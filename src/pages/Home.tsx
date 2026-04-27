@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { Logo } from '@/components/brand/logo'
 import { EventCard } from '@/components/events/event-card'
 import { BusinessCard } from '@/components/business/business-card'
+import { Hoje } from '@/components/home/hoje'
 import { useEvents } from '@/hooks/useEvents'
 import { useBusinesses } from '@/hooks/useBusinesses'
 
@@ -44,6 +45,8 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <Hoje />
 
       {events.length > 0 && (
         <section className="max-w-6xl mx-auto px-8 pb-16">

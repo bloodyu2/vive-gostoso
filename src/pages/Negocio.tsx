@@ -1,8 +1,8 @@
 import { useParams, Link } from 'react-router-dom'
-import { MapPin, Phone, Globe, Instagram, Clock, ArrowLeft, CheckCircle } from 'lucide-react'
+import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useBusiness } from '@/hooks/useBusinesses'
-import { isBusinessOpen, formatCurrency } from '@/lib/utils'
+import { isBusinessOpen } from '@/lib/utils'
 
 const DAYS: Record<string, string> = {
   seg: 'Segunda', ter: 'Terça', qua: 'Quarta',
@@ -117,7 +117,7 @@ export default function Negocio() {
               <a href={`https://instagram.com/${b.instagram}`} target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-2.5 text-sm text-[#3D3D3D] hover:text-teal transition-colors">
                 <div className="w-8 h-8 rounded-lg bg-[#E8E4DF] flex items-center justify-center flex-shrink-0">
-                  <Instagram className="w-4 h-4 text-[#1A1A1A]" />
+                  <AtSign className="w-4 h-4 text-[#1A1A1A]" />
                 </div>
                 @{b.instagram}
               </a>
