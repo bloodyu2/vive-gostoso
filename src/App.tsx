@@ -8,6 +8,7 @@ import Explore from '@/pages/Explore'
 import Participe from '@/pages/Participe'
 import Conheca from '@/pages/Conheca'
 import Apoie from '@/pages/Apoie'
+import Negocio from '@/pages/Negocio'
 import Login from '@/pages/cadastre/Login'
 import Painel from '@/pages/cadastre/Painel'
 import Perfil from '@/pages/cadastre/Perfil'
@@ -24,6 +25,7 @@ export default function App() {
       <Route path="/participe" element={<PageWrapper><Participe /></PageWrapper>} />
       <Route path="/conheca" element={<PageWrapper><Conheca /></PageWrapper>} />
       <Route path="/apoie" element={<PageWrapper><Apoie /></PageWrapper>} />
+      <Route path="/negocio/:slug" element={<PageWrapper><Negocio /></PageWrapper>} />
       <Route path="/cadastre" element={<Login />} />
       <Route path="/cadastre/painel" element={<PageWrapper><Painel /></PageWrapper>} />
       <Route path="/cadastre/perfil" element={<PageWrapper><Perfil /></PageWrapper>} />

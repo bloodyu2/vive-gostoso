@@ -5,18 +5,19 @@ import { cn } from '@/lib/utils'
 
 const NAV = [
   { to: '/',          label: 'INÍCIO',    color: 'text-[#1A1A1A]' },
-  { to: '/come',      label: 'COME',      color: 'text-ocre' },
+  { to: '/come',      label: 'COME',      color: 'text-coral' },
   { to: '/fique',     label: 'FIQUE',     color: 'text-teal' },
-  { to: '/passeie',   label: 'PASSEIE',   color: 'text-[#3D8B5A]' },
-  { to: '/explore',   label: 'EXPLORE',   color: 'text-coral' },
-  { to: '/apoie',     label: 'APOIE',     color: 'text-ocre' },
+  { to: '/passeie',   label: 'PASSEIE',   color: 'text-ocre' },
+  { to: '/explore',   label: 'EXPLORE',   color: 'text-[#1A1A1A]' },
+  { to: '/participe', label: 'PARTICIPE', color: 'text-[#3D8B5A]' },
+  { to: '/apoie',     label: 'APOIE',     color: 'text-teal' },
 ]
 
 export function Header() {
   const { pathname } = useLocation()
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-[#E8E4DF] px-8 py-3.5 flex items-center justify-between gap-6">
-      <Link to="/"><Logo height={26} /></Link>
+    <header className="sticky top-0 z-40 bg-white border-b border-[#E8E4DF] px-8 py-3 flex items-center justify-between gap-6">
+      <Link to="/"><Logo height={40} /></Link>
       <nav className="flex gap-1 items-center">
         {NAV.map(v => {
           const active = pathname === v.to || (v.to !== '/' && pathname.startsWith(v.to))
