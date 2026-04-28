@@ -151,6 +151,30 @@ export default function Home() {
         </section>
       )}
 
+      {/* ── Banner: Quer saber como funciona? ── */}
+      <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10">
+        <Link
+          to="/sobre"
+          className="group flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#1A1A1A] dark:bg-white/5 text-white rounded-2xl px-6 py-5 hover:bg-[#2A2A2A] dark:hover:bg-white/10 transition-colors"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-teal/20 flex items-center justify-center flex-shrink-0">
+              <span className="text-teal text-lg">?</span>
+            </div>
+            <div>
+              <p className="font-semibold text-white text-base">Quer saber como o Vive Gostoso funciona?</p>
+              <p className="text-white/50 text-sm mt-0.5">Entenda o modelo, a transparência financeira e como participar.</p>
+            </div>
+          </div>
+          <span className="flex-shrink-0 flex items-center gap-1.5 text-teal text-sm font-semibold group-hover:gap-2.5 transition-all">
+            Saiba mais
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </span>
+        </Link>
+      </section>
+
       {/* ── Verificados pela cidade ── */}
       {featured.length > 0 && (
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-16 md:pb-20">
