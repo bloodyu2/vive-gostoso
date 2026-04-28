@@ -11,7 +11,10 @@ export default function Perfil() {
   return <AuthGuard><PerfilInner /></AuthGuard>
 }
 
-type PartialBusiness = Partial<Pick<Business, 'id' | 'name' | 'description' | 'address' | 'whatsapp' | 'instagram' | 'website' | 'category_id'>>
+type PartialBusiness = Partial<Pick<Business,
+  'id' | 'name' | 'description' | 'address' | 'whatsapp' | 'instagram' | 'website' | 'category_id' |
+  'price_range' | 'menu_url' | 'amenities'
+>>
 
 function PerfilInner() {
   const { user } = useAuth()
@@ -43,7 +46,7 @@ function PerfilInner() {
         if (prof.business_id) {
           const { data: b } = await supabase
             .from('gostoso_businesses')
-            .select('id, name, description, address, whatsapp, instagram, website, category_id')
+            .select('id, name, description, address, whatsapp, instagram, website, category_id, price_range, menu_url, amenities')
             .eq('id', prof.business_id)
             .single()
           if (b) setBiz(b as PartialBusiness)
@@ -66,7 +69,19 @@ function PerfilInner() {
     if (biz.id) {
       await supabase
         .from('gostoso_businesses')
-        .update({ name: biz.name, description: biz.description, address: biz.address, whatsapp: biz.whatsapp, instagram: biz.instagram, website: biz.website, category_id: biz.category_id, slug })
+        .update({
+          name: biz.name,
+          description: biz.description,
+          address: biz.address,
+          whatsapp: biz.whatsapp,
+          instagram: biz.instagram,
+          website: biz.website,
+          category_id: biz.category_id,
+          slug,
+          price_range: biz.price_range ?? null,
+          menu_url: biz.menu_url ?? null,
+          amenities: biz.amenities ?? {},
+        })
         .eq('id', biz.id)
     } else {
       const { data: newBiz } = await supabase
@@ -80,6 +95,9 @@ function PerfilInner() {
           instagram: biz.instagram ?? null,
           website: biz.website ?? null,
           category_id: biz.category_id ?? null,
+          price_range: biz.price_range ?? null,
+          menu_url: biz.menu_url ?? null,
+          amenities: biz.amenities ?? {},
         }])
         .select('id')
         .single()
@@ -143,6 +161,66 @@ function PerfilInner() {
             ))}
           </select>
         </div>
+
+        {/* Faixa de preço */}
+        <div>
+          <label className="block text-sm font-medium mb-1.5">Faixa de preço</label>
+          <div className="flex gap-2 flex-wrap">
+            {(['', '$', '$$', '$$$'] as const).map(v => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => setBiz(b => ({ ...b, price_range: (v === '' ? null : v) as '$' | '$$' | '$$$' | null }))}
+                className={`px-4 py-2 rounded-xl border text-sm font-semibold transition-colors ${
+                  (biz.price_range ?? '') === v
+                    ? 'bg-teal text-white border-teal'
+                    : 'bg-white text-[#737373] border-[#E8E4DF] hover:border-teal'
+                }`}
+              >
+                {v || 'Não informar'}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Link do cardápio */}
+        <div>
+          <label className="block text-sm font-medium mb-1.5">Link do cardápio <span className="text-[#737373] font-normal">(opcional)</span></label>
+          <input
+            type="url"
+            value={biz.menu_url ?? ''}
+            onChange={e => setBiz(b => ({ ...b, menu_url: e.target.value || null }))}
+            placeholder="https://... link do PDF, site ou WhatsApp"
+            className="w-full px-4 py-3 rounded-xl border border-[#E8E4DF] text-sm focus:outline-none focus:border-teal focus:ring-2 focus:ring-teal/20"
+          />
+        </div>
+
+        {/* Comodidades */}
+        <div>
+          <label className="block text-sm font-medium mb-2">Comodidades</label>
+          <div className="grid grid-cols-2 gap-2">
+            {([
+              { key: 'wifi' as const,         label: 'WiFi grátis' },
+              { key: 'parking' as const,      label: 'Estacionamento' },
+              { key: 'accessible' as const,   label: 'Acessível' },
+              { key: 'reservations' as const, label: 'Aceita reservas' },
+            ]).map(({ key, label }) => (
+              <label key={key} className="flex items-center gap-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={biz.amenities?.[key] ?? false}
+                  onChange={e => setBiz(b => ({
+                    ...b,
+                    amenities: { ...b.amenities, [key]: e.target.checked },
+                  }))}
+                  className="w-4 h-4 rounded border-[#E8E4DF] accent-teal"
+                />
+                <span className="text-sm">{label}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
         <Button type="submit" variant="primary" disabled={saving} className="w-full">
           {saving ? 'Salvando...' : 'Salvar negócio'}
         </Button>
