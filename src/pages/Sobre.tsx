@@ -400,6 +400,12 @@ export default function Sobre() {
               <p className="text-sm text-[#737373] leading-relaxed">
                 Hub responsável pelo desenvolvimento e manutenção da plataforma. O Vive Gostoso é o caso zero de um modelo replicável para outras cidades do litoral nordestino.
               </p>
+              <a
+                href="mailto:contato@vivegostoso.com.br"
+                className="mt-3 inline-block text-xs text-teal hover:underline"
+              >
+                contato@vivegostoso.com.br
+              </a>
             </div>
           </div>
         </div>

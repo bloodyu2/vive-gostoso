@@ -70,7 +70,12 @@ export function Footer() {
       </div>
 
       <div className="border-t border-[#3D3D3D] mt-10 pt-5 text-xs max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
-        <span className="opacity-50">vivegostoso.com.br · São Miguel do Gostoso, RN</span>
+        <span className="opacity-50">
+          vivegostoso.com.br · São Miguel do Gostoso, RN ·{' '}
+          <a href="mailto:contato@vivegostoso.com.br" className="hover:opacity-100 transition-opacity">
+            contato@vivegostoso.com.br
+          </a>
+        </span>
         <a
           href="https://balaio.net"
           target="_blank"
