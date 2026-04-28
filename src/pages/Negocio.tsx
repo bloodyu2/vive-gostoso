@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle, Share2, Check } from 'lucide-react'
+import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle, Share2, Check, BookOpen, Wifi, Car, UserCheck, CalendarCheck } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useBusiness } from '@/hooks/useBusinesses'
 import { isBusinessOpen } from '@/lib/utils'
 import { ManagedBadge } from '@/components/business/managed-badge'
 import { ClaimCta } from '@/components/business/claim-cta'
+import { Lightbox } from '@/components/ui/lightbox'
 
 const DAYS: Record<string, string> = {
   seg: 'Segunda', ter: 'Terça', qua: 'Quarta',
@@ -17,6 +18,7 @@ export default function Negocio() {
   const { slug } = useParams<{ slug: string }>()
   const { data: b, isLoading } = useBusiness(slug ?? '')
   const [copied, setCopied] = useState(false)
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
   if (isLoading) return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-16">
@@ -66,7 +68,10 @@ export default function Negocio() {
       </Link>
 
       {/* Cover */}
-      <div className="aspect-[21/9] bg-gradient-to-br from-teal to-teal-dark rounded-2xl overflow-hidden mb-8 relative">
+      <div
+        className="aspect-[21/9] bg-gradient-to-br from-teal to-teal-dark rounded-2xl overflow-hidden mb-8 relative cursor-pointer"
+        onClick={() => b.cover_url ? setLightboxIndex(0) : undefined}
+      >
         {b.cover_url && <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />}
         {b.is_featured && (
           <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-white/90 backdrop-blur text-teal text-xs font-semibold px-3 py-1.5 rounded-full">
@@ -87,6 +92,11 @@ export default function Negocio() {
           </div>
 
           <h1 className="font-display font-bold text-4xl tracking-tight mb-1">{b.name}</h1>
+          {b.price_range && (
+            <span className="inline-block text-sm font-semibold text-[#737373] bg-[#F0EDEA] px-2 py-0.5 rounded-lg mb-4">
+              {b.price_range}
+            </span>
+          )}
           {b.address && (
             <p className="flex items-center gap-1.5 text-sm text-[#737373] mb-6">
               <MapPin className="w-4 h-4 flex-shrink-0" /> {b.address}
@@ -101,7 +111,11 @@ export default function Negocio() {
           {b.photos && b.photos.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
               {b.photos.map((url, i) => (
-                <div key={i} className="aspect-square rounded-xl overflow-hidden bg-[#E8E4DF]">
+                <div
+                  key={i}
+                  className="aspect-square rounded-xl overflow-hidden bg-[#E8E4DF] cursor-pointer hover:opacity-90 transition-opacity"
+                  onClick={() => setLightboxIndex(b.cover_url ? i + 1 : i)}
+                >
                   <img src={url} alt={`${b.name} foto ${i + 1}`} className="w-full h-full object-cover" />
                 </div>
               ))}
@@ -119,6 +133,19 @@ export default function Negocio() {
             {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
             {copied ? 'Link copiado!' : 'Compartilhar este lugar'}
           </button>
+
+          {/* Cardápio */}
+          {b.menu_url && (
+            <a
+              href={b.menu_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 bg-ocre/10 text-ocre border border-ocre/30 rounded-2xl px-5 py-3.5 text-sm font-semibold hover:bg-ocre/20 transition-colors"
+            >
+              <BookOpen className="w-4 h-4" />
+              Ver cardápio
+            </a>
+          )}
 
           {/* Claim */}
           {!b.profile_id && <ClaimCta businessSlug={b.slug} />}
@@ -167,6 +194,35 @@ export default function Negocio() {
             )}
           </div>
 
+          {/* Amenidades */}
+          {b.amenities && Object.values(b.amenities).some(Boolean) && (
+            <div className="bg-white border border-[#E8E4DF] rounded-2xl p-5">
+              <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide mb-3">Comodidades</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {b.amenities.wifi && (
+                  <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
+                    <Wifi className="w-4 h-4 text-teal flex-shrink-0" /> WiFi grátis
+                  </div>
+                )}
+                {b.amenities.parking && (
+                  <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
+                    <Car className="w-4 h-4 text-teal flex-shrink-0" /> Estacionamento
+                  </div>
+                )}
+                {b.amenities.accessible && (
+                  <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
+                    <UserCheck className="w-4 h-4 text-teal flex-shrink-0" /> Acessível
+                  </div>
+                )}
+                {b.amenities.reservations && (
+                  <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
+                    <CalendarCheck className="w-4 h-4 text-teal flex-shrink-0" /> Aceita reservas
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Horários */}
           {b.opening_hours && Object.keys(b.opening_hours).length > 0 && (
             <div className="bg-white border border-[#E8E4DF] rounded-2xl p-5">
@@ -199,6 +255,14 @@ export default function Negocio() {
           )}
         </aside>
       </div>
+      {/* Lightbox */}
+      {lightboxIndex !== null && (
+        <Lightbox
+          photos={[b.cover_url, ...(b.photos ?? [])].filter((u): u is string => !!u)}
+          initialIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
+      )}
     </main>
   )
 }
