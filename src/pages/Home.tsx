@@ -12,6 +12,7 @@ const VERBS = [
   { to: '/explore',   label: 'EXPLORE.',   color: 'text-coral',       sub: 'Mapa interativo' },
   { to: '/participe', label: 'PARTICIPE.', color: 'text-teal',        sub: 'Eventos e festivais' },
   { to: '/apoie',     label: 'APOIE.',     color: 'text-ocre',        sub: 'Fundo transparente' },
+  { to: '/contrate',  label: 'CONTRATE.',  color: 'text-[#1A1A1A]',  sub: 'Serviços e empregos' },
 ]
 
 export default function Home() {
@@ -83,13 +84,28 @@ export default function Home() {
       </section>
 
       {/* ── Verb grid ── */}
-      <section className="max-w-6xl mx-auto px-5 md:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+      <section className="max-w-6xl mx-auto px-5 md:px-8 py-10 md:py-16">
+        {/* Mobile: lista vertical com ícone de seta. Tablet+: grid 2 ou 3 colunas */}
+        <div className="flex flex-col sm:hidden gap-2">
+          {VERBS.map(v => (
+            <Link key={v.to} to={v.to}
+              className="bg-white rounded-2xl border border-[#E8E4DF] px-5 py-4 flex items-center justify-between hover:shadow-md transition-all active:scale-[0.98]">
+              <div>
+                <div className={`font-display font-bold text-2xl ${v.color}`}>{v.label}</div>
+                <div className="text-xs text-[#737373] mt-0.5">{v.sub}</div>
+              </div>
+              <svg className="w-5 h-5 text-[#C4BFBA] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          ))}
+        </div>
+        <div className="hidden sm:grid sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
           {VERBS.map(v => (
             <Link key={v.to} to={v.to}
               className="bg-white rounded-2xl border border-[#E8E4DF] p-5 md:p-6 hover:shadow-md hover:-translate-y-0.5 transition-all">
               <div className={`font-display font-bold text-3xl md:text-4xl ${v.color}`}>{v.label}</div>
-              <div className="text-xs md:text-sm text-[#737373] mt-1 leading-snug">{v.sub}</div>
+              <div className="text-sm text-[#737373] mt-1 leading-snug">{v.sub}</div>
             </Link>
           ))}
         </div>

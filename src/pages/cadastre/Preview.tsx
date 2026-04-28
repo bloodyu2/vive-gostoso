@@ -36,7 +36,7 @@ function PreviewInner() {
   }, [user])
 
   return (
-    <main className="max-w-sm mx-auto px-8 py-12">
+    <main className="max-w-sm mx-auto px-5 md:px-8 py-12">
       <h1 className="font-display text-2xl font-semibold mb-8">Como aparece no diretório</h1>
       {business
         ? <BusinessCard business={business} />

@@ -1,6 +1,6 @@
 export default function Conheca() {
   return (
-    <main className="max-w-3xl mx-auto px-8 py-16">
+    <main className="max-w-3xl mx-auto px-5 md:px-8 py-16">
       <h1 className="font-display font-bold text-[72px] leading-none text-[#1A1A1A] mb-8">CONHEÇA.</h1>
 
       <section className="mb-12">

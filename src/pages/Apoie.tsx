@@ -17,7 +17,7 @@ export default function Apoie() {
         acumuladoCents={summary?.acumuladoCents ?? 0}
         associadosCount={14}
       />
-      <section className="max-w-5xl mx-auto px-8 py-16">
+      <section className="max-w-5xl mx-auto px-5 md:px-8 py-16">
         <h2 className="font-display font-semibold text-3xl mb-2">Movimentações</h2>
         <p className="text-[#737373] text-sm mb-8">Cada real que entra ou sai. Auditável. Público.</p>
         <div className="bg-white border border-[#E8E4DF] rounded-2xl overflow-hidden">

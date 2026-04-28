@@ -5,7 +5,7 @@ import { useEvents } from '@/hooks/useEvents'
 export default function Participe() {
   const { data: events = [], isLoading } = useEvents()
   return (
-    <main className="max-w-6xl mx-auto px-8 py-12">
+    <main className="max-w-6xl mx-auto px-5 md:px-8 py-12">
       <div className="mb-10">
         <VerbPill verb="participe" />
         <p className="mt-3 text-lg text-[#3D3D3D] max-w-xl leading-relaxed">

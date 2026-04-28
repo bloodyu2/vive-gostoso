@@ -10,7 +10,7 @@ export default function Painel() {
 function PainelInner() {
   const { user, signOut } = useAuth()
   return (
-    <main className="max-w-4xl mx-auto px-8 py-12">
+    <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
       <div className="flex justify-between items-center mb-10">
         <div>
           <h1 className="font-display text-3xl font-semibold">Painel do Prestador</h1>

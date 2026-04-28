@@ -29,23 +29,23 @@ export function Hoje() {
   const dayLabel = now.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })
 
   return (
-    <section className="max-w-6xl mx-auto px-8 pb-16">
+    <section className="max-w-6xl mx-auto px-5 md:px-8 pb-12 md:pb-16">
       <div className="bg-[#1A1A1A] rounded-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-7 pt-7 pb-5 border-b border-white/10">
+        <div className="flex items-center justify-between px-5 md:px-7 pt-5 md:pt-7 pb-4 md:pb-5 border-b border-white/10">
           <div>
             <div className="flex items-center gap-2 mb-1">
               <TodayDot />
               <span className="text-xs font-semibold tracking-widest uppercase text-white/60">Agora em Gostoso</span>
             </div>
-            <h2 className="font-display font-bold text-2xl text-white capitalize">{dayLabel}</h2>
+            <h2 className="font-display font-bold text-xl md:text-2xl text-white capitalize">{dayLabel}</h2>
           </div>
         </div>
 
         <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/10">
           {/* Abertos agora */}
           {openNow.length > 0 && (
-            <div className="p-7">
+            <div className="p-5 md:p-7">
               <div className="flex items-center gap-2 mb-4">
                 <Clock className="w-4 h-4 text-[#3D8B5A]" />
                 <span className="text-sm font-semibold text-white/80">Abertos agora</span>
@@ -79,7 +79,7 @@ export function Hoje() {
 
           {/* Eventos de hoje */}
           {todayEvents.length > 0 && (
-            <div className="p-7">
+            <div className="p-5 md:p-7">
               <div className="flex items-center gap-2 mb-4">
                 <CalendarDays className="w-4 h-4 text-coral" />
                 <span className="text-sm font-semibold text-white/80">Acontecendo hoje</span>

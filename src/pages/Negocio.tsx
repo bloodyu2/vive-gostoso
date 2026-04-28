@@ -15,7 +15,7 @@ export default function Negocio() {
   const { data: b, isLoading } = useBusiness(slug ?? '')
 
   if (isLoading) return (
-    <main className="max-w-4xl mx-auto px-8 py-16">
+    <main className="max-w-4xl mx-auto px-5 md:px-8 py-16">
       <div className="animate-pulse space-y-6">
         <div className="h-64 bg-[#E8E4DF] rounded-2xl" />
         <div className="h-8 bg-[#E8E4DF] rounded w-1/2" />
@@ -25,7 +25,7 @@ export default function Negocio() {
   )
 
   if (!b) return (
-    <main className="max-w-4xl mx-auto px-8 py-16 text-center">
+    <main className="max-w-4xl mx-auto px-5 md:px-8 py-16 text-center">
       <div className="text-6xl mb-4">🤔</div>
       <h2 className="font-display text-2xl font-semibold mb-2">Negócio não encontrado</h2>
       <p className="text-[#737373] mb-6">Pode ter sido removido ou o link está incorreto.</p>
@@ -39,7 +39,7 @@ export default function Negocio() {
   const backLabel = verb === 'fique' ? 'FIQUE' : verb === 'passeie' ? 'PASSEIE' : 'COME'
 
   return (
-    <main className="max-w-4xl mx-auto px-8 py-10">
+    <main className="max-w-4xl mx-auto px-5 md:px-8 py-10">
       <Link to={backTo} className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
         <ArrowLeft className="w-4 h-4" />
         Voltar a {backLabel}

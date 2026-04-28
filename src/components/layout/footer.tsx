@@ -11,6 +11,7 @@ const CIDADE = [
   { to: '/conheca',  label: 'CONHEÇA' },
   { to: '/participe',label: 'PARTICIPE' },
   { to: '/apoie',    label: 'APOIE' },
+  { to: '/contrate', label: 'CONTRATE' },
 ]
 const NEGOCIOS = [
   { to: '/cadastre',        label: 'Cadastrar' },

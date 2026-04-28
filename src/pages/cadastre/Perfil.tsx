@@ -106,7 +106,7 @@ function PerfilInner() {
   ]
 
   return (
-    <main className="max-w-2xl mx-auto px-8 py-12">
+    <main className="max-w-2xl mx-auto px-5 md:px-8 py-12">
       <h1 className="font-display text-3xl font-semibold mb-8">Meu Negócio</h1>
       <form onSubmit={handleSave} className="space-y-5">
         {fields.map(({ label, key, required }) => (

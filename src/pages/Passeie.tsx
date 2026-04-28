@@ -13,7 +13,7 @@ export default function Passeie() {
   const filtered = activeCat ? businesses.filter(b => b.category?.slug === activeCat) : businesses
 
   return (
-    <main className="max-w-6xl mx-auto px-8 py-12">
+    <main className="max-w-6xl mx-auto px-5 md:px-8 py-12">
       <div className="flex justify-between items-end flex-wrap gap-6 mb-10">
         <div>
           <VerbPill verb="passeie" />
