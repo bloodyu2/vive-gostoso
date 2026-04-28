@@ -8,6 +8,7 @@ const MODULOS = [
   { to: '/explore', label: 'EXPLORE' },
 ]
 const CIDADE = [
+  { to: '/sobre',    label: 'Sobre o projeto' },
   { to: '/conheca',  label: 'CONHEÇA' },
   { to: '/participe',label: 'PARTICIPE' },
   { to: '/apoie',    label: 'APOIE' },

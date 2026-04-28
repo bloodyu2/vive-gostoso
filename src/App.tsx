@@ -11,6 +11,7 @@ import Conheca from '@/pages/Conheca'
 import Apoie from '@/pages/Apoie'
 import Negocio from '@/pages/Negocio'
 import Contrate from '@/pages/Contrate'
+import Sobre from '@/pages/Sobre'
 import NotFound from '@/pages/NotFound'
 import Login from '@/pages/cadastre/Login'
 import Painel from '@/pages/cadastre/Painel'
@@ -31,6 +32,7 @@ export default function App() {
       <Route path="/conheca" element={<PageWrapper><Conheca /></PageWrapper>} />
       <Route path="/apoie" element={<PageWrapper><Apoie /></PageWrapper>} />
       <Route path="/contrate" element={<PageWrapper><Contrate /></PageWrapper>} />
+      <Route path="/sobre" element={<PageWrapper><Sobre /></PageWrapper>} />
       <Route path="/negocio/:slug" element={<PageWrapper><Negocio /></PageWrapper>} />
       <Route path="/cadastre" element={<Login />} />
       <Route path="/cadastre/painel" element={<PageWrapper><Painel /></PageWrapper>} />

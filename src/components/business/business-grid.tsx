@@ -1,9 +1,15 @@
 import { BusinessCard } from './business-card'
 import type { Business } from '@/types/database'
 
-interface BusinessGridProps { businesses: Business[]; loading?: boolean }
+export type ViewMode = 'grid' | 'list' | 'gallery'
 
-export function BusinessGrid({ businesses, loading }: BusinessGridProps) {
+interface BusinessGridProps {
+  businesses: Business[]
+  loading?: boolean
+  view?: ViewMode
+}
+
+export function BusinessGrid({ businesses, loading, view = 'grid' }: BusinessGridProps) {
   if (loading) return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {Array.from({ length: 6 }).map((_, i) => (
@@ -18,14 +24,32 @@ export function BusinessGrid({ businesses, loading }: BusinessGridProps) {
       ))}
     </div>
   )
+
   if (!businesses.length) return (
     <div className="text-center py-20 text-[#737373]">
       <p className="text-lg">Nenhum negócio encontrado.</p>
     </div>
   )
+
+  if (view === 'list') {
+    return (
+      <div className="flex flex-col gap-4">
+        {businesses.map(b => <BusinessCard key={b.id} business={b} view="list" />)}
+      </div>
+    )
+  }
+
+  if (view === 'gallery') {
+    return (
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        {businesses.map(b => <BusinessCard key={b.id} business={b} view="gallery" />)}
+      </div>
+    )
+  }
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {businesses.map(b => <BusinessCard key={b.id} business={b} />)}
+      {businesses.map(b => <BusinessCard key={b.id} business={b} view="grid" />)}
     </div>
   )
 }

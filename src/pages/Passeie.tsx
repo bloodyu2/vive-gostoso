@@ -2,15 +2,21 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { VerbPill } from '@/components/brand/verb-pill'
 import { BusinessFilters } from '@/components/business/business-filters'
-import { BusinessGrid } from '@/components/business/business-grid'
+import { BusinessGrid, type ViewMode } from '@/components/business/business-grid'
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useCategories } from '@/hooks/useCategories'
+import { isBusinessOpen } from '@/lib/utils'
 
 export default function Passeie() {
   const [activeCat, setActiveCat] = useState<string | null>(null)
+  const [view, setView] = useState<ViewMode>('grid')
+  const [openOnly, setOpenOnly] = useState(false)
   const { data: categories = [] } = useCategories('passeie')
   const { data: businesses = [], isLoading } = useBusinesses('passeie')
-  const filtered = activeCat ? businesses.filter(b => b.category?.slug === activeCat) : businesses
+
+  const filtered = businesses
+    .filter(b => !activeCat || b.category?.slug === activeCat)
+    .filter(b => !openOnly || isBusinessOpen(b.opening_hours))
 
   return (
     <main className="max-w-6xl mx-auto px-5 md:px-8 py-12">
@@ -25,8 +31,13 @@ export default function Passeie() {
           Abrir no mapa
         </Link>
       </div>
-      <BusinessFilters categories={categories} active={activeCat} onSelect={setActiveCat} />
-      <BusinessGrid businesses={filtered} loading={isLoading} />
+      <BusinessFilters
+        categories={categories} active={activeCat} onSelect={setActiveCat}
+        view={view} onView={setView}
+        total={filtered.length}
+        openOnly={openOnly} onOpenOnly={setOpenOnly}
+      />
+      <BusinessGrid businesses={filtered} loading={isLoading} view={view} />
     </main>
   )
 }
