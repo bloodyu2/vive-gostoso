@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { PageWrapper } from '@/components/layout/page-wrapper'
+import { InstallBanner } from '@/components/install-banner'
 import Home from '@/pages/Home'
 import Come from '@/pages/Come'
 import Fique from '@/pages/Fique'
@@ -18,6 +19,8 @@ import Preview from '@/pages/cadastre/Preview'
 
 export default function App() {
   return (
+    <>
+    <InstallBanner />
     <Routes>
       <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
       <Route path="/come" element={<PageWrapper><Come /></PageWrapper>} />
@@ -35,5 +38,6 @@ export default function App() {
       <Route path="/cadastre/preview" element={<PageWrapper><Preview /></PageWrapper>} />
       <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
     </Routes>
+    </>
   )
 }
