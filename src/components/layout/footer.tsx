@@ -67,9 +67,20 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-[#3D3D3D] mt-10 pt-5 text-xs opacity-50 max-w-6xl mx-auto flex flex-col sm:flex-row justify-between gap-2">
-        <span>vivegostoso.com.br · São Miguel do Gostoso, RN</span>
-        <span>A plataforma é da cidade.</span>
+      <div className="border-t border-[#3D3D3D] mt-10 pt-5 text-xs max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+        <span className="opacity-50">vivegostoso.com.br · São Miguel do Gostoso, RN</span>
+        <a
+          href="https://balaio.net"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity"
+        >
+          <svg width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M6 26 C6 26 4 16 16 10 C28 4 28 14 22 18 C16 22 14 18 16 14 C18 10 22 12 20 16" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+            <circle cx="20" cy="16" r="2" fill="currentColor"/>
+          </svg>
+          <span className="font-medium">Feito pela Balaio</span>
+        </a>
       </div>
     </footer>
   )

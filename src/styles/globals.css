@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-teal: #0D7C7C;
   --color-teal-dark: #0a6666;
@@ -34,4 +36,10 @@ body {
   background-color: #F5F2EE;
   color: #1A1A1A;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.dark body {
+  background-color: #111111;
+  color: #F0EDEA;
 }

@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Compass } from 'lucide-react'
+import { Menu, X, Compass, Sun, Moon } from 'lucide-react'
 import { Logo } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { useTheme } from '@/hooks/useTheme'
 
 // Quatro verbos no topo — os mais usados pela maioria dos visitantes
 const NAV_MAIN = [
@@ -29,6 +30,7 @@ export function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [discoverOpen, setDiscoverOpen] = useState(false)
   const discoverRef = useRef<HTMLDivElement>(null)
+  const { theme, toggle } = useTheme()
 
   // Fecha o popover ao clicar fora
   useEffect(() => {
@@ -49,7 +51,7 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-white border-b border-[#E8E4DF]">
+      <header className="sticky top-0 z-40 bg-white dark:bg-[#1A1A1A] border-b border-[#E8E4DF] dark:border-[#2D2D2D]">
         {/* Desktop */}
         <div className="hidden md:flex items-center justify-between gap-4 px-8 py-2">
           <Link to="/" className="flex-shrink-0">
@@ -65,8 +67,8 @@ export function Header() {
                 className={cn(
                   'px-3.5 py-2 rounded-full text-sm font-semibold tracking-wide transition-all duration-150',
                   isActive(v.to)
-                    ? cn('bg-teal-light', v.color)
-                    : 'text-[#3D3D3D] hover:bg-areia',
+                    ? cn('bg-teal-light dark:bg-teal/20', v.color)
+                    : 'text-[#3D3D3D] dark:text-[#C0BCB8] hover:bg-areia dark:hover:bg-[#2D2D2D]',
                 )}
               >
                 {v.label}
@@ -80,8 +82,8 @@ export function Header() {
                 className={cn(
                   'flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-semibold tracking-wide transition-all duration-150',
                   discoverOpen || NAV_DISCOVER.some(v => isActive(v.to))
-                    ? 'bg-[#1A1A1A] text-white'
-                    : 'text-[#3D3D3D] hover:bg-areia',
+                    ? 'bg-[#1A1A1A] dark:bg-white text-white dark:text-[#1A1A1A]'
+                    : 'text-[#3D3D3D] dark:text-[#C0BCB8] hover:bg-areia dark:hover:bg-[#2D2D2D]',
                 )}
               >
                 <Compass className="w-3.5 h-3.5" />
@@ -89,8 +91,8 @@ export function Header() {
               </button>
 
               {discoverOpen && (
-                <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-2xl border border-[#E8E4DF] shadow-lg overflow-hidden z-50">
-                  <div className="px-4 py-2.5 border-b border-[#F5F2EE]">
+                <div className="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-[#222] rounded-2xl border border-[#E8E4DF] dark:border-[#2D2D2D] shadow-lg overflow-hidden z-50">
+                  <div className="px-4 py-2.5 border-b border-[#F5F2EE] dark:border-[#2D2D2D]">
                     <span className="text-[10px] font-bold tracking-widest uppercase text-[#737373]">Explorar a cidade</span>
                   </div>
                   {NAV_DISCOVER.map(v => (
@@ -98,8 +100,8 @@ export function Header() {
                       key={v.to}
                       to={v.to}
                       className={cn(
-                        'flex items-center justify-between px-4 py-3 hover:bg-areia transition-colors',
-                        isActive(v.to) && 'bg-areia',
+                        'flex items-center justify-between px-4 py-3 hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors',
+                        isActive(v.to) && 'bg-areia dark:bg-[#2D2D2D]',
                       )}
                     >
                       <div>
@@ -116,23 +118,38 @@ export function Header() {
             </div>
           </nav>
 
-          <Link to="/cadastre" className="flex-shrink-0">
-            <Button variant="primary">Cadastre seu negócio</Button>
-          </Link>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              onClick={toggle}
+              className="w-9 h-9 flex items-center justify-center rounded-full text-[#3D3D3D] dark:text-[#C0BCB8] hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors"
+              aria-label={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+            <Link to="/cadastre">
+              <Button variant="primary">Cadastre seu negócio</Button>
+            </Link>
+          </div>
         </div>
 
         {/* Mobile */}
         <div className="flex md:hidden items-center justify-between px-5 py-3">
-          <div className="w-10" />
+          <button
+            onClick={toggle}
+            className="w-10 h-10 flex items-center justify-center rounded-xl text-[#3D3D3D] dark:text-[#C0BCB8] hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors"
+            aria-label={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
+          >
+            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
           <Link to="/" onClick={() => setDrawerOpen(false)}>
             <Logo height={52} />
           </Link>
           <button
             onClick={() => setDrawerOpen(o => !o)}
-            className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-areia transition-colors"
+            className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors"
             aria-label="Menu"
           >
-            {drawerOpen ? <X className="w-5 h-5 text-[#1A1A1A]" /> : <Menu className="w-5 h-5 text-[#1A1A1A]" />}
+            {drawerOpen ? <X className="w-5 h-5 text-[#1A1A1A] dark:text-white" /> : <Menu className="w-5 h-5 text-[#1A1A1A] dark:text-white" />}
           </button>
         </div>
       </header>
@@ -140,7 +157,7 @@ export function Header() {
       {/* Mobile drawer */}
       {drawerOpen && (
         <div className="md:hidden fixed inset-0 z-30 pt-[69px]" onClick={() => setDrawerOpen(false)}>
-          <div className="bg-white border-b border-[#E8E4DF] shadow-xl" onClick={e => e.stopPropagation()}>
+          <div className="bg-white dark:bg-[#1A1A1A] border-b border-[#E8E4DF] dark:border-[#2D2D2D] shadow-xl" onClick={e => e.stopPropagation()}>
             <nav className="px-5 py-4 space-y-1">
               {NAV_ALL.map(v => (
                 <Link
@@ -150,8 +167,8 @@ export function Header() {
                   className={cn(
                     'block px-4 py-3 rounded-xl text-sm font-semibold tracking-wide transition-all',
                     isActive(v.to)
-                      ? cn('bg-teal-light', v.color)
-                      : 'text-[#3D3D3D] hover:bg-areia',
+                      ? cn('bg-teal-light dark:bg-teal/20', v.color)
+                      : 'text-[#3D3D3D] dark:text-[#C0BCB8] hover:bg-areia dark:hover:bg-[#2D2D2D]',
                   )}
                 >
                   {v.label}
