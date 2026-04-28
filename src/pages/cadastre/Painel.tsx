@@ -55,6 +55,16 @@ function PainelInner() {
             <p className="text-sm text-[#737373] mt-1">Aprovar ou rejeitar pedidos de dono.</p>
           </Link>
         )}
+        {role === 'admin' && (
+          <Link
+            to="/cadastre/admin/reviews"
+            className="bg-white border border-[#E8E4DF] rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all"
+          >
+            <div className="text-2xl mb-2">⭐</div>
+            <h2 className="font-semibold text-lg">Avaliações</h2>
+            <p className="text-sm text-[#737373] mt-1">Moderar avaliações pendentes de aprovação.</p>
+          </Link>
+        )}
       </div>
     </main>
   )

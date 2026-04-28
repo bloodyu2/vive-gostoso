@@ -7,6 +7,8 @@ import { isBusinessOpen } from '@/lib/utils'
 import { ManagedBadge } from '@/components/business/managed-badge'
 import { ClaimCta } from '@/components/business/claim-cta'
 import { Lightbox } from '@/components/ui/lightbox'
+import { ReviewList } from '@/components/reviews/review-list'
+import { ReviewForm } from '@/components/reviews/review-form'
 
 const DAYS: Record<string, string> = {
   seg: 'Segunda', ter: 'Terça', qua: 'Quarta',
@@ -121,6 +123,17 @@ export default function Negocio() {
               ))}
             </div>
           )}
+
+          {/* Avaliações */}
+          <div className="mt-8">
+            <h2 className="font-display font-semibold text-2xl mb-5">Avaliações</h2>
+            <ReviewList businessId={b.id} />
+          </div>
+
+          {/* Avaliar */}
+          <div className="mt-6">
+            <ReviewForm businessId={b.id} />
+          </div>
         </div>
 
         {/* Sidebar */}

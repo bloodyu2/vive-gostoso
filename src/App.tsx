@@ -24,6 +24,7 @@ import Perfil from '@/pages/cadastre/Perfil'
 import Preview from '@/pages/cadastre/Preview'
 import Claim from '@/pages/cadastre/Claim'
 import AdminClaims from '@/pages/cadastre/AdminClaims'
+import AdminReviews from '@/pages/cadastre/AdminReviews'
 
 export default function App() {
   return (
@@ -52,6 +53,7 @@ export default function App() {
       <Route path="/cadastre/preview" element={<PageWrapper><Preview /></PageWrapper>} />
       <Route path="/cadastre/claim/:slug" element={<Claim />} />
       <Route path="/cadastre/admin/claims" element={<PageWrapper><AdminClaims /></PageWrapper>} />
+      <Route path="/cadastre/admin/reviews" element={<PageWrapper><AdminReviews /></PageWrapper>} />
       <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
     </Routes>
     </>
