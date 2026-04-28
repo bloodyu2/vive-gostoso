@@ -40,13 +40,14 @@ export default function Negocio() {
   const backTo = verb === 'fique' ? '/fique' : verb === 'passeie' ? '/passeie' : '/come'
   const backLabel = verb === 'fique' ? 'FIQUE' : verb === 'passeie' ? 'PASSEIE' : 'COME'
 
-  const shareUrl = `https://vivegostoso.com.br/negocio/${b.slug}`
-  const shareText = `Encontrei ${b.name} no Vive Gostoso 🌊\nConfira: ${shareUrl}`
+  const business = b
+  const shareUrl = `https://vivegostoso.com.br/negocio/${business.slug}`
+  const shareText = `Encontrei ${business.name} no Vive Gostoso 🌊\nConfira: ${shareUrl}`
 
   async function handleShare() {
     if (navigator.share) {
       try {
-        await navigator.share({ title: b.name, text: `Encontrei ${b.name} no Vive Gostoso 🌊`, url: shareUrl })
+        await navigator.share({ title: business.name, text: `Encontrei ${business.name} no Vive Gostoso 🌊`, url: shareUrl })
       } catch { /* user cancelled */ }
     } else {
       await navigator.clipboard.writeText(shareText)
