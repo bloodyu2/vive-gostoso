@@ -9,6 +9,7 @@ import Participe from '@/pages/Participe'
 import Conheca from '@/pages/Conheca'
 import Apoie from '@/pages/Apoie'
 import Negocio from '@/pages/Negocio'
+import NotFound from '@/pages/NotFound'
 import Login from '@/pages/cadastre/Login'
 import Painel from '@/pages/cadastre/Painel'
 import Perfil from '@/pages/cadastre/Perfil'
@@ -30,6 +31,7 @@ export default function App() {
       <Route path="/cadastre/painel" element={<PageWrapper><Painel /></PageWrapper>} />
       <Route path="/cadastre/perfil" element={<PageWrapper><Perfil /></PageWrapper>} />
       <Route path="/cadastre/preview" element={<PageWrapper><Preview /></PageWrapper>} />
+      <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
     </Routes>
   )
 }
