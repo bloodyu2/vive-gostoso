@@ -51,8 +51,18 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
             <Link to={`/negocio/${b.slug}`}>
               <h3 className="font-display font-semibold text-lg tracking-tight hover:text-teal transition-colors">{b.name}</h3>
             </Link>
-            <div className="mt-1.5">
+            <div className="mt-1.5 flex flex-wrap gap-1.5 items-center">
               <ManagedBadge profileId={b.profile_id} isVerified={b.is_verified} size="sm" />
+              {b.price_range && (
+                <span className="inline-flex items-center text-xs font-semibold text-[#737373] bg-[#F0EDEA] px-2 py-0.5 rounded-full">
+                  {b.price_range}
+                </span>
+              )}
+              {b.menu_url && (
+                <span className="inline-flex items-center text-xs font-semibold text-ocre bg-ocre/10 px-2 py-0.5 rounded-full">
+                  Cardápio
+                </span>
+              )}
             </div>
             {b.address && (
               <p className="flex items-center gap-1 text-xs text-[#737373] mt-0.5">
@@ -127,8 +137,18 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
         <Link to={`/negocio/${b.slug}`}>
           <h3 className="font-display font-semibold text-xl tracking-tight hover:text-teal transition-colors">{b.name}</h3>
         </Link>
-        <div className="mt-1.5">
+        <div className="mt-1.5 flex flex-wrap gap-1.5 items-center">
           <ManagedBadge profileId={b.profile_id} isVerified={b.is_verified} size="sm" />
+          {b.price_range && (
+            <span className="inline-flex items-center text-xs font-semibold text-[#737373] bg-[#F0EDEA] px-2 py-0.5 rounded-full">
+              {b.price_range}
+            </span>
+          )}
+          {b.menu_url && (
+            <span className="inline-flex items-center text-xs font-semibold text-ocre bg-ocre/10 px-2 py-0.5 rounded-full">
+              Cardápio
+            </span>
+          )}
         </div>
 
         {b.address && (
