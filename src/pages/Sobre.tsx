@@ -15,23 +15,28 @@ const VERBOS = [
 const STEPS = [
   {
     n: '01',
-    title: 'O negócio se cadastra',
-    body: 'Restaurante, pousada, guia ou prestador de serviço — qualquer estabelecimento de Gostoso pode criar um perfil gratuito com fotos, horários, contato e localização.',
+    title: 'Todo mundo entra de graça',
+    body: 'Agora e sempre: qualquer negócio de Gostoso pode criar um perfil completo sem pagar nada. Fotos, horários, contato, localização, descrição. Sem prazo de validade, sem cobrança surpresa. Isso é feito de boa vontade e amor pela cidade.',
   },
   {
     n: '02',
-    title: 'O visitante descobre',
-    body: 'Quem chega a Gostoso encontra tudo num só lugar: onde comer, onde ficar, o que fazer, o que está aberto agora. Sem precisar depender de grupos de WhatsApp ou dicas desencontradas.',
+    title: 'O visitante descobre todo mundo',
+    body: 'Quem chega a Gostoso encontra tudo num só lugar: onde comer, onde ficar, o que fazer, o que está aberto agora. Cada negócio cadastrado ganha visibilidade orgânica imediata — sem anunciar, sem pagar nada.',
   },
   {
     n: '03',
-    title: 'O associado financia a cidade',
-    body: 'Quem escolhe o plano associado (R$30-50/mês) ganha destaque na plataforma. Mas mais importante: 80% do que paga vai direto para o Fundo Público de Marketing da Cidade, visível e auditável por qualquer pessoa.',
+    title: 'Quanto maior a comunidade, mais forte o alcance',
+    body: 'Quanto mais negócios participam, mais relevante a plataforma fica nos mecanismos de busca. Mais visitantes a encontram antes de chegar a Gostoso. O tráfego orgânico cresce junto com a comunidade — e beneficia todos, de graça.',
   },
   {
     n: '04',
-    title: 'A cidade cresce junta',
-    body: 'O fundo financia promoção coletiva: campanhas de turismo, presença em feiras, calendário de eventos. Nenhum negócio sozinho consegue isso. Juntos, conseguem.',
+    title: 'Associados amplificam o todo',
+    body: 'Quem escolhe um plano pago (R$30-50/mês) financia campanhas de tráfego pago que promovem Gostoso como destino. O benefício não é só de quem paga — é de toda a plataforma. 80% de tudo que entra vai para o Fundo Público da Cidade, auditável por qualquer pessoa.',
+  },
+  {
+    n: '05',
+    title: 'A comunidade decide o que vem depois',
+    body: 'Simpósios, treinamentos, palestras, workshops — tudo isso é possível quando a comunidade se organiza. O Vive Gostoso é a infraestrutura. O que construímos em cima depende de quantas pessoas decidirem participar.',
   },
 ]
 
