@@ -146,8 +146,8 @@ export default function Sobre() {
         <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-8">
           Feito por quem mora aqui.
         </h2>
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl p-6">
+        <div className="flex flex-col sm:flex-row gap-6">
+          <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl p-6 flex-1">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-teal flex items-center justify-center text-white font-bold">V</div>
               <div>
@@ -159,16 +159,21 @@ export default function Sobre() {
               Desenvolvedor e estrategista. Escolheu Gostoso como casa definitiva e decidiu colocar a tecnologia a serviço da cidade que adotou.
             </p>
           </div>
-          <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl p-6">
+          <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl p-6 flex-1">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-ocre flex items-center justify-center text-white font-bold">J</div>
+              <div className="w-10 h-10 rounded-xl bg-[#0D0D0D] flex items-center justify-center flex-shrink-0">
+                <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 26 C6 26 4 16 16 10 C28 4 28 14 22 18 C16 22 14 18 16 14 C18 10 22 12 20 16" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                  <circle cx="20" cy="16" r="2" fill="white"/>
+                </svg>
+              </div>
               <div>
-                <div className="font-semibold">Jonathan</div>
-                <div className="text-xs text-[#737373]">Articulação comunitária · morador local</div>
+                <div className="font-semibold">Instituto Balaio</div>
+                <div className="text-xs text-[#737373]">Tecnologia e estratégia digital · <a href="https://balaio.net" target="_blank" rel="noopener noreferrer" className="text-teal hover:underline">balaio.net</a></div>
               </div>
             </div>
             <p className="text-sm text-[#737373] leading-relaxed">
-              Guia turístico, dono de churrasco, conhecido de todo Gostoso. Conecta a plataforma com a realidade da cidade e com os primeiros negócios parceiros.
+              Hub de tecnologia e inovação responsável pelo desenvolvimento e manutenção da plataforma. O Vive Gostoso é o caso zero de um modelo replicável para outras cidades do litoral nordestino.
             </p>
           </div>
         </div>

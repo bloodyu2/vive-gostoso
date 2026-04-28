@@ -16,6 +16,20 @@ export function useFundEntries() {
   })
 }
 
+export function useAssociadosCount() {
+  return useQuery({
+    queryKey: ['associados-count'],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from('gostoso_businesses')
+        .select('*', { count: 'exact', head: true })
+        .eq('plan', 'associado')
+      if (error) throw error
+      return count ?? 0
+    },
+  })
+}
+
 export function useFundSummary() {
   return useQuery({
     queryKey: ['fund-summary'],
