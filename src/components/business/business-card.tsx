@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Phone, MapPin, Navigation, ExternalLink } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { ManagedBadge } from '@/components/business/managed-badge'
 import { isBusinessOpen } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import type { Business } from '@/types/database'
@@ -50,6 +51,9 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
             <Link to={`/negocio/${b.slug}`}>
               <h3 className="font-display font-semibold text-lg tracking-tight hover:text-teal transition-colors">{b.name}</h3>
             </Link>
+            <div className="mt-1.5">
+              <ManagedBadge profileId={b.profile_id} isVerified={b.is_verified} size="sm" />
+            </div>
             {b.address && (
               <p className="flex items-center gap-1 text-xs text-[#737373] mt-0.5">
                 <MapPin className="w-3 h-3 flex-shrink-0" />{b.address}
@@ -123,6 +127,9 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
         <Link to={`/negocio/${b.slug}`}>
           <h3 className="font-display font-semibold text-xl tracking-tight hover:text-teal transition-colors">{b.name}</h3>
         </Link>
+        <div className="mt-1.5">
+          <ManagedBadge profileId={b.profile_id} isVerified={b.is_verified} size="sm" />
+        </div>
 
         {b.address && (
           <p className="flex items-center gap-1 text-xs text-[#737373] mt-0.5">
