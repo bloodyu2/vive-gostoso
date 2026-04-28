@@ -50,7 +50,7 @@ export default function Home() {
 
             {/* Sub */}
             <p className="text-base md:text-lg text-white/70 max-w-md leading-relaxed">
-              A infraestrutura digital de São Miguel do Gostoso. Negócios, eventos, mapa — tudo numa cidade só.
+              Onde comer, ficar e curtir em São Miguel do Gostoso — tudo aqui, tudo perto, tudo agora.
             </p>
 
             {/* CTAs */}

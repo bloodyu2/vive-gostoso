@@ -29,7 +29,7 @@ export function Footer() {
         <div className="max-w-xs">
           <Logo height={32} dark />
           <p className="text-sm opacity-70 mt-3 leading-relaxed">
-            A infraestrutura digital de São Miguel do Gostoso.<br />A plataforma é da cidade.
+            Gostoso na palma da mão.<br />A plataforma é da cidade.
           </p>
         </div>
 
