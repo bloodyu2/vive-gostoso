@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle } from 'lucide-react'
+import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle, Share2, Copy, Check } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useBusiness } from '@/hooks/useBusinesses'
 import { isBusinessOpen } from '@/lib/utils'
@@ -33,10 +34,27 @@ export default function Negocio() {
     </main>
   )
 
+  const [copied, setCopied] = useState(false)
+
   const open = isBusinessOpen(b.opening_hours)
   const verb = b.category?.verb ?? 'come'
   const backTo = verb === 'fique' ? '/fique' : verb === 'passeie' ? '/passeie' : '/come'
   const backLabel = verb === 'fique' ? 'FIQUE' : verb === 'passeie' ? 'PASSEIE' : 'COME'
+
+  const shareUrl = `https://vivegostoso.com.br/negocio/${b.slug}`
+  const shareText = `Encontrei ${b.name} no Vive Gostoso 🌊\nConfira: ${shareUrl}`
+
+  async function handleShare() {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: b.name, text: `Encontrei ${b.name} no Vive Gostoso 🌊`, url: shareUrl })
+      } catch { /* user cancelled */ }
+    } else {
+      await navigator.clipboard.writeText(shareText)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2500)
+    }
+  }
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-10">
@@ -90,6 +108,15 @@ export default function Negocio() {
 
         {/* Sidebar */}
         <aside className="space-y-5">
+          {/* Share */}
+          <button
+            onClick={handleShare}
+            className="w-full flex items-center justify-center gap-2 bg-[#1A1A1A] dark:bg-white text-white dark:text-[#1A1A1A] rounded-2xl px-5 py-3.5 text-sm font-semibold hover:opacity-90 transition-opacity"
+          >
+            {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
+            {copied ? 'Link copiado!' : 'Compartilhar este lugar'}
+          </button>
+
           {/* Contatos */}
           <div className="bg-white border border-[#E8E4DF] rounded-2xl p-5 space-y-3">
             <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide">Contato</h3>

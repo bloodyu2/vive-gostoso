@@ -127,6 +127,20 @@ export interface JobListing {
   created_at: string
 }
 
+export interface BlogPost {
+  id: string
+  slug: string
+  title: string
+  excerpt: string
+  content: string
+  cover_url: string | null
+  author: string
+  tags: string[]
+  is_published: boolean
+  published_at: string | null
+  created_at: string
+}
+
 export type Database = {
   public: {
     Tables: {
@@ -137,6 +151,7 @@ export type Database = {
       gostoso_profiles:         { Row: Profile; Insert: Omit<Profile, 'id' | 'created_at' | 'updated_at'>; Update: Partial<Profile> }
       gostoso_service_listings: { Row: ServiceListing; Insert: Omit<ServiceListing, 'id' | 'created_at'>; Update: Partial<ServiceListing> }
       gostoso_job_listings:     { Row: JobListing; Insert: Omit<JobListing, 'id' | 'created_at'>; Update: Partial<JobListing> }
+      gostoso_blog_posts:       { Row: BlogPost; Insert: Omit<BlogPost, 'id' | 'created_at'>; Update: Partial<BlogPost> }
     }
   }
 }

@@ -116,6 +116,84 @@ export default function Sobre() {
         </div>
       </section>
 
+      {/* Planos */}
+      <section className="bg-areia dark:bg-[#161616] px-5 md:px-8 py-16 md:py-20">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-xs font-bold tracking-widest uppercase text-[#737373] mb-3">Associe-se</p>
+          <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-4">
+            Dois planos. Um objetivo.
+          </h2>
+          <p className="text-[#737373] text-lg mb-10 max-w-2xl">
+            Cadastro gratuito para todos. Os planos pagos existem para quem quer mais visibilidade -- e para financiar a promoção coletiva da cidade.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-6">
+            {/* Tier 1 */}
+            <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl p-6">
+              <div className="flex items-baseline gap-1 mb-1">
+                <span className="font-display font-bold text-4xl text-teal">R$30</span>
+                <span className="text-sm text-[#737373]">/mês</span>
+              </div>
+              <div className="text-xs font-bold uppercase tracking-widest text-teal mb-5">Associado</div>
+              <ul className="space-y-3 text-sm text-[#3D3D3D] dark:text-[#C0BCB8]">
+                <li className="flex items-start gap-2">
+                  <span className="text-teal mt-0.5">✓</span>
+                  Destaque nos resultados de busca e listagens
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-teal mt-0.5">✓</span>
+                  Selo "Associado" no perfil
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-teal mt-0.5">✓</span>
+                  <span>
+                    <strong>Tráfego pago coletivo</strong> -- sua marca aparece nas campanhas de marketing que a plataforma roda para Gostoso como destino. Todos os associados se beneficiam juntos.
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-teal mt-0.5">✓</span>
+                  80% do valor vai para o Fundo Público da Cidade
+                </li>
+              </ul>
+            </div>
+
+            {/* Tier 2 */}
+            <div className="bg-white dark:bg-[#1C1C1C] border-2 border-ocre rounded-2xl p-6 relative">
+              <div className="absolute -top-3 left-6 bg-ocre text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
+                Mais visibilidade
+              </div>
+              <div className="flex items-baseline gap-1 mb-1">
+                <span className="font-display font-bold text-4xl text-ocre">R$50</span>
+                <span className="text-sm text-[#737373]">/mês</span>
+              </div>
+              <div className="text-xs font-bold uppercase tracking-widest text-ocre mb-5">Associado Plus</div>
+              <ul className="space-y-3 text-sm text-[#3D3D3D] dark:text-[#C0BCB8]">
+                <li className="flex items-start gap-2">
+                  <span className="text-ocre mt-0.5">✓</span>
+                  Tudo do plano Associado
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-ocre mt-0.5">✓</span>
+                  <span>
+                    <strong>Tráfego pago dedicado</strong> -- campanhas individuais criadas e gerenciadas pela <a href="https://balaio.net" target="_blank" rel="noopener noreferrer" className="text-teal underline">Balaio</a>, agência especializada em marketing digital para negócios locais. Seu estabelecimento. Seu público. Sua campanha.
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-ocre mt-0.5">✓</span>
+                  Relatório mensal de desempenho
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-ocre mt-0.5">✓</span>
+                  80% do valor vai para o Fundo Público da Cidade
+                </li>
+              </ul>
+            </div>
+          </div>
+          <p className="text-xs text-[#737373] mt-6 text-center">
+            Qualquer negócio pode se cadastrar gratuitamente. Os planos pagos são opcionais e não existem para gerar lucro -- existem para financiar a cidade.
+          </p>
+        </div>
+      </section>
+
       {/* Transparência financeira */}
       <section className="bg-teal text-white px-5 md:px-8 py-16">
         <div className="max-w-4xl mx-auto grid md:grid-cols-3 gap-8 text-center">

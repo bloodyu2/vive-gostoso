@@ -1,4 +1,6 @@
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { ChevronDown } from 'lucide-react'
 import { EventCard } from '@/components/events/event-card'
 import { BusinessCard } from '@/components/business/business-card'
 import { Hoje } from '@/components/home/hoje'
@@ -19,6 +21,18 @@ export default function Home() {
   const { data: events = [] } = useEvents(true)
   const { data: allBusinesses = [] } = useBusinesses()
   const featured = allBusinesses.filter(b => b.is_featured)
+
+  const verbsRef = useRef<HTMLDivElement>(null)
+  const [scrolled, setScrolled] = useState(false)
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 80)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  function scrollToVerbs() {
+    verbsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   return (
     <div>
@@ -81,10 +95,20 @@ export default function Home() {
             ))}
           </div>
         </div>
+
+        {/* Scroll incentive */}
+        <button
+          onClick={scrollToVerbs}
+          aria-label="Descer"
+          className={`absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/40 hover:text-white/80 transition-all duration-500 ${scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        >
+          <span className="text-[10px] uppercase tracking-widest font-semibold">Explorar</span>
+          <ChevronDown className="w-5 h-5 animate-bounce" />
+        </button>
       </section>
 
       {/* ── Verb grid ── */}
-      <section className="max-w-6xl mx-auto px-5 md:px-8 py-10 md:py-16">
+      <section ref={verbsRef} className="max-w-6xl mx-auto px-5 md:px-8 py-10 md:py-16">
         {/* Mobile: lista vertical com ícone de seta. Tablet+: grid 2 ou 3 colunas */}
         <div className="flex flex-col sm:hidden gap-2">
           {VERBS.map(v => (

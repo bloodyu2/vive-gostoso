@@ -9,6 +9,7 @@ const MODULOS = [
 ]
 const CIDADE = [
   { to: '/sobre',    label: 'Sobre o projeto' },
+  { to: '/blog',     label: 'Blog' },
   { to: '/conheca',  label: 'CONHEÇA' },
   { to: '/participe',label: 'PARTICIPE' },
   { to: '/apoie',    label: 'APOIE' },

@@ -14,6 +14,8 @@ import Negocio from '@/pages/Negocio'
 import Contrate from '@/pages/Contrate'
 import Servicos from '@/pages/Servicos'
 import Sobre from '@/pages/Sobre'
+import Blog from '@/pages/Blog'
+import BlogPost from '@/pages/BlogPost'
 import NotFound from '@/pages/NotFound'
 import Login from '@/pages/cadastre/Login'
 import Painel from '@/pages/cadastre/Painel'
@@ -37,6 +39,8 @@ export default function App() {
       <Route path="/contrate" element={<PageWrapper><Contrate /></PageWrapper>} />
       <Route path="/resolva" element={<PageWrapper><Servicos /></PageWrapper>} />
       <Route path="/sobre" element={<PageWrapper><Sobre /></PageWrapper>} />
+      <Route path="/blog" element={<PageWrapper><Blog /></PageWrapper>} />
+      <Route path="/blog/:slug" element={<PageWrapper><BlogPost /></PageWrapper>} />
       <Route path="/negocio/:slug" element={<PageWrapper><Negocio /></PageWrapper>} />
       <Route path="/cadastre" element={<Login />} />
       <Route path="/cadastre/painel" element={<PageWrapper><Painel /></PageWrapper>} />
