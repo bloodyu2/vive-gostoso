@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle, Share2, Copy, Check } from 'lucide-react'
+import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle, Share2, Check } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useBusiness } from '@/hooks/useBusinesses'
 import { isBusinessOpen } from '@/lib/utils'
@@ -14,6 +14,7 @@ const DAY_ORDER = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']
 export default function Negocio() {
   const { slug } = useParams<{ slug: string }>()
   const { data: b, isLoading } = useBusiness(slug ?? '')
+  const [copied, setCopied] = useState(false)
 
   if (isLoading) return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-16">
@@ -33,8 +34,6 @@ export default function Negocio() {
       <Link to="/" className="text-teal font-semibold">← Voltar ao início</Link>
     </main>
   )
-
-  const [copied, setCopied] = useState(false)
 
   const open = isBusinessOpen(b.opening_hours)
   const verb = b.category?.verb ?? 'come'

@@ -6,6 +6,7 @@ import { BusinessCard } from '@/components/business/business-card'
 import { Hoje } from '@/components/home/hoje'
 import { useEvents } from '@/hooks/useEvents'
 import { useBusinesses } from '@/hooks/useBusinesses'
+import { useStats } from '@/hooks/useStats'
 
 const VERBS = [
   { to: '/come',      label: 'COME.',      color: 'text-ocre',       sub: 'Restaurantes e gastronomia' },
@@ -21,6 +22,7 @@ export default function Home() {
   const { data: events = [] } = useEvents(true)
   const { data: allBusinesses = [] } = useBusinesses()
   const featured = allBusinesses.filter(b => b.is_featured)
+  const { data: stats } = useStats()
 
   const verbsRef = useRef<HTMLDivElement>(null)
   const [scrolled, setScrolled] = useState(false)
@@ -83,10 +85,19 @@ export default function Home() {
           {/* Stats strip */}
           <div className="flex flex-wrap gap-x-10 gap-y-4 mt-14 pt-10 border-t border-white/10">
             {[
-              { n: '250+',   label: 'hospedagens' },
-              { n: '4.500',  label: 'leitos' },
-              { n: '10+',    label: 'festivais por ano' },
-              { n: '100%',   label: 'dinheiro fica na cidade' },
+              {
+                n: stats?.businesses ? `${stats.businesses}` : '—',
+                label: 'negócios cadastrados',
+              },
+              {
+                n: stats?.accommodations ? `${stats.accommodations}` : '—',
+                label: 'hospedagens',
+              },
+              {
+                n: stats?.events ? `${stats.events}` : '—',
+                label: 'eventos no calendário',
+              },
+              { n: '100%', label: 'dinheiro fica na cidade' },
             ].map(s => (
               <div key={s.label}>
                 <div className="font-display font-bold text-2xl text-white">{s.n}</div>
