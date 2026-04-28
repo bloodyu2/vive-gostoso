@@ -22,6 +22,8 @@ import Login from '@/pages/cadastre/Login'
 import Painel from '@/pages/cadastre/Painel'
 import Perfil from '@/pages/cadastre/Perfil'
 import Preview from '@/pages/cadastre/Preview'
+import Claim from '@/pages/cadastre/Claim'
+import AdminClaims from '@/pages/cadastre/AdminClaims'
 
 export default function App() {
   return (
@@ -48,6 +50,8 @@ export default function App() {
       <Route path="/cadastre/painel" element={<PageWrapper><Painel /></PageWrapper>} />
       <Route path="/cadastre/perfil" element={<PageWrapper><Perfil /></PageWrapper>} />
       <Route path="/cadastre/preview" element={<PageWrapper><Preview /></PageWrapper>} />
+      <Route path="/cadastre/claim/:slug" element={<Claim />} />
+      <Route path="/cadastre/admin/claims" element={<PageWrapper><AdminClaims /></PageWrapper>} />
       <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
     </Routes>
     </>
