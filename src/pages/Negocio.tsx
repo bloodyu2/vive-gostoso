@@ -4,6 +4,8 @@ import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle, Share2, Ch
 import { Badge } from '@/components/ui/badge'
 import { useBusiness } from '@/hooks/useBusinesses'
 import { isBusinessOpen } from '@/lib/utils'
+import { ManagedBadge } from '@/components/business/managed-badge'
+import { ClaimCta } from '@/components/business/claim-cta'
 
 const DAYS: Record<string, string> = {
   seg: 'Segunda', ter: 'Terça', qua: 'Quarta',
@@ -81,6 +83,7 @@ export default function Negocio() {
             {b.category && <Badge kind="cat">{b.category.name}</Badge>}
             {open ? <Badge kind="open" dot>Aberto agora</Badge> : <Badge kind="closed" dot>Fechado agora</Badge>}
             {b.plan === 'associado' && <Badge kind="verif">Associado</Badge>}
+            <ManagedBadge profileId={b.profile_id} isVerified={b.is_verified} />
           </div>
 
           <h1 className="font-display font-bold text-4xl tracking-tight mb-1">{b.name}</h1>
@@ -116,6 +119,9 @@ export default function Negocio() {
             {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
             {copied ? 'Link copiado!' : 'Compartilhar este lugar'}
           </button>
+
+          {/* Claim */}
+          {!b.profile_id && <ClaimCta businessSlug={b.slug} />}
 
           {/* Contatos */}
           <div className="bg-white border border-[#E8E4DF] rounded-2xl p-5 space-y-3">
