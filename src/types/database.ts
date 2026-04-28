@@ -33,6 +33,14 @@ export interface Business {
   display_order: number
   created_at: string
   updated_at: string
+  price_range: '$' | '$$' | '$$$' | null
+  menu_url: string | null
+  amenities: {
+    wifi?: boolean
+    parking?: boolean
+    accessible?: boolean
+    reservations?: boolean
+  } | null
   category?: Category
 }
 
