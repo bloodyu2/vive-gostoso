@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Instagram, MapPin } from 'lucide-react'
+import { AtSign, MapPin } from 'lucide-react'
 
 const LINKS = [
   { to: '/come',      emoji: '🍽️',  label: 'COME.',      sub: 'Restaurantes e gastronomia',   color: 'bg-ocre/10 hover:bg-ocre/20 border-ocre/20' },
@@ -58,7 +58,7 @@ export default function Bio() {
           rel="noopener noreferrer"
           className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A] hover:text-teal transition-colors"
         >
-          <Instagram className="w-4 h-4" />
+          <AtSign className="w-4 h-4" />
           @vivegostoso
         </a>
       </div>
