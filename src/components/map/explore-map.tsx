@@ -78,26 +78,28 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
       const verb = b.category?.verb ?? 'come'
       const color = VERB_COLOR[verb] ?? '#0D7C7C'
 
-      // Custom marker element
+      // Marcador: círculo sólido com anchor center — sem transform conflitante
       const el = document.createElement('div')
       el.style.cssText = `
-        width: 32px; height: 32px;
-        border-radius: 50% 50% 50% 0;
-        transform: rotate(-45deg);
+        width: 14px; height: 14px;
+        border-radius: 50%;
         background: ${color};
-        border: 2px solid white;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+        border: 2.5px solid white;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.30);
         cursor: pointer;
-        transition: transform 0.15s;
+        transition: width 0.12s, height 0.12s;
+        box-sizing: border-box;
       `
       el.addEventListener('mouseenter', () => {
-        el.style.transform = 'rotate(-45deg) scale(1.15)'
+        el.style.width = '18px'
+        el.style.height = '18px'
       })
       el.addEventListener('mouseleave', () => {
-        el.style.transform = 'rotate(-45deg) scale(1)'
+        el.style.width = '14px'
+        el.style.height = '14px'
       })
 
-      const marker = new mapboxgl.Marker({ element: el, anchor: 'bottom-left' })
+      const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
         .setLngLat([b.lng!, b.lat!])
         .addTo(map.current!)
 
