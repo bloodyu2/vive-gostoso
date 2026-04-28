@@ -2,7 +2,7 @@ export interface Category {
   id: string
   name: string
   slug: string
-  verb: 'come' | 'fique' | 'passeie'
+  verb: 'come' | 'fique' | 'passeie' | 'resolva'
   icon: string | null
   color: string | null
   display_order: number

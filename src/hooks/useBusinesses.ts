@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { Business, Category } from '@/types/database'
 
-export function useBusinesses(verb?: 'come' | 'fique' | 'passeie') {
+export function useBusinesses(verb?: 'come' | 'fique' | 'passeie' | 'resolva') {
   return useQuery({
     queryKey: ['businesses', verb],
     queryFn: async (): Promise<Business[]> => {

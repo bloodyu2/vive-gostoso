@@ -8,6 +8,7 @@ const verbColors: Record<string, string> = {
   participe: 'text-teal',
   conheca:   'text-[#1A1A1A]',
   apoie:     'text-ocre',
+  resolva:   'text-[#7C3AED]',
 }
 
 interface VerbPillProps { verb: string; className?: string }

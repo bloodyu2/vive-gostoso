@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { InstallBanner } from '@/components/install-banner'
+import { ScrollToTop } from '@/components/scroll-to-top'
 import Home from '@/pages/Home'
 import Come from '@/pages/Come'
 import Fique from '@/pages/Fique'
@@ -11,6 +12,7 @@ import Conheca from '@/pages/Conheca'
 import Apoie from '@/pages/Apoie'
 import Negocio from '@/pages/Negocio'
 import Contrate from '@/pages/Contrate'
+import Servicos from '@/pages/Servicos'
 import Sobre from '@/pages/Sobre'
 import NotFound from '@/pages/NotFound'
 import Login from '@/pages/cadastre/Login'
@@ -21,6 +23,7 @@ import Preview from '@/pages/cadastre/Preview'
 export default function App() {
   return (
     <>
+    <ScrollToTop />
     <InstallBanner />
     <Routes>
       <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
@@ -32,6 +35,7 @@ export default function App() {
       <Route path="/conheca" element={<PageWrapper><Conheca /></PageWrapper>} />
       <Route path="/apoie" element={<PageWrapper><Apoie /></PageWrapper>} />
       <Route path="/contrate" element={<PageWrapper><Contrate /></PageWrapper>} />
+      <Route path="/resolva" element={<PageWrapper><Servicos /></PageWrapper>} />
       <Route path="/sobre" element={<PageWrapper><Sobre /></PageWrapper>} />
       <Route path="/negocio/:slug" element={<PageWrapper><Negocio /></PageWrapper>} />
       <Route path="/cadastre" element={<Login />} />

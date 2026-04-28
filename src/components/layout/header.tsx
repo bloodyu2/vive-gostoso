@@ -19,7 +19,8 @@ const NAV_DISCOVER = [
   { to: '/explore',  label: 'EXPLORE',   sub: 'Mapa interativo',     color: 'text-coral' },
   { to: '/participe',label: 'PARTICIPE', sub: 'Eventos e festivais',  color: 'text-teal' },
   { to: '/conheca',  label: 'CONHEÇA',   sub: 'A cidade e as praias', color: 'text-[#3D8B5A]' },
-  { to: '/contrate', label: 'CONTRATE',  sub: 'Serviços e empregos',  color: 'text-ocre' },
+  { to: '/resolva',  label: 'RESOLVA',   sub: 'Comércio e serviços',  color: 'text-[#7C3AED]' },
+  { to: '/contrate', label: 'CONTRATE',  sub: 'Freelancers e vagas',  color: 'text-ocre' },
 ]
 
 // Menu completo para o drawer mobile
