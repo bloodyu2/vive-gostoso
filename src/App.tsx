@@ -25,6 +25,7 @@ import Preview from '@/pages/cadastre/Preview'
 import Claim from '@/pages/cadastre/Claim'
 import AdminClaims from '@/pages/cadastre/AdminClaims'
 import AdminReviews from '@/pages/cadastre/AdminReviews'
+import Bio from '@/pages/Bio'
 
 export default function App() {
   return (
@@ -47,6 +48,7 @@ export default function App() {
       <Route path="/blog" element={<PageWrapper><Blog /></PageWrapper>} />
       <Route path="/blog/:slug" element={<PageWrapper><BlogPost /></PageWrapper>} />
       <Route path="/negocio/:slug" element={<PageWrapper><Negocio /></PageWrapper>} />
+      <Route path="/bio" element={<Bio />} />
       <Route path="/cadastre" element={<Login />} />
       <Route path="/cadastre/painel" element={<PageWrapper><Painel /></PageWrapper>} />
       <Route path="/cadastre/perfil" element={<PageWrapper><Perfil /></PageWrapper>} />
