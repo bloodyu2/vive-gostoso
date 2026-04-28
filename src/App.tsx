@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { InstallBanner } from '@/components/install-banner'
+import { ShareFab } from '@/components/share-fab'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import Home from '@/pages/Home'
 import Come from '@/pages/Come'
@@ -27,6 +28,7 @@ export default function App() {
     <>
     <ScrollToTop />
     <InstallBanner />
+    <ShareFab />
     <Routes>
       <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
       <Route path="/come" element={<PageWrapper><Come /></PageWrapper>} />

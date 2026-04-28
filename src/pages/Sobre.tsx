@@ -405,6 +405,29 @@ export default function Sobre() {
         </div>
       </section>
 
+      {/* CTA — conhecer a homepage */}
+      <section className="bg-[#1A1A1A] text-white px-5 md:px-8 py-16 md:py-20">
+        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+          <div>
+            <p className="text-white/50 text-sm font-semibold uppercase tracking-widest mb-3">Pronto para explorar?</p>
+            <h2 className="font-display font-bold text-3xl md:text-4xl leading-tight mb-3">
+              Agora que você conhece a iniciativa —<br className="hidden md:block" />
+              que tal conhecer a cidade?
+            </h2>
+            <p className="text-white/60 text-base leading-relaxed max-w-lg">
+              Restaurantes, pousadas, passeios, eventos — tudo está na plataforma. Quem sabe o seu negócio já não está lá?
+            </p>
+          </div>
+          <Link
+            to="/"
+            className="flex-shrink-0 flex items-center gap-2 bg-teal text-white font-semibold px-8 py-4 rounded-full text-base hover:bg-teal-dark transition-colors"
+          >
+            Ver a página inicial
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+        </div>
+      </section>
+
       {/* CTA final */}
       <section className="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-20">
         <p className="text-xs font-bold tracking-widest uppercase text-[#737373] mb-3">Participe</p>
