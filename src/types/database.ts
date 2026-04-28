@@ -141,6 +141,17 @@ export interface BlogPost {
   created_at: string
 }
 
+export interface ClaimRequest {
+  id: string
+  business_id: string
+  profile_id: string
+  status: 'pending' | 'approved' | 'rejected'
+  message: string | null
+  admin_note: string | null
+  created_at: string
+  resolved_at: string | null
+}
+
 export type Database = {
   public: {
     Tables: {
@@ -152,6 +163,7 @@ export type Database = {
       gostoso_service_listings: { Row: ServiceListing; Insert: Omit<ServiceListing, 'id' | 'created_at'>; Update: Partial<ServiceListing> }
       gostoso_job_listings:     { Row: JobListing; Insert: Omit<JobListing, 'id' | 'created_at'>; Update: Partial<JobListing> }
       gostoso_blog_posts:       { Row: BlogPost; Insert: Omit<BlogPost, 'id' | 'created_at'>; Update: Partial<BlogPost> }
+      gostoso_claim_requests:   { Row: ClaimRequest; Insert: Omit<ClaimRequest, 'id' | 'created_at' | 'resolved_at'>; Update: Partial<Pick<ClaimRequest, 'status' | 'admin_note' | 'resolved_at'>> }
     }
   }
 }
