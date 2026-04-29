@@ -1,10 +1,44 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Plus, Pencil, Eye, EyeOff } from 'lucide-react'
+import { Plus, Pencil, Eye, EyeOff, ExternalLink, Copy, Check } from 'lucide-react'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
 import { useMyBusinesses, useInvalidateMyBusinesses, type BusinessSummary } from '@/hooks/useMyBusinesses'
+
+function CopyLinkButton({ slug }: { slug: string }) {
+  const [copied, setCopied] = useState(false)
+  const url = `${window.location.origin}/negocio/${slug}`
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(url)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // fallback for older browsers
+      const el = document.createElement('textarea')
+      el.value = url
+      document.body.appendChild(el)
+      el.select()
+      document.execCommand('copy')
+      document.body.removeChild(el)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
+
+  return (
+    <button
+      onClick={copy}
+      title={copied ? 'Link copiado!' : 'Copiar link público'}
+      className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-medium border border-[#E8E4DF] text-[#737373] hover:border-teal hover:text-teal transition-colors"
+    >
+      {copied ? <Check className="w-3.5 h-3.5 text-teal" /> : <Copy className="w-3.5 h-3.5" />}
+      {copied ? 'Copiado' : 'Copiar link'}
+    </button>
+  )
+}
 
 export default function MeusNegocios() {
   return <AuthGuard><MeusNegociosInner /></AuthGuard>
@@ -115,13 +149,29 @@ function MeusNegociosInner() {
                     {b.is_published ? 'Publicado' : 'Rascunho'}
                   </span>
                 </div>
-                {b.category && (
-                  <p className="text-xs text-[#737373] mt-0.5">{b.category.name}</p>
-                )}
+                <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                  {b.category && (
+                    <p className="text-xs text-[#737373]">{b.category.name}</p>
+                  )}
+                  <span className="text-xs text-[#C4BFBA] font-mono truncate max-w-[160px]">
+                    vivegostoso.com.br/negocio/{b.slug}
+                  </span>
+                </div>
               </div>
 
               {/* Actions */}
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-2 flex-shrink-0 flex-wrap justify-end">
+                <CopyLinkButton slug={b.slug} />
+                <a
+                  href={`/negocio/${b.slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Ver página pública"
+                  className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-medium border border-[#E8E4DF] text-[#737373] hover:border-teal hover:text-teal transition-colors"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  Ver
+                </a>
                 <PublishToggle biz={b} onDone={() => invalidate()} />
                 <Link
                   to={`/cadastre/perfil?bizId=${b.id}`}

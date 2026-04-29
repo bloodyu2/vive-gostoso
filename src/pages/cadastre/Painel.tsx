@@ -19,12 +19,15 @@ function PainelInner() {
   const [searchParams] = useSearchParams()
   const successMsg = searchParams.get('associado') === 'success'
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null)
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
 
   async function handleCheckout(bizId: string, plan: 'associado' | 'destaque') {
     setCheckoutLoading(bizId)
+    setCheckoutError(null)
     try {
       await startCheckout(bizId, plan)
-    } catch {
+    } catch (err) {
+      setCheckoutError(err instanceof Error ? err.message : 'Erro ao iniciar pagamento. Tente novamente.')
       setCheckoutLoading(null)
     }
   }
@@ -84,6 +87,13 @@ function PainelInner() {
         <div className="mt-10 border-t border-[#E8E4DF] pt-8">
           <h2 className="font-display text-xl font-semibold mb-1">Planos</h2>
           <p className="text-sm text-[#737373] mb-5">Destaque seu negócio no diretório e apoie Gostoso.</p>
+
+          {checkoutError && (
+            <div className="mb-4 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-600">
+              {checkoutError}
+            </div>
+          )}
+
           <div className="space-y-3">
             {businesses.map(b => (
               <div
