@@ -1,9 +1,11 @@
 import { FundHero } from '@/components/fund/fund-hero'
 import { FundEntryRow } from '@/components/fund/fund-entry-row'
 import { useFundEntries, useFundSummary, useAssociadosCount } from '@/hooks/useFund'
+import { useGoals } from '@/hooks/useGoals'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
-import { CheckCircle, Clock, Globe, Mail, Phone, Smartphone, Zap } from 'lucide-react'
+import { CheckCircle, Clock, Globe, Mail, Phone, Smartphone, Zap, Target, BookOpen, Megaphone, Server, Users } from 'lucide-react'
+import type { Goal } from '@/types/database'
 
 // Custos reais de operação — atualizar manualmente quando mudar
 const CUSTOS_ATIVOS = [
@@ -46,10 +48,35 @@ const CUSTOS_PLANEJADOS = [
   },
 ]
 
+const GOAL_ICONS: Record<Goal['category'], React.ElementType> = {
+  comunidade: Users,
+  operacao: Phone,
+  marketing: Megaphone,
+  infraestrutura: Server,
+}
+
+const GOAL_COLORS: Record<Goal['category'], { bg: string; text: string; border: string }> = {
+  comunidade: { bg: 'bg-teal-light', text: 'text-teal', border: 'border-teal/20' },
+  operacao:   { bg: 'bg-ocre/10',    text: 'text-ocre',  border: 'border-ocre/20' },
+  marketing:  { bg: 'bg-coral/10',   text: 'text-coral', border: 'border-coral/20' },
+  infraestrutura: { bg: 'bg-[#E8E4DF]', text: 'text-[#737373]', border: 'border-[#D4CFCA]' },
+}
+
+const STATUS_LABELS: Record<Goal['status'], string> = {
+  pendente: 'Pendente',
+  em_andamento: 'Em andamento',
+  concluido: 'Concluído',
+}
+
+function formatCurrency(cents: number) {
+  return (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+}
+
 export default function Apoie() {
   const { data: entries = [] } = useFundEntries()
   const { data: summary } = useFundSummary()
   const { data: associadosCount = 0 } = useAssociadosCount()
+  const { data: goals = [] } = useGoals()
 
   return (
     <main>
@@ -84,6 +111,76 @@ export default function Apoie() {
             Cada real que entra aqui fica em Gostoso. Auditável. Público.
           </p>
         </div>
+
+        {/* Objetivos e metas */}
+        {goals.length > 0 && (
+          <div className="mt-16">
+            <div className="flex items-center gap-3 mb-2">
+              <Target className="w-5 h-5 text-teal" />
+              <h2 className="font-display font-semibold text-3xl">Para onde vai o dinheiro</h2>
+            </div>
+            <p className="text-[#737373] text-sm mb-8 max-w-xl">
+              Estas são as metas concretas que a arrecadação vai financiar. Sem devaneios, sem promessas vazias.
+            </p>
+            <div className="space-y-4">
+              {goals.map((goal) => {
+                const Icon = GOAL_ICONS[goal.category]
+                const colors = GOAL_COLORS[goal.category]
+                const pct = goal.target_cents > 0
+                  ? Math.min(100, Math.round((goal.raised_cents / goal.target_cents) * 100))
+                  : 0
+                const isConcluido = goal.status === 'concluido'
+                const isEmAndamento = goal.status === 'em_andamento'
+                return (
+                  <div
+                    key={goal.id}
+                    className={`bg-white dark:bg-[#1C1C1C] border ${colors.border} rounded-2xl px-5 py-5 ${isConcluido ? 'opacity-70' : ''}`}
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className={`w-10 h-10 rounded-xl ${colors.bg} flex items-center justify-center flex-shrink-0 mt-0.5`}>
+                        <Icon className={`w-5 h-5 ${colors.text}`} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                          <span className="font-semibold text-sm text-[#1A1A1A] dark:text-white leading-snug">{goal.title}</span>
+                          <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                            isConcluido
+                              ? 'bg-teal-light text-teal'
+                              : isEmAndamento
+                              ? 'bg-ocre/10 text-ocre'
+                              : 'bg-[#E8E4DF] text-[#737373]'
+                          }`}>
+                            {STATUS_LABELS[goal.status]}
+                          </span>
+                          {goal.target_date && (
+                            <span className="text-xs text-[#A0A0A0]">
+                              Meta: {new Date(goal.target_date).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+                            </span>
+                          )}
+                        </div>
+                        {goal.description && (
+                          <p className="text-xs text-[#737373] leading-relaxed mb-3">{goal.description}</p>
+                        )}
+                        {/* Progress bar */}
+                        <div className="flex items-center gap-3">
+                          <div className="flex-1 h-1.5 bg-[#E8E4DF] dark:bg-[#333] rounded-full overflow-hidden">
+                            <div
+                              className={`h-full rounded-full transition-all ${isConcluido ? 'bg-teal' : isEmAndamento ? 'bg-ocre' : 'bg-[#D4CFCA]'}`}
+                              style={{ width: `${pct}%` }}
+                            />
+                          </div>
+                          <span className="text-xs text-[#737373] flex-shrink-0 tabular-nums">
+                            {formatCurrency(goal.raised_cents)} / {formatCurrency(goal.target_cents)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Custos reais de operação */}
         <div className="mt-16">

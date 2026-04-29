@@ -135,6 +135,19 @@ export interface JobListing {
   created_at: string
 }
 
+export interface Goal {
+  id: string
+  title: string
+  description: string | null
+  target_cents: number
+  raised_cents: number
+  category: 'marketing' | 'operacao' | 'infraestrutura' | 'comunidade'
+  status: 'pendente' | 'em_andamento' | 'concluido'
+  target_date: string | null
+  display_order: number
+  created_at: string
+}
+
 export interface BlogPost {
   id: string
   slug: string
@@ -170,6 +183,7 @@ export type Database = {
       gostoso_profiles:         { Row: Profile; Insert: Omit<Profile, 'id' | 'created_at' | 'updated_at'>; Update: Partial<Profile> }
       gostoso_service_listings: { Row: ServiceListing; Insert: Omit<ServiceListing, 'id' | 'created_at'>; Update: Partial<ServiceListing> }
       gostoso_job_listings:     { Row: JobListing; Insert: Omit<JobListing, 'id' | 'created_at'>; Update: Partial<JobListing> }
+      gostoso_goals:            { Row: Goal; Insert: Omit<Goal, 'id' | 'created_at'>; Update: Partial<Goal> }
       gostoso_blog_posts:       { Row: BlogPost; Insert: Omit<BlogPost, 'id' | 'created_at'>; Update: Partial<BlogPost> }
       gostoso_claim_requests:   { Row: ClaimRequest; Insert: Omit<ClaimRequest, 'id' | 'created_at' | 'resolved_at'>; Update: Partial<Pick<ClaimRequest, 'status' | 'admin_note' | 'resolved_at'>> }
     }
