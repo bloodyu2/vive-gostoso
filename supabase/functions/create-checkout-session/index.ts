@@ -83,6 +83,11 @@ serve(async (req) => {
       customer: customerId,
       mode: 'subscription',
       line_items: [{ price: priceId, quantity: 1 }],
+      // Accept card and boleto (PIX doesn't support recurring subscriptions in Stripe)
+      payment_method_types: ['card', 'boleto'],
+      locale: 'pt-BR',
+      // Required for boleto — collects CPF/CNPJ and billing address
+      billing_address_collection: 'required',
       success_url: successUrl ?? `${req.headers.get('origin')}/cadastre/painel?associado=success`,
       cancel_url: cancelUrl ?? `${req.headers.get('origin')}/cadastre/painel`,
       metadata: { business_id: businessId },
