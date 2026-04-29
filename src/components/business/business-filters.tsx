@@ -1,4 +1,4 @@
-import { LayoutGrid, List, Images } from 'lucide-react'
+import { LayoutGrid, List, Images, Search, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Category } from '@/types/database'
 import type { ViewMode } from './business-grid'
@@ -12,6 +12,8 @@ interface BusinessFiltersProps {
   total: number
   openOnly: boolean
   onOpenOnly: (v: boolean) => void
+  search: string
+  onSearch: (s: string) => void
 }
 
 const VIEW_OPTIONS: { v: ViewMode; Icon: React.ElementType; label: string }[] = [
@@ -24,9 +26,31 @@ export function BusinessFilters({
   categories, active, onSelect,
   view, onView,
   total, openOnly, onOpenOnly,
+  search, onSearch,
 }: BusinessFiltersProps) {
   return (
     <div className="mb-8 space-y-3">
+      {/* Search bar */}
+      <div className="relative">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#B0A99F] pointer-events-none" />
+        <input
+          type="text"
+          value={search}
+          onChange={e => onSearch(e.target.value)}
+          placeholder="Buscar por nome, descrição ou endereço..."
+          className="w-full bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl pl-11 pr-10 py-3 text-sm text-[#1A1A1A] dark:text-white placeholder-[#B0A99F] focus:outline-none focus:border-teal focus:ring-1 focus:ring-teal transition-colors"
+        />
+        {search && (
+          <button
+            onClick={() => onSearch('')}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#B0A99F] hover:text-[#737373] transition-colors"
+            aria-label="Limpar busca"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
+      </div>
+
       {/* Row 1: category pills */}
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
         <button
@@ -58,6 +82,7 @@ export function BusinessFilters({
         <div className="flex items-center gap-3">
           <span className="text-sm text-[#737373]">
             {total} {total === 1 ? 'resultado' : 'resultados'}
+            {search && <span className="ml-1 text-teal font-medium">para "{search}"</span>}
           </span>
 
           <button
