@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { VerbPill } from '@/components/brand/verb-pill'
 import { BusinessFilters } from '@/components/business/business-filters'
@@ -16,12 +16,17 @@ export default function Come() {
   const [activeCat, setActiveCat] = useState<string | null>(null)
   const [view, setView] = useState<ViewMode>('grid')
   const [openOnly, setOpenOnly] = useState(false)
+  const [search, setSearch] = useState('')
   const { data: categories = [] } = useCategories('come')
   const { data: businesses = [], isLoading } = useBusinesses('come')
 
-  const filtered = businesses
-    .filter(b => !activeCat || b.category?.slug === activeCat)
-    .filter(b => !openOnly || isBusinessOpen(b.opening_hours))
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase()
+    return businesses
+      .filter(b => !activeCat || b.category?.slug === activeCat)
+      .filter(b => !openOnly || isBusinessOpen(b.opening_hours))
+      .filter(b => !q || [b.name, b.description ?? '', b.address ?? ''].join(' ').toLowerCase().includes(q))
+  }, [businesses, activeCat, openOnly, search])
 
   return (
     <main className="max-w-6xl mx-auto px-5 md:px-8 py-12">
@@ -41,6 +46,7 @@ export default function Come() {
         view={view} onView={setView}
         total={filtered.length}
         openOnly={openOnly} onOpenOnly={setOpenOnly}
+        search={search} onSearch={setSearch}
       />
       <BusinessGrid businesses={filtered} loading={isLoading} view={view} />
     </main>
