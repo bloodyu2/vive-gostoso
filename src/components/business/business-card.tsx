@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { ManagedBadge } from '@/components/business/managed-badge'
 import { isBusinessOpen } from '@/lib/utils'
 import { cn } from '@/lib/utils'
-import { useLocalePath } from '@/hooks/use-locale-path'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import type { Business } from '@/types/database'
 
 function mapsUrl(b: Business) {

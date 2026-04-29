@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { MapPin, X } from 'lucide-react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import { useLocalePath } from '@/hooks/use-locale-path'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import type { Business } from '@/types/database'
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN as string
