@@ -16,7 +16,7 @@ interface VerbPillProps { verb: string; className?: string }
 export function VerbPill({ verb, className }: VerbPillProps) {
   return (
     <h1 className={cn(
-      'font-display font-bold text-[80px] leading-none tracking-tight',
+      'font-display font-bold text-4xl sm:text-5xl md:text-[80px] leading-none tracking-tight',
       verbColors[verb] ?? 'text-[#1A1A1A]',
       className
     )}>

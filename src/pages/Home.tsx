@@ -7,6 +7,7 @@ import { Hoje } from '@/components/home/hoje'
 import { useEvents } from '@/hooks/useEvents'
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useStats } from '@/hooks/useStats'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 const VERBS = [
   { to: '/come',      label: 'COME.',      color: 'text-ocre',       sub: 'Restaurantes e gastronomia' },
@@ -19,6 +20,10 @@ const VERBS = [
 ]
 
 export default function Home() {
+  usePageMeta({
+    title: 'São Miguel do Gostoso, RN',
+    description: 'Come. Fique. Passeie. O guia completo de São Miguel do Gostoso: restaurantes, pousadas, passeios e muito mais.',
+  })
   const { data: events = [] } = useEvents(true)
   const { data: allBusinesses = [] } = useBusinesses()
   const featured = allBusinesses.filter(b => b.is_featured)
@@ -58,15 +63,15 @@ export default function Home() {
 
             {/* Display headline */}
             <h1 className="font-display font-bold leading-none tracking-tight">
-              <span className="block text-5xl sm:text-6xl md:text-7xl text-white/90">Come.</span>
-              <span className="block text-5xl sm:text-6xl md:text-7xl text-white/90">Fique.</span>
-              <span className="block text-5xl sm:text-6xl md:text-7xl text-white/90">Passeie.</span>
-              <span className="block text-5xl sm:text-6xl md:text-7xl text-coral mt-1">Vive Gostoso.</span>
+              <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">Come.</span>
+              <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">Fique.</span>
+              <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">Passeie.</span>
+              <span className="block text-3xl sm:text-5xl md:text-7xl text-coral mt-1">Vive Gostoso.</span>
             </h1>
 
             {/* Sub */}
             <p className="text-base md:text-lg text-white/70 max-w-md leading-relaxed">
-              Onde comer, ficar e curtir em São Miguel do Gostoso — tudo aqui, tudo perto, tudo agora.
+              Onde comer, ficar e curtir em São Miguel do Gostoso. Tudo aqui, tudo perto, tudo agora.
             </p>
 
             {/* CTAs */}

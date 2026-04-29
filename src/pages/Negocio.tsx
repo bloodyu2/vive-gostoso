@@ -9,6 +9,7 @@ import { ClaimCta } from '@/components/business/claim-cta'
 import { Lightbox } from '@/components/ui/lightbox'
 import { ReviewList } from '@/components/reviews/review-list'
 import { ReviewForm } from '@/components/reviews/review-form'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 const DAYS: Record<string, string> = {
   seg: 'Segunda', ter: 'Terça', qua: 'Quarta',
@@ -21,6 +22,16 @@ export default function Negocio() {
   const { data: b, isLoading } = useBusiness(slug ?? '')
   const [copied, setCopied] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+
+  usePageMeta(b
+    ? {
+        title: b.name,
+        description: b.description ?? `${b.name} em São Miguel do Gostoso. Encontre no Vive Gostoso.`,
+        image: b.cover_url ?? undefined,
+        url: `https://vivegostoso.com.br/negocio/${b.slug}`,
+      }
+    : { title: 'Carregando...' }
+  )
 
   if (isLoading) return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-16">

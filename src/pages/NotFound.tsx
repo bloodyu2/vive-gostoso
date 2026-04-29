@@ -17,7 +17,7 @@ export default function NotFound() {
         Página não encontrada
       </h1>
       <p className="text-[#737373] text-base leading-relaxed mb-10">
-        O endereço que você tentou acessar não existe em Gostoso — pelo menos não aqui.<br />
+        O endereço que você tentou acessar não existe em Gostoso, pelo menos não aqui.<br />
         Tente um destes:
       </p>
 

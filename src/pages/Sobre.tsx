@@ -21,35 +21,35 @@ const STEPS = [
     icon: Gift,
     color: 'bg-teal-light text-teal',
     title: 'Cadastro gratuito para sempre',
-    body: 'Qualquer negócio de Gostoso entra na plataforma sem pagar nada. Fotos, horários, contato, localização. Isso é feito de boa vontade e amor pela cidade — sem prazo, sem cobrança surpresa.',
+    body: 'Qualquer negócio de Gostoso entra na plataforma sem pagar nada. Fotos, horários, contato, localização. Isso é feito de boa vontade e amor pela cidade, sem prazo, sem cobrança surpresa.',
     tag: 'Hoje',
   },
   {
     icon: Search,
     color: 'bg-teal-light text-teal',
     title: 'Tráfego orgânico imediato',
-    body: 'Quem chega a Gostoso pesquisa antes de chegar. Cada perfil cadastrado aparece nos resultados de busca, no Google e dentro da plataforma — sem pagar um centavo de anúncio.',
+    body: 'Quem chega a Gostoso pesquisa antes de chegar. Cada perfil cadastrado aparece nos resultados de busca, no Google e dentro da plataforma, sem pagar um centavo de anúncio.',
     tag: 'Hoje',
   },
   {
     icon: TrendingUp,
     color: 'bg-ocre-light text-ocre',
     title: 'Mais negócios = mais alcance para todos',
-    body: 'A plataforma fica mais relevante no Google a cada negócio que entra. Mais visitantes a encontram antes de embarcar para Gostoso. O crescimento é coletivo — e gratuito para quem participa.',
+    body: 'A plataforma fica mais relevante no Google a cada negócio que entra. Mais visitantes a encontram antes de embarcar para Gostoso. O crescimento é coletivo, e gratuito para quem participa.',
     tag: 'Efeito rede',
   },
   {
     icon: Megaphone,
     color: 'bg-ocre-light text-ocre',
     title: 'Associados amplificam o destino',
-    body: 'Quem se torna associado (R$30-50/mês) financia campanhas de tráfego pago que promovem Gostoso como destino. O retorno não é exclusivo de quem paga — toda a plataforma se beneficia. 80% vai direto para o Fundo Público da Cidade.',
+    body: 'Quem se torna associado (R$30-50/mês) financia campanhas de tráfego pago que promovem Gostoso como destino. O retorno não é exclusivo de quem paga: toda a plataforma se beneficia. 80% vai direto para o Fundo Público da Cidade.',
     tag: 'Opcional',
   },
   {
     icon: Lightbulb,
     color: 'bg-[#EDE9FE] text-[#7C3AED]',
     title: 'O futuro depende da comunidade',
-    body: 'Simpósios, treinamentos, palestras, workshops de temporada — tudo isso é possível quando a comunidade se organiza. O Vive Gostoso é a infraestrutura. O que construímos em cima é decisão de quem vive e trabalha aqui.',
+    body: 'Simpósios, treinamentos, palestras, workshops de temporada: tudo isso é possível quando a comunidade se organiza. O Vive Gostoso é a infraestrutura. O que construímos em cima é decisão de quem vive e trabalha aqui.',
     tag: 'Futuro',
   },
 ]
@@ -78,7 +78,7 @@ export default function Sobre() {
             A infraestrutura<br />digital de uma cidade.
           </h1>
           <p className="text-white/70 text-lg md:text-xl max-w-2xl leading-relaxed mb-10">
-            Gostoso tem tudo — praias de classe mundial, gastronomia de respeito, eventos que atraem o Brasil inteiro.
+            Gostoso tem tudo: praias de classe mundial, gastronomia de respeito, eventos que atraem o Brasil inteiro.
             Faltava um lugar onde tudo isso estivesse junto, organizado e acessível.
             <strong className="text-white"> O Vive Gostoso é esse lugar.</strong>
           </p>
@@ -124,7 +124,7 @@ export default function Sobre() {
         </h2>
         <div className="grid md:grid-cols-2 gap-6 text-[#3D3D3D] dark:text-[#C0BCB8] text-base leading-relaxed">
           <p>
-            Sites de turismo mostram o que a cidade quer vender. O Vive Gostoso mostra o que a cidade <em>é</em> — incluindo o restaurante pequeno que abre toda segunda, a pousada gerenciada por quem nasceu aqui, o kite instructor que conhece cada vento.
+            Sites de turismo mostram o que a cidade quer vender. O Vive Gostoso mostra o que a cidade <em>é</em>, incluindo o restaurante pequeno que abre toda segunda, a pousada gerenciada por quem nasceu aqui, o kite instructor que conhece cada vento.
           </p>
           <p>
             A plataforma pertence à cidade. Não existe para gerar lucro para um investidor externo. Existe para que o dinheiro do turismo fique em Gostoso, financie Gostoso, e faça Gostoso crescer do jeito que os moradores querem.
@@ -212,7 +212,7 @@ export default function Sobre() {
             Oito verbos. Uma cidade inteira.
           </h2>
           <p className="text-[#737373] text-lg mb-10">
-            Cada módulo responde a uma pergunta que o visitante — e o morador — faz todo dia.
+            Cada módulo responde a uma pergunta que o visitante, e o morador, faz todo dia.
           </p>
           <div className="grid sm:grid-cols-2 gap-3">
             {VERBOS.map(({ v, to, desc, color }) => (
@@ -237,7 +237,7 @@ export default function Sobre() {
           Três formas de participar.
         </h2>
         <p className="text-[#737373] text-lg mb-10 max-w-2xl">
-          O cadastro é gratuito e já traz retorno. Os planos pagos existem para quem quer mais — e para financiar a cidade.
+          O cadastro é gratuito e já traz retorno. Os planos pagos existem para quem quer mais, e para financiar a cidade.
         </p>
         <div className="grid sm:grid-cols-3 gap-5">
           {/* Gratuito */}
@@ -245,7 +245,7 @@ export default function Sobre() {
             <div className="flex items-baseline gap-1 mb-1">
               <span className="font-display font-bold text-4xl text-[#1A1A1A] dark:text-white">R$0</span>
             </div>
-            <div className="text-xs font-bold uppercase tracking-widest text-[#737373] mb-5">Gratuito — sempre</div>
+            <div className="text-xs font-bold uppercase tracking-widest text-[#737373] mb-5">Gratuito, sempre</div>
             <ul className="space-y-2.5 text-sm text-[#3D3D3D] dark:text-[#C0BCB8] flex-1">
               <li className="flex items-start gap-2"><span className="text-teal mt-0.5">✓</span> Perfil completo na plataforma</li>
               <li className="flex items-start gap-2"><span className="text-teal mt-0.5">✓</span> Fotos, horários, contato e mapa</li>
@@ -268,7 +268,7 @@ export default function Sobre() {
               <li className="flex items-start gap-2"><span className="text-teal mt-0.5">✓</span> Tudo do plano gratuito</li>
               <li className="flex items-start gap-2"><span className="text-teal mt-0.5">✓</span> Destaque nas listagens</li>
               <li className="flex items-start gap-2"><span className="text-teal mt-0.5">✓</span> Selo "Associado" no perfil</li>
-              <li className="flex items-start gap-2"><span className="text-teal mt-0.5">✓</span><span><strong>Tráfego pago coletivo</strong> — campanhas que promovem Gostoso como destino. Todos os associados aparecem.</span></li>
+              <li className="flex items-start gap-2"><span className="text-teal mt-0.5">✓</span><span><strong>Tráfego pago coletivo:</strong> campanhas que promovem Gostoso como destino. Todos os associados aparecem.</span></li>
               <li className="flex items-start gap-2"><span className="text-teal mt-0.5">✓</span> 80% vai para o Fundo da Cidade</li>
             </ul>
             <Link to="/cadastre" className="mt-6 block text-center bg-teal text-white font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-teal-dark transition-colors">
@@ -288,7 +288,7 @@ export default function Sobre() {
             <div className="text-xs font-bold uppercase tracking-widest text-ocre mb-5">Associado Plus</div>
             <ul className="space-y-2.5 text-sm text-[#3D3D3D] dark:text-[#C0BCB8] flex-1">
               <li className="flex items-start gap-2"><span className="text-ocre mt-0.5">✓</span> Tudo do plano Associado</li>
-              <li className="flex items-start gap-2"><span className="text-ocre mt-0.5">✓</span><span><strong>Tráfego pago dedicado</strong> — campanhas individuais criadas e gerenciadas pela <a href="https://balaio.net" target="_blank" rel="noopener noreferrer" className="text-teal underline">Balaio</a>, especializada em marketing local.</span></li>
+              <li className="flex items-start gap-2"><span className="text-ocre mt-0.5">✓</span><span><strong>Tráfego pago dedicado:</strong> campanhas individuais criadas e gerenciadas pela <a href="https://balaio.net" target="_blank" rel="noopener noreferrer" className="text-teal underline">Balaio</a>, especializada em marketing local.</span></li>
               <li className="flex items-start gap-2"><span className="text-ocre mt-0.5">✓</span> Relatório mensal de resultados</li>
               <li className="flex items-start gap-2"><span className="text-ocre mt-0.5">✓</span> 80% vai para o Fundo da Cidade</li>
             </ul>
@@ -298,7 +298,7 @@ export default function Sobre() {
           </div>
         </div>
         <p className="text-xs text-[#737373] mt-6 text-center">
-          Os planos pagos são opcionais e não existem para gerar lucro — existem para financiar a promoção coletiva de Gostoso.
+          Os planos pagos são opcionais e não existem para gerar lucro: existem para financiar a promoção coletiva de Gostoso.
         </p>
       </section>
 
@@ -320,7 +320,7 @@ export default function Sobre() {
             </div>
             <div className="bg-white/10 rounded-2xl p-6 text-center">
               <div className="text-5xl font-display font-bold mb-2">0%</div>
-              <div className="text-teal-light text-sm font-medium leading-snug">de lucro — a plataforma não existe para enriquecer ninguém de fora</div>
+              <div className="text-teal-light text-sm font-medium leading-snug">de lucro: a plataforma não existe para enriquecer ninguém de fora</div>
             </div>
           </div>
           <div className="bg-white/10 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -417,11 +417,11 @@ export default function Sobre() {
           <div>
             <p className="text-white/50 text-sm font-semibold uppercase tracking-widest mb-3">Pronto para explorar?</p>
             <h2 className="font-display font-bold text-3xl md:text-4xl leading-tight mb-3">
-              Agora que você conhece a iniciativa —<br className="hidden md:block" />
+              Agora que você conhece a iniciativa,<br className="hidden md:block" />
               que tal conhecer a cidade?
             </h2>
             <p className="text-white/60 text-base leading-relaxed max-w-lg">
-              Restaurantes, pousadas, passeios, eventos — tudo está na plataforma. Quem sabe o seu negócio já não está lá?
+              Restaurantes, pousadas, passeios, eventos: tudo está na plataforma. Quem sabe o seu negócio já não está lá?
             </p>
           </div>
           <Link

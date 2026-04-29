@@ -41,6 +41,8 @@ export interface Business {
     accessible?: boolean
     reservations?: boolean
   } | null
+  is_published: boolean
+  services: { name: string; description?: string; price?: string }[]
   category?: Category
 }
 

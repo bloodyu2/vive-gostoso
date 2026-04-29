@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Compass, Sun, Moon } from 'lucide-react'
+import { Menu, X, Compass, Sun, Moon, User } from 'lucide-react'
 import { Logo } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/hooks/useTheme'
+import { useAuth } from '@/hooks/useAuth'
 
 // Quatro verbos no topo — os mais usados pela maioria dos visitantes
 const NAV_MAIN = [
@@ -32,6 +33,7 @@ export function Header() {
   const [discoverOpen, setDiscoverOpen] = useState(false)
   const discoverRef = useRef<HTMLDivElement>(null)
   const { theme, toggle } = useTheme()
+  const { user } = useAuth()
 
   // Fecha o popover ao clicar fora
   useEffect(() => {
@@ -127,9 +129,23 @@ export function Header() {
             >
               {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
-            <Link to="/cadastre">
-              <Button variant="primary">Cadastre seu negócio</Button>
-            </Link>
+            {user ? (
+              <Link to="/cadastre/painel">
+                <Button variant="ghost" className="flex items-center gap-1.5">
+                  <User className="w-4 h-4" />
+                  Minha conta
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/cadastre" className="text-sm font-medium text-[#3D3D3D] dark:text-[#C0BCB8] hover:text-teal dark:hover:text-teal transition-colors px-2">
+                  Entrar
+                </Link>
+                <Link to="/cadastre">
+                  <Button variant="primary">Cadastre seu negócio</Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
 
@@ -176,7 +192,19 @@ export function Header() {
                 </Link>
               ))}
             </nav>
-            <div className="px-5 pb-5">
+            <div className="px-5 pb-5 space-y-2">
+              {user ? (
+                <Link to="/cadastre/painel" onClick={() => setDrawerOpen(false)}>
+                  <Button variant="ghost" className="w-full flex items-center gap-1.5">
+                    <User className="w-4 h-4" />
+                    Minha conta
+                  </Button>
+                </Link>
+              ) : (
+                <Link to="/cadastre" onClick={() => setDrawerOpen(false)}>
+                  <Button variant="ghost" className="w-full">Entrar</Button>
+                </Link>
+              )}
               <Link to="/cadastre" onClick={() => setDrawerOpen(false)}>
                 <Button variant="primary" className="w-full">Cadastre seu negócio</Button>
               </Link>

@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import { AuthGuard } from '@/components/auth/auth-guard'
+import { AdminGuard } from '@/components/auth/admin-guard'
 import { StarRating } from '@/components/reviews/star-rating'
 import { useAdminPendingReviews, useModerateReview } from '@/hooks/useReviews'
 
 export default function AdminReviews() {
-  return <AuthGuard><AdminReviewsInner /></AuthGuard>
+  return <AdminGuard><AdminReviewsInner /></AdminGuard>
 }
 
 function formatDate(iso: string) {

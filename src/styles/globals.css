@@ -31,12 +31,17 @@
   font-display: swap;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   font-family: var(--font-sans);
   background-color: #F5F2EE;
   color: #1A1A1A;
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.2s, color 0.2s;
+  overflow-x: hidden;
 }
 
 .dark body {

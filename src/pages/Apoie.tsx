@@ -1,28 +1,45 @@
+import { usePageMeta } from '@/hooks/usePageMeta'
 import { FundHero } from '@/components/fund/fund-hero'
 import { FundEntryRow } from '@/components/fund/fund-entry-row'
 import { useFundEntries, useFundSummary, useAssociadosCount } from '@/hooks/useFund'
 import { useGoals } from '@/hooks/useGoals'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
-import { CheckCircle, Clock, Globe, Mail, Phone, Smartphone, Zap, Target, Megaphone, Server, Users } from 'lucide-react'
+import { CheckCircle, Clock, Globe, Mail, Database, Layers, Phone, Smartphone, Zap, Target, Megaphone, Server, Users } from 'lucide-react'
 import type { Goal } from '@/types/database'
 
-// Custos reais de operação — atualizar manualmente quando mudar
+// Custos reais de operacao -- atualizar manualmente quando mudar
 const CUSTOS_ATIVOS = [
   {
     icon: Globe,
-    label: 'Domínio vivegostoso.com.br',
-    detalhe: 'Registro.br — renovação anual',
-    valor_mes: 3.33,    // R$40/ano ÷ 12
+    label: 'Dominio vivegostoso.com.br',
+    detalhe: 'Registro.br -- renovacao anual',
+    valor_mes: 3.33,
     valor_display: 'R$40/ano',
+    status: 'ativo' as const,
+  },
+  {
+    icon: Layers,
+    label: 'Hospedagem Vercel (Pro)',
+    detalhe: 'Deploy, CDN, previews e analytics de performance',
+    valor_mes: 100.00,
+    valor_display: '~R$100/mes',
+    status: 'ativo' as const,
+  },
+  {
+    icon: Database,
+    label: 'Banco de dados Supabase (Pro)',
+    detalhe: 'PostgreSQL + Auth + Storage de fotos + Realtime',
+    valor_mes: 140.00,
+    valor_display: '~R$140/mes (~USD 25)',
     status: 'ativo' as const,
   },
   {
     icon: Mail,
     label: 'E-mail dedicado',
-    detalhe: 'contato@vivegostoso.com.br — GoDaddy',
+    detalhe: 'contato@vivegostoso.com.br',
     valor_mes: 9.90,
-    valor_display: 'R$9,90/mês',
+    valor_display: 'R$9,90/mes',
     status: 'ativo' as const,
   },
 ]
@@ -30,20 +47,26 @@ const CUSTOS_ATIVOS = [
 const CUSTOS_PLANEJADOS = [
   {
     icon: Phone,
-    label: 'Número de telefone dedicado',
-    detalhe: 'Atendimento à comunidade e negócios',
+    label: 'Numero de telefone dedicado',
+    detalhe: 'Atendimento a comunidade e negocios',
     status: 'planejado' as const,
   },
   {
     icon: Smartphone,
     label: 'WhatsApp Business verificado',
-    detalhe: 'Canal oficial de suporte e anúncios',
+    detalhe: 'Canal oficial de suporte e anuncios',
     status: 'planejado' as const,
   },
   {
     icon: Zap,
-    label: 'Servidor de produção dedicado',
-    detalhe: 'Quando o volume de negócios justificar',
+    label: 'Ferramentas de marketing digital',
+    detalhe: 'Quando a arrecadacao justificar -- email marketing, ads locais',
+    status: 'planejado' as const,
+  },
+  {
+    icon: Server,
+    label: 'Midia social e conteudo',
+    detalhe: 'Producao de fotos e videos dos negocios da cidade',
     status: 'planejado' as const,
   },
 ]
@@ -73,6 +96,10 @@ function formatCurrency(cents: number) {
 }
 
 export default function Apoie() {
+  usePageMeta({
+    title: 'Apoie Gostoso',
+    description: 'Fundo público transparente para promover São Miguel do Gostoso. Veja como o dinheiro é usado.',
+  })
   const { data: entries = [] } = useFundEntries()
   const { data: summary } = useFundSummary()
   const { data: associadosCount = 0 } = useAssociadosCount()

@@ -18,6 +18,7 @@ export function useBusinesses(verb?: 'come' | 'fique' | 'passeie' | 'resolva') {
           .from('gostoso_businesses')
           .select('*, category:gostoso_categories(*)')
           .eq('active', true)
+          .eq('is_published', true)
           .in('category_id', catIds)
           .order('is_featured', { ascending: false })
           .order('display_order')
@@ -29,6 +30,7 @@ export function useBusinesses(verb?: 'come' | 'fique' | 'passeie' | 'resolva') {
         .from('gostoso_businesses')
         .select('*, category:gostoso_categories(*)')
         .eq('active', true)
+        .eq('is_published', true)
         .order('is_featured', { ascending: false })
         .order('display_order')
       if (error) throw error
@@ -46,6 +48,7 @@ export function useBusiness(slug: string) {
         .select('*, category:gostoso_categories(*)')
         .eq('slug', slug)
         .eq('active', true)
+        .eq('is_published', true)
         .single()
       if (error) return null
       return data as Business
@@ -61,6 +64,7 @@ export function useAllBusinessesWithCoords() {
         .from('gostoso_businesses')
         .select('*, category:gostoso_categories(*)')
         .eq('active', true)
+        .eq('is_published', true)
         .not('lat', 'is', null)
         .not('lng', 'is', null)
       if (error) throw error

@@ -173,7 +173,7 @@ export default function Contrate() {
                 <div className="text-4xl mb-3">💼</div>
                 <h3 className="font-display font-bold text-xl mb-2">Nenhuma vaga aberta agora</h3>
                 <p className="text-[#737373] text-sm max-w-xs mx-auto leading-relaxed mb-5">
-                  Se você tem um negócio em Gostoso e precisa contratar alguém, publique aqui — é gratuito.
+                  Se você tem um negócio em Gostoso e precisa contratar alguém, publique aqui. É gratuito.
                 </p>
                 <button
                   onClick={() => setShowJobForm(true)}

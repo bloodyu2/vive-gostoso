@@ -1,8 +1,13 @@
 import { VerbPill } from '@/components/brand/verb-pill'
 import { EventCard } from '@/components/events/event-card'
 import { useEvents } from '@/hooks/useEvents'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 export default function Participe() {
+  usePageMeta({
+    title: 'Eventos em Gostoso',
+    description: 'Festivais, eventos culturais e agenda completa de São Miguel do Gostoso.',
+  })
   const { data: events = [], isLoading } = useEvents()
   return (
     <main className="max-w-6xl mx-auto px-5 md:px-8 py-12">

@@ -6,8 +6,13 @@ import { BusinessGrid, type ViewMode } from '@/components/business/business-grid
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useCategories } from '@/hooks/useCategories'
 import { isBusinessOpen } from '@/lib/utils'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 export default function Passeie() {
+  usePageMeta({
+    title: 'Passeios e Esportes',
+    description: 'Kitesurf, windsurf, buggy, tours e esportes náuticos em São Miguel do Gostoso.',
+  })
   const [activeCat, setActiveCat] = useState<string | null>(null)
   const [view, setView] = useState<ViewMode>('grid')
   const [openOnly, setOpenOnly] = useState(false)

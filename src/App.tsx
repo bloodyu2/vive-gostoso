@@ -23,6 +23,7 @@ import Painel from '@/pages/cadastre/Painel'
 import Perfil from '@/pages/cadastre/Perfil'
 import Preview from '@/pages/cadastre/Preview'
 import Claim from '@/pages/cadastre/Claim'
+import Admin from '@/pages/cadastre/Admin'
 import AdminClaims from '@/pages/cadastre/AdminClaims'
 import AdminReviews from '@/pages/cadastre/AdminReviews'
 import Bio from '@/pages/Bio'
@@ -54,6 +55,7 @@ export default function App() {
       <Route path="/cadastre/perfil" element={<PageWrapper><Perfil /></PageWrapper>} />
       <Route path="/cadastre/preview" element={<PageWrapper><Preview /></PageWrapper>} />
       <Route path="/cadastre/claim/:slug" element={<Claim />} />
+      <Route path="/cadastre/admin" element={<PageWrapper><Admin /></PageWrapper>} />
       <Route path="/cadastre/admin/claims" element={<PageWrapper><AdminClaims /></PageWrapper>} />
       <Route path="/cadastre/admin/reviews" element={<PageWrapper><AdminReviews /></PageWrapper>} />
       <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />

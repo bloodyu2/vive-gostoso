@@ -6,8 +6,13 @@ import { BusinessGrid, type ViewMode } from '@/components/business/business-grid
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useCategories } from '@/hooks/useCategories'
 import { isBusinessOpen } from '@/lib/utils'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 export default function Come() {
+  usePageMeta({
+    title: 'Restaurantes e Gastronomia',
+    description: 'Os melhores restaurantes de São Miguel do Gostoso. Frutos do mar, comida regional e muito sol.',
+  })
   const [activeCat, setActiveCat] = useState<string | null>(null)
   const [view, setView] = useState<ViewMode>('grid')
   const [openOnly, setOpenOnly] = useState(false)

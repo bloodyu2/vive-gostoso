@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AuthGuard } from '@/components/auth/auth-guard'
+import { AdminGuard } from '@/components/auth/admin-guard'
 import { useClaimsAdmin, useApproveClaim, useRejectClaim } from '@/hooks/useClaims'
 import { Button } from '@/components/ui/button'
 
 export default function AdminClaims() {
-  return <AuthGuard><AdminClaimsInner /></AuthGuard>
+  return <AdminGuard><AdminClaimsInner /></AdminGuard>
 }
 
 function AdminClaimsInner() {

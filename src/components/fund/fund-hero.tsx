@@ -22,7 +22,7 @@ export function FundHero({
         <div className="text-xs font-medium tracking-widest uppercase opacity-80 mb-3">
           Fundo público transparente · {month}
         </div>
-        <h1 className="font-display font-bold text-6xl sm:text-7xl md:text-[80px] leading-none tracking-tight mb-4">
+        <h1 className="font-display font-bold text-5xl sm:text-6xl md:text-[80px] leading-none tracking-tight mb-4">
           APOIE.
         </h1>
         <p className="text-base md:text-lg opacity-90 max-w-lg leading-relaxed">
@@ -34,7 +34,7 @@ export function FundHero({
           <div className="mt-10 md:mt-12 bg-white/10 border border-white/20 rounded-2xl p-8 max-w-2xl">
             <div className="text-3xl font-display font-bold mb-3">Plataforma em lançamento</div>
             <p className="opacity-85 leading-relaxed mb-6">
-              O fundo ainda não tem movimentações registradas — a plataforma está sendo apresentada
+              O fundo ainda não tem movimentações registradas. A plataforma está sendo apresentada
               aos primeiros negócios de Gostoso. Quando os primeiros associados confirmarem,
               tudo aparece aqui em tempo real.
             </p>
@@ -56,7 +56,7 @@ export function FundHero({
               to="/cadastre"
               className="inline-block mt-6 bg-white text-teal font-semibold text-sm px-6 py-3 rounded-full hover:bg-teal-light transition-colors"
             >
-              Associe seu negócio — seja o primeiro
+              Associe seu negócio: seja o primeiro
             </Link>
           </div>
         ) : (
@@ -80,7 +80,7 @@ export function FundHero({
                   <div className="w-4/5 h-full bg-ocre rounded-full" />
                 </div>
                 <p className="text-sm opacity-80 mt-4 leading-relaxed">
-                  {formatCurrency(marketingCents)} já têm destino — eventos, festivais, divulgação.<br />
+                  {formatCurrency(marketingCents)} já têm destino: eventos, festivais, divulgação.<br />
                   {formatCurrency(operacaoCents)} cobrem domínio, servidor, manutenção. A gente não lucra.
                 </p>
               </div>
