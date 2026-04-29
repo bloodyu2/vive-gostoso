@@ -4,7 +4,7 @@ import { useFundEntries, useFundSummary, useAssociadosCount } from '@/hooks/useF
 import { useGoals } from '@/hooks/useGoals'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
-import { CheckCircle, Clock, Globe, Mail, Phone, Smartphone, Zap, Target, BookOpen, Megaphone, Server, Users } from 'lucide-react'
+import { CheckCircle, Clock, Globe, Mail, Phone, Smartphone, Zap, Target, Megaphone, Server, Users } from 'lucide-react'
 import type { Goal } from '@/types/database'
 
 // Custos reais de operação — atualizar manualmente quando mudar
