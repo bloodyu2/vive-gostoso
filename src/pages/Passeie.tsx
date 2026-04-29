@@ -7,8 +7,10 @@ import { useBusinesses } from '@/hooks/useBusinesses'
 import { useCategories } from '@/hooks/useCategories'
 import { isBusinessOpen } from '@/lib/utils'
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { useTranslation } from 'react-i18next'
 
 export default function Passeie() {
+  const { t } = useTranslation()
   usePageMeta({
     title: 'Passeios e Esportes',
     description: 'Kitesurf, windsurf, buggy, tours e esportes náuticos em São Miguel do Gostoso.',
@@ -34,11 +36,11 @@ export default function Passeie() {
         <div>
           <VerbPill verb="passeie" />
           <p className="mt-3 text-lg text-[#3D3D3D] max-w-xl leading-relaxed">
-            Buggy, kite, windsurf, passeios de jangada.<br />O que fazer em Gostoso vai muito além da praia.
+            {t('passeie.desc')}
           </p>
         </div>
         <Link to="/explore" className="text-teal border-2 border-teal rounded-xl px-5 py-3 text-sm font-semibold flex items-center gap-2 hover:bg-teal-light transition-colors">
-          Abrir no mapa
+          {t('passeie.abrir_mapa')}
         </Link>
       </div>
       <BusinessFilters

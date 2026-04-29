@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { usePageMeta } from '@/hooks/usePageMeta'
@@ -101,6 +102,7 @@ function formatCurrency(cents: number) {
 }
 
 export default function Apoie() {
+  const { t } = useTranslation()
   usePageMeta({
     title: 'Apoie Gostoso',
     description: 'Fundo público transparente para promover São Miguel do Gostoso. Veja como o dinheiro é usado.',
@@ -153,8 +155,8 @@ export default function Apoie() {
           <div className="mb-8 bg-teal/10 border border-teal/20 rounded-2xl p-5 flex items-center gap-4">
             <span className="text-3xl">💚</span>
             <div>
-              <p className="font-semibold text-teal">Doação confirmada — obrigado!</p>
-              <p className="text-sm text-teal/80 mt-0.5">Cada real fica em Gostoso e vai direto para a plataforma.</p>
+              <p className="font-semibold text-teal">{t('apoie.sucesso_titulo')}</p>
+              <p className="text-sm text-teal/80 mt-0.5">{t('apoie.sucesso_desc')}</p>
             </div>
           </div>
         )}
@@ -163,10 +165,10 @@ export default function Apoie() {
         <div className="mb-16 bg-white border border-[#E8E4DF] rounded-2xl p-6 md:p-8">
           <div className="flex items-center gap-3 mb-1">
             <Heart className="w-5 h-5 text-coral" />
-            <h2 className="font-display font-semibold text-2xl">Doe para a plataforma</h2>
+            <h2 className="font-display font-semibold text-2xl">{t('apoie.doe_titulo')}</h2>
           </div>
           <p className="text-sm text-[#737373] mb-6">
-            Qualquer valor, sem mensalidade. Cartão, PIX ou boleto — tudo fica em Gostoso.
+            {t('apoie.doe_desc')}
           </p>
 
           {/* Preset amounts */}
@@ -192,7 +194,7 @@ export default function Apoie() {
                   : 'bg-white text-[#3D3D3D] border-[#E8E4DF] hover:border-coral hover:text-coral'
               }`}
             >
-              Outro valor
+              {t('apoie.valor_custom')}
             </button>
           </div>
 
@@ -225,7 +227,7 @@ export default function Apoie() {
             {donationLoading
               ? 'Redirecionando...'
               : effectiveAmountBRL && effectiveAmountBRL >= 5
-              ? `Doar R$${effectiveAmountBRL.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}`
+              ? `${t('apoie.doe_btn')} R$${effectiveAmountBRL.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}`
               : 'Escolha um valor'}
           </button>
           <p className="text-xs text-[#A0A0A0] mt-3">Pagamento seguro via Stripe. Sem vínculo de mensalidade.</p>
@@ -365,7 +367,7 @@ export default function Apoie() {
 
         {/* Custos reais de operação */}
         <div className="mt-16">
-          <h2 className="font-display font-semibold text-3xl mb-2">O que custa manter isso</h2>
+          <h2 className="font-display font-semibold text-3xl mb-2">{t('apoie.custos_titulo')}</h2>
           <p className="text-[#737373] text-sm mb-8 max-w-xl">
             Transparência total: estes são os custos reais de operação da plataforma. Nada oculto, nenhum centavo de lucro.
           </p>

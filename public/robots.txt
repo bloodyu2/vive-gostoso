@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# All locale prefixes are allowed
+Allow: /en/
+Allow: /es/
+
+# Admin and auth routes — no index needed
+Disallow: /cadastre/
+
+Sitemap: https://vivegostoso.com.br/sitemap.xml

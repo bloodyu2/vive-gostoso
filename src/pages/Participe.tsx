@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { VerbPill } from '@/components/brand/verb-pill'
 import { EventCard } from '@/components/events/event-card'
 import { EventSubmitForm } from '@/components/events/event-submit-form'
@@ -8,6 +9,7 @@ import { usePageMeta } from '@/hooks/usePageMeta'
 import { Button } from '@/components/ui/button'
 
 export default function Participe() {
+  const { t } = useTranslation()
   usePageMeta({
     title: 'Eventos em Gostoso',
     description: 'Festivais, eventos culturais e agenda completa de São Miguel do Gostoso.',
@@ -21,8 +23,7 @@ export default function Participe() {
         <div>
           <VerbPill verb="participe" />
           <p className="mt-3 text-lg text-[#3D3D3D] max-w-xl leading-relaxed">
-            Réveillon, festivais de kite, mostra de cinema, bossa nova na praia.<br />
-            Gostoso nunca para.
+            {t('participe.desc')}
           </p>
         </div>
         <Button

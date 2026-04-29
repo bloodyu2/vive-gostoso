@@ -7,8 +7,10 @@ import { useBusinesses } from '@/hooks/useBusinesses'
 import { useCategories } from '@/hooks/useCategories'
 import { isBusinessOpen } from '@/lib/utils'
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { useTranslation } from 'react-i18next'
 
 export default function Come() {
+  const { t } = useTranslation()
   usePageMeta({
     title: 'Restaurantes e Gastronomia',
     description: 'Os melhores restaurantes de São Miguel do Gostoso. Frutos do mar, comida regional e muito sol.',
@@ -34,11 +36,11 @@ export default function Come() {
         <div>
           <VerbPill verb="come" />
           <p className="mt-3 text-lg text-[#3D3D3D] max-w-xl leading-relaxed">
-            Do peixe frito na praia ao jantar na pousada.<br />Tudo que Gostoso tem pra comer.
+            {t('come.desc')}
           </p>
         </div>
         <Link to="/explore" className="text-teal border-2 border-teal rounded-xl px-5 py-3 text-sm font-semibold flex items-center gap-2 hover:bg-teal-light transition-colors">
-          Abrir no mapa
+          {t('come.abrir_mapa')}
         </Link>
       </div>
       <BusinessFilters

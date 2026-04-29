@@ -1,0 +1,164 @@
+{
+  "nav": {
+    "come": "COME",
+    "fique": "FIQUE",
+    "passeie": "PASSEIE",
+    "apoie": "APOIE",
+    "explore": "EXPLORE",
+    "participe": "PARTICIPE",
+    "conheca": "CONHEÇA",
+    "resolva": "RESOLVA",
+    "contrate": "CONTRATE",
+    "explorar": "Explorar",
+    "explorar_cidade": "Explorar a cidade",
+    "mapa_interativo": "Mapa interativo",
+    "eventos_festivais": "Eventos e festivais",
+    "cidade_praias": "A cidade e as praias",
+    "comercio_servicos": "Comércio e serviços",
+    "freelancers_vagas": "Freelancers e vagas",
+    "buscar": "Buscar",
+    "minha_conta": "Minha conta",
+    "entrar": "Entrar",
+    "cadastre_negocio": "Cadastre seu negócio",
+    "negocios": "Negócios"
+  },
+  "home": {
+    "eyebrow": "São Miguel do Gostoso · RN",
+    "hero_h1_1": "Come.",
+    "hero_h1_2": "Fique.",
+    "hero_h1_3": "Passeie.",
+    "hero_brand": "Vive Gostoso.",
+    "hero_sub": "Onde comer, ficar e curtir em São Miguel do Gostoso. Tudo aqui, tudo perto, tudo agora.",
+    "cta_explorar": "Explorar a cidade",
+    "cta_restaurantes": "Ver restaurantes",
+    "stat_negocios": "negócios cadastrados",
+    "stat_hospedagens": "hospedagens",
+    "stat_eventos": "eventos no calendário",
+    "stat_dinheiro": "dinheiro fica na cidade",
+    "scroll_label": "Explorar",
+    "verbs_come_sub": "Restaurantes e gastronomia",
+    "verbs_fique_sub": "Pousadas e hospedagem",
+    "verbs_passeie_sub": "Passeios e esportes",
+    "verbs_explore_sub": "Mapa interativo",
+    "verbs_participe_sub": "Eventos e festivais",
+    "verbs_apoie_sub": "Fundo transparente",
+    "verbs_contrate_sub": "Serviços e empregos",
+    "novos_titulo": "Bem-vindos ao guia 👋",
+    "novos_eyebrow": "Novos na plataforma",
+    "ver_todos": "Ver todos →",
+    "eventos_titulo": "Próximos eventos",
+    "eventos_eyebrow": "Agenda de Gostoso",
+    "ver_agenda": "Ver agenda completa →",
+    "instagram_titulo": "Siga a cidade",
+    "instagram_sub": "Fotos, histórias e o cotidiano de São Miguel do Gostoso."
+  },
+  "come": {
+    "desc": "Do peixe frito na praia ao jantar na pousada. Tudo que Gostoso tem pra comer.",
+    "abrir_mapa": "Abrir no mapa"
+  },
+  "fique": {
+    "desc": "Da pousada de frente pra praia ao chalé no sossego. Onde ficar em Gostoso.",
+    "abrir_mapa": "Abrir no mapa"
+  },
+  "passeie": {
+    "desc": "Kite, surf, buggy e muito mais. O que fazer em São Miguel do Gostoso.",
+    "abrir_mapa": "Abrir no mapa"
+  },
+  "explore": {
+    "titulo": "Explore o mapa",
+    "desc": "Todos os negócios de Gostoso no mapa. Clique para descobrir."
+  },
+  "participe": {
+    "titulo": "Agenda de eventos",
+    "desc": "Shows, festivais, feiras e o que mais acontece em São Miguel do Gostoso.",
+    "sem_eventos": "Nenhum evento próximo",
+    "sem_eventos_sub": "Fique atento — a agenda é atualizada com frequência."
+  },
+  "contrate": {
+    "badge": "CONTRATE.",
+    "titulo": "Talentos e vagas de Gostoso",
+    "desc": "Moradores que oferecem serviços. Negócios que precisam de gente. Tudo aqui, direto pelo WhatsApp.",
+    "oferecer_servico": "Oferecer serviço",
+    "publicar_vaga": "Publicar vaga",
+    "tab_servicos": "Serviços locais",
+    "tab_vagas": "Vagas de emprego",
+    "todos": "Todos",
+    "sem_servicos": "Ainda sem serviços cadastrados",
+    "sem_servicos_sub": "Seja o primeiro a oferecer um serviço para a cidade. É gratuito e direto pelo WhatsApp.",
+    "cadastrar_servico": "Cadastrar meu serviço",
+    "sem_vagas": "Nenhuma vaga aberta agora",
+    "sem_vagas_sub": "Se você tem um negócio em Gostoso e precisa contratar alguém, publique aqui. É gratuito.",
+    "servico": "Serviço",
+    "vaga": "Vaga"
+  },
+  "sobre": {
+    "badge": "SOBRE O PROJETO",
+    "titulo": "A plataforma é da cidade",
+    "desc": "O Vive Gostoso nasceu de uma ideia simples: São Miguel do Gostoso merece uma plataforma própria, feita por quem conhece a cidade."
+  },
+  "apoie": {
+    "badge": "APOIE.",
+    "titulo": "Fundo transparente da cidade",
+    "desc": "100% do que arrecadamos vai direto para manter e melhorar a plataforma. Sem mistério.",
+    "doe_titulo": "Fazer uma doação",
+    "doe_desc": "Qualquer valor ajuda a manter o Vive Gostoso funcionando.",
+    "valor_custom": "Outro valor",
+    "doe_btn": "Apoiar com",
+    "sucesso_titulo": "Obrigado pelo apoio!",
+    "sucesso_desc": "Sua doação ajuda a manter a plataforma gratuita para toda a cidade.",
+    "custos_titulo": "Custos operacionais",
+    "custos_desc": "O que custa manter o Vive Gostoso funcionando todo mês.",
+    "status_ativo": "Ativo",
+    "status_planejado": "Planejado"
+  },
+  "conheca": {
+    "badge": "CONHEÇA.",
+    "titulo": "São Miguel do Gostoso",
+    "desc": "Uma vila de pescadores no litoral norte do Rio Grande do Norte. Ventos constantes, mar azul e pôr do sol famoso no mundo inteiro."
+  },
+  "negocio": {
+    "abrir_mapa": "Ver no mapa",
+    "contato": "Contato",
+    "endereco": "Endereço",
+    "horario": "Horário de funcionamento",
+    "aberto": "Aberto agora",
+    "fechado": "Fechado",
+    "ver_mais": "Ver mais",
+    "galeria": "Galeria",
+    "servicos": "Serviços"
+  },
+  "footer": {
+    "tagline1": "Gostoso na palma da mão.",
+    "tagline2": "A plataforma é da cidade.",
+    "modulos": "Módulos",
+    "cidade": "Cidade",
+    "negocios": "Negócios",
+    "sobre_projeto": "Sobre o projeto",
+    "blog": "Blog",
+    "cadastrar": "Cadastrar",
+    "painel": "Painel",
+    "selo_verificado": "Selo verificado",
+    "feito_por": "Feito pela Balaio",
+    "modo_claro": "Modo claro",
+    "modo_escuro": "Modo escuro"
+  },
+  "common": {
+    "ver_perfil": "Ver perfil",
+    "ver_todos": "Ver todos →",
+    "voltar": "Voltar",
+    "fechar": "Fechar",
+    "carregando": "Carregando...",
+    "sem_resultados": "Nenhum resultado encontrado",
+    "aberto": "Aberto",
+    "fechado": "Fechado",
+    "whatsapp": "WhatsApp",
+    "instagram": "Instagram",
+    "site": "Site",
+    "ligacao": "Ligar"
+  },
+  "not_found": {
+    "titulo": "Página não encontrada",
+    "desc": "Essa página não existe ou foi movida.",
+    "voltar_inicio": "Voltar ao início"
+  }
+}

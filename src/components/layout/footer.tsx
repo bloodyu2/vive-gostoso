@@ -1,27 +1,35 @@
 import { Link } from 'react-router-dom'
+import { Sun, Moon } from 'lucide-react'
 import { Logo } from '@/components/brand/logo'
-
-const MODULOS = [
-  { to: '/come',    label: 'COME' },
-  { to: '/fique',   label: 'FIQUE' },
-  { to: '/passeie', label: 'PASSEIE' },
-  { to: '/explore', label: 'EXPLORE' },
-]
-const CIDADE = [
-  { to: '/sobre',    label: 'Sobre o projeto' },
-  { to: '/blog',     label: 'Blog' },
-  { to: '/conheca',  label: 'CONHEÇA' },
-  { to: '/participe',label: 'PARTICIPE' },
-  { to: '/apoie',    label: 'APOIE' },
-  { to: '/contrate', label: 'CONTRATE' },
-]
-const NEGOCIOS = [
-  { to: '/cadastre',        label: 'Cadastrar' },
-  { to: '/cadastre/painel', label: 'Painel' },
-  { to: '/apoie',           label: 'Selo verificado' },
-]
+import { useTheme } from '@/hooks/useTheme'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 
 export function Footer() {
+  const { theme, toggle } = useTheme()
+  const { t } = useTranslation()
+  const lp = useLocalePath()
+
+  const MODULOS = [
+    { to: lp('/come'),     label: t('nav.come') },
+    { to: lp('/fique'),    label: t('nav.fique') },
+    { to: lp('/passeie'),  label: t('nav.passeie') },
+    { to: lp('/explore'),  label: t('nav.explore') },
+  ]
+  const CIDADE = [
+    { to: lp('/sobre'),     label: t('footer.sobre_projeto') },
+    { to: lp('/blog'),      label: t('footer.blog') },
+    { to: lp('/conheca'),   label: t('nav.conheca') },
+    { to: lp('/participe'), label: t('nav.participe') },
+    { to: lp('/apoie'),     label: t('nav.apoie') },
+    { to: lp('/contrate'),  label: t('nav.contrate') },
+  ]
+  const NEGOCIOS = [
+    { to: '/cadastre',        label: t('footer.cadastrar') },
+    { to: '/cadastre/painel', label: t('footer.painel') },
+    { to: lp('/apoie'),       label: t('footer.selo_verificado') },
+  ]
+
   return (
     <footer className="bg-[#1A1A1A] text-[#E6F5F5] px-5 md:px-8 pt-12 pb-8 mt-16">
       <div className="max-w-6xl mx-auto flex justify-between items-start flex-wrap gap-8">
@@ -30,7 +38,7 @@ export function Footer() {
         <div className="max-w-xs">
           <Logo height={32} dark />
           <p className="text-sm opacity-70 mt-3 leading-relaxed">
-            Gostoso na palma da mão.<br />A plataforma é da cidade.
+            {t('footer.tagline1')}<br />{t('footer.tagline2')}
           </p>
           <a
             href="https://instagram.com/vivegostoso"
@@ -50,7 +58,7 @@ export function Footer() {
         {/* Nav columns */}
         <div className="flex flex-wrap gap-8 sm:gap-12 text-sm">
           <div>
-            <div className="font-semibold mb-3 text-white">Módulos</div>
+            <div className="font-semibold mb-3 text-white">{t('footer.modulos')}</div>
             <nav className="flex flex-col gap-1.5">
               {MODULOS.map(v => (
                 <Link key={v.to} to={v.to} className="opacity-70 hover:opacity-100 hover:text-teal-light transition-opacity leading-loose">
@@ -60,7 +68,7 @@ export function Footer() {
             </nav>
           </div>
           <div>
-            <div className="font-semibold mb-3 text-white">Cidade</div>
+            <div className="font-semibold mb-3 text-white">{t('footer.cidade')}</div>
             <nav className="flex flex-col gap-1.5">
               {CIDADE.map(v => (
                 <Link key={v.to} to={v.to} className="opacity-70 hover:opacity-100 hover:text-teal-light transition-opacity leading-loose">
@@ -70,7 +78,7 @@ export function Footer() {
             </nav>
           </div>
           <div>
-            <div className="font-semibold mb-3 text-white">Negócios</div>
+            <div className="font-semibold mb-3 text-white">{t('footer.negocios')}</div>
             <nav className="flex flex-col gap-1.5">
               {NEGOCIOS.map(v => (
                 <Link key={v.to} to={v.to} className="opacity-70 hover:opacity-100 hover:text-teal-light transition-opacity leading-loose">
@@ -89,18 +97,28 @@ export function Footer() {
             contato@vivegostoso.com.br
           </a>
         </span>
-        <a
-          href="https://balaio.net"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity"
-        >
-          <svg width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M6 26 C6 26 4 16 16 10 C28 4 28 14 22 18 C16 22 14 18 16 14 C18 10 22 12 20 16" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-            <circle cx="20" cy="16" r="2" fill="currentColor"/>
-          </svg>
-          <span className="font-medium">Feito pela Balaio</span>
-        </a>
+        <div className="flex items-center gap-4">
+          {/* Dark mode toggle — discrete, white icon */}
+          <button
+            onClick={toggle}
+            className="opacity-60 hover:opacity-100 transition-opacity text-white"
+            aria-label={theme === 'dark' ? t('footer.modo_claro') : t('footer.modo_escuro')}
+          >
+            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
+          <a
+            href="https://balaio.net"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity"
+          >
+            <svg width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M6 26 C6 26 4 16 16 10 C28 4 28 14 22 18 C16 22 14 18 16 14 C18 10 22 12 20 16" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              <circle cx="20" cy="16" r="2" fill="currentColor"/>
+            </svg>
+            <span className="font-medium">{t('footer.feito_por')}</span>
+          </a>
+        </div>
       </div>
     </footer>
   )

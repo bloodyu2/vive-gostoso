@@ -1,0 +1,164 @@
+{
+  "nav": {
+    "come": "COME",
+    "fique": "QUÉDATE",
+    "passeie": "PASEA",
+    "apoie": "APOYA",
+    "explore": "MAPA",
+    "participe": "EVENTOS",
+    "conheca": "DESCUBRE",
+    "resolva": "SERVICIOS",
+    "contrate": "CONTRATA",
+    "explorar": "Descubrir",
+    "explorar_cidade": "Explorar la ciudad",
+    "mapa_interativo": "Mapa interactivo",
+    "eventos_festivais": "Eventos y festivales",
+    "cidade_praias": "La ciudad y las playas",
+    "comercio_servicos": "Comercio y servicios",
+    "freelancers_vagas": "Freelancers y empleo",
+    "buscar": "Buscar",
+    "minha_conta": "Mi cuenta",
+    "entrar": "Entrar",
+    "cadastre_negocio": "Registra tu negocio",
+    "negocios": "Negocios"
+  },
+  "home": {
+    "eyebrow": "São Miguel do Gostoso · RN",
+    "hero_h1_1": "Come.",
+    "hero_h1_2": "Quédate.",
+    "hero_h1_3": "Pasea.",
+    "hero_brand": "Vive Gostoso.",
+    "hero_sub": "Dónde comer, quedarse y disfrutar en São Miguel do Gostoso. Todo aquí, todo cerca, todo ahora.",
+    "cta_explorar": "Explorar la ciudad",
+    "cta_restaurantes": "Ver restaurantes",
+    "stat_negocios": "negocios registrados",
+    "stat_hospedagens": "alojamientos",
+    "stat_eventos": "eventos en la agenda",
+    "stat_dinheiro": "dinero queda en la ciudad",
+    "scroll_label": "Explorar",
+    "verbs_come_sub": "Restaurantes y gastronomía",
+    "verbs_fique_sub": "Posadas y alojamiento",
+    "verbs_passeie_sub": "Paseos y deportes",
+    "verbs_explore_sub": "Mapa interactivo",
+    "verbs_participe_sub": "Eventos y festivales",
+    "verbs_apoie_sub": "Fondo transparente",
+    "verbs_contrate_sub": "Servicios y empleos",
+    "novos_titulo": "Bienvenidos a la guía 👋",
+    "novos_eyebrow": "Nuevos en la plataforma",
+    "ver_todos": "Ver todos →",
+    "eventos_titulo": "Próximos eventos",
+    "eventos_eyebrow": "Agenda de Gostoso",
+    "ver_agenda": "Ver agenda completa →",
+    "instagram_titulo": "Sigue la ciudad",
+    "instagram_sub": "Fotos, historias y el día a día de São Miguel do Gostoso."
+  },
+  "come": {
+    "desc": "Del pescado frito en la playa a la cena en la posada. Todo lo que Gostoso tiene para comer.",
+    "abrir_mapa": "Abrir en el mapa"
+  },
+  "fique": {
+    "desc": "Desde posadas frente al mar hasta chalets tranquilos. Dónde hospedarse en Gostoso.",
+    "abrir_mapa": "Abrir en el mapa"
+  },
+  "passeie": {
+    "desc": "Kite, surf, buggy y mucho más. Qué hacer en São Miguel do Gostoso.",
+    "abrir_mapa": "Abrir en el mapa"
+  },
+  "explore": {
+    "titulo": "Explorar el mapa",
+    "desc": "Todos los negocios de Gostoso en el mapa. Haz clic para descubrir."
+  },
+  "participe": {
+    "titulo": "Agenda de eventos",
+    "desc": "Shows, festivales, ferias y todo lo que pasa en São Miguel do Gostoso.",
+    "sem_eventos": "Ningún evento próximo",
+    "sem_eventos_sub": "Estáte atento — la agenda se actualiza con frecuencia."
+  },
+  "contrate": {
+    "badge": "CONTRATA.",
+    "titulo": "Talentos y empleos en Gostoso",
+    "desc": "Residentes que ofrecen servicios. Negocios que necesitan gente. Todo aquí, directo por WhatsApp.",
+    "oferecer_servico": "Ofrecer servicio",
+    "publicar_vaga": "Publicar empleo",
+    "tab_servicos": "Servicios locales",
+    "tab_vagas": "Ofertas de empleo",
+    "todos": "Todos",
+    "sem_servicos": "Aún sin servicios registrados",
+    "sem_servicos_sub": "Sé el primero en ofrecer un servicio a la ciudad. Es gratuito y directo por WhatsApp.",
+    "cadastrar_servico": "Registrar mi servicio",
+    "sem_vagas": "Ninguna vacante abierta ahora",
+    "sem_vagas_sub": "Si tienes un negocio en Gostoso y necesitas contratar a alguien, publícalo aquí. Es gratuito.",
+    "servico": "Servicio",
+    "vaga": "Empleo"
+  },
+  "sobre": {
+    "badge": "SOBRE EL PROYECTO",
+    "titulo": "La plataforma es de la ciudad",
+    "desc": "Vive Gostoso nació de una idea simple: São Miguel do Gostoso merece una plataforma propia, hecha por quienes conocen la ciudad."
+  },
+  "apoie": {
+    "badge": "APOYA.",
+    "titulo": "Fondo transparente de la ciudad",
+    "desc": "El 100% de lo que recaudamos va directamente a mantener y mejorar la plataforma. Sin misterios.",
+    "doe_titulo": "Hacer una donación",
+    "doe_desc": "Cualquier monto ayuda a mantener el Vive Gostoso funcionando.",
+    "valor_custom": "Otro monto",
+    "doe_btn": "Apoyar con",
+    "sucesso_titulo": "¡Gracias por tu apoyo!",
+    "sucesso_desc": "Tu donación ayuda a mantener la plataforma gratuita para toda la ciudad.",
+    "custos_titulo": "Costos operativos",
+    "custos_desc": "Lo que cuesta mantener el Vive Gostoso funcionando cada mes.",
+    "status_ativo": "Activo",
+    "status_planejado": "Planificado"
+  },
+  "conheca": {
+    "badge": "DESCUBRE.",
+    "titulo": "São Miguel do Gostoso",
+    "desc": "Un pueblo de pescadores en la costa norte de Rio Grande do Norte. Vientos constantes, mar azul y una puesta de sol famosa en todo el mundo."
+  },
+  "negocio": {
+    "abrir_mapa": "Ver en el mapa",
+    "contato": "Contacto",
+    "endereco": "Dirección",
+    "horario": "Horario de atención",
+    "aberto": "Abierto ahora",
+    "fechado": "Cerrado",
+    "ver_mais": "Ver más",
+    "galeria": "Galería",
+    "servicos": "Servicios"
+  },
+  "footer": {
+    "tagline1": "Gostoso en la palma de tu mano.",
+    "tagline2": "La plataforma es de la ciudad.",
+    "modulos": "Explorar",
+    "cidade": "Ciudad",
+    "negocios": "Negocios",
+    "sobre_projeto": "Sobre el proyecto",
+    "blog": "Blog",
+    "cadastrar": "Registrarse",
+    "painel": "Panel",
+    "selo_verificado": "Sello verificado",
+    "feito_por": "Hecho por Balaio",
+    "modo_claro": "Modo claro",
+    "modo_escuro": "Modo oscuro"
+  },
+  "common": {
+    "ver_perfil": "Ver perfil",
+    "ver_todos": "Ver todos →",
+    "voltar": "Volver",
+    "fechar": "Cerrar",
+    "carregando": "Cargando...",
+    "sem_resultados": "Sin resultados",
+    "aberto": "Abierto",
+    "fechado": "Cerrado",
+    "whatsapp": "WhatsApp",
+    "instagram": "Instagram",
+    "site": "Sitio web",
+    "ligacao": "Llamar"
+  },
+  "not_found": {
+    "titulo": "Página no encontrada",
+    "desc": "Esta página no existe o fue movida.",
+    "voltar_inicio": "Volver al inicio"
+  }
+}

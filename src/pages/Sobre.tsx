@@ -4,6 +4,7 @@ import {
   Gift, Search, Megaphone, Lightbulb, BookOpen,
   Eye, BarChart2, CheckCircle, ExternalLink,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 const VERBOS = [
   { v: 'COME',      to: '/come',      desc: 'Restaurantes, bares e gastronomia local',     color: 'text-ocre' },
@@ -62,6 +63,7 @@ const FUTURE = [
 ]
 
 export default function Sobre() {
+  const { t } = useTranslation()
   return (
     <main>
       {/* Hero */}
@@ -72,15 +74,13 @@ export default function Sobre() {
         <div className="relative max-w-4xl mx-auto px-5 md:px-8 py-20 md:py-28">
           <div className="inline-flex items-center gap-2 bg-teal/20 text-teal-light text-xs font-semibold tracking-widest uppercase px-4 py-2 rounded-full mb-6">
             <MapPin className="w-3.5 h-3.5" />
-            São Miguel do Gostoso, RN
+            {t('sobre.badge')}
           </div>
           <h1 className="font-display font-bold text-5xl md:text-6xl leading-[1.1] tracking-tight mb-6">
-            A infraestrutura<br />digital de uma cidade.
+            {t('sobre.titulo')}
           </h1>
           <p className="text-white/70 text-lg md:text-xl max-w-2xl leading-relaxed mb-10">
-            Gostoso tem tudo: praias de classe mundial, gastronomia de respeito, eventos que atraem o Brasil inteiro.
-            Faltava um lugar onde tudo isso estivesse junto, organizado e acessível.
-            <strong className="text-white"> O Vive Gostoso é esse lugar.</strong>
+            {t('sobre.desc')}
           </p>
           {/* Stats strip */}
           <div className="flex flex-wrap gap-x-10 gap-y-4 pt-8 border-t border-white/10">

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Briefcase, Wrench, Plus } from 'lucide-react'
 import { ServiceCard } from '@/components/contrate/service-card'
 import { JobCard } from '@/components/contrate/job-card'
@@ -14,6 +15,7 @@ type Tab = 'servicos' | 'vagas'
 const SERVICE_CATS = Object.entries(SERVICE_CATEGORY_LABELS) as [ServiceCategory, string][]
 
 export default function Contrate() {
+  const { t } = useTranslation()
   const [tab, setTab] = useState<Tab>('servicos')
   const [catFilter, setCatFilter] = useState<ServiceCategory | undefined>()
   const [showServiceForm, setShowServiceForm] = useState(false)
@@ -30,13 +32,13 @@ export default function Contrate() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-8">
           <div>
             <div className="inline-flex items-center gap-2 bg-[#1A1A1A] text-white text-xs font-bold px-3 py-1.5 rounded-full mb-3 tracking-wide">
-              CONTRATE.
+              {t('contrate.badge')}
             </div>
             <h1 className="font-display font-bold text-3xl md:text-4xl text-[#1A1A1A] leading-tight">
-              Talentos e vagas<br />de Gostoso
+              {t('contrate.titulo')}
             </h1>
             <p className="mt-2 text-[#737373] text-base max-w-lg leading-relaxed">
-              Moradores que oferecem serviços. Negócios que precisam de gente. Tudo aqui, direto pelo WhatsApp.
+              {t('contrate.desc')}
             </p>
           </div>
           <div className="flex gap-2 flex-shrink-0">
@@ -45,16 +47,16 @@ export default function Contrate() {
               className="flex items-center gap-2 bg-teal text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-teal-dark transition-colors"
             >
               <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline">Oferecer serviço</span>
-              <span className="sm:hidden">Serviço</span>
+              <span className="hidden sm:inline">{t('contrate.oferecer_servico')}</span>
+              <span className="sm:hidden">{t('contrate.servico')}</span>
             </button>
             <button
               onClick={() => setShowJobForm(true)}
               className="flex items-center gap-2 bg-ocre text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity"
             >
               <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline">Publicar vaga</span>
-              <span className="sm:hidden">Vaga</span>
+              <span className="hidden sm:inline">{t('contrate.publicar_vaga')}</span>
+              <span className="sm:hidden">{t('contrate.vaga')}</span>
             </button>
           </div>
         </div>
@@ -70,7 +72,7 @@ export default function Contrate() {
             }`}
           >
             <Wrench className="w-4 h-4" />
-            Serviços locais
+            {t('contrate.tab_servicos')}
             {services.length > 0 && tab === 'servicos' && (
               <span className="bg-teal/10 text-teal text-xs px-2 py-0.5 rounded-full">{services.length}</span>
             )}
@@ -84,7 +86,7 @@ export default function Contrate() {
             }`}
           >
             <Briefcase className="w-4 h-4" />
-            Vagas de emprego
+            {t('contrate.tab_vagas')}
             {jobs.length > 0 && tab === 'vagas' && (
               <span className="bg-ocre/10 text-ocre text-xs px-2 py-0.5 rounded-full">{jobs.length}</span>
             )}
@@ -102,7 +104,7 @@ export default function Contrate() {
                   !catFilter ? 'bg-teal text-white' : 'bg-white border border-[#E8E4DF] text-[#737373] hover:border-teal/40'
                 }`}
               >
-                Todos
+                {t('contrate.todos')}
               </button>
               {SERVICE_CATS.map(([k, v]) => (
                 <button
@@ -132,15 +134,15 @@ export default function Contrate() {
             ) : services.length === 0 ? (
               <div className="text-center py-16">
                 <div className="text-4xl mb-3">🔨</div>
-                <h3 className="font-display font-bold text-xl mb-2">Ainda sem serviços cadastrados</h3>
+                <h3 className="font-display font-bold text-xl mb-2">{t('contrate.sem_servicos')}</h3>
                 <p className="text-[#737373] text-sm max-w-xs mx-auto leading-relaxed mb-5">
-                  Seja o primeiro a oferecer um serviço para a cidade. É gratuito e direto pelo WhatsApp.
+                  {t('contrate.sem_servicos_sub')}
                 </p>
                 <button
                   onClick={() => setShowServiceForm(true)}
                   className="bg-teal text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-teal-dark transition-colors"
                 >
-                  Cadastrar meu serviço
+                  {t('contrate.cadastrar_servico')}
                 </button>
               </div>
             ) : (
@@ -171,15 +173,15 @@ export default function Contrate() {
             ) : jobs.length === 0 ? (
               <div className="text-center py-16">
                 <div className="text-4xl mb-3">💼</div>
-                <h3 className="font-display font-bold text-xl mb-2">Nenhuma vaga aberta agora</h3>
+                <h3 className="font-display font-bold text-xl mb-2">{t('contrate.sem_vagas')}</h3>
                 <p className="text-[#737373] text-sm max-w-xs mx-auto leading-relaxed mb-5">
-                  Se você tem um negócio em Gostoso e precisa contratar alguém, publique aqui. É gratuito.
+                  {t('contrate.sem_vagas_sub')}
                 </p>
                 <button
                   onClick={() => setShowJobForm(true)}
                   className="bg-ocre text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
                 >
-                  Publicar vaga
+                  {t('contrate.publicar_vaga')}
                 </button>
               </div>
             ) : (

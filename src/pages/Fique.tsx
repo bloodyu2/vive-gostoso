@@ -7,8 +7,10 @@ import { useBusinesses } from '@/hooks/useBusinesses'
 import { useCategories } from '@/hooks/useCategories'
 import { isBusinessOpen } from '@/lib/utils'
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { useTranslation } from 'react-i18next'
 
 export default function Fique() {
+  const { t } = useTranslation()
   usePageMeta({
     title: 'Pousadas e Hospedagem',
     description: 'As melhores pousadas de São Miguel do Gostoso. Encontre onde ficar pertinho do mar.',
@@ -34,11 +36,11 @@ export default function Fique() {
         <div>
           <VerbPill verb="fique" />
           <p className="mt-3 text-lg text-[#3D3D3D] max-w-xl leading-relaxed">
-            Pousadas na beira da praia, no centro, perto do kite.<br />Onde ficar em Gostoso.
+            {t('fique.desc')}
           </p>
         </div>
         <Link to="/explore" className="text-teal border-2 border-teal rounded-xl px-5 py-3 text-sm font-semibold flex items-center gap-2 hover:bg-teal-light transition-colors">
-          Abrir no mapa
+          {t('fique.abrir_mapa')}
         </Link>
       </div>
       <BusinessFilters

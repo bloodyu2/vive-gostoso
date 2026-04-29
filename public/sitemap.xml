@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Home -->
+  <url>
+    <loc>https://vivegostoso.com.br/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vivegostoso.com.br/"/>
+    <xhtml:link rel="alternate" hreflang="en"    href="https://vivegostoso.com.br/en"/>
+    <xhtml:link rel="alternate" hreflang="es"    href="https://vivegostoso.com.br/es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vivegostoso.com.br/"/>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Come / Eat / Comer -->
+  <url>
+    <loc>https://vivegostoso.com.br/come</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vivegostoso.com.br/come"/>
+    <xhtml:link rel="alternate" hreflang="en"    href="https://vivegostoso.com.br/en/come"/>
+    <xhtml:link rel="alternate" hreflang="es"    href="https://vivegostoso.com.br/es/come"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vivegostoso.com.br/come"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Fique / Stay / Quédate -->
+  <url>
+    <loc>https://vivegostoso.com.br/fique</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vivegostoso.com.br/fique"/>
+    <xhtml:link rel="alternate" hreflang="en"    href="https://vivegostoso.com.br/en/fique"/>
+    <xhtml:link rel="alternate" hreflang="es"    href="https://vivegostoso.com.br/es/fique"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vivegostoso.com.br/fique"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Passeie / Explore / Pasea -->
+  <url>
+    <loc>https://vivegostoso.com.br/passeie</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vivegostoso.com.br/passeie"/>
+    <xhtml:link rel="alternate" hreflang="en"    href="https://vivegostoso.com.br/en/passeie"/>
+    <xhtml:link rel="alternate" hreflang="es"    href="https://vivegostoso.com.br/es/passeie"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vivegostoso.com.br/passeie"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Explore map -->
+  <url>
+    <loc>https://vivegostoso.com.br/explore</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vivegostoso.com.br/explore"/>
+    <xhtml:link rel="alternate" hreflang="en"    href="https://vivegostoso.com.br/en/explore"/>
+    <xhtml:link rel="alternate" hreflang="es"    href="https://vivegostoso.com.br/es/explore"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vivegostoso.com.br/explore"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Participe / Events -->
+  <url>
+    <loc>https://vivegostoso.com.br/participe</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vivegostoso.com.br/participe"/>
+    <xhtml:link rel="alternate" hreflang="en"    href="https://vivegostoso.com.br/en/participe"/>
+    <xhtml:link rel="alternate" hreflang="es"    href="https://vivegostoso.com.br/es/participe"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vivegostoso.com.br/participe"/>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Conheca / Discover -->
+  <url>
+    <loc>https://vivegostoso.com.br/conheca</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vivegostoso.com.br/conheca"/>
+    <xhtml:link rel="alternate" hreflang="en"    href="https://vivegostoso.com.br/en/conheca"/>
+    <xhtml:link rel="alternate" hreflang="es"    href="https://vivegostoso.com.br/es/conheca"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vivegostoso.com.br/conheca"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Apoie / Support -->
+  <url>
+    <loc>https://vivegostoso.com.br/apoie</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vivegostoso.com.br/apoie"/>
+    <xhtml:link rel="alternate" hreflang="en"    href="https://vivegostoso.com.br/en/apoie"/>
+    <xhtml:link rel="alternate" hreflang="es"    href="https://vivegostoso.com.br/es/apoie"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vivegostoso.com.br/apoie"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Contrate / Hire -->
+  <url>
+    <loc>https://vivegostoso.com.br/contrate</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vivegostoso.com.br/contrate"/>
+    <xhtml:link rel="alternate" hreflang="en"    href="https://vivegostoso.com.br/en/contrate"/>
+    <xhtml:link rel="alternate" hreflang="es"    href="https://vivegostoso.com.br/es/contrate"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vivegostoso.com.br/contrate"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Resolva / Services -->
+  <url>
+    <loc>https://vivegostoso.com.br/resolva</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vivegostoso.com.br/resolva"/>
+    <xhtml:link rel="alternate" hreflang="en"    href="https://vivegostoso.com.br/en/resolva"/>
+    <xhtml:link rel="alternate" hreflang="es"    href="https://vivegostoso.com.br/es/resolva"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vivegostoso.com.br/resolva"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Sobre / About -->
+  <url>
+    <loc>https://vivegostoso.com.br/sobre</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vivegostoso.com.br/sobre"/>
+    <xhtml:link rel="alternate" hreflang="en"    href="https://vivegostoso.com.br/en/sobre"/>
+    <xhtml:link rel="alternate" hreflang="es"    href="https://vivegostoso.com.br/es/sobre"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vivegostoso.com.br/sobre"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Blog -->
+  <url>
+    <loc>https://vivegostoso.com.br/blog</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vivegostoso.com.br/blog"/>
+    <xhtml:link rel="alternate" hreflang="en"    href="https://vivegostoso.com.br/en/blog"/>
+    <xhtml:link rel="alternate" hreflang="es"    href="https://vivegostoso.com.br/es/blog"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vivegostoso.com.br/blog"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+</urlset>

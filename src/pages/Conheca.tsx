@@ -1,20 +1,20 @@
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { useTranslation } from 'react-i18next'
 
 export default function Conheca() {
+  const { t } = useTranslation()
   usePageMeta({
     title: 'Conheça Gostoso',
     description: 'A história, as praias, como chegar e a melhor época para visitar São Miguel do Gostoso.',
   })
   return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-16">
-      <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-[72px] leading-none text-[#1A1A1A] mb-8">CONHEÇA.</h1>
+      <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-[72px] leading-none text-[#1A1A1A] mb-8">{t('conheca.badge')}</h1>
 
       <section className="mb-12">
-        <h2 className="font-display text-2xl font-semibold mb-3">A cidade</h2>
+        <h2 className="font-display text-2xl font-semibold mb-3">{t('conheca.titulo')}</h2>
         <p className="text-lg leading-relaxed text-[#3D3D3D]">
-          São Miguel do Gostoso fica no litoral norte do Rio Grande do Norte, a 100 km de Natal.
-          Com ventos constantes e mar aberto, virou capital mundial do kitesurf e do windsurf.
-          Mas é mais do que esporte: é comunidade, gastronomia nordestina, sunsets monumentais.
+          {t('conheca.desc')}
         </p>
       </section>
 

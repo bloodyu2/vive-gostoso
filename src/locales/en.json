@@ -1,0 +1,164 @@
+{
+  "nav": {
+    "come": "EAT",
+    "fique": "STAY",
+    "passeie": "EXPLORE",
+    "apoie": "SUPPORT",
+    "explore": "MAP",
+    "participe": "EVENTS",
+    "conheca": "DISCOVER",
+    "resolva": "SERVICES",
+    "contrate": "HIRE",
+    "explorar": "Discover",
+    "explorar_cidade": "Explore the city",
+    "mapa_interativo": "Interactive map",
+    "eventos_festivais": "Events & festivals",
+    "cidade_praias": "The town & beaches",
+    "comercio_servicos": "Shops & services",
+    "freelancers_vagas": "Freelancers & jobs",
+    "buscar": "Search",
+    "minha_conta": "My account",
+    "entrar": "Sign in",
+    "cadastre_negocio": "List your business",
+    "negocios": "Business"
+  },
+  "home": {
+    "eyebrow": "São Miguel do Gostoso · RN",
+    "hero_h1_1": "Eat.",
+    "hero_h1_2": "Stay.",
+    "hero_h1_3": "Explore.",
+    "hero_brand": "Vive Gostoso.",
+    "hero_sub": "Where to eat, stay and have fun in São Miguel do Gostoso. Everything here, all close, all now.",
+    "cta_explorar": "Explore the city",
+    "cta_restaurantes": "See restaurants",
+    "stat_negocios": "registered businesses",
+    "stat_hospedagens": "accommodations",
+    "stat_eventos": "events on the calendar",
+    "stat_dinheiro": "money stays in town",
+    "scroll_label": "Explore",
+    "verbs_come_sub": "Restaurants & gastronomy",
+    "verbs_fique_sub": "Guesthouses & stays",
+    "verbs_passeie_sub": "Tours & sports",
+    "verbs_explore_sub": "Interactive map",
+    "verbs_participe_sub": "Events & festivals",
+    "verbs_apoie_sub": "Transparent fund",
+    "verbs_contrate_sub": "Services & jobs",
+    "novos_titulo": "Welcome to the guide 👋",
+    "novos_eyebrow": "New on the platform",
+    "ver_todos": "See all →",
+    "eventos_titulo": "Upcoming events",
+    "eventos_eyebrow": "Gostoso calendar",
+    "ver_agenda": "See full calendar →",
+    "instagram_titulo": "Follow the city",
+    "instagram_sub": "Photos, stories and everyday life in São Miguel do Gostoso."
+  },
+  "come": {
+    "desc": "From fried fish on the beach to dinner at the guesthouse. Everything Gostoso has to eat.",
+    "abrir_mapa": "Open on map"
+  },
+  "fique": {
+    "desc": "From beachfront guesthouses to cozy chalets. Where to stay in Gostoso.",
+    "abrir_mapa": "Open on map"
+  },
+  "passeie": {
+    "desc": "Kite, surf, buggy and much more. Things to do in São Miguel do Gostoso.",
+    "abrir_mapa": "Open on map"
+  },
+  "explore": {
+    "titulo": "Explore the map",
+    "desc": "All businesses in Gostoso on the map. Click to discover."
+  },
+  "participe": {
+    "titulo": "Events calendar",
+    "desc": "Shows, festivals, fairs and everything happening in São Miguel do Gostoso.",
+    "sem_eventos": "No upcoming events",
+    "sem_eventos_sub": "Keep an eye out — the calendar is updated regularly."
+  },
+  "contrate": {
+    "badge": "HIRE.",
+    "titulo": "Talent & jobs in Gostoso",
+    "desc": "Locals offering services. Businesses looking for people. All here, direct via WhatsApp.",
+    "oferecer_servico": "Offer a service",
+    "publicar_vaga": "Post a job",
+    "tab_servicos": "Local services",
+    "tab_vagas": "Job listings",
+    "todos": "All",
+    "sem_servicos": "No services listed yet",
+    "sem_servicos_sub": "Be the first to offer a service to the city. It's free and direct via WhatsApp.",
+    "cadastrar_servico": "List my service",
+    "sem_vagas": "No open positions right now",
+    "sem_vagas_sub": "If you run a business in Gostoso and need to hire someone, post here. It's free.",
+    "servico": "Service",
+    "vaga": "Job"
+  },
+  "sobre": {
+    "badge": "ABOUT THE PROJECT",
+    "titulo": "The platform belongs to the city",
+    "desc": "Vive Gostoso was born from a simple idea: São Miguel do Gostoso deserves its own platform, built by people who know the town."
+  },
+  "apoie": {
+    "badge": "SUPPORT.",
+    "titulo": "The city's transparent fund",
+    "desc": "100% of what we raise goes directly to maintaining and improving the platform. No mystery.",
+    "doe_titulo": "Make a donation",
+    "doe_desc": "Any amount helps keep Vive Gostoso running.",
+    "valor_custom": "Other amount",
+    "doe_btn": "Support with",
+    "sucesso_titulo": "Thank you for your support!",
+    "sucesso_desc": "Your donation helps keep the platform free for the whole city.",
+    "custos_titulo": "Operating costs",
+    "custos_desc": "What it costs to keep Vive Gostoso running every month.",
+    "status_ativo": "Active",
+    "status_planejado": "Planned"
+  },
+  "conheca": {
+    "badge": "DISCOVER.",
+    "titulo": "São Miguel do Gostoso",
+    "desc": "A fishing village on the northern coast of Rio Grande do Norte. Constant winds, blue sea and a sunset famous around the world."
+  },
+  "negocio": {
+    "abrir_mapa": "View on map",
+    "contato": "Contact",
+    "endereco": "Address",
+    "horario": "Opening hours",
+    "aberto": "Open now",
+    "fechado": "Closed",
+    "ver_mais": "See more",
+    "galeria": "Gallery",
+    "servicos": "Services"
+  },
+  "footer": {
+    "tagline1": "Gostoso in the palm of your hand.",
+    "tagline2": "The platform belongs to the city.",
+    "modulos": "Explore",
+    "cidade": "Town",
+    "negocios": "Business",
+    "sobre_projeto": "About the project",
+    "blog": "Blog",
+    "cadastrar": "Register",
+    "painel": "Dashboard",
+    "selo_verificado": "Verified badge",
+    "feito_por": "Made by Balaio",
+    "modo_claro": "Light mode",
+    "modo_escuro": "Dark mode"
+  },
+  "common": {
+    "ver_perfil": "View profile",
+    "ver_todos": "See all →",
+    "voltar": "Back",
+    "fechar": "Close",
+    "carregando": "Loading...",
+    "sem_resultados": "No results found",
+    "aberto": "Open",
+    "fechado": "Closed",
+    "whatsapp": "WhatsApp",
+    "instagram": "Instagram",
+    "site": "Website",
+    "ligacao": "Call"
+  },
+  "not_found": {
+    "titulo": "Page not found",
+    "desc": "This page doesn't exist or has been moved.",
+    "voltar_inicio": "Back to home"
+  }
+}

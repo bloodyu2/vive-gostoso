@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { EventCard } from '@/components/events/event-card'
 import { BusinessCard } from '@/components/business/business-card'
 import { Hoje } from '@/components/home/hoje'
@@ -9,18 +10,22 @@ import { useBusinesses } from '@/hooks/useBusinesses'
 import { useStats } from '@/hooks/useStats'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useRecentBusinesses } from '@/hooks/useRecentBusinesses'
-
-const VERBS = [
-  { to: '/come',      label: 'COME.',      color: 'text-ocre',       sub: 'Restaurantes e gastronomia' },
-  { to: '/fique',     label: 'FIQUE.',     color: 'text-teal',        sub: 'Pousadas e hospedagem' },
-  { to: '/passeie',   label: 'PASSEIE.',   color: 'text-[#3D8B5A]',  sub: 'Passeios e esportes' },
-  { to: '/explore',   label: 'EXPLORE.',   color: 'text-coral',       sub: 'Mapa interativo' },
-  { to: '/participe', label: 'PARTICIPE.', color: 'text-teal',        sub: 'Eventos e festivais' },
-  { to: '/apoie',     label: 'APOIE.',     color: 'text-ocre',        sub: 'Fundo transparente' },
-  { to: '/contrate',  label: 'CONTRATE.',  color: 'text-[#1A1A1A]',  sub: 'Serviços e empregos' },
-]
+import { useLocalePath } from '@/hooks/useLocalePath'
 
 export default function Home() {
+  const { t } = useTranslation()
+  const lp = useLocalePath()
+
+  const VERBS = [
+    { to: lp('/come'),      label: t('nav.come') + '.',      color: 'text-ocre',       sub: t('home.verbs_come_sub') },
+    { to: lp('/fique'),     label: t('nav.fique') + '.',     color: 'text-teal',        sub: t('home.verbs_fique_sub') },
+    { to: lp('/passeie'),   label: t('nav.passeie') + '.',   color: 'text-[#3D8B5A]',  sub: t('home.verbs_passeie_sub') },
+    { to: lp('/explore'),   label: t('nav.explore') + '.',   color: 'text-coral',       sub: t('home.verbs_explore_sub') },
+    { to: lp('/participe'), label: t('nav.participe') + '.', color: 'text-teal',        sub: t('home.verbs_participe_sub') },
+    { to: lp('/apoie'),     label: t('nav.apoie') + '.',     color: 'text-ocre',        sub: t('home.verbs_apoie_sub') },
+    { to: lp('/contrate'),  label: t('nav.contrate') + '.',  color: 'text-[#1A1A1A]',  sub: t('home.verbs_contrate_sub') },
+  ]
+
   usePageMeta({
     title: 'São Miguel do Gostoso, RN',
     description: 'Come. Fique. Passeie. O guia completo de São Miguel do Gostoso: restaurantes, pousadas, passeios e muito mais.',
@@ -59,32 +64,32 @@ export default function Home() {
             <div className="flex items-center gap-3">
               <span className="inline-block w-2 h-2 rounded-full bg-teal animate-pulse" />
               <span className="text-xs font-semibold tracking-widest uppercase text-white/60">
-                São Miguel do Gostoso · RN
+                {t('home.eyebrow')}
               </span>
             </div>
 
             {/* Display headline */}
             <h1 className="font-display font-bold leading-none tracking-tight">
-              <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">Come.</span>
-              <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">Fique.</span>
-              <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">Passeie.</span>
-              <span className="block text-3xl sm:text-5xl md:text-7xl text-coral mt-1">Vive Gostoso.</span>
+              <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">{t('home.hero_h1_1')}</span>
+              <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">{t('home.hero_h1_2')}</span>
+              <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">{t('home.hero_h1_3')}</span>
+              <span className="block text-3xl sm:text-5xl md:text-7xl text-coral mt-1">{t('home.hero_brand')}</span>
             </h1>
 
             {/* Sub */}
             <p className="text-base md:text-lg text-white/70 max-w-md leading-relaxed">
-              Onde comer, ficar e curtir em São Miguel do Gostoso. Tudo aqui, tudo perto, tudo agora.
+              {t('home.hero_sub')}
             </p>
 
             {/* CTAs */}
             <div className="flex flex-wrap gap-3 pt-2">
-              <Link to="/explore"
+              <Link to={lp('/explore')}
                 className="bg-teal text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-teal-dark transition-colors">
-                Explorar a cidade
+                {t('home.cta_explorar')}
               </Link>
-              <Link to="/come"
+              <Link to={lp('/come')}
                 className="bg-white/10 text-white border border-white/20 px-6 py-3 rounded-full text-sm font-semibold hover:bg-white/20 transition-colors">
-                Ver restaurantes
+                {t('home.cta_restaurantes')}
               </Link>
             </div>
           </div>
@@ -94,17 +99,17 @@ export default function Home() {
             {[
               {
                 n: stats?.businesses ? `${stats.businesses}` : '—',
-                label: 'negócios cadastrados',
+                label: t('home.stat_negocios'),
               },
               {
                 n: stats?.accommodations ? `${stats.accommodations}` : '—',
-                label: 'hospedagens',
+                label: t('home.stat_hospedagens'),
               },
               {
                 n: stats?.events ? `${stats.events}` : '—',
-                label: 'eventos no calendário',
+                label: t('home.stat_eventos'),
               },
-              { n: '100%', label: 'dinheiro fica na cidade' },
+              { n: '100%', label: t('home.stat_dinheiro') },
             ].map(s => (
               <div key={s.label}>
                 <div className="font-display font-bold text-2xl text-white">{s.n}</div>
@@ -117,10 +122,10 @@ export default function Home() {
         {/* Scroll incentive */}
         <button
           onClick={scrollToVerbs}
-          aria-label="Descer"
+          aria-label={t('home.scroll_label')}
           className={`absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/40 hover:text-white/80 transition-all duration-500 ${scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
-          <span className="text-[10px] uppercase tracking-widest font-semibold">Explorar</span>
+          <span className="text-[10px] uppercase tracking-widest font-semibold">{t('home.scroll_label')}</span>
           <ChevronDown className="w-5 h-5 animate-bounce" />
         </button>
       </section>
@@ -158,10 +163,10 @@ export default function Home() {
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10 md:pb-14">
           <div className="flex justify-between items-center mb-5">
             <div>
-              <span className="text-xs font-bold tracking-widest uppercase text-[#737373]">Novos na plataforma</span>
-              <h2 className="font-display text-xl md:text-2xl font-semibold mt-0.5">Bem-vindos ao guia 👋</h2>
+              <span className="text-xs font-bold tracking-widest uppercase text-[#737373]">{t('home.novos_eyebrow')}</span>
+              <h2 className="font-display text-xl md:text-2xl font-semibold mt-0.5">{t('home.novos_titulo')}</h2>
             </div>
-            <Link to="/come" className="text-teal text-sm font-semibold">Ver todos →</Link>
+            <Link to="/come" className="text-teal text-sm font-semibold">{t('home.ver_todos')}</Link>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {recentBusinesses.map(b => (
@@ -194,8 +199,8 @@ export default function Home() {
       {events.length > 0 && (
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-12 md:pb-16">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="font-display text-xl md:text-2xl font-semibold">Próximos eventos</h2>
-            <Link to="/participe" className="text-teal text-sm font-semibold">Ver todos →</Link>
+            <h2 className="font-display text-xl md:text-2xl font-semibold">{t('home.eventos_titulo')}</h2>
+            <Link to="/participe" className="text-teal text-sm font-semibold">{t('home.ver_todos')}</Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {events.slice(0, 3).map(e => <EventCard key={e.id} event={e} />)}
@@ -227,13 +232,13 @@ export default function Home() {
                 @vivegostoso
               </p>
               <p className="text-white/80 text-sm mt-0.5">
-                Novidades sempre saem por lá antes de tudo
+                {t('home.instagram_sub')}
               </p>
             </div>
           </div>
 
           <span className="relative flex items-center gap-2 bg-white text-[#833ab4] font-semibold text-sm px-5 py-2.5 rounded-full group-hover:gap-3 transition-all flex-shrink-0">
-            Seguir no Instagram
+            {t('home.instagram_titulo')}
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
