@@ -10,6 +10,8 @@ import { Lightbox } from '@/components/ui/lightbox'
 import { ReviewList } from '@/components/reviews/review-list'
 import { ReviewForm } from '@/components/reviews/review-form'
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { useReviews } from '@/hooks/useReviews'
+import { StarRating } from '@/components/reviews/star-rating'
 
 const DAYS: Record<string, string> = {
   seg: 'Segunda', ter: 'Terça', qua: 'Quarta',
@@ -22,6 +24,10 @@ export default function Negocio() {
   const { data: b, isLoading } = useBusiness(slug ?? '')
   const [copied, setCopied] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const { data: reviews = [] } = useReviews(b?.id ?? '')
+  const avgRating = reviews.length > 0
+    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+    : null
 
   usePageMeta(b
     ? {
@@ -105,6 +111,15 @@ export default function Negocio() {
           </div>
 
           <h1 className="font-display font-bold text-4xl tracking-tight mb-1">{b.name}</h1>
+          {avgRating !== null && (
+            <div className="flex items-center gap-2 mb-4">
+              <StarRating value={Math.round(avgRating)} readonly size="sm" />
+              <span className="text-sm font-semibold text-[#1A1A1A]">{avgRating.toFixed(1)}</span>
+              <span className="text-sm text-[#737373]">
+                ({reviews.length} {reviews.length === 1 ? 'avaliação' : 'avaliações'})
+              </span>
+            </div>
+          )}
           {b.price_range && (
             <span className="inline-block text-sm font-semibold text-[#737373] bg-[#F0EDEA] px-2 py-0.5 rounded-lg mb-4">
               {b.price_range}
@@ -149,6 +164,18 @@ export default function Negocio() {
 
         {/* Sidebar */}
         <aside className="space-y-5">
+          {/* WhatsApp CTA */}
+          {b.whatsapp && (
+            <a
+              href={`https://wa.me/${b.whatsapp.replace(/\D/g, '')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1EBE57] text-white rounded-2xl px-5 py-4 text-sm font-semibold transition-colors"
+            >
+              <Phone className="w-4 h-4" />
+              Falar no WhatsApp
+            </a>
+          )}
           {/* Share */}
           <button
             onClick={handleShare}
