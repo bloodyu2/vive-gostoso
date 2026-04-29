@@ -367,22 +367,10 @@ export default function Sobre() {
         <div className="max-w-4xl mx-auto">
           <p className="text-xs font-bold tracking-widest uppercase text-[#737373] mb-3">Quem faz</p>
           <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-8">
-            Feito por quem mora aqui.
+            Desenvolvido pela Balaio.
           </h2>
-          <div className="flex flex-col sm:flex-row gap-6">
-            <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl p-6 flex-1">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-teal flex items-center justify-center text-white font-bold text-sm">V</div>
-                <div>
-                  <div className="font-semibold">Victor Hugo Lima</div>
-                  <div className="text-xs text-[#737373]">Arquiteto técnico · morador desde 2025</div>
-                </div>
-              </div>
-              <p className="text-sm text-[#737373] leading-relaxed">
-                Desenvolvedor e estrategista. Escolheu Gostoso como casa definitiva e decidiu colocar a tecnologia a serviço da cidade que adotou.
-              </p>
-            </div>
-            <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl p-6 flex-1">
+          <div className="max-w-md">
+            <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-[#0D0D0D] flex items-center justify-center flex-shrink-0">
                   <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
