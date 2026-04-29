@@ -55,6 +55,24 @@ serve(async (req) => {
           stripe_customer_id: session.customer as string,
         })
         .eq('id', businessId)
+
+      // Get profile_id from the business and send notification
+      const { data: updatedBiz } = await supabase
+        .from('gostoso_businesses')
+        .select('profile_id')
+        .eq('id', businessId)
+        .maybeSingle()
+
+      if (updatedBiz?.profile_id) {
+        const planName = plan === 'destaque' ? 'Destaque' : 'Associado'
+        await supabase.from('gostoso_notifications').insert({
+          profile_id: updatedBiz.profile_id,
+          type: 'plan_activated',
+          title: `Plano ${planName} ativado! 🚀`,
+          body: 'Seu negócio agora tem visibilidade ampliada na plataforma.',
+          link: '/cadastre/painel',
+        })
+      }
     }
   }
 

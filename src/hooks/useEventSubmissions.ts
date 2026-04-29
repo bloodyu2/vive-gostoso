@@ -26,7 +26,7 @@ export function useSubmitEvent() {
   })
 }
 
-// Admin: list pending submissions
+// Admin: list pending submissions (not yet reviewed — is_approved=false AND reviewed_at IS NULL)
 export function usePendingEventSubmissions() {
   return useQuery<EventSubmission[]>({
     queryKey: ['admin-event-submissions'],
@@ -35,6 +35,7 @@ export function usePendingEventSubmissions() {
         .from('gostoso_event_submissions')
         .select('*')
         .eq('is_approved', false)
+        .is('reviewed_at', null)
         .order('created_at', { ascending: false })
       if (error) throw error
       return (data ?? []) as EventSubmission[]
@@ -78,7 +79,7 @@ export function useApproveEventSubmission() {
   })
 }
 
-// Admin: reject a submission
+// Admin: reject a submission (is_approved stays false; reviewed_at marks it as processed)
 export function useRejectEventSubmission() {
   const qc = useQueryClient()
   return useMutation({
@@ -86,7 +87,7 @@ export function useRejectEventSubmission() {
       const { error } = await supabase
         .from('gostoso_event_submissions')
         .update({
-          is_approved: true, // mark as processed (not pending anymore)
+          is_approved: false,
           admin_note: note ?? 'Rejeitado',
           reviewed_at: new Date().toISOString(),
         })

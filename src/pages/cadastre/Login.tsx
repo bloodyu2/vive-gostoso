@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { Logo } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
@@ -92,6 +92,12 @@ export default function Login() {
 
         {/* White body */}
         <div className="bg-white p-8">
+          {/* Tourist notice */}
+          <div className="flex items-start gap-2.5 bg-areia rounded-xl px-4 py-3 mb-6 text-sm text-[#737373]">
+            <span className="text-base leading-none mt-0.5 flex-shrink-0">🗺️</span>
+            <span>Só explorando Gostoso? Não precisa criar conta — <Link to="/" className="text-teal font-medium hover:underline">navegue à vontade</Link>.</span>
+          </div>
+
           {/* Value props - shown only on login/register, not forgot */}
           {mode !== 'forgot' && (
             <>

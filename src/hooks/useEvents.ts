@@ -18,3 +18,20 @@ export function useEvents(featured?: boolean) {
     },
   })
 }
+
+export function useEvent(id: string) {
+  return useQuery({
+    queryKey: ['event', id],
+    enabled: !!id,
+    staleTime: 5 * 60 * 1000,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('gostoso_events')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle()
+      if (error) throw error
+      return data as GostosoEvent | null
+    },
+  })
+}

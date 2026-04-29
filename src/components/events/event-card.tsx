@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Badge } from '@/components/ui/badge'
 import type { GostosoEvent } from '@/types/database'
 
@@ -37,24 +38,19 @@ function CardContent({ event: e }: { event: GostosoEvent }) {
 }
 
 export function EventCard({ event: e }: { event: GostosoEvent }) {
-  const baseClass = "bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden transition-all duration-200"
+  const baseClass = "bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 block"
 
   if (e.source_url) {
     return (
-      <a
-        href={e.source_url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`${baseClass} hover:shadow-md hover:-translate-y-0.5 block`}
-      >
+      <a href={e.source_url} target="_blank" rel="noopener noreferrer" className={baseClass}>
         <CardContent event={e} />
       </a>
     )
   }
 
   return (
-    <article className={baseClass}>
+    <Link to={`/evento/${e.id}`} className={baseClass}>
       <CardContent event={e} />
-    </article>
+    </Link>
   )
 }

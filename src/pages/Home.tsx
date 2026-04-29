@@ -8,6 +8,7 @@ import { useEvents } from '@/hooks/useEvents'
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useStats } from '@/hooks/useStats'
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { useRecentBusinesses } from '@/hooks/useRecentBusinesses'
 
 const VERBS = [
   { to: '/come',      label: 'COME.',      color: 'text-ocre',       sub: 'Restaurantes e gastronomia' },
@@ -28,6 +29,7 @@ export default function Home() {
   const { data: allBusinesses = [] } = useBusinesses()
   const featured = allBusinesses.filter(b => b.is_featured)
   const { data: stats } = useStats()
+  const { data: recentBusinesses = [] } = useRecentBusinesses()
 
   const verbsRef = useRef<HTMLDivElement>(null)
   const [scrolled, setScrolled] = useState(false)
@@ -150,6 +152,40 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* ── Recém chegados ── */}
+      {recentBusinesses.length > 0 && (
+        <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10 md:pb-14">
+          <div className="flex justify-between items-center mb-5">
+            <div>
+              <span className="text-xs font-bold tracking-widest uppercase text-[#737373]">Novos na plataforma</span>
+              <h2 className="font-display text-xl md:text-2xl font-semibold mt-0.5">Bem-vindos ao guia 👋</h2>
+            </div>
+            <Link to="/come" className="text-teal text-sm font-semibold">Ver todos →</Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {recentBusinesses.map(b => (
+              <Link
+                key={b.id}
+                to={`/negocio/${b.slug}`}
+                className="group bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all"
+              >
+                <div className="aspect-square bg-gradient-to-br from-teal to-teal-dark overflow-hidden">
+                  {b.cover_url
+                    ? <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
+                    : <div className="w-full h-full flex items-center justify-center text-white/30 text-3xl font-bold">{b.name[0]}</div>
+                  }
+                </div>
+                <div className="p-3">
+                  <p className="text-xs font-semibold text-[#1A1A1A] truncate leading-snug">{b.name}</p>
+                  {b.category && <p className="text-[10px] text-[#737373] mt-0.5 truncate">{b.category.name}</p>}
+                  {b.is_verified && <span className="inline-block mt-1.5 text-[9px] font-bold tracking-wide uppercase text-teal bg-teal-light px-1.5 py-0.5 rounded-full">Verificado</span>}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ── Agora em Gostoso ── */}
       <Hoje />

@@ -99,6 +99,15 @@ export function useApproveClaim() {
         .update({ business_id: businessId })
         .eq('id', profileId)
       if (e3) throw e3
+
+      // Notify the profile owner
+      await supabase.from('gostoso_notifications').insert({
+        profile_id: profileId,
+        type: 'claim_approved',
+        title: '🎉 Negócio aprovado!',
+        body: 'Seu pedido foi aprovado. Você já pode gerenciar seu perfil.',
+        link: '/cadastre/painel',
+      })
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['claims-admin'] })
@@ -111,12 +120,22 @@ export function useApproveClaim() {
 export function useRejectClaim() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: async ({ claimId, adminNote }: { claimId: string; adminNote?: string }) => {
+    mutationFn: async ({ claimId, adminNote, profileId }: { claimId: string; adminNote?: string; profileId?: string }) => {
       const { error } = await supabase
         .from('gostoso_claim_requests')
         .update({ status: 'rejected', admin_note: adminNote ?? null, resolved_at: new Date().toISOString() })
         .eq('id', claimId)
       if (error) throw error
+
+      if (profileId) {
+        await supabase.from('gostoso_notifications').insert({
+          profile_id: profileId,
+          type: 'claim_rejected',
+          title: 'Pedido não aprovado',
+          body: adminNote ? `Motivo: ${adminNote}` : 'Seu pedido de reivindicação não foi aprovado desta vez.',
+          link: null,
+        })
+      }
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['claims-admin'] })

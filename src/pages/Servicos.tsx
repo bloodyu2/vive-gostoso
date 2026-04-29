@@ -5,9 +5,14 @@ import { BusinessFilters } from '@/components/business/business-filters'
 import { BusinessGrid, type ViewMode } from '@/components/business/business-grid'
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useCategories } from '@/hooks/useCategories'
+import { usePageMeta } from '@/hooks/usePageMeta'
 import { isBusinessOpen } from '@/lib/utils'
 
 export default function Servicos() {
+  usePageMeta({
+    title: 'Comércio e Serviços em Gostoso',
+    description: 'Farmácia, lavanderia, mercado, barbearia e tudo que resolve o seu dia em São Miguel do Gostoso.',
+  })
   const [activeCat, setActiveCat] = useState<string | null>(null)
   const [view, setView] = useState<ViewMode>('grid')
   const [openOnly, setOpenOnly] = useState(false)

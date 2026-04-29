@@ -21,17 +21,17 @@ const CUSTOS_ATIVOS = [
   {
     icon: Layers,
     label: 'Hospedagem Vercel (Pro)',
-    detalhe: 'Deploy, CDN, previews e analytics de performance',
-    valor_mes: 100.00,
-    valor_display: '~R$100/mes',
+    detalhe: 'Deploy, CDN global, previews e analytics',
+    valor_mes: 118.00,
+    valor_display: '~R$118/mês (USD 20)',
     status: 'ativo' as const,
   },
   {
     icon: Database,
     label: 'Banco de dados Supabase (Pro)',
-    detalhe: 'PostgreSQL + Auth + Storage de fotos + Realtime',
-    valor_mes: 140.00,
-    valor_display: '~R$140/mes (~USD 25)',
+    detalhe: 'PostgreSQL + Auth + Storage + Edge Functions',
+    valor_mes: 148.00,
+    valor_display: '~R$148/mês (USD 25)',
     status: 'ativo' as const,
   },
   {
@@ -137,6 +137,45 @@ export default function Apoie() {
           <p className="m-0 italic text-[#3D3D3D] leading-relaxed">
             Cada real que entra aqui fica em Gostoso. Auditável. Público.
           </p>
+        </div>
+
+        {/* APRENDE — destaque do primeiro semestre */}
+        <div className="mt-16">
+          <div className="relative overflow-hidden bg-gradient-to-br from-[#1A1A1A] to-[#2D2D2D] rounded-2xl p-6 md:p-8">
+            {/* Background dot pattern */}
+            <div className="absolute inset-0 opacity-[0.04]"
+              style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}
+            />
+            <div className="relative">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="inline-flex items-center gap-1.5 bg-teal text-white text-xs font-bold px-3 py-1 rounded-full">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                  Objetivo 1º semestre
+                </span>
+              </div>
+              <h3 className="font-display font-bold text-3xl md:text-4xl text-white mb-3">
+                Programa APRENDE
+              </h3>
+              <p className="text-white/70 text-base leading-relaxed max-w-xl mb-6">
+                Capacitação digital para todos os negócios da plataforma: fotografia com celular, redes sociais, atendimento ao turista e gestão básica.
+                O dinheiro que entra no fundo financia esse programa antes de qualquer outra coisa.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <div className="bg-white/10 rounded-xl px-4 py-2.5 text-center">
+                  <div className="font-display font-bold text-white text-xl">1º sem.</div>
+                  <div className="text-white/50 text-xs mt-0.5">Meta de entrega</div>
+                </div>
+                <div className="bg-white/10 rounded-xl px-4 py-2.5 text-center">
+                  <div className="font-display font-bold text-white text-xl">100%</div>
+                  <div className="text-white/50 text-xs mt-0.5">Gratuito p/ associados</div>
+                </div>
+                <div className="bg-white/10 rounded-xl px-4 py-2.5 text-center">
+                  <div className="font-display font-bold text-teal text-xl">Gostoso</div>
+                  <div className="text-white/50 text-xs mt-0.5">Feito por quem é da cidade</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Objetivos e metas */}

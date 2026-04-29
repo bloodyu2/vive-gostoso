@@ -26,6 +26,7 @@ export function Hoje() {
 
   if (openNow.length === 0 && todayEvents.length === 0) return null
 
+  const colCount = (openNow.length > 0 ? 1 : 0) + (todayEvents.length > 0 ? 1 : 0)
   const dayLabel = now.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })
 
   return (
@@ -42,7 +43,7 @@ export function Hoje() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/10">
+        <div className={`grid ${colCount === 2 ? 'md:grid-cols-2 md:divide-x' : ''} divide-y md:divide-y-0 divide-white/10`}>
           {/* Abertos agora */}
           {openNow.length > 0 && (
             <div className="p-5 md:p-7">

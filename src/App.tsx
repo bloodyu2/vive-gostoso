@@ -33,6 +33,7 @@ import AdminServices from '@/pages/cadastre/AdminServices'
 import AdminJobs from '@/pages/cadastre/AdminJobs'
 import ResetarSenha from '@/pages/cadastre/ResetarSenha'
 import Bio from '@/pages/Bio'
+import Evento from '@/pages/Evento'
 
 export default function App() {
   return (
@@ -56,6 +57,7 @@ export default function App() {
       <Route path="/blog" element={<PageWrapper><Blog /></PageWrapper>} />
       <Route path="/blog/:slug" element={<PageWrapper><BlogPost /></PageWrapper>} />
       <Route path="/negocio/:slug" element={<PageWrapper><Negocio /></PageWrapper>} />
+      <Route path="/evento/:id" element={<PageWrapper><Evento /></PageWrapper>} />
       <Route path="/bio" element={<Bio />} />
       <Route path="/cadastre" element={<Login />} />
       <Route path="/cadastre/resetar-senha" element={<ResetarSenha />} />

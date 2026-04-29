@@ -97,6 +97,7 @@ function AdminClaimsInner() {
                       onClick={() => reject.mutate({
                         claimId: claim.id,
                         adminNote: rejectNote[claim.id],
+                        profileId: claim.profile_id,
                       })}
                       className="text-coral hover:text-coral flex-shrink-0"
                     >

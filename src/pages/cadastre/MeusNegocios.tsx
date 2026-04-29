@@ -123,44 +123,42 @@ function MeusNegociosInner() {
       ) : (
         <div className="space-y-3">
           {businesses.map(b => (
-            <div
-              key={b.id}
-              className="bg-white border border-[#E8E4DF] rounded-2xl px-5 py-4 flex items-center gap-4"
-            >
-              {/* Cover thumb */}
-              <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-teal to-teal-dark">
-                {b.cover_url && (
-                  <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
-                )}
-              </div>
-
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-semibold text-sm text-[#1A1A1A] truncate">{b.name}</span>
-                  <span
-                    className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full flex-shrink-0 ${
-                      b.is_published
-                        ? 'bg-teal/10 text-teal'
-                        : 'bg-[#E8E4DF] text-[#737373]'
-                    }`}
-                  >
-                    <span className={`w-1.5 h-1.5 rounded-full ${b.is_published ? 'bg-teal' : 'bg-[#A0A0A0]'}`} />
-                    {b.is_published ? 'Publicado' : 'Rascunho'}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                  {b.category && (
-                    <p className="text-xs text-[#737373]">{b.category.name}</p>
+            <div key={b.id} className="bg-white border border-[#E8E4DF] rounded-2xl p-4 md:p-5">
+              {/* Top row: thumb + info */}
+              <div className="flex items-start gap-3">
+                {/* Cover thumb */}
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-teal to-teal-dark">
+                  {b.cover_url && (
+                    <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
                   )}
-                  <span className="text-xs text-[#C4BFBA] font-mono truncate max-w-[160px]">
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-semibold text-sm text-[#1A1A1A] truncate">{b.name}</span>
+                    <span
+                      className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full flex-shrink-0 ${
+                        b.is_published
+                          ? 'bg-teal/10 text-teal'
+                          : 'bg-[#E8E4DF] text-[#737373]'
+                      }`}
+                    >
+                      <span className={`w-1.5 h-1.5 rounded-full ${b.is_published ? 'bg-teal' : 'bg-[#A0A0A0]'}`} />
+                      {b.is_published ? 'Publicado' : 'Rascunho'}
+                    </span>
+                  </div>
+                  {b.category && (
+                    <p className="text-xs text-[#737373] mt-0.5">{b.category.name}</p>
+                  )}
+                  <p className="text-[10px] text-[#C4BFBA] font-mono mt-0.5 truncate">
                     vivegostoso.com.br/negocio/{b.slug}
-                  </span>
+                  </p>
                 </div>
               </div>
 
-              {/* Actions */}
-              <div className="flex items-center gap-2 flex-shrink-0 flex-wrap justify-end">
+              {/* Action row — always below info, wraps cleanly on mobile */}
+              <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-[#F5F2EE]">
                 <CopyLinkButton slug={b.slug} />
                 <a
                   href={`/negocio/${b.slug}`}
