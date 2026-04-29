@@ -1,11 +1,14 @@
+import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { FundHero } from '@/components/fund/fund-hero'
 import { FundEntryRow } from '@/components/fund/fund-entry-row'
 import { useFundEntries, useFundSummary, useAssociadosCount } from '@/hooks/useFund'
 import { useGoals } from '@/hooks/useGoals'
+import { startDonation } from '@/hooks/useCheckout'
 import { Button } from '@/components/ui/button'
-import { Link } from 'react-router-dom'
-import { CheckCircle, Clock, Globe, Mail, Database, Layers, Phone, Smartphone, Zap, Target, Megaphone, Server, Users } from 'lucide-react'
+import { CheckCircle, Clock, Globe, Mail, Database, Layers, Phone, Smartphone, Zap, Target, Megaphone, Server, Users, Heart } from 'lucide-react'
 import type { Goal } from '@/types/database'
 
 // Custos reais de operacao -- atualizar manualmente quando mudar
@@ -71,6 +74,8 @@ const CUSTOS_PLANEJADOS = [
   },
 ]
 
+const DONATION_PRESETS = [25, 50, 100, 250]
+
 const GOAL_ICONS: Record<Goal['category'], React.ElementType> = {
   comunidade: Users,
   operacao: Phone,
@@ -100,10 +105,36 @@ export default function Apoie() {
     title: 'Apoie Gostoso',
     description: 'Fundo público transparente para promover São Miguel do Gostoso. Veja como o dinheiro é usado.',
   })
+  const [searchParams] = useSearchParams()
+  const donationSuccess = searchParams.get('doacao') === 'success'
+
   const { data: entries = [] } = useFundEntries()
   const { data: summary } = useFundSummary()
   const { data: associadosCount = 0 } = useAssociadosCount()
   const { data: goals = [] } = useGoals()
+
+  const [selectedPreset, setSelectedPreset] = useState<number | null>(null)
+  const [customAmount, setCustomAmount] = useState('')
+  const [donationLoading, setDonationLoading] = useState(false)
+  const [donationError, setDonationError] = useState<string | null>(null)
+
+  const effectiveAmountBRL = selectedPreset ?? (customAmount ? parseFloat(customAmount.replace(',', '.')) : null)
+
+  async function handleDonate() {
+    if (!effectiveAmountBRL || effectiveAmountBRL < 5) {
+      setDonationError('Valor mínimo de R$5,00.')
+      return
+    }
+    const amountCents = Math.round(effectiveAmountBRL * 100)
+    setDonationLoading(true)
+    setDonationError(null)
+    try {
+      await startDonation(amountCents)
+    } catch (err) {
+      setDonationError(err instanceof Error ? err.message : 'Erro ao processar doação. Tente novamente.')
+      setDonationLoading(false)
+    }
+  }
 
   return (
     <main>
@@ -116,6 +147,90 @@ export default function Apoie() {
         hasEntries={entries.length > 0}
       />
       <section className="max-w-5xl mx-auto px-5 md:px-8 py-16">
+
+        {/* Donation success banner */}
+        {donationSuccess && (
+          <div className="mb-8 bg-teal/10 border border-teal/20 rounded-2xl p-5 flex items-center gap-4">
+            <span className="text-3xl">💚</span>
+            <div>
+              <p className="font-semibold text-teal">Doação confirmada — obrigado!</p>
+              <p className="text-sm text-teal/80 mt-0.5">Cada real fica em Gostoso e vai direto para a plataforma.</p>
+            </div>
+          </div>
+        )}
+
+        {/* ── Donation widget ── */}
+        <div className="mb-16 bg-white border border-[#E8E4DF] rounded-2xl p-6 md:p-8">
+          <div className="flex items-center gap-3 mb-1">
+            <Heart className="w-5 h-5 text-coral" />
+            <h2 className="font-display font-semibold text-2xl">Doe para a plataforma</h2>
+          </div>
+          <p className="text-sm text-[#737373] mb-6">
+            Qualquer valor, sem mensalidade. Cartão, PIX ou boleto — tudo fica em Gostoso.
+          </p>
+
+          {/* Preset amounts */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {DONATION_PRESETS.map(val => (
+              <button
+                key={val}
+                onClick={() => { setSelectedPreset(val); setCustomAmount('') }}
+                className={`px-5 py-2.5 rounded-xl text-sm font-semibold border transition-all ${
+                  selectedPreset === val
+                    ? 'bg-coral text-white border-coral'
+                    : 'bg-white text-[#3D3D3D] border-[#E8E4DF] hover:border-coral hover:text-coral'
+                }`}
+              >
+                R${val}
+              </button>
+            ))}
+            <button
+              onClick={() => setSelectedPreset(null)}
+              className={`px-5 py-2.5 rounded-xl text-sm font-semibold border transition-all ${
+                selectedPreset === null && customAmount
+                  ? 'bg-coral text-white border-coral'
+                  : 'bg-white text-[#3D3D3D] border-[#E8E4DF] hover:border-coral hover:text-coral'
+              }`}
+            >
+              Outro valor
+            </button>
+          </div>
+
+          {/* Custom amount input */}
+          {selectedPreset === null && (
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-sm font-semibold text-[#737373]">R$</span>
+              <input
+                type="number"
+                min={5}
+                step={1}
+                value={customAmount}
+                onChange={e => setCustomAmount(e.target.value)}
+                placeholder="Quanto você quer doar?"
+                className="flex-1 border border-[#E8E4DF] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-coral transition-colors"
+              />
+            </div>
+          )}
+
+          {donationError && (
+            <p className="text-sm text-red-500 mb-4">{donationError}</p>
+          )}
+
+          <button
+            onClick={handleDonate}
+            disabled={donationLoading || !effectiveAmountBRL || (effectiveAmountBRL ?? 0) < 5}
+            className="w-full sm:w-auto bg-coral text-white font-semibold px-8 py-3 rounded-xl hover:bg-coral/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          >
+            <Heart className="w-4 h-4" />
+            {donationLoading
+              ? 'Redirecionando...'
+              : effectiveAmountBRL && effectiveAmountBRL >= 5
+              ? `Doar R$${effectiveAmountBRL.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}`
+              : 'Escolha um valor'}
+          </button>
+          <p className="text-xs text-[#A0A0A0] mt-3">Pagamento seguro via Stripe. Sem vínculo de mensalidade.</p>
+        </div>
+
         {entries.length > 0 ? (
           <>
             <h2 className="font-display font-semibold text-3xl mb-2">Movimentações</h2>

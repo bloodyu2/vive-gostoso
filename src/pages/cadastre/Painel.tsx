@@ -7,6 +7,11 @@ import { useMyBusinesses } from '@/hooks/useMyBusinesses'
 import { startCheckout } from '@/hooks/useCheckout'
 import { Button } from '@/components/ui/button'
 
+const PLAN_PRICES = {
+  monthly: { associado: 'R$39,90/mês', destaque: 'R$59,90/mês' },
+  annual:  { associado: 'R$430,92/ano', destaque: 'R$646,92/ano' },
+} as const
+
 export default function Painel() {
   return <AuthGuard><PainelInner /></AuthGuard>
 }
@@ -20,12 +25,21 @@ function PainelInner() {
   const successMsg = searchParams.get('associado') === 'success'
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
+  const [billingMode, setBillingMode] = useState<Record<string, 'monthly' | 'annual'>>({})
+
+  function getBilling(bizId: string): 'monthly' | 'annual' {
+    return billingMode[bizId] ?? 'monthly'
+  }
+
+  function toggleBillingMode(bizId: string, mode: 'monthly' | 'annual') {
+    setBillingMode(prev => ({ ...prev, [bizId]: mode }))
+  }
 
   async function handleCheckout(bizId: string, plan: 'associado' | 'destaque') {
     setCheckoutLoading(bizId)
     setCheckoutError(null)
     try {
-      await startCheckout(bizId, plan)
+      await startCheckout(bizId, plan, getBilling(bizId))
     } catch (err) {
       setCheckoutError(err instanceof Error ? err.message : 'Erro ao iniciar pagamento. Tente novamente.')
       setCheckoutLoading(null)
@@ -94,61 +108,107 @@ function PainelInner() {
             </div>
           )}
 
-          <div className="space-y-3">
-            {businesses.map(b => (
-              <div
-                key={b.id}
-                className="bg-white border border-[#E8E4DF] rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center gap-4"
-              >
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-sm text-[#1A1A1A]">{b.name}</p>
-                  <p className="text-xs text-[#737373] mt-0.5">
-                    Plano atual:{' '}
-                    <span className={
-                      b.plan === 'destaque'
-                        ? 'font-semibold text-ocre'
-                        : b.plan === 'associado'
-                        ? 'font-semibold text-teal'
-                        : ''
-                    }>
-                      {b.plan === 'destaque' ? '★ Destaque' : b.plan === 'associado' ? '✓ Associado' : 'Gratuito'}
-                    </span>
-                  </p>
-                </div>
-                <div className="flex gap-2 flex-shrink-0 flex-wrap">
-                  {b.plan === 'free' && (
-                    <>
-                      <button
-                        onClick={() => handleCheckout(b.id, 'associado')}
-                        disabled={checkoutLoading === b.id}
-                        className="text-xs font-semibold bg-teal text-white px-4 py-2 rounded-xl hover:bg-teal-dark transition-colors disabled:opacity-50"
-                      >
-                        {checkoutLoading === b.id ? '...' : 'Associar — R$39,90/mês'}
-                      </button>
+          <div className="space-y-4">
+            {businesses.map(b => {
+              const billing = getBilling(b.id)
+              const isLoading = checkoutLoading === b.id
+              const prices = PLAN_PRICES[billing]
+
+              return (
+                <div
+                  key={b.id}
+                  className="bg-white border border-[#E8E4DF] rounded-2xl p-5"
+                >
+                  {/* Business name + current plan */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <p className="font-semibold text-sm text-[#1A1A1A]">{b.name}</p>
+                      <p className="text-xs text-[#737373] mt-0.5">
+                        Plano atual:{' '}
+                        <span className={
+                          b.plan === 'destaque'
+                            ? 'font-semibold text-ocre'
+                            : b.plan === 'associado'
+                            ? 'font-semibold text-teal'
+                            : ''
+                        }>
+                          {b.plan === 'destaque' ? '★ Destaque' : b.plan === 'associado' ? '✓ Associado' : 'Gratuito'}
+                        </span>
+                      </p>
+                    </div>
+                    {/* Billing toggle — only show for upgradeable plans */}
+                    {b.plan !== 'destaque' && (
+                      <div className="flex items-center gap-1 bg-[#F5F2EE] rounded-xl p-1">
+                        <button
+                          onClick={() => toggleBillingMode(b.id, 'monthly')}
+                          className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
+                            billing === 'monthly'
+                              ? 'bg-white text-[#1A1A1A] shadow-sm'
+                              : 'text-[#737373] hover:text-[#1A1A1A]'
+                          }`}
+                        >
+                          Mensal
+                        </button>
+                        <button
+                          onClick={() => toggleBillingMode(b.id, 'annual')}
+                          className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all flex items-center gap-1.5 ${
+                            billing === 'annual'
+                              ? 'bg-white text-[#1A1A1A] shadow-sm'
+                              : 'text-[#737373] hover:text-[#1A1A1A]'
+                          }`}
+                        >
+                          Anual
+                          <span className="bg-ocre text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full leading-none">
+                            -10%
+                          </span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Annual info pill */}
+                  {billing === 'annual' && b.plan !== 'destaque' && (
+                    <div className="mb-3 text-xs text-ocre bg-ocre/10 border border-ocre/20 rounded-xl px-3 py-2">
+                      Pague uma vez por ano e economize 10%. PIX, boleto e cartão aceitos.
+                    </div>
+                  )}
+
+                  {/* Action buttons */}
+                  <div className="flex gap-2 flex-wrap">
+                    {b.plan === 'free' && (
+                      <>
+                        <button
+                          onClick={() => handleCheckout(b.id, 'associado')}
+                          disabled={isLoading}
+                          className="text-xs font-semibold bg-teal text-white px-4 py-2 rounded-xl hover:bg-teal-dark transition-colors disabled:opacity-50"
+                        >
+                          {isLoading ? '...' : `Associar — ${prices.associado}`}
+                        </button>
+                        <button
+                          onClick={() => handleCheckout(b.id, 'destaque')}
+                          disabled={isLoading}
+                          className="text-xs font-semibold bg-ocre text-white px-4 py-2 rounded-xl hover:bg-ocre-dark transition-colors disabled:opacity-50"
+                        >
+                          {isLoading ? '...' : `Destaque — ${prices.destaque}`}
+                        </button>
+                      </>
+                    )}
+                    {b.plan === 'associado' && (
                       <button
                         onClick={() => handleCheckout(b.id, 'destaque')}
-                        disabled={checkoutLoading === b.id}
+                        disabled={isLoading}
                         className="text-xs font-semibold bg-ocre text-white px-4 py-2 rounded-xl hover:bg-ocre-dark transition-colors disabled:opacity-50"
                       >
-                        {checkoutLoading === b.id ? '...' : 'Destaque — R$59,90/mês'}
+                        {isLoading ? '...' : `Atualizar para Destaque — ${prices.destaque}`}
                       </button>
-                    </>
-                  )}
-                  {b.plan === 'associado' && (
-                    <button
-                      onClick={() => handleCheckout(b.id, 'destaque')}
-                      disabled={checkoutLoading === b.id}
-                      className="text-xs font-semibold bg-ocre text-white px-4 py-2 rounded-xl hover:bg-ocre-dark transition-colors disabled:opacity-50"
-                    >
-                      {checkoutLoading === b.id ? '...' : 'Atualizar para Destaque — R$59,90/mês'}
-                    </button>
-                  )}
-                  {b.plan === 'destaque' && (
-                    <span className="text-xs text-ocre font-semibold">★ Plano Destaque ativo</span>
-                  )}
+                    )}
+                    {b.plan === 'destaque' && (
+                      <span className="text-xs text-ocre font-semibold">★ Plano Destaque ativo</span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       )}

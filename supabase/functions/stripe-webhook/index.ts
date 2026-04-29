@@ -3,8 +3,10 @@ import Stripe from 'https://esm.sh/stripe@14.21.0?target=deno'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const PRICE_TO_PLAN: Record<string, 'associado' | 'destaque'> = {
-  'price_1TRYN4CK3p35JtqmlgDz9R7v': 'associado',
-  'price_1TRYN7CK3p35JtqmURKw4Z6a': 'destaque',
+  'price_1TRYN4CK3p35JtqmlgDz9R7v': 'associado', // mensal
+  'price_1TRYN7CK3p35JtqmURKw4Z6a': 'destaque',  // mensal
+  'price_1TReBwCK3p35JtqmmjgaRwCy': 'associado', // anual (10% off)
+  'price_1TReBzCK3p35JtqmM0tIPdHm': 'destaque',  // anual (10% off)
 }
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {

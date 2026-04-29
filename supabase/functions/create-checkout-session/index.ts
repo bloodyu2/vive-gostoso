@@ -2,6 +2,12 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import Stripe from 'https://esm.sh/stripe@14.21.0?target=deno'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
+// Annual price IDs — when used, PIX is enabled in addition to card + boleto
+const ANNUAL_PRICE_IDS = new Set([
+  'price_1TReBwCK3p35JtqmmjgaRwCy', // associado anual (R$430,92/ano — 10% off)
+  'price_1TReBzCK3p35JtqmM0tIPdHm', // destaque anual  (R$646,92/ano — 10% off)
+])
+
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {
   apiVersion: '2023-10-16',
   httpClient: Stripe.createFetchHttpClient(),
@@ -83,8 +89,10 @@ serve(async (req) => {
       customer: customerId,
       mode: 'subscription',
       line_items: [{ price: priceId, quantity: 1 }],
-      // Accept card and boleto (PIX doesn't support recurring subscriptions in Stripe)
-      payment_method_types: ['card', 'boleto'],
+      // Annual plans support PIX (one payment/year); monthly uses card + boleto only
+      payment_method_types: ANNUAL_PRICE_IDS.has(priceId)
+        ? ['card', 'boleto', 'pix']
+        : ['card', 'boleto'],
       locale: 'pt-BR',
       // Required for boleto — collects CPF/CNPJ and billing address
       billing_address_collection: 'required',
