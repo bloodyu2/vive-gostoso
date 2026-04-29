@@ -31,6 +31,7 @@ import AdminReviews from '@/pages/cadastre/AdminReviews'
 import AdminEvents from '@/pages/cadastre/AdminEvents'
 import AdminServices from '@/pages/cadastre/AdminServices'
 import AdminJobs from '@/pages/cadastre/AdminJobs'
+import ResetarSenha from '@/pages/cadastre/ResetarSenha'
 import Bio from '@/pages/Bio'
 
 export default function App() {
@@ -57,6 +58,7 @@ export default function App() {
       <Route path="/negocio/:slug" element={<PageWrapper><Negocio /></PageWrapper>} />
       <Route path="/bio" element={<Bio />} />
       <Route path="/cadastre" element={<Login />} />
+      <Route path="/cadastre/resetar-senha" element={<ResetarSenha />} />
       <Route path="/cadastre/painel" element={<PageWrapper><Painel /></PageWrapper>} />
       <Route path="/cadastre/perfil" element={<PageWrapper><Perfil /></PageWrapper>} />
       <Route path="/cadastre/negocios" element={<PageWrapper><MeusNegocios /></PageWrapper>} />

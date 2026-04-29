@@ -71,7 +71,7 @@ export default function Login() {
     setLoading(true)
     setError(null)
     const { error: authError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/cadastre/painel`,
+      redirectTo: `${window.location.origin}/cadastre/resetar-senha`,
     })
     if (authError) {
       setError('Não foi possível enviar o e-mail. Tente de novo.')
