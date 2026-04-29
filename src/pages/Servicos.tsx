@@ -7,8 +7,12 @@ import { useBusinesses } from '@/hooks/useBusinesses'
 import { useCategories } from '@/hooks/useCategories'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { isBusinessOpen } from '@/lib/utils'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 
 export default function Servicos() {
+  const { t } = useTranslation()
+  const lp = useLocalePath()
   usePageMeta({
     title: 'Comércio e Serviços em Gostoso',
     description: 'Farmácia, lavanderia, mercado, barbearia e tudo que resolve o seu dia em São Miguel do Gostoso.',
@@ -39,11 +43,11 @@ export default function Servicos() {
         <div>
           <VerbPill verb="resolva" />
           <p className="mt-3 text-lg text-[#3D3D3D] max-w-xl leading-relaxed">
-            Farmácia, lavanderia, mercado, barbearia.<br />Tudo que resolve o seu dia em Gostoso.
+            {t('resolva.desc')}
           </p>
         </div>
-        <Link to="/explore" className="text-teal border-2 border-teal rounded-xl px-5 py-3 text-sm font-semibold flex items-center gap-2 hover:bg-teal-light transition-colors">
-          Abrir no mapa
+        <Link to={lp('/explore')} className="text-teal border-2 border-teal rounded-xl px-5 py-3 text-sm font-semibold flex items-center gap-2 hover:bg-teal-light transition-colors">
+          {t('resolva.abrir_mapa')}
         </Link>
       </div>
       <BusinessFilters

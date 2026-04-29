@@ -12,11 +12,9 @@ import { ReviewForm } from '@/components/reviews/review-form'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useReviews } from '@/hooks/useReviews'
 import { StarRating } from '@/components/reviews/star-rating'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 
-const DAYS: Record<string, string> = {
-  seg: 'Segunda', ter: 'Terça', qua: 'Quarta',
-  qui: 'Quinta', sex: 'Sexta', sab: 'Sábado', dom: 'Domingo',
-}
 const DAY_ORDER = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']
 
 export default function Negocio() {
@@ -25,6 +23,19 @@ export default function Negocio() {
   const [copied, setCopied] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const { data: reviews = [] } = useReviews(b?.id ?? '')
+  const { t } = useTranslation()
+  const lp = useLocalePath()
+
+  const days: Record<string, string> = {
+    seg: t('negocio.dia_seg'),
+    ter: t('negocio.dia_ter'),
+    qua: t('negocio.dia_qua'),
+    qui: t('negocio.dia_qui'),
+    sex: t('negocio.dia_sex'),
+    sab: t('negocio.dia_sab'),
+    dom: t('negocio.dia_dom'),
+  }
+
   const avgRating = reviews.length > 0
     ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
     : null
@@ -36,7 +47,7 @@ export default function Negocio() {
         image: b.cover_url ?? undefined,
         url: `https://vivegostoso.com.br/negocio/${b.slug}`,
       }
-    : { title: 'Carregando...' }
+    : { title: t('common.carregando') }
   )
 
   if (isLoading) return (
@@ -52,28 +63,28 @@ export default function Negocio() {
   if (!b) return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-16 text-center">
       <div className="text-6xl mb-4">🤔</div>
-      <h2 className="font-display text-2xl font-semibold mb-2">Negócio não encontrado</h2>
-      <p className="text-[#737373] mb-6">Pode ter sido removido ou o link está incorreto.</p>
-      <Link to="/" className="text-teal font-semibold">← Voltar ao início</Link>
+      <h2 className="font-display text-2xl font-semibold mb-2">{t('negocio.nao_encontrado')}</h2>
+      <p className="text-[#737373] mb-6">{t('negocio.nao_encontrado_desc')}</p>
+      <Link to={lp('/')} className="text-teal font-semibold">{t('not_found.voltar_inicio')}</Link>
     </main>
   )
 
   const open = isBusinessOpen(b.opening_hours)
   const verb = b.category?.verb ?? 'come'
   const backTo = verb === 'fique' ? '/fique' : verb === 'passeie' ? '/passeie' : '/come'
-  const backLabel = verb === 'fique' ? 'FIQUE' : verb === 'passeie' ? 'PASSEIE' : 'COME'
+  const backLabel = verb === 'fique' ? t('nav.fique') : verb === 'passeie' ? t('nav.passeie') : t('nav.come')
 
   const business = b
   const shareUrl = `https://vivegostoso.com.br/negocio/${business.slug}`
-  const shareText = `Encontrei ${business.name} no Vive Gostoso 🌊\nConfira: ${shareUrl}`
+  const shareText = `${business.name} — ${shareUrl}`
 
   async function handleShare() {
     if (navigator.share) {
       try {
-        await navigator.share({ title: business.name, text: `Encontrei ${business.name} no Vive Gostoso 🌊`, url: shareUrl })
+        await navigator.share({ title: business.name, text: shareText, url: shareUrl })
       } catch { /* user cancelled */ }
     } else {
-      await navigator.clipboard.writeText(shareText)
+      await navigator.clipboard.writeText(shareUrl)
       setCopied(true)
       setTimeout(() => setCopied(false), 2500)
     }
@@ -81,9 +92,9 @@ export default function Negocio() {
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-10">
-      <Link to={backTo} className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
+      <Link to={lp(backTo)} className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
         <ArrowLeft className="w-4 h-4" />
-        Voltar a {backLabel}
+        {t('negocio.voltar_a')} {backLabel}
       </Link>
 
       {/* Cover */}
@@ -95,7 +106,7 @@ export default function Negocio() {
         {b.is_featured && (
           <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-white/90 backdrop-blur text-teal text-xs font-semibold px-3 py-1.5 rounded-full">
             <CheckCircle className="w-3.5 h-3.5" />
-            Verificado pela cidade
+            {t('negocio.verificado')}
           </div>
         )}
       </div>
@@ -105,7 +116,10 @@ export default function Negocio() {
         <div className="lg:col-span-2">
           <div className="flex gap-2 mb-3 flex-wrap items-center">
             {b.category && <Badge kind="cat">{b.category.name}</Badge>}
-            {open ? <Badge kind="open" dot>Aberto agora</Badge> : <Badge kind="closed" dot>Fechado agora</Badge>}
+            {open
+              ? <Badge kind="open" dot>{t('negocio.aberto')}</Badge>
+              : <Badge kind="closed" dot>{t('negocio.fechado')}</Badge>
+            }
             {b.plan === 'associado' && <Badge kind="verif">✓ Associado</Badge>}
             {b.plan === 'destaque' && (
               <span className="inline-flex items-center gap-1 text-xs font-semibold text-ocre bg-ocre/10 border border-ocre/20 px-2.5 py-0.5 rounded-full">
@@ -121,7 +135,7 @@ export default function Negocio() {
               <StarRating value={Math.round(avgRating)} readonly size="sm" />
               <span className="text-sm font-semibold text-[#1A1A1A]">{avgRating.toFixed(1)}</span>
               <span className="text-sm text-[#737373]">
-                ({reviews.length} {reviews.length === 1 ? 'avaliação' : 'avaliações'})
+                ({reviews.length} {reviews.length === 1 ? t('negocio.avaliacao_singular') : t('negocio.avaliacao_plural')})
               </span>
             </div>
           )}
@@ -157,7 +171,7 @@ export default function Negocio() {
 
           {/* Avaliações */}
           <div className="mt-8">
-            <h2 className="font-display font-semibold text-2xl mb-5">Avaliações</h2>
+            <h2 className="font-display font-semibold text-2xl mb-5">{t('negocio.avaliacoes')}</h2>
             <ReviewList businessId={b.id} />
           </div>
 
@@ -178,7 +192,7 @@ export default function Negocio() {
               className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1EBE57] text-white rounded-2xl px-5 py-4 text-sm font-semibold transition-colors"
             >
               <Phone className="w-4 h-4" />
-              Falar no WhatsApp
+              {t('negocio.falar_whatsapp')}
             </a>
           )}
           {/* Share */}
@@ -187,7 +201,7 @@ export default function Negocio() {
             className="w-full flex items-center justify-center gap-2 bg-[#1A1A1A] dark:bg-white text-white dark:text-[#1A1A1A] rounded-2xl px-5 py-3.5 text-sm font-semibold hover:opacity-90 transition-opacity"
           >
             {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
-            {copied ? 'Link copiado!' : 'Compartilhar este lugar'}
+            {copied ? t('negocio.link_copiado') : t('negocio.compartilhar')}
           </button>
 
           {/* Cardápio */}
@@ -199,7 +213,7 @@ export default function Negocio() {
               className="w-full flex items-center justify-center gap-2 bg-ocre/10 text-ocre border border-ocre/30 rounded-2xl px-5 py-3.5 text-sm font-semibold hover:bg-ocre/20 transition-colors"
             >
               <BookOpen className="w-4 h-4" />
-              Ver cardápio
+              {t('negocio.ver_cardapio')}
             </a>
           )}
 
@@ -208,7 +222,7 @@ export default function Negocio() {
 
           {/* Contatos */}
           <div className="bg-white border border-[#E8E4DF] rounded-2xl p-5 space-y-3">
-            <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide">Contato</h3>
+            <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide">{t('negocio.contato')}</h3>
 
             {b.whatsapp && (
               <a href={`https://wa.me/${b.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer"
@@ -245,7 +259,7 @@ export default function Negocio() {
                 <div className="w-8 h-8 rounded-lg bg-[#E8E4DF] flex items-center justify-center flex-shrink-0">
                   <Globe className="w-4 h-4 text-[#1A1A1A]" />
                 </div>
-                Site
+                {t('common.site')}
               </a>
             )}
           </div>
@@ -253,26 +267,26 @@ export default function Negocio() {
           {/* Amenidades */}
           {b.amenities && Object.values(b.amenities).some(Boolean) && (
             <div className="bg-white border border-[#E8E4DF] rounded-2xl p-5">
-              <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide mb-3">Comodidades</h3>
+              <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide mb-3">{t('negocio.comodidades')}</h3>
               <div className="grid grid-cols-2 gap-2">
                 {b.amenities.wifi && (
                   <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
-                    <Wifi className="w-4 h-4 text-teal flex-shrink-0" /> WiFi grátis
+                    <Wifi className="w-4 h-4 text-teal flex-shrink-0" /> {t('negocio.wifi')}
                   </div>
                 )}
                 {b.amenities.parking && (
                   <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
-                    <Car className="w-4 h-4 text-teal flex-shrink-0" /> Estacionamento
+                    <Car className="w-4 h-4 text-teal flex-shrink-0" /> {t('negocio.estacionamento')}
                   </div>
                 )}
                 {b.amenities.accessible && (
                   <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
-                    <UserCheck className="w-4 h-4 text-teal flex-shrink-0" /> Acessível
+                    <UserCheck className="w-4 h-4 text-teal flex-shrink-0" /> {t('negocio.acessivel')}
                   </div>
                 )}
                 {b.amenities.reservations && (
                   <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
-                    <CalendarCheck className="w-4 h-4 text-teal flex-shrink-0" /> Aceita reservas
+                    <CalendarCheck className="w-4 h-4 text-teal flex-shrink-0" /> {t('negocio.reservas')}
                   </div>
                 )}
               </div>
@@ -283,7 +297,7 @@ export default function Negocio() {
           {b.opening_hours && Object.keys(b.opening_hours).length > 0 && (
             <div className="bg-white border border-[#E8E4DF] rounded-2xl p-5">
               <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide mb-3 flex items-center gap-2">
-                <Clock className="w-4 h-4" /> Horários
+                <Clock className="w-4 h-4" /> {t('negocio.horarios')}
               </h3>
               <div className="space-y-1.5">
                 {DAY_ORDER.map(day => {
@@ -291,9 +305,9 @@ export default function Negocio() {
                   if (!h) return null
                   return (
                     <div key={day} className="flex justify-between text-sm">
-                      <span className="text-[#737373]">{DAYS[day]}</span>
+                      <span className="text-[#737373]">{days[day]}</span>
                       <span className={h.closed ? 'text-coral' : 'text-[#1A1A1A] font-medium'}>
-                        {h.closed ? 'Fechado' : `${h.open} – ${h.close}`}
+                        {h.closed ? t('negocio.fechado_dia') : `${h.open} – ${h.close}`}
                       </span>
                     </div>
                   )
@@ -305,8 +319,8 @@ export default function Negocio() {
           {/* Fundo */}
           {b.plan === 'associado' && (
             <div className="bg-teal-light border border-teal/20 rounded-2xl p-5 text-sm text-teal leading-relaxed">
-              <strong>Negócio associado.</strong> Parte da mensalidade deste estabelecimento vai para o Fundo Público da Cidade.{' '}
-              <Link to="/apoie" className="underline">Saiba mais →</Link>
+              <strong>{t('negocio.negocio_associado')}</strong> {t('negocio.negocio_associado_desc')}{' '}
+              <Link to={lp('/apoie')} className="underline">{t('negocio.saiba_mais')}</Link>
             </div>
           )}
         </aside>

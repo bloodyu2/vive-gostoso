@@ -5,17 +5,7 @@ import {
   Eye, BarChart2, CheckCircle, ExternalLink,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-
-const VERBOS = [
-  { v: 'COME',      to: '/come',      desc: 'Restaurantes, bares e gastronomia local',     color: 'text-ocre' },
-  { v: 'FIQUE',     to: '/fique',     desc: 'Pousadas e hospedagem de todos os estilos',    color: 'text-teal' },
-  { v: 'PASSEIE',   to: '/passeie',   desc: 'Kite, buggy, passeios e esportes',             color: 'text-[#3D8B5A]' },
-  { v: 'EXPLORE',   to: '/explore',   desc: 'Mapa interativo da cidade',                    color: 'text-coral' },
-  { v: 'PARTICIPE', to: '/participe', desc: 'Festivais e eventos do calendário',            color: 'text-teal' },
-  { v: 'CONHEÇA',   to: '/conheca',   desc: 'História, praias e como chegar',               color: 'text-[#3D8B5A]' },
-  { v: 'APOIE',     to: '/apoie',     desc: 'Fundo público e transparência financeira',     color: 'text-ocre' },
-  { v: 'CONTRATE',  to: '/contrate',  desc: 'Serviços de moradores e vagas de emprego',     color: 'text-coral' },
-]
+import { useLocalePath } from '@/hooks/useLocalePath'
 
 const STEPS = [
   {
@@ -64,6 +54,19 @@ const FUTURE = [
 
 export default function Sobre() {
   const { t } = useTranslation()
+  const lp = useLocalePath()
+
+  const VERBOS = [
+    { v: t('nav.come'),      to: lp('/come'),      desc: 'Restaurantes, bares e gastronomia local',     color: 'text-ocre' },
+    { v: t('nav.fique'),     to: lp('/fique'),     desc: 'Pousadas e hospedagem de todos os estilos',    color: 'text-teal' },
+    { v: t('nav.passeie'),   to: lp('/passeie'),   desc: 'Kite, buggy, passeios e esportes',             color: 'text-[#3D8B5A]' },
+    { v: t('nav.explore'),   to: lp('/explore'),   desc: 'Mapa interativo da cidade',                    color: 'text-coral' },
+    { v: t('nav.participe'), to: lp('/participe'), desc: 'Festivais e eventos do calendário',            color: 'text-teal' },
+    { v: t('nav.conheca'),   to: lp('/conheca'),   desc: 'História, praias e como chegar',               color: 'text-[#3D8B5A]' },
+    { v: t('nav.apoie'),     to: lp('/apoie'),     desc: 'Fundo público e transparência financeira',     color: 'text-ocre' },
+    { v: t('nav.contrate'),  to: lp('/contrate'),  desc: 'Serviços de moradores e vagas de emprego',     color: 'text-coral' },
+  ]
+
   return (
     <main>
       {/* Hero */}
@@ -327,7 +330,7 @@ export default function Sobre() {
             <p className="text-white/80 text-sm leading-relaxed max-w-md">
               Toda movimentação financeira é pública e visível em tempo real na página APOIE. Qualquer pessoa pode auditar o que entra e o que sai.
             </p>
-            <Link to="/apoie" className="flex-shrink-0 inline-flex items-center gap-2 bg-white text-teal font-semibold px-5 py-2.5 rounded-full hover:bg-teal-light transition-colors text-sm">
+            <Link to={lp('/apoie')} className="flex-shrink-0 inline-flex items-center gap-2 bg-white text-teal font-semibold px-5 py-2.5 rounded-full hover:bg-teal-light transition-colors text-sm">
               <TrendingUp className="w-4 h-4" />
               Ver o fundo agora
             </Link>
@@ -413,7 +416,7 @@ export default function Sobre() {
             </p>
           </div>
           <Link
-            to="/"
+            to={lp('/')}
             className="flex-shrink-0 flex items-center gap-2 bg-teal text-white font-semibold px-8 py-4 rounded-full text-base hover:bg-teal-dark transition-colors"
           >
             Ver a página inicial
@@ -449,7 +452,7 @@ export default function Sobre() {
             <p className="text-sm text-[#737373] leading-relaxed mb-4">
               Torne-se associado e contribua com a promoção coletiva da cidade. 80% do valor vai direto para o Fundo Público.
             </p>
-            <Link to="/apoie" className="text-ocre text-sm font-semibold hover:underline flex items-center gap-1">
+            <Link to={lp('/apoie')} className="text-ocre text-sm font-semibold hover:underline flex items-center gap-1">
               Ver os planos <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -461,7 +464,7 @@ export default function Sobre() {
             <p className="text-sm text-[#737373] leading-relaxed mb-4">
               Ofereça seus serviços ou divulgue vagas de emprego no módulo Contrate. Gratuito e sem intermediários.
             </p>
-            <Link to="/contrate" className="text-[#3D3D3D] dark:text-[#C0BCB8] text-sm font-semibold hover:underline flex items-center gap-1">
+            <Link to={lp('/contrate')} className="text-[#3D3D3D] dark:text-[#C0BCB8] text-sm font-semibold hover:underline flex items-center gap-1">
               Ver o Contrate <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>

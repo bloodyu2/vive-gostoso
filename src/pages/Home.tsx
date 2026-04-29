@@ -166,13 +166,13 @@ export default function Home() {
               <span className="text-xs font-bold tracking-widest uppercase text-[#737373]">{t('home.novos_eyebrow')}</span>
               <h2 className="font-display text-xl md:text-2xl font-semibold mt-0.5">{t('home.novos_titulo')}</h2>
             </div>
-            <Link to="/come" className="text-teal text-sm font-semibold">{t('home.ver_todos')}</Link>
+            <Link to={lp('/come')} className="text-teal text-sm font-semibold">{t('home.ver_todos')}</Link>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {recentBusinesses.map(b => (
               <Link
                 key={b.id}
-                to={`/negocio/${b.slug}`}
+                to={lp(`/negocio/${b.slug}`)}
                 className="group bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all"
               >
                 <div className="aspect-square bg-gradient-to-br from-teal to-teal-dark overflow-hidden">
@@ -200,7 +200,7 @@ export default function Home() {
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-12 md:pb-16">
           <div className="flex justify-between items-center mb-6">
             <h2 className="font-display text-xl md:text-2xl font-semibold">{t('home.eventos_titulo')}</h2>
-            <Link to="/participe" className="text-teal text-sm font-semibold">{t('home.ver_todos')}</Link>
+            <Link to={lp('/participe')} className="text-teal text-sm font-semibold">{t('home.ver_todos')}</Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {events.slice(0, 3).map(e => <EventCard key={e.id} event={e} />)}
@@ -249,7 +249,7 @@ export default function Home() {
       {/* ── Banner: Quer saber como funciona? ── */}
       <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10">
         <Link
-          to="/sobre"
+          to={lp('/sobre')}
           className="group flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#1A1A1A] dark:bg-white/5 text-white rounded-2xl px-6 py-5 hover:bg-[#2A2A2A] dark:hover:bg-white/10 transition-colors"
         >
           <div className="flex items-center gap-4">
@@ -275,7 +275,7 @@ export default function Home() {
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-16 md:pb-20">
           <div className="flex justify-between items-center mb-6">
             <h2 className="font-display text-xl md:text-2xl font-semibold">Verificados pela cidade</h2>
-            <Link to="/come" className="text-teal text-sm font-semibold">Ver diretório →</Link>
+            <Link to={lp('/come')} className="text-teal text-sm font-semibold">Ver diretório →</Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {featured.slice(0, 3).map(b => <BusinessCard key={b.id} business={b} />)}

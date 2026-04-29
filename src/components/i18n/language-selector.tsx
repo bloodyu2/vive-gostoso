@@ -27,6 +27,7 @@ export function LanguageSelector({ variant = 'dropdown' }: LanguageSelectorProps
   const current = LANGUAGES.find(l => l.code === currentLocale) ?? LANGUAGES[0]
 
   function change(code: string) {
+    localStorage.setItem('i18n-lang', code)
     // Strip current locale prefix to get the bare page path
     const pagePath = stripLocale(pathname)  // e.g. '/come' or '/'
 

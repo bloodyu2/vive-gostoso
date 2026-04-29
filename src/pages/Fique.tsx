@@ -8,9 +8,11 @@ import { useCategories } from '@/hooks/useCategories'
 import { isBusinessOpen } from '@/lib/utils'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 
 export default function Fique() {
   const { t } = useTranslation()
+  const lp = useLocalePath()
   usePageMeta({
     title: 'Pousadas e Hospedagem',
     description: 'As melhores pousadas de São Miguel do Gostoso. Encontre onde ficar pertinho do mar.',
@@ -39,7 +41,7 @@ export default function Fique() {
             {t('fique.desc')}
           </p>
         </div>
-        <Link to="/explore" className="text-teal border-2 border-teal rounded-xl px-5 py-3 text-sm font-semibold flex items-center gap-2 hover:bg-teal-light transition-colors">
+        <Link to={lp('/explore')} className="text-teal border-2 border-teal rounded-xl px-5 py-3 text-sm font-semibold flex items-center gap-2 hover:bg-teal-light transition-colors">
           {t('fique.abrir_mapa')}
         </Link>
       </div>

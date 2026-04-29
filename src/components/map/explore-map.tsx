@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { MapPin, X } from 'lucide-react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
+import { useLocalePath } from '@/hooks/use-locale-path'
 import type { Business } from '@/types/database'
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN as string
@@ -42,6 +43,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
   const sidebarRef = useRef<HTMLDivElement>(null)
   const [popup, setPopup] = useState<PopupBusiness | null>(null)
+  const lp = useLocalePath()
 
   const geo = businesses.filter(b => b.lat != null && b.lng != null)
   const noGeo = businesses.filter(b => b.lat == null || b.lng == null)
@@ -139,14 +141,17 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
     const el = sectionRefs.current[verb]
     const sidebar = sidebarRef.current
     if (!el || !sidebar) return
-    sidebar.scrollTo({ top: el.offsetTop - 110, behavior: 'smooth' })
+    const elRect = el.getBoundingClientRect()
+    const sidebarRect = sidebar.getBoundingClientRect()
+    const target = sidebar.scrollTop + elRect.top - sidebarRect.top - 110
+    sidebar.scrollTo({ top: target, behavior: 'smooth' })
   }
 
   return (
     <div className="w-full h-full flex flex-col md:flex-row overflow-hidden">
 
       {/* Mapa */}
-      <div className="flex-1 relative min-h-[300px] md:min-h-0">
+      <div className="h-[42vh] flex-shrink-0 md:flex-1 md:h-full relative min-h-[240px]">
         <div ref={mapContainer} className="w-full h-full" />
 
         {/* Stats chip */}
@@ -186,7 +191,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
                 </button>
               </div>
               <Link
-                to={`/negocio/${popup.slug}`}
+                to={lp(`/negocio/${popup.slug}`)}
                 className="mt-3 block text-center text-sm font-semibold bg-teal text-white rounded-xl px-4 py-2 hover:bg-teal-dark transition-colors"
               >
                 Ver perfil
@@ -197,7 +202,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
       </div>
 
       {/* Sidebar */}
-      <div ref={sidebarRef} className="w-full md:w-80 bg-white border-t md:border-t-0 md:border-l border-[#E8E4DF] overflow-y-auto flex-shrink-0">
+      <div ref={sidebarRef} className="flex-1 min-h-0 w-full md:flex-none md:w-80 bg-white border-t md:border-t-0 md:border-l border-[#E8E4DF] overflow-y-auto">
         {/* Sticky header: count + category jump pills */}
         <div className="sticky top-0 bg-white z-10 border-b border-[#E8E4DF]">
           <div className="px-5 pt-4 pb-2">
@@ -238,7 +243,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
                 >
                   {VERB_LABEL[verb]}
                 </span>
-                <Link to={VERB_TO[verb]} className="text-xs text-teal font-medium hover:underline">
+                <Link to={lp(VERB_TO[verb])} className="text-xs text-teal font-medium hover:underline">
                   Ver todos →
                 </Link>
               </div>
@@ -272,7 +277,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
                   </button>
                 ))}
                 {list.length > 5 && (
-                  <Link to={VERB_TO[verb]} className="block px-5 py-3 text-xs text-teal font-medium hover:bg-[#F5F2EE] transition-colors">
+                  <Link to={lp(VERB_TO[verb])} className="block px-5 py-3 text-xs text-teal font-medium hover:bg-[#F5F2EE] transition-colors">
                     +{list.length - 5} mais em {VERB_LABEL[verb].toLowerCase()} →
                   </Link>
                 )}

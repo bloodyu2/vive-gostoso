@@ -8,9 +8,11 @@ import { useCategories } from '@/hooks/useCategories'
 import { isBusinessOpen } from '@/lib/utils'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 
 export default function Come() {
   const { t } = useTranslation()
+  const lp = useLocalePath()
   usePageMeta({
     title: 'Restaurantes e Gastronomia',
     description: 'Os melhores restaurantes de São Miguel do Gostoso. Frutos do mar, comida regional e muito sol.',
@@ -39,7 +41,7 @@ export default function Come() {
             {t('come.desc')}
           </p>
         </div>
-        <Link to="/explore" className="text-teal border-2 border-teal rounded-xl px-5 py-3 text-sm font-semibold flex items-center gap-2 hover:bg-teal-light transition-colors">
+        <Link to={lp('/explore')} className="text-teal border-2 border-teal rounded-xl px-5 py-3 text-sm font-semibold flex items-center gap-2 hover:bg-teal-light transition-colors">
           {t('come.abrir_mapa')}
         </Link>
       </div>
