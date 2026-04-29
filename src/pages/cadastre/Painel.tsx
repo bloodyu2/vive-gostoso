@@ -23,10 +23,15 @@ function PainelInner() {
         <Button variant="ghost" onClick={signOut}>Sair</Button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Link to="/cadastre/negocios" className="bg-white border border-[#E8E4DF] rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all">
+          <div className="text-2xl mb-2">🏪</div>
+          <h2 className="font-semibold text-lg">Gerenciar negócios</h2>
+          <p className="text-sm text-[#737373] mt-1">Veja, edite e publique seus negócios cadastrados.</p>
+        </Link>
         <Link to="/cadastre/perfil" className="bg-white border border-[#E8E4DF] rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all">
-          <div className="text-2xl mb-2">🏠</div>
-          <h2 className="font-semibold text-lg">Meu Negócio</h2>
-          <p className="text-sm text-[#737373] mt-1">Edite as informações do seu negócio.</p>
+          <div className="text-2xl mb-2">➕</div>
+          <h2 className="font-semibold text-lg">Adicionar novo negócio</h2>
+          <p className="text-sm text-[#737373] mt-1">Cadastre mais um negócio na plataforma.</p>
         </Link>
         <Link to="/cadastre/preview" className="bg-white border border-[#E8E4DF] rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all">
           <div className="text-2xl mb-2">👁</div>

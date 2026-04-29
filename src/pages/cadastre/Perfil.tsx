@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
 import { useCategories } from '@/hooks/useCategories'
+import { useInvalidateMyBusinesses } from '@/hooks/useMyBusinesses'
 import type { Business } from '@/types/database'
 
 export default function Perfil() {
@@ -391,17 +392,23 @@ function PerfilInner() {
   const { user } = useAuth()
   const { data: categories = [] } = useCategories()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const bizId = searchParams.get('bizId')
+  const invalidateMyBusinesses = useInvalidateMyBusinesses()
+
   const [biz, setBiz] = useState<PartialBusiness>({})
   const [saving, setSaving] = useState(false)
   const [profileId, setProfileId] = useState<string | null>(null)
 
   useEffect(() => {
     if (!user) return
+
+    // Ensure profile exists and get its ID
     supabase
       .from('gostoso_profiles')
-      .select('id, business_id')
+      .select('id')
       .eq('auth_user_id', user.id)
-      .single()
+      .maybeSingle()
       .then(async ({ data: profile }) => {
         if (!profile) {
           const { data: p } = await supabase
@@ -412,21 +419,25 @@ function PerfilInner() {
           if (p) setProfileId((p as { id: string }).id)
           return
         }
-        const prof = profile as { id: string; business_id: string | null }
-        setProfileId(prof.id)
-        if (prof.business_id) {
-          const { data: b } = await supabase
-            .from('gostoso_businesses')
-            .select(
-              'id, name, description, address, whatsapp, instagram, website, category_id, ' +
-              'price_range, menu_url, amenities, is_published, services, cover_url, photos'
-            )
-            .eq('id', prof.business_id)
-            .single()
-          if (b) setBiz(b as PartialBusiness)
-        }
+        setProfileId((profile as { id: string }).id)
       })
   }, [user])
+
+  useEffect(() => {
+    // Load existing business when bizId is present
+    if (!bizId) return
+    supabase
+      .from('gostoso_businesses')
+      .select(
+        'id, name, description, address, whatsapp, instagram, website, category_id, ' +
+        'price_range, menu_url, amenities, is_published, services, cover_url, photos'
+      )
+      .eq('id', bizId)
+      .single()
+      .then(({ data: b }) => {
+        if (b) setBiz(b as PartialBusiness)
+      })
+  }, [bizId])
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
@@ -487,7 +498,8 @@ function PerfilInner() {
     }
 
     setSaving(false)
-    navigate('/cadastre/painel')
+    invalidateMyBusinesses()
+    navigate('/cadastre/negocios')
   }
 
   const textFields = [
@@ -500,7 +512,9 @@ function PerfilInner() {
 
   return (
     <main className="max-w-2xl mx-auto px-5 md:px-8 py-12">
-      <h1 className="font-display text-3xl font-semibold mb-8">Meu Negocio</h1>
+      <h1 className="font-display text-3xl font-semibold mb-8">
+        {bizId ? 'Editar negócio' : 'Novo negócio'}
+      </h1>
 
       {/* Status banner - only shown when business already exists */}
       {biz.id && (
