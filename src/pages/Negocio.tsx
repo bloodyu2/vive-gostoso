@@ -106,7 +106,12 @@ export default function Negocio() {
           <div className="flex gap-2 mb-3 flex-wrap items-center">
             {b.category && <Badge kind="cat">{b.category.name}</Badge>}
             {open ? <Badge kind="open" dot>Aberto agora</Badge> : <Badge kind="closed" dot>Fechado agora</Badge>}
-            {b.plan === 'associado' && <Badge kind="verif">Associado</Badge>}
+            {b.plan === 'associado' && <Badge kind="verif">✓ Associado</Badge>}
+            {b.plan === 'destaque' && (
+              <span className="inline-flex items-center gap-1 text-xs font-semibold text-ocre bg-ocre/10 border border-ocre/20 px-2.5 py-0.5 rounded-full">
+                ★ Destaque
+              </span>
+            )}
             <ManagedBadge profileId={b.profile_id} isVerified={b.is_verified} />
           </div>
 

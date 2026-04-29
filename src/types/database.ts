@@ -28,7 +28,9 @@ export interface Business {
   opening_hours: Record<string, { open: string; close: string; closed: boolean }> | null
   is_verified: boolean
   is_featured: boolean
-  plan: 'free' | 'associado'
+  plan: 'free' | 'associado' | 'destaque'
+  stripe_customer_id: string | null
+  stripe_subscription_id: string | null
   active: boolean
   display_order: number
   created_at: string
@@ -175,6 +177,25 @@ export interface ClaimRequest {
   resolved_at: string | null
 }
 
+export interface EventSubmission {
+  id: string
+  name: string
+  description: string | null
+  starts_at: string
+  ends_at: string | null
+  location: string | null
+  cover_url: string | null
+  event_type: 'festival' | 'esporte' | 'cultural' | 'gastronomia' | null
+  source_url: string | null
+  submitter_name: string
+  submitter_email: string
+  submitter_phone: string | null
+  is_approved: boolean
+  admin_note: string | null
+  created_at: string
+  reviewed_at: string | null
+}
+
 export type Database = {
   public: {
     Tables: {
@@ -188,6 +209,7 @@ export type Database = {
       gostoso_goals:            { Row: Goal; Insert: Omit<Goal, 'id' | 'created_at'>; Update: Partial<Goal> }
       gostoso_blog_posts:       { Row: BlogPost; Insert: Omit<BlogPost, 'id' | 'created_at'>; Update: Partial<BlogPost> }
       gostoso_claim_requests:   { Row: ClaimRequest; Insert: Omit<ClaimRequest, 'id' | 'created_at' | 'resolved_at'>; Update: Partial<Pick<ClaimRequest, 'status' | 'admin_note' | 'resolved_at'>> }
+      gostoso_event_submissions: { Row: EventSubmission; Insert: Omit<EventSubmission, 'id' | 'created_at' | 'reviewed_at'> & { is_approved?: false }; Update: Partial<Pick<EventSubmission, 'is_approved' | 'admin_note' | 'reviewed_at'>> }
     }
   }
 }

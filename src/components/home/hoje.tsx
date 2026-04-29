@@ -91,9 +91,9 @@ export function Hoje() {
                     <div className="w-9 h-9 rounded-xl bg-coral/20 flex-shrink-0 flex items-center justify-center">
                       <CalendarDays className="w-4 h-4 text-coral" />
                     </div>
-                    <div>
-                      <div className="text-white text-sm font-medium leading-snug">{e.name}</div>
-                      {e.location && <div className="text-white/40 text-xs mt-0.5">{e.location}</div>}
+                    <div className="min-w-0 flex-1">
+                      <div className="text-white text-sm font-medium leading-snug line-clamp-2">{e.name}</div>
+                      {e.location && <div className="text-white/40 text-xs mt-0.5 truncate">{e.location}</div>}
                     </div>
                   </div>
                 ))}

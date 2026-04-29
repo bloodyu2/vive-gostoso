@@ -9,6 +9,7 @@ export interface BusinessSummary {
   cover_url: string | null
   active: boolean
   is_published: boolean
+  plan: 'free' | 'associado' | 'destaque'
   category: { name: string } | null
 }
 
@@ -22,7 +23,7 @@ export function useMyBusinesses() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('gostoso_businesses')
-        .select('id, name, slug, cover_url, active, is_published, category:gostoso_categories(name)')
+        .select('id, name, slug, cover_url, active, is_published, plan, category:gostoso_categories(name)')
         .eq('profile_id', profile!.id)
         .order('created_at', { ascending: true })
       if (error) throw error

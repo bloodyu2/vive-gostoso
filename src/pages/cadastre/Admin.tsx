@@ -38,6 +38,13 @@ function AdminInner() {
       badge: stats?.pendingClaims ?? 0,
     },
     {
+      to: '/cadastre/admin/events',
+      emoji: '🗓️',
+      title: 'Eventos',
+      desc: 'Aprovar ou rejeitar submissões de eventos da comunidade.',
+      badge: stats?.pendingEvents ?? 0,
+    },
+    {
       to: '/cadastre/admin/services',
       emoji: '💼',
       title: 'Serviços CONTRATE',
@@ -76,16 +83,17 @@ function AdminInner() {
 
       {/* Stat bar */}
       {statsQuery.isLoading ? (
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-8">
-          {[1, 2, 3, 4, 5].map(i => (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-8">
+          {[1, 2, 3, 4, 5, 6].map(i => (
             <div key={i} className="h-20 bg-[#E8E4DF] rounded-xl animate-pulse" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-8">
           {[
             { value: stats?.pendingReviews ?? '—', label: 'Avaliações' },
             { value: stats?.pendingClaims ?? '—', label: 'Reivind.' },
+            { value: stats?.pendingEvents ?? '—', label: 'Eventos' },
             { value: stats?.pendingServices ?? '—', label: 'Serviços' },
             { value: stats?.pendingJobs ?? '—', label: 'Vagas' },
             { value: stats?.totalBusinesses ?? '—', label: 'Negócios' },

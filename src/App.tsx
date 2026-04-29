@@ -3,6 +3,7 @@ import { PageWrapper } from '@/components/layout/page-wrapper'
 import { InstallBanner } from '@/components/install-banner'
 import { ShareFab } from '@/components/share-fab'
 import { ScrollToTop } from '@/components/scroll-to-top'
+import { CookieBanner } from '@/components/cookie-banner'
 import Home from '@/pages/Home'
 import Come from '@/pages/Come'
 import Fique from '@/pages/Fique'
@@ -27,6 +28,9 @@ import Admin from '@/pages/cadastre/Admin'
 import MeusNegocios from '@/pages/cadastre/MeusNegocios'
 import AdminClaims from '@/pages/cadastre/AdminClaims'
 import AdminReviews from '@/pages/cadastre/AdminReviews'
+import AdminEvents from '@/pages/cadastre/AdminEvents'
+import AdminServices from '@/pages/cadastre/AdminServices'
+import AdminJobs from '@/pages/cadastre/AdminJobs'
 import Bio from '@/pages/Bio'
 
 export default function App() {
@@ -35,6 +39,7 @@ export default function App() {
     <ScrollToTop />
     <InstallBanner />
     <ShareFab />
+    <CookieBanner />
     <Routes>
       <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
       <Route path="/come" element={<PageWrapper><Come /></PageWrapper>} />
@@ -60,6 +65,9 @@ export default function App() {
       <Route path="/cadastre/admin" element={<PageWrapper><Admin /></PageWrapper>} />
       <Route path="/cadastre/admin/claims" element={<PageWrapper><AdminClaims /></PageWrapper>} />
       <Route path="/cadastre/admin/reviews" element={<PageWrapper><AdminReviews /></PageWrapper>} />
+      <Route path="/cadastre/admin/events" element={<PageWrapper><AdminEvents /></PageWrapper>} />
+      <Route path="/cadastre/admin/services" element={<PageWrapper><AdminServices /></PageWrapper>} />
+      <Route path="/cadastre/admin/jobs" element={<PageWrapper><AdminJobs /></PageWrapper>} />
       <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
     </Routes>
     </>

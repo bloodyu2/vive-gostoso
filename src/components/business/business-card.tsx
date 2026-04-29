@@ -132,6 +132,16 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
         <div className="flex gap-1.5 mb-2 flex-wrap">
           {b.category && <Badge kind="cat">{b.category.name}</Badge>}
           {open ? <Badge kind="open" dot>Aberto</Badge> : <Badge kind="closed" dot>Fechado</Badge>}
+          {b.plan === 'associado' && (
+            <span className="inline-flex items-center gap-1 text-xs font-semibold text-teal bg-teal/10 px-2 py-0.5 rounded-full">
+              ✓ Associado
+            </span>
+          )}
+          {b.plan === 'destaque' && (
+            <span className="inline-flex items-center gap-1 text-xs font-semibold text-ocre bg-ocre/10 px-2 py-0.5 rounded-full">
+              ★ Destaque
+            </span>
+          )}
         </div>
 
         <Link to={`/negocio/${b.slug}`}>

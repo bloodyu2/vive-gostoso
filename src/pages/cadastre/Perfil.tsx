@@ -17,7 +17,7 @@ type ServiceItem = { name: string; description?: string; price?: string }
 type PartialBusiness = Partial<Pick<Business,
   | 'id' | 'name' | 'description' | 'address' | 'whatsapp' | 'instagram' | 'website'
   | 'category_id' | 'price_range' | 'menu_url' | 'amenities'
-  | 'is_published' | 'services' | 'cover_url' | 'photos'
+  | 'is_published' | 'services' | 'cover_url' | 'photos' | 'opening_hours'
 >>
 
 // ---------------------------------------------------------------------------
@@ -430,10 +430,10 @@ function PerfilInner() {
       .from('gostoso_businesses')
       .select(
         'id, name, description, address, whatsapp, instagram, website, category_id, ' +
-        'price_range, menu_url, amenities, is_published, services, cover_url, photos'
+        'price_range, menu_url, amenities, is_published, services, cover_url, photos, opening_hours'
       )
       .eq('id', bizId)
-      .single()
+      .maybeSingle()
       .then(({ data: b }) => {
         if (b) setBiz(b as PartialBusiness)
       })

@@ -23,7 +23,7 @@ export function useAssociadosCount() {
       const { count, error } = await supabase
         .from('gostoso_businesses')
         .select('*', { count: 'exact', head: true })
-        .eq('plan', 'associado')
+        .in('plan', ['associado', 'destaque'])
       if (error) throw error
       return count ?? 0
     },
@@ -39,16 +39,17 @@ export function useFundSummary() {
         .select('amount_cents, status, category')
       if (error) throw error
       const entries = (data ?? []) as Pick<FundEntry, 'amount_cents' | 'status' | 'category'>[]
-      const totalCents = entries
-        .filter(e => e.status === 'realizado' && e.amount_cents > 0)
+      const realized = entries.filter(e => e.status === 'realizado')
+      const totalCents = realized
+        .filter(e => e.amount_cents > 0)
         .reduce((s, e) => s + e.amount_cents, 0)
-      const marketingCents = entries
+      const marketingCents = realized
         .filter(e => e.category === 'marketing')
         .reduce((s, e) => s + e.amount_cents, 0)
-      const operacaoCents = entries
+      const operacaoCents = realized
         .filter(e => e.category === 'operacao')
         .reduce((s, e) => s + e.amount_cents, 0)
-      const acumuladoCents = entries
+      const acumuladoCents = realized
         .filter(e => e.category === 'acumulado')
         .reduce((s, e) => s + e.amount_cents, 0)
       return { totalCents, marketingCents, operacaoCents, acumuladoCents }
