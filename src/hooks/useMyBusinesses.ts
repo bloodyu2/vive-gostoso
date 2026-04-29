@@ -26,7 +26,10 @@ export function useMyBusinesses() {
         .eq('profile_id', profile!.id)
         .order('created_at', { ascending: true })
       if (error) throw error
-      return (data ?? []) as BusinessSummary[]
+      return (data ?? []).map(b => ({
+        ...b,
+        category: Array.isArray(b.category) ? (b.category[0] ?? null) : b.category,
+      })) as unknown as BusinessSummary[]
     },
   })
 }
