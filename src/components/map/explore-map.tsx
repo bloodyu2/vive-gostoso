@@ -18,6 +18,13 @@ const VERB_COLOR: Record<string, string> = {
   resolva: '#1A1A1A',
 }
 
+const VERB_EMOJI: Record<string, string> = {
+  come:    '🍽',
+  fique:   '🏠',
+  passeie: '🏄',
+  resolva: '🔧',
+}
+
 interface PopupBusiness {
   name: string
   slug: string
@@ -32,6 +39,8 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<mapboxgl.Map | null>(null)
   const markers = useRef<mapboxgl.Marker[]>([])
+  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
+  const sidebarRef = useRef<HTMLDivElement>(null)
   const [popup, setPopup] = useState<PopupBusiness | null>(null)
 
   const geo = businesses.filter(b => b.lat != null && b.lng != null)
@@ -78,7 +87,6 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
       const verb = b.category?.verb ?? 'come'
       const color = VERB_COLOR[verb] ?? '#0D7C7C'
 
-      // Marcador: círculo sólido com anchor center — sem transform conflitante
       const el = document.createElement('div')
       el.style.cssText = `
         width: 14px; height: 14px;
@@ -124,6 +132,15 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
   const VERB_LABEL: Record<string, string> = { come: 'Restaurantes', fique: 'Hospedagem', passeie: 'Passeios', resolva: 'Serviços' }
   const VERB_TO: Record<string, string>    = { come: '/come', fique: '/fique', passeie: '/passeie', resolva: '/resolva' }
   const SIDEBAR_VERBS = ['come', 'fique', 'passeie']
+
+  const activeVerbs = SIDEBAR_VERBS.filter(v => byVerb[v]?.length)
+
+  function jumpToSection(verb: string) {
+    const el = sectionRefs.current[verb]
+    const sidebar = sidebarRef.current
+    if (!el || !sidebar) return
+    sidebar.scrollTo({ top: el.offsetTop - 110, behavior: 'smooth' })
+  }
 
   return (
     <div className="w-full h-full flex flex-col md:flex-row overflow-hidden">
@@ -180,17 +197,40 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
       </div>
 
       {/* Sidebar */}
-      <div className="w-full md:w-80 bg-white border-t md:border-t-0 md:border-l border-[#E8E4DF] overflow-y-auto flex-shrink-0">
-        <div className="px-5 py-4 border-b border-[#E8E4DF] sticky top-0 bg-white z-10">
-          <div className="font-semibold text-sm text-[#1A1A1A]">{businesses.length} negócios cadastrados</div>
-          <div className="text-xs text-[#737373] mt-0.5">São Miguel do Gostoso, RN</div>
+      <div ref={sidebarRef} className="w-full md:w-80 bg-white border-t md:border-t-0 md:border-l border-[#E8E4DF] overflow-y-auto flex-shrink-0">
+        {/* Sticky header: count + category jump pills */}
+        <div className="sticky top-0 bg-white z-10 border-b border-[#E8E4DF]">
+          <div className="px-5 pt-4 pb-2">
+            <div className="font-semibold text-sm text-[#1A1A1A]">{businesses.length} negócios cadastrados</div>
+            <div className="text-xs text-[#737373] mt-0.5">São Miguel do Gostoso, RN</div>
+          </div>
+          {/* Jump pills — only shown when 2+ categories have businesses */}
+          {activeVerbs.length > 1 && (
+            <div className="flex gap-2 px-5 pb-3 overflow-x-auto scrollbar-none">
+              {activeVerbs.map(verb => (
+                <button
+                  key={verb}
+                  onClick={() => jumpToSection(verb)}
+                  className="flex-shrink-0 flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors hover:opacity-80"
+                  style={{
+                    borderColor: VERB_COLOR[verb] + '55',
+                    color: VERB_COLOR[verb],
+                    background: VERB_COLOR[verb] + '10',
+                  }}
+                >
+                  <span>{VERB_EMOJI[verb]}</span>
+                  {VERB_LABEL[verb]}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {SIDEBAR_VERBS.map(verb => {
           const list = byVerb[verb]
           if (!list?.length) return null
           return (
-            <div key={verb}>
+            <div key={verb} ref={el => { sectionRefs.current[verb] = el }}>
               <div className="flex items-center justify-between px-5 py-3 bg-[#F5F2EE]">
                 <span
                   className="text-xs font-semibold px-2.5 py-0.5 rounded-full border"

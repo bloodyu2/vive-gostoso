@@ -94,11 +94,11 @@ export default function Contrate() {
         {/* Serviços tab */}
         {tab === 'servicos' && (
           <>
-            {/* Category filter pills */}
-            <div className="flex flex-wrap gap-2 mb-6">
+            {/* Category filter pills — horizontal scroll on mobile */}
+            <div className="flex gap-2 mb-6 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-none">
               <button
                 onClick={() => setCatFilter(undefined)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                className={`flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
                   !catFilter ? 'bg-teal text-white' : 'bg-white border border-[#E8E4DF] text-[#737373] hover:border-teal/40'
                 }`}
               >
@@ -108,7 +108,7 @@ export default function Contrate() {
                 <button
                   key={k}
                   onClick={() => setCatFilter(catFilter === k ? undefined : k)}
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                  className={`flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
                     catFilter === k ? 'bg-teal text-white' : 'bg-white border border-[#E8E4DF] text-[#737373] hover:border-teal/40'
                   }`}
                 >

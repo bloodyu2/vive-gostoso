@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
@@ -7,12 +8,17 @@ import { supabase } from '@/lib/supabase'
 import { useCategories } from '@/hooks/useCategories'
 import { useInvalidateMyBusinesses } from '@/hooks/useMyBusinesses'
 import type { Business } from '@/types/database'
+import { ExternalLink } from 'lucide-react'
 
 export default function Perfil() {
   return <AuthGuard><PerfilInner /></AuthGuard>
 }
 
 type ServiceItem = { name: string; description?: string; price?: string }
+
+type DayKey = 'dom' | 'seg' | 'ter' | 'qua' | 'qui' | 'sex' | 'sab'
+type DayHours = { open: string; close: string; closed: boolean }
+type OpeningHoursValue = Record<DayKey, DayHours>
 
 type PartialBusiness = Partial<Pick<Business,
   | 'id' | 'name' | 'description' | 'address' | 'whatsapp' | 'instagram' | 'website'
@@ -37,6 +43,20 @@ const INPUT_CLS =
   'w-full rounded-xl border border-[#E8E4DF] px-4 py-3 text-sm focus:border-teal focus:ring-2 focus:ring-teal/20 focus:outline-none'
 
 const SECTION_CLS = 'mb-8 pb-8 border-b border-[#E8E4DF]'
+
+const DAYS: { key: DayKey; label: string }[] = [
+  { key: 'dom', label: 'Domingo' },
+  { key: 'seg', label: 'Segunda-feira' },
+  { key: 'ter', label: 'Terça-feira' },
+  { key: 'qua', label: 'Quarta-feira' },
+  { key: 'qui', label: 'Quinta-feira' },
+  { key: 'sex', label: 'Sexta-feira' },
+  { key: 'sab', label: 'Sábado' },
+]
+
+const EMPTY_HOURS: OpeningHoursValue = Object.fromEntries(
+  DAYS.map(d => [d.key, { open: '', close: '', closed: true }])
+) as OpeningHoursValue
 
 // ---------------------------------------------------------------------------
 // Sub-components
@@ -285,6 +305,97 @@ function PhotoSection({
   )
 }
 
+// ---------------------------------------------------------------------------
+// Opening hours editor
+// ---------------------------------------------------------------------------
+
+function OpeningHoursSection({
+  value,
+  onChange,
+}: {
+  value: OpeningHoursValue | null
+  onChange: (v: OpeningHoursValue) => void
+}) {
+  // If no saved value yet, start empty (all closed, no times)
+  const [hours, setHours] = useState<OpeningHoursValue>(() =>
+    value ? (value as OpeningHoursValue) : { ...EMPTY_HOURS }
+  )
+
+  // Sync if parent loads data after mount
+  useEffect(() => {
+    if (value) setHours(value as OpeningHoursValue)
+  }, [value])
+
+  function update(day: DayKey, field: keyof DayHours, val: string | boolean) {
+    const next: OpeningHoursValue = { ...hours, [day]: { ...hours[day], [field]: val } }
+    setHours(next)
+    onChange(next)
+  }
+
+  return (
+    <section className={SECTION_CLS}>
+      <h2 className="font-display text-lg font-semibold mb-1">Horários de funcionamento</h2>
+      <p className="text-sm text-[#737373] mb-4">
+        Marque "Fechado" nos dias em que não atende. Deixe os campos em branco se o horário não se aplica.
+      </p>
+      <div className="space-y-2">
+        {DAYS.map(({ key, label }) => {
+          const day = hours[key] ?? { open: '', close: '', closed: true }
+          return (
+            <div
+              key={key}
+              className={`flex flex-wrap items-center gap-3 rounded-xl border px-4 py-3 transition-colors ${
+                day.closed
+                  ? 'border-[#E8E4DF] bg-[#F9F7F5] opacity-60'
+                  : 'border-[#E8E4DF] bg-white'
+              }`}
+            >
+              {/* Day label */}
+              <span className="text-sm font-medium text-[#1A1A1A] w-28 flex-shrink-0">{label}</span>
+
+              {/* Time inputs or "Fechado" text */}
+              {!day.closed ? (
+                <div className="flex items-center gap-2 flex-1 min-w-0 flex-wrap">
+                  <input
+                    type="time"
+                    value={day.open}
+                    onChange={e => update(key, 'open', e.target.value)}
+                    className="border border-[#E8E4DF] rounded-lg px-3 py-1.5 text-sm w-28 focus:border-teal focus:outline-none"
+                  />
+                  <span className="text-xs text-[#737373]">até</span>
+                  <input
+                    type="time"
+                    value={day.close}
+                    onChange={e => update(key, 'close', e.target.value)}
+                    className="border border-[#E8E4DF] rounded-lg px-3 py-1.5 text-sm w-28 focus:border-teal focus:outline-none"
+                  />
+                </div>
+              ) : (
+                <span className="text-sm text-[#A0A0A0] flex-1">Fechado</span>
+              )}
+
+              {/* Closed toggle */}
+              <label className="flex items-center gap-1.5 cursor-pointer ml-auto flex-shrink-0">
+                <input
+                  type="checkbox"
+                  checked={day.closed}
+                  onChange={e => update(key, 'closed', e.target.checked)}
+                  className="w-4 h-4 rounded border-[#E8E4DF] accent-teal"
+                />
+                <span className="text-xs text-[#737373]">Fechado</span>
+              </label>
+            </div>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Services section (inline services shown on business profile)
+// ---------------------------------------------------------------------------
+
 function ServicesSection({
   services,
   onChange,
@@ -307,34 +418,44 @@ function ServicesSection({
 
   return (
     <section className={SECTION_CLS}>
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="font-display text-lg font-semibold">
-          Servicos
-          <span className="text-[#737373] font-normal text-sm ml-1">({services.length}/10)</span>
-        </h2>
+      <div className="flex items-start justify-between mb-1 gap-3">
+        <div>
+          <h2 className="font-display text-lg font-semibold">Serviços do negócio</h2>
+          <p className="text-sm text-[#737373] mt-0.5">
+            Aparecem no perfil do negócio.{' '}
+            <Link
+              to="/contrate"
+              target="_blank"
+              className="inline-flex items-center gap-1 text-teal hover:underline"
+            >
+              Para listar no diretório CONTRATE clique aqui
+              <ExternalLink className="w-3 h-3" />
+            </Link>
+          </p>
+        </div>
         {services.length < 10 && (
           <button
             type="button"
             onClick={addService}
-            className="text-sm font-semibold text-teal hover:text-teal/80 transition-colors"
+            className="flex-shrink-0 text-sm font-semibold text-teal hover:text-teal/80 transition-colors"
           >
-            + Adicionar servico
+            + Adicionar
           </button>
         )}
       </div>
 
       {services.length === 0 && (
-        <p className="text-sm text-[#737373]">
-          Nenhum servico cadastrado ainda. Clique em "Adicionar servico" para comecar.
+        <p className="text-sm text-[#737373] mt-3">
+          Nenhum serviço cadastrado ainda. Clique em "+ Adicionar" para começar.
         </p>
       )}
 
-      <div className="space-y-4">
+      <div className="space-y-4 mt-4">
         {services.map((svc, i) => (
           <div key={i} className="rounded-2xl border border-[#E8E4DF] p-4 space-y-3">
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1">
-                <label className="block text-xs font-medium mb-1 text-[#737373]">Nome do servico *</label>
+                <label className="block text-xs font-medium mb-1 text-[#737373]">Nome do serviço *</label>
                 <input
                   type="text"
                   required
@@ -355,19 +476,19 @@ function ServicesSection({
             </div>
             <div>
               <label className="block text-xs font-medium mb-1 text-[#737373]">
-                Descricao <span className="font-normal">(opcional)</span>
+                Descrição <span className="font-normal">(opcional)</span>
               </label>
               <input
                 type="text"
                 value={svc.description ?? ''}
                 onChange={e => updateService(i, 'description', e.target.value)}
-                placeholder="Breve descricao do servico"
+                placeholder="Breve descrição do serviço"
                 className={INPUT_CLS}
               />
             </div>
             <div>
               <label className="block text-xs font-medium mb-1 text-[#737373]">
-                Preco <span className="font-normal">(opcional)</span>
+                Preço <span className="font-normal">(opcional)</span>
               </label>
               <input
                 type="text"
@@ -481,6 +602,7 @@ function PerfilInner() {
           menu_url: biz.menu_url ?? null,
           amenities: biz.amenities ?? {},
           services,
+          opening_hours: biz.opening_hours ?? null,
         })
         .eq('id', biz.id)
     } else {
@@ -502,6 +624,7 @@ function PerfilInner() {
           menu_url: biz.menu_url ?? null,
           amenities: biz.amenities ?? {},
           services,
+          opening_hours: biz.opening_hours ?? null,
         }])
         .select('id')
         .single()
@@ -521,8 +644,8 @@ function PerfilInner() {
   }
 
   const textFields = [
-    { label: 'Nome do negocio', key: 'name' as const, required: true },
-    { label: 'Endereco',        key: 'address' as const },
+    { label: 'Nome do negócio', key: 'name' as const, required: true },
+    { label: 'Endereço',        key: 'address' as const },
     { label: 'WhatsApp',        key: 'whatsapp' as const },
     { label: 'Instagram (sem @)', key: 'instagram' as const },
     { label: 'Website',         key: 'website' as const },
@@ -576,7 +699,7 @@ function PerfilInner() {
       <form onSubmit={handleSave}>
         {/* Basic info */}
         <section className={SECTION_CLS}>
-          <h2 className="font-display text-lg font-semibold mb-4">Informacoes basicas</h2>
+          <h2 className="font-display text-lg font-semibold mb-4">Informações básicas</h2>
           <div className="space-y-4">
             {textFields.map(({ label, key, required }) => (
               <div key={key}>
@@ -591,7 +714,7 @@ function PerfilInner() {
               </div>
             ))}
             <div>
-              <label className="block text-sm font-medium mb-1.5">Descricao</label>
+              <label className="block text-sm font-medium mb-1.5">Descrição</label>
               <textarea
                 rows={3}
                 value={biz.description ?? ''}
@@ -615,13 +738,19 @@ function PerfilInner() {
           </div>
         </section>
 
+        {/* Opening hours */}
+        <OpeningHoursSection
+          value={biz.opening_hours as OpeningHoursValue | null}
+          onChange={hours => setBiz(b => ({ ...b, opening_hours: hours }))}
+        />
+
         {/* Details */}
         <section className={SECTION_CLS}>
           <h2 className="font-display text-lg font-semibold mb-4">Detalhes</h2>
           <div className="space-y-4">
             {/* Faixa de preco */}
             <div>
-              <label className="block text-sm font-medium mb-1.5">Faixa de preco</label>
+              <label className="block text-sm font-medium mb-1.5">Faixa de preço</label>
               <div className="flex gap-2 flex-wrap">
                 {(['', '$', '$$', '$$$'] as const).map(v => (
                   <button
@@ -636,7 +765,7 @@ function PerfilInner() {
                         : 'bg-white text-[#737373] border-[#E8E4DF] hover:border-teal'
                     }`}
                   >
-                    {v || 'Nao informar'}
+                    {v || 'Não informar'}
                   </button>
                 ))}
               </div>
@@ -645,7 +774,7 @@ function PerfilInner() {
             {/* Link do cardapio */}
             <div>
               <label className="block text-sm font-medium mb-1.5">
-                Link do cardapio{' '}
+                Link do cardápio{' '}
                 <span className="text-[#737373] font-normal">(opcional)</span>
               </label>
               <input
@@ -662,9 +791,9 @@ function PerfilInner() {
               <label className="block text-sm font-medium mb-2">Comodidades</label>
               <div className="grid grid-cols-2 gap-2">
                 {([
-                  { key: 'wifi' as const,         label: 'WiFi gratis' },
+                  { key: 'wifi' as const,         label: 'WiFi grátis' },
                   { key: 'parking' as const,      label: 'Estacionamento' },
-                  { key: 'accessible' as const,   label: 'Acessivel' },
+                  { key: 'accessible' as const,   label: 'Acessível' },
                   { key: 'reservations' as const, label: 'Aceita reservas' },
                 ]).map(({ key, label }) => (
                   <label key={key} className="flex items-center gap-2 cursor-pointer select-none">
@@ -703,7 +832,7 @@ function PerfilInner() {
         />
 
         <Button type="submit" variant="primary" disabled={saving} className="w-full">
-          {saving ? 'Salvando...' : 'Salvar negocio'}
+          {saving ? 'Salvando...' : 'Salvar negócio'}
         </Button>
       </form>
     </main>

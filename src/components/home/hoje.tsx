@@ -62,11 +62,13 @@ export function Hoje() {
                     <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal to-teal-dark flex-shrink-0 overflow-hidden">
                       {b.cover_url && <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />}
                     </div>
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <div className="text-white text-sm font-medium group-hover:text-teal-light transition-colors truncate">{b.name}</div>
-                      {b.category && <div className="text-white/40 text-xs truncate">{b.category.name}</div>}
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <Badge kind="open" dot className="flex-shrink-0">Aberto</Badge>
+                        {b.category && <span className="text-white/40 text-xs truncate">{b.category.name}</span>}
+                      </div>
                     </div>
-                    <Badge kind="open" dot className="ml-auto flex-shrink-0">Aberto</Badge>
                   </Link>
                 ))}
                 {openNow.length > 5 && (
