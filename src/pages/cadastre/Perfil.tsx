@@ -399,6 +399,24 @@ function PerfilInner() {
   const [biz, setBiz] = useState<PartialBusiness>({})
   const [saving, setSaving] = useState(false)
   const [profileId, setProfileId] = useState<string | null>(null)
+  const [dupMatches, setDupMatches] = useState<{ id: string; name: string; slug: string; profile_id: string | null }[]>([])
+
+  // Duplicate detection — only active in "new business" mode (no bizId)
+  useEffect(() => {
+    if (bizId) return
+    const name = biz.name?.trim() ?? ''
+    if (name.length < 3) { setDupMatches([]); return }
+    const t = setTimeout(async () => {
+      const { data } = await supabase
+        .from('gostoso_businesses')
+        .select('id, name, slug, profile_id')
+        .eq('active', true)
+        .ilike('name', `%${name}%`)
+        .limit(3)
+      setDupMatches((data ?? []) as typeof dupMatches)
+    }, 500)
+    return () => clearTimeout(t)
+  }, [biz.name, bizId])
 
   useEffect(() => {
     if (!user) return
@@ -515,6 +533,36 @@ function PerfilInner() {
       <h1 className="font-display text-3xl font-semibold mb-8">
         {bizId ? 'Editar negócio' : 'Novo negócio'}
       </h1>
+
+      {/* Duplicate detection banner — only in new-business mode */}
+      {!bizId && dupMatches.length > 0 && (
+        <div className="mb-8 rounded-2xl border border-ocre/40 bg-ocre/5 px-5 py-4">
+          <p className="text-sm font-semibold text-ocre mb-2">
+            ⚠️ Negócio similar já existe na plataforma
+          </p>
+          <p className="text-xs text-[#737373] mb-3">
+            Antes de criar um novo, verifique se o seu já está cadastrado. Se for seu, você pode reivindicá-lo e assumir o controle.
+          </p>
+          <div className="space-y-2">
+            {dupMatches.map(m => (
+              <div key={m.id} className="flex items-center justify-between gap-3 bg-white rounded-xl border border-[#E8E4DF] px-4 py-2.5">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold truncate">{m.name}</p>
+                  <p className="text-xs text-[#737373]">
+                    {m.profile_id ? 'Já tem proprietário' : 'Sem proprietário — pode ser seu'}
+                  </p>
+                </div>
+                <a
+                  href={`/cadastre/claim/${m.slug}`}
+                  className="flex-shrink-0 text-xs font-semibold text-teal border border-teal/30 px-3 py-1.5 rounded-xl hover:bg-teal/5 transition-colors"
+                >
+                  {m.profile_id ? 'Contestar' : 'Reivindicar'}
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Status banner - only shown when business already exists */}
       {biz.id && (

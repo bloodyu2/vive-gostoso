@@ -11,25 +11,27 @@ export default function Claim() {
   const { slug } = useParams<{ slug: string }>()
   const { data: business } = useBusiness(slug ?? '')
   const { user, loading: authLoading } = useAuth()
+  // Auth form state
+  const [mode, setMode] = useState<'login' | 'register'>('login')
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [authError, setAuthError] = useState<string | null>(null)
+  const [authLoading2, setAuthLoading2] = useState(false)
   const [message, setMessage] = useState('')
-  const [sent, setSent] = useState(false)
-  const [mailLoading, setMailLoading] = useState(false)
-  const [claimed, setClaimed] = useState(false)
 
+  const [submitted, setSubmitted] = useState(false)
   const submitClaim = useSubmitClaim()
   const { data: existingClaim } = useMyClaimStatus(business?.id ?? '')
 
-  // Após retorno do magic link (usuário autenticado), criar perfil se necessário e submeter claim
+  // Once user is authenticated, auto-submit the claim
   useEffect(() => {
-    if (!user || !business || claimed || existingClaim) return
+    if (!user || !business || submitted || existingClaim) return
     ;(async () => {
-      // Garantir que o perfil existe
       const { data: profile } = await supabase
         .from('gostoso_profiles')
         .select('id')
         .eq('auth_user_id', user.id)
-        .single()
+        .maybeSingle()
 
       let pid: string
       if (profile) {
@@ -45,22 +47,23 @@ export default function Claim() {
       }
 
       await submitClaim.mutateAsync({ businessId: business.id, profileId: pid, message: message || undefined })
-      setClaimed(true)
+      setSubmitted(true)
     })()
   }, [user, business])
 
-  async function handleSendLink(e: React.FormEvent) {
+  async function handleAuth(e: React.FormEvent) {
     e.preventDefault()
-    if (!business) return
-    setMailLoading(true)
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/cadastre/claim/${slug}`,
-      },
-    })
-    if (!error) setSent(true)
-    setMailLoading(false)
+    setAuthError(null)
+    setAuthLoading2(true)
+
+    if (mode === 'login') {
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) setAuthError('E-mail ou senha incorretos.')
+    } else {
+      const { error } = await supabase.auth.signUp({ email, password })
+      if (error) setAuthError(error.message)
+    }
+    setAuthLoading2(false)
   }
 
   if (!business) return (
@@ -69,25 +72,29 @@ export default function Claim() {
     </div>
   )
 
-  // Negócio já tem dono
+  // Business already has an owner
   if (business.profile_id) return (
     <div className="min-h-screen bg-areia flex items-center justify-center px-4">
       <div className="bg-white rounded-2xl border border-[#E8E4DF] p-10 w-full max-w-md text-center">
         <div className="flex justify-center mb-8"><Logo height={32} /></div>
-        <div className="text-4xl mb-4">✅</div>
-        <h2 className="font-display text-2xl font-semibold mb-2">Perfil já reivindicado</h2>
+        <div className="text-4xl mb-4">🔒</div>
+        <h2 className="font-display text-2xl font-semibold mb-2">Negócio já tem proprietário</h2>
         <p className="text-[#737373] text-sm mb-6">
-          <strong>{business.name}</strong> já tem um dono cadastrado na plataforma.
+          <strong>{business.name}</strong> já está vinculado a uma conta.
+          Se você acredita que é o proprietário legítimo, pode enviar uma contestação.
         </p>
-        <Link to={`/negocio/${business.slug}`} className="text-teal text-sm font-semibold">
+        <Link
+          to={`/negocio/${business.slug}`}
+          className="text-teal text-sm font-semibold"
+        >
           ← Ver o negócio
         </Link>
       </div>
     </div>
   )
 
-  // Pedido pendente (já enviado)
-  if (claimed || existingClaim?.status === 'pending') return (
+  // Claim already submitted / approved
+  if (submitted || existingClaim?.status === 'pending') return (
     <div className="min-h-screen bg-areia flex items-center justify-center px-4">
       <div className="bg-white rounded-2xl border border-[#E8E4DF] p-10 w-full max-w-md text-center">
         <div className="flex justify-center mb-8"><Logo height={32} /></div>
@@ -95,7 +102,7 @@ export default function Claim() {
         <h2 className="font-display text-2xl font-semibold mb-2">Pedido enviado!</h2>
         <p className="text-[#737373] text-sm mb-6">
           Recebemos seu pedido para reivindicar <strong>{business.name}</strong>.
-          Nossa equipe vai analisar em até 48 horas e você receberá uma confirmação por e-mail.
+          Nossa equipe analisa em até 48 horas e você receberá confirmação por e-mail.
         </p>
         <Link to={`/negocio/${business.slug}`} className="text-teal text-sm font-semibold">
           ← Voltar ao negócio
@@ -120,37 +127,66 @@ export default function Claim() {
     </div>
   )
 
-  // Link enviado, aguardando clique no e-mail
-  if (sent) return (
+  // If user is already logged in but claim not submitted yet — auto-submits via useEffect
+  if (user || authLoading) return (
     <div className="min-h-screen bg-areia flex items-center justify-center px-4">
       <div className="bg-white rounded-2xl border border-[#E8E4DF] p-10 w-full max-w-md text-center">
         <div className="flex justify-center mb-8"><Logo height={32} /></div>
-        <div className="text-5xl mb-4">📬</div>
-        <h2 className="font-display text-2xl font-semibold mb-2">Verifique seu e-mail</h2>
-        <p className="text-[#737373] text-sm">
-          Enviamos um link para <strong>{email}</strong>.
-          Clique nele para confirmar e enviar o pedido de reivindicação.
-        </p>
+        <p className="text-[#737373] text-sm">Enviando pedido...</p>
       </div>
     </div>
   )
 
-  // Formulário principal
+  // Main form — not logged in
   return (
-    <div className="min-h-screen bg-areia flex items-center justify-center px-4">
+    <div className="min-h-screen bg-areia flex items-center justify-center px-4 py-12">
       <div className="bg-white rounded-2xl border border-[#E8E4DF] p-10 w-full max-w-md shadow-sm">
-        <div className="flex justify-center mb-8"><Logo height={32} /></div>
-        <h1 className="font-display text-2xl font-semibold mb-1 text-center">
-          Reivindicar negócio
-        </h1>
-        <p className="text-[#737373] text-sm text-center mb-2">
-          Você está reivindicando
-        </p>
-        <p className="text-center font-semibold text-[#1A1A1A] mb-8">{business.name}</p>
+        <div className="flex justify-center mb-6"><Logo height={32} /></div>
 
-        <form onSubmit={handleSendLink} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1.5">Seu e-mail</label>
+        <div className="text-center mb-6">
+          <h1 className="font-display text-2xl font-semibold mb-1">Reivindicar negócio</h1>
+          <p className="text-[#737373] text-sm">Você está reivindicando</p>
+          <p className="font-semibold text-[#1A1A1A] mt-1">{business.name}</p>
+        </div>
+
+        {/* Message to admin */}
+        <div className="mb-5">
+          <label className="block text-sm font-medium mb-1.5">
+            Mensagem para análise <span className="text-[#737373] font-normal">(opcional)</span>
+          </label>
+          <textarea
+            rows={2}
+            value={message}
+            onChange={e => setMessage(e.target.value)}
+            placeholder="Ex: Sou o proprietário desde 2019, posso enviar documentação..."
+            className="w-full px-4 py-3 rounded-xl border border-[#E8E4DF] text-sm focus:outline-none focus:border-teal focus:ring-2 focus:ring-teal/20 resize-none"
+          />
+        </div>
+
+        <div className="border-t border-[#F5F2EE] pt-5">
+          <p className="text-xs text-[#737373] mb-4 text-center">
+            {mode === 'login' ? 'Entre com sua conta para continuar' : 'Crie sua conta para continuar'}
+          </p>
+
+          {/* Mode toggle */}
+          <div className="flex rounded-xl border border-[#E8E4DF] overflow-hidden mb-4 text-sm font-semibold">
+            <button
+              type="button"
+              onClick={() => setMode('login')}
+              className={`flex-1 py-2 transition-colors ${mode === 'login' ? 'bg-teal text-white' : 'text-[#737373] hover:bg-areia'}`}
+            >
+              Entrar
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode('register')}
+              className={`flex-1 py-2 transition-colors ${mode === 'register' ? 'bg-teal text-white' : 'text-[#737373] hover:bg-areia'}`}
+            >
+              Criar conta
+            </button>
+          </div>
+
+          <form onSubmit={handleAuth} className="space-y-3">
             <input
               type="email"
               required
@@ -159,26 +195,27 @@ export default function Claim() {
               placeholder="seu@email.com"
               className="w-full px-4 py-3 rounded-xl border border-[#E8E4DF] text-sm focus:outline-none focus:border-teal focus:ring-2 focus:ring-teal/20"
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1.5">
-              Mensagem para a equipe <span className="text-[#737373] font-normal">(opcional)</span>
-            </label>
-            <textarea
-              rows={3}
-              value={message}
-              onChange={e => setMessage(e.target.value)}
-              placeholder="Ex: Sou o proprietário desde 2019, posso enviar documentação..."
-              className="w-full px-4 py-3 rounded-xl border border-[#E8E4DF] text-sm focus:outline-none focus:border-teal focus:ring-2 focus:ring-teal/20 resize-none"
+            <input
+              type="password"
+              required
+              minLength={6}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              placeholder="Senha (mínimo 6 caracteres)"
+              className="w-full px-4 py-3 rounded-xl border border-[#E8E4DF] text-sm focus:outline-none focus:border-teal focus:ring-2 focus:ring-teal/20"
             />
-          </div>
-          <Button type="submit" variant="primary" className="w-full" disabled={mailLoading || authLoading}>
-            {mailLoading ? 'Enviando...' : 'Continuar com link mágico'}
-          </Button>
-        </form>
+            {authError && (
+              <p className="text-xs text-red-500">{authError}</p>
+            )}
+            <Button type="submit" variant="primary" className="w-full" disabled={authLoading2}>
+              {authLoading2 ? 'Aguarde...' : mode === 'login' ? 'Entrar e reivindicar' : 'Criar conta e reivindicar'}
+            </Button>
+          </form>
+        </div>
 
         <p className="text-xs text-[#737373] text-center mt-5 leading-relaxed">
-          Você receberá um link por e-mail. Ao clicar, confirmamos sua identidade e enviamos o pedido para análise.
+          Após confirmar, nossa equipe analisa o pedido em até 48h.
+          Você pode enviar documentação comprobatória por e-mail.
         </p>
       </div>
     </div>

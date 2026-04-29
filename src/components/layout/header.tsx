@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Compass, Sun, Moon, User } from 'lucide-react'
+import { Menu, X, Compass, Sun, Moon, User, Search } from 'lucide-react'
 import { Logo } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
+import { GlobalSearch } from '@/components/search/global-search'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/hooks/useTheme'
 import { useAuth } from '@/hooks/useAuth'
@@ -31,9 +32,22 @@ export function Header() {
   const { pathname } = useLocation()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [discoverOpen, setDiscoverOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const discoverRef = useRef<HTMLDivElement>(null)
   const { theme, toggle } = useTheme()
   const { user } = useAuth()
+
+  // Cmd/Ctrl+K opens search
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        setSearchOpen(true)
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [])
 
   // Fecha o popover ao clicar fora
   useEffect(() => {
@@ -54,6 +68,7 @@ export function Header() {
 
   return (
     <>
+      {searchOpen && <GlobalSearch onClose={() => setSearchOpen(false)} />}
       <header className="sticky top-0 z-40 bg-white dark:bg-[#1A1A1A] border-b border-[#E8E4DF] dark:border-[#2D2D2D]">
         {/* Desktop */}
         <div className="hidden md:flex items-center justify-between gap-4 px-8 py-2">
@@ -122,6 +137,16 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2 flex-shrink-0">
+            {/* Search button */}
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="flex items-center gap-2 pl-3 pr-4 py-1.5 rounded-full border border-[#E8E4DF] dark:border-[#2D2D2D] text-[#737373] hover:border-teal hover:text-teal transition-colors text-xs"
+              aria-label="Buscar"
+            >
+              <Search className="w-3.5 h-3.5" />
+              <span className="hidden lg:inline">Buscar</span>
+              <kbd className="hidden lg:inline bg-[#F5F2EE] dark:bg-[#2D2D2D] px-1.5 py-0.5 rounded font-mono text-[10px] text-[#3D3D3D] dark:text-[#C0BCB8]">⌘K</kbd>
+            </button>
             <button
               onClick={toggle}
               className="w-9 h-9 flex items-center justify-center rounded-full text-[#3D3D3D] dark:text-[#C0BCB8] hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors"
@@ -152,11 +177,11 @@ export function Header() {
         {/* Mobile */}
         <div className="flex md:hidden items-center justify-between px-5 py-3">
           <button
-            onClick={toggle}
+            onClick={() => setSearchOpen(true)}
             className="w-10 h-10 flex items-center justify-center rounded-xl text-[#3D3D3D] dark:text-[#C0BCB8] hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors"
-            aria-label={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
+            aria-label="Buscar"
           >
-            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            <Search className="w-5 h-5" />
           </button>
           <Link to="/" onClick={() => setDrawerOpen(false)}>
             <Logo height={52} />
