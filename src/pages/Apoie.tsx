@@ -18,19 +18,19 @@ import type { Goal } from '@/types/database'
 const CUSTOS_ATIVOS = [
   {
     icon: Layers,
-    label: 'Vercel Pro',
+    label: 'Vercel Hobby',
     detalhe: 'Hospedagem, CDN global, deploys automáticos',
-    valor_display: '~R$118/mês',
-    valor_sub: 'USD 20 · cobrado em dólar',
-    valor_mes: 118.00,
+    valor_display: 'R$0/mês',
+    valor_sub: 'Plano gratuito',
+    valor_mes: 0,
   },
   {
     icon: Database,
     label: 'Supabase Pro',
     detalhe: 'Banco de dados, autenticação, storage e Edge Functions',
-    valor_display: '~R$148/mês',
-    valor_sub: 'USD 25 · cobrado em dólar',
-    valor_mes: 148.00,
+    valor_display: '~R$58/mês',
+    valor_sub: 'USD 10 · cobrado em dólar',
+    valor_mes: 58.00,
   },
   {
     icon: Mail,
@@ -51,6 +51,11 @@ const CUSTOS_ATIVOS = [
 ]
 
 const CUSTOS_PLANEJADOS = [
+  {
+    icon: Layers,
+    label: 'Vercel Pro',
+    detalhe: 'Hospedagem avançada com analytics e limites maiores — quando o tráfego justificar (USD 20/mês)',
+  },
   {
     icon: Phone,
     label: 'Número de telefone dedicado',
