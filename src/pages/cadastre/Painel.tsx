@@ -134,6 +134,11 @@ function PainelInner() {
                         }>
                           {b.plan === 'destaque' ? '★ Destaque' : b.plan === 'associado' ? '✓ Associado' : 'Gratuito'}
                         </span>
+                        {b.plan_expires_at && (
+                          <span className="ml-1 text-[#A0A0A0]">
+                            · válido até {new Date(b.plan_expires_at).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          </span>
+                        )}
                       </p>
                     </div>
                     {/* Billing toggle — only show for upgradeable plans */}

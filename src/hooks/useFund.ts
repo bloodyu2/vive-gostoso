@@ -20,11 +20,13 @@ export function useAssociadosCount() {
   return useQuery({
     queryKey: ['associados-count'],
     queryFn: async () => {
+      // Conta negócios com plano ativo: assinatura mensal OU pagamento anual válido
+      const now = new Date().toISOString()
       const { count, error } = await supabase
         .from('gostoso_businesses')
         .select('*', { count: 'exact', head: true })
         .in('plan', ['associado', 'destaque'])
-        .not('stripe_subscription_id', 'is', null)
+        .or(`stripe_subscription_id.not.is.null,plan_expires_at.gte.${now}`)
       if (error) throw error
       return count ?? 0
     },
