@@ -102,9 +102,8 @@ serve(async (req) => {
       session = await stripe.checkout.sessions.create({
         customer: customerId,
         mode: 'payment',
-        payment_method_types: ['card', 'pix', 'boleto'],
+        payment_method_types: ['card', 'boleto'],
         payment_method_options: {
-          pix:    { expires_after_seconds: 3600 },
           boleto: { expires_after_days: 3 },
         },
         line_items: [{

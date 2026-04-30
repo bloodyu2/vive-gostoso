@@ -174,7 +174,7 @@ function PainelInner() {
                   {/* Annual info pill */}
                   {billing === 'annual' && b.plan !== 'destaque' && (
                     <div className="mb-3 text-xs text-ocre bg-ocre/10 border border-ocre/20 rounded-xl px-3 py-2">
-                      Pague uma vez por ano e economize 10%. PIX, boleto e cartão aceitos.
+                      Pague uma vez por ano e economize 10%. Cartão e boleto aceitos.
                     </div>
                   )}
 
