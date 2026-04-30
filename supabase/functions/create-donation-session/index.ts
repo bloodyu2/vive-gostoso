@@ -42,7 +42,6 @@ serve(async (req) => {
           product_data: {
             name: 'Doação — Vive Gostoso',
             description: 'Apoio à plataforma comunitária de São Miguel do Gostoso, RN. Cada real fica na cidade.',
-            images: [],
           },
           unit_amount: amountCents,
         },
@@ -58,8 +57,9 @@ serve(async (req) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   } catch (err) {
-    console.error('create-donation-session error:', err)
-    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+    const message = err instanceof Error ? err.message : String(err)
+    console.error('create-donation-session error:', message)
+    return new Response(JSON.stringify({ error: message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
