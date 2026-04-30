@@ -92,16 +92,6 @@ function PainelInner() {
           <h2 className="font-semibold text-lg">Preview</h2>
           <p className="text-sm text-[#737373] mt-1">Como seu negócio aparece no diretório.</p>
         </Link>
-        {role === 'admin' && (
-          <Link
-            to="/cadastre/admin"
-            className="bg-teal/10 border border-teal/20 rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all col-span-full"
-          >
-            <div className="text-2xl mb-2">⚙️</div>
-            <h2 className="font-semibold text-lg text-teal">Painel Admin</h2>
-            <p className="text-sm text-[#737373] mt-1">Moderar avaliações, reivindicações, serviços e vagas.</p>
-          </Link>
-        )}
       </div>
 
       {/* Subscription section */}
