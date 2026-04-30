@@ -27,8 +27,13 @@ function PainelInner() {
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const [billingMode, setBillingMode] = useState<Record<string, 'monthly' | 'annual'>>({})
 
-  // Admin accounts go directly to the admin panel — must be AFTER all hook calls
-  if (!profileLoading && role === 'admin') return <Navigate to="/cadastre/admin" replace />
+  // Must be AFTER all hook calls
+  if (profileLoading) return (
+    <div className="flex items-center justify-center h-64">
+      <div className="w-8 h-8 border-4 border-teal border-t-transparent rounded-full animate-spin" />
+    </div>
+  )
+  if (role === 'admin') return <Navigate to="/cadastre/admin" replace />
 
   function getBilling(bizId: string): 'monthly' | 'annual' {
     return billingMode[bizId] ?? 'monthly'

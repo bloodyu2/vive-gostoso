@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, Navigate } from 'react-router-dom'
 import { Logo } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
+import { useProfile } from '@/hooks/useProfile'
 
 type Mode = 'login' | 'register' | 'forgot'
 
@@ -16,9 +17,18 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const navigate = useNavigate()
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
+  const { data: profile, isLoading: profileLoading } = useProfile()
 
-  if (user) { navigate('/cadastre/painel'); return null }
+  if (authLoading || (user && profileLoading)) return (
+    <div className="flex items-center justify-center min-h-screen bg-areia">
+      <div className="w-8 h-8 border-4 border-teal border-t-transparent rounded-full animate-spin" />
+    </div>
+  )
+  if (user) {
+    if (profile?.role === 'admin') return <Navigate to="/cadastre/admin" replace />
+    return <Navigate to="/cadastre/painel" replace />
+  }
 
   function resetForm() {
     setError(null)
@@ -36,9 +46,21 @@ export default function Login() {
     e.preventDefault()
     setLoading(true)
     setError(null)
-    const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
     if (authError) {
       setError('E-mail ou senha incorretos. Tente de novo.')
+      setLoading(false)
+      return
+    }
+    // Fetch profile immediately to route admin users directly
+    const userId = data.user?.id
+    if (userId) {
+      const { data: prof } = await supabase
+        .from('gostoso_profiles')
+        .select('role')
+        .eq('auth_user_id', userId)
+        .maybeSingle()
+      navigate(prof?.role === 'admin' ? '/cadastre/admin' : '/cadastre/painel')
     } else {
       navigate('/cadastre/painel')
     }
