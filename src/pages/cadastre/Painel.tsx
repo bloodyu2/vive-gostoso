@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams, Navigate } from 'react-router-dom'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { useAuth } from '@/hooks/useAuth'
 import { useProfile } from '@/hooks/useProfile'
@@ -18,9 +18,12 @@ export default function Painel() {
 
 function PainelInner() {
   const { user, signOut } = useAuth()
-  const { data: profile } = useProfile()
+  const { data: profile, isLoading: profileLoading } = useProfile()
   const role = profile?.role ?? null
   const { data: businesses = [] } = useMyBusinesses()
+
+  // Admin accounts go directly to the admin panel — no prestador view needed
+  if (!profileLoading && role === 'admin') return <Navigate to="/cadastre/admin" replace />
   const [searchParams] = useSearchParams()
   const successMsg = searchParams.get('associado') === 'success'
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null)

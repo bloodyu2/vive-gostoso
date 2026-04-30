@@ -18,9 +18,13 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
 }
 
 function AdminRoleCheck({ children }: { children: React.ReactNode }) {
+  // useProfile calls useAuth internally, which starts with user=null (local state).
+  // We must wait for auth to resolve before evaluating the profile — otherwise
+  // the query is disabled and profile comes back undefined, triggering a redirect.
+  const { loading: authLoading } = useAuth()
   const { data: profile, isLoading } = useProfile()
 
-  if (isLoading) return <Spinner />
+  if (authLoading || isLoading) return <Spinner />
   if (!profile || profile.role !== 'admin') return <Navigate to="/cadastre/painel" replace />
 
   return <>{children}</>
