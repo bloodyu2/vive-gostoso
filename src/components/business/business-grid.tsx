@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { BusinessCard } from './business-card'
 import type { Business } from '@/types/database'
 
@@ -10,6 +11,8 @@ interface BusinessGridProps {
 }
 
 export function BusinessGrid({ businesses, loading, view = 'grid' }: BusinessGridProps) {
+  const { t } = useTranslation()
+
   if (loading) return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {Array.from({ length: 6 }).map((_, i) => (
@@ -27,7 +30,7 @@ export function BusinessGrid({ businesses, loading, view = 'grid' }: BusinessGri
 
   if (!businesses.length) return (
     <div className="text-center py-20 text-[#737373]">
-      <p className="text-lg">Nenhum negócio encontrado.</p>
+      <p className="text-lg">{t('filters.nenhum_negocio')}</p>
     </div>
   )
 

@@ -21,14 +21,14 @@ function PainelInner() {
   const { data: profile, isLoading: profileLoading } = useProfile()
   const role = profile?.role ?? null
   const { data: businesses = [] } = useMyBusinesses()
-
-  // Admin accounts go directly to the admin panel — no prestador view needed
-  if (!profileLoading && role === 'admin') return <Navigate to="/cadastre/admin" replace />
   const [searchParams] = useSearchParams()
   const successMsg = searchParams.get('associado') === 'success'
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const [billingMode, setBillingMode] = useState<Record<string, 'monthly' | 'annual'>>({})
+
+  // Admin accounts go directly to the admin panel — must be AFTER all hook calls
+  if (!profileLoading && role === 'admin') return <Navigate to="/cadastre/admin" replace />
 
   function getBilling(bizId: string): 'monthly' | 'annual' {
     return billingMode[bizId] ?? 'monthly'

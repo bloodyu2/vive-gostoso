@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Phone, MapPin, Navigation, ExternalLink } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Badge } from '@/components/ui/badge'
 import { ManagedBadge } from '@/components/business/managed-badge'
 import { isBusinessOpen } from '@/lib/utils'
@@ -23,6 +24,7 @@ interface Props {
 }
 
 export function BusinessCard({ business: b, view = 'grid' }: Props) {
+  const { t } = useTranslation()
   const open = isBusinessOpen(b.opening_hours)
   const lp = useLocalePath()
 
@@ -48,7 +50,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
           <div>
             <div className="flex gap-1.5 mb-1.5 flex-wrap">
               {b.category && <Badge kind="cat">{b.category.name}</Badge>}
-              {open ? <Badge kind="open" dot>Aberto</Badge> : <Badge kind="closed" dot>Fechado</Badge>}
+              {open ? <Badge kind="open" dot>{t('common.aberto')}</Badge> : <Badge kind="closed" dot>{t('common.fechado')}</Badge>}
             </div>
             <Link to={lp(`/negocio/${b.slug}`)}>
               <h3 className="font-display font-semibold text-lg tracking-tight hover:text-teal transition-colors">{b.name}</h3>
@@ -62,7 +64,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
               )}
               {b.menu_url && (
                 <span className="inline-flex items-center text-xs font-semibold text-ocre bg-ocre/10 px-2 py-0.5 rounded-full">
-                  Cardápio
+                  {t('filters.cardapio')}
                 </span>
               )}
             </div>
@@ -105,7 +107,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
               to={lp(`/negocio/${b.slug}`)}
               className="ml-auto flex items-center gap-1 text-teal text-xs font-semibold hover:underline"
             >
-              Ver mais <ExternalLink className="w-3 h-3" />
+              {t('filters.ver_mais')} <ExternalLink className="w-3 h-3" />
             </Link>
           </div>
         </div>
@@ -123,7 +125,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
         {b.cover_url && <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />}
         {b.is_featured && (
           <div className="absolute top-3 right-3">
-            <Badge kind="verif">✓ Verificado</Badge>
+            <Badge kind="verif">✓ {t('filters.verificado')}</Badge>
           </div>
         )}
         <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-black/40 to-transparent" />
@@ -133,15 +135,15 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
       <div className="p-4 flex flex-col flex-1">
         <div className="flex gap-1.5 mb-2 flex-wrap">
           {b.category && <Badge kind="cat">{b.category.name}</Badge>}
-          {open ? <Badge kind="open" dot>Aberto</Badge> : <Badge kind="closed" dot>Fechado</Badge>}
+          {open ? <Badge kind="open" dot>{t('common.aberto')}</Badge> : <Badge kind="closed" dot>{t('common.fechado')}</Badge>}
           {b.plan === 'associado' && (
             <span className="inline-flex items-center gap-1 text-xs font-semibold text-teal bg-teal/10 px-2 py-0.5 rounded-full">
-              ✓ Associado
+              ✓ {t('filters.associado')}
             </span>
           )}
           {b.plan === 'destaque' && (
             <span className="inline-flex items-center gap-1 text-xs font-semibold text-ocre bg-ocre/10 px-2 py-0.5 rounded-full">
-              ★ Destaque
+              ★ {t('filters.destaque')}
             </span>
           )}
         </div>
@@ -158,7 +160,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
           )}
           {b.menu_url && (
             <span className="inline-flex items-center text-xs font-semibold text-ocre bg-ocre/10 px-2 py-0.5 rounded-full">
-              Cardápio
+              {t('filters.cardapio')}
             </span>
           )}
         </div>
@@ -203,7 +205,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
             to={lp(`/negocio/${b.slug}`)}
             className="ml-auto flex items-center gap-1 text-teal text-xs font-semibold hover:underline"
           >
-            Ver mais <ExternalLink className="w-3 h-3" />
+            {t('filters.ver_mais')} <ExternalLink className="w-3 h-3" />
           </Link>
         </div>
       </div>

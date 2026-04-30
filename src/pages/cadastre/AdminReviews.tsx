@@ -18,8 +18,8 @@ function AdminReviewsInner() {
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
-      <Link to="/cadastre/painel" className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
-        <ArrowLeft className="w-4 h-4" /> Voltar ao Painel
+      <Link to="/cadastre/admin" className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
+        <ArrowLeft className="w-4 h-4" /> Admin
       </Link>
 
       <h1 className="font-display text-3xl font-semibold mb-2">Avaliações Pendentes</h1>

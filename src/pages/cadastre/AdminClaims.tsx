@@ -25,8 +25,8 @@ function AdminClaimsInner() {
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
       <div className="flex items-center gap-4 mb-8">
-        <Link to="/cadastre/painel" className="text-sm text-[#737373] hover:text-teal transition-colors">
-          ← Painel
+        <Link to="/cadastre/admin" className="text-sm text-[#737373] hover:text-teal transition-colors">
+          ← Admin
         </Link>
         <h1 className="font-display text-3xl font-semibold">Pedidos de Reivindicação</h1>
         {claims.length > 0 && (

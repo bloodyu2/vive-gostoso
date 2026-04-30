@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
 
@@ -20,6 +21,7 @@ function useBlogPosts() {
 
 export default function Blog() {
   const { data: posts = [], isLoading } = useBlogPosts()
+  const { t } = useTranslation()
 
   return (
     <main className="max-w-6xl mx-auto px-5 md:px-8 py-12">
@@ -28,7 +30,7 @@ export default function Blog() {
           Blog
         </h1>
         <p className="mt-3 text-lg text-[#3D3D3D] dark:text-[#C0BCB8] max-w-xl leading-relaxed">
-          Histórias, dicas e novidades de São Miguel do Gostoso.
+          {t('blog.subtitulo')}
         </p>
       </div>
 
@@ -42,8 +44,8 @@ export default function Blog() {
 
       {!isLoading && posts.length === 0 && (
         <div className="text-center py-20 text-[#737373]">
-          <p className="text-lg">Nenhum artigo publicado ainda.</p>
-          <p className="text-sm mt-2">Volte em breve.</p>
+          <p className="text-lg">{t('blog.sem_artigos')}</p>
+          <p className="text-sm mt-2">{t('blog.sem_artigos_sub')}</p>
         </div>
       )}
 

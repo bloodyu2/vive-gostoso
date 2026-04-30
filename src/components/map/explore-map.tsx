@@ -42,6 +42,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
   const markers = useRef<mapboxgl.Marker[]>([])
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
   const sidebarRef = useRef<HTMLDivElement>(null)
+  const sidebarHeaderRef = useRef<HTMLDivElement>(null)
   const [popup, setPopup] = useState<PopupBusiness | null>(null)
   const lp = useLocalePath()
 
@@ -141,10 +142,15 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
     const el = sectionRefs.current[verb]
     const sidebar = sidebarRef.current
     if (!el || !sidebar) return
+    // Measure the sticky header's actual rendered height so the scroll lands
+    // just below it regardless of whether the pills row is showing.
+    const headerHeight = sidebarHeaderRef.current?.offsetHeight ?? 90
+    // Use getBoundingClientRect to find the section's current viewport position,
+    // then convert to an absolute scroll offset within the sidebar container.
     const elRect = el.getBoundingClientRect()
     const sidebarRect = sidebar.getBoundingClientRect()
-    const target = sidebar.scrollTop + elRect.top - sidebarRect.top - 110
-    sidebar.scrollTo({ top: target, behavior: 'smooth' })
+    const target = sidebar.scrollTop + elRect.top - sidebarRect.top - headerHeight
+    sidebar.scrollTo({ top: Math.max(0, target), behavior: 'smooth' })
   }
 
   return (
@@ -202,9 +208,9 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
       </div>
 
       {/* Sidebar */}
-      <div ref={sidebarRef} className="flex-1 min-h-0 w-full md:flex-none md:w-80 bg-white border-t md:border-t-0 md:border-l border-[#E8E4DF] overflow-y-auto">
+      <div ref={sidebarRef} className="flex-1 min-h-0 w-full md:flex-none md:w-80 md:h-full bg-white border-t md:border-t-0 md:border-l border-[#E8E4DF] overflow-y-auto">
         {/* Sticky header: count + category jump pills */}
-        <div className="sticky top-0 bg-white z-10 border-b border-[#E8E4DF]">
+        <div ref={sidebarHeaderRef} className="sticky top-0 bg-white z-10 border-b border-[#E8E4DF]">
           <div className="px-5 pt-4 pb-2">
             <div className="font-semibold text-sm text-[#1A1A1A]">{businesses.length} negócios cadastrados</div>
             <div className="text-xs text-[#737373] mt-0.5">São Miguel do Gostoso, RN</div>

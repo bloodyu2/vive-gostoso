@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
 
@@ -24,6 +25,7 @@ function useBlogPost(slug: string) {
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>()
   const { data: post, isLoading } = useBlogPost(slug ?? '')
+  const { t } = useTranslation()
 
   if (isLoading) {
     return (
@@ -40,10 +42,10 @@ export default function BlogPostPage() {
   if (!post) {
     return (
       <main className="max-w-3xl mx-auto px-5 md:px-8 py-20 text-center">
-        <p className="text-[#737373] text-lg">Artigo não encontrado.</p>
+        <p className="text-[#737373] text-lg">{t('blog.nao_encontrado')}</p>
         <Link to="/blog" className="mt-4 inline-flex items-center gap-2 text-teal font-semibold hover:underline">
           <ArrowLeft className="w-4 h-4" />
-          Voltar ao blog
+          {t('blog.voltar_blog')}
         </Link>
       </main>
     )

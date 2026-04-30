@@ -74,6 +74,22 @@
     "sem_eventos": "Nenhum evento próximo",
     "sem_eventos_sub": "Fique atento — a agenda é atualizada com frequência."
   },
+  "blog": {
+    "subtitulo": "Histórias, dicas e novidades de São Miguel do Gostoso.",
+    "sem_artigos": "Nenhum artigo publicado ainda.",
+    "sem_artigos_sub": "Volte em breve.",
+    "nao_encontrado": "Artigo não encontrado.",
+    "voltar_blog": "Voltar ao blog"
+  },
+  "evento": {
+    "nao_encontrado": "Evento não encontrado",
+    "ver_todos": "← Ver todos os eventos",
+    "todos_eventos": "Todos os eventos",
+    "destaque": "Destaque",
+    "as": "às",
+    "ate": "até",
+    "saiba_mais": "Saiba mais"
+  },
   "contrate": {
     "badge": "CONTRATE.",
     "titulo": "Talentos e vagas de Gostoso",
@@ -192,5 +208,23 @@
     "titulo": "Página não encontrada",
     "desc": "Essa página não existe ou foi movida.",
     "voltar_inicio": "Voltar ao início"
+  },
+  "filters": {
+    "buscar_placeholder": "Buscar por nome, descrição ou endereço...",
+    "limpar_busca": "Limpar busca",
+    "todos": "Todos",
+    "resultado_um": "resultado",
+    "resultado_outros": "resultados",
+    "para_busca": "para \"{{search}}\"",
+    "aberto_agora": "Aberto agora",
+    "grade": "Grade",
+    "lista": "Lista",
+    "galeria": "Galeria",
+    "nenhum_negocio": "Nenhum negócio encontrado.",
+    "cardapio": "Cardápio",
+    "verificado": "Verificado",
+    "associado": "Associado",
+    "destaque": "Destaque",
+    "ver_mais": "Ver mais"
   }
 }

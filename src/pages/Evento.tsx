@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { CalendarDays, MapPin, ArrowLeft, ExternalLink } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useEvent } from '@/hooks/useEvents'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { Badge } from '@/components/ui/badge'
@@ -11,6 +12,7 @@ const typeMap: Record<string, string> = {
 export default function Evento() {
   const { id } = useParams<{ id: string }>()
   const { data: event, isLoading } = useEvent(id ?? '')
+  const { t } = useTranslation()
 
   usePageMeta({
     title: event ? event.name : 'Evento',
@@ -28,8 +30,8 @@ export default function Evento() {
   if (!event) return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-12 text-center">
       <div className="text-5xl mb-4">🗓️</div>
-      <h1 className="font-display text-2xl font-semibold mb-2">Evento não encontrado</h1>
-      <Link to="/participe" className="text-teal text-sm font-semibold">← Ver todos os eventos</Link>
+      <h1 className="font-display text-2xl font-semibold mb-2">{t('evento.nao_encontrado')}</h1>
+      <Link to="/participe" className="text-teal text-sm font-semibold">{t('evento.ver_todos')}</Link>
     </main>
   )
 
@@ -42,7 +44,7 @@ export default function Evento() {
   return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-10">
       <Link to="/participe" className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
-        <ArrowLeft className="w-4 h-4" /> Todos os eventos
+        <ArrowLeft className="w-4 h-4" /> {t('evento.todos_eventos')}
       </Link>
 
       {/* Cover */}
@@ -55,7 +57,7 @@ export default function Evento() {
         {event.event_type && typeMap[event.event_type] && (
           <Badge kind="cat">{typeMap[event.event_type]}</Badge>
         )}
-        {event.is_featured && <Badge kind="verif">Destaque</Badge>}
+        {event.is_featured && <Badge kind="verif">{t('evento.destaque')}</Badge>}
       </div>
 
       <h1 className="font-display font-bold text-3xl md:text-4xl leading-tight mb-4">{event.name}</h1>
@@ -64,8 +66,8 @@ export default function Evento() {
       <div className="flex flex-col gap-2 mb-6 text-sm text-[#3D3D3D]">
         <div className="flex items-center gap-2">
           <CalendarDays className="w-4 h-4 text-teal flex-shrink-0" />
-          <span className="capitalize">{dateStr}{timeStr !== '00:00' ? ` às ${timeStr}` : ''}</span>
-          {endStr && <span className="text-[#737373]">até {endStr}</span>}
+          <span className="capitalize">{dateStr}{timeStr !== '00:00' ? ` ${t('evento.as')} ${timeStr}` : ''}</span>
+          {endStr && <span className="text-[#737373]">{t('evento.ate')} {endStr}</span>}
         </div>
         {event.location && (
           <div className="flex items-center gap-2">
@@ -84,7 +86,7 @@ export default function Evento() {
       {event.source_url && (
         <a href={event.source_url} target="_blank" rel="noopener noreferrer"
            className="inline-flex items-center gap-2 bg-teal text-white font-semibold px-6 py-3 rounded-full hover:bg-teal-dark transition-colors">
-          Saiba mais <ExternalLink className="w-4 h-4" />
+          {t('evento.saiba_mais')} <ExternalLink className="w-4 h-4" />
         </a>
       )}
     </main>

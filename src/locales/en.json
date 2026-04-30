@@ -74,6 +74,22 @@
     "sem_eventos": "No upcoming events",
     "sem_eventos_sub": "Keep an eye out — the calendar is updated regularly."
   },
+  "blog": {
+    "subtitulo": "Stories, tips and news from São Miguel do Gostoso.",
+    "sem_artigos": "No articles published yet.",
+    "sem_artigos_sub": "Check back soon.",
+    "nao_encontrado": "Article not found.",
+    "voltar_blog": "Back to blog"
+  },
+  "evento": {
+    "nao_encontrado": "Event not found",
+    "ver_todos": "← See all events",
+    "todos_eventos": "All events",
+    "destaque": "Featured",
+    "as": "at",
+    "ate": "until",
+    "saiba_mais": "Learn more"
+  },
   "contrate": {
     "badge": "HIRE.",
     "titulo": "Talent & jobs in Gostoso",
@@ -192,5 +208,23 @@
     "titulo": "Page not found",
     "desc": "This page doesn't exist or has been moved.",
     "voltar_inicio": "Back to home"
+  },
+  "filters": {
+    "buscar_placeholder": "Search by name, description or address...",
+    "limpar_busca": "Clear search",
+    "todos": "All",
+    "resultado_um": "result",
+    "resultado_outros": "results",
+    "para_busca": "for \"{{search}}\"",
+    "aberto_agora": "Open now",
+    "grade": "Grid",
+    "lista": "List",
+    "galeria": "Gallery",
+    "nenhum_negocio": "No businesses found.",
+    "cardapio": "Menu",
+    "verificado": "Verified",
+    "associado": "Member",
+    "destaque": "Featured",
+    "ver_mais": "See more"
   }
 }
