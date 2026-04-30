@@ -24,6 +24,7 @@ export function useAssociadosCount() {
         .from('gostoso_businesses')
         .select('*', { count: 'exact', head: true })
         .in('plan', ['associado', 'destaque'])
+        .not('stripe_subscription_id', 'is', null)
       if (error) throw error
       return count ?? 0
     },
