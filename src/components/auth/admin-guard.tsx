@@ -18,13 +18,14 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
 }
 
 function AdminRoleCheck({ children }: { children: React.ReactNode }) {
-  // useProfile calls useAuth internally, which starts with user=null (local state).
-  // We must wait for auth to resolve before evaluating the profile — otherwise
-  // the query is disabled and profile comes back undefined, triggering a redirect.
+  // useProfile has its own useAuth() instance starting with user=null.
+  // In RQ v5, isLoading = isPending && isFetching — when enabled:false, isFetching
+  // is false so isLoading is false even though profile is undefined. Use isPending
+  // instead so we wait while the query is disabled OR fetching.
   const { loading: authLoading } = useAuth()
-  const { data: profile, isLoading } = useProfile()
+  const { data: profile, isPending } = useProfile()
 
-  if (authLoading || isLoading) return <Spinner />
+  if (authLoading || isPending) return <Spinner />
   if (!profile || profile.role !== 'admin') return <Navigate to="/cadastre/painel" replace />
 
   return <>{children}</>
