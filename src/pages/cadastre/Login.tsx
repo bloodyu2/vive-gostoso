@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link, Navigate } from 'react-router-dom'
+import { Calendar, Camera, BarChart2 } from 'lucide-react'
 import { Logo } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
@@ -134,15 +135,15 @@ export default function Login() {
 
               <ul className="space-y-3 mb-8">
                 <li className="flex items-start gap-3 text-sm text-[#1A1A1A]">
-                  <span className="text-base leading-none mt-0.5">🗓️</span>
+                  <Calendar className="w-4 h-4 text-teal flex-shrink-0 mt-0.5" />
                   <span>Seus horários e contato sempre atualizados</span>
                 </li>
                 <li className="flex items-start gap-3 text-sm text-[#1A1A1A]">
-                  <span className="text-base leading-none mt-0.5">📸</span>
+                  <Camera className="w-4 h-4 text-teal flex-shrink-0 mt-0.5" />
                   <span>Fotos e descrição do seu negócio</span>
                 </li>
                 <li className="flex items-start gap-3 text-sm text-[#1A1A1A]">
-                  <span className="text-base leading-none mt-0.5">📊</span>
+                  <BarChart2 className="w-4 h-4 text-teal flex-shrink-0 mt-0.5" />
                   <span>Visibilidade para turistas e moradores</span>
                 </li>
               </ul>

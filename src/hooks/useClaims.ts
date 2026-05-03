@@ -104,7 +104,7 @@ export function useApproveClaim() {
       await supabase.from('gostoso_notifications').insert({
         profile_id: profileId,
         type: 'claim_approved',
-        title: '🎉 Negócio aprovado!',
+        title: 'Negócio aprovado!',
         body: 'Seu pedido foi aprovado. Você já pode gerenciar seu perfil.',
         link: '/cadastre/painel',
       })

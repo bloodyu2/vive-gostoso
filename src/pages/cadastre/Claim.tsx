@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { CheckCircle } from 'lucide-react'
 import { Logo } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
@@ -98,7 +99,7 @@ export default function Claim() {
     <div className="min-h-screen bg-areia flex items-center justify-center px-4">
       <div className="bg-white rounded-2xl border border-[#E8E4DF] p-10 w-full max-w-md text-center">
         <div className="flex justify-center mb-8"><Logo height={32} /></div>
-        <div className="text-4xl mb-4">🎉</div>
+        <CheckCircle className="w-10 h-10 mb-4 text-teal mx-auto" />
         <h2 className="font-display text-2xl font-semibold mb-2">Pedido enviado!</h2>
         <p className="text-[#737373] text-sm mb-6">
           Recebemos seu pedido para reivindicar <strong>{business.name}</strong>.

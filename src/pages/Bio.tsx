@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom'
-import { AtSign, MapPin } from 'lucide-react'
+import { AtSign, MapPin, Utensils, BedDouble, Wind, CalendarDays, Map, Briefcase, Heart, Waves } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 
-const LINKS = [
-  { to: '/come',      emoji: '🍽️',  label: 'COME.',      sub: 'Restaurantes e gastronomia',   color: 'bg-ocre/10 hover:bg-ocre/20 border-ocre/20' },
-  { to: '/fique',     emoji: '🏄',  label: 'FIQUE.',     sub: 'Pousadas e hospedagem',         color: 'bg-teal/10 hover:bg-teal/20 border-teal/20' },
-  { to: '/passeie',   emoji: '🪁',  label: 'PASSEIE.',   sub: 'Passeios e esportes náuticos',  color: 'bg-[#3D8B5A]/10 hover:bg-[#3D8B5A]/20 border-[#3D8B5A]/20' },
-  { to: '/participe', emoji: '🎉',  label: 'PARTICIPE.', sub: 'Eventos e festivais',           color: 'bg-teal/10 hover:bg-teal/20 border-teal/20' },
-  { to: '/explore',   emoji: '🗺️',  label: 'EXPLORE.',   sub: 'Mapa interativo da cidade',     color: 'bg-coral/10 hover:bg-coral/20 border-coral/20' },
-  { to: '/contrate',  emoji: '💼',  label: 'CONTRATE.',  sub: 'Serviços locais e vagas',       color: 'bg-[#1A1A1A]/5 hover:bg-[#1A1A1A]/10 border-[#1A1A1A]/10' },
-  { to: '/apoie',     emoji: '🤝',  label: 'APOIE.',     sub: 'Fundo público transparente',    color: 'bg-ocre/10 hover:bg-ocre/20 border-ocre/20' },
-  { to: '/conheca',   emoji: '🌊',  label: 'CONHEÇA.',   sub: 'São Miguel do Gostoso, RN',     color: 'bg-teal/10 hover:bg-teal/20 border-teal/20' },
+const LINKS: { to: string; icon: LucideIcon; label: string; sub: string; color: string }[] = [
+  { to: '/come',      icon: Utensils,    label: 'COME.',      sub: 'Restaurantes e gastronomia',   color: 'bg-ocre/10 hover:bg-ocre/20 border-ocre/20' },
+  { to: '/fique',     icon: BedDouble,   label: 'FIQUE.',     sub: 'Pousadas e hospedagem',         color: 'bg-teal/10 hover:bg-teal/20 border-teal/20' },
+  { to: '/passeie',   icon: Wind,        label: 'PASSEIE.',   sub: 'Passeios e esportes náuticos',  color: 'bg-[#3D8B5A]/10 hover:bg-[#3D8B5A]/20 border-[#3D8B5A]/20' },
+  { to: '/participe', icon: CalendarDays,label: 'PARTICIPE.', sub: 'Eventos e festivais',           color: 'bg-teal/10 hover:bg-teal/20 border-teal/20' },
+  { to: '/explore',   icon: Map,         label: 'EXPLORE.',   sub: 'Mapa interativo da cidade',     color: 'bg-coral/10 hover:bg-coral/20 border-coral/20' },
+  { to: '/contrate',  icon: Briefcase,   label: 'CONTRATE.',  sub: 'Serviços locais e vagas',       color: 'bg-[#1A1A1A]/5 hover:bg-[#1A1A1A]/10 border-[#1A1A1A]/10' },
+  { to: '/apoie',     icon: Heart,       label: 'APOIE.',     sub: 'Fundo público transparente',    color: 'bg-ocre/10 hover:bg-ocre/20 border-ocre/20' },
+  { to: '/conheca',   icon: Waves,       label: 'CONHEÇA.',   sub: 'São Miguel do Gostoso, RN',     color: 'bg-teal/10 hover:bg-teal/20 border-teal/20' },
 ]
 
 export default function Bio() {
@@ -35,13 +36,13 @@ export default function Bio() {
 
       {/* Links principais */}
       <div className="w-full max-w-sm flex flex-col gap-3">
-        {LINKS.map(({ to, emoji, label, sub, color }) => (
+        {LINKS.map(({ to, icon: Icon, label, sub, color }) => (
           <Link
             key={to}
             to={to}
             className={`flex items-center gap-4 px-5 py-4 rounded-2xl border transition-all duration-150 ${color}`}
           >
-            <span className="text-2xl leading-none">{emoji}</span>
+            <Icon className="w-6 h-6 flex-shrink-0" />
             <div className="min-w-0">
               <div className="font-display font-bold text-base tracking-tight text-[#1A1A1A] leading-tight">{label}</div>
               <div className="text-xs text-[#737373] mt-0.5 truncate">{sub}</div>

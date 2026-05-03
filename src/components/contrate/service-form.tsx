@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { X } from 'lucide-react'
+import { X, CheckCircle } from 'lucide-react'
 import { SERVICE_CATEGORY_LABELS } from '@/types/database'
 import type { ServiceCategory } from '@/types/database'
 import { useSubmitService } from '@/hooks/useServices'
@@ -46,7 +46,7 @@ export function ServiceForm({ onClose }: Props) {
 
         {sent ? (
           <div className="px-6 py-10 text-center">
-            <div className="text-4xl mb-4">🎉</div>
+            <CheckCircle className="w-10 h-10 mb-4 text-teal mx-auto" />
             <h3 className="font-display font-bold text-xl mb-2">Recebemos!</h3>
             <p className="text-[#737373] text-sm leading-relaxed">
               Vamos revisar e publicar em até 24 horas. Fique de olho no WhatsApp — podemos entrar em contato para confirmar.

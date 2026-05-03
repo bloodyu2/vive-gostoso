@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import { Star, Tag, Calendar, Briefcase, ClipboardList, Car } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { useAdminStats } from '@/hooks/useAdminStats'
 import { useAuth } from '@/hooks/useAuth'
@@ -22,45 +24,45 @@ function AdminInner() {
   const stats = statsQuery.data
   const { user, signOut } = useAuth()
 
-  const modules = [
+  const modules: { to: string; icon: LucideIcon; title: string; desc: string; badge: number }[] = [
     {
       to: '/cadastre/admin/reviews',
-      emoji: '🌟',
+      icon: Star,
       title: 'Avaliações',
       desc: 'Aprovar ou rejeitar avaliações de negócios.',
       badge: stats?.pendingReviews ?? 0,
     },
     {
       to: '/cadastre/admin/claims',
-      emoji: '🏷️',
+      icon: Tag,
       title: 'Reivindicações',
       desc: 'Aprovar ou rejeitar pedidos de ownership.',
       badge: stats?.pendingClaims ?? 0,
     },
     {
       to: '/cadastre/admin/events',
-      emoji: '🗓️',
+      icon: Calendar,
       title: 'Eventos',
       desc: 'Aprovar ou rejeitar submissões de eventos da comunidade.',
       badge: stats?.pendingEvents ?? 0,
     },
     {
       to: '/cadastre/admin/services',
-      emoji: '💼',
+      icon: Briefcase,
       title: 'Serviços CONTRATE',
       desc: 'Publicar ou rejeitar serviços de moradores.',
       badge: stats?.pendingServices ?? 0,
     },
     {
       to: '/cadastre/admin/jobs',
-      emoji: '📋',
+      icon: ClipboardList,
       title: 'Vagas CONTRATE',
       desc: 'Publicar ou rejeitar vagas de emprego.',
       badge: stats?.pendingJobs ?? 0,
     },
     {
       to: '/cadastre/admin/transfers',
-      emoji: '🚗',
+      icon: Car,
       title: 'Transfers',
       desc: 'Publicar ou rejeitar prestadores de transfer.',
       badge: stats?.pendingTransfers ?? 0,
@@ -119,14 +121,14 @@ function AdminInner() {
 
       {/* Module cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {modules.map(({ to, emoji, title, desc, badge }) => (
+        {modules.map(({ to, icon: Icon, title, desc, badge }) => (
           <Link
             key={to}
             to={to}
             className="relative bg-white border border-[#E8E4DF] rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all block"
           >
             <Badge count={badge} />
-            <div className="text-3xl mb-3">{emoji}</div>
+            <Icon className="w-7 h-7 mb-3 text-[#1A1A1A]" />
             <p className="font-semibold text-[#1A1A1A] text-lg mb-1">{title}</p>
             <p className="text-sm text-[#737373]">{desc}</p>
           </Link>

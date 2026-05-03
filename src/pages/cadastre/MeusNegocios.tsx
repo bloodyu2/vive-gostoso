@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Plus, Pencil, Eye, EyeOff, ExternalLink, Copy, Check } from 'lucide-react'
+import { Plus, Pencil, Eye, EyeOff, ExternalLink, Copy, Check, Store } from 'lucide-react'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
@@ -112,7 +112,7 @@ function MeusNegociosInner() {
 
       {businesses.length === 0 ? (
         <div className="text-center py-16 border-2 border-dashed border-[#E8E4DF] rounded-2xl">
-          <div className="text-4xl mb-3">🏪</div>
+          <Store className="w-10 h-10 mb-3 text-[#737373] mx-auto" />
           <p className="text-[#737373] text-sm mb-4">
             Ainda não tem nenhum negócio vinculado à sua conta.
           </p>

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Car } from 'lucide-react'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { useAdminTransfers, useModerateTransfer } from '@/hooks/useTransfers'
 import type { Transfer } from '@/types/database'
@@ -131,7 +132,7 @@ function AdminTransfersInner() {
             </div>
             {pending.length === 0 ? (
               <div className="text-center py-10 border-2 border-dashed border-[#E8E4DF] rounded-2xl">
-                <div className="text-3xl mb-2">🚗</div>
+                <Car className="w-8 h-8 mb-2 text-[#737373] mx-auto" />
                 <p className="text-[#737373] text-sm font-semibold">Nenhum transfer pendente.</p>
                 <p className="text-xs text-[#B0A99F] mt-1">Tudo moderado!</p>
               </div>

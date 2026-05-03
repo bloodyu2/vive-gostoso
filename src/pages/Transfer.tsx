@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   X, Car, Users, Clock, Languages, MessageCircle, Plus,
-  CreditCard, AlertCircle, MapPin,
+  CreditCard, AlertCircle, MapPin, CheckCircle,
 } from 'lucide-react'
 import { useTransfers, useSubmitTransfer } from '@/hooks/useTransfers'
 import type { TransferFormData } from '@/hooks/useTransfers'
@@ -418,7 +418,7 @@ function RegistrationModal({ onClose }: RegistrationModalProps) {
 
         {sent ? (
           <div className="px-6 py-10 text-center">
-            <div className="text-4xl mb-4">🎉</div>
+            <CheckCircle className="w-10 h-10 mb-4 text-teal mx-auto" />
             <h3 className="font-display font-bold text-xl mb-2">{t('transfer.modal_sucesso_titulo')}</h3>
             <p className="text-[#737373] text-sm leading-relaxed">{t('transfer.modal_sucesso_desc')}</p>
             <button onClick={onClose} className="mt-6 bg-teal text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-teal-dark transition-colors">

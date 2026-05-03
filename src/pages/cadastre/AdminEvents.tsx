@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { CalendarCheck } from 'lucide-react'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { usePendingEventSubmissions, useApproveEventSubmission, useRejectEventSubmission } from '@/hooks/useEventSubmissions'
 import { Button } from '@/components/ui/button'
@@ -74,7 +75,7 @@ function AdminEventsInner() {
         </div>
       ) : submissions.length === 0 ? (
         <div className="text-center py-16 border-2 border-dashed border-[#E8E4DF] rounded-2xl">
-          <div className="text-4xl mb-3">🎉</div>
+          <CalendarCheck className="w-10 h-10 mb-3 text-teal mx-auto" />
           <p className="text-[#737373] text-sm">Nenhuma submissão pendente. Tudo em dia!</p>
         </div>
       ) : (

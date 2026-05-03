@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { MapPin, X } from 'lucide-react'
+import { MapPin, X, Utensils, BedDouble, Compass, Wrench } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { useLocalePath } from '@/hooks/useLocalePath'
@@ -19,11 +20,11 @@ const VERB_COLOR: Record<string, string> = {
   resolva: '#1A1A1A',
 }
 
-const VERB_EMOJI: Record<string, string> = {
-  come:    '🍽',
-  fique:   '🏠',
-  passeie: '🏄',
-  resolva: '🔧',
+const VERB_ICON: Record<string, LucideIcon> = {
+  come:    Utensils,
+  fique:   BedDouble,
+  passeie: Compass,
+  resolva: Wrench,
 }
 
 interface PopupBusiness {
@@ -218,21 +219,24 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
           {/* Jump pills — only shown when 2+ categories have businesses */}
           {activeVerbs.length > 1 && (
             <div className="flex gap-2 px-5 pb-3 overflow-x-auto scrollbar-none">
-              {activeVerbs.map(verb => (
-                <button
-                  key={verb}
-                  onClick={() => jumpToSection(verb)}
-                  className="flex-shrink-0 flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors hover:opacity-80"
-                  style={{
-                    borderColor: VERB_COLOR[verb] + '55',
-                    color: VERB_COLOR[verb],
-                    background: VERB_COLOR[verb] + '10',
-                  }}
-                >
-                  <span>{VERB_EMOJI[verb]}</span>
-                  {VERB_LABEL[verb]}
-                </button>
-              ))}
+              {activeVerbs.map(verb => {
+                const VerbIcon = VERB_ICON[verb]
+                return (
+                  <button
+                    key={verb}
+                    onClick={() => jumpToSection(verb)}
+                    className="flex-shrink-0 flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors hover:opacity-80"
+                    style={{
+                      borderColor: VERB_COLOR[verb] + '55',
+                      color: VERB_COLOR[verb],
+                      background: VERB_COLOR[verb] + '10',
+                    }}
+                  >
+                    {VerbIcon && <VerbIcon className="w-3.5 h-3.5" />}
+                    {VERB_LABEL[verb]}
+                  </button>
+                )
+              })}
             </div>
           )}
         </div>

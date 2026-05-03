@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { X } from 'lucide-react'
+import { X, CheckCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useSubmitEvent } from '@/hooks/useEventSubmissions'
 import type { EventSubmission } from '@/types/database'
@@ -76,7 +76,7 @@ export function EventSubmitForm({ open, onClose }: Props) {
 
         {done ? (
           <div className="px-6 py-12 text-center">
-            <div className="text-5xl mb-4">🎉</div>
+            <CheckCircle className="w-12 h-12 mb-4 text-teal mx-auto" />
             <h3 className="font-display font-semibold text-xl mb-2">Evento enviado!</h3>
             <p className="text-sm text-[#737373] mb-6">
               Recebemos sua sugestão. Vamos revisar e publicar em breve.

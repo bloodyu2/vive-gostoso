@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useSearchParams, Navigate } from 'react-router-dom'
+import { CheckCircle, Store, PlusCircle, Eye } from 'lucide-react'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { useAuth } from '@/hooks/useAuth'
 import { useProfile } from '@/hooks/useProfile'
@@ -67,7 +68,7 @@ function PainelInner() {
       {/* Success banner */}
       {successMsg && (
         <div className="mb-6 bg-teal/10 border border-teal/20 rounded-2xl p-4 flex items-center gap-3">
-          <span className="text-2xl">🎉</span>
+          <CheckCircle className="w-6 h-6 text-teal flex-shrink-0" />
           <div>
             <p className="font-semibold text-teal text-sm">Associação confirmada!</p>
             <p className="text-xs text-teal/80 mt-0.5">Seu negócio agora aparece com o selo verificado.</p>
@@ -78,17 +79,17 @@ function PainelInner() {
       {/* Module grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Link to="/cadastre/negocios" className="bg-white border border-[#E8E4DF] rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all">
-          <div className="text-2xl mb-2">🏪</div>
+          <Store className="w-6 h-6 mb-2 text-[#1A1A1A]" />
           <h2 className="font-semibold text-lg">Gerenciar negócios</h2>
           <p className="text-sm text-[#737373] mt-1">Veja, edite e publique seus negócios cadastrados.</p>
         </Link>
         <Link to="/cadastre/perfil" className="bg-white border border-[#E8E4DF] rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all">
-          <div className="text-2xl mb-2">➕</div>
+          <PlusCircle className="w-6 h-6 mb-2 text-[#1A1A1A]" />
           <h2 className="font-semibold text-lg">Adicionar novo negócio</h2>
           <p className="text-sm text-[#737373] mt-1">Cadastre mais um negócio na plataforma.</p>
         </Link>
         <Link to="/cadastre/preview" className="bg-white border border-[#E8E4DF] rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all">
-          <div className="text-2xl mb-2">👁</div>
+          <Eye className="w-6 h-6 mb-2 text-[#1A1A1A]" />
           <h2 className="font-semibold text-lg">Preview</h2>
           <p className="text-sm text-[#737373] mt-1">Como seu negócio aparece no diretório.</p>
         </Link>
