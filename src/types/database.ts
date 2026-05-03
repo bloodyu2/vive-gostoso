@@ -166,6 +166,27 @@ export interface BlogPost {
   created_at: string
 }
 
+export interface TransferRoute {
+  from: string
+  to: string
+  price_brl: number
+}
+
+export interface Transfer {
+  id: string
+  provider_name: string
+  whatsapp: string
+  photo_url: string | null
+  vehicle_type: string | null
+  max_passengers: number
+  routes: TransferRoute[] | null
+  available_hours: string | null
+  languages: string[] | null
+  description: string | null
+  active: boolean
+  created_at: string
+}
+
 export interface ClaimRequest {
   id: string
   business_id: string
@@ -210,6 +231,7 @@ export type Database = {
       gostoso_blog_posts:       { Row: BlogPost; Insert: Omit<BlogPost, 'id' | 'created_at'>; Update: Partial<BlogPost> }
       gostoso_claim_requests:   { Row: ClaimRequest; Insert: Omit<ClaimRequest, 'id' | 'created_at' | 'resolved_at'>; Update: Partial<Pick<ClaimRequest, 'status' | 'admin_note' | 'resolved_at'>> }
       gostoso_event_submissions: { Row: EventSubmission; Insert: Omit<EventSubmission, 'id' | 'created_at' | 'reviewed_at'> & { is_approved?: false }; Update: Partial<Pick<EventSubmission, 'is_approved' | 'admin_note' | 'reviewed_at'>> }
+      gostoso_transfers:        { Row: Transfer; Insert: Omit<Transfer, 'id' | 'created_at'>; Update: Partial<Omit<Transfer, 'id' | 'created_at'>> }
     }
   }
 }

@@ -68,6 +68,7 @@ export function Header() {
     { to: lp('/conheca'),   label: t('nav.conheca'),    sub: t('nav.cidade_praias'),     color: 'text-[#3D8B5A]', bare: '/conheca' },
     { to: lp('/resolva'),   label: t('nav.resolva'),    sub: t('nav.comercio_servicos'), color: 'text-[#7C3AED]', bare: '/resolva' },
     { to: lp('/contrate'),  label: t('nav.contrate'),   sub: t('nav.freelancers_vagas'), color: 'text-ocre',       bare: '/contrate' },
+    { to: lp('/transfer'),  label: t('nav.transfer'),   sub: t('nav.transfer_sub'),      color: 'text-[#1A6FD6]', bare: '/transfer' },
   ]
 
   const NAV_ALL = [...NAV_MAIN, ...NAV_DISCOVER]

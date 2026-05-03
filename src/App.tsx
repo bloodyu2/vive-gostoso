@@ -35,6 +35,7 @@ import AdminJobs from '@/pages/cadastre/AdminJobs'
 import ResetarSenha from '@/pages/cadastre/ResetarSenha'
 import Bio from '@/pages/Bio'
 import Evento from '@/pages/Evento'
+import Transfer from '@/pages/Transfer'
 
 /**
  * Public page routes — defined once as JSX element array and reused
@@ -57,6 +58,7 @@ const PUBLIC_ROUTES = [
   <Route key="blog-slug"  path="blog/:slug"        element={<PageWrapper><BlogPost /></PageWrapper>} />,
   <Route key="negocio"    path="negocio/:slug"     element={<PageWrapper><Negocio /></PageWrapper>} />,
   <Route key="evento"     path="evento/:id"        element={<PageWrapper><Evento /></PageWrapper>} />,
+  <Route key="transfer"   path="transfer"          element={<PageWrapper><Transfer /></PageWrapper>} />,
 ]
 
 export default function App() {
