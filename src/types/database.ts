@@ -183,6 +183,10 @@ export interface Transfer {
   available_hours: string | null
   languages: string[] | null
   description: string | null
+  advance_notice: string | null
+  payment_methods: string[] | null
+  meeting_point: string | null
+  observations: string | null
   active: boolean
   created_at: string
 }

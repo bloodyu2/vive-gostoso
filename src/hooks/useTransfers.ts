@@ -10,6 +10,10 @@ export interface TransferFormData {
   available_hours: string
   languages: string[]
   description: string
+  advance_notice: string
+  payment_methods: string[]
+  meeting_point: string
+  observations: string
 }
 
 export function useTransfers() {
@@ -71,7 +75,17 @@ export function useSubmitTransfer() {
       const { error } = await supabase
         .from('gostoso_transfers')
         .insert({
-          ...form,
+          provider_name: form.provider_name,
+          whatsapp: form.whatsapp,
+          vehicle_type: form.vehicle_type,
+          max_passengers: form.max_passengers,
+          available_hours: form.available_hours,
+          languages: form.languages,
+          description: form.description,
+          advance_notice: form.advance_notice || null,
+          payment_methods: form.payment_methods.length > 0 ? form.payment_methods : null,
+          meeting_point: form.meeting_point || null,
+          observations: form.observations || null,
           photo_url: null,
           routes: null,
           active: false,
