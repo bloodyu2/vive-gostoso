@@ -58,6 +58,13 @@ function AdminInner() {
       desc: 'Publicar ou rejeitar vagas de emprego.',
       badge: stats?.pendingJobs ?? 0,
     },
+    {
+      to: '/cadastre/admin/transfers',
+      emoji: '🚗',
+      title: 'Transfers',
+      desc: 'Publicar ou rejeitar prestadores de transfer.',
+      badge: stats?.pendingTransfers ?? 0,
+    },
   ]
 
   return (
@@ -83,19 +90,20 @@ function AdminInner() {
 
       {/* Stat bar */}
       {statsQuery.isLoading ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-8">
-          {[1, 2, 3, 4, 5, 6].map(i => (
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 mb-8">
+          {[1, 2, 3, 4, 5, 6, 7].map(i => (
             <div key={i} className="h-20 bg-[#E8E4DF] rounded-xl animate-pulse" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 mb-8">
           {[
             { value: stats?.pendingReviews ?? '—', label: 'Avaliações' },
             { value: stats?.pendingClaims ?? '—', label: 'Reivind.' },
             { value: stats?.pendingEvents ?? '—', label: 'Eventos' },
             { value: stats?.pendingServices ?? '—', label: 'Serviços' },
             { value: stats?.pendingJobs ?? '—', label: 'Vagas' },
+            { value: stats?.pendingTransfers ?? '—', label: 'Transfers' },
             { value: stats?.totalBusinesses ?? '—', label: 'Negócios' },
           ].map(({ value, label }) => (
             <div

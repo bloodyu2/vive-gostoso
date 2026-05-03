@@ -7,6 +7,7 @@ export interface AdminStats {
   pendingServices: number
   pendingJobs: number
   pendingEvents: number
+  pendingTransfers: number
   totalBusinesses: number
 }
 
@@ -21,6 +22,7 @@ export function useAdminStats() {
         servicesResult,
         jobsResult,
         eventsResult,
+        transfersResult,
         businessesResult,
       ] = await Promise.all([
         supabase
@@ -44,6 +46,10 @@ export function useAdminStats() {
           .select('id', { count: 'exact', head: true })
           .eq('is_approved', false),
         supabase
+          .from('gostoso_transfers')
+          .select('id', { count: 'exact', head: true })
+          .eq('active', false),
+        supabase
           .from('gostoso_businesses')
           .select('id', { count: 'exact', head: true }),
       ])
@@ -53,15 +59,17 @@ export function useAdminStats() {
       if (servicesResult.error) throw servicesResult.error
       if (jobsResult.error) throw jobsResult.error
       if (eventsResult.error) throw eventsResult.error
+      if (transfersResult.error) throw transfersResult.error
       if (businessesResult.error) throw businessesResult.error
 
       return {
-        pendingReviews:  reviewsResult.count ?? 0,
-        pendingClaims:   claimsResult.count ?? 0,
-        pendingServices: servicesResult.count ?? 0,
-        pendingJobs:     jobsResult.count ?? 0,
-        pendingEvents:   eventsResult.count ?? 0,
-        totalBusinesses: businessesResult.count ?? 0,
+        pendingReviews:   reviewsResult.count ?? 0,
+        pendingClaims:    claimsResult.count ?? 0,
+        pendingServices:  servicesResult.count ?? 0,
+        pendingJobs:      jobsResult.count ?? 0,
+        pendingEvents:    eventsResult.count ?? 0,
+        pendingTransfers: transfersResult.count ?? 0,
+        totalBusinesses:  businessesResult.count ?? 0,
       }
     },
   })

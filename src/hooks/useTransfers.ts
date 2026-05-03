@@ -27,6 +27,43 @@ export function useTransfers() {
   })
 }
 
+export function useAdminTransfers() {
+  return useQuery({
+    queryKey: ['transfers', 'admin'],
+    queryFn: async (): Promise<Transfer[]> => {
+      const { data, error } = await supabase
+        .from('gostoso_transfers')
+        .select('*')
+        .order('active', { ascending: true })
+        .order('created_at', { ascending: false })
+      if (error) throw error
+      return (data ?? []) as Transfer[]
+    },
+  })
+}
+
+export function useModerateTransfer() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, action }: { id: string; action: 'approve' | 'reject' | 'deactivate' }) => {
+      if (action === 'reject') {
+        const { error } = await supabase.from('gostoso_transfers').delete().eq('id', id)
+        if (error) throw error
+      } else {
+        const { error } = await supabase
+          .from('gostoso_transfers')
+          .update({ active: action === 'approve' })
+          .eq('id', id)
+        if (error) throw error
+      }
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['transfers'] })
+      qc.invalidateQueries({ queryKey: ['admin-stats'] })
+    },
+  })
+}
+
 export function useSubmitTransfer() {
   const qc = useQueryClient()
   return useMutation({
