@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 function useBlogPosts() {
   return useQuery({
@@ -20,6 +21,10 @@ function useBlogPosts() {
 }
 
 export default function Blog() {
+  usePageMeta({
+    title: 'Blog — São Miguel do Gostoso',
+    description: 'Artigos, dicas e novidades sobre São Miguel do Gostoso. Gastronomia, surf, kite, eventos e cultura local.',
+  })
   const { data: posts = [], isLoading } = useBlogPosts()
   const { t } = useTranslation()
 

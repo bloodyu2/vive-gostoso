@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 const STEPS = [
   {
@@ -53,6 +54,10 @@ const FUTURE = [
 ]
 
 export default function Sobre() {
+  usePageMeta({
+    title: 'Sobre o Vive Gostoso',
+    description: 'Conheça o projeto por trás do guia digital de São Miguel do Gostoso — feito pela comunidade, para a comunidade.',
+  })
   const { t } = useTranslation()
   const lp = useLocalePath()
 

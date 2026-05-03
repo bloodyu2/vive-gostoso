@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 function useBlogPost(slug: string) {
   return useQuery({
@@ -26,6 +27,14 @@ export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>()
   const { data: post, isLoading } = useBlogPost(slug ?? '')
   const { t } = useTranslation()
+
+  usePageMeta({
+    title: post?.title ?? 'Blog — São Miguel do Gostoso',
+    description: post?.excerpt ?? 'Artigos e dicas sobre São Miguel do Gostoso.',
+    image: post?.cover_url ?? undefined,
+    url: slug ? `https://vivegostoso.com.br/blog/${slug}` : undefined,
+    type: 'article',
+  })
 
   if (isLoading) {
     return (
