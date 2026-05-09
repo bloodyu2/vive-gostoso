@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Plus, Pencil, Eye, EyeOff, ExternalLink, Copy, Check, Store } from 'lucide-react'
+import { Link, useSearchParams } from 'react-router-dom'
+import { Plus, Pencil, Eye, EyeOff, ExternalLink, Copy, Check, Store, X, PartyPopper } from 'lucide-react'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
@@ -61,16 +61,16 @@ function PublishToggle({ biz, onDone }: { biz: BusinessSummary; onDone: () => vo
     <button
       onClick={toggle}
       disabled={loading}
-      title={biz.is_published ? 'Despublicar' : 'Publicar'}
+      title={biz.is_published ? 'Despublicar' : 'Publicar agora'}
       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-colors disabled:opacity-50 ${
         biz.is_published
           ? 'border-teal/30 text-teal hover:bg-teal/5'
-          : 'border-[#E8E4DF] text-[#737373] hover:border-teal hover:text-teal'
+          : 'bg-teal text-white border-teal hover:bg-teal/90'
       }`}
     >
       {biz.is_published
         ? <><EyeOff className="w-3.5 h-3.5" /> Despublicar</>
-        : <><Eye className="w-3.5 h-3.5" /> Publicar</>}
+        : <><Eye className="w-3.5 h-3.5" /> Publicar agora</>}
     </button>
   )
 }
@@ -78,6 +78,13 @@ function PublishToggle({ biz, onDone }: { biz: BusinessSummary; onDone: () => vo
 function MeusNegociosInner() {
   const { data: businesses = [], isLoading } = useMyBusinesses()
   const invalidate = useInvalidateMyBusinesses()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const isNew = searchParams.get('new') === '1'
+
+  function dismissNew() {
+    searchParams.delete('new')
+    setSearchParams(searchParams, { replace: true })
+  }
 
   if (isLoading) {
     return (
@@ -93,6 +100,23 @@ function MeusNegociosInner() {
 
   return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-12">
+      {/* Banner pós-criação */}
+      {isNew && (
+        <div className="relative flex items-start gap-3 bg-teal/5 border border-teal/30 rounded-2xl px-5 py-4 mb-6">
+          <PartyPopper className="w-5 h-5 text-teal flex-shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <p className="font-semibold text-sm text-[#1A1A1A]">Negócio criado com sucesso!</p>
+            <p className="text-sm text-[#737373] mt-0.5">
+              Seu negócio está salvo como <strong>rascunho</strong> — ainda não está visível no site.
+              Complete o perfil e clique em <strong>Publicar</strong> quando estiver pronto.
+            </p>
+          </div>
+          <button onClick={dismissNew} className="text-[#B0A99F] hover:text-[#737373] transition-colors flex-shrink-0">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="font-display text-3xl font-semibold">Meus negócios</h1>
@@ -123,7 +147,9 @@ function MeusNegociosInner() {
       ) : (
         <div className="space-y-3">
           {businesses.map(b => (
-            <div key={b.id} className="bg-white border border-[#E8E4DF] rounded-2xl p-4 md:p-5">
+            <div key={b.id} className={`bg-white rounded-2xl p-4 md:p-5 border ${
+              b.is_published ? 'border-[#E8E4DF]' : 'border-ocre/40 bg-ocre/[0.02]'
+            }`}>
               {/* Top row: thumb + info */}
               <div className="flex items-start gap-3">
                 {/* Cover thumb */}
@@ -154,6 +180,11 @@ function MeusNegociosInner() {
                   <p className="text-[10px] text-[#C4BFBA] font-mono mt-0.5 truncate">
                     vivegostoso.com.br/negocio/{b.slug}
                   </p>
+                  {!b.is_published && (
+                    <p className="text-[11px] text-ocre font-medium mt-1">
+                      Não visível no site — publique quando estiver pronto.
+                    </p>
+                  )}
                 </div>
               </div>
 

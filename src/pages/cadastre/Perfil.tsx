@@ -39,6 +39,24 @@ function makeSlug(name: string) {
     .replace(/\s+/g, '-')
     .replace(/[^a-z0-9-]/g, '')
     .replace(/-+$/g, '')
+    .replace(/^-+/g, '')
+}
+
+async function ensureUniqueSlug(baseSlug: string, excludeId?: string): Promise<string> {
+  let slug = baseSlug
+  let suffix = 2
+  for (;;) {
+    let q = supabase
+      .from('gostoso_businesses')
+      .select('id', { count: 'exact', head: true })
+      .eq('slug', slug)
+    if (excludeId) q = q.neq('id', excludeId)
+    const { count } = await q
+    if (!count) break
+    slug = `${baseSlug}-${suffix}`
+    suffix++
+  }
+  return slug
 }
 
 const INPUT_CLS =
@@ -585,10 +603,12 @@ function PerfilInner() {
     if (!profileId) return
     setSaving(true)
 
-    const slug = makeSlug(biz.name ?? '')
+    const baseSlug = makeSlug(biz.name ?? '')
     const services = (biz.services ?? []).filter(s => s.name.trim())
+    let isNew = false
 
     if (biz.id) {
+      const slug = await ensureUniqueSlug(baseSlug, biz.id)
       await supabase
         .from('gostoso_businesses')
         .update({
@@ -608,6 +628,8 @@ function PerfilInner() {
         })
         .eq('id', biz.id)
     } else {
+      isNew = true
+      const slug = await ensureUniqueSlug(baseSlug)
       const { data: newBiz } = await supabase
         .from('gostoso_businesses')
         .insert([{
@@ -642,7 +664,7 @@ function PerfilInner() {
 
     setSaving(false)
     invalidateMyBusinesses()
-    navigate('/cadastre/negocios')
+    navigate(isNew ? '/cadastre/negocios?new=1' : '/cadastre/negocios')
   }
 
   const textFields = [

@@ -72,7 +72,7 @@ function AdminInner() {
       icon: Store,
       title: 'Negócios',
       desc: 'Publicar, despublicar e editar slugs de negócios.',
-      badge: 0,
+      badge: stats?.draftBusinesses ?? 0,
     },
   ]
 
@@ -99,13 +99,13 @@ function AdminInner() {
 
       {/* Stat bar */}
       {statsQuery.isLoading ? (
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 mb-8">
-          {[1, 2, 3, 4, 5, 6, 7].map(i => (
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3 mb-8">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
             <div key={i} className="h-20 bg-[#E8E4DF] rounded-xl animate-pulse" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3 mb-8">
           {[
             { value: stats?.pendingReviews ?? '—', label: 'Avaliações' },
             { value: stats?.pendingClaims ?? '—', label: 'Reivind.' },
@@ -114,6 +114,7 @@ function AdminInner() {
             { value: stats?.pendingJobs ?? '—', label: 'Vagas' },
             { value: stats?.pendingTransfers ?? '—', label: 'Transfers' },
             { value: stats?.totalBusinesses ?? '—', label: 'Negócios' },
+            { value: stats?.draftBusinesses ?? '—', label: 'Rascunhos' },
           ].map(({ value, label }) => (
             <div
               key={label}
