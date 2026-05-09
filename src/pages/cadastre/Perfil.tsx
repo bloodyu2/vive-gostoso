@@ -32,11 +32,13 @@ type PartialBusiness = Partial<Pick<Business,
 
 function makeSlug(name: string) {
   return name
+    .trim()
     .toLowerCase()
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
     .replace(/\s+/g, '-')
     .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+$/g, '')
 }
 
 const INPUT_CLS =

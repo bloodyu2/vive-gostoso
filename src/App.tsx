@@ -33,6 +33,7 @@ import AdminEvents from '@/pages/cadastre/AdminEvents'
 import AdminServices from '@/pages/cadastre/AdminServices'
 import AdminJobs from '@/pages/cadastre/AdminJobs'
 import AdminTransfers from '@/pages/cadastre/AdminTransfers'
+import AdminBusinesses from '@/pages/cadastre/AdminBusinesses'
 import ResetarSenha from '@/pages/cadastre/ResetarSenha'
 import Bio from '@/pages/Bio'
 import Evento from '@/pages/Evento'
@@ -102,6 +103,7 @@ export default function App() {
         <Route path="/cadastre/admin/services"      element={<PageWrapper><AdminServices /></PageWrapper>} />
         <Route path="/cadastre/admin/jobs"          element={<PageWrapper><AdminJobs /></PageWrapper>} />
         <Route path="/cadastre/admin/transfers"     element={<PageWrapper><AdminTransfers /></PageWrapper>} />
+        <Route path="/cadastre/admin/businesses"    element={<PageWrapper><AdminBusinesses /></PageWrapper>} />
 
         {/* ── 404 ── */}
         <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />

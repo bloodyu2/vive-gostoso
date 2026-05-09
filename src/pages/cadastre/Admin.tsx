@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Star, Tag, Calendar, Briefcase, ClipboardList, Car } from 'lucide-react'
+import { Star, Tag, Calendar, Briefcase, ClipboardList, Car, Store } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { useAdminStats } from '@/hooks/useAdminStats'
@@ -66,6 +66,13 @@ function AdminInner() {
       title: 'Transfers',
       desc: 'Publicar ou rejeitar prestadores de transfer.',
       badge: stats?.pendingTransfers ?? 0,
+    },
+    {
+      to: '/cadastre/admin/businesses',
+      icon: Store,
+      title: 'Negócios',
+      desc: 'Publicar, despublicar e editar slugs de negócios.',
+      badge: 0,
     },
   ]
 
