@@ -1,36 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-teal: #0D7C7C;
-  --color-teal-dark: #0a6666;
-  --color-teal-light: #e6f5f5;
-  --color-ocre: #C97D2A;
-  --color-ocre-light: #fbf0e3;
-  --color-coral: #E05A3A;
-  --color-areia: #F5F2EE;
+  /* --- Typography --- */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-sans:    "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
 
-  --font-display: "Fraunces", Georgia, serif;
-  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  /* --- Brand: Teal Atlântico --- */
+  --color-teal-50:  #E6F5F5;
+  --color-teal-100: #CCE9E9;
+  --color-teal-500: #0D7C7C;
+  --color-teal-600: #0A6A6A;
+  --color-teal-700: #085E5E;
+  --color-teal:     #0D7C7C;
+
+  /* --- Brand: Ocre Nordestino --- */
+  --color-ocre-50:  #FBF0E3;
+  --color-ocre-100: #F5E0C5;
+  --color-ocre-400: #E8A04E;
+  --color-ocre-500: #C97D2A;
+  --color-ocre-700: #A05E1A;
+  --color-ocre:     #C97D2A;
+
+  /* --- Brand: Coral Barco --- */
+  --color-coral:        #E05A3A;
+  --color-coral-dark:   #C44A2C;
+  --color-coral-darker: #A83D22;
+
+  /* --- Neutrals --- */
+  --color-sand:        #F5F2EE;
+  --color-sand-bright: #FAF8F5;
+  --color-areia:       #F5F2EE;
+
+  /* --- Accent --- */
+  --color-green-coqueiro: #3D8B5A;
+  --color-sky:            #87CEEB;
+
+  /* --- Shadows --- */
+  --shadow-card:       0 1px 3px rgba(0,0,0,0.08);
+  --shadow-card-hover: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-modal:      0 8px 32px rgba(0,0,0,0.14);
+
+  /* --- Border radius --- */
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
 }
 
-@font-face {
-  font-family: "Fraunces";
-  src: url("/fonts/Fraunces-VariableFont.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
+/* --- shadcn/ui CSS variables (HSL channels, no hsl()) --- */
+:root {
+  --background:             245 242 238;
+  --foreground:             26 26 26;
+  --card:                   250 248 245;
+  --card-foreground:        26 26 26;
+  --popover:                250 248 245;
+  --popover-foreground:     26 26 26;
+  --primary:                13 124 124;
+  --primary-foreground:     255 255 255;
+  --secondary:              201 125 42;
+  --secondary-foreground:   255 255 255;
+  --muted:                  245 242 238;
+  --muted-foreground:       115 115 115;
+  --accent:                 224 90 58;
+  --accent-foreground:      255 255 255;
+  --destructive:            192 57 43;
+  --destructive-foreground: 255 255 255;
+  --border:                 196 196 196;
+  --input:                  196 196 196;
+  --ring:                   13 124 124;
+  --radius:                 0.75rem;
 }
 
-@font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url("/fonts/PlusJakartaSans-VariableFont.woff2") format("woff2");
-  font-weight: 200 800;
-  font-style: normal;
-  font-display: swap;
-}
-
+/* --- Base --- */
 html {
   overflow-x: hidden;
 }
@@ -39,11 +81,61 @@ body {
   font-family: var(--font-sans);
   background-color: #F5F2EE;
   color: #1A1A1A;
+  font-size: 16px;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
-  transition: background-color 0.2s, color 0.2s;
+  text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  transition: background-color 0.2s, color 0.2s;
 }
 
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+}
+
+/* --- Accessibility --- */
+*:focus-visible {
+  outline: 2px solid #0D7C7C;
+  outline-offset: 2px;
+}
+
+/* --- Scrollbar --- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #C4C4C4 transparent;
+}
+
+/* --- Verb identity classes --- */
+.verb {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+.verb-come      { color: #C97D2A; }
+.verb-fique     { color: #0D7C7C; }
+.verb-passeie   { color: #3D8B5A; }
+.verb-explore   { color: #E05A3A; }
+.verb-participe { color: #0D7C7C; }
+.verb-conheca   { color: #1A1A1A; }
+.verb-apoie     { color: #C97D2A; }
+.verb-vive      { color: #E05A3A; }
+
+/* --- Selection --- */
+::selection {
+  background: #E6F5F5;
+  color: #085E5E;
+}
+
+/* --- Dark mode --- */
 .dark body {
   background-color: #111111;
   color: #F0EDEA;

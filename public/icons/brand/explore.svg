@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="#E05A3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  
+  <circle cx="24" cy="22" r="14"></circle>
+  <circle cx="24" cy="22" r="4" fill="#E05A3A" stroke="none"></circle>
+  
+  <line x1="24" y1="8" x2="24" y2="12" stroke-width="1.4"></line>
+  <line x1="24" y1="32" x2="24" y2="36" stroke-width="1.4"></line>
+  <line x1="10" y1="22" x2="14" y2="22" stroke-width="1.4"></line>
+  <line x1="34" y1="22" x2="38" y2="22" stroke-width="1.4"></line>
+  
+  <text x="22" y="7" font-family="system-ui" font-size="5" font-weight="700" fill="#E05A3A" stroke="none">N</text>
+  
+  <path d="M24 36 Q24 42 24 44" stroke-width="1.5" opacity=".5"></path>
+  <circle cx="24" cy="44" r="2" fill="#E05A3A" stroke="none"></circle>
+</svg>

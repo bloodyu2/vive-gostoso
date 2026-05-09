@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360">
+  <defs>
+    
+    <filter id="grain" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3"></feTurbulence>
+      <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0"></feColorMatrix>
+      <feComposite in2="SourceGraphic" operator="in"></feComposite>
+    </filter>
+    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" scale="2.4"></feDisplacementMap>
+    </filter>
+    <radialGradient id="sun" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#E8A04E"></stop>
+      <stop offset="100%" stop-color="#C97D2A"></stop>
+    </radialGradient>
+  </defs>
+
+  
+  <text x="80" y="56" class="city">São Miguel do Gostoso</text>
+  <text x="820" y="56" class="city" text-anchor="end">RN · Brasil</text>
+  <line x1="80" y1="74" x2="820" y2="74" stroke="#1A1A1A" stroke-width="1.2" opacity="0.55"></line>
+
+  
+  <circle cx="118" cy="180" r="36" fill="url(#sun)" opacity="0.78"></circle>
+
+  
+  <g filter="url(#rough)">
+    <text x="78" y="220" class="vive">Vive</text>
+  </g>
+  
+  <g filter="url(#grain)">
+    <text x="78" y="220" class="vive" style="fill:#1A1A1A">Vive</text>
+  </g>
+
+  
+  <g filter="url(#rough)">
+    <text x="86" y="310" class="gost">Gostoso</text>
+  </g>
+  <g filter="url(#grain)" opacity="0.65">
+    <text x="86" y="310" class="gost" style="fill:#1A1A1A">Gostoso</text>
+  </g>
+
+  
+  <circle cx="708" cy="298" r="14" fill="#C97D2A"></circle>
+
+  
+  <path d="M 728 298 Q 760 280 790 290 T 850 286" stroke="#0D7C7C" stroke-width="2.4" fill="none" stroke-linecap="round" opacity="0.7"></path>
+  <path d="M 728 298 Q 762 312 794 304 T 854 314" stroke="#C97D2A" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.55"></path>
+
+  
+  <g transform="translate(740, 56)">
+    <path d="M 0 12 L 28 12 L 26 16 L 2 16 Z" fill="#1A1A1A" opacity="0.7"></path>
+    <path d="M 14 12 L 14 -8 L 22 12 Z" fill="#1A1A1A" opacity="0.7"></path>
+  </g>
+</svg>

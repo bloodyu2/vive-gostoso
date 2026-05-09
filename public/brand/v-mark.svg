@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  
+  <defs>
+    
+  </defs>
+  <rect class="bg" width="200" height="200" rx="32"></rect>
+  
+  <path class="wave-1" d="&#xA;    M 38 50&#xA;    Q 50 55 60 70&#xA;    L 100 150&#xA;    L 92 158&#xA;    L 50 80&#xA;    Q 42 65 30 60&#xA;    Z&#xA;  "></path>
+  <path class="wave-1" d="&#xA;    M 162 50&#xA;    Q 150 55 140 70&#xA;    L 100 150&#xA;    L 108 158&#xA;    L 150 80&#xA;    Q 158 65 170 60&#xA;    Z&#xA;  "></path>
+  
+  <path class="wave-2" d="&#xA;    M 70 60&#xA;    L 100 130&#xA;    L 130 60&#xA;    L 122 58&#xA;    L 100 110&#xA;    L 78 58&#xA;    Z&#xA;  " opacity="0.95"></path>
+  
+  <circle cx="155" cy="148" r="9" fill="#C97D2A"></circle>
+</svg>
