@@ -3,6 +3,7 @@ import { AdminGuard } from '@/components/auth/admin-guard'
 import { useAdminPendingJobs, useModerateJob } from '@/hooks/useJobs'
 import { CONTRACT_TYPE_LABELS } from '@/types/database'
 import type { JobListing } from '@/types/database'
+import { buildWhatsAppLink } from '@/lib/whatsapp'
 
 export default function AdminJobs() {
   return <AdminGuard><AdminJobsInner /></AdminGuard>
@@ -51,7 +52,7 @@ function JobRow({ job }: { job: JobListing }) {
       <div className="pt-1 border-t border-[#F0EDE8] text-xs text-[#A0A0A0]">
         WhatsApp:{' '}
         <a
-          href={`https://wa.me/${job.whatsapp}`}
+          href={buildWhatsAppLink(job.whatsapp)}
           target="_blank"
           rel="noopener noreferrer"
           className="text-teal hover:underline"

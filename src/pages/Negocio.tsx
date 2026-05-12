@@ -4,6 +4,7 @@ import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle, Share2, Ch
 import { Badge } from '@/components/ui/badge'
 import { useBusiness } from '@/hooks/useBusinesses'
 import { isBusinessOpen } from '@/lib/utils'
+import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { ManagedBadge } from '@/components/business/managed-badge'
 import { ClaimCta } from '@/components/business/claim-cta'
 import { Lightbox } from '@/components/ui/lightbox'
@@ -186,7 +187,7 @@ export default function Negocio() {
           {/* WhatsApp CTA */}
           {b.whatsapp && (
             <a
-              href={`https://wa.me/${b.whatsapp.replace(/\D/g, '')}`}
+              href={buildWhatsAppLink(b.whatsapp)}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1EBE57] text-white rounded-2xl px-5 py-4 text-sm font-semibold transition-colors"
@@ -225,7 +226,7 @@ export default function Negocio() {
             <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide">{t('negocio.contato')}</h3>
 
             {b.whatsapp && (
-              <a href={`https://wa.me/${b.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer"
+              <a href={buildWhatsAppLink(b.whatsapp)} target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-2.5 text-sm text-[#3D3D3D] hover:text-teal transition-colors">
                 <div className="w-8 h-8 rounded-lg bg-[#25D366]/10 flex items-center justify-center flex-shrink-0">
                   <Phone className="w-4 h-4 text-[#25D366]" />
