@@ -39,7 +39,7 @@ export default function BlogPostPage() {
 
   const jsonLd = useMemo(() => {
     if (!post) return undefined
-    return [
+    const blocks: Array<Record<string, unknown>> = [
       articleSchema({
         title: post.title,
         description: description ?? '',
@@ -56,6 +56,17 @@ export default function BlogPostPage() {
         { name: post.title, url },
       ]),
     ]
+    if (post.faq_jsonld) {
+      try {
+        const parsed = JSON.parse(post.faq_jsonld)
+        if (parsed && typeof parsed === 'object') {
+          blocks.push(parsed as Record<string, unknown>)
+        }
+      } catch {
+        // ignora JSON-LD malformado
+      }
+    }
+    return blocks
   }, [post, description, url])
 
   usePageMeta({
