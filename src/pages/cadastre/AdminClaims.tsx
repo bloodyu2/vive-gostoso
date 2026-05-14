@@ -47,10 +47,12 @@ function AdminClaimsInner() {
             <div key={claim.id} className="bg-white border border-[#E8E4DF] rounded-2xl p-6">
               <div className="flex flex-col sm:flex-row sm:items-start gap-4">
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-[#1A1A1A] truncate">{claim.business.name}</p>
+                  <p className="font-semibold text-[#1A1A1A] truncate">
+                    {claim.business?.name ?? <span className="text-[#B0A99F] italic">Negócio removido</span>}
+                  </p>
                   <p className="text-sm text-teal font-medium">
-                    {claim.profile.email ?? '—'}{' '}
-                    {claim.profile.full_name && (
+                    {claim.profile?.email ?? '—'}{' '}
+                    {claim.profile?.full_name && (
                       <span className="text-[#737373]">({claim.profile.full_name})</span>
                     )}
                   </p>
@@ -65,13 +67,15 @@ function AdminClaimsInner() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 sm:items-end sm:min-w-[200px]">
-                  <Link
-                    to={`/negocio/${claim.business.slug}`}
-                    target="_blank"
-                    className="text-xs text-[#737373] underline hover:text-teal transition-colors"
-                  >
-                    Ver negócio ↗
-                  </Link>
+                  {claim.business?.slug && (
+                    <Link
+                      to={`/negocio/${claim.business.slug}`}
+                      target="_blank"
+                      className="text-xs text-[#737373] underline hover:text-teal transition-colors"
+                    >
+                      Ver negócio ↗
+                    </Link>
+                  )}
                   <Button
                     variant="primary"
                     disabled={approve.isPending}
