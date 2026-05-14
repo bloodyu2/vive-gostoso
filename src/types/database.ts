@@ -164,6 +164,8 @@ export interface BlogPost {
   is_published: boolean
   published_at: string | null
   created_at: string
+  /** JSON-LD FAQPage (string) — injetado como <script type="application/ld+json"> */
+  faq_jsonld: string | null
 }
 
 export interface TransferRoute {
