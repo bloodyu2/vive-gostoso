@@ -60,6 +60,7 @@ export function Header() {
     { to: lp('/fique'),   label: t('nav.fique'),   color: 'text-teal',       bare: '/fique' },
     { to: lp('/passeie'), label: t('nav.passeie'), color: 'text-[#3D8B5A]', bare: '/passeie' },
     { to: lp('/apoie'),   label: t('nav.apoie'),   color: 'text-ocre',       bare: '/apoie' },
+    { to: lp('/blog'),    label: t('nav.blog'),    color: 'text-[#1A1A1A]', bare: '/blog' },
   ]
 
   const NAV_DISCOVER = [

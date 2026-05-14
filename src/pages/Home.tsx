@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useQuery } from '@tanstack/react-query'
 import { EventCard } from '@/components/events/event-card'
 import { BusinessCard } from '@/components/business/business-card'
 import { Hoje } from '@/components/home/hoje'
@@ -11,6 +12,24 @@ import { useStats } from '@/hooks/useStats'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useRecentBusinesses } from '@/hooks/useRecentBusinesses'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import { supabase } from '@/lib/supabase'
+import type { BlogPost } from '@/types/database'
+
+function useLatestBlogPosts(limit = 3) {
+  return useQuery({
+    queryKey: ['blog-posts-latest', limit],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('gostoso_blog_posts')
+        .select('id, slug, title, excerpt, cover_url, published_at, author, tags')
+        .eq('is_published', true)
+        .order('published_at', { ascending: false })
+        .limit(limit)
+      if (error) throw error
+      return (data ?? []) as BlogPost[]
+    },
+  })
+}
 
 export default function Home() {
   const { t } = useTranslation()
@@ -35,6 +54,7 @@ export default function Home() {
   const featured = allBusinesses.filter(b => b.is_featured)
   const { data: stats } = useStats()
   const { data: recentBusinesses = [] } = useRecentBusinesses()
+  const { data: latestPosts = [] } = useLatestBlogPosts(3)
 
   const verbsRef = useRef<HTMLDivElement>(null)
   const [scrolled, setScrolled] = useState(false)
@@ -245,6 +265,68 @@ export default function Home() {
           </span>
         </a>
       </section>
+
+      {/* ── Últimos do blog ── */}
+      {latestPosts.length > 0 && (
+        <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10 md:pb-14">
+          <div className="flex justify-between items-end mb-5">
+            <div>
+              <span className="text-xs font-bold tracking-widest uppercase text-[#737373]">{t('home.blog_eyebrow')}</span>
+              <h2 className="font-display text-xl md:text-2xl font-semibold mt-0.5">{t('home.blog_titulo')}</h2>
+            </div>
+            <Link to={lp('/blog')} className="text-teal text-sm font-semibold hover:underline">
+              {t('home.blog_ver_todos')} →
+            </Link>
+          </div>
+          <div className={`grid gap-4 md:gap-6 ${latestPosts.length === 1 ? 'grid-cols-1 max-w-md' : latestPosts.length === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'}`}>
+            {latestPosts.map(post => (
+              <Link
+                key={post.id}
+                to={lp(`/blog/${post.slug}`)}
+                className="group rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] bg-white dark:bg-[#222] hover:shadow-md hover:-translate-y-0.5 transition-all"
+              >
+                {post.cover_url ? (
+                  <div className="aspect-[16/10] overflow-hidden bg-[#E8E4DF] dark:bg-[#2D2D2D]">
+                    <img
+                      src={post.cover_url}
+                      alt={post.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                ) : (
+                  <div className="aspect-[16/10] bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center">
+                    <span className="text-5xl font-display font-bold text-white/30">{post.title.charAt(0)}</span>
+                  </div>
+                )}
+                <div className="p-4 md:p-5">
+                  {post.tags && post.tags.length > 0 && (
+                    <div className="flex gap-2 mb-2 flex-wrap">
+                      {post.tags.slice(0, 2).map(tag => (
+                        <span key={tag} className="text-[10px] font-bold uppercase tracking-wider text-teal">{tag}</span>
+                      ))}
+                    </div>
+                  )}
+                  <h3 className="font-display font-bold text-base md:text-lg text-[#1A1A1A] dark:text-white group-hover:text-teal transition-colors leading-snug line-clamp-3">
+                    {post.title}
+                  </h3>
+                  {post.excerpt && (
+                    <p className="mt-2 text-sm text-[#737373] leading-relaxed line-clamp-2">
+                      {post.excerpt}
+                    </p>
+                  )}
+                  <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-teal group-hover:gap-2.5 transition-all">
+                    {t('home.blog_ler')}
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ── Banner: Quer saber como funciona? ── */}
       <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10">

@@ -18,6 +18,7 @@
     "freelancers_vagas": "Freelancers & jobs",
     "transfer": "TRANSFER",
     "transfer_sub": "Transfer & tours",
+    "blog": "BLOG",
     "buscar": "Search",
     "minha_conta": "My account",
     "entrar": "Sign in",
@@ -52,7 +53,11 @@
     "eventos_eyebrow": "Gostoso calendar",
     "ver_agenda": "See full calendar →",
     "instagram_titulo": "Follow the city",
-    "instagram_sub": "Photos, stories and everyday life in São Miguel do Gostoso."
+    "instagram_sub": "Photos, stories and everyday life in São Miguel do Gostoso.",
+    "blog_eyebrow": "From the blog",
+    "blog_titulo": "Stories and tips from Gostoso",
+    "blog_ver_todos": "See all articles",
+    "blog_ler": "Read article"
   },
   "come": {
     "desc": "From fried fish on the beach to dinner at the guesthouse. Everything Gostoso has to eat.",
