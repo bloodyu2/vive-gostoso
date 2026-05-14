@@ -3,6 +3,8 @@
  * Runs before every build (prebuild) to produce public/sitemap.xml.
  * Fetches live slugs/IDs from Supabase so the sitemap always reflects the
  * current database state.
+ *
+ * Re-run on every deploy to pick up new published blog posts and businesses.
  */
 
 import { readFileSync, writeFileSync } from 'fs'
