@@ -33,36 +33,62 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-KDGMDLHG');</script>
     <!-- End Google Tag Manager -->
+
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/icon-192.png" />
-    <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#0D7C7C" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-site-verification" content="gPvFU0UYNa9LNCnR3_NkyaRMM0twHhZCteIAgxHLlys" />
+
+    <!-- Core PWA meta -->
+    <meta name="application-name" content="Vive Gostoso" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Vive Gostoso" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="google-site-verification" content="gPvFU0UYNa9LNCnR3_NkyaRMM0twHhZCteIAgxHLlys" />
+    <meta name="theme-color" content="#0D7C7C" />
+    <meta name="msapplication-TileColor" content="#0D7C7C" />
+    <meta name="msapplication-TileImage" content="/icons/pwa/icon-144.png" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/pwa/icon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/pwa/icon-16.png" />
+    <link rel="shortcut icon" href="/favicon.png" />
+
+    <!-- Apple touch icons -->
+    <link rel="apple-touch-icon" href="/icons/pwa/icon-180.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/pwa/icon-152.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/icons/pwa/icon-144.png" />
+    <link rel="apple-touch-icon" sizes="128x128" href="/icons/pwa/icon-128.png" />
+
+    <!-- Apple splash screens -->
+    <link rel="apple-touch-startup-image" media="screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)" href="/icons/pwa/icon-512.png" />
+    <link rel="apple-touch-startup-image" media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)" href="/icons/pwa/icon-512.png" />
+    <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="/icons/pwa/icon-192.png" />
+
     <title>Vive Gostoso — São Miguel do Gostoso, RN</title>
-    <meta name="description" content="O sistema operacional digital de São Miguel do Gostoso. Come. Fique. Passeie." />
+    <meta name="description" content="A infraestrutura digital de São Miguel do Gostoso, RN. Come. Fique. Passeie." />
+
     <!-- Open Graph / Social Sharing -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Vive Gostoso" />
-    <meta property="og:title" content="Vive Gostoso — São Miguel do Gostoso, RN" />
-    <meta property="og:description" content="O guia digital de São Miguel do Gostoso. Come. Fique. Passeie." />
+    <meta property="og:title" content="Vive Gostoso — A cidade online" />
+    <meta property="og:description" content="São Miguel do Gostoso, RN. A infraestrutura digital da cidade. Come. Fique. Passeie." />
     <meta property="og:url" content="https://vivegostoso.com.br" />
-    <meta property="og:image" content="https://vivegostoso.com.br/icon-192.png" />
+    <meta property="og:image" content="https://vivegostoso.com.br/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="pt_BR" />
+
     <!-- Twitter/X Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@vivegostoso" />
-    <meta name="twitter:title" content="Vive Gostoso — São Miguel do Gostoso, RN" />
-    <meta name="twitter:description" content="O guia digital de São Miguel do Gostoso. Come. Fique. Passeie." />
-    <meta name="twitter:image" content="https://vivegostoso.com.br/icon-192.png" />
+    <meta name="twitter:title" content="Vive Gostoso — A cidade online" />
+    <meta name="twitter:description" content="São Miguel do Gostoso, RN. A infraestrutura digital da cidade." />
+    <meta name="twitter:image" content="https://vivegostoso.com.br/og-image.png" />
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
@@ -71,12 +97,5 @@
     <!-- End Google Tag Manager (noscript) -->
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-          navigator.serviceWorker.register('/sw.js')
-        })
-      }
-    </script>
   </body>
 </html>

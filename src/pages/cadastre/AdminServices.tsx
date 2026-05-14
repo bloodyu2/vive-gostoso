@@ -3,6 +3,7 @@ import { AdminGuard } from '@/components/auth/admin-guard'
 import { useAdminPendingServices, useModerateService } from '@/hooks/useServices'
 import { SERVICE_CATEGORY_LABELS } from '@/types/database'
 import type { ServiceListing } from '@/types/database'
+import { buildWhatsAppLink } from '@/lib/whatsapp'
 
 export default function AdminServices() {
   return <AdminGuard><AdminServicesInner /></AdminGuard>
@@ -56,7 +57,7 @@ function ServiceRow({ svc }: { svc: ServiceListing }) {
         <span>
           WhatsApp:{' '}
           <a
-            href={`https://wa.me/${svc.whatsapp}`}
+            href={buildWhatsAppLink(svc.whatsapp)}
             target="_blank"
             rel="noopener noreferrer"
             className="text-teal hover:underline"

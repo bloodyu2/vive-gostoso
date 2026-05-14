@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { ManagedBadge } from '@/components/business/managed-badge'
 import { isBusinessOpen } from '@/lib/utils'
 import { cn } from '@/lib/utils'
+import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import type { Business } from '@/types/database'
 
@@ -82,7 +83,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
           <div className="flex items-center gap-2 mt-3 flex-wrap" onClick={stopProp}>
             {b.whatsapp && (
               <a
-                href={`https://wa.me/${b.whatsapp.replace(/\D/g, '')}`}
+                href={buildWhatsAppLink(b.whatsapp)}
                 target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-1.5 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C4A] text-xs font-semibold px-3 py-1.5 rounded-full transition-colors"
               >
@@ -180,7 +181,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
         <div className="flex items-center gap-2 mt-4 pt-3 border-t border-[#F5F2EE] dark:border-[#2D2D2D] flex-wrap" onClick={stopProp}>
           {b.whatsapp && (
             <a
-              href={`https://wa.me/${b.whatsapp.replace(/\D/g, '')}`}
+              href={buildWhatsAppLink(b.whatsapp)}
               target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-1.5 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C4A] text-xs font-semibold px-3 py-1.5 rounded-full transition-colors"
             >

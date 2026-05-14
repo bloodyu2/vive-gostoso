@@ -1,11 +1,15 @@
 import { Phone } from 'lucide-react'
 import type { ServiceListing } from '@/types/database'
 import { SERVICE_CATEGORY_LABELS } from '@/types/database'
+import { buildWhatsAppLink } from '@/lib/whatsapp'
 
 interface Props { service: ServiceListing }
 
 export function ServiceCard({ service }: Props) {
-  const wa = `https://wa.me/${service.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(`Olá ${service.name}, vi seu perfil no Vive Gostoso e gostaria de saber mais sobre: ${service.headline}`)}`
+  const wa = buildWhatsAppLink(
+    service.whatsapp,
+    `Olá ${service.name}, vi seu perfil no Vive Gostoso e gostaria de saber mais sobre: ${service.headline}`,
+  )
 
   return (
     <div className="bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden hover:shadow-md transition-shadow">

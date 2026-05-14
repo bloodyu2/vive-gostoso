@@ -1,11 +1,15 @@
 import { Briefcase, Phone } from 'lucide-react'
 import type { JobListing } from '@/types/database'
 import { CONTRACT_TYPE_LABELS } from '@/types/database'
+import { buildWhatsAppLink } from '@/lib/whatsapp'
 
 interface Props { job: JobListing }
 
 export function JobCard({ job }: Props) {
-  const wa = `https://wa.me/${job.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(`Olá! Vi a vaga de ${job.title} no Vive Gostoso e tenho interesse. Podemos conversar?`)}`
+  const wa = buildWhatsAppLink(
+    job.whatsapp,
+    `Olá! Vi a vaga de ${job.title} no Vive Gostoso e tenho interesse. Podemos conversar?`,
+  )
 
   return (
     <div className="bg-white rounded-2xl border border-[#E8E4DF] p-5 hover:shadow-md transition-shadow">

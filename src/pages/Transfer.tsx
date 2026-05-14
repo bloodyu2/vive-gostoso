@@ -8,6 +8,7 @@ import { useTransfers, useSubmitTransfer } from '@/hooks/useTransfers'
 import type { TransferFormData } from '@/hooks/useTransfers'
 import type { Transfer, TransferRoute } from '@/types/database'
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { buildWhatsAppLink } from '@/lib/whatsapp'
 
 const VEHICLE_TYPES = ['Van', 'Carro', 'Buggy', 'SUV']
 const LANGUAGES_LIST = ['Português', 'Inglês', 'Espanhol', 'Francês']
@@ -140,7 +141,7 @@ function TransferDetailModal({ transfer, initialRoute, onClose }: TransferDetail
   const [selectedRouteKey, setSelectedRouteKey] = useState(initialRoute)
 
   const selectedRoute = transfer.routes?.find(r => routeKey(r) === selectedRouteKey) ?? null
-  const waUrl = `https://wa.me/${transfer.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(buildWaMessage(transfer, selectedRoute))}`
+  const waUrl = buildWhatsAppLink(transfer.whatsapp, buildWaMessage(transfer, selectedRoute))
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">

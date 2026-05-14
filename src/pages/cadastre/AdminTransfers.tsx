@@ -3,6 +3,7 @@ import { Car } from 'lucide-react'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { useAdminTransfers, useModerateTransfer } from '@/hooks/useTransfers'
 import type { Transfer } from '@/types/database'
+import { buildWhatsAppLink } from '@/lib/whatsapp'
 
 export default function AdminTransfers() {
   return <AdminGuard><AdminTransfersInner /></AdminGuard>
@@ -77,7 +78,7 @@ function TransferRow({ transfer }: { transfer: Transfer }) {
         <span>
           WhatsApp:{' '}
           <a
-            href={`https://wa.me/${transfer.whatsapp.replace(/\D/g, '')}`}
+            href={buildWhatsAppLink(transfer.whatsapp)}
             target="_blank"
             rel="noopener noreferrer"
             className="text-teal hover:underline"

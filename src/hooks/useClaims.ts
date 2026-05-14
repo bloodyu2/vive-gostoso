@@ -48,12 +48,14 @@ export function useMyClaimStatus(businessId: string) {
 }
 
 // Admin: lista todos os pedidos pendentes com joins
+// Os joins podem retornar null se o registro relacionado for excluído ou se a RLS
+// não permitir leitura — manter os tipos opcionais e tratar isso na UI.
 export function useClaimsAdmin() {
   return useQuery({
     queryKey: ['claims-admin'],
     queryFn: async (): Promise<(ClaimRequest & {
-      business: { name: string; slug: string }
-      profile: { full_name: string | null; email: string | null }
+      business: { name: string; slug: string } | null
+      profile: { full_name: string | null; email: string | null } | null
     })[]> => {
       const { data, error } = await supabase
         .from('gostoso_claim_requests')
@@ -66,8 +68,8 @@ export function useClaimsAdmin() {
         .order('created_at', { ascending: true })
       if (error) throw error
       return (data ?? []) as (ClaimRequest & {
-        business: { name: string; slug: string }
-        profile: { full_name: string | null; email: string | null }
+        business: { name: string; slug: string } | null
+        profile: { full_name: string | null; email: string | null } | null
       })[]
     },
   })
