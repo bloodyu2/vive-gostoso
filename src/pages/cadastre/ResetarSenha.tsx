@@ -42,8 +42,8 @@ export default function ResetarSenha() {
     e.preventDefault()
     setError(null)
 
-    if (password.length < 6) {
-      setError('A senha deve ter pelo menos 6 caracteres.')
+    if (password.length < 8) {
+      setError('A senha deve ter pelo menos 8 caracteres.')
       return
     }
     if (password !== confirm) {
@@ -108,14 +108,16 @@ export default function ResetarSenha() {
                   type="password"
                   required
                   autoFocus
+                  minLength={8}
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  placeholder="Nova senha (mínimo 6 caracteres)"
+                  placeholder="Nova senha (mínimo 8 caracteres)"
                   className="w-full rounded-xl border border-[#E8E4DF] px-4 py-3 text-sm focus:border-teal focus:ring-2 focus:ring-teal/20 focus:outline-none"
                 />
                 <input
                   type="password"
                   required
+                  minLength={8}
                   value={confirm}
                   onChange={e => setConfirm(e.target.value)}
                   placeholder="Confirmar nova senha"
