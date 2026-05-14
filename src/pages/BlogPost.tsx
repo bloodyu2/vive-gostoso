@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import DOMPurify from 'isomorphic-dompurify'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
 import { usePageMeta } from '@/hooks/usePageMeta'
@@ -116,7 +117,7 @@ export default function BlogPostPage() {
 
       <article
         className="mt-8 prose prose-lg prose-headings:font-display prose-headings:text-[#1A1A1A] dark:prose-headings:text-white prose-p:text-[#3D3D3D] dark:prose-p:text-[#C0BCB8] prose-a:text-teal max-w-none"
-        dangerouslySetInnerHTML={{ __html: post.content }}
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
       />
     </main>
   )

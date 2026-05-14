@@ -6,24 +6,53 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {
   httpClient: Stripe.createFetchHttpClient(),
 })
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+const ALLOWED_ORIGINS = new Set([
+  'https://vivegostoso.com.br',
+  'https://www.vivegostoso.com.br',
+  'http://localhost:5173',
+  'http://localhost:3000',
+])
+
+function corsHeaders(origin: string | null) {
+  const allow = origin && ALLOWED_ORIGINS.has(origin) ? origin : 'https://vivegostoso.com.br'
+  return {
+    'Access-Control-Allow-Origin': allow,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Vary': 'Origin',
+  }
+}
+
+function safeUrl(value: unknown, fallback: string): string {
+  if (typeof value !== 'string') return fallback
+  try {
+    const u = new URL(value)
+    return ALLOWED_ORIGINS.has(u.origin) ? u.toString() : fallback
+  } catch { return fallback }
 }
 
 serve(async (req) => {
+  const cors = corsHeaders(req.headers.get('origin'))
+
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: cors })
   }
 
   try {
     const { amountCents, successUrl, cancelUrl } = await req.json()
-    const origin = req.headers.get('origin') ?? 'https://vivegostoso.com.br'
+    const reqOrigin = req.headers.get('origin')
+    const baseOrigin = reqOrigin && ALLOWED_ORIGINS.has(reqOrigin) ? reqOrigin : 'https://vivegostoso.com.br'
 
-    if (!amountCents || typeof amountCents !== 'number' || amountCents < 500) {
-      return new Response(JSON.stringify({ error: 'Valor mínimo de doação: R$5,00' }), {
+    if (
+      !amountCents ||
+      typeof amountCents !== 'number' ||
+      !Number.isFinite(amountCents) ||
+      !Number.isInteger(amountCents) ||
+      amountCents < 500 ||
+      amountCents > 1_000_000_00
+    ) {
+      return new Response(JSON.stringify({ error: 'Valor inválido. Mínimo R$5,00, máximo R$1.000.000,00.' }), {
         status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...cors, 'Content-Type': 'application/json' },
       })
     }
 
@@ -46,21 +75,21 @@ serve(async (req) => {
         },
         quantity: 1,
       }],
-      success_url: successUrl ?? `${origin}/apoie?doacao=success`,
-      cancel_url: cancelUrl ?? `${origin}/apoie`,
+      success_url: safeUrl(successUrl, `${baseOrigin}/apoie?doacao=success`),
+      cancel_url:  safeUrl(cancelUrl,  `${baseOrigin}/apoie`),
       metadata: { type: 'donation' },
     })
 
     return new Response(JSON.stringify({ url: session.url }), {
       status: 200,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...cors, 'Content-Type': 'application/json' },
     })
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
     console.error('create-donation-session error:', message)
     return new Response(JSON.stringify({ error: message }), {
       status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...cors, 'Content-Type': 'application/json' },
     })
   }
 })
