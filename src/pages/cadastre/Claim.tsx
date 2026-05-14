@@ -61,6 +61,11 @@ export default function Claim() {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) setAuthError('E-mail ou senha incorretos.')
     } else {
+      if (password.length < 8) {
+        setAuthError('A senha deve ter pelo menos 8 caracteres.')
+        setAuthLoading2(false)
+        return
+      }
       const { error } = await supabase.auth.signUp({ email, password })
       if (error) setAuthError(error.message)
     }
@@ -199,10 +204,10 @@ export default function Claim() {
             <input
               type="password"
               required
-              minLength={6}
+              minLength={8}
               value={password}
               onChange={e => setPassword(e.target.value)}
-              placeholder="Senha (mínimo 6 caracteres)"
+              placeholder="Senha (mínimo 8 caracteres)"
               className="w-full px-4 py-3 rounded-xl border border-[#E8E4DF] text-sm focus:outline-none focus:border-teal focus:ring-2 focus:ring-teal/20"
             />
             {authError && (

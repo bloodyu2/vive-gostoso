@@ -74,8 +74,8 @@ export default function Login() {
       setError('As senhas não coincidem.')
       return
     }
-    if (password.length < 6) {
-      setError('A senha deve ter pelo menos 6 caracteres.')
+    if (password.length < 8) {
+      setError('A senha deve ter pelo menos 8 caracteres.')
       return
     }
     setLoading(true)
@@ -229,14 +229,16 @@ export default function Login() {
                   <input
                     type="password"
                     required
+                    minLength={8}
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    placeholder="Senha (mínimo 6 caracteres)"
+                    placeholder="Senha (mínimo 8 caracteres)"
                     className="w-full rounded-xl border border-[#E8E4DF] px-4 py-3 text-sm focus:border-teal focus:ring-2 focus:ring-teal/20 focus:outline-none"
                   />
                   <input
                     type="password"
                     required
+                    minLength={8}
                     value={confirm}
                     onChange={e => setConfirm(e.target.value)}
                     placeholder="Confirmar senha"
