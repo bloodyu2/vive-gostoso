@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
@@ -6,6 +7,10 @@ import DOMPurify from 'isomorphic-dompurify'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { articleSchema, breadcrumbSchema, clampDescription } from '@/lib/seo'
+import { RelatedPosts, TableOfContents } from '@/components/blog'
+
+const SITE_URL = 'https://vivegostoso.com.br'
 
 function useBlogPost(slug: string) {
   return useQuery({
@@ -29,12 +34,41 @@ export default function BlogPostPage() {
   const { data: post, isLoading } = useBlogPost(slug ?? '')
   const { t } = useTranslation()
 
+  const url = slug ? `${SITE_URL}/blog/${slug}` : SITE_URL
+  const description = post?.excerpt ? clampDescription(post.excerpt, 160) : undefined
+
+  const jsonLd = useMemo(() => {
+    if (!post) return undefined
+    return [
+      articleSchema({
+        title: post.title,
+        description: description ?? '',
+        url,
+        image: post.cover_url ?? undefined,
+        author: post.author,
+        publishedTime: post.published_at,
+        modifiedTime: post.published_at,
+        tags: post.tags,
+      }),
+      breadcrumbSchema([
+        { name: 'Início', url: SITE_URL },
+        { name: 'Blog', url: `${SITE_URL}/blog` },
+        { name: post.title, url },
+      ]),
+    ]
+  }, [post, description, url])
+
   usePageMeta({
     title: post?.title ?? 'Blog — São Miguel do Gostoso',
-    description: post?.excerpt ?? 'Artigos e dicas sobre São Miguel do Gostoso.',
+    description: description ?? 'Artigos e dicas sobre São Miguel do Gostoso.',
     image: post?.cover_url ?? undefined,
-    url: slug ? `https://vivegostoso.com.br/blog/${slug}` : undefined,
+    url,
     type: 'article',
+    publishedTime: post?.published_at ?? undefined,
+    modifiedTime: post?.published_at ?? undefined,
+    author: post?.author,
+    tags: post?.tags,
+    jsonLd,
   })
 
   if (isLoading) {
@@ -96,29 +130,37 @@ export default function BlogPostPage() {
         {post.published_at && (
           <>
             <span>·</span>
-            <span>
+            <time dateTime={post.published_at}>
               {new Date(post.published_at).toLocaleDateString('pt-BR', {
                 day: 'numeric', month: 'long', year: 'numeric'
               })}
-            </span>
+            </time>
           </>
         )}
       </div>
 
       {post.cover_url && (
-        <div className="mt-8 rounded-2xl overflow-hidden aspect-[16/9]">
+        <figure className="mt-8 rounded-2xl overflow-hidden aspect-[16/9]">
           <img
             src={post.cover_url}
             alt={post.title}
+            width={1200}
+            height={675}
+            loading="eager"
+            decoding="async"
             className="w-full h-full object-cover"
           />
-        </div>
+        </figure>
       )}
 
+      <TableOfContents containerSelector="article" levels={[2]} />
+
       <article
-        className="mt-8 prose prose-lg prose-headings:font-display prose-headings:text-[#1A1A1A] dark:prose-headings:text-white prose-p:text-[#3D3D3D] dark:prose-p:text-[#C0BCB8] prose-a:text-teal max-w-none"
+        className="mt-2 prose prose-lg prose-headings:font-display prose-headings:text-[#1A1A1A] dark:prose-headings:text-white prose-p:text-[#3D3D3D] dark:prose-p:text-[#C0BCB8] prose-a:text-teal max-w-none"
         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
       />
+
+      <RelatedPosts currentSlug={post.slug} tags={post.tags} />
     </main>
   )
 }

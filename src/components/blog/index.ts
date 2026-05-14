@@ -1,0 +1,6 @@
+export { CTAWhatsApp } from './CTAWhatsApp'
+export { CTAReserve } from './CTAReserve'
+export { FAQSection, type FAQItem } from './FAQSection'
+export { ImageWithCaption } from './ImageWithCaption'
+export { TableOfContents } from './TableOfContents'
+export { RelatedPosts } from './RelatedPosts'
