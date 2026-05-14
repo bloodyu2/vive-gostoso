@@ -156,8 +156,11 @@ export default function BlogPostPage() {
       <TableOfContents containerSelector="article" levels={[2]} />
 
       <article
-        className="mt-2 prose prose-lg prose-headings:font-display prose-headings:text-[#1A1A1A] dark:prose-headings:text-white prose-p:text-[#3D3D3D] dark:prose-p:text-[#C0BCB8] prose-a:text-teal max-w-none"
-        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
+        className="blog-prose mt-2 max-w-none"
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content, {
+          ADD_TAGS: ['details', 'summary'],
+          ADD_ATTR: ['open'],
+        }) }}
       />
 
       <RelatedPosts currentSlug={post.slug} tags={post.tags} />

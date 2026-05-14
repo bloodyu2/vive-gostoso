@@ -1,8 +1,8 @@
 import { MessageCircle } from 'lucide-react'
-import { buildWhatsAppLink } from '@/lib/whatsapp'
+import { buildWhatsAppLink, OFFICIAL_WHATSAPP } from '@/lib/whatsapp'
 
 interface CTAWhatsAppProps {
-  /** WhatsApp number (DDD + número, com ou sem 55). Default: número padrão Vive Gostoso. */
+  /** WhatsApp number (DDD + número, com ou sem 55). Default: número oficial Vive Gostoso. */
   phone?: string
   /** Texto do botão. Default: 'Falar no WhatsApp' */
   label?: string
@@ -17,7 +17,7 @@ interface CTAWhatsAppProps {
  * mobile-first, com mensagem pré-preenchida.
  */
 export function CTAWhatsApp({
-  phone = '5584999999999',
+  phone = OFFICIAL_WHATSAPP,
   label = 'Falar no WhatsApp',
   message,
   helper,

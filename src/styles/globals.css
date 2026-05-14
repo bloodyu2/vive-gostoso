@@ -140,3 +140,332 @@ h4, h5, h6 {
   background-color: #111111;
   color: #F0EDEA;
 }
+
+/* ==========================================================================
+   Blog prose — typography para conteúdo HTML do blog (substitui o plugin
+   @tailwindcss/typography que não está instalado neste projeto Tailwind v4).
+   Use a classe `.blog-prose` no container do <article>.
+   ========================================================================== */
+
+.blog-prose {
+  color: #3D3D3D;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+.dark .blog-prose { color: #C0BCB8; }
+
+.blog-prose > * + * { margin-top: 1.25em; }
+
+.blog-prose p {
+  margin: 1.25em 0;
+}
+
+.blog-prose h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.875rem;
+  line-height: 1.2;
+  color: #1A1A1A;
+  margin: 2.25em 0 0.75em;
+  letter-spacing: -0.015em;
+  scroll-margin-top: 80px;
+}
+.dark .blog-prose h2 { color: #ffffff; }
+
+.blog-prose h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.375rem;
+  line-height: 1.3;
+  color: #1A1A1A;
+  margin: 1.75em 0 0.5em;
+  letter-spacing: -0.01em;
+  scroll-margin-top: 80px;
+}
+.dark .blog-prose h3 { color: #ffffff; }
+
+.blog-prose h4 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: #1A1A1A;
+  margin: 1.5em 0 0.4em;
+}
+.dark .blog-prose h4 { color: #ffffff; }
+
+.blog-prose strong { color: #1A1A1A; font-weight: 700; }
+.dark .blog-prose strong { color: #ffffff; }
+
+.blog-prose a {
+  color: #0D7C7C;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.blog-prose a:hover { color: #085E5E; }
+
+.blog-prose ul, .blog-prose ol {
+  margin: 1.25em 0;
+  padding-left: 1.5em;
+}
+.blog-prose ul { list-style: disc; }
+.blog-prose ol { list-style: decimal; }
+.blog-prose li { margin: 0.5em 0; }
+.blog-prose li > p { margin: 0.4em 0; }
+
+.blog-prose blockquote {
+  margin: 1.5em 0;
+  padding: 0.75em 1.25em;
+  border-left: 4px solid #0D7C7C;
+  background: #F5F2EE;
+  font-style: italic;
+  color: #3D3D3D;
+  border-radius: 0 12px 12px 0;
+}
+.dark .blog-prose blockquote { background: #222; color: #C0BCB8; }
+
+.blog-prose hr {
+  margin: 2.5em 0;
+  border: 0;
+  border-top: 1px solid #E8E4DF;
+}
+.dark .blog-prose hr { border-top-color: #2D2D2D; }
+
+/* Tabela comparativa */
+.blog-prose table.comparison-table,
+.blog-prose .comparison-table {
+  width: 100%;
+  margin: 2em 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #E8E4DF;
+  border-radius: 16px;
+  overflow: hidden;
+  font-size: 0.95rem;
+}
+.dark .blog-prose .comparison-table { border-color: #2D2D2D; }
+
+.blog-prose .comparison-table thead {
+  background: #0D7C7C;
+  color: #ffffff;
+}
+.blog-prose .comparison-table th {
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.blog-prose .comparison-table td {
+  padding: 14px 16px;
+  border-top: 1px solid #E8E4DF;
+  vertical-align: top;
+  line-height: 1.55;
+}
+.dark .blog-prose .comparison-table td { border-top-color: #2D2D2D; }
+.blog-prose .comparison-table tbody tr:nth-child(even) td { background: #FAF8F5; }
+.dark .blog-prose .comparison-table tbody tr:nth-child(even) td { background: #1c1c1c; }
+.blog-prose .comparison-table td:first-child {
+  font-weight: 600;
+  color: #1A1A1A;
+  width: 28%;
+}
+.dark .blog-prose .comparison-table td:first-child { color: #ffffff; }
+
+/* Callouts: .callout, .callout--tip, .callout--warn, .callout--info */
+.blog-prose .callout {
+  margin: 1.75em 0;
+  padding: 1.1em 1.25em 1.1em 1.25em;
+  border-radius: 14px;
+  border-left: 4px solid #0D7C7C;
+  background: #E6F5F5;
+  color: #085E5E;
+  line-height: 1.6;
+}
+.blog-prose .callout strong { color: inherit; }
+.blog-prose .callout > p { margin: 0; }
+.blog-prose .callout > p + p { margin-top: 0.6em; }
+.blog-prose .callout--tip {
+  background: #FBF0E3;
+  border-left-color: #C97D2A;
+  color: #6b3f0e;
+}
+.dark .blog-prose .callout--tip { color: #F5E0C5; }
+.blog-prose .callout--warn {
+  background: #FDECE5;
+  border-left-color: #E05A3A;
+  color: #8a2c10;
+}
+.dark .blog-prose .callout--warn { color: #ffd0c0; }
+.blog-prose .callout--info {
+  background: #E6F5F5;
+  border-left-color: #0D7C7C;
+  color: #085E5E;
+}
+.dark .blog-prose .callout { background: #1d2929; color: #cfeaea; }
+.dark .blog-prose .callout--tip { background: #2a2118; }
+.dark .blog-prose .callout--warn { background: #2c1a14; }
+
+/* Inline CTA cards (renderizados via HTML cru) */
+.blog-prose .inline-cta {
+  display: block;
+  margin: 2em 0;
+  padding: 1.25em 1.4em;
+  border-radius: 16px;
+  border: 1px solid #E8E4DF;
+  background: #ffffff;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+}
+.dark .blog-prose .inline-cta { background: #222; border-color: #2D2D2D; }
+.blog-prose .inline-cta:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  border-color: #0D7C7C;
+  text-decoration: none;
+}
+.blog-prose .inline-cta__title {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #1A1A1A;
+  margin-bottom: 0.25em;
+}
+.dark .blog-prose .inline-cta__title { color: #ffffff; }
+.blog-prose .inline-cta__desc {
+  display: block;
+  font-size: 0.95rem;
+  color: #5a5a5a;
+  line-height: 1.55;
+}
+.dark .blog-prose .inline-cta__desc { color: #b0aca8; }
+.blog-prose .inline-cta__action {
+  display: inline-block;
+  margin-top: 0.6em;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0D7C7C;
+  text-decoration: none;
+}
+
+/* CTA WhatsApp inline (verde) */
+.blog-prose .inline-cta--whatsapp {
+  background: linear-gradient(135deg, #E6F5EE 0%, #D2F0DD 100%);
+  border-color: #25D366;
+}
+.dark .blog-prose .inline-cta--whatsapp {
+  background: linear-gradient(135deg, #163021 0%, #1e3d2a 100%);
+  border-color: #25D366;
+}
+.blog-prose .inline-cta--whatsapp .inline-cta__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  margin-top: 0.85em;
+  padding: 0.55em 1.1em;
+  background: #25D366;
+  color: #ffffff;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.blog-prose .inline-cta--whatsapp .inline-cta__action:hover { background: #1ebd5b; }
+
+/* Imagens e legendas dentro do corpo */
+.blog-prose figure {
+  margin: 2.25em 0;
+}
+.blog-prose figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px;
+}
+.blog-prose figcaption {
+  margin-top: 0.65em;
+  font-size: 0.85rem;
+  color: #737373;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* Imagens soltas (sem figure) */
+.blog-prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+}
+
+/* FAQ: <details>/<summary> nativos */
+.blog-prose details.faq {
+  margin: 0.6em 0;
+  padding: 0;
+  border: 1px solid #E8E4DF;
+  border-radius: 14px;
+  background: #ffffff;
+  overflow: hidden;
+}
+.dark .blog-prose details.faq { background: #222; border-color: #2D2D2D; }
+.blog-prose details.faq summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 1em 1.2em;
+  font-weight: 600;
+  color: #1A1A1A;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  position: relative;
+  padding-right: 2.5em;
+  user-select: none;
+}
+.dark .blog-prose details.faq summary { color: #ffffff; }
+.blog-prose details.faq summary::-webkit-details-marker { display: none; }
+.blog-prose details.faq summary::after {
+  content: "+";
+  position: absolute;
+  right: 1em;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #0D7C7C;
+  transition: transform 0.2s;
+  line-height: 1;
+}
+.blog-prose details.faq[open] summary::after {
+  content: "−";
+}
+.blog-prose details.faq summary:hover { background: #FAF8F5; }
+.dark .blog-prose details.faq summary:hover { background: #2a2a2a; }
+.blog-prose details.faq > *:not(summary) {
+  padding: 0 1.2em 1.2em;
+  color: #3D3D3D;
+  line-height: 1.7;
+}
+.dark .blog-prose details.faq > *:not(summary) { color: #C0BCB8; }
+.blog-prose details.faq > *:not(summary) p { margin: 0.5em 0; }
+.blog-prose details.faq > *:not(summary) p:first-child { margin-top: 0; }
+
+/* Section heading da FAQ */
+.blog-prose .faq-section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.875rem;
+  color: #1A1A1A;
+  margin: 2.5em 0 1em;
+  letter-spacing: -0.015em;
+}
+.dark .blog-prose .faq-section-title { color: #ffffff; }
+
+/* Mobile tweaks */
+@media (max-width: 640px) {
+  .blog-prose { font-size: 1rem; line-height: 1.7; }
+  .blog-prose h2 { font-size: 1.5rem; margin-top: 1.75em; }
+  .blog-prose h3 { font-size: 1.2rem; }
+  .blog-prose .comparison-table { font-size: 0.85rem; }
+  .blog-prose .comparison-table th,
+  .blog-prose .comparison-table td { padding: 10px 12px; }
+}
