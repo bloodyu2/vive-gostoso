@@ -83,7 +83,10 @@ export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPosts
               <div className="aspect-[16/10] bg-gradient-to-br from-teal to-teal-dark" />
             )}
             <div className="p-4">
-              <h3 className="font-display font-bold text-base text-[#1A1A1A] dark:text-white group-hover:text-teal transition-colors leading-snug line-clamp-2">
+              <h3
+                className="font-display font-bold text-base text-[#1A1A1A] dark:text-white group-hover:text-teal transition-colors leading-snug line-clamp-3"
+                style={{ wordBreak: 'normal', overflowWrap: 'break-word', hyphens: 'auto' }}
+              >
                 {post.title}
               </h3>
               {post.excerpt && (
