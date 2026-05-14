@@ -26,7 +26,15 @@ function useSearch(query: string) {
     clearTimeout(debounceTimer)
     debounceTimer = setTimeout(async () => {
       setLoading(true)
-      const q = query.trim()
+      // Sanitize for PostgREST .or() filter syntax: comma, parens, backslash
+      // and asterisk are filter delimiters / wildcards. Strip them so that
+      // user input cannot break out of the ilike pattern.
+      const q = query.trim().replace(/[,()\\*]/g, '').slice(0, 80)
+      if (q.length < 2) {
+        setResults([])
+        setLoading(false)
+        return
+      }
       const { data } = await supabase
         .from('gostoso_businesses')
         .select('id, name, slug, cover_url, address, category:gostoso_categories(name)')

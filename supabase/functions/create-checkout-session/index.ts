@@ -19,14 +19,27 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {
   httpClient: Stripe.createFetchHttpClient(),
 })
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+const ALLOWED_ORIGINS = new Set([
+  'https://vivegostoso.com.br',
+  'https://www.vivegostoso.com.br',
+  'http://localhost:5173',
+  'http://localhost:3000',
+])
+
+function corsHeaders(origin: string | null) {
+  const allow = origin && ALLOWED_ORIGINS.has(origin) ? origin : 'https://vivegostoso.com.br'
+  return {
+    'Access-Control-Allow-Origin': allow,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Vary': 'Origin',
+  }
 }
 
 serve(async (req) => {
+  const cors = corsHeaders(req.headers.get('origin'))
+
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: cors })
   }
 
   try {
@@ -34,7 +47,7 @@ serve(async (req) => {
     if (!authHeader) {
       return new Response(JSON.stringify({ error: 'Not authenticated' }), {
         status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...cors, 'Content-Type': 'application/json' },
       })
     }
 
@@ -48,7 +61,7 @@ serve(async (req) => {
     if (userErr || !user) {
       return new Response(JSON.stringify({ error: 'Invalid token' }), {
         status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...cors, 'Content-Type': 'application/json' },
       })
     }
 
@@ -57,7 +70,7 @@ serve(async (req) => {
     if (!priceId || !businessId) {
       return new Response(JSON.stringify({ error: 'Missing priceId or businessId' }), {
         status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...cors, 'Content-Type': 'application/json' },
       })
     }
 
@@ -70,7 +83,7 @@ serve(async (req) => {
     if (!biz) {
       return new Response(JSON.stringify({ error: 'Business not found' }), {
         status: 404,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...cors, 'Content-Type': 'application/json' },
       })
     }
 
@@ -88,9 +101,19 @@ serve(async (req) => {
         .eq('id', businessId)
     }
 
-    const origin = req.headers.get('origin') ?? 'https://vivegostoso.com.br'
-    const success = successUrl ?? `${origin}/cadastre/painel?associado=success`
-    const cancel  = cancelUrl  ?? `${origin}/cadastre/painel`
+    // Only honour caller-supplied successUrl/cancelUrl when they target an
+    // allow-listed origin. Otherwise fall back to the canonical site.
+    function safeUrl(value: unknown, fallback: string): string {
+      if (typeof value !== 'string') return fallback
+      try {
+        const u = new URL(value)
+        return ALLOWED_ORIGINS.has(u.origin) ? u.toString() : fallback
+      } catch { return fallback }
+    }
+    const reqOrigin = req.headers.get('origin')
+    const baseOrigin = reqOrigin && ALLOWED_ORIGINS.has(reqOrigin) ? reqOrigin : 'https://vivegostoso.com.br'
+    const success = safeUrl(successUrl, `${baseOrigin}/cadastre/painel?associado=success`)
+    const cancel  = safeUrl(cancelUrl,  `${baseOrigin}/cadastre/painel`)
 
     const annualInfo = ANNUAL_PRICES[priceId]
     let session: Stripe.Checkout.Session
@@ -141,20 +164,20 @@ serve(async (req) => {
     } else {
       return new Response(JSON.stringify({ error: 'Invalid price ID' }), {
         status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...cors, 'Content-Type': 'application/json' },
       })
     }
 
     return new Response(JSON.stringify({ url: session.url }), {
       status: 200,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...cors, 'Content-Type': 'application/json' },
     })
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
     console.error('create-checkout-session error:', message)
     return new Response(JSON.stringify({ error: message }), {
       status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...cors, 'Content-Type': 'application/json' },
     })
   }
 })
