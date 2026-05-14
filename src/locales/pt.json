@@ -18,6 +18,7 @@
     "freelancers_vagas": "Freelancers e vagas",
     "transfer": "TRANSFER",
     "transfer_sub": "Transfer e passeios",
+    "blog": "BLOG",
     "buscar": "Buscar",
     "minha_conta": "Minha conta",
     "entrar": "Entrar",
@@ -52,7 +53,11 @@
     "eventos_eyebrow": "Agenda de Gostoso",
     "ver_agenda": "Ver agenda completa →",
     "instagram_titulo": "Siga a cidade",
-    "instagram_sub": "Fotos, histórias e o cotidiano de São Miguel do Gostoso."
+    "instagram_sub": "Fotos, histórias e o cotidiano de São Miguel do Gostoso.",
+    "blog_eyebrow": "Do blog",
+    "blog_titulo": "Histórias e dicas de Gostoso",
+    "blog_ver_todos": "Ver todos os artigos",
+    "blog_ler": "Ler artigo"
   },
   "come": {
     "desc": "Do peixe frito na praia ao jantar na pousada. Tudo que Gostoso tem pra comer.",
