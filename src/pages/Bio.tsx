@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { AtSign, MapPin, Utensils, BedDouble, Wind, CalendarDays, Map, Briefcase, Heart, Waves } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 const LINKS: { to: string; icon: LucideIcon; label: string; sub: string; color: string }[] = [
   { to: '/come',      icon: Utensils,    label: 'COME.',      sub: 'Restaurantes e gastronomia',   color: 'bg-ocre/10 hover:bg-ocre/20 border-ocre/20' },
@@ -14,6 +15,12 @@ const LINKS: { to: string; icon: LucideIcon; label: string; sub: string; color: 
 ]
 
 export default function Bio() {
+  usePageMeta({
+    title: 'Bio — Vive Gostoso',
+    description: 'Conheça o Vive Gostoso — o guia digital de São Miguel do Gostoso, RN. Come. Fique. Passeie.',
+    url: 'https://vivegostoso.com.br/bio',
+  })
+
   return (
     <div className="min-h-screen bg-areia flex flex-col items-center px-5 py-10">
 

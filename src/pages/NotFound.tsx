@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -10,6 +11,20 @@ const LINKS = [
 
 export default function NotFound() {
   const { t } = useTranslation()
+
+  useEffect(() => {
+    document.title = 'Página não encontrada — Vive Gostoso'
+    let el = document.querySelector('meta[name="robots"]') as HTMLMetaElement | null
+    if (!el) {
+      el = document.createElement('meta')
+      el.setAttribute('name', 'robots')
+      document.head.appendChild(el)
+    }
+    el.setAttribute('content', 'noindex, nofollow')
+    return () => {
+      el?.remove()
+    }
+  }, [])
 
   return (
     <main className="max-w-2xl mx-auto px-5 py-20 text-center">

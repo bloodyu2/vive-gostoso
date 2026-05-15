@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { usePageMeta } from '@/hooks/usePageMeta'
 import { Briefcase, Wrench, Plus } from 'lucide-react'
 import { ServiceCard } from '@/components/contrate/service-card'
 import { JobCard } from '@/components/contrate/job-card'
@@ -17,6 +18,12 @@ const SERVICE_CATS = Object.entries(SERVICE_CATEGORY_LABELS) as [ServiceCategory
 export default function Contrate() {
   const { t } = useTranslation()
   const [tab, setTab] = useState<Tab>('servicos')
+
+  usePageMeta({
+    title: 'Contrate — Vive Gostoso',
+    description: 'Encontre serviços locais e vagas de emprego em São Miguel do Gostoso. Contrate profissionais ou anuncie sua empresa no Vive Gostoso.',
+    url: 'https://vivegostoso.com.br/contrate',
+  })
   const [catFilter, setCatFilter] = useState<ServiceCategory | undefined>()
   const [showServiceForm, setShowServiceForm] = useState(false)
   const [showJobForm, setShowJobForm] = useState(false)
