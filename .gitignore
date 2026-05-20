@@ -17,6 +17,8 @@ dist-ssr
 .claude/
 .cursor/
 .cursorrules
+CLAUDE.md
+memory.md
 
 # Editor directories and files
 .vscode/*
