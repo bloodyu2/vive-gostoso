@@ -15,10 +15,12 @@ export async function middleware(request: NextRequest) {
   }
 
   // Demais rotas: i18n middleware primeiro
+  // next-intl retorna 200 com rewrite headers para o locale padrao (pt)
+  // Devemos sempre retornar a resposta do intl para que o rewrite seja aplicado
   const intlResponse = intlMiddleware(request)
-  if (intlResponse && intlResponse.status !== 200) return intlResponse
+  if (intlResponse) return intlResponse
 
-  // Depois refresh passivo da session
+  // Fallback: refresh passivo da session (nao deve chegar aqui normalmente)
   return await updateSession(request)
 }
 
