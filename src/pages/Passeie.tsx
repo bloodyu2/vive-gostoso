@@ -1,3 +1,4 @@
+'use client'
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { VerbPill } from '@/components/brand/verb-pill'
@@ -9,8 +10,13 @@ import { isBusinessOpen } from '@/lib/utils'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import type { Business } from '@/types/database'
 
-export default function Passeie() {
+type PasseieProps = {
+  initialBusinesses?: Business[]
+}
+
+export default function Passeie({ initialBusinesses = [] }: PasseieProps) {
   const { t } = useTranslation()
   const lp = useLocalePath()
   usePageMeta({
@@ -22,7 +28,7 @@ export default function Passeie() {
   const [openOnly, setOpenOnly] = useState(false)
   const [search, setSearch] = useState('')
   const { data: categories = [] } = useCategories('passeie')
-  const { data: businesses = [], isLoading } = useBusinesses('passeie')
+  const { data: businesses = initialBusinesses, isLoading } = useBusinesses('passeie')
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()

@@ -1,3 +1,4 @@
+'use client'
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { VerbPill } from '@/components/brand/verb-pill'
@@ -9,8 +10,13 @@ import { isBusinessOpen } from '@/lib/utils'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import type { Business } from '@/types/database'
 
-export default function Come() {
+type ComeProps = {
+  initialBusinesses?: Business[]
+}
+
+export default function Come({ initialBusinesses = [] }: ComeProps) {
   const { t } = useTranslation()
   const lp = useLocalePath()
   usePageMeta({
@@ -22,7 +28,7 @@ export default function Come() {
   const [openOnly, setOpenOnly] = useState(false)
   const [search, setSearch] = useState('')
   const { data: categories = [] } = useCategories('come')
-  const { data: businesses = [], isLoading } = useBusinesses('come')
+  const { data: businesses = initialBusinesses, isLoading } = useBusinesses('come')
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
