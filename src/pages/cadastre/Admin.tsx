@@ -22,7 +22,7 @@ function Badge({ count }: { count: number }) {
 function AdminInner() {
   const statsQuery = useAdminStats()
   const stats = statsQuery.data
-  const { user, signOut } = useAuth()
+  const { user, supabase } = useAuth()
 
   const modules: { to: string; icon: LucideIcon; title: string; desc: string; badge: number }[] = [
     {
@@ -92,7 +92,7 @@ function AdminInner() {
         {user?.email && (
           <span className="text-sm text-[#737373]">{user.email}</span>
         )}
-        <Button variant="ghost" onClick={() => signOut()} className="text-sm px-3 py-2 min-h-0">
+        <Button variant="ghost" onClick={() => supabase.auth.signOut()} className="text-sm px-3 py-2 min-h-0">
           Sair
         </Button>
       </div>

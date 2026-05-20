@@ -18,7 +18,7 @@ export default function Painel() {
 }
 
 function PainelInner() {
-  const { user, signOut } = useAuth()
+  const { user, supabase } = useAuth()
   const { data: profile, isLoading: profileLoading } = useProfile()
   const role = profile?.role ?? null
   const { data: businesses = [] } = useMyBusinesses()
@@ -62,7 +62,7 @@ function PainelInner() {
           <h1 className="font-display text-3xl font-semibold">Painel do Prestador</h1>
           <p className="text-sm text-[#737373] mt-1">{user?.email}</p>
         </div>
-        <Button variant="ghost" onClick={signOut}>Sair</Button>
+        <Button variant="ghost" onClick={() => supabase.auth.signOut()}>Sair</Button>
       </div>
 
       {/* Success banner */}
