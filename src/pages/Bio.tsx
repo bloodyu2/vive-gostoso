@@ -1,3 +1,5 @@
+'use client'
+
 import { Link } from 'react-router-dom'
 import { AtSign, MapPin, Utensils, BedDouble, Wind, CalendarDays, Map, Briefcase, Heart, Waves } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'

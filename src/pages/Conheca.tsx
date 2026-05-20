@@ -1,3 +1,5 @@
+'use client'
+
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useTranslation } from 'react-i18next'
 
