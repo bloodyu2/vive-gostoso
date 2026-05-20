@@ -1,3 +1,4 @@
+'use client'
 // src/components/reviews/review-form.tsx
 import { useState } from 'react'
 import { StarRating } from './star-rating'

@@ -1,3 +1,4 @@
+'use client'
 // src/components/reviews/review-list.tsx
 import { StarRating } from './star-rating'
 import { useReviews } from '@/hooks/useReviews'

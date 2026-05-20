@@ -1,3 +1,4 @@
+'use client'
 // src/components/reviews/star-rating.tsx
 import { useState } from 'react'
 
