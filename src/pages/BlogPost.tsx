@@ -1,3 +1,4 @@
+'use client'
 import { useMemo } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
@@ -29,9 +30,15 @@ function useBlogPost(slug: string) {
   })
 }
 
-export default function BlogPostPage() {
-  const { slug } = useParams<{ slug: string }>()
-  const { data: post, isLoading } = useBlogPost(slug ?? '')
+type BlogPostPageProps = {
+  initialPost?: BlogPost | null
+  slug?: string
+}
+
+export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPageProps) {
+  const params = useParams<{ slug: string }>()
+  const slug = slugProp ?? params.slug
+  const { data: post = initialPost ?? undefined, isLoading } = useBlogPost(slug ?? '')
   const { t } = useTranslation()
 
   const url = slug ? `${SITE_URL}/blog/${slug}` : SITE_URL

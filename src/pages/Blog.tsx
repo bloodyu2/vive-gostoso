@@ -1,3 +1,4 @@
+'use client'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -20,12 +21,16 @@ function useBlogPosts() {
   })
 }
 
-export default function Blog() {
+type BlogProps = {
+  initialPosts?: BlogPost[]
+}
+
+export default function Blog({ initialPosts = [] }: BlogProps) {
   usePageMeta({
     title: 'Blog — São Miguel do Gostoso',
     description: 'Artigos, dicas e novidades sobre São Miguel do Gostoso. Gastronomia, surf, kite, eventos e cultura local.',
   })
-  const { data: posts = [], isLoading } = useBlogPosts()
+  const { data: posts = initialPosts, isLoading } = useBlogPosts()
   const { t } = useTranslation()
 
   return (
