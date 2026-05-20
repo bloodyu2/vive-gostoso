@@ -1,5 +1,7 @@
+'use client'
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import Link from 'next/link'
+import type { User } from '@supabase/supabase-js'
 import { CheckCircle } from 'lucide-react'
 import { Logo } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
@@ -8,9 +10,10 @@ import { useAuth } from '@/hooks/useAuth'
 import { useBusiness } from '@/hooks/useBusinesses'
 import { useSubmitClaim, useMyClaimStatus } from '@/hooks/useClaims'
 
-export default function Claim() {
-  const { slug } = useParams<{ slug: string }>()
-  const { data: business } = useBusiness(slug ?? '')
+type Props = { slug?: string; user?: User | null }
+
+export default function Claim({ slug: slugProp }: Props) {
+  const { data: business } = useBusiness(slugProp ?? '')
   const { user, loading: authLoading } = useAuth()
   // Auth form state
   const [mode, setMode] = useState<'login' | 'register'>('login')
@@ -90,7 +93,7 @@ export default function Claim() {
           Se você acredita que é o proprietário legítimo, pode enviar uma contestação.
         </p>
         <Link
-          to={`/negocio/${business.slug}`}
+          href={`/negocio/${business.slug}`}
           className="text-teal text-sm font-semibold"
         >
           ← Ver o negócio
@@ -110,7 +113,7 @@ export default function Claim() {
           Recebemos seu pedido para reivindicar <strong>{business.name}</strong>.
           Nossa equipe analisa em até 48 horas e você receberá confirmação por e-mail.
         </p>
-        <Link to={`/negocio/${business.slug}`} className="text-teal text-sm font-semibold">
+        <Link href={`/negocio/${business.slug}`} className="text-teal text-sm font-semibold">
           ← Voltar ao negócio
         </Link>
       </div>
@@ -126,7 +129,7 @@ export default function Claim() {
         <p className="text-[#737373] text-sm mb-6">
           Seu perfil está vinculado a <strong>{business.name}</strong>.
         </p>
-        <Link to="/cadastre/painel" className="text-teal text-sm font-semibold">
+        <Link href="/cadastre/painel" className="text-teal text-sm font-semibold">
           Ir para o painel →
         </Link>
       </div>

@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useState } from 'react'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { useAuth } from '@/hooks/useAuth'

@@ -1,6 +1,7 @@
+'use client'
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Link } from 'react-router-dom'
+import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
@@ -444,7 +445,7 @@ function ServicesSection({
           <p className="text-sm text-[#737373] mt-0.5">
             Aparecem no perfil do negócio.{' '}
             <Link
-              to="/contrate"
+              href="/contrate"
               target="_blank"
               className="inline-flex items-center gap-1 text-teal hover:underline"
             >
@@ -532,9 +533,9 @@ function ServicesSection({
 function PerfilInner() {
   const { user } = useAuth()
   const { data: categories = [] } = useCategories()
-  const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const bizId = searchParams.get('bizId')
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const bizId = searchParams?.get('bizId') ?? null
   const invalidateMyBusinesses = useInvalidateMyBusinesses()
 
   const [biz, setBiz] = useState<PartialBusiness>({})
@@ -664,7 +665,7 @@ function PerfilInner() {
 
     setSaving(false)
     invalidateMyBusinesses()
-    navigate(isNew ? '/cadastre/negocios?new=1' : '/cadastre/negocios')
+    router.push(isNew ? '/cadastre/negocios?new=1' : '/cadastre/negocios')
   }
 
   const textFields = [

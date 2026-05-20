@@ -1,5 +1,7 @@
+'use client'
 import { useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Plus, Pencil, Eye, EyeOff, ExternalLink, Copy, Check, Store, X, PartyPopper } from 'lucide-react'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { Button } from '@/components/ui/button'
@@ -78,12 +80,12 @@ function PublishToggle({ biz, onDone }: { biz: BusinessSummary; onDone: () => vo
 function MeusNegociosInner() {
   const { data: businesses = [], isLoading } = useMyBusinesses()
   const invalidate = useInvalidateMyBusinesses()
-  const [searchParams, setSearchParams] = useSearchParams()
-  const isNew = searchParams.get('new') === '1'
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const isNew = searchParams?.get('new') === '1'
 
   function dismissNew() {
-    searchParams.delete('new')
-    setSearchParams(searchParams, { replace: true })
+    router.replace('/cadastre/negocios', { scroll: false })
   }
 
   if (isLoading) {
@@ -126,7 +128,7 @@ function MeusNegociosInner() {
               : `${businesses.length} negócio${businesses.length !== 1 ? 's' : ''} cadastrado${businesses.length !== 1 ? 's' : ''}`}
           </p>
         </div>
-        <Link to="/cadastre/perfil">
+        <Link href="/cadastre/perfil">
           <Button variant="primary" className="flex items-center gap-2">
             <Plus className="w-4 h-4" />
             Novo negócio
@@ -140,7 +142,7 @@ function MeusNegociosInner() {
           <p className="text-[#737373] text-sm mb-4">
             Ainda não tem nenhum negócio vinculado à sua conta.
           </p>
-          <Link to="/cadastre/perfil">
+          <Link href="/cadastre/perfil">
             <Button variant="primary">Cadastrar meu negócio</Button>
           </Link>
         </div>
@@ -203,7 +205,7 @@ function MeusNegociosInner() {
                 </a>
                 <PublishToggle biz={b} onDone={() => invalidate()} />
                 <Link
-                  to={`/cadastre/perfil?bizId=${b.id}`}
+                  href={`/cadastre/perfil?bizId=${b.id}`}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-teal text-white hover:bg-teal/90 transition-colors"
                 >
                   <Pencil className="w-3.5 h-3.5" />
@@ -216,7 +218,7 @@ function MeusNegociosInner() {
       )}
 
       <div className="mt-8">
-        <Link to="/cadastre/painel" className="text-sm text-[#737373] hover:text-teal transition-colors">
+        <Link href="/cadastre/painel" className="text-sm text-[#737373] hover:text-teal transition-colors">
           ← Voltar ao painel
         </Link>
       </div>

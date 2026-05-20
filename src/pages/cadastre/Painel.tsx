@@ -1,5 +1,7 @@
+'use client'
 import { useState } from 'react'
-import { Link, useSearchParams, Navigate } from 'react-router-dom'
+import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { CheckCircle, Store, PlusCircle, Eye } from 'lucide-react'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { useAuth } from '@/hooks/useAuth'
@@ -22,7 +24,8 @@ function PainelInner() {
   const { data: profile, isLoading: profileLoading } = useProfile()
   const role = profile?.role ?? null
   const { data: businesses = [] } = useMyBusinesses()
-  const [searchParams] = useSearchParams()
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const successMsg = searchParams.get('associado') === 'success'
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
@@ -34,7 +37,7 @@ function PainelInner() {
       <div className="w-8 h-8 border-4 border-teal border-t-transparent rounded-full animate-spin" />
     </div>
   )
-  if (role === 'admin') return <Navigate to="/cadastre/admin" replace />
+  if (role === 'admin') { router.replace('/cadastre/admin'); return null }
 
   function getBilling(bizId: string): 'monthly' | 'annual' {
     return billingMode[bizId] ?? 'monthly'
@@ -78,17 +81,17 @@ function PainelInner() {
 
       {/* Module grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Link to="/cadastre/negocios" className="bg-white border border-[#E8E4DF] rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all">
+        <Link href="/cadastre/negocios" className="bg-white border border-[#E8E4DF] rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all">
           <Store className="w-6 h-6 mb-2 text-[#1A1A1A]" />
           <h2 className="font-semibold text-lg">Gerenciar negócios</h2>
           <p className="text-sm text-[#737373] mt-1">Veja, edite e publique seus negócios cadastrados.</p>
         </Link>
-        <Link to="/cadastre/perfil" className="bg-white border border-[#E8E4DF] rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all">
+        <Link href="/cadastre/perfil" className="bg-white border border-[#E8E4DF] rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all">
           <PlusCircle className="w-6 h-6 mb-2 text-[#1A1A1A]" />
           <h2 className="font-semibold text-lg">Adicionar novo negócio</h2>
           <p className="text-sm text-[#737373] mt-1">Cadastre mais um negócio na plataforma.</p>
         </Link>
-        <Link to="/cadastre/preview" className="bg-white border border-[#E8E4DF] rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all">
+        <Link href="/cadastre/preview" className="bg-white border border-[#E8E4DF] rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all">
           <Eye className="w-6 h-6 mb-2 text-[#1A1A1A]" />
           <h2 className="font-semibold text-lg">Preview</h2>
           <p className="text-sm text-[#737373] mt-1">Como seu negócio aparece no diretório.</p>
