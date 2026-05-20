@@ -1,12 +1,22 @@
 // app/layout.tsx
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Providers } from '@/components/providers'
 import '@/styles/globals.css'
+
+export const viewport: Viewport = {
+  themeColor: '#0D7C7C',
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://vivegostoso.com.br'),
   title: { default: 'Vive Gostoso', template: '%s | Vive Gostoso' },
   description: 'A infraestrutura digital de São Miguel do Gostoso, RN.',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Vive Gostoso',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
