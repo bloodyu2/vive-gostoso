@@ -14,6 +14,12 @@ export async function middleware(request: NextRequest) {
     return await updateSession(request)
   }
 
+  // Arquivos especiais do Next.js que nao devem passar pelo i18n
+  // (sitemap.xml, robots.txt, etc. sao gerados em app/ na raiz)
+  if (pathname === '/sitemap.xml' || pathname === '/robots.txt') {
+    return NextResponse.next()
+  }
+
   // Demais rotas: i18n middleware primeiro
   // next-intl retorna 200 com rewrite headers para o locale padrao (pt)
   // Devemos sempre retornar a resposta do intl para que o rewrite seja aplicado
