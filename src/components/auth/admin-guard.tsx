@@ -1,4 +1,6 @@
-import { Navigate } from 'react-router-dom'
+'use client'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { useProfile } from '@/hooks/useProfile'
 
@@ -10,23 +12,30 @@ const Spinner = () => (
 
 export function AdminGuard({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
+  const router = useRouter()
 
-  if (loading) return <Spinner />
-  if (!user) return <Navigate to="/cadastre" replace />
+  useEffect(() => {
+    if (!loading && !user) router.replace('/cadastre')
+  }, [loading, user, router])
+
+  if (loading || !user) return <Spinner />
 
   return <AdminRoleCheck>{children}</AdminRoleCheck>
 }
 
 function AdminRoleCheck({ children }: { children: React.ReactNode }) {
-  // useProfile has its own useAuth() instance starting with user=null.
-  // In RQ v5, isLoading = isPending && isFetching — when enabled:false, isFetching
-  // is false so isLoading is false even though profile is undefined. Use isPending
-  // instead so we wait while the query is disabled OR fetching.
   const { loading: authLoading } = useAuth()
   const { data: profile, isPending } = useProfile()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!authLoading && !isPending && (!profile || profile.role !== 'admin')) {
+      router.replace('/cadastre/painel')
+    }
+  }, [authLoading, isPending, profile, router])
 
   if (authLoading || isPending) return <Spinner />
-  if (!profile || profile.role !== 'admin') return <Navigate to="/cadastre/painel" replace />
+  if (!profile || profile.role !== 'admin') return <Spinner />
 
   return <>{children}</>
 }
