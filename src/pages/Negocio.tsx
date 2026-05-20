@@ -1,3 +1,4 @@
+'use client'
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle, Share2, Check, BookOpen, Wifi, Car, UserCheck, CalendarCheck } from 'lucide-react'
@@ -15,12 +16,19 @@ import { useReviews } from '@/hooks/useReviews'
 import { StarRating } from '@/components/reviews/star-rating'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import type { Business } from '@/types/database'
 
 const DAY_ORDER = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']
 
-export default function Negocio() {
-  const { slug } = useParams<{ slug: string }>()
-  const { data: b, isLoading } = useBusiness(slug ?? '')
+type NegocioProps = {
+  initialBusiness?: Business | null
+  slug?: string
+}
+
+export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProps) {
+  const params = useParams<{ slug: string }>()
+  const slug = slugProp ?? params.slug
+  const { data: b = initialBusiness ?? undefined, isLoading } = useBusiness(slug ?? '')
   const [copied, setCopied] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const { data: reviews = [] } = useReviews(b?.id ?? '')
