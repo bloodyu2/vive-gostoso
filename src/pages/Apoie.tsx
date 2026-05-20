@@ -1,3 +1,4 @@
+'use client'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams, Link } from 'react-router-dom'
@@ -11,7 +12,7 @@ import {
   CheckCircle, Clock, Globe, Mail, Database, Layers,
   Phone, Smartphone, Zap, Server, Heart, Target, Megaphone, Users,
 } from 'lucide-react'
-import type { Goal } from '@/types/database'
+import type { FundEntry, Goal } from '@/types/database'
 
 // ─── Static data ────────────────────────────────────────────────────────────
 
@@ -106,7 +107,11 @@ function fmt(cents: number) {
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
-export default function Apoie() {
+type ApoieProps = {
+  initialEntries?: FundEntry[]
+}
+
+export default function Apoie({ initialEntries = [] }: ApoieProps) {
   const { t } = useTranslation()
   usePageMeta({
     title: 'Apoie Gostoso',
@@ -116,7 +121,7 @@ export default function Apoie() {
   const [searchParams] = useSearchParams()
   const donationSuccess = searchParams.get('doacao') === 'success'
 
-  const { data: entries = [] }      = useFundEntries()
+  const { data: entries = initialEntries }      = useFundEntries()
   const { data: summary }           = useFundSummary()
   const { data: associadosCount = 0 } = useAssociadosCount()
   const { data: goals = [] }        = useGoals()

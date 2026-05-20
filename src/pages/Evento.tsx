@@ -1,17 +1,25 @@
+'use client'
 import { useParams, Link } from 'react-router-dom'
 import { CalendarDays, MapPin, ArrowLeft, ExternalLink } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useEvent } from '@/hooks/useEvents'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { Badge } from '@/components/ui/badge'
+import type { GostosoEvent } from '@/types/database'
 
 const typeMap: Record<string, string> = {
   festival: 'Festival', esporte: 'Esporte', cultural: 'Cultural', gastronomia: 'Gastronomia',
 }
 
-export default function Evento() {
-  const { id } = useParams<{ id: string }>()
-  const { data: event, isLoading } = useEvent(id ?? '')
+type EventoProps = {
+  initialEvent?: GostosoEvent | null
+  id?: string
+}
+
+export default function Evento({ initialEvent, id: idProp }: EventoProps) {
+  const params = useParams<{ id: string }>()
+  const id = idProp ?? params.id
+  const { data: event = initialEvent ?? undefined, isLoading } = useEvent(id ?? '')
   const { t } = useTranslation()
 
   usePageMeta({

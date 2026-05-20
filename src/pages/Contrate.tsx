@@ -1,3 +1,4 @@
+'use client'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Briefcase, Wrench, Plus } from 'lucide-react'
@@ -8,21 +9,26 @@ import { JobForm } from '@/components/contrate/job-form'
 import { useServices } from '@/hooks/useServices'
 import { useJobs } from '@/hooks/useJobs'
 import { SERVICE_CATEGORY_LABELS } from '@/types/database'
-import type { ServiceCategory } from '@/types/database'
+import type { ServiceCategory, ServiceListing, JobListing } from '@/types/database'
 
 type Tab = 'servicos' | 'vagas'
 
 const SERVICE_CATS = Object.entries(SERVICE_CATEGORY_LABELS) as [ServiceCategory, string][]
 
-export default function Contrate() {
+type ContrateProps = {
+  initialServices?: ServiceListing[]
+  initialJobs?: JobListing[]
+}
+
+export default function Contrate({ initialServices = [], initialJobs = [] }: ContrateProps) {
   const { t } = useTranslation()
   const [tab, setTab] = useState<Tab>('servicos')
   const [catFilter, setCatFilter] = useState<ServiceCategory | undefined>()
   const [showServiceForm, setShowServiceForm] = useState(false)
   const [showJobForm, setShowJobForm] = useState(false)
 
-  const { data: services = [], isLoading: loadingServices } = useServices(catFilter)
-  const { data: jobs = [], isLoading: loadingJobs } = useJobs()
+  const { data: services = initialServices, isLoading: loadingServices } = useServices(catFilter)
+  const { data: jobs = initialJobs, isLoading: loadingJobs } = useJobs()
 
   return (
     <>
