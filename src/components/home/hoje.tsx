@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { Clock, CalendarDays } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useBusinesses } from '@/hooks/useBusinesses'
@@ -56,7 +56,7 @@ export function Hoje() {
                 {openNow.slice(0, 5).map(b => (
                   <Link
                     key={b.id}
-                    to={`/negocio/${b.slug}`}
+                    href={`/negocio/${b.slug}`}
                     className="flex items-center gap-3 group"
                   >
                     <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal to-teal-dark flex-shrink-0 overflow-hidden">
@@ -72,7 +72,7 @@ export function Hoje() {
                   </Link>
                 ))}
                 {openNow.length > 5 && (
-                  <Link to="/come" className="block text-xs text-white/40 hover:text-teal-light pt-1 transition-colors">
+                  <Link href="/come" className="block text-xs text-white/40 hover:text-teal-light pt-1 transition-colors">
                     +{openNow.length - 5} mais abertos →
                   </Link>
                 )}
@@ -101,7 +101,7 @@ export function Hoje() {
                   </div>
                 ))}
                 {todayEvents.length > 4 && (
-                  <Link to="/participe" className="block text-xs text-white/40 hover:text-coral pt-1 transition-colors">
+                  <Link href="/participe" className="block text-xs text-white/40 hover:text-coral pt-1 transition-colors">
                     Ver todos os eventos →
                   </Link>
                 )}

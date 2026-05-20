@@ -1,6 +1,7 @@
+'use client'
 import { useState, useRef, useEffect } from 'react'
 import { Bell } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { useNotifications, useMarkAllNotificationsRead } from '@/hooks/useNotifications'
 import { cn } from '@/lib/utils'
 
@@ -69,7 +70,7 @@ export function NotificationBell() {
             ) : notifications.map(n => {
               const Wrapper = n.link ? Link : 'div'
               const wrapperProps = n.link
-                ? { to: n.link, onClick: () => setOpen(false) }
+                ? { href: n.link, onClick: () => setOpen(false) }
                 : {}
               return (
                 <Wrapper

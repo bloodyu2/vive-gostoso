@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import type { UseQueryOptions } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { GostosoEvent } from '@/types/database'
 
@@ -19,7 +20,10 @@ export function useEvents(featured?: boolean) {
   })
 }
 
-export function useEvent(id: string) {
+export function useEvent(
+  id: string,
+  options?: Pick<UseQueryOptions<GostosoEvent | null>, 'initialData'>,
+) {
   return useQuery({
     queryKey: ['event', id],
     enabled: !!id,
@@ -33,5 +37,6 @@ export function useEvent(id: string) {
       if (error) throw error
       return data as GostosoEvent | null
     },
+    ...options,
   })
 }

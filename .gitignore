@@ -12,11 +12,23 @@ dist
 dist-ssr
 *.local
 
+# Next.js
+.next/
+next-env.d.ts
+tsconfig.tsbuildinfo
+
+# next-pwa generated files (built at deploy time)
+public/sw.js
+public/swe-worker-*.js
+public/workbox-*.js
+
 .env.local
 .env
 .claude/
 .cursor/
 .cursorrules
+CLAUDE.md
+memory.md
 
 # Editor directories and files
 .vscode/*

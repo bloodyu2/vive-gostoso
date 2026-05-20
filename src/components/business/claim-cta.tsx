@@ -1,5 +1,5 @@
 // src/components/business/claim-cta.tsx
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { Flag } from 'lucide-react'
 
 interface ClaimCtaProps {
@@ -17,7 +17,7 @@ export function ClaimCta({ businessSlug }: ClaimCtaProps) {
         Reivindique este perfil para gerenciar as informações diretamente.
       </p>
       <Link
-        to={`/cadastre/claim/${businessSlug}`}
+        href={`/cadastre/claim/${businessSlug}`}
         className="inline-flex items-center justify-center gap-1.5 bg-[#1A1A1A] text-white text-xs font-semibold px-4 py-2.5 rounded-xl hover:opacity-90 transition-opacity"
       >
         Reivindicar este negócio

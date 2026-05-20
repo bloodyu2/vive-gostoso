@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { Phone, MapPin, Navigation, ExternalLink } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Badge } from '@/components/ui/badge'
@@ -35,7 +35,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
     return (
       <div className="group bg-white dark:bg-[#1C1C1C] rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] hover:border-ocre hover:shadow-lg transition-all duration-200 flex">
         {/* Thumb */}
-        <Link to={lp(`/negocio/${b.slug}`)} className="relative w-36 sm:w-48 flex-shrink-0">
+        <Link href={lp(`/negocio/${b.slug}`)} className="relative w-36 sm:w-48 flex-shrink-0">
           <div className="w-full h-full bg-gradient-to-br from-teal to-teal-dark">
             {b.cover_url && <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />}
           </div>
@@ -53,7 +53,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
               {b.category && <Badge kind="cat">{b.category.name}</Badge>}
               {open ? <Badge kind="open" dot>{t('common.aberto')}</Badge> : <Badge kind="closed" dot>{t('common.fechado')}</Badge>}
             </div>
-            <Link to={lp(`/negocio/${b.slug}`)}>
+            <Link href={lp(`/negocio/${b.slug}`)}>
               <h3 className="font-display font-semibold text-lg tracking-tight hover:text-teal transition-colors">{b.name}</h3>
             </Link>
             <div className="mt-1.5 flex flex-wrap gap-1.5 items-center">
@@ -105,7 +105,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
               <Navigation className="w-3 h-3" />Waze
             </a>
             <Link
-              to={lp(`/negocio/${b.slug}`)}
+              href={lp(`/negocio/${b.slug}`)}
               className="ml-auto flex items-center gap-1 text-teal text-xs font-semibold hover:underline"
             >
               {t('filters.ver_mais')} <ExternalLink className="w-3 h-3" />
@@ -122,7 +122,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
       'group bg-white dark:bg-[#1C1C1C] rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] hover:border-ocre hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 flex flex-col',
     )}>
       {/* Cover */}
-      <Link to={lp(`/negocio/${b.slug}`)} className="relative overflow-hidden aspect-[4/3] bg-gradient-to-br from-teal to-teal-dark flex-shrink-0">
+      <Link href={lp(`/negocio/${b.slug}`)} className="relative overflow-hidden aspect-[4/3] bg-gradient-to-br from-teal to-teal-dark flex-shrink-0">
         {b.cover_url && <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />}
         {b.is_featured && (
           <div className="absolute top-3 right-3">
@@ -149,7 +149,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
           )}
         </div>
 
-        <Link to={lp(`/negocio/${b.slug}`)}>
+        <Link href={lp(`/negocio/${b.slug}`)}>
           <h3 className="font-display font-semibold text-xl tracking-tight hover:text-teal transition-colors">{b.name}</h3>
         </Link>
         <div className="mt-1.5 flex flex-wrap gap-1.5 items-center">
@@ -203,7 +203,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
             <Navigation className="w-3 h-3" />Waze
           </a>
           <Link
-            to={lp(`/negocio/${b.slug}`)}
+            href={lp(`/negocio/${b.slug}`)}
             className="ml-auto flex items-center gap-1 text-teal text-xs font-semibold hover:underline"
           >
             {t('filters.ver_mais')} <ExternalLink className="w-3 h-3" />

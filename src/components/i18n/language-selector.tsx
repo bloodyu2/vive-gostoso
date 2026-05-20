@@ -1,7 +1,8 @@
+'use client'
 import { useState, useRef, useEffect } from 'react'
 import { Globe } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useRouter, usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { stripLocale, localeFromPath } from '@/hooks/useLocalePath'
 
@@ -18,18 +19,18 @@ interface LanguageSelectorProps {
 
 export function LanguageSelector({ variant = 'dropdown' }: LanguageSelectorProps) {
   const { } = useTranslation()
-  const navigate = useNavigate()
-  const { pathname } = useLocation()
+  const router = useRouter()
+  const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
-  const currentLocale = localeFromPath(pathname)
+  const currentLocale = localeFromPath(pathname ?? '/')
   const current = LANGUAGES.find(l => l.code === currentLocale) ?? LANGUAGES[0]
 
   function change(code: string) {
     localStorage.setItem('i18n-lang', code)
     // Strip current locale prefix to get the bare page path
-    const pagePath = stripLocale(pathname)  // e.g. '/come' or '/'
+    const pagePath = stripLocale(pathname ?? '/')  // e.g. '/come' or '/'
 
     let newPath: string
     if (code === 'pt') {
@@ -39,7 +40,7 @@ export function LanguageSelector({ variant = 'dropdown' }: LanguageSelectorProps
       newPath = `/${code}${pagePath === '/' ? '' : pagePath}`
     }
 
-    navigate(newPath)
+    router.push(newPath)
     setOpen(false)
   }
 

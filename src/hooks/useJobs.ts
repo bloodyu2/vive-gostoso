@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import type { UseQueryOptions } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { JobListing, ContractType } from '@/types/database'
 
@@ -44,7 +45,10 @@ export function useModerateJob() {
   })
 }
 
-export function useJobs(contractType?: ContractType) {
+export function useJobs(
+  contractType?: ContractType,
+  options?: Pick<UseQueryOptions<JobListing[]>, 'initialData'>,
+) {
   return useQuery({
     queryKey: ['jobs', contractType],
     queryFn: async (): Promise<JobListing[]> => {
@@ -58,6 +62,7 @@ export function useJobs(contractType?: ContractType) {
       if (error) throw error
       return (data ?? []) as JobListing[]
     },
+    ...options,
   })
 }
 

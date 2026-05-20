@@ -1,5 +1,63 @@
 # CLAUDE.md — Vive Gostoso
 
+## ⚡ INÍCIO DE SESSÃO — LEIA PRIMEIRO
+
+**Antes de qualquer ação: leia `./memory.md`**
+Contém o contexto completo da última interação — estado atual, pendências, decisões tomadas.
+Se o arquivo não existir: crie-o vazio e continue.
+
+---
+
+## ✅ AO FINALIZAR CADA TAREFA
+
+**Atualize `./memory.md`** antes de encerrar a sessão com:
+- O que foi feito nesta sessão
+- Estado atual (build OK? Deploy READY? PRs pendentes?)
+- Pendências e próximos passos
+- Contexto importante para o próximo agente
+
+O `memory.md` é a memória persistente deste projeto entre sessões. Mantenha-o sempre atualizado.
+
+---
+
+## REGRAS OBRIGATÓRIAS (da pasta mãe)
+
+### Superpowers — fluxo mínimo por tarefa
+```
+1. brainstorming / writing-plans  → planejar antes de implementar
+2. subagent-driven-development    → implementar
+3. verification-before-completion → verificar antes de declarar concluído
+4. push + monitorar Vercel deploy em background até READY
+```
+
+### Comportamento
+- Fazer apenas o que foi pedido — nada mais, nada menos
+- SEMPRE ler um arquivo antes de editá-lo
+- SEMPRE preferir editar arquivo existente a criar um novo
+- NUNCA commitar sem solicitação explícita do usuário
+- NUNCA fazer commit de segredos, credenciais ou `.env`
+- NUNCA criar arquivos `.md` de documentação proativamente (salvo solicitação explícita)
+- NUNCA salvar arquivos de trabalho na pasta raiz do projeto
+
+### Deploy Vercel (após todo git push)
+Spawnar agente de monitoramento em background: poll até status = READY. Em caso de erro: ler logs, corrigir código, commitar, pushar e monitorar novamente.
+
+### .gitignore (verificar no início de cada sessão)
+Garantir que estes itens estejam no `.gitignore`:
+```
+.claude/
+.cursor/
+.cursorrules
+CLAUDE.md
+memory.md
+```
+Se não estiverem: adicionar antes de qualquer commit.
+
+### git push 403
+Se `git push` falhar com 403 na VM: usar GitHub web (github.dev) ou comunicar ao usuário.
+
+---
+
 > O CLAUDE.md principal com toda a documentação do projeto está em `../CLAUDE.md`
 > (carregado automaticamente pelo Claude Code quando você abre a pasta `gostoso/`).
 > Este arquivo existe dentro do repo git para versionar regras críticas e o estado atual.

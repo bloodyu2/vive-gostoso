@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
@@ -67,7 +67,7 @@ export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPosts
         {posts.map(post => (
           <Link
             key={post.id}
-            to={`/blog/${post.slug}`}
+            href={`/blog/${post.slug}`}
             className="group rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] bg-white dark:bg-[#222] hover:shadow-lg transition-shadow"
           >
             {post.cover_url ? (

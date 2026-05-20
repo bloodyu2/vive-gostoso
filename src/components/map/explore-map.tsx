@@ -1,5 +1,6 @@
+'use client'
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { MapPin, X, Utensils, BedDouble, Compass, Wrench } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 // mapbox-gl is loaded dynamically on component mount to keep it out of the
@@ -77,7 +78,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
     import('mapbox-gl').then((mapboxgl) => {
       if (map.current || !mapContainer.current) return
       mapboxRef.current = mapboxgl as MapboxGLModule
-      mapboxgl.default.accessToken = import.meta.env.VITE_MAPBOX_TOKEN as string
+      mapboxgl.default.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string
 
       map.current = new mapboxgl.default.Map({
         container: mapContainer.current,
@@ -213,7 +214,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
                 </button>
               </div>
               <Link
-                to={lp(`/negocio/${popup.slug}`)}
+                href={lp(`/negocio/${popup.slug}`)}
                 className="mt-3 block text-center text-sm font-semibold bg-teal text-white rounded-xl px-4 py-2 hover:bg-teal-dark transition-colors"
               >
                 Ver perfil
@@ -268,7 +269,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
                 >
                   {VERB_LABEL[verb]}
                 </span>
-                <Link to={lp(VERB_TO[verb])} className="text-xs text-teal font-medium hover:underline">
+                <Link href={lp(VERB_TO[verb])} className="text-xs text-teal font-medium hover:underline">
                   Ver todos →
                 </Link>
               </div>
@@ -302,7 +303,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
                   </button>
                 ))}
                 {list.length > 5 && (
-                  <Link to={lp(VERB_TO[verb])} className="block px-5 py-3 text-xs text-teal font-medium hover:bg-[#F5F2EE] transition-colors">
+                  <Link href={lp(VERB_TO[verb])} className="block px-5 py-3 text-xs text-teal font-medium hover:bg-[#F5F2EE] transition-colors">
                     +{list.length - 5} mais em {VERB_LABEL[verb].toLowerCase()} →
                   </Link>
                 )}

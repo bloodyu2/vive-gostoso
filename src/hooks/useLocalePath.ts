@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom'
+import { usePathname } from 'next/navigation'
 
 type Locale = 'pt' | 'en' | 'es'
 const LOCALES: Locale[] = ['en', 'es']
@@ -10,7 +10,7 @@ const LOCALES: Locale[] = ['en', 'es']
  * ES:  `/es/come`
  */
 export function useLocalePath() {
-  const { pathname } = useLocation()
+  const pathname = usePathname() ?? '/'
   const segments = pathname.split('/')
   const firstSeg = segments[1] as Locale
   const currentLocale: Locale = LOCALES.includes(firstSeg) ? firstSeg : 'pt'

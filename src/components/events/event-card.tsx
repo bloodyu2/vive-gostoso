@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import type { GostosoEvent } from '@/types/database'
 
@@ -49,7 +49,7 @@ export function EventCard({ event: e }: { event: GostosoEvent }) {
   }
 
   return (
-    <Link to={`/evento/${e.id}`} className={baseClass}>
+    <Link href={`/evento/${e.id}`} className={baseClass}>
       <CardContent event={e} />
     </Link>
   )

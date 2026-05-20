@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom'
+'use client'
+import Link from 'next/link'
 import { Sun, Moon } from 'lucide-react'
 import { Logo } from '@/components/brand/logo'
 import { useTheme } from '@/hooks/useTheme'
@@ -61,7 +62,7 @@ export function Footer() {
             <div className="font-semibold mb-3 text-white">{t('footer.modulos')}</div>
             <nav className="flex flex-col gap-1.5">
               {MODULOS.map(v => (
-                <Link key={v.to} to={v.to} className="opacity-70 hover:opacity-100 hover:text-teal-light transition-opacity leading-loose">
+                <Link key={v.to} href={v.to} className="opacity-70 hover:opacity-100 hover:text-teal-light transition-opacity leading-loose">
                   {v.label}
                 </Link>
               ))}
@@ -71,7 +72,7 @@ export function Footer() {
             <div className="font-semibold mb-3 text-white">{t('footer.cidade')}</div>
             <nav className="flex flex-col gap-1.5">
               {CIDADE.map(v => (
-                <Link key={v.to} to={v.to} className="opacity-70 hover:opacity-100 hover:text-teal-light transition-opacity leading-loose">
+                <Link key={v.to} href={v.to} className="opacity-70 hover:opacity-100 hover:text-teal-light transition-opacity leading-loose">
                   {v.label}
                 </Link>
               ))}
@@ -81,7 +82,7 @@ export function Footer() {
             <div className="font-semibold mb-3 text-white">{t('footer.negocios')}</div>
             <nav className="flex flex-col gap-1.5">
               {NEGOCIOS.map(v => (
-                <Link key={v.to} to={v.to} className="opacity-70 hover:opacity-100 hover:text-teal-light transition-opacity leading-loose">
+                <Link key={v.to} href={v.to} className="opacity-70 hover:opacity-100 hover:text-teal-light transition-opacity leading-loose">
                   {v.label}
                 </Link>
               ))}
