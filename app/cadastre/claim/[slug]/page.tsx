@@ -10,12 +10,13 @@ export default async function ClaimPage({ params }: Props) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/cadastre')
 
-  const { data: business } = await supabase
+  const { data: business, error } = await supabase
     .from('gostoso_businesses')
     .select('id, name, slug, is_verified')
     .eq('slug', slug)
     .maybeSingle()
 
+  if (error) throw error
   if (!business) notFound()
 
   return <Claim slug={slug} user={user} />
