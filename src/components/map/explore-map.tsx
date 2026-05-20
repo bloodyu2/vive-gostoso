@@ -9,8 +9,8 @@ import type { Business } from '@/types/database'
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN as string
 
-// Centro de São Miguel do Gostoso
-const CENTER: [number, number] = [-35.6378, -5.1178]
+// Centro de São Miguel do Gostoso [lng, lat] — formato Mapbox
+const CENTER: [number, number] = [-35.6419, -5.1167]
 const ZOOM = 14
 
 const VERB_COLOR: Record<string, string> = {
