@@ -8,10 +8,11 @@ export default async function ClaimPage({ params }: Props) {
   const { slug } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/cadastre')
 
   const { data: business } = await supabase
     .from('gostoso_businesses')
-    .select('id, name, slug, is_verified, profile_id')
+    .select('id, name, slug, is_verified')
     .eq('slug', slug)
     .maybeSingle()
 
