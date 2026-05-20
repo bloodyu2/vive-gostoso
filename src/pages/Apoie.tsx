@@ -121,7 +121,8 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
   const [searchParams] = useSearchParams()
   const donationSuccess = searchParams.get('doacao') === 'success'
 
-  const { data: entries = initialEntries }      = useFundEntries()
+  const { data: entries }      = useFundEntries({ initialData: initialEntries })
+  const entriesList = entries ?? []
   const { data: summary }           = useFundSummary()
   const { data: associadosCount = 0 } = useAssociadosCount()
   const { data: goals = [] }        = useGoals()
@@ -159,7 +160,7 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
         operacaoCents={summary?.operacaoCents ?? 0}
         acumuladoCents={summary?.acumuladoCents ?? 0}
         associadosCount={associadosCount}
-        hasEntries={entries.length > 0}
+        hasEntries={entriesList.length > 0}
       />
 
       <div className="max-w-3xl mx-auto px-5 md:px-8 py-14 space-y-14">
@@ -412,10 +413,10 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
           <h2 className="font-display font-semibold text-2xl mb-1">Movimentações</h2>
           <p className="text-sm text-[#737373] mb-5">Cada real que entra ou sai. Auditável. Público.</p>
 
-          {entries.length > 0 ? (
+          {entriesList.length > 0 ? (
             <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl overflow-hidden">
-              {entries.map((e, i) => (
-                <FundEntryRow key={e.id} entry={e} last={i === entries.length - 1} />
+              {entriesList.map((e, i) => (
+                <FundEntryRow key={e.id} entry={e} last={i === entriesList.length - 1} />
               ))}
             </div>
           ) : (

@@ -1,8 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
+import type { UseQueryOptions } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { FundEntry } from '@/types/database'
 
-export function useFundEntries() {
+export function useFundEntries(
+  options?: Pick<UseQueryOptions<FundEntry[]>, 'initialData'>,
+) {
   return useQuery({
     queryKey: ['fund-entries'],
     queryFn: async (): Promise<FundEntry[]> => {
@@ -13,6 +16,7 @@ export function useFundEntries() {
       if (error) throw error
       return (data ?? []) as FundEntry[]
     },
+    ...options,
   })
 }
 

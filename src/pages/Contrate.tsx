@@ -27,8 +27,10 @@ export default function Contrate({ initialServices = [], initialJobs = [] }: Con
   const [showServiceForm, setShowServiceForm] = useState(false)
   const [showJobForm, setShowJobForm] = useState(false)
 
-  const { data: services = initialServices, isLoading: loadingServices } = useServices(catFilter)
-  const { data: jobs = initialJobs, isLoading: loadingJobs } = useJobs()
+  const { data: services, isLoading: loadingServices } = useServices(catFilter, { initialData: initialServices })
+  const { data: jobs, isLoading: loadingJobs } = useJobs(undefined, { initialData: initialJobs })
+  const servicesList = services ?? []
+  const jobsList = jobs ?? []
 
   return (
     <>
@@ -79,8 +81,8 @@ export default function Contrate({ initialServices = [], initialJobs = [] }: Con
           >
             <Wrench className="w-4 h-4" />
             {t('contrate.tab_servicos')}
-            {services.length > 0 && tab === 'servicos' && (
-              <span className="bg-teal/10 text-teal text-xs px-2 py-0.5 rounded-full">{services.length}</span>
+            {servicesList.length > 0 && tab === 'servicos' && (
+              <span className="bg-teal/10 text-teal text-xs px-2 py-0.5 rounded-full">{servicesList.length}</span>
             )}
           </button>
           <button
@@ -93,8 +95,8 @@ export default function Contrate({ initialServices = [], initialJobs = [] }: Con
           >
             <Briefcase className="w-4 h-4" />
             {t('contrate.tab_vagas')}
-            {jobs.length > 0 && tab === 'vagas' && (
-              <span className="bg-ocre/10 text-ocre text-xs px-2 py-0.5 rounded-full">{jobs.length}</span>
+            {jobsList.length > 0 && tab === 'vagas' && (
+              <span className="bg-ocre/10 text-ocre text-xs px-2 py-0.5 rounded-full">{jobsList.length}</span>
             )}
           </button>
         </div>
@@ -137,7 +139,7 @@ export default function Contrate({ initialServices = [], initialJobs = [] }: Con
                   </div>
                 ))}
               </div>
-            ) : services.length === 0 ? (
+            ) : servicesList.length === 0 ? (
               <div className="text-center py-16">
                 <div className="text-4xl mb-3">🔨</div>
                 <h3 className="font-display font-bold text-xl mb-2">{t('contrate.sem_servicos')}</h3>
@@ -153,7 +155,7 @@ export default function Contrate({ initialServices = [], initialJobs = [] }: Con
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-                {services.map(s => <ServiceCard key={s.id} service={s} />)}
+                {servicesList.map(s => <ServiceCard key={s.id} service={s} />)}
               </div>
             )}
           </>
@@ -176,7 +178,7 @@ export default function Contrate({ initialServices = [], initialJobs = [] }: Con
                   </div>
                 ))}
               </div>
-            ) : jobs.length === 0 ? (
+            ) : jobsList.length === 0 ? (
               <div className="text-center py-16">
                 <div className="text-4xl mb-3">💼</div>
                 <h3 className="font-display font-bold text-xl mb-2">{t('contrate.sem_vagas')}</h3>
@@ -192,7 +194,7 @@ export default function Contrate({ initialServices = [], initialJobs = [] }: Con
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-                {jobs.map(j => <JobCard key={j.id} job={j} />)}
+                {jobsList.map(j => <JobCard key={j.id} job={j} />)}
               </div>
             )}
           </>

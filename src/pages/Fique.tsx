@@ -28,11 +28,11 @@ export default function Fique({ initialBusinesses = [] }: FiqueProps) {
   const [openOnly, setOpenOnly] = useState(false)
   const [search, setSearch] = useState('')
   const { data: categories = [] } = useCategories('fique')
-  const { data: businesses = initialBusinesses, isLoading } = useBusinesses('fique')
+  const { data: businesses, isLoading } = useBusinesses('fique', { initialData: initialBusinesses })
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
-    return businesses
+    return (businesses ?? [])
       .filter(b => !activeCat || b.category?.slug === activeCat)
       .filter(b => !openOnly || isBusinessOpen(b.opening_hours))
       .filter(b => !q || [b.name, b.description ?? '', b.address ?? ''].join(' ').toLowerCase().includes(q))

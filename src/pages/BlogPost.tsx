@@ -2,6 +2,7 @@
 import { useMemo } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import type { UseQueryOptions } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import DOMPurify from 'isomorphic-dompurify'
@@ -13,7 +14,10 @@ import { RelatedPosts, TableOfContents } from '@/components/blog'
 
 const SITE_URL = 'https://vivegostoso.com.br'
 
-function useBlogPost(slug: string) {
+function useBlogPost(
+  slug: string,
+  options?: Pick<UseQueryOptions<BlogPost | null>, 'initialData'>,
+) {
   return useQuery({
     queryKey: ['blog-post', slug],
     queryFn: async () => {
@@ -27,6 +31,7 @@ function useBlogPost(slug: string) {
       return data as BlogPost | null
     },
     enabled: !!slug,
+    ...options,
   })
 }
 
@@ -38,7 +43,7 @@ type BlogPostPageProps = {
 export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPageProps) {
   const params = useParams<{ slug: string }>()
   const slug = slugProp ?? params.slug
-  const { data: post = initialPost ?? undefined, isLoading } = useBlogPost(slug ?? '')
+  const { data: post, isLoading } = useBlogPost(slug ?? '', initialPost !== undefined ? { initialData: initialPost } : undefined)
   const { t } = useTranslation()
 
   const url = slug ? `${SITE_URL}/blog/${slug}` : SITE_URL

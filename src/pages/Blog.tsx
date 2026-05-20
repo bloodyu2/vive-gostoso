@@ -1,12 +1,13 @@
 'use client'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import type { UseQueryOptions } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
 import { usePageMeta } from '@/hooks/usePageMeta'
 
-function useBlogPosts() {
+function useBlogPosts(options?: Pick<UseQueryOptions<BlogPost[]>, 'initialData'>) {
   return useQuery({
     queryKey: ['blog-posts'],
     queryFn: async () => {
@@ -18,6 +19,7 @@ function useBlogPosts() {
       if (error) throw error
       return (data ?? []) as BlogPost[]
     },
+    ...options,
   })
 }
 
@@ -30,7 +32,7 @@ export default function Blog({ initialPosts = [] }: BlogProps) {
     title: 'Blog — São Miguel do Gostoso',
     description: 'Artigos, dicas e novidades sobre São Miguel do Gostoso. Gastronomia, surf, kite, eventos e cultura local.',
   })
-  const { data: posts = initialPosts, isLoading } = useBlogPosts()
+  const { data: posts = [], isLoading } = useBlogPosts({ initialData: initialPosts })
   const { t } = useTranslation()
 
   return (

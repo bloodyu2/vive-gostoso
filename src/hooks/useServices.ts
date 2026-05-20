@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import type { UseQueryOptions } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { ServiceListing, ServiceCategory } from '@/types/database'
 
@@ -44,7 +45,10 @@ export function useModerateService() {
   })
 }
 
-export function useServices(category?: ServiceCategory) {
+export function useServices(
+  category?: ServiceCategory,
+  options?: Pick<UseQueryOptions<ServiceListing[]>, 'initialData'>,
+) {
   return useQuery({
     queryKey: ['services', category],
     queryFn: async (): Promise<ServiceListing[]> => {
@@ -59,6 +63,7 @@ export function useServices(category?: ServiceCategory) {
       if (error) throw error
       return (data ?? []) as ServiceListing[]
     },
+    ...options,
   })
 }
 

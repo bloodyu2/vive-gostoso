@@ -19,7 +19,7 @@ type EventoProps = {
 export default function Evento({ initialEvent, id: idProp }: EventoProps) {
   const params = useParams<{ id: string }>()
   const id = idProp ?? params.id
-  const { data: event = initialEvent ?? undefined, isLoading } = useEvent(id ?? '')
+  const { data: event, isLoading } = useEvent(id ?? '', initialEvent !== undefined ? { initialData: initialEvent } : undefined)
   const { t } = useTranslation()
 
   usePageMeta({

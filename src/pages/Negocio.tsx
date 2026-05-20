@@ -28,7 +28,7 @@ type NegocioProps = {
 export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProps) {
   const params = useParams<{ slug: string }>()
   const slug = slugProp ?? params.slug
-  const { data: b = initialBusiness ?? undefined, isLoading } = useBusiness(slug ?? '')
+  const { data: b, isLoading } = useBusiness(slug ?? '', initialBusiness !== undefined ? { initialData: initialBusiness } : undefined)
   const [copied, setCopied] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const { data: reviews = [] } = useReviews(b?.id ?? '')

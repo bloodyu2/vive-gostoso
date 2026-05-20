@@ -1,8 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
+import type { UseQueryOptions } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { Business, Category } from '@/types/database'
 
-export function useBusinesses(verb?: 'come' | 'fique' | 'passeie' | 'resolva') {
+export function useBusinesses(
+  verb?: 'come' | 'fique' | 'passeie' | 'resolva',
+  options?: Pick<UseQueryOptions<Business[]>, 'initialData'>,
+) {
   return useQuery({
     queryKey: ['businesses', verb],
     queryFn: async (): Promise<Business[]> => {
@@ -36,10 +40,14 @@ export function useBusinesses(verb?: 'come' | 'fique' | 'passeie' | 'resolva') {
       if (error) throw error
       return (data ?? []) as Business[]
     },
+    ...options,
   })
 }
 
-export function useBusiness(slug: string) {
+export function useBusiness(
+  slug: string,
+  options?: Pick<UseQueryOptions<Business | null>, 'initialData'>,
+) {
   return useQuery({
     queryKey: ['business', slug],
     queryFn: async (): Promise<Business | null> => {
@@ -53,6 +61,7 @@ export function useBusiness(slug: string) {
       if (error) return null
       return data as Business
     },
+    ...options,
   })
 }
 
