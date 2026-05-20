@@ -1,4 +1,4 @@
-export const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN as string
+export const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string
 
 export const MAP_STYLE = 'mapbox://styles/mapbox/streets-v12'
 

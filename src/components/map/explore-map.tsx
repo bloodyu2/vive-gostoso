@@ -77,7 +77,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
     import('mapbox-gl').then((mapboxgl) => {
       if (map.current || !mapContainer.current) return
       mapboxRef.current = mapboxgl as MapboxGLModule
-      mapboxgl.default.accessToken = import.meta.env.VITE_MAPBOX_TOKEN as string
+      mapboxgl.default.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string
 
       map.current = new mapboxgl.default.Map({
         container: mapContainer.current,

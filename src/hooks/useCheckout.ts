@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase'
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL as string
 
 export const STRIPE_PRICES = {
   monthly: {
