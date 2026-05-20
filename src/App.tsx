@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { InstallBanner } from '@/components/install-banner'
@@ -5,39 +6,49 @@ import { ShareFab } from '@/components/share-fab'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { CookieBanner } from '@/components/cookie-banner'
 import { LocaleSync } from '@/components/i18n/locale-sync'
-import Home from '@/pages/Home'
-import Come from '@/pages/Come'
-import Fique from '@/pages/Fique'
-import Passeie from '@/pages/Passeie'
-import Explore from '@/pages/Explore'
-import Participe from '@/pages/Participe'
-import Conheca from '@/pages/Conheca'
-import Apoie from '@/pages/Apoie'
-import Negocio from '@/pages/Negocio'
-import Contrate from '@/pages/Contrate'
-import Servicos from '@/pages/Servicos'
-import Sobre from '@/pages/Sobre'
-import Blog from '@/pages/Blog'
-import BlogPost from '@/pages/BlogPost'
-import NotFound from '@/pages/NotFound'
-import Login from '@/pages/cadastre/Login'
-import Painel from '@/pages/cadastre/Painel'
-import Perfil from '@/pages/cadastre/Perfil'
-import Preview from '@/pages/cadastre/Preview'
-import Claim from '@/pages/cadastre/Claim'
-import Admin from '@/pages/cadastre/Admin'
-import MeusNegocios from '@/pages/cadastre/MeusNegocios'
-import AdminClaims from '@/pages/cadastre/AdminClaims'
-import AdminReviews from '@/pages/cadastre/AdminReviews'
-import AdminEvents from '@/pages/cadastre/AdminEvents'
-import AdminServices from '@/pages/cadastre/AdminServices'
-import AdminJobs from '@/pages/cadastre/AdminJobs'
-import AdminTransfers from '@/pages/cadastre/AdminTransfers'
-import AdminBusinesses from '@/pages/cadastre/AdminBusinesses'
-import ResetarSenha from '@/pages/cadastre/ResetarSenha'
-import Bio from '@/pages/Bio'
-import Evento from '@/pages/Evento'
-import Transfer from '@/pages/Transfer'
+
+// Lazy load de páginas públicas
+const Home = lazy(() => import('@/pages/Home'))
+const Come = lazy(() => import('@/pages/Come'))
+const Fique = lazy(() => import('@/pages/Fique'))
+const Passeie = lazy(() => import('@/pages/Passeie'))
+const Explore = lazy(() => import('@/pages/Explore'))
+const Participe = lazy(() => import('@/pages/Participe'))
+const Conheca = lazy(() => import('@/pages/Conheca'))
+const Apoie = lazy(() => import('@/pages/Apoie'))
+const Negocio = lazy(() => import('@/pages/Negocio'))
+const Contrate = lazy(() => import('@/pages/Contrate'))
+const Servicos = lazy(() => import('@/pages/Servicos'))
+const Sobre = lazy(() => import('@/pages/Sobre'))
+const Blog = lazy(() => import('@/pages/Blog'))
+const BlogPost = lazy(() => import('@/pages/BlogPost'))
+const NotFound = lazy(() => import('@/pages/NotFound'))
+const Bio = lazy(() => import('@/pages/Bio'))
+const Evento = lazy(() => import('@/pages/Evento'))
+const Transfer = lazy(() => import('@/pages/Transfer'))
+
+// Lazy load de páginas admin/cadastre (raramente acessadas por visitantes)
+const Login = lazy(() => import('@/pages/cadastre/Login'))
+const Painel = lazy(() => import('@/pages/cadastre/Painel'))
+const Perfil = lazy(() => import('@/pages/cadastre/Perfil'))
+const Preview = lazy(() => import('@/pages/cadastre/Preview'))
+const Claim = lazy(() => import('@/pages/cadastre/Claim'))
+const Admin = lazy(() => import('@/pages/cadastre/Admin'))
+const MeusNegocios = lazy(() => import('@/pages/cadastre/MeusNegocios'))
+const AdminClaims = lazy(() => import('@/pages/cadastre/AdminClaims'))
+const AdminReviews = lazy(() => import('@/pages/cadastre/AdminReviews'))
+const AdminEvents = lazy(() => import('@/pages/cadastre/AdminEvents'))
+const AdminServices = lazy(() => import('@/pages/cadastre/AdminServices'))
+const AdminJobs = lazy(() => import('@/pages/cadastre/AdminJobs'))
+const AdminTransfers = lazy(() => import('@/pages/cadastre/AdminTransfers'))
+const AdminBusinesses = lazy(() => import('@/pages/cadastre/AdminBusinesses'))
+const ResetarSenha = lazy(() => import('@/pages/cadastre/ResetarSenha'))
+
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-screen bg-[#F5F2EE]">
+    <div className="w-8 h-8 border-4 border-teal-700 border-t-transparent rounded-full animate-spin" />
+  </div>
+)
 
 /**
  * Public page routes — defined once as JSX element array and reused
@@ -70,6 +81,7 @@ export default function App() {
       <InstallBanner />
       <ShareFab />
       <CookieBanner />
+      <Suspense fallback={<PageLoader />}>
       <Routes>
 
         {/* ── Portuguese (default — no locale prefix) ── */}
@@ -109,6 +121,7 @@ export default function App() {
         <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
 
       </Routes>
+      </Suspense>
     </>
   )
 }

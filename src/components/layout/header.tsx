@@ -204,7 +204,7 @@ export function Header() {
       {/* Mobile drawer */}
       {drawerOpen && (
         <div className="md:hidden fixed inset-0 z-30 pt-[69px]" onClick={() => setDrawerOpen(false)}>
-          <div className="bg-white dark:bg-[#1A1A1A] border-b border-[#E8E4DF] dark:border-[#2D2D2D] shadow-xl" onClick={e => e.stopPropagation()}>
+          <div className="bg-white dark:bg-[#1A1A1A] border-b border-[#E8E4DF] dark:border-[#2D2D2D] shadow-xl overflow-y-auto max-h-[calc(100vh-69px)]" onClick={e => e.stopPropagation()}>
             <nav className="px-5 py-4 space-y-1">
               {NAV_ALL.map(v => (
                 <Link
