@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
@@ -31,7 +33,17 @@ function useLatestBlogPosts(limit = 3) {
   })
 }
 
-export default function Home() {
+type HomeInitialData = {
+  featuredBusinesses: Record<string, unknown>[]
+  upcomingEvents: Record<string, unknown>[]
+  totalBusinesses: number
+}
+
+type HomeProps = {
+  initialData?: HomeInitialData
+}
+
+export default function Home({ initialData: _initialData }: HomeProps) {
   const { t } = useTranslation()
   const lp = useLocalePath()
 
