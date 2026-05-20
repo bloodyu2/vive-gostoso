@@ -111,4 +111,58 @@ export default defineConfig({
     }),
   ],
   resolve: { alias: { '@': path.resolve(__dirname, './src') } },
+  build: {
+    target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],
+    chunkSizeWarningLimit: 2000,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return;
+
+          // React core
+          if (
+            id.includes('node_modules/react/') ||
+            id.includes('node_modules/react-dom/') ||
+            id.includes('node_modules/react-router-dom/') ||
+            id.includes('node_modules/scheduler/')
+          ) {
+            return 'vendor-react';
+          }
+
+          // Mapbox — muito pesado, só carregado na rota /explore
+          if (
+            id.includes('node_modules/mapbox-gl') ||
+            id.includes('node_modules/react-map-gl') ||
+            id.includes('node_modules/supercluster') ||
+            id.includes('node_modules/@mapbox')
+          ) {
+            return 'vendor-mapbox';
+          }
+
+          // Supabase
+          if (id.includes('node_modules/@supabase')) {
+            return 'vendor-supabase';
+          }
+
+          // TanStack Query
+          if (id.includes('node_modules/@tanstack')) {
+            return 'vendor-query';
+          }
+
+          // i18n
+          if (id.includes('node_modules/i18next') || id.includes('node_modules/react-i18next')) {
+            return 'vendor-i18n';
+          }
+
+          // Lucide icons
+          if (id.includes('node_modules/lucide-react') || id.includes('node_modules/lucide')) {
+            return 'vendor-icons';
+          }
+
+          // Tudo mais → vendor-misc
+          return 'vendor-misc';
+        },
+      },
+    },
+  },
 })
