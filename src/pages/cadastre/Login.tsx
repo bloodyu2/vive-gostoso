@@ -1,9 +1,12 @@
+'use client'
+
 import { useState } from 'react'
-import { useNavigate, Link, Navigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Calendar, Camera, BarChart2 } from 'lucide-react'
 import { Logo } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/useAuth'
 import { useProfile } from '@/hooks/useProfile'
 
@@ -17,7 +20,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
-  const navigate = useNavigate()
+  const router = useRouter()
   const { user, loading: authLoading } = useAuth()
   const { data: profile, isLoading: profileLoading } = useProfile()
 
@@ -27,9 +30,15 @@ export default function Login() {
     </div>
   )
   if (user) {
-    if (profile?.role === 'admin') return <Navigate to="/cadastre/admin" replace />
-    return <Navigate to="/cadastre/painel" replace />
+    if (profile?.role === 'admin') {
+      router.replace('/cadastre/admin')
+    } else {
+      router.replace('/cadastre/painel')
+    }
+    return null
   }
+
+  const supabase = createClient()
 
   function resetForm() {
     setError(null)
@@ -61,9 +70,9 @@ export default function Login() {
         .select('role')
         .eq('auth_user_id', userId)
         .maybeSingle()
-      navigate(prof?.role === 'admin' ? '/cadastre/admin' : '/cadastre/painel')
+      router.push(prof?.role === 'admin' ? '/cadastre/admin' : '/cadastre/painel')
     } else {
-      navigate('/cadastre/painel')
+      router.push('/cadastre/painel')
     }
     setLoading(false)
   }
@@ -118,7 +127,7 @@ export default function Login() {
           {/* Tourist notice */}
           <div className="flex items-start gap-2.5 bg-areia rounded-xl px-4 py-3 mb-6 text-sm text-[#737373]">
             <span className="text-base leading-none mt-0.5 flex-shrink-0">🗺️</span>
-            <span>Só explorando Gostoso? Não precisa criar conta — <Link to="/" className="text-teal font-medium hover:underline">navegue à vontade</Link>.</span>
+            <span>Só explorando Gostoso? Não precisa criar conta — <Link href="/" className="text-teal font-medium hover:underline">navegue à vontade</Link>.</span>
           </div>
 
           {/* Value props - shown only on login/register, not forgot */}

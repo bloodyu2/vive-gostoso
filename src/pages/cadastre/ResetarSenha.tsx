@@ -1,8 +1,10 @@
+'use client'
+
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 import { Logo } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/client'
 
 type Stage = 'waiting' | 'form' | 'success' | 'invalid'
 
@@ -12,7 +14,8 @@ export default function ResetarSenha() {
   const [confirm, setConfirm] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const router = useRouter()
+  const supabase = createClient()
 
   useEffect(() => {
     // Supabase fires PASSWORD_RECOVERY when the user arrives via the reset link.
@@ -88,7 +91,7 @@ export default function ResetarSenha() {
               <p className="text-[#737373] text-sm mb-6">
                 O link de redefinição já foi usado ou expirou. Solicite um novo.
               </p>
-              <Button variant="primary" className="w-full" onClick={() => navigate('/cadastre')}>
+              <Button variant="primary" className="w-full" onClick={() => router.push('/cadastre')}>
                 Pedir novo link
               </Button>
             </div>
@@ -139,7 +142,7 @@ export default function ResetarSenha() {
               <p className="text-[#737373] text-sm mb-6">
                 Sua nova senha foi salva. Você já está conectado.
               </p>
-              <Button variant="primary" className="w-full" onClick={() => navigate('/cadastre/painel')}>
+              <Button variant="primary" className="w-full" onClick={() => router.push('/cadastre/painel')}>
                 Ir para o painel
               </Button>
             </div>
