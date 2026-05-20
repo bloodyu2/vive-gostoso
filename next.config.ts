@@ -1,6 +1,9 @@
 // next.config.ts
 import type { NextConfig } from 'next'
 import withPWA from '@ducanh2912/next-pwa'
+import createNextIntlPlugin from 'next-intl/plugin'
+
+const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 
 const config: NextConfig = {
   images: {
@@ -31,4 +34,4 @@ export default withPWA({
   cacheOnFrontEndNav: true,
   reloadOnOnline: true,
   disable: process.env.NODE_ENV === 'development',
-})(config)
+})(withNextIntl(config))
