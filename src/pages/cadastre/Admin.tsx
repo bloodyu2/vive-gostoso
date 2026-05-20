@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { Star, Tag, Calendar, Briefcase, ClipboardList, Car, Store } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { AdminGuard } from '@/components/auth/admin-guard'
@@ -24,51 +26,51 @@ function AdminInner() {
   const stats = statsQuery.data
   const { user, supabase } = useAuth()
 
-  const modules: { to: string; icon: LucideIcon; title: string; desc: string; badge: number }[] = [
+  const modules: { href: string; icon: LucideIcon; title: string; desc: string; badge: number }[] = [
     {
-      to: '/cadastre/admin/reviews',
+      href: '/cadastre/admin/reviews',
       icon: Star,
       title: 'Avaliações',
       desc: 'Aprovar ou rejeitar avaliações de negócios.',
       badge: stats?.pendingReviews ?? 0,
     },
     {
-      to: '/cadastre/admin/claims',
+      href: '/cadastre/admin/claims',
       icon: Tag,
       title: 'Reivindicações',
       desc: 'Aprovar ou rejeitar pedidos de ownership.',
       badge: stats?.pendingClaims ?? 0,
     },
     {
-      to: '/cadastre/admin/events',
+      href: '/cadastre/admin/events',
       icon: Calendar,
       title: 'Eventos',
       desc: 'Aprovar ou rejeitar submissões de eventos da comunidade.',
       badge: stats?.pendingEvents ?? 0,
     },
     {
-      to: '/cadastre/admin/services',
+      href: '/cadastre/admin/services',
       icon: Briefcase,
       title: 'Serviços CONTRATE',
       desc: 'Publicar ou rejeitar serviços de moradores.',
       badge: stats?.pendingServices ?? 0,
     },
     {
-      to: '/cadastre/admin/jobs',
+      href: '/cadastre/admin/jobs',
       icon: ClipboardList,
       title: 'Vagas CONTRATE',
       desc: 'Publicar ou rejeitar vagas de emprego.',
       badge: stats?.pendingJobs ?? 0,
     },
     {
-      to: '/cadastre/admin/transfers',
+      href: '/cadastre/admin/transfers',
       icon: Car,
       title: 'Transfers',
       desc: 'Publicar ou rejeitar prestadores de transfer.',
       badge: stats?.pendingTransfers ?? 0,
     },
     {
-      to: '/cadastre/admin/businesses',
+      href: '/cadastre/admin/businesses',
       icon: Store,
       title: 'Negócios',
       desc: 'Publicar, despublicar e editar slugs de negócios.',
@@ -80,7 +82,7 @@ function AdminInner() {
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
       {/* Back link */}
       <Link
-        to="/cadastre/painel"
+        href="/cadastre/painel"
         className="text-sm text-[#737373] hover:text-teal transition-colors inline-block mb-6"
       >
         ← Painel
@@ -129,10 +131,10 @@ function AdminInner() {
 
       {/* Module cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {modules.map(({ to, icon: Icon, title, desc, badge }) => (
+        {modules.map(({ href, icon: Icon, title, desc, badge }) => (
           <Link
-            key={to}
-            to={to}
+            key={href}
+            href={href}
             className="relative bg-white border border-[#E8E4DF] rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all block"
           >
             <Badge count={badge} />

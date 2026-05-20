@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { StarRating } from '@/components/reviews/star-rating'
@@ -18,7 +20,7 @@ function AdminReviewsInner() {
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
-      <Link to="/cadastre/admin" className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
+      <Link href="/cadastre/admin" className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
         <ArrowLeft className="w-4 h-4" /> Admin
       </Link>
 

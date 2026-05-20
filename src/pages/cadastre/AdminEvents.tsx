@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { CalendarCheck } from 'lucide-react'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { usePendingEventSubmissions, useApproveEventSubmission, useRejectEventSubmission } from '@/hooks/useEventSubmissions'
@@ -63,7 +65,7 @@ function AdminEventsInner() {
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
-      <Link to="/cadastre/admin" className="text-sm text-[#737373] hover:text-teal transition-colors inline-block mb-6">
+      <Link href="/cadastre/admin" className="text-sm text-[#737373] hover:text-teal transition-colors inline-block mb-6">
         ← Admin
       </Link>
       <h1 className="font-display text-3xl font-semibold mb-2">Eventos pendentes</h1>

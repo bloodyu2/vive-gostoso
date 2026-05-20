@@ -1,5 +1,7 @@
+'use client'
+
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { useClaimsAdmin, useApproveClaim, useRejectClaim } from '@/hooks/useClaims'
 import { Button } from '@/components/ui/button'
@@ -25,7 +27,7 @@ function AdminClaimsInner() {
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
       <div className="flex items-center gap-4 mb-8">
-        <Link to="/cadastre/admin" className="text-sm text-[#737373] hover:text-teal transition-colors">
+        <Link href="/cadastre/admin" className="text-sm text-[#737373] hover:text-teal transition-colors">
           ← Admin
         </Link>
         <h1 className="font-display text-3xl font-semibold">Pedidos de Reivindicação</h1>
@@ -69,7 +71,7 @@ function AdminClaimsInner() {
                 <div className="flex flex-col gap-2 sm:items-end sm:min-w-[200px]">
                   {claim.business?.slug && (
                     <Link
-                      to={`/negocio/${claim.business.slug}`}
+                      href={`/negocio/${claim.business.slug}`}
                       target="_blank"
                       className="text-xs text-[#737373] underline hover:text-teal transition-colors"
                     >

@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { useAdminPendingJobs, useModerateJob } from '@/hooks/useJobs'
 import { CONTRACT_TYPE_LABELS } from '@/types/database'
@@ -70,7 +72,7 @@ function AdminJobsInner() {
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
       <Link
-        to="/cadastre/admin"
+        href="/cadastre/admin"
         className="text-sm text-[#737373] hover:text-teal transition-colors inline-block mb-6"
       >
         ← Admin

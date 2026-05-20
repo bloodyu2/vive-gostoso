@@ -1,6 +1,8 @@
 // src/lib/supabase/queries.ts
 // Server-side Supabase queries for Next.js SSG/ISR pages
 import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Business, GostosoEvent, FundEntry, ServiceListing, JobListing, BlogPost } from '@/types/database'
 
 // ─── Businesses ──────────────────────────────────────────────────────────────
@@ -162,4 +164,19 @@ export async function getJobs(): Promise<JobListing[]> {
     .order('created_at', { ascending: false })
   if (error) { console.error('[getJobs]', error.message); return [] }
   return (data ?? []) as JobListing[]
+}
+
+// ─── Admin ────────────────────────────────────────────────────────────────────
+
+export async function requireAdmin(supabase: SupabaseClient, userId: string): Promise<void> {
+  const { data: profile, error } = await supabase
+    .from('gostoso_profiles')
+    .select('role')
+    .eq('auth_user_id', userId)
+    .maybeSingle()
+
+  if (error) throw error
+  if (profile?.role !== 'admin') {
+    redirect('/cadastre/painel')
+  }
 }
