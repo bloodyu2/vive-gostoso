@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
-import { getEvent } from '@/lib/supabase/queries'
-import { getEventIdsForBuild } from '@/lib/supabase/build-queries'
+import { getEventIdsForBuild, getEventForPage } from '@/lib/supabase/build-queries'
 import Evento from '@/views/Evento'
 
 export const revalidate = 3600
@@ -14,14 +13,8 @@ export async function generateStaticParams() {
 }
 
 export default async function EventoPage({ params }: Props) {
-  try {
-    const { id } = await params
-    const event = await getEvent(id)
-    if (!event) notFound()
-    return <Evento initialEvent={event} id={id} />
-  } catch (e: unknown) {
-    if ((e as { digest?: string })?.digest?.startsWith('NEXT_NOT_FOUND')) throw e
-    console.error('[EventoPage] SSR error:', e)
-    throw e
-  }
+  const { id } = await params
+  const event = await getEventForPage(id)
+  if (!event) notFound()
+  return <Evento initialEvent={event} id={id} />
 }

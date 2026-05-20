@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getBlogPost } from '@/lib/supabase/queries'
-import { getBlogSlugsForBuild } from '@/lib/supabase/build-queries'
+import { getBlogSlugsForBuild, getBlogPostForPage } from '@/lib/supabase/build-queries'
 import BlogPostPage from '@/views/BlogPost'
 
 export const revalidate = 86400
@@ -16,8 +15,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const post = await getBlogPost(slug)
-  if (!post) return { title: 'Post não encontrado' }
+  const post = await getBlogPostForPage(slug)
+  if (!post) return { title: 'Post nao encontrado' }
   return {
     title: post.title,
     description: post.excerpt,
@@ -28,14 +27,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogPostRoute({ params }: Props) {
-  try {
-    const { slug } = await params
-    const post = await getBlogPost(slug)
-    if (!post) notFound()
-    return <BlogPostPage initialPost={post} slug={slug} />
-  } catch (e: unknown) {
-    if ((e as { digest?: string })?.digest?.startsWith('NEXT_NOT_FOUND')) throw e
-    console.error('[BlogPostRoute] SSR error:', e)
-    throw e
-  }
+  const { slug } = await params
+  const post = await getBlogPostForPage(slug)
+  if (!post) notFound()
+  return <BlogPostPage initialPost={post} slug={slug} />
 }
