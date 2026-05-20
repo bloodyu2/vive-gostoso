@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { requireAdmin } from '@/lib/supabase/queries'
-import AdminReviews from '@/pages/cadastre/AdminReviews'
+import AdminReviews from '@/views/cadastre/AdminReviews'
 
 export default async function AdminReviewsPage() {
   const supabase = await createClient()

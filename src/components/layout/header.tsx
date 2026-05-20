@@ -51,6 +51,7 @@ export function Header() {
 
   // isActive: exact match or prefix (but never treat locale-root like / or /en as prefix)
   const isActive = (to: string) => {
+    if (!pathname) return false
     if (pathname === to) return true
     if (to === '/' || to === '/en' || to === '/es') return false
     return pathname.startsWith(to)

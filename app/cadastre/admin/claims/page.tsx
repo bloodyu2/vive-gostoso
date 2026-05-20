@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { requireAdmin } from '@/lib/supabase/queries'
-import AdminClaims from '@/pages/cadastre/AdminClaims'
+import AdminClaims from '@/views/cadastre/AdminClaims'
 
 export default async function AdminClaimsPage() {
   const supabase = await createClient()

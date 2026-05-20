@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { getEvent, getEventIds } from '@/lib/supabase/queries'
-import Evento from '@/pages/Evento'
+import Evento from '@/views/Evento'
 
 export const revalidate = 3600
 

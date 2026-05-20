@@ -11,7 +11,7 @@ const BASE = 'https://vivegostoso.com.br'
  */
 export function HreflangTags() {
   const pathname = usePathname()
-  const pagePath = stripLocale(pathname)  // e.g. '/come' or '/'
+  const pagePath = stripLocale(pathname ?? '/')  // e.g. '/come' or '/'
 
   useEffect(() => {
     // Remove previous hreflang tags injected by this component

@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { requireAdmin } from '@/lib/supabase/queries'
-import AdminEvents from '@/pages/cadastre/AdminEvents'
+import AdminEvents from '@/views/cadastre/AdminEvents'
 
 export default async function AdminEventsPage() {
   const supabase = await createClient()

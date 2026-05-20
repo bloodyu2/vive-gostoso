@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import Claim from '@/pages/cadastre/Claim'
+import Claim from '@/views/cadastre/Claim'
 
 type Props = { params: Promise<{ slug: string }> }
 

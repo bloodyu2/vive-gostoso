@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getBusiness, getBusinessSlugs } from '@/lib/supabase/queries'
-import Negocio from '@/pages/Negocio'
+import Negocio from '@/views/Negocio'
 
 export const revalidate = 3600
 

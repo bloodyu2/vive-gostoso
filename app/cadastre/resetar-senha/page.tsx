@@ -1,4 +1,4 @@
-import ResetarSenha from '@/pages/cadastre/ResetarSenha'
+import ResetarSenha from '@/views/cadastre/ResetarSenha'
 
 export default function ResetarSenhaPage() {
   return <ResetarSenha />

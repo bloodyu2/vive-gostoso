@@ -1,6 +1,6 @@
 // app/[lang]/conheca/page.tsx
 import type { Metadata } from 'next'
-import Conheca from '@/pages/Conheca'
+import Conheca from '@/views/Conheca'
 
 export const metadata: Metadata = {
   title: 'Conheça São Miguel do Gostoso',

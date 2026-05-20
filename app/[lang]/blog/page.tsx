@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getBlogPosts } from '@/lib/supabase/queries'
-import Blog from '@/pages/Blog'
+import Blog from '@/views/Blog'
 
 export const revalidate = 3600
 

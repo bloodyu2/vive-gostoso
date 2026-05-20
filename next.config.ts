@@ -6,6 +6,10 @@ import createNextIntlPlugin from 'next-intl/plugin'
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 
 const config: NextConfig = {
+  eslint: {
+    // ESLint runs separately in CI; skip during production build to avoid false failures
+    ignoreDuringBuilds: true,
+  },
   images: {
     remotePatterns: [
       {

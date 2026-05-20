@@ -120,7 +120,7 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
   })
 
   const searchParams = useSearchParams()
-  const donationSuccess = searchParams.get('doacao') === 'success'
+  const donationSuccess = searchParams?.get('doacao') === 'success'
 
   const { data: entries }      = useFundEntries({ initialData: initialEntries })
   const entriesList = entries ?? []

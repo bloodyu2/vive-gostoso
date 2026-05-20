@@ -10,7 +10,7 @@ const LOCALES: Locale[] = ['en', 'es']
  * ES:  `/es/come`
  */
 export function useLocalePath() {
-  const pathname = usePathname()
+  const pathname = usePathname() ?? '/'
   const segments = pathname.split('/')
   const firstSeg = segments[1] as Locale
   const currentLocale: Locale = LOCALES.includes(firstSeg) ? firstSeg : 'pt'

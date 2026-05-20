@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getServices, getJobs } from '@/lib/supabase/queries'
-import Contrate from '@/pages/Contrate'
+import Contrate from '@/views/Contrate'
 
 export const revalidate = 1800
 

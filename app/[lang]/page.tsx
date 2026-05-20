@@ -1,7 +1,7 @@
 // app/[lang]/page.tsx
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
-import Home from '@/pages/Home'
+import Home from '@/views/Home'
 
 export const revalidate = 3600
 

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Transfer from '@/pages/Transfer'
+import Transfer from '@/views/Transfer'
 
 export const revalidate = 1800
 

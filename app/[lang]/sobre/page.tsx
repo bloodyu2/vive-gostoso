@@ -1,6 +1,6 @@
 // app/[lang]/sobre/page.tsx
 import type { Metadata } from 'next'
-import Sobre from '@/pages/Sobre'
+import Sobre from '@/views/Sobre'
 
 export const metadata: Metadata = {
   title: 'Sobre o Projeto',

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import MeusNegocios from '@/pages/cadastre/MeusNegocios'
+import MeusNegocios from '@/views/cadastre/MeusNegocios'
 
 export default async function MeusNegociosPage() {
   const supabase = await createClient()

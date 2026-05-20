@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { requireAdmin } from '@/lib/supabase/queries'
-import AdminServices from '@/pages/cadastre/AdminServices'
+import AdminServices from '@/views/cadastre/AdminServices'
 
 export default async function AdminServicesPage() {
   const supabase = await createClient()

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import Perfil from '@/pages/cadastre/Perfil'
+import Perfil from '@/views/cadastre/Perfil'
 
 export default async function PerfilPage() {
   const supabase = await createClient()

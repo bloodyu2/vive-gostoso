@@ -26,7 +26,7 @@ function PainelInner() {
   const { data: businesses = [] } = useMyBusinesses()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const successMsg = searchParams.get('associado') === 'success'
+  const successMsg = searchParams?.get('associado') === 'success'
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const [billingMode, setBillingMode] = useState<Record<string, 'monthly' | 'annual'>>({})

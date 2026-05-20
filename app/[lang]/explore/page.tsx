@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getBusinessesForMap } from '@/lib/supabase/queries'
-import Explore from '@/pages/Explore'
+import Explore from '@/views/Explore'
 import type { Business } from '@/types/database'
 
 export const revalidate = 1800

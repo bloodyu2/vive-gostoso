@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getFundEntries } from '@/lib/supabase/queries'
-import Apoie from '@/pages/Apoie'
+import Apoie from '@/views/Apoie'
 
 export const revalidate = 3600
 

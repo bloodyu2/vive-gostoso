@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getBusinessesByVerb } from '@/lib/supabase/queries'
-import Come from '@/pages/Come'
+import Come from '@/views/Come'
 
 export const revalidate = 1800
 
