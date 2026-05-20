@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import Explore from '@/pages/Explore'
+import type { Business } from '@/types/database'
 
 export const revalidate = 1800
 
@@ -19,5 +20,5 @@ export default async function ExplorePage() {
     .not('lat', 'is', null)
     .not('lng', 'is', null)
 
-  return <Explore initialBusinesses={businesses ?? []} />
+  return <Explore initialBusinesses={(businesses ?? []) as unknown as Business[]} />
 }
