@@ -1,5 +1,5 @@
 'use client'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import type { UseQueryOptions } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -66,7 +66,7 @@ export default function Blog({ initialPosts = [] }: BlogProps) {
           {posts.map(post => (
             <Link
               key={post.id}
-              to={`/blog/${post.slug}`}
+              href={`/blog/${post.slug}`}
               className="group rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] bg-white dark:bg-[#222] hover:shadow-lg transition-shadow"
             >
               {post.cover_url ? (

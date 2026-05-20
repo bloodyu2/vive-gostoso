@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import Link from 'next/link'
 import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle, Share2, Check, BookOpen, Wifi, Car, UserCheck, CalendarCheck } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useBusiness } from '@/hooks/useBusinesses'
@@ -26,8 +26,7 @@ type NegocioProps = {
 }
 
 export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProps) {
-  const params = useParams<{ slug: string }>()
-  const slug = slugProp ?? params.slug
+  const slug = slugProp
   const { data: b, isLoading } = useBusiness(slug ?? '', initialBusiness !== undefined ? { initialData: initialBusiness } : undefined)
   const [copied, setCopied] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
@@ -74,7 +73,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
       <div className="text-6xl mb-4">🤔</div>
       <h2 className="font-display text-2xl font-semibold mb-2">{t('negocio.nao_encontrado')}</h2>
       <p className="text-[#737373] mb-6">{t('negocio.nao_encontrado_desc')}</p>
-      <Link to={lp('/')} className="text-teal font-semibold">{t('not_found.voltar_inicio')}</Link>
+      <Link href={lp('/')} className="text-teal font-semibold">{t('not_found.voltar_inicio')}</Link>
     </main>
   )
 
@@ -101,7 +100,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-10">
-      <Link to={lp(backTo)} className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
+      <Link href={lp(backTo)} className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
         <ArrowLeft className="w-4 h-4" />
         {t('negocio.voltar_a')} {backLabel}
       </Link>
@@ -329,7 +328,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
           {b.plan === 'associado' && (
             <div className="bg-teal-light border border-teal/20 rounded-2xl p-5 text-sm text-teal leading-relaxed">
               <strong>{t('negocio.negocio_associado')}</strong> {t('negocio.negocio_associado_desc')}{' '}
-              <Link to={lp('/apoie')} className="underline">{t('negocio.saiba_mais')}</Link>
+              <Link href={lp('/apoie')} className="underline">{t('negocio.saiba_mais')}</Link>
             </div>
           )}
         </aside>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
@@ -48,13 +48,13 @@ export default function Home({ initialData: _initialData }: HomeProps) {
   const lp = useLocalePath()
 
   const VERBS = [
-    { to: lp('/come'),      label: t('nav.come') + '.',      color: 'text-ocre',       sub: t('home.verbs_come_sub') },
-    { to: lp('/fique'),     label: t('nav.fique') + '.',     color: 'text-teal',        sub: t('home.verbs_fique_sub') },
-    { to: lp('/passeie'),   label: t('nav.passeie') + '.',   color: 'text-[#3D8B5A]',  sub: t('home.verbs_passeie_sub') },
-    { to: lp('/explore'),   label: t('nav.explore') + '.',   color: 'text-coral',       sub: t('home.verbs_explore_sub') },
-    { to: lp('/participe'), label: t('nav.participe') + '.', color: 'text-teal',        sub: t('home.verbs_participe_sub') },
-    { to: lp('/apoie'),     label: t('nav.apoie') + '.',     color: 'text-ocre',        sub: t('home.verbs_apoie_sub') },
-    { to: lp('/contrate'),  label: t('nav.contrate') + '.',  color: 'text-[#1A1A1A]',  sub: t('home.verbs_contrate_sub') },
+    { href: lp('/come'),      label: t('nav.come') + '.',      color: 'text-ocre',       sub: t('home.verbs_come_sub') },
+    { href: lp('/fique'),     label: t('nav.fique') + '.',     color: 'text-teal',        sub: t('home.verbs_fique_sub') },
+    { href: lp('/passeie'),   label: t('nav.passeie') + '.',   color: 'text-[#3D8B5A]',  sub: t('home.verbs_passeie_sub') },
+    { href: lp('/explore'),   label: t('nav.explore') + '.',   color: 'text-coral',       sub: t('home.verbs_explore_sub') },
+    { href: lp('/participe'), label: t('nav.participe') + '.', color: 'text-teal',        sub: t('home.verbs_participe_sub') },
+    { href: lp('/apoie'),     label: t('nav.apoie') + '.',     color: 'text-ocre',        sub: t('home.verbs_apoie_sub') },
+    { href: lp('/contrate'),  label: t('nav.contrate') + '.',  color: 'text-[#1A1A1A]',  sub: t('home.verbs_contrate_sub') },
   ]
 
   usePageMeta({
@@ -115,11 +115,11 @@ export default function Home({ initialData: _initialData }: HomeProps) {
 
             {/* CTAs */}
             <div className="flex flex-wrap gap-3 pt-2">
-              <Link to={lp('/explore')}
+              <Link href={lp('/explore')}
                 className="bg-teal text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-teal-dark transition-colors">
                 {t('home.cta_explorar')}
               </Link>
-              <Link to={lp('/come')}
+              <Link href={lp('/come')}
                 className="bg-white/10 text-white border border-white/20 px-6 py-3 rounded-full text-sm font-semibold hover:bg-white/20 transition-colors">
                 {t('home.cta_restaurantes')}
               </Link>
@@ -167,7 +167,7 @@ export default function Home({ initialData: _initialData }: HomeProps) {
         {/* Mobile: lista vertical com ícone de seta. Tablet+: grid 2 ou 3 colunas */}
         <div className="flex flex-col sm:hidden gap-2">
           {VERBS.map(v => (
-            <Link key={v.to} to={v.to}
+            <Link key={v.href} href={v.href}
               className="bg-white rounded-2xl border border-[#E8E4DF] px-5 py-4 flex items-center justify-between hover:shadow-md transition-all active:scale-[0.98]">
               <div>
                 <div className={`font-display font-bold text-2xl ${v.color}`}>{v.label}</div>
@@ -181,7 +181,7 @@ export default function Home({ initialData: _initialData }: HomeProps) {
         </div>
         <div className="hidden sm:grid sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
           {VERBS.map(v => (
-            <Link key={v.to} to={v.to}
+            <Link key={v.href} href={v.href}
               className="bg-white rounded-2xl border border-[#E8E4DF] p-5 md:p-6 hover:shadow-md hover:-translate-y-0.5 transition-all">
               <div className={`font-display font-bold text-3xl md:text-4xl ${v.color}`}>{v.label}</div>
               <div className="text-sm text-[#737373] mt-1 leading-snug">{v.sub}</div>
@@ -198,13 +198,13 @@ export default function Home({ initialData: _initialData }: HomeProps) {
               <span className="text-xs font-bold tracking-widest uppercase text-[#737373]">{t('home.novos_eyebrow')}</span>
               <h2 className="font-display text-xl md:text-2xl font-semibold mt-0.5">{t('home.novos_titulo')}</h2>
             </div>
-            <Link to={lp('/come')} className="text-teal text-sm font-semibold">{t('home.ver_todos')}</Link>
+            <Link href={lp('/come')} className="text-teal text-sm font-semibold">{t('home.ver_todos')}</Link>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {recentBusinesses.map(b => (
               <Link
                 key={b.id}
-                to={lp(`/negocio/${b.slug}`)}
+                href={lp(`/negocio/${b.slug}`)}
                 className="group bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all"
               >
                 <div className="aspect-square bg-gradient-to-br from-teal to-teal-dark overflow-hidden">
@@ -232,7 +232,7 @@ export default function Home({ initialData: _initialData }: HomeProps) {
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-12 md:pb-16">
           <div className="flex justify-between items-center mb-6">
             <h2 className="font-display text-xl md:text-2xl font-semibold">{t('home.eventos_titulo')}</h2>
-            <Link to={lp('/participe')} className="text-teal text-sm font-semibold">{t('home.ver_todos')}</Link>
+            <Link href={lp('/participe')} className="text-teal text-sm font-semibold">{t('home.ver_todos')}</Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {events.slice(0, 3).map(e => <EventCard key={e.id} event={e} />)}
@@ -286,7 +286,7 @@ export default function Home({ initialData: _initialData }: HomeProps) {
               <span className="text-xs font-bold tracking-widest uppercase text-[#737373]">{t('home.blog_eyebrow')}</span>
               <h2 className="font-display text-xl md:text-2xl font-semibold mt-0.5">{t('home.blog_titulo')}</h2>
             </div>
-            <Link to={lp('/blog')} className="text-teal text-sm font-semibold hover:underline">
+            <Link href={lp('/blog')} className="text-teal text-sm font-semibold hover:underline">
               {t('home.blog_ver_todos')} →
             </Link>
           </div>
@@ -294,7 +294,7 @@ export default function Home({ initialData: _initialData }: HomeProps) {
             {latestPosts.map(post => (
               <Link
                 key={post.id}
-                to={lp(`/blog/${post.slug}`)}
+                href={lp(`/blog/${post.slug}`)}
                 className="group rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] bg-white dark:bg-[#222] hover:shadow-md hover:-translate-y-0.5 transition-all"
               >
                 {post.cover_url ? (
@@ -343,7 +343,7 @@ export default function Home({ initialData: _initialData }: HomeProps) {
       {/* ── Banner: Quer saber como funciona? ── */}
       <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10">
         <Link
-          to={lp('/sobre')}
+          href={lp('/sobre')}
           className="group flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#1A1A1A] dark:bg-white/5 text-white rounded-2xl px-6 py-5 hover:bg-[#2A2A2A] dark:hover:bg-white/10 transition-colors"
         >
           <div className="flex items-center gap-4">
@@ -369,7 +369,7 @@ export default function Home({ initialData: _initialData }: HomeProps) {
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-16 md:pb-20">
           <div className="flex justify-between items-center mb-6">
             <h2 className="font-display text-xl md:text-2xl font-semibold">Verificados pela cidade</h2>
-            <Link to={lp('/come')} className="text-teal text-sm font-semibold">Ver diretório →</Link>
+            <Link href={lp('/come')} className="text-teal text-sm font-semibold">Ver diretório →</Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {featured.slice(0, 3).map(b => <BusinessCard key={b.id} business={b} />)}

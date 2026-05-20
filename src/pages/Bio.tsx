@@ -1,6 +1,6 @@
 'use client'
 
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { AtSign, MapPin, Utensils, BedDouble, Wind, CalendarDays, Map, Briefcase, Heart, Waves } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
@@ -41,7 +41,7 @@ export default function Bio() {
         {LINKS.map(({ to, icon: Icon, label, sub, color }) => (
           <Link
             key={to}
-            to={to}
+            href={to}
             className={`flex items-center gap-4 px-5 py-4 rounded-2xl border transition-all duration-150 ${color}`}
           >
             <Icon className="w-6 h-6 flex-shrink-0" />

@@ -1,6 +1,6 @@
 'use client'
 
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import {
   Heart, Globe, Users, TrendingUp, MapPin, ArrowRight,
   Gift, Search, Megaphone, Lightbulb, BookOpen,
@@ -35,14 +35,14 @@ export default function Sobre() {
   ]
 
   const VERBOS = [
-    { v: t('nav.come'),      to: lp('/come'),      desc: t('sobre.verbos_come_desc'),      color: 'text-ocre' },
-    { v: t('nav.fique'),     to: lp('/fique'),     desc: t('sobre.verbos_fique_desc'),     color: 'text-teal' },
-    { v: t('nav.passeie'),   to: lp('/passeie'),   desc: t('sobre.verbos_passeie_desc'),   color: 'text-[#3D8B5A]' },
-    { v: t('nav.explore'),   to: lp('/explore'),   desc: t('sobre.verbos_explore_desc'),   color: 'text-coral' },
-    { v: t('nav.participe'), to: lp('/participe'), desc: t('sobre.verbos_participe_desc'), color: 'text-teal' },
-    { v: t('nav.conheca'),   to: lp('/conheca'),   desc: t('sobre.verbos_conheca_desc'),   color: 'text-[#3D8B5A]' },
-    { v: t('nav.apoie'),     to: lp('/apoie'),     desc: t('sobre.verbos_apoie_desc'),     color: 'text-ocre' },
-    { v: t('nav.contrate'),  to: lp('/contrate'),  desc: t('sobre.verbos_contrate_desc'),  color: 'text-coral' },
+    { v: t('nav.come'),      href: lp('/come'),      desc: t('sobre.verbos_come_desc'),      color: 'text-ocre' },
+    { v: t('nav.fique'),     href: lp('/fique'),     desc: t('sobre.verbos_fique_desc'),     color: 'text-teal' },
+    { v: t('nav.passeie'),   href: lp('/passeie'),   desc: t('sobre.verbos_passeie_desc'),   color: 'text-[#3D8B5A]' },
+    { v: t('nav.explore'),   href: lp('/explore'),   desc: t('sobre.verbos_explore_desc'),   color: 'text-coral' },
+    { v: t('nav.participe'), href: lp('/participe'), desc: t('sobre.verbos_participe_desc'), color: 'text-teal' },
+    { v: t('nav.conheca'),   href: lp('/conheca'),   desc: t('sobre.verbos_conheca_desc'),   color: 'text-[#3D8B5A]' },
+    { v: t('nav.apoie'),     href: lp('/apoie'),     desc: t('sobre.verbos_apoie_desc'),     color: 'text-ocre' },
+    { v: t('nav.contrate'),  href: lp('/contrate'),  desc: t('sobre.verbos_contrate_desc'),  color: 'text-coral' },
   ]
 
   return (
@@ -86,7 +86,7 @@ export default function Sobre() {
               <p className="text-teal-light text-sm mt-0.5">{t('sobre.banner_sub')}</p>
             </div>
           </div>
-          <Link to="/cadastre"
+          <Link href="/cadastre"
             className="flex-shrink-0 bg-white text-teal font-semibold text-sm px-5 py-2.5 rounded-full hover:bg-teal-light transition-colors flex items-center gap-1.5">
             {t('sobre.banner_btn')} <ArrowRight className="w-4 h-4" />
           </Link>
@@ -183,10 +183,10 @@ export default function Sobre() {
             {t('sobre.verbos_desc')}
           </p>
           <div className="grid sm:grid-cols-2 gap-3">
-            {VERBOS.map(({ v, to, desc, color }) => (
+            {VERBOS.map(({ v, href, desc, color }) => (
               <Link
                 key={v}
-                to={to}
+                href={href}
                 className="group flex items-center gap-4 bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl px-5 py-4 hover:border-teal hover:shadow-md transition-all"
               >
                 <span className={`font-display font-bold text-xl w-28 flex-shrink-0 ${color}`}>{v}</span>
@@ -219,7 +219,7 @@ export default function Sobre() {
                 <li key={i} className="flex items-start gap-2"><span className="text-teal mt-0.5">✓</span> {t(`sobre.planos_free_item_${i}`)}</li>
               ))}
             </ul>
-            <Link to="/cadastre" className="mt-6 block text-center bg-[#F5F2EE] dark:bg-[#2D2D2D] text-[#1A1A1A] dark:text-white font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-[#E8E4DF] transition-colors">
+            <Link href="/cadastre" className="mt-6 block text-center bg-[#F5F2EE] dark:bg-[#2D2D2D] text-[#1A1A1A] dark:text-white font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-[#E8E4DF] transition-colors">
               {t('sobre.planos_free_btn')}
             </Link>
           </div>
@@ -240,7 +240,7 @@ export default function Sobre() {
               </li>
               <li className="flex items-start gap-2"><span className="text-teal mt-0.5">✓</span> {t('sobre.planos_assoc_item_4')}</li>
             </ul>
-            <Link to="/cadastre" className="mt-6 block text-center bg-teal text-white font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-teal-dark transition-colors">
+            <Link href="/cadastre" className="mt-6 block text-center bg-teal text-white font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-teal-dark transition-colors">
               {t('sobre.planos_assoc_btn')}
             </Link>
           </div>
@@ -263,7 +263,7 @@ export default function Sobre() {
               <li className="flex items-start gap-2"><span className="text-ocre mt-0.5">✓</span> {t('sobre.planos_plus_item_2')}</li>
               <li className="flex items-start gap-2"><span className="text-ocre mt-0.5">✓</span> {t('sobre.planos_plus_item_3')}</li>
             </ul>
-            <Link to="/cadastre" className="mt-6 block text-center bg-ocre text-white font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-ocre-dark transition-colors">
+            <Link href="/cadastre" className="mt-6 block text-center bg-ocre text-white font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-ocre-dark transition-colors">
               {t('sobre.planos_plus_btn')}
             </Link>
           </div>
@@ -288,7 +288,7 @@ export default function Sobre() {
           </div>
           <div className="bg-white/10 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-white/80 text-sm leading-relaxed max-w-md">{t('sobre.transp_desc')}</p>
-            <Link to={lp('/apoie')} className="flex-shrink-0 inline-flex items-center gap-2 bg-white text-teal font-semibold px-5 py-2.5 rounded-full hover:bg-teal-light transition-colors text-sm">
+            <Link href={lp('/apoie')} className="flex-shrink-0 inline-flex items-center gap-2 bg-white text-teal font-semibold px-5 py-2.5 rounded-full hover:bg-teal-light transition-colors text-sm">
               <TrendingUp className="w-4 h-4" />
               {t('sobre.transp_btn')}
             </Link>
@@ -367,7 +367,7 @@ export default function Sobre() {
             </p>
           </div>
           <Link
-            to={lp('/')}
+            href={lp('/')}
             className="flex-shrink-0 flex items-center gap-2 bg-teal text-white font-semibold px-8 py-4 rounded-full text-base hover:bg-teal-dark transition-colors"
           >
             {t('sobre.cta_explorar_btn')}
@@ -389,7 +389,7 @@ export default function Sobre() {
             </div>
             <h3 className="font-semibold mb-2">{t('sobre.participar_negocio_h3')}</h3>
             <p className="text-sm text-[#737373] leading-relaxed mb-4">{t('sobre.participar_negocio_desc')}</p>
-            <Link to="/cadastre" className="text-teal text-sm font-semibold hover:underline flex items-center gap-1">
+            <Link href="/cadastre" className="text-teal text-sm font-semibold hover:underline flex items-center gap-1">
               {t('sobre.participar_negocio_btn')} <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -399,7 +399,7 @@ export default function Sobre() {
             </div>
             <h3 className="font-semibold mb-2">{t('sobre.participar_alcance_h3')}</h3>
             <p className="text-sm text-[#737373] leading-relaxed mb-4">{t('sobre.participar_alcance_desc')}</p>
-            <Link to={lp('/apoie')} className="text-ocre text-sm font-semibold hover:underline flex items-center gap-1">
+            <Link href={lp('/apoie')} className="text-ocre text-sm font-semibold hover:underline flex items-center gap-1">
               {t('sobre.participar_alcance_btn')} <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -409,7 +409,7 @@ export default function Sobre() {
             </div>
             <h3 className="font-semibold mb-2">{t('sobre.participar_morador_h3')}</h3>
             <p className="text-sm text-[#737373] leading-relaxed mb-4">{t('sobre.participar_morador_desc')}</p>
-            <Link to={lp('/contrate')} className="text-[#3D3D3D] dark:text-[#C0BCB8] text-sm font-semibold hover:underline flex items-center gap-1">
+            <Link href={lp('/contrate')} className="text-[#3D3D3D] dark:text-[#C0BCB8] text-sm font-semibold hover:underline flex items-center gap-1">
               {t('sobre.participar_morador_btn')} <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>

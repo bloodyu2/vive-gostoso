@@ -1,7 +1,8 @@
+'use client'
 import { useState, useRef, useEffect } from 'react'
 import { Globe } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useRouter, usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { stripLocale, localeFromPath } from '@/hooks/useLocalePath'
 
@@ -18,8 +19,8 @@ interface LanguageSelectorProps {
 
 export function LanguageSelector({ variant = 'dropdown' }: LanguageSelectorProps) {
   const { } = useTranslation()
-  const navigate = useNavigate()
-  const { pathname } = useLocation()
+  const router = useRouter()
+  const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -39,7 +40,7 @@ export function LanguageSelector({ variant = 'dropdown' }: LanguageSelectorProps
       newPath = `/${code}${pagePath === '/' ? '' : pagePath}`
     }
 
-    navigate(newPath)
+    router.push(newPath)
     setOpen(false)
   }
 

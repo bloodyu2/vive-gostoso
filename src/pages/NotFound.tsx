@@ -1,6 +1,6 @@
 'use client'
 
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 
 const LINKS = [
@@ -27,7 +27,7 @@ export default function NotFound() {
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
         {LINKS.map(l => (
-          <Link key={l.to} to={l.to}
+          <Link key={l.to} href={l.to}
             className="bg-white rounded-2xl border border-[#E8E4DF] p-4 hover:shadow-md hover:-translate-y-0.5 transition-all">
             <div className="font-display font-bold text-xl text-teal">{l.label}</div>
             <div className="text-xs text-[#737373] mt-1">{l.sub}</div>
@@ -35,7 +35,7 @@ export default function NotFound() {
         ))}
       </div>
 
-      <Link to="/" className="inline-flex items-center gap-2 text-teal font-semibold text-sm hover:underline">
+      <Link href="/" className="inline-flex items-center gap-2 text-teal font-semibold text-sm hover:underline">
         ← {t('not_found.voltar_inicio')}
       </Link>
     </main>

@@ -1,6 +1,6 @@
 'use client'
 import { useMemo } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import type { UseQueryOptions } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
@@ -41,8 +41,7 @@ type BlogPostPageProps = {
 }
 
 export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPageProps) {
-  const params = useParams<{ slug: string }>()
-  const slug = slugProp ?? params.slug
+  const slug = slugProp
   const { data: post, isLoading } = useBlogPost(slug ?? '', initialPost !== undefined ? { initialData: initialPost } : undefined)
   const { t } = useTranslation()
 
@@ -110,7 +109,7 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
     return (
       <main className="max-w-3xl mx-auto px-5 md:px-8 py-20 text-center">
         <p className="text-[#737373] text-lg">{t('blog.nao_encontrado')}</p>
-        <Link to="/blog" className="mt-4 inline-flex items-center gap-2 text-teal font-semibold hover:underline">
+        <Link href="/blog" className="mt-4 inline-flex items-center gap-2 text-teal font-semibold hover:underline">
           <ArrowLeft className="w-4 h-4" />
           {t('blog.voltar_blog')}
         </Link>
@@ -121,7 +120,7 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
   return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-12">
       <Link
-        to="/blog"
+        href="/blog"
         className="inline-flex items-center gap-2 text-sm text-[#737373] hover:text-teal transition-colors mb-8"
       >
         <ArrowLeft className="w-4 h-4" />

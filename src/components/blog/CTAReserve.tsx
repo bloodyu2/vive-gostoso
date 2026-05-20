@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
 interface CTAReserveProps {
@@ -20,7 +20,7 @@ interface CTAReserveProps {
 export function CTAReserve({ to, title, description, cta = 'Ver detalhes' }: CTAReserveProps) {
   return (
     <Link
-      to={to}
+      href={to}
       className="not-prose my-8 group block rounded-2xl border border-[#E8E4DF] dark:border-[#2D2D2D] bg-white dark:bg-[#222] p-6 hover:shadow-lg hover:border-teal transition-all"
     >
       <div className="flex items-center justify-between gap-4">

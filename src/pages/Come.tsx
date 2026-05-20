@@ -1,6 +1,6 @@
 'use client'
 import { useState, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { VerbPill } from '@/components/brand/verb-pill'
 import { BusinessFilters } from '@/components/business/business-filters'
 import { BusinessGrid, type ViewMode } from '@/components/business/business-grid'
@@ -47,7 +47,7 @@ export default function Come({ initialBusinesses = [] }: ComeProps) {
             {t('come.desc')}
           </p>
         </div>
-        <Link to={lp('/explore')} className="text-teal border-2 border-teal rounded-xl px-5 py-3 text-sm font-semibold flex items-center gap-2 hover:bg-teal-light transition-colors">
+        <Link href={lp('/explore')} className="text-teal border-2 border-teal rounded-xl px-5 py-3 text-sm font-semibold flex items-center gap-2 hover:bg-teal-light transition-colors">
           {t('come.abrir_mapa')}
         </Link>
       </div>

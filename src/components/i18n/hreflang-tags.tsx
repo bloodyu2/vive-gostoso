@@ -1,5 +1,6 @@
+'use client'
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { usePathname } from 'next/navigation'
 import { stripLocale } from '@/hooks/useLocalePath'
 
 const BASE = 'https://vivegostoso.com.br'
@@ -9,7 +10,7 @@ const BASE = 'https://vivegostoso.com.br'
  * Renders nothing visible — side-effect only.
  */
 export function HreflangTags() {
-  const { pathname } = useLocation()
+  const pathname = usePathname()
   const pagePath = stripLocale(pathname)  // e.g. '/come' or '/'
 
   useEffect(() => {

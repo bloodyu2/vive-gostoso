@@ -1,7 +1,8 @@
 'use client'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSearchParams, Link } from 'react-router-dom'
+import { useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { FundHero } from '@/components/fund/fund-hero'
 import { FundEntryRow } from '@/components/fund/fund-entry-row'
@@ -118,7 +119,7 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
     description: 'Fundo público transparente para promover São Miguel do Gostoso. Veja como o dinheiro é usado.',
   })
 
-  const [searchParams] = useSearchParams()
+  const searchParams = useSearchParams()
   const donationSuccess = searchParams.get('doacao') === 'success'
 
   const { data: entries }      = useFundEntries({ initialData: initialEntries })
@@ -472,7 +473,7 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
         {/* ── CTA ── */}
         <div className="flex gap-3 pb-4">
           <Link
-            to="/cadastre"
+            href="/cadastre"
             className="inline-flex items-center gap-2 bg-teal text-white font-semibold px-6 py-3 rounded-xl hover:bg-teal-dark transition-colors text-sm"
           >
             Associar meu negócio

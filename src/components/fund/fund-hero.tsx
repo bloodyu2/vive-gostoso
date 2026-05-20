@@ -1,5 +1,5 @@
 import { formatCurrency } from '@/lib/utils'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 
 interface FundHeroProps {
   totalCents: number
@@ -53,7 +53,7 @@ export function FundHero({
               </div>
             </div>
             <Link
-              to="/cadastre"
+              href="/cadastre"
               className="inline-block mt-6 bg-white text-teal font-semibold text-sm px-6 py-3 rounded-full hover:bg-teal-light transition-colors"
             >
               Associe seu negócio: seja o primeiro

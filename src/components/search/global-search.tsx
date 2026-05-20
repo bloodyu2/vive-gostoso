@@ -1,5 +1,6 @@
+'use client'
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { Search, X, MapPin } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
@@ -131,7 +132,7 @@ export function GlobalSearch({ onClose }: Props) {
                 Nenhum negócio encontrado para <strong>"{query}"</strong>.
               </p>
               <Link
-                to="/cadastre"
+                href="/cadastre"
                 onClick={onClose}
                 className="text-sm text-teal font-semibold hover:underline"
               >
@@ -145,7 +146,7 @@ export function GlobalSearch({ onClose }: Props) {
               {results.map(r => (
                 <li key={r.id}>
                   <Link
-                    to={`/negocio/${r.slug}`}
+                    href={`/negocio/${r.slug}`}
                     onClick={onClose}
                     className="flex items-center gap-3 px-4 py-3 hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors"
                   >
