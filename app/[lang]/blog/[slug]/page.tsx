@@ -8,11 +8,15 @@ export const revalidate = 86400
 type Props = { params: Promise<{ lang: string; slug: string }> }
 
 export async function generateStaticParams() {
-  const posts = await getBlogPosts(100)
-  const langs = ['pt', 'en', 'es']
-  return langs.flatMap((lang) =>
-    posts.map((p: { slug: string }) => ({ lang, slug: p.slug }))
-  )
+  try {
+    const posts = await getBlogPosts(100)
+    const langs = ['pt', 'en', 'es']
+    return langs.flatMap((lang) =>
+      posts.map((p: { slug: string }) => ({ lang, slug: p.slug }))
+    )
+  } catch {
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

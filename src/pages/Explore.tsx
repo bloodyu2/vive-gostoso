@@ -28,7 +28,7 @@ export default function Explore({ initialBusinesses = [] }: ExploreProps) {
     title: 'Mapa de Gostoso',
     description: 'Explore o mapa interativo de São Miguel do Gostoso. Encontre restaurantes, pousadas, passeios e muito mais.',
   })
-  const { data: businesses = initialBusinesses } = useBusinesses()
+  const { data: businesses = initialBusinesses } = useBusinesses(undefined, { initialData: initialBusinesses })
   return (
     <div style={{ height: 'calc(100vh - 70px)' }}>
       <ExploreMap businesses={businesses} />

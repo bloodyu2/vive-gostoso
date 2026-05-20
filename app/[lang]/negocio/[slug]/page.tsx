@@ -10,9 +10,13 @@ type Props = {
 }
 
 export async function generateStaticParams() {
-  const slugs = await getBusinessSlugs(50)
-  const langs = ['pt', 'en', 'es']
-  return langs.flatMap((lang) => slugs.map((slug) => ({ lang, slug })))
+  try {
+    const slugs = await getBusinessSlugs(50)
+    const langs = ['pt', 'en', 'es']
+    return langs.flatMap((lang) => slugs.map((slug) => ({ lang, slug })))
+  } catch {
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

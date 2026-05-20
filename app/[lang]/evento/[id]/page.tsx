@@ -7,9 +7,13 @@ export const revalidate = 3600
 type Props = { params: Promise<{ lang: string; id: string }> }
 
 export async function generateStaticParams() {
-  const ids = await getEventIds()
-  const langs = ['pt', 'en', 'es']
-  return langs.flatMap((lang) => ids.map((id) => ({ lang, id })))
+  try {
+    const ids = await getEventIds()
+    const langs = ['pt', 'en', 'es']
+    return langs.flatMap((lang) => ids.map((id) => ({ lang, id })))
+  } catch {
+    return []
+  }
 }
 
 export default async function EventoPage({ params }: Props) {

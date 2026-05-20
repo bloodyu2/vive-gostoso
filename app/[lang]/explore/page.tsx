@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { createClient } from '@/lib/supabase/server'
+import { getBusinessesForMap } from '@/lib/supabase/queries'
 import Explore from '@/pages/Explore'
 import type { Business } from '@/types/database'
 
@@ -11,14 +11,6 @@ export const metadata: Metadata = {
 }
 
 export default async function ExplorePage() {
-  const supabase = await createClient()
-  const { data: businesses } = await supabase
-    .from('gostoso_businesses')
-    .select('id, name, slug, lat, lng, cover_url, category_id, is_featured, active, is_published, category:gostoso_categories(*)')
-    .eq('active', true)
-    .eq('is_published', true)
-    .not('lat', 'is', null)
-    .not('lng', 'is', null)
-
-  return <Explore initialBusinesses={(businesses ?? []) as unknown as Business[]} />
+  const businesses = await getBusinessesForMap()
+  return <Explore initialBusinesses={businesses as unknown as Business[]} />
 }
