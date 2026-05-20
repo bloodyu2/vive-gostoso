@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { MapPin, X, Utensils, BedDouble, Compass, Wrench } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import mapboxgl from 'mapbox-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
+// CSS loaded dynamically via DOM injection to avoid render-blocking on non-map pages
 import { useLocalePath } from '@/hooks/useLocalePath'
 import type { Business } from '@/types/database'
 
@@ -61,6 +61,15 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
   // Init map
   useEffect(() => {
     if (map.current || !mapContainer.current) return
+
+    // Inject mapbox CSS dynamically — avoids render-blocking on non-map pages
+    if (!document.getElementById('mapbox-gl-css')) {
+      const link = document.createElement('link')
+      link.id = 'mapbox-gl-css'
+      link.rel = 'stylesheet'
+      link.href = 'https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css'
+      document.head.appendChild(link)
+    }
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
