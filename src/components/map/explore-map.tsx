@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { MapPin, X, Utensils, BedDouble, Compass, Wrench } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import mapboxgl from 'mapbox-gl'
-// CSS loaded dynamically via DOM injection to avoid render-blocking on non-map pages
+// mapbox-gl is loaded dynamically on component mount to keep it out of the
+// initial bundle entry graph (prevents Vite from adding a modulepreload for it)
 import { useLocalePath } from '@/hooks/useLocalePath'
 import type { Business } from '@/types/database'
 
-mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN as string
+// Lazy type reference only — no static import of mapbox-gl
+type MapboxGLModule = typeof import('mapbox-gl')
 
 // Centro de São Miguel do Gostoso [lng, lat] — formato Mapbox
 const CENTER: [number, number] = [-35.6419, -5.1167]
@@ -39,8 +40,10 @@ interface ExploreMapProps { businesses: Business[] }
 
 export function ExploreMap({ businesses }: ExploreMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null)
-  const map = useRef<mapboxgl.Map | null>(null)
-  const markers = useRef<mapboxgl.Marker[]>([])
+  // Store mapbox module and map instance separately to allow dynamic import
+  const mapboxRef = useRef<MapboxGLModule | null>(null)
+  const map = useRef<InstanceType<MapboxGLModule['Map']> | null>(null)
+  const markers = useRef<InstanceType<MapboxGLModule['Marker']>[]>([])
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
   const sidebarRef = useRef<HTMLDivElement>(null)
   const sidebarHeaderRef = useRef<HTMLDivElement>(null)
@@ -58,7 +61,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
     return acc
   }, {})
 
-  // Init map
+  // Init map — dynamic import keeps vendor-mapbox out of the entry modulepreload list
   useEffect(() => {
     if (map.current || !mapContainer.current) return
 
@@ -71,16 +74,25 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
       document.head.appendChild(link)
     }
 
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/streets-v12',
-      center: CENTER,
-      zoom: ZOOM,
-      attributionControl: false,
-    })
+    import('mapbox-gl').then((mapboxgl) => {
+      if (map.current || !mapContainer.current) return
+      mapboxRef.current = mapboxgl as MapboxGLModule
+      mapboxgl.default.accessToken = import.meta.env.VITE_MAPBOX_TOKEN as string
 
-    map.current.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-left')
-    map.current.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-left')
+      map.current = new mapboxgl.default.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: CENTER,
+        zoom: ZOOM,
+        attributionControl: false,
+      })
+
+      map.current.addControl(new mapboxgl.default.AttributionControl({ compact: true }), 'bottom-left')
+      map.current.addControl(new mapboxgl.default.NavigationControl({ showCompass: false }), 'top-left')
+
+      // Close popup on map click
+      map.current.on('click', () => setPopup(null))
+    })
 
     return () => {
       map.current?.remove()
@@ -90,7 +102,9 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
 
   // Add markers when businesses load
   useEffect(() => {
-    if (!map.current) return
+    if (!map.current || !mapboxRef.current) return
+
+    const mapboxgl = mapboxRef.current
 
     // Clear old markers
     markers.current.forEach(m => m.remove())
@@ -133,14 +147,6 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
       markers.current.push(marker)
     })
   }, [geo.length])
-
-  // Close popup on map click
-  useEffect(() => {
-    if (!map.current) return
-    const close = () => setPopup(null)
-    map.current.on('click', close)
-    return () => { map.current?.off('click', close) }
-  }, [])
 
   const VERB_LABEL: Record<string, string> = { come: 'Restaurantes', fique: 'Hospedagem', passeie: 'Passeios', resolva: 'Serviços' }
   const VERB_TO: Record<string, string>    = { come: '/come', fique: '/fique', passeie: '/passeie', resolva: '/resolva' }

@@ -129,15 +129,10 @@ export default defineConfig({
             return 'vendor-react';
           }
 
-          // Mapbox — muito pesado, só carregado na rota /explore
-          if (
-            id.includes('node_modules/mapbox-gl') ||
-            id.includes('node_modules/react-map-gl') ||
-            id.includes('node_modules/supercluster') ||
-            id.includes('node_modules/@mapbox')
-          ) {
-            return 'vendor-mapbox';
-          }
+          // Mapbox — NOT listed here so that the dynamic import() in explore-map.tsx
+          // is the only reference. Without a manualChunks entry the bundler won't
+          // add a <link rel="modulepreload"> for vendor-mapbox in index.html,
+          // keeping it truly out of the initial load path.
 
           // Supabase
           if (id.includes('node_modules/@supabase')) {
@@ -157,6 +152,19 @@ export default defineConfig({
           // Lucide icons
           if (id.includes('node_modules/lucide-react') || id.includes('node_modules/lucide')) {
             return 'vendor-icons';
+          }
+
+          // Mapbox and its deps must NOT be assigned to any manualChunk name.
+          // Returning undefined lets Rollup decide — since the only reference is
+          // a dynamic import() in explore-map.tsx, Rollup will create a separate
+          // async chunk that is NOT added to <link rel="modulepreload"> in index.html.
+          if (
+            id.includes('node_modules/mapbox-gl') ||
+            id.includes('node_modules/react-map-gl') ||
+            id.includes('node_modules/supercluster') ||
+            id.includes('node_modules/@mapbox')
+          ) {
+            return undefined;
           }
 
           // Tudo mais → vendor-misc
