@@ -1,15 +1,11 @@
 import type { Metadata } from 'next'
-import { getServices, getJobs } from '@/lib/supabase/queries'
 import Contrate from '@/views/Contrate'
 
-export const revalidate = 1800
-
 export const metadata: Metadata = {
-  title: 'CONTRATE. -- Serviços e Vagas em São Miguel do Gostoso',
-  description: 'Contrate serviços locais e encontre vagas de emprego em São Miguel do Gostoso, RN.',
+  title: 'CONTRATE. -- Profissionais e Empresas em São Miguel do Gostoso',
+  description: 'Contrate profissionais e empresas de serviço em São Miguel do Gostoso, RN. Encontre autônomos, agências e vagas de emprego.',
 }
 
-export default async function ContratePage() {
-  const [services, jobs] = await Promise.all([getServices(), getJobs()])
-  return <Contrate initialServices={services} initialJobs={jobs} />
+export default function ContratePage() {
+  return <Contrate />
 }
