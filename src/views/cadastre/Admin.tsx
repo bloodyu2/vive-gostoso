@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import {
   Star, Tag, Calendar, Briefcase, ClipboardList, Car, Store,
-  LogOut, LayoutDashboard,
+  LogOut, LayoutDashboard, User,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { AdminGuard } from '@/components/auth/admin-guard'
@@ -78,6 +78,13 @@ function AdminInner() {
       title: 'Negócios',
       desc: 'Publicar, despublicar e editar slugs de negócios.',
       badge: stats?.draftBusinesses ?? 0,
+    },
+    {
+      href: '/cadastre/admin/profissionais',
+      icon: User,
+      title: 'Profissionais',
+      desc: 'Publicar, despublicar e deletar perfis de profissionais autônomos.',
+      badge: 0,
     },
   ]
 
