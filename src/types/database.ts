@@ -1,3 +1,6 @@
+import type { Professional, PortfolioItem } from './professional'
+export type { Professional, PortfolioItem }
+
 export interface Category {
   id: string
   name: string
@@ -44,6 +47,7 @@ export interface Business {
     reservations?: boolean
   } | null
   is_published: boolean
+  business_type: 'local' | 'service_company'
   services: { name: string; description?: string; price?: string }[]
   category?: Category
 }
@@ -238,6 +242,7 @@ export type Database = {
       gostoso_claim_requests:   { Row: ClaimRequest; Insert: Omit<ClaimRequest, 'id' | 'created_at' | 'resolved_at'>; Update: Partial<Pick<ClaimRequest, 'status' | 'admin_note' | 'resolved_at'>> }
       gostoso_event_submissions: { Row: EventSubmission; Insert: Omit<EventSubmission, 'id' | 'created_at' | 'reviewed_at'> & { is_approved?: false }; Update: Partial<Pick<EventSubmission, 'is_approved' | 'admin_note' | 'reviewed_at'>> }
       gostoso_transfers:        { Row: Transfer; Insert: Omit<Transfer, 'id' | 'created_at'>; Update: Partial<Omit<Transfer, 'id' | 'created_at'>> }
+      gostoso_professionals:    { Row: Professional; Insert: Omit<Professional, 'id' | 'created_at' | 'updated_at'>; Update: Partial<Omit<Professional, 'id' | 'created_at' | 'updated_at'>> }
     }
   }
 }
