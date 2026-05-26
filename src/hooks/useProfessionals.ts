@@ -189,6 +189,7 @@ export function useDeleteProfessional() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-professionals'] })
+      qc.invalidateQueries({ queryKey: ['professionals'] })
     },
   })
 }
