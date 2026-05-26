@@ -10,6 +10,7 @@ import { AuthGuard } from '@/components/auth/auth-guard'
 import { useAuth } from '@/hooks/useAuth'
 import { useProfile } from '@/hooks/useProfile'
 import { useMyBusinesses } from '@/hooks/useMyBusinesses'
+import { useMyProfessional } from '@/hooks/useProfessionals'
 import { startCheckout } from '@/hooks/useCheckout'
 import { Button } from '@/components/ui/button'
 
@@ -41,11 +42,77 @@ function StatCard({ label, value, sub }: { label: string; value: string | number
   )
 }
 
+function TypeFork() {
+  const router = useRouter()
+  return (
+    <div className="min-h-screen bg-[#FAFAF9] flex items-center justify-center px-5">
+      <div className="w-full max-w-xl">
+        <div className="bg-white rounded-3xl border border-[#E8E4DF] overflow-hidden shadow-sm">
+          <div className="bg-[#1A1A1A] px-8 py-6">
+            <h2 className="font-display text-xl font-bold text-white mb-1">
+              O que você quer fazer no Vive Gostoso?
+            </h2>
+            <p className="text-[#888] text-sm">
+              Escolha o tipo de perfil — você pode mudar depois
+            </p>
+          </div>
+          <div className="p-6">
+            <p className="text-xs font-semibold text-[#737373] uppercase tracking-wide mb-4">
+              Selecione uma opção para continuar:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                onClick={() => router.push('/cadastre/negocios')}
+                className="text-left border-2 border-[#E8E4DF] rounded-2xl p-5 hover:border-[#0D7C7C] hover:bg-[#0D7C7C]/5 transition-all"
+              >
+                <div className="text-3xl mb-3">🏪</div>
+                <p className="font-semibold text-[#1A1A1A] text-sm mb-1">
+                  Tenho um negócio local
+                </p>
+                <p className="text-xs text-[#737373] leading-relaxed">
+                  Restaurante, pousada, loja, serviço com endereço físico em São Miguel do Gostoso.
+                </p>
+                <div className="flex flex-wrap gap-1 mt-3">
+                  {['Restaurante', 'Pousada', 'Loja'].map(t => (
+                    <span key={t} className="bg-[#F5F2EE] text-[#888] text-[10px] px-2 py-0.5 rounded-md">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </button>
+              <button
+                onClick={() => router.push('/cadastre/profissional')}
+                className="text-left border-2 border-[#E8E4DF] rounded-2xl p-5 hover:border-[#0D7C7C] hover:bg-[#0D7C7C]/5 transition-all"
+              >
+                <div className="text-3xl mb-3">👤</div>
+                <p className="font-semibold text-[#1A1A1A] text-sm mb-1">
+                  Sou profissional autônomo
+                </p>
+                <p className="text-xs text-[#737373] leading-relaxed">
+                  Ofereço serviços como pessoa física — consultoria, mentoria, design, fotografia, etc.
+                </p>
+                <div className="flex flex-wrap gap-1 mt-3">
+                  {['Coach', 'Consultor', 'Fotógrafo'].map(t => (
+                    <span key={t} className="bg-[#F5F2EE] text-[#888] text-[10px] px-2 py-0.5 rounded-md">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function PainelInner() {
   const { user, supabase } = useAuth()
   const { data: profile, isLoading: profileLoading } = useProfile()
   const role = profile?.role ?? null
-  const { data: businesses = [] } = useMyBusinesses()
+  const { data: businesses = [], isLoading: businessesLoading } = useMyBusinesses()
+  const { data: myProfessional, isLoading: profLoading } = useMyProfessional()
   const router = useRouter()
   const searchParams = useSearchParams()
   const successMsg = searchParams?.get('associado') === 'success'
@@ -60,6 +127,11 @@ function PainelInner() {
     </div>
   )
   if (role === 'admin') { router.replace('/cadastre/admin'); return null }
+
+  // If no businesses and no professional profile, show the fork
+  if (!profileLoading && !businessesLoading && !profLoading && businesses.length === 0 && !myProfessional) {
+    return <TypeFork />
+  }
 
   const publishedCount = businesses.filter(b => b.is_published).length
   const draftCount = businesses.filter(b => !b.is_published).length
