@@ -124,7 +124,7 @@ export function useUpsertProfessional() {
       }
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['my-professional'] })
+      qc.invalidateQueries({ queryKey: ['my-professional', profile?.id] })
       qc.invalidateQueries({ queryKey: ['professionals'] })
     },
   })

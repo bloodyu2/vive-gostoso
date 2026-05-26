@@ -1,7 +1,7 @@
 // src/views/cadastre/ProfessionalPanel.tsx
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, Save, ExternalLink, Plus, Trash2 } from 'lucide-react'
 import { AuthGuard } from '@/components/auth/auth-guard'
@@ -29,6 +29,8 @@ function ProfessionalPanelInner() {
   const { data: pro, isLoading } = useMyProfessional()
   const upsert = useUpsertProfessional()
 
+  const initialized = useRef(false)
+
   const [tab, setTab] = useState<'perfil' | 'portfolio' | 'visibilidade'>('perfil')
   const [displayName, setDisplayName] = useState('')
   const [headline, setHeadline] = useState('')
@@ -43,9 +45,10 @@ function ProfessionalPanelInner() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
 
-  // Initialize form when pro data loads
+  // Initialize form when pro data loads (only once — guard prevents re-hydration after save)
   useEffect(() => {
-    if (pro) {
+    if (pro && !initialized.current) {
+      initialized.current = true
       setDisplayName(pro.display_name)
       setHeadline(pro.headline)
       setBio(pro.bio ?? '')
@@ -89,6 +92,12 @@ function ProfessionalPanelInner() {
     const sanitizedWa = whatsapp ? validateWhatsApp(whatsapp) : undefined
     if (whatsapp && !sanitizedWa) {
       setError('WhatsApp inválido. Use apenas números com DDI 55 (ex: 5584999991111).')
+      return
+    }
+
+    const invalidPortfolioItem = portfolioItems.find(i => !i.title.trim())
+    if (invalidPortfolioItem) {
+      setError('Todos os itens do portfólio precisam ter um título.')
       return
     }
 
