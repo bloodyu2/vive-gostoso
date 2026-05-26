@@ -9,7 +9,7 @@ import { supabase } from '@/lib/supabase'
 import { useCategories } from '@/hooks/useCategories'
 import { useInvalidateMyBusinesses } from '@/hooks/useMyBusinesses'
 import type { Business } from '@/types/database'
-import { ExternalLink } from 'lucide-react'
+import { ArrowLeft, Camera, ExternalLink, Loader2 } from 'lucide-react'
 
 export default function Perfil() {
   return <AuthGuard><PerfilInner /></AuthGuard>
@@ -63,7 +63,7 @@ async function ensureUniqueSlug(baseSlug: string, excludeId?: string): Promise<s
 const INPUT_CLS =
   'w-full rounded-xl border border-[#E8E4DF] px-4 py-3 text-sm focus:border-teal focus:ring-2 focus:ring-teal/20 focus:outline-none'
 
-const SECTION_CLS = 'mb-8 pb-8 border-b border-[#E8E4DF]'
+const SECTION_CLS = 'mb-8 pb-8 border-b border-[#F0ECE8]'
 
 const DAYS: { key: DayKey; label: string }[] = [
   { key: 'dom', label: 'Domingo' },
@@ -248,8 +248,9 @@ function PhotoSection({
             <img src={coverUrl} alt="Capa" className="w-full h-full object-cover" />
           </div>
         ) : (
-          <div className="w-full h-40 rounded-2xl border-2 border-dashed border-[#E8E4DF] flex items-center justify-center text-sm text-[#737373] mb-2">
-            Sem foto de capa
+          <div className="w-full h-40 rounded-2xl border-2 border-dashed border-[#E8E4DF] flex flex-col items-center justify-center gap-2 text-sm text-[#A0A0A0] mb-2 bg-[#FAFAF9]">
+            <Camera className="w-7 h-7 text-[#C4BFBA]" />
+            <span>Sem foto de capa</span>
           </div>
         )}
         <input
@@ -540,6 +541,9 @@ function PerfilInner() {
 
   const [biz, setBiz] = useState<PartialBusiness>({})
   const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+  const [profileLoading, setProfileLoading] = useState(true)
+  const formRef = useRef<HTMLFormElement>(null)
   const [profileId, setProfileId] = useState<string | null>(null)
   const [dupMatches, setDupMatches] = useState<{ id: string; name: string; slug: string; profile_id: string | null }[]>([])
 
@@ -564,23 +568,34 @@ function PerfilInner() {
     if (!user) return
 
     // Ensure profile exists and get its ID
-    supabase
-      .from('gostoso_profiles')
-      .select('id')
-      .eq('auth_user_id', user.id)
-      .maybeSingle()
-      .then(async ({ data: profile }) => {
-        if (!profile) {
-          const { data: p } = await supabase
-            .from('gostoso_profiles')
-            .insert([{ auth_user_id: user.id, email: user.email ?? '' }])
-            .select('id')
-            .single()
-          if (p) setProfileId((p as { id: string }).id)
-          return
-        }
+    ;(async () => {
+      setProfileLoading(true)
+      const { data: profile } = await supabase
+        .from('gostoso_profiles')
+        .select('id')
+        .eq('auth_user_id', user.id)
+        .maybeSingle()
+
+      if (profile) {
         setProfileId((profile as { id: string }).id)
-      })
+        setProfileLoading(false)
+        return
+      }
+
+      // Profile doesn't exist yet — create it
+      const { data: newProfile, error: insertErr } = await supabase
+        .from('gostoso_profiles')
+        .insert([{ auth_user_id: user.id, email: user.email ?? '' }])
+        .select('id')
+        .single()
+
+      if (insertErr || !newProfile) {
+        setSaveError('Erro ao inicializar seu perfil. Tente recarregar a página.')
+      } else {
+        setProfileId((newProfile as { id: string }).id)
+      }
+      setProfileLoading(false)
+    })()
   }, [user])
 
   useEffect(() => {
@@ -601,71 +616,88 @@ function PerfilInner() {
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
-    if (!profileId) return
-    setSaving(true)
+    setSaveError(null)
 
-    const baseSlug = makeSlug(biz.name ?? '')
-    const services = (biz.services ?? []).filter(s => s.name.trim())
-    let isNew = false
-
-    if (biz.id) {
-      const slug = await ensureUniqueSlug(baseSlug, biz.id)
-      await supabase
-        .from('gostoso_businesses')
-        .update({
-          name: biz.name,
-          description: biz.description,
-          address: biz.address,
-          whatsapp: biz.whatsapp,
-          instagram: biz.instagram,
-          website: biz.website,
-          category_id: biz.category_id,
-          slug,
-          price_range: biz.price_range ?? null,
-          menu_url: biz.menu_url ?? null,
-          amenities: biz.amenities ?? {},
-          services,
-          opening_hours: biz.opening_hours ?? null,
-        })
-        .eq('id', biz.id)
-    } else {
-      isNew = true
-      const slug = await ensureUniqueSlug(baseSlug)
-      const { data: newBiz } = await supabase
-        .from('gostoso_businesses')
-        .insert([{
-          name: biz.name ?? 'Sem nome',
-          slug,
-          profile_id: profileId,
-          active: true,
-          is_published: false,
-          description: biz.description ?? null,
-          address: biz.address ?? null,
-          whatsapp: biz.whatsapp ?? null,
-          instagram: biz.instagram ?? null,
-          website: biz.website ?? null,
-          category_id: biz.category_id ?? null,
-          price_range: biz.price_range ?? null,
-          menu_url: biz.menu_url ?? null,
-          amenities: biz.amenities ?? {},
-          services,
-          opening_hours: biz.opening_hours ?? null,
-        }])
-        .select('id')
-        .single()
-      if (newBiz) {
-        const nb = newBiz as { id: string }
-        setBiz(b => ({ ...b, id: nb.id }))
-        await supabase
-          .from('gostoso_profiles')
-          .update({ business_id: nb.id })
-          .eq('id', profileId)
-      }
+    if (!profileId) {
+      setSaveError('Perfil ainda não carregado. Aguarde um momento e tente novamente.')
+      return
     }
 
-    setSaving(false)
-    invalidateMyBusinesses()
-    router.push(isNew ? '/cadastre/negocios?new=1' : '/cadastre/negocios')
+    setSaving(true)
+
+    try {
+      const baseSlug = makeSlug(biz.name ?? '')
+      const services = (biz.services ?? []).filter(s => s.name.trim())
+      let isNew = false
+
+      if (biz.id) {
+        // UPDATE
+        const slug = await ensureUniqueSlug(baseSlug, biz.id)
+        const { error } = await supabase
+          .from('gostoso_businesses')
+          .update({
+            name: biz.name,
+            description: biz.description,
+            address: biz.address,
+            whatsapp: biz.whatsapp,
+            instagram: biz.instagram,
+            website: biz.website,
+            category_id: biz.category_id,
+            slug,
+            price_range: biz.price_range ?? null,
+            menu_url: biz.menu_url ?? null,
+            amenities: biz.amenities ?? {},
+            services,
+            opening_hours: biz.opening_hours ?? null,
+          })
+          .eq('id', biz.id)
+        if (error) throw error
+      } else {
+        // INSERT
+        isNew = true
+        const slug = await ensureUniqueSlug(baseSlug)
+        const { data: newBiz, error: insertErr } = await supabase
+          .from('gostoso_businesses')
+          .insert([{
+            name: biz.name ?? 'Sem nome',
+            slug,
+            profile_id: profileId,
+            active: true,
+            is_published: false,
+            description: biz.description ?? null,
+            address: biz.address ?? null,
+            whatsapp: biz.whatsapp ?? null,
+            instagram: biz.instagram ?? null,
+            website: biz.website ?? null,
+            category_id: biz.category_id ?? null,
+            price_range: biz.price_range ?? null,
+            menu_url: biz.menu_url ?? null,
+            amenities: biz.amenities ?? {},
+            services,
+            opening_hours: biz.opening_hours ?? null,
+          }])
+          .select('id')
+          .single()
+
+        if (insertErr) throw insertErr
+
+        if (newBiz) {
+          const nb = newBiz as { id: string }
+          setBiz(b => ({ ...b, id: nb.id }))
+          await supabase
+            .from('gostoso_profiles')
+            .update({ business_id: nb.id })
+            .eq('id', profileId)
+        }
+      }
+
+      invalidateMyBusinesses()
+      router.push(isNew ? '/cadastre/negocios?new=1' : '/cadastre/negocios')
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err)
+      setSaveError(`Erro ao salvar: ${msg}. Tente novamente ou entre em contato pelo WhatsApp.`)
+      setSaving(false)
+    }
   }
 
   const textFields = [
@@ -677,16 +709,41 @@ function PerfilInner() {
   ]
 
   return (
-    <main className="max-w-2xl mx-auto px-5 md:px-8 py-12">
-      <h1 className="font-display text-3xl font-semibold mb-8">
-        {bizId ? 'Editar negócio' : 'Novo negócio'}
-      </h1>
+    <div className="min-h-screen bg-[#FAFAF9] pb-24">
+      {/* ── Top bar ── */}
+      <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
+        <div className="max-w-2xl mx-auto px-5 md:px-8 h-14 flex items-center gap-3">
+          <Link
+            href="/cadastre/negocios"
+            className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Meus negócios
+          </Link>
+          <span className="text-[#E8E4DF]">/</span>
+          <span className="text-sm font-medium text-[#1A1A1A] truncate">
+            {bizId ? (biz.name || 'Editar negócio') : 'Novo negócio'}
+          </span>
+        </div>
+      </div>
+
+      <main className="max-w-2xl mx-auto px-5 md:px-8 py-8">
+        <div className="mb-7">
+          <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">
+            {bizId ? 'Editar negócio' : 'Novo negócio'}
+          </h1>
+          <p className="text-sm text-[#737373] mt-1">
+            {bizId
+              ? 'Atualize as informações que aparecem no diretório.'
+              : 'Preencha os dados básicos e publique quando estiver pronto.'}
+          </p>
+        </div>
 
       {/* Duplicate detection banner — only in new-business mode */}
       {!bizId && dupMatches.length > 0 && (
         <div className="mb-8 rounded-2xl border border-ocre/40 bg-ocre/5 px-5 py-4">
           <p className="text-sm font-semibold text-ocre mb-2">
-            ⚠️ Negócio similar já existe na plataforma
+            Negócio similar já existe na plataforma
           </p>
           <p className="text-xs text-[#737373] mb-3">
             Antes de criar um novo, verifique se o seu já está cadastrado. Se for seu, você pode reivindicá-lo e assumir o controle.
@@ -721,29 +778,45 @@ function PerfilInner() {
         />
       )}
 
-      <form onSubmit={handleSave}>
+      <form ref={formRef} onSubmit={handleSave}>
         {/* Basic info */}
         <section className={SECTION_CLS}>
-          <h2 className="font-display text-lg font-semibold mb-4">Informações básicas</h2>
+          <h2 className="font-display text-lg font-semibold mb-1">Informações básicas</h2>
+          <p className="text-sm text-[#737373] mb-4">Nome, endereço, contato e como os turistas vão encontrar você.</p>
           <div className="space-y-4">
-            {textFields.map(({ label, key, required }) => (
-              <div key={key}>
-                <label className="block text-sm font-medium mb-1.5">{label}</label>
-                <input
-                  type="text"
-                  required={required}
-                  value={(biz[key] as string | null | undefined) ?? ''}
-                  onChange={e => setBiz(b => ({ ...b, [key]: e.target.value }))}
-                  className={INPUT_CLS}
-                />
-              </div>
-            ))}
+            {textFields.map(({ label, key, required }) => {
+              const helperText: Partial<Record<typeof key, string>> = {
+                whatsapp: 'Somente números com DDD, ex: 84999990000',
+                instagram: 'Sem @ — ex: vivegostoso',
+                website: 'URL completa com https://',
+                address: 'Rua, número ou referência de localização',
+              }
+              return (
+                <div key={key}>
+                  <label className="block text-sm font-medium mb-1.5">
+                    {label}
+                    {required && <span className="text-coral ml-0.5">*</span>}
+                  </label>
+                  <input
+                    type="text"
+                    required={required}
+                    value={(biz[key] as string | null | undefined) ?? ''}
+                    onChange={e => setBiz(b => ({ ...b, [key]: e.target.value }))}
+                    className={INPUT_CLS}
+                  />
+                  {helperText[key] && (
+                    <p className="text-xs text-[#A0A0A0] mt-1">{helperText[key]}</p>
+                  )}
+                </div>
+              )
+            })}
             <div>
               <label className="block text-sm font-medium mb-1.5">Descrição</label>
               <textarea
-                rows={3}
+                rows={4}
                 value={biz.description ?? ''}
                 onChange={e => setBiz(b => ({ ...b, description: e.target.value }))}
+                placeholder="Descreva seu negócio em poucas frases — o que oferece, o que torna especial..."
                 className={`${INPUT_CLS} resize-none`}
               />
             </div>
@@ -856,10 +929,38 @@ function PerfilInner() {
           onChange={items => setBiz(b => ({ ...b, services: items }))}
         />
 
-        <Button type="submit" variant="primary" disabled={saving} className="w-full">
-          {saving ? 'Salvando...' : 'Salvar negócio'}
-        </Button>
       </form>
-    </main>
+      </main>
+
+      {/* ── Sticky save footer ── */}
+      <div className="fixed bottom-0 left-0 right-0 z-20 bg-white border-t border-[#E8E4DF] shadow-[0_-2px_12px_rgba(0,0,0,0.06)]">
+        {saveError && (
+          <div className="bg-red-50 border-b border-red-100 px-5 py-2">
+            <p className="text-xs text-red-600 text-center max-w-2xl mx-auto">{saveError}</p>
+          </div>
+        )}
+        <div className="max-w-2xl mx-auto px-5 py-3 flex items-center gap-3">
+          <Link
+            href="/cadastre/negocios"
+            className="flex-shrink-0 px-4 py-2.5 rounded-xl border border-[#E8E4DF] text-sm font-medium text-[#737373] hover:border-[#737373] transition-colors"
+          >
+            Cancelar
+          </Link>
+          <Button
+            type="button"
+            variant="primary"
+            disabled={saving || profileLoading}
+            className="flex-1 flex items-center justify-center gap-2"
+            onClick={() => formRef.current?.requestSubmit()}
+          >
+            {saving
+              ? <><Loader2 className="w-4 h-4 animate-spin" />Salvando...</>
+              : profileLoading
+              ? <><Loader2 className="w-4 h-4 animate-spin" />Carregando...</>
+              : 'Salvar negócio'}
+          </Button>
+        </div>
+      </div>
+    </div>
   )
 }

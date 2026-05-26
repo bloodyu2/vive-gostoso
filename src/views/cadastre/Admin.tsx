@@ -1,7 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { Star, Tag, Calendar, Briefcase, ClipboardList, Car, Store } from 'lucide-react'
+import {
+  Star, Tag, Calendar, Briefcase, ClipboardList, Car, Store,
+  LogOut, LayoutDashboard,
+} from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { useAdminStats } from '@/hooks/useAdminStats'
@@ -12,10 +15,10 @@ export default function Admin() {
   return <AdminGuard><AdminInner /></AdminGuard>
 }
 
-function Badge({ count }: { count: number }) {
+function PendingBadge({ count }: { count: number }) {
   if (!count) return null
   return (
-    <span className="absolute top-4 right-4 bg-coral text-white text-xs font-bold px-2 py-0.5 rounded-full">
+    <span className="ml-auto flex-shrink-0 bg-coral text-white text-[10px] font-bold px-2 py-0.5 rounded-full tabular-nums">
       {count}
     </span>
   )
@@ -45,7 +48,7 @@ function AdminInner() {
       href: '/cadastre/admin/events',
       icon: Calendar,
       title: 'Eventos',
-      desc: 'Aprovar ou rejeitar submissões de eventos da comunidade.',
+      desc: 'Aprovar eventos submetidos pela comunidade.',
       badge: stats?.pendingEvents ?? 0,
     },
     {
@@ -78,72 +81,120 @@ function AdminInner() {
     },
   ]
 
+  const totalPending = (stats?.pendingReviews ?? 0)
+    + (stats?.pendingClaims ?? 0)
+    + (stats?.pendingEvents ?? 0)
+    + (stats?.pendingServices ?? 0)
+    + (stats?.pendingJobs ?? 0)
+    + (stats?.pendingTransfers ?? 0)
+
+  const statItems = [
+    { value: stats?.pendingReviews ?? '—', label: 'Avaliações', urgent: (stats?.pendingReviews ?? 0) > 0 },
+    { value: stats?.pendingClaims ?? '—', label: 'Reivind.', urgent: (stats?.pendingClaims ?? 0) > 0 },
+    { value: stats?.pendingEvents ?? '—', label: 'Eventos', urgent: (stats?.pendingEvents ?? 0) > 0 },
+    { value: stats?.pendingServices ?? '—', label: 'Serviços', urgent: false },
+    { value: stats?.pendingJobs ?? '—', label: 'Vagas', urgent: false },
+    { value: stats?.pendingTransfers ?? '—', label: 'Transfers', urgent: false },
+    { value: stats?.totalBusinesses ?? '—', label: 'Negócios', urgent: false },
+    { value: stats?.draftBusinesses ?? '—', label: 'Rascunhos', urgent: (stats?.draftBusinesses ?? 0) > 0 },
+  ]
+
   return (
-    <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
-      {/* Back link */}
-      <Link
-        href="/cadastre/painel"
-        className="text-sm text-[#737373] hover:text-teal transition-colors inline-block mb-6"
-      >
-        ← Painel
-      </Link>
-
-      {/* Header */}
-      <div className="flex flex-wrap items-center gap-3 mb-8">
-        <h1 className="font-display text-3xl font-semibold flex-1">Painel Admin</h1>
-        {user?.email && (
-          <span className="text-sm text-[#737373]">{user.email}</span>
-        )}
-        <Button variant="ghost" onClick={() => supabase.auth.signOut()} className="text-sm px-3 py-2 min-h-0">
-          Sair
-        </Button>
-      </div>
-
-      {/* Stat bar */}
-      {statsQuery.isLoading ? (
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3 mb-8">
-          {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
-            <div key={i} className="h-20 bg-[#E8E4DF] rounded-xl animate-pulse" />
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3 mb-8">
-          {[
-            { value: stats?.pendingReviews ?? '—', label: 'Avaliações' },
-            { value: stats?.pendingClaims ?? '—', label: 'Reivind.' },
-            { value: stats?.pendingEvents ?? '—', label: 'Eventos' },
-            { value: stats?.pendingServices ?? '—', label: 'Serviços' },
-            { value: stats?.pendingJobs ?? '—', label: 'Vagas' },
-            { value: stats?.pendingTransfers ?? '—', label: 'Transfers' },
-            { value: stats?.totalBusinesses ?? '—', label: 'Negócios' },
-            { value: stats?.draftBusinesses ?? '—', label: 'Rascunhos' },
-          ].map(({ value, label }) => (
-            <div
-              key={label}
-              className="bg-white border border-[#E8E4DF] rounded-xl p-4"
+    <div className="min-h-screen bg-[#FAFAF9]">
+      {/* ── Top bar ── */}
+      <header className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
+        <div className="max-w-4xl mx-auto px-5 md:px-8 h-14 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <LayoutDashboard className="w-4 h-4 text-[#737373]" />
+            <span className="text-sm font-semibold text-[#1A1A1A]">Admin</span>
+            {totalPending > 0 && (
+              <span className="bg-coral text-white text-[10px] font-bold px-2 py-0.5 rounded-full tabular-nums">
+                {totalPending} pendente{totalPending !== 1 ? 's' : ''}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
+            {user?.email && (
+              <span className="hidden sm:block text-xs text-[#737373] truncate max-w-[180px]">
+                {user.email}
+              </span>
+            )}
+            <button
+              onClick={() => supabase.auth.signOut()}
+              title="Sair"
+              className="flex items-center gap-1.5 text-xs text-[#737373] hover:text-[#1A1A1A] border border-[#E8E4DF] hover:border-[#C4BFBA] rounded-xl px-3 py-1.5 transition-colors"
             >
-              <p className="text-2xl font-bold text-teal">{value}</p>
-              <p className="text-xs text-[#737373] mt-1">{label}</p>
-            </div>
+              <LogOut className="w-3.5 h-3.5" />
+              Sair
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-4xl mx-auto px-5 md:px-8 py-8">
+        {/* ── Back link ── */}
+        <Link
+          href="/cadastre/painel"
+          className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6"
+        >
+          ← Painel do prestador
+        </Link>
+
+        {/* ── Heading ── */}
+        <div className="mb-6">
+          <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">Painel Admin</h1>
+          <p className="text-sm text-[#737373] mt-1">Moderação e gestão do diretório Vive Gostoso.</p>
+        </div>
+
+        {/* ── Stats bar ── */}
+        {statsQuery.isLoading ? (
+          <div className="grid grid-cols-4 sm:grid-cols-8 gap-2 mb-8">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+              <div key={i} className="h-16 bg-[#E8E4DF] rounded-xl animate-pulse" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-4 sm:grid-cols-8 gap-2 mb-8">
+            {statItems.map(({ value, label, urgent }) => (
+              <div
+                key={label}
+                className={`rounded-xl border p-3 text-center ${
+                  urgent
+                    ? 'bg-coral/5 border-coral/25'
+                    : 'bg-white border-[#E8E4DF]'
+                }`}
+              >
+                <p className={`text-xl font-bold tabular-nums leading-none ${urgent ? 'text-coral' : 'text-[#1A1A1A]'}`}>
+                  {value}
+                </p>
+                <p className="text-[10px] text-[#737373] mt-1 leading-tight">{label}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* ── Module list ── */}
+        <div className="space-y-2">
+          {modules.map(({ href, icon: Icon, title, desc, badge }) => (
+            <Link
+              key={href}
+              href={href}
+              className="group flex items-center gap-4 bg-white border border-[#E8E4DF] rounded-2xl px-5 py-4 hover:shadow-sm hover:-translate-y-0.5 transition-all"
+            >
+              <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                badge > 0 ? 'bg-coral/10' : 'bg-[#F5F2EE]'
+              }`}>
+                <Icon className={`w-4 h-4 ${badge > 0 ? 'text-coral' : 'text-[#737373]'}`} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-sm text-[#1A1A1A] group-hover:text-teal transition-colors">{title}</p>
+                <p className="text-xs text-[#737373] mt-0.5 truncate">{desc}</p>
+              </div>
+              <PendingBadge count={badge} />
+            </Link>
           ))}
         </div>
-      )}
-
-      {/* Module cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {modules.map(({ href, icon: Icon, title, desc, badge }) => (
-          <Link
-            key={href}
-            href={href}
-            className="relative bg-white border border-[#E8E4DF] rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all block"
-          >
-            <Badge count={badge} />
-            <Icon className="w-7 h-7 mb-3 text-[#1A1A1A]" />
-            <p className="font-semibold text-[#1A1A1A] text-lg mb-1">{title}</p>
-            <p className="text-sm text-[#737373]">{desc}</p>
-          </Link>
-        ))}
-      </div>
-    </main>
+      </main>
+    </div>
   )
 }

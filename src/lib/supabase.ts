@@ -1,14 +1,8 @@
-import { createClient } from '@supabase/supabase-js'
+import { createBrowserClient } from '@supabase/ssr'
 
-// Using untyped client; queries are typed via explicit casts on query results
-export const supabase = createClient(
+// Browser client — session stored in cookies (shared with SSR middleware).
+// Using untyped client; queries are typed via explicit casts on query results.
+export const supabase = createBrowserClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL as string,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-    },
-  }
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
 )

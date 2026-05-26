@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { AtSign, MapPin, Utensils, BedDouble, Wind, CalendarDays, Map, Briefcase, Heart, Waves } from 'lucide-react'
+import { AtSign, MapPin, Utensils, BedDouble, Wind, CalendarDays, Map, Briefcase, Heart, Waves, Store } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
 const LINKS: { to: string; icon: LucideIcon; label: string; sub: string; color: string }[] = [
@@ -51,6 +51,26 @@ export default function Bio() {
             </div>
           </Link>
         ))}
+      </div>
+
+      {/* B2B CTA — for business owners */}
+      <div className="w-full max-w-sm mt-4">
+        <div className="rounded-2xl border border-teal/20 bg-teal/5 px-5 py-4">
+          <p className="text-xs text-[#737373] mb-2">Você tem um negócio em Gostoso?</p>
+          <Link
+            href="/parceiros"
+            className="flex items-center gap-3 group"
+          >
+            <Store className="w-5 h-5 text-teal flex-shrink-0" />
+            <div className="min-w-0 flex-1">
+              <div className="font-display font-bold text-sm text-[#1A1A1A] group-hover:text-teal transition-colors">
+                Apareça no diretório
+              </div>
+              <div className="text-xs text-[#737373]">Cadastre seu negócio grátis</div>
+            </div>
+            <span className="text-teal text-xs font-semibold flex-shrink-0">→</span>
+          </Link>
+        </div>
       </div>
 
       {/* Instagram */}
