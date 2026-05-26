@@ -3,6 +3,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
+import { useProfile } from '@/hooks/useProfile'
 import type { Professional, ProfessionalCategory } from '@/types/professional'
 import { generateSlug } from '@/types/professional'
 
@@ -51,21 +52,16 @@ export function useProfessional(slug: string) {
 
 /** Get the current user's professional profile (published or draft). */
 export function useMyProfessional() {
+  const { data: profile } = useProfile()
+
   return useQuery<Professional | null>({
-    queryKey: ['my-professional'],
+    queryKey: ['my-professional', profile?.id],
+    enabled: !!profile?.id,
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return null
-      const { data: profile } = await supabase
-        .from('gostoso_profiles')
-        .select('id')
-        .eq('auth_user_id', user.id)
-        .maybeSingle()
-      if (!profile) return null
       const { data, error } = await supabase
         .from('gostoso_professionals')
         .select('*')
-        .eq('profile_id', profile.id)
+        .eq('profile_id', profile!.id)
         .maybeSingle()
       if (error) throw error
       return data as Professional | null
@@ -93,20 +89,13 @@ export type ProfessionalUpsert = {
 /** Create or update the current user's professional profile. */
 export function useUpsertProfessional() {
   const qc = useQueryClient()
+  const { data: profile } = useProfile()
 
   return useMutation({
     mutationFn: async (input: ProfessionalUpsert) => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) throw new Error('Not authenticated')
+      if (!profile?.id) throw new Error('Not authenticated')
 
-      const { data: profile } = await supabase
-        .from('gostoso_profiles')
-        .select('id')
-        .eq('auth_user_id', user.id)
-        .maybeSingle()
-      if (!profile) throw new Error('Profile not found')
-
-      // Check if record exists
+      // Only 1-2 round trips now (instead of 3-4)
       const { data: existing } = await supabase
         .from('gostoso_professionals')
         .select('id, slug')
@@ -190,6 +179,7 @@ export function useDeleteProfessional() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-professionals'] })
       qc.invalidateQueries({ queryKey: ['professionals'] })
+      qc.invalidateQueries({ queryKey: ['professional'] })  // clears all slug caches
     },
   })
 }
