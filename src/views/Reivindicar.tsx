@@ -74,7 +74,7 @@ export default function Reivindicar() {
           </h1>
 
           <p className="text-[#A0A0A0] text-base leading-relaxed max-w-lg mb-8">
-            Mais de 180 estabelecimentos de São Miguel do Gostoso já estão listados na plataforma. O seu pode ser um deles — e estar esperando por você.
+            Mais de 180 estabelecimentos de São Miguel do Gostoso já estão listados na plataforma. O seu pode ser um deles, esperando por você.
           </p>
 
           {/* ── Search box ── */}
@@ -232,7 +232,7 @@ export default function Reivindicar() {
             Não encontrou seu negócio?
           </h2>
           <p className="text-[#A0A0A0] text-sm mb-8 max-w-sm mx-auto">
-            Sem problema. Crie seu perfil do zero — é gratuito e leva menos de 5 minutos.
+            Sem problema. Crie seu perfil do zero. É gratuito e leva menos de 5 minutos.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link

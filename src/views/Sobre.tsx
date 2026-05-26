@@ -16,7 +16,7 @@ export default function Sobre() {
 
   usePageMeta({
     title: 'Sobre o Vive Gostoso',
-    description: 'Conheça o projeto por trás do guia digital de São Miguel do Gostoso — feito pela comunidade, para a comunidade.',
+    description: 'Conheça o projeto por trás do guia digital de São Miguel do Gostoso, feito pela comunidade, para a comunidade.',
   })
 
   const STEPS = [

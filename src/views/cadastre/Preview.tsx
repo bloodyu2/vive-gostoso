@@ -108,7 +108,7 @@ function PreviewInner() {
                   : 'bg-[#F5F2EE] text-[#737373]'
               }`}>
                 <span className={`w-2 h-2 rounded-full ${business.is_published ? 'bg-teal' : 'bg-[#A0A0A0]'}`} />
-                {business.is_published ? 'Publicado e visível' : 'Rascunho — não visível'}
+                {business.is_published ? 'Publicado e visível' : 'Rascunho (não visível)'}
               </div>
 
               {/* Quick actions */}

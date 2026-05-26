@@ -37,7 +37,7 @@ export function ServiceForm({ onClose }: Props) {
         <div className="flex items-center justify-between px-6 py-5 border-b border-[#E8E4DF] sticky top-0 bg-white z-10">
           <div>
             <h2 className="font-display font-bold text-xl text-[#1A1A1A]">Ofereço meu serviço</h2>
-            <p className="text-xs text-[#737373] mt-0.5">Seu cadastro fica ativo após revisão — normalmente 24h</p>
+            <p className="text-xs text-[#737373] mt-0.5">Seu cadastro fica ativo após revisão, normalmente em 24h</p>
           </div>
           <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-[#F5F2EE] transition-colors">
             <X className="w-5 h-5" />
@@ -49,7 +49,7 @@ export function ServiceForm({ onClose }: Props) {
             <CheckCircle className="w-10 h-10 mb-4 text-teal mx-auto" />
             <h3 className="font-display font-bold text-xl mb-2">Recebemos!</h3>
             <p className="text-[#737373] text-sm leading-relaxed">
-              Vamos revisar e publicar em até 24 horas. Fique de olho no WhatsApp — podemos entrar em contato para confirmar.
+              Vamos revisar e publicar em até 24 horas. Fique de olho no WhatsApp, podemos entrar em contato para confirmar.
             </p>
             <button onClick={onClose} className="mt-6 bg-teal text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-teal-dark transition-colors">
               Fechar
@@ -120,7 +120,7 @@ export function ServiceForm({ onClose }: Props) {
             </div>
 
             <p className="text-xs text-[#737373] leading-relaxed">
-              Ao enviar, você concorda que seu nome e WhatsApp fiquem visíveis para quem buscar o serviço. Sem taxas — a plataforma é da cidade.
+              Ao enviar, você concorda que seu nome e WhatsApp fiquem visíveis para quem buscar o serviço. Sem taxas. A plataforma é da cidade.
             </p>
 
             <button

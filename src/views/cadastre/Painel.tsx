@@ -321,14 +321,14 @@ function PainelInner() {
                             disabled={isLoading}
                             className="text-xs font-semibold bg-teal text-white px-4 py-2 rounded-xl hover:bg-teal/90 transition-colors disabled:opacity-50"
                           >
-                            {isLoading ? '...' : `Associar — ${prices.associado}`}
+                            {isLoading ? '...' : `Associar: ${prices.associado}`}
                           </button>
                           <button
                             onClick={() => handleCheckout(b.id, 'destaque')}
                             disabled={isLoading}
                             className="text-xs font-semibold bg-ocre text-white px-4 py-2 rounded-xl hover:bg-ocre/90 transition-colors disabled:opacity-50"
                           >
-                            {isLoading ? '...' : `Destaque — ${prices.destaque}`}
+                            {isLoading ? '...' : `Destaque: ${prices.destaque}`}
                           </button>
                         </>
                       )}
@@ -338,7 +338,7 @@ function PainelInner() {
                           disabled={isLoading}
                           className="text-xs font-semibold bg-ocre text-white px-4 py-2 rounded-xl hover:bg-ocre/90 transition-colors disabled:opacity-50"
                         >
-                          {isLoading ? '...' : `Upgrade para Destaque — ${prices.destaque}`}
+                          {isLoading ? '...' : `Upgrade para Destaque: ${prices.destaque}`}
                         </button>
                       )}
                       {b.plan === 'destaque' && (

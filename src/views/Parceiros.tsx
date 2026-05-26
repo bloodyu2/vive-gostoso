@@ -240,7 +240,7 @@ export default function Parceiros() {
               href="/cadastre"
               className="inline-flex items-center gap-2 bg-teal text-white px-6 py-3.5 rounded-2xl font-semibold text-sm hover:bg-teal/90 transition-colors"
             >
-              Começar agora — é grátis
+              Começar agora, é grátis
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

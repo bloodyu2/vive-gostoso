@@ -127,7 +127,7 @@ export default function Login() {
           {/* Tourist notice */}
           <div className="flex items-start gap-2.5 bg-areia rounded-xl px-4 py-3 mb-6 text-sm text-[#737373]">
             <span className="text-base leading-none mt-0.5 flex-shrink-0">🗺️</span>
-            <span>Só explorando Gostoso? Não precisa criar conta — <Link href="/" className="text-teal font-medium hover:underline">navegue à vontade</Link>.</span>
+            <span>Só explorando Gostoso? Não precisa criar conta, <Link href="/" className="text-teal font-medium hover:underline">navegue à vontade</Link>.</span>
           </div>
 
           {/* Value props - shown only on login/register, not forgot */}

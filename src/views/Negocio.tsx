@@ -84,7 +84,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
 
   const business = b
   const shareUrl = `https://vivegostoso.com.br/negocio/${business.slug}`
-  const shareText = `${business.name} — ${shareUrl}`
+  const shareText = `${business.name}: ${shareUrl}`
 
   async function handleShare() {
     if (navigator.share) {

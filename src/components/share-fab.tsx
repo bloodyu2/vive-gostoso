@@ -7,7 +7,7 @@ export function ShareFab() {
   async function handleShare() {
     const data = {
       title: 'Vive Gostoso',
-      text: 'Descubra São Miguel do Gostoso — restaurantes, pousadas, passeios e muito mais.',
+      text: 'Descubra São Miguel do Gostoso: restaurantes, pousadas, passeios e muito mais.',
       url: window.location.href,
     }
 

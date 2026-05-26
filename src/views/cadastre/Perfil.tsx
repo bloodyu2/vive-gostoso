@@ -754,7 +754,7 @@ function PerfilInner() {
                 <div className="min-w-0">
                   <p className="text-sm font-semibold truncate">{m.name}</p>
                   <p className="text-xs text-[#737373]">
-                    {m.profile_id ? 'Já tem proprietário' : 'Sem proprietário — pode ser seu'}
+                    {m.profile_id ? 'Já tem proprietário' : 'Sem proprietário, pode ser seu'}
                   </p>
                 </div>
                 <a
@@ -787,7 +787,7 @@ function PerfilInner() {
             {textFields.map(({ label, key, required }) => {
               const helperText: Partial<Record<typeof key, string>> = {
                 whatsapp: 'Somente números com DDD, ex: 84999990000',
-                instagram: 'Sem @ — ex: vivegostoso',
+                instagram: 'Sem @, ex: vivegostoso',
                 website: 'URL completa com https://',
                 address: 'Rua, número ou referência de localização',
               }
@@ -816,7 +816,7 @@ function PerfilInner() {
                 rows={4}
                 value={biz.description ?? ''}
                 onChange={e => setBiz(b => ({ ...b, description: e.target.value }))}
-                placeholder="Descreva seu negócio em poucas frases — o que oferece, o que torna especial..."
+                placeholder="Descreva seu negócio em poucas frases: o que oferece, o que torna especial..."
                 className={`${INPUT_CLS} resize-none`}
               />
             </div>

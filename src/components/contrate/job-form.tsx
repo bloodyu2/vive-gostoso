@@ -36,7 +36,7 @@ export function JobForm({ onClose }: Props) {
         <div className="flex items-center justify-between px-6 py-5 border-b border-[#E8E4DF] sticky top-0 bg-white z-10">
           <div>
             <h2 className="font-display font-bold text-xl text-[#1A1A1A]">Publicar vaga</h2>
-            <p className="text-xs text-[#737373] mt-0.5">A vaga fica ativa após revisão — normalmente 24h</p>
+            <p className="text-xs text-[#737373] mt-0.5">A vaga fica ativa após revisão, normalmente em 24h</p>
           </div>
           <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-[#F5F2EE] transition-colors">
             <X className="w-5 h-5" />

@@ -56,7 +56,7 @@ const CUSTOS_PLANEJADOS = [
   {
     icon: Layers,
     label: 'Vercel Pro',
-    detalhe: 'Hospedagem avançada com analytics e limites maiores — quando o tráfego justificar (USD 20/mês)',
+    detalhe: 'Hospedagem avançada com analytics e limites maiores, quando o tráfego justificar (USD 20/mês)',
   },
   {
     icon: Phone,
@@ -71,7 +71,7 @@ const CUSTOS_PLANEJADOS = [
   {
     icon: Zap,
     label: 'Marketing digital',
-    detalhe: 'E-mail marketing, anúncios locais — quando a arrecadação justificar',
+    detalhe: 'E-mail marketing e anúncios locais quando a arrecadação justificar',
   },
   {
     icon: Server,
@@ -311,7 +311,7 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
           {/* Planejado */}
           <div className="flex items-center gap-2 mb-3 mt-8">
             <Clock className="w-3.5 h-3.5 text-ocre" />
-            <span className="text-xs font-semibold uppercase tracking-widest text-[#737373]">Planejado — quando a arrecadação permitir</span>
+            <span className="text-xs font-semibold uppercase tracking-widest text-[#737373]">Planejado para quando a arrecadação permitir</span>
           </div>
 
           <div className="bg-white dark:bg-[#1C1C1C] border border-dashed border-[#D4CFCA] dark:border-[#333] rounded-2xl overflow-hidden opacity-75">
