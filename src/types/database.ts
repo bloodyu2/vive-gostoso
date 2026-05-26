@@ -230,7 +230,7 @@ export interface EventSubmission {
 export type Database = {
   public: {
     Tables: {
-      gostoso_businesses:       { Row: Business; Insert: Omit<Business, 'id' | 'created_at' | 'updated_at' | 'category'>; Update: Partial<Omit<Business, 'category'>> }
+      gostoso_businesses:       { Row: Business; Insert: Omit<Business, 'id' | 'created_at' | 'updated_at' | 'category'> & { business_type?: 'local' | 'service_company' }; Update: Partial<Omit<Business, 'category'>> }
       gostoso_categories:       { Row: Category; Insert: Omit<Category, 'id'>; Update: Partial<Category> }
       gostoso_events:           { Row: GostosoEvent; Insert: Omit<GostosoEvent, 'id' | 'created_at'>; Update: Partial<GostosoEvent> }
       gostoso_fund_entries:     { Row: FundEntry; Insert: Omit<FundEntry, 'id' | 'created_at'>; Update: Partial<FundEntry> }
