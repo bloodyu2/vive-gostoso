@@ -62,8 +62,9 @@ function TypeFork() {
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
+                type="button"
                 onClick={() => router.push('/cadastre/negocios')}
-                className="text-left border-2 border-[#E8E4DF] rounded-2xl p-5 hover:border-[#0D7C7C] hover:bg-[#0D7C7C]/5 transition-all"
+                className="text-left border-2 border-[#E8E4DF] rounded-2xl p-5 hover:border-teal hover:bg-teal/5 transition-all"
               >
                 <div className="text-3xl mb-3">🏪</div>
                 <p className="font-semibold text-[#1A1A1A] text-sm mb-1">
@@ -81,8 +82,9 @@ function TypeFork() {
                 </div>
               </button>
               <button
+                type="button"
                 onClick={() => router.push('/cadastre/profissional')}
-                className="text-left border-2 border-[#E8E4DF] rounded-2xl p-5 hover:border-[#0D7C7C] hover:bg-[#0D7C7C]/5 transition-all"
+                className="text-left border-2 border-[#E8E4DF] rounded-2xl p-5 hover:border-teal hover:bg-teal/5 transition-all"
               >
                 <div className="text-3xl mb-3">👤</div>
                 <p className="font-semibold text-[#1A1A1A] text-sm mb-1">
@@ -289,6 +291,21 @@ function PainelInner() {
               Veja como seu negócio aparece para visitantes do diretório.
             </p>
           </Link>
+
+          {myProfessional && (
+            <Link href="/cadastre/profissional" className="block bg-white rounded-2xl border border-[#E8E4DF] p-5 hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-xl bg-teal/10 flex items-center justify-center">
+                  <span className="text-teal text-lg">👤</span>
+                </div>
+                <div>
+                  <p className="font-semibold text-[#1A1A1A] text-sm">{myProfessional.display_name}</p>
+                  <p className="text-xs text-[#737373]">{myProfessional.headline}</p>
+                </div>
+              </div>
+              <p className="text-xs text-[#0D7C7C] font-semibold">Editar perfil profissional →</p>
+            </Link>
+          )}
         </div>
 
         {/* ── Subscription section ── */}
@@ -449,25 +466,6 @@ function PainelInner() {
               </div>
             )}
           </section>
-        )}
-
-        {/* ── Empty state (no businesses yet) ── */}
-        {businesses.length === 0 && (
-          <div className="text-center py-16 border-2 border-dashed border-[#E8E4DF] rounded-2xl">
-            <Store className="w-10 h-10 mb-4 text-[#C4BFBA] mx-auto" />
-            <h2 className="font-display text-lg font-semibold text-[#1A1A1A] mb-2">
-              Seu espaço no Vive Gostoso espera por você
-            </h2>
-            <p className="text-sm text-[#737373] mb-6 max-w-xs mx-auto">
-              Cadastre seu negócio e apareça para os turistas e moradores de São Miguel do Gostoso.
-            </p>
-            <Link href="/cadastre/perfil">
-              <Button variant="primary" className="inline-flex items-center gap-2">
-                <PlusCircle className="w-4 h-4" />
-                Cadastrar meu negócio
-              </Button>
-            </Link>
-          </div>
         )}
 
         {/* ── Footer note ── */}
