@@ -112,7 +112,46 @@
     "sem_vagas": "Ninguna vacante abierta ahora",
     "sem_vagas_sub": "Si tienes un negocio en Gostoso y necesitas contratar a alguien, publícalo aquí. Es gratuito.",
     "servico": "Servicio",
-    "vaga": "Empleo"
+    "vaga": "Empleo",
+    "tab_empresas": "Empresas",
+    "tab_profissionais": "Profesionales",
+    "hero_title": "Profesionales y empresas de São Miguel do Gostoso",
+    "hero_sub": "Encuentra a quien necesitas — autónomos, agencias y servicios de la ciudad",
+    "service_company_badge": "Empresa de Servicios"
+  },
+  "professional": {
+    "categories": {
+      "coach": "Coach",
+      "mentor": "Mentor",
+      "consultor": "Consultor",
+      "designer": "Diseñador",
+      "fotografo": "Fotógrafo",
+      "juridico": "Jurídico / Abogado",
+      "educacao": "Educación",
+      "outro": "Otro"
+    },
+    "headline_placeholder": "Ej: Coach ejecutivo y mentor de líderes",
+    "bio_placeholder": "Cuéntanos sobre tu experiencia, especialidades y cómo puedes ayudar...",
+    "whatsapp_hint": "Solo números: 5584999991111",
+    "specialties_label": "Especialidades",
+    "portfolio_label": "Portafolio",
+    "reviews_label": "Reseñas",
+    "hourly_rate_label": "Valor por hora (opcional)",
+    "published": "Publicado",
+    "draft": "Borrador",
+    "cta_whatsapp": "Contactar por WhatsApp",
+    "cta_whatsapp_hint": "menciona Vive Gostoso",
+    "no_professionals": "No se encontraron profesionales en esta categoría.",
+    "all_categories": "Todos"
+  },
+  "cadastre_fork": {
+    "title": "¿Qué quieres hacer en Vive Gostoso?",
+    "subtitle": "Elige tu tipo de perfil — puedes cambiarlo después",
+    "select_prompt": "Selecciona una opción para continuar:",
+    "business_title": "Tengo un negocio local",
+    "business_desc": "Restaurante, posada, tienda o servicio con dirección física en São Miguel do Gostoso.",
+    "professional_title": "Soy profesional autónomo",
+    "professional_desc": "Ofrezco servicios como persona física — consultoría, mentoría, diseño, fotografía, etc."
   },
   "sobre": {
     "badge": "SOBRE EL PROYECTO",

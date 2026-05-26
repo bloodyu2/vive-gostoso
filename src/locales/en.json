@@ -112,7 +112,46 @@
     "sem_vagas": "No open positions right now",
     "sem_vagas_sub": "If you run a business in Gostoso and need to hire someone, post here. It's free.",
     "servico": "Service",
-    "vaga": "Job"
+    "vaga": "Job",
+    "tab_empresas": "Companies",
+    "tab_profissionais": "Professionals",
+    "hero_title": "Professionals and companies in São Miguel do Gostoso",
+    "hero_sub": "Find who you need — freelancers, agencies, and city services",
+    "service_company_badge": "Service Company"
+  },
+  "professional": {
+    "categories": {
+      "coach": "Coach",
+      "mentor": "Mentor",
+      "consultor": "Consultant",
+      "designer": "Designer",
+      "fotografo": "Photographer",
+      "juridico": "Legal / Lawyer",
+      "educacao": "Education",
+      "outro": "Other"
+    },
+    "headline_placeholder": "E.g. Executive coach & leadership mentor",
+    "bio_placeholder": "Tell about your experience, specialties and how you can help...",
+    "whatsapp_hint": "Digits only: 5584999991111",
+    "specialties_label": "Specialties",
+    "portfolio_label": "Portfolio",
+    "reviews_label": "Reviews",
+    "hourly_rate_label": "Hourly rate (optional)",
+    "published": "Published",
+    "draft": "Draft",
+    "cta_whatsapp": "Message on WhatsApp",
+    "cta_whatsapp_hint": "mentions Vive Gostoso",
+    "no_professionals": "No professionals found in this category.",
+    "all_categories": "All"
+  },
+  "cadastre_fork": {
+    "title": "What do you want to do on Vive Gostoso?",
+    "subtitle": "Choose your profile type — you can change later",
+    "select_prompt": "Select an option to continue:",
+    "business_title": "I have a local business",
+    "business_desc": "Restaurant, guesthouse, shop, or service with a physical address in São Miguel do Gostoso.",
+    "professional_title": "I am a freelance professional",
+    "professional_desc": "I offer services as an individual — consulting, mentoring, design, photography, etc."
   },
   "sobre": {
     "badge": "ABOUT THE PROJECT",

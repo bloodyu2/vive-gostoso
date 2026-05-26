@@ -112,7 +112,46 @@
     "sem_vagas": "Nenhuma vaga aberta agora",
     "sem_vagas_sub": "Se você tem um negócio em Gostoso e precisa contratar alguém, publique aqui. É gratuito.",
     "servico": "Serviço",
-    "vaga": "Vaga"
+    "vaga": "Vaga",
+    "tab_empresas": "Empresas",
+    "tab_profissionais": "Profissionais",
+    "hero_title": "Profissionais e empresas de São Miguel do Gostoso",
+    "hero_sub": "Encontre quem você precisa — autônomos, agências e serviços da cidade",
+    "service_company_badge": "Empresa de Serviço"
+  },
+  "professional": {
+    "categories": {
+      "coach": "Coach",
+      "mentor": "Mentor",
+      "consultor": "Consultor",
+      "designer": "Designer",
+      "fotografo": "Fotógrafo",
+      "juridico": "Jurídico / Advogado",
+      "educacao": "Educação",
+      "outro": "Outro"
+    },
+    "headline_placeholder": "Ex: Coach executivo & mentor de líderes",
+    "bio_placeholder": "Conte sobre sua experiência, especialidades e como você pode ajudar...",
+    "whatsapp_hint": "Só números: 5584999991111",
+    "specialties_label": "Especialidades",
+    "portfolio_label": "Portfólio",
+    "reviews_label": "Avaliações",
+    "hourly_rate_label": "Valor por hora (opcional)",
+    "published": "Publicado",
+    "draft": "Rascunho",
+    "cta_whatsapp": "Chamar no WhatsApp",
+    "cta_whatsapp_hint": "menciona Vive Gostoso",
+    "no_professionals": "Nenhum profissional encontrado nessa categoria.",
+    "all_categories": "Todos"
+  },
+  "cadastre_fork": {
+    "title": "O que você quer fazer no Vive Gostoso?",
+    "subtitle": "Escolha o tipo de perfil — você pode mudar depois",
+    "select_prompt": "Selecione uma opção para continuar:",
+    "business_title": "Tenho um negócio local",
+    "business_desc": "Restaurante, pousada, loja, serviço com endereço físico em São Miguel do Gostoso.",
+    "professional_title": "Sou profissional autônomo",
+    "professional_desc": "Ofereço serviços como pessoa física — consultoria, mentoria, design, fotografia, etc."
   },
   "sobre": {
     "badge": "SOBRE O PROJETO",
