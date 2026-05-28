@@ -35,7 +35,7 @@ function AdminRoleCheck({ children }: { children: React.ReactNode }) {
   }, [authLoading, isPending, profile, router])
 
   if (authLoading || isPending) return <Spinner />
-  if (!profile || profile.role !== 'admin') return <Spinner />
+  if (!profile || profile.role !== 'admin') return null
 
   return <>{children}</>
 }

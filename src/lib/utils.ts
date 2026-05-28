@@ -18,8 +18,14 @@ export function isBusinessOpen(
   const day = days[now.getDay()]
   const hours = opening_hours[day]
   if (!hours || hours.closed) return false
-  const [oh, om] = hours.open.split(':').map(Number)
-  const [ch, cm] = hours.close.split(':').map(Number)
+  const parseTime = (t: string) => {
+    const parts = t?.split(':').map(Number)
+    if (!parts || parts.length < 2 || isNaN(parts[0]) || isNaN(parts[1])) return null
+    return parts[0] * 60 + parts[1]
+  }
+  const openMin = parseTime(hours.open)
+  const closeMin = parseTime(hours.close)
+  if (openMin === null || closeMin === null) return false
   const nowMinutes = now.getHours() * 60 + now.getMinutes()
-  return nowMinutes >= oh * 60 + om && nowMinutes <= ch * 60 + cm
+  return nowMinutes >= openMin && nowMinutes <= closeMin
 }

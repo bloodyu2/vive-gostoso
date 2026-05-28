@@ -169,7 +169,7 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
         {/* ── Success banner ── */}
         {donationSuccess && (
           <div className="bg-teal/10 border border-teal/20 rounded-2xl p-5 flex items-center gap-4">
-            <span className="text-2xl">💚</span>
+            <Heart className="w-6 h-6 text-teal flex-shrink-0" />
             <div>
               <p className="font-semibold text-teal">{t('apoie.sucesso_titulo')}</p>
               <p className="text-sm text-teal/80 mt-0.5">{t('apoie.sucesso_desc')}</p>
@@ -220,11 +220,13 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
               <div className="flex items-center gap-2 mb-4 bg-[#F5F2EE] dark:bg-[#252525] rounded-xl px-4 py-2.5">
                 <span className="text-sm font-semibold text-[#737373]">R$</span>
                 <input
-                  type="number"
-                  min={5}
-                  step={1}
+                  type="text"
+                  inputMode="numeric"
                   value={customAmount}
-                  onChange={e => setCustomAmount(e.target.value)}
+                  onChange={e => {
+                    const v = e.target.value.replace(/[^0-9,]/g, '')
+                    setCustomAmount(v)
+                  }}
                   placeholder="Quanto você quer apoiar?"
                   className="flex-1 bg-transparent text-sm outline-none text-[#1A1A1A] dark:text-white placeholder:text-[#B0A89E]"
                 />

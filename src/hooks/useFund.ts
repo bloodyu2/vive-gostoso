@@ -37,6 +37,7 @@ export function useAssociadosCount() {
       const { count: annualCount, error: e2 } = await supabase
         .from('gostoso_businesses')
         .select('*', { count: 'exact', head: true })
+        .eq('active', true)
         .in('plan', ['associado', 'destaque'])
         .is('stripe_subscription_id', null)
         .gte('plan_expires_at', now)

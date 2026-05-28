@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useStats } from '@/hooks/useStats'
+import { buildWhatsAppLink, OFFICIAL_WHATSAPP } from '@/lib/whatsapp'
 
 const BENEFITS = [
   {
@@ -140,7 +141,7 @@ export default function Parceiros() {
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <a
-                href="https://wa.me/5584999999999?text=Olá! Gostaria de saber mais sobre o Vive Gostoso para meu negócio."
+                href={buildWhatsAppLink(OFFICIAL_WHATSAPP, 'Gostaria de saber mais sobre o Vive Gostoso para meu negócio.')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 border border-white/20 text-white px-6 py-3.5 rounded-2xl font-semibold text-sm hover:bg-white/5 transition-colors"

@@ -50,6 +50,7 @@ export function useBusiness(
 ) {
   return useQuery({
     queryKey: ['business', slug],
+    enabled: !!slug,
     queryFn: async (): Promise<Business | null> => {
       const { data, error } = await supabase
         .from('gostoso_businesses')

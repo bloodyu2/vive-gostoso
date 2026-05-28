@@ -66,7 +66,7 @@ function TypeFork() {
                 onClick={() => router.push('/cadastre/negocios')}
                 className="text-left border-2 border-[#E8E4DF] rounded-2xl p-5 hover:border-teal hover:bg-teal/5 transition-all"
               >
-                <div className="text-3xl mb-3">🏪</div>
+                <Store className="w-8 h-8 text-teal mb-3" />
                 <p className="font-semibold text-[#1A1A1A] text-sm mb-1">
                   Tenho um negócio local
                 </p>
@@ -86,7 +86,7 @@ function TypeFork() {
                 onClick={() => router.push('/cadastre/profissional')}
                 className="text-left border-2 border-[#E8E4DF] rounded-2xl p-5 hover:border-teal hover:bg-teal/5 transition-all"
               >
-                <div className="text-3xl mb-3">👤</div>
+                <User className="w-8 h-8 text-teal mb-3" />
                 <p className="font-semibold text-[#1A1A1A] text-sm mb-1">
                   Sou profissional autônomo
                 </p>
@@ -201,7 +201,7 @@ function PainelInner() {
 
         {/* ── Greeting ── */}
         <div className="mb-6">
-          <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">Olá! 👋</h1>
+          <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">Olá!</h1>
           <p className="text-sm text-[#737373] mt-1">Gerencie seus negócios e planos no Vive Gostoso.</p>
         </div>
 
@@ -296,7 +296,7 @@ function PainelInner() {
             <Link href="/cadastre/profissional" className="block bg-white rounded-2xl border border-[#E8E4DF] p-5 hover:shadow-md transition-shadow">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 rounded-xl bg-teal/10 flex items-center justify-center">
-                  <span className="text-teal text-lg">👤</span>
+                  <User className="w-5 h-5 text-teal" />
                 </div>
                 <div>
                   <p className="font-semibold text-[#1A1A1A] text-sm">{myProfessional.display_name}</p>

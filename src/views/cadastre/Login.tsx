@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Calendar, Camera, BarChart2 } from 'lucide-react'
+import { Calendar, Camera, BarChart2, MapPin, Mail } from 'lucide-react'
 import { Logo } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
@@ -126,7 +126,7 @@ export default function Login() {
         <div className="bg-white p-8">
           {/* Tourist notice */}
           <div className="flex items-start gap-2.5 bg-areia rounded-xl px-4 py-3 mb-6 text-sm text-[#737373]">
-            <span className="text-base leading-none mt-0.5 flex-shrink-0">🗺️</span>
+            <MapPin className="w-4 h-4 text-teal flex-shrink-0 mt-0.5" />
             <span>Só explorando Gostoso? Não precisa criar conta, <Link href="/" className="text-teal font-medium hover:underline">navegue à vontade</Link>.</span>
           </div>
 
@@ -174,7 +174,7 @@ export default function Login() {
           {/* Success state */}
           {success ? (
             <div className="text-center">
-              <div className="text-5xl mb-4">📬</div>
+              <Mail className="w-12 h-12 text-teal mx-auto mb-4" />
               <p className="text-[#1A1A1A] text-sm mb-6">{success}</p>
               <Button variant="secondary" className="w-full" onClick={() => { setSuccess(null); switchMode('login') }}>
                 Voltar para o login

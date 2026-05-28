@@ -223,7 +223,7 @@ export default function Contrate() {
       <section className="bg-[#1A1A1A]">
         <div className="max-w-5xl mx-auto px-5 md:px-8 pt-12 pb-0">
           <div className="inline-flex items-center gap-2 bg-teal/20 text-teal text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
-            🤝 Contrate
+            <Briefcase className="w-3.5 h-3.5" /> Contrate
           </div>
           <h1 className="font-display text-3xl md:text-4xl font-bold text-white leading-tight mb-2">
             Profissionais e empresas<br className="hidden md:block" /> de São Miguel do Gostoso

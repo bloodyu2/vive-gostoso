@@ -35,7 +35,8 @@ export function compressImage(file: File): Promise<Blob> {
       const canvas = document.createElement('canvas')
       canvas.width = width
       canvas.height = height
-      const ctx = canvas.getContext('2d')!
+      const ctx = canvas.getContext('2d')
+      if (!ctx) { reject(new Error('Falha ao criar contexto da imagem')); return }
       ctx.drawImage(img, 0, 0, width, height)
       canvas.toBlob(
         (blob) => {
