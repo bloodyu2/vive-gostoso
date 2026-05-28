@@ -10,6 +10,7 @@ import { useCategories } from '@/hooks/useCategories'
 import { useInvalidateMyBusinesses } from '@/hooks/useMyBusinesses'
 import type { Business } from '@/types/database'
 import { ArrowLeft, Camera, ExternalLink, Loader2 } from 'lucide-react'
+import { validateImageFile, compressImage } from '@/lib/image-upload'
 
 export default function Perfil() {
   return <AuthGuard><PerfilInner /></AuthGuard>
@@ -173,9 +174,12 @@ function PhotoSection({
   const currentPhotos = photos ?? []
 
   async function uploadFile(file: File, path: string): Promise<string> {
+    const compressed = await compressImage(file)
+    const safeName = file.name.replace(/\.[^.]+$/, '') + '.jpg'
+    const toUpload = new File([compressed], safeName, { type: 'image/jpeg' })
     const { error: upErr } = await supabase.storage
       .from('business-photos')
-      .upload(path, file, { upsert: true })
+      .upload(path, toUpload, { upsert: true, contentType: 'image/jpeg' })
     if (upErr) throw upErr
     return supabase.storage.from('business-photos').getPublicUrl(path).data.publicUrl
   }
@@ -184,14 +188,21 @@ function PhotoSection({
     const file = e.target.files?.[0]
     if (!file || !bizId) return
     setError(null)
+    const validationError = validateImageFile(file)
+    if (validationError) {
+      setError(validationError)
+      if (coverRef.current) coverRef.current.value = ''
+      return
+    }
     setUploadingCover(true)
     try {
-      const path = `${bizId}/${Date.now()}-${file.name}`
+      const path = `${bizId}/${Date.now()}-${file.name.replace(/\.[^.]+$/, '')}.jpg`
       const url = await uploadFile(file, path)
       await supabase.from('gostoso_businesses').update({ cover_url: url }).eq('id', bizId)
       onCoverChange(url)
-    } catch {
-      setError('Erro ao enviar foto de capa. Tente novamente.')
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'erro inesperado'
+      setError(`Erro ao enviar foto de capa: ${msg}`)
     } finally {
       setUploadingCover(false)
       if (coverRef.current) coverRef.current.value = ''
@@ -203,6 +214,15 @@ function PhotoSection({
     if (!files.length || !bizId) return
     setError(null)
 
+    for (const f of files) {
+      const validationError = validateImageFile(f)
+      if (validationError) {
+        setError(`${f.name}: ${validationError}`)
+        if (galleryRef.current) galleryRef.current.value = ''
+        return
+      }
+    }
+
     const slots = 10 - currentPhotos.length
     if (slots <= 0) {
       setError('Galeria cheia (máximo 10 fotos).')
@@ -213,13 +233,14 @@ function PhotoSection({
     setUploadingGallery(true)
     try {
       const urls = await Promise.all(
-        toUpload.map(f => uploadFile(f, `${bizId}/${Date.now()}-${f.name}`))
+        toUpload.map(f => uploadFile(f, `${bizId}/${Date.now()}-${f.name.replace(/\.[^.]+$/, '')}.jpg`))
       )
       const next = [...currentPhotos, ...urls]
       await supabase.from('gostoso_businesses').update({ photos: next }).eq('id', bizId)
       onPhotosChange(next)
-    } catch {
-      setError('Erro ao enviar fotos. Tente novamente.')
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'erro inesperado'
+      setError(`Erro ao enviar fotos: ${msg}`)
     } finally {
       setUploadingGallery(false)
       if (galleryRef.current) galleryRef.current.value = ''
@@ -245,7 +266,7 @@ function PhotoSection({
         <label className="block text-sm font-medium mb-2">Foto de capa</label>
         {coverUrl ? (
           <div className="relative w-full h-40 rounded-2xl overflow-hidden mb-2 border border-[#E8E4DF]">
-            <img src={coverUrl} alt="Capa" className="w-full h-full object-cover" />
+            <img src={coverUrl} alt="Capa" className="w-full h-full object-cover" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
           </div>
         ) : (
           <div className="w-full h-40 rounded-2xl border-2 border-dashed border-[#E8E4DF] flex flex-col items-center justify-center gap-2 text-sm text-[#A0A0A0] mb-2 bg-[#FAFAF9]">
@@ -256,7 +277,7 @@ function PhotoSection({
         <input
           ref={coverRef}
           type="file"
-          accept="image/jpeg,image/png,image/webp,image/gif"
+          accept="image/jpeg,image/jpg,image/png,image/webp,image/heic,image/heif"
           className="hidden"
           onChange={handleCoverUpload}
           disabled={!bizId}
@@ -288,6 +309,7 @@ function PhotoSection({
                   src={url}
                   alt=""
                   className="w-full h-full object-cover rounded-xl"
+                  onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
                 />
                 <button
                   type="button"
@@ -306,8 +328,8 @@ function PhotoSection({
             <input
               ref={galleryRef}
               type="file"
-              accept="image/jpeg,image/png,image/webp,image/gif"
-              multiple
+          accept="image/jpeg,image/jpg,image/png,image/webp,image/heic,image/heif"
+          multiple
               className="hidden"
               onChange={handleGalleryUpload}
               disabled={!bizId}

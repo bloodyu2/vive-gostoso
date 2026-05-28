@@ -29,6 +29,8 @@ public/workbox-*.js
 .cursorrules
 CLAUDE.md
 memory.md
+.superpowers/
+docs/superpowers/
 
 # Editor directories and files
 .vscode/*

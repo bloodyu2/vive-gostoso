@@ -37,7 +37,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
         {/* Thumb */}
         <Link href={lp(`/negocio/${b.slug}`)} className="relative w-36 sm:w-48 flex-shrink-0">
           <div className="w-full h-full bg-gradient-to-br from-teal to-teal-dark">
-            {b.cover_url && <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />}
+            {b.cover_url && <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />}
           </div>
           {b.is_featured && (
             <div className="absolute top-2 left-2">
@@ -123,7 +123,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
     )}>
       {/* Cover */}
       <Link href={lp(`/negocio/${b.slug}`)} className="relative overflow-hidden aspect-[4/3] bg-gradient-to-br from-teal to-teal-dark flex-shrink-0">
-        {b.cover_url && <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />}
+        {b.cover_url && <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />}
         {b.is_featured && (
           <div className="absolute top-3 right-3">
             <Badge kind="verif">✓ {t('filters.verificado')}</Badge>
