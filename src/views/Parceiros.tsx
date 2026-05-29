@@ -5,6 +5,8 @@ import {
   Store, CheckCircle, Users, TrendingUp, MapPin,
   AtSign, Phone, Star, ArrowRight, Shield,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useStats } from '@/hooks/useStats'
 import { buildWhatsAppLink, OFFICIAL_WHATSAPP } from '@/lib/whatsapp'
@@ -32,60 +34,6 @@ const BENEFITS = [
   },
 ]
 
-const PLANS = [
-  {
-    name: 'Gratuito',
-    price: 'R$0',
-    period: 'para sempre',
-    color: 'border-[#E8E4DF]',
-    badge: null,
-    features: [
-      'Perfil básico no diretório',
-      'Fotos e descrição',
-      'Link para Instagram e WhatsApp',
-      'Horários de funcionamento',
-    ],
-    cta: 'Começar grátis',
-    ctaStyle: 'border border-[#E8E4DF] text-[#1A1A1A] hover:border-teal hover:text-teal',
-    ctaHref: '/cadastre',
-  },
-  {
-    name: 'Associado',
-    price: 'R$39,90',
-    period: 'por mês',
-    color: 'border-teal',
-    badge: 'Mais popular',
-    badgeColor: 'bg-teal text-white',
-    features: [
-      'Tudo do plano gratuito',
-      'Selo de negócio verificado ✓',
-      'Posição destacada no diretório',
-      'Suporte direto da equipe',
-    ],
-    cta: 'Assinar Associado',
-    ctaStyle: 'bg-teal text-white hover:bg-teal/90',
-    ctaHref: '/cadastre',
-  },
-  {
-    name: 'Destaque',
-    price: 'R$59,90',
-    period: 'por mês',
-    color: 'border-ocre',
-    badge: 'Máximo destaque',
-    badgeColor: 'bg-ocre text-white',
-    features: [
-      'Tudo do plano Associado',
-      '★ Destaque no topo do diretório',
-      'Foto de capa em destaque',
-      'Prioridade em buscas por categoria',
-      'Apoio na estratégia digital',
-    ],
-    cta: 'Assinar Destaque',
-    ctaStyle: 'bg-ocre text-white hover:bg-ocre/90',
-    ctaHref: '/cadastre',
-  },
-]
-
 const TESTIMONIALS = [
   {
     name: 'Tribo do Kite',
@@ -100,11 +48,64 @@ const TESTIMONIALS = [
 ]
 
 export default function Parceiros() {
+  const { t } = useTranslation()
+  const localePath = useLocalePath()
   const { data: stats } = useStats()
+  const planData = [
+    {
+      name: t('parceiros:plan_gratuito'),
+      price: 'R$0',
+      period: t('parceiros:plan_period_forever'),
+      color: 'border-[#E8E4DF]',
+      badge: null,
+      badgeColor: '',
+      features: [
+        'Perfil básico no diretório',
+        'Fotos e descrição',
+        'Link para Instagram e WhatsApp',
+        'Horários de funcionamento',
+      ],
+      cta: 'Começar grátis',
+      ctaStyle: 'border border-[#E8E4DF] text-[#1A1A1A] hover:border-teal hover:text-teal',
+    },
+    {
+      name: t('parceiros:plan_associado'),
+      price: 'R$39,90',
+      period: t('parceiros:plan_period_month'),
+      color: 'border-teal',
+      badge: t('parceiros:plan_popular_badge'),
+      badgeColor: 'bg-teal text-white',
+      features: [
+        'Tudo do plano gratuito',
+        'Selo de negócio verificado ✓',
+        'Posição destacada no diretório',
+        'Suporte direto da equipe',
+      ],
+      cta: 'Assinar Associado',
+      ctaStyle: 'bg-teal text-white hover:bg-teal/90',
+    },
+    {
+      name: t('parceiros:plan_destaque'),
+      price: 'R$59,90',
+      period: t('parceiros:plan_period_month'),
+      color: 'border-ocre',
+      badge: t('parceiros:plan_destaque_badge'),
+      badgeColor: 'bg-ocre text-white',
+      features: [
+        'Tudo do plano Associado',
+        '★ Destaque no topo do diretório',
+        'Foto de capa em destaque',
+        'Prioridade em buscas por categoria',
+        'Apoio na estratégia digital',
+      ],
+      cta: 'Assinar Destaque',
+      ctaStyle: 'bg-ocre text-white hover:bg-ocre/90',
+    },
+  ];
 
   usePageMeta({
-    title: 'Cadastre seu negócio no Vive Gostoso',
-    description: 'Apareça no maior diretório digital de São Miguel do Gostoso. Cadastro gratuito para negócios locais.',
+    title: t('parceiros:hero_titulo', 'Cadastre seu negócio no Vive Gostoso'),
+    description: t('parceiros:hero_desc', 'Apareça no maior diretório digital de São Miguel do Gostoso. Cadastro gratuito para negócios locais.'),
   })
 
   return (
@@ -119,25 +120,25 @@ export default function Parceiros() {
           <div className="relative">
             <div className="inline-flex items-center gap-2 bg-teal/20 text-teal text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
               <Store className="w-3.5 h-3.5" />
-              Para negócios de São Miguel do Gostoso
+              {t('parceiros:badge')}
             </div>
 
             <h1 className="font-display text-4xl md:text-5xl font-bold leading-tight mb-4 max-w-2xl">
-              Seu negócio merece estar no{' '}
+              {t('parceiros:hero_titulo')}{' '}
               <span className="text-teal">Vive Gostoso</span>
             </h1>
 
             <p className="text-[#A0A0A0] text-lg leading-relaxed max-w-xl mb-8">
-              O diretório digital que os turistas usam para descobrir restaurantes, pousadas, passeios e serviços em São Miguel do Gostoso.
+              {t('parceiros:hero_desc')}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
-                href="/cadastre"
+                href={localePath('/cadastre')}
                 className="inline-flex items-center justify-center gap-2 bg-teal text-white px-6 py-3.5 rounded-2xl font-semibold text-sm hover:bg-teal/90 transition-colors"
               >
                 <Store className="w-4 h-4" />
-                Cadastrar meu negócio grátis
+                {t('parceiros:cta_cadastrar')}
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <a
@@ -147,7 +148,7 @@ export default function Parceiros() {
                 className="inline-flex items-center justify-center gap-2 border border-white/20 text-white px-6 py-3.5 rounded-2xl font-semibold text-sm hover:bg-white/5 transition-colors"
               >
                 <Phone className="w-4 h-4" />
-                Falar com a equipe
+                {t('parceiros:cta_equipe')}
               </a>
             </div>
 
@@ -156,15 +157,15 @@ export default function Parceiros() {
               <div className="flex flex-wrap gap-6 mt-10 pt-8 border-t border-white/10">
                 <div>
                   <p className="text-2xl font-bold text-white tabular-nums">{stats.businesses ?? 179}+</p>
-                  <p className="text-xs text-[#737373] mt-0.5">negócios listados</p>
+                  <p className="text-xs text-[#737373] mt-0.5">{t('parceiros:stats_negocios')}</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white tabular-nums">13</p>
-                  <p className="text-xs text-[#737373] mt-0.5">categorias</p>
+                  <p className="text-xs text-[#737373] mt-0.5">{t('parceiros:stats_categorias')}</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-teal tabular-nums">100%</p>
-                  <p className="text-xs text-[#737373] mt-0.5">local e independente</p>
+                  <p className="text-xs text-[#737373] mt-0.5">{t('parceiros:stats_local')}</p>
                 </div>
               </div>
             )}
@@ -176,10 +177,10 @@ export default function Parceiros() {
       <section className="max-w-5xl mx-auto px-5 md:px-8 py-16">
         <div className="text-center mb-10">
           <h2 className="font-display text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
-            Por que entrar no diretório?
+            {t('parceiros:benefits_titulo')}
           </h2>
           <p className="text-[#737373] text-base">
-            Uma presença digital real, construída para São Miguel do Gostoso.
+            {t('parceiros:benefits_desc')}
           </p>
         </div>
 
@@ -203,9 +204,9 @@ export default function Parceiros() {
         <div className="max-w-5xl mx-auto px-5 md:px-8">
           <div className="text-center mb-10">
             <h2 className="font-display text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
-              Simples e rápido
+              {t('parceiros:how_titulo')}
             </h2>
-            <p className="text-[#737373]">Em menos de 5 minutos seu negócio está no ar.</p>
+            <p className="text-[#737373]">{t('parceiros:how_desc')}</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
@@ -238,10 +239,10 @@ export default function Parceiros() {
 
           <div className="text-center mt-10">
             <Link
-              href="/cadastre"
+              href={localePath('/cadastre')}
               className="inline-flex items-center gap-2 bg-teal text-white px-6 py-3.5 rounded-2xl font-semibold text-sm hover:bg-teal/90 transition-colors"
             >
-              Começar agora, é grátis
+              {t('parceiros:how_cta')}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -252,13 +253,13 @@ export default function Parceiros() {
       <section className="max-w-5xl mx-auto px-5 md:px-8 py-16">
         <div className="text-center mb-10">
           <h2 className="font-display text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
-            Planos que crescem com você
+            {t('parceiros:plans_titulo')}
           </h2>
-          <p className="text-[#737373]">Comece grátis e faça upgrade quando quiser.</p>
+          <p className="text-[#737373]">{t('parceiros:plans_desc')}</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {PLANS.map((plan) => (
+          {planData.map((plan) => (
             <div
               key={plan.name}
               className={`bg-white border-2 rounded-2xl p-6 flex flex-col relative ${plan.color}`}
@@ -284,7 +285,7 @@ export default function Parceiros() {
                 ))}
               </ul>
               <Link
-                href={plan.ctaHref}
+                href={localePath('/cadastre')}
                 className={`w-full text-center px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${plan.ctaStyle}`}
               >
                 {plan.cta}
@@ -294,7 +295,7 @@ export default function Parceiros() {
         </div>
 
         <p className="text-center text-xs text-[#737373] mt-6">
-          Planos anuais com 10% de desconto · Cartão, PIX e boleto · Cancele quando quiser
+          {t('parceiros:plan_disclaimer')}
         </p>
       </section>
 
@@ -303,7 +304,7 @@ export default function Parceiros() {
         <div className="max-w-5xl mx-auto px-5 md:px-8">
           <div className="text-center mb-10">
             <h2 className="font-display text-2xl font-bold text-[#1A1A1A] mb-2">
-              Quem já está no Vive Gostoso
+              {t('parceiros:testimonial_titulo')}
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
@@ -330,19 +331,19 @@ export default function Parceiros() {
         <div className="bg-[#1A1A1A] text-white rounded-3xl px-8 py-12">
           <Shield className="w-10 h-10 text-teal mx-auto mb-4" />
           <h2 className="font-display text-2xl md:text-3xl font-bold mb-3">
-            São Miguel do Gostoso é do seu jeito.
+            {t('parceiros:final_titulo')}
           </h2>
           <p className="text-[#A0A0A0] text-base mb-8 max-w-md mx-auto">
-            Plataforma local, independente e feita para apoiar quem faz a cidade acontecer.
+            {t('parceiros:final_desc')}
           </p>
           <Link
-            href="/cadastre"
+            href={localePath('/cadastre')}
             className="inline-flex items-center gap-2 bg-teal text-white px-8 py-4 rounded-2xl font-semibold text-base hover:bg-teal/90 transition-colors"
           >
-            Cadastrar meu negócio agora
+            {t('parceiros:final_cta')}
             <ArrowRight className="w-5 h-5" />
           </Link>
-          <p className="text-xs text-[#737373] mt-4">Grátis · Sem cartão de crédito · Pronto em 5 minutos</p>
+          <p className="text-xs text-[#737373] mt-4">{t('parceiros:final_fineprint')}</p>
         </div>
       </section>
 

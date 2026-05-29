@@ -3,6 +3,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useTranslation, Trans } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import { Building2, User, Briefcase, MessageCircle } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useQuery } from '@tanstack/react-query'
@@ -98,6 +100,8 @@ function Stars({ rating }: { rating: number }) {
 
 // ── Professional card ──────────────────────────────────────────────────────
 function ProfessionalCard({ pro }: { pro: Professional }) {
+  const { t } = useTranslation()
+  const lp = useLocalePath()
   const waLink = pro.whatsapp
     ? buildWhatsAppLink(pro.whatsapp, { source: 'professional_card', name: pro.display_name })
     : null
@@ -109,7 +113,7 @@ function ProfessionalCard({ pro }: { pro: Professional }) {
           {initials(pro.display_name)}
         </div>
         <div className="flex-1 min-w-0">
-          <Link href={`/contrate/profissional/${pro.slug}`} className="font-semibold text-[#1A1A1A] text-sm hover:text-teal transition-colors">
+          <Link href={lp(`/contrate/profissional/${pro.slug}`)} className="font-semibold text-[#1A1A1A] text-sm hover:text-teal transition-colors">
             {pro.display_name}
           </Link>
           <p className="text-xs text-[#737373] leading-snug">{pro.headline}</p>
@@ -127,7 +131,7 @@ function ProfessionalCard({ pro }: { pro: Professional }) {
       {pro.review_count > 0 && (
         <div className="flex items-center gap-1.5 mb-3 text-xs text-[#737373]">
           <Stars rating={pro.rating_avg} />
-          {pro.rating_avg.toFixed(1)} · {pro.review_count} avaliações
+          {pro.rating_avg.toFixed(1)} · {pro.review_count} {t('negocio.avaliacao_plural')}
         </div>
       )}
       {waLink ? (
@@ -138,14 +142,14 @@ function ProfessionalCard({ pro }: { pro: Professional }) {
           className="flex items-center justify-center gap-1.5 w-full bg-teal text-white rounded-xl py-2 text-xs font-semibold hover:bg-teal/90 transition-colors"
         >
           <MessageCircle className="w-3.5 h-3.5" />
-          Chamar no WhatsApp
+          {t('professional.cta_whatsapp')}
         </a>
       ) : (
         <Link
-          href={`/contrate/profissional/${pro.slug}`}
+          href={lp(`/contrate/profissional/${pro.slug}`)}
           className="flex items-center justify-center w-full border border-[#E8E4DF] text-[#737373] rounded-xl py-2 text-xs font-semibold hover:bg-[#F5F2EE] transition-colors"
         >
-          Ver perfil
+          {t('common.ver_perfil')}
         </Link>
       )}
     </div>
@@ -154,6 +158,8 @@ function ProfessionalCard({ pro }: { pro: Professional }) {
 
 // ── Service company card ───────────────────────────────────────────────────
 function ServiceCompanyCard({ company }: { company: ServiceCompany }) {
+  const { t } = useTranslation()
+  const lp = useLocalePath()
   const waLink = company.whatsapp
     ? buildWhatsAppLink(company.whatsapp, { source: 'service_company_card', name: company.name })
     : null
@@ -165,7 +171,7 @@ function ServiceCompanyCard({ company }: { company: ServiceCompany }) {
           <Building2 className="w-5 h-5 text-white" />
         </div>
         <div className="flex-1 min-w-0">
-          <Link href={`/negocio/${company.slug}`} className="font-semibold text-[#1A1A1A] text-sm hover:text-teal transition-colors">
+          <Link href={lp(`/negocio/${company.slug}`)} className="font-semibold text-[#1A1A1A] text-sm hover:text-teal transition-colors">
             {company.name}
           </Link>
           {company.category?.name && (
@@ -181,7 +187,7 @@ function ServiceCompanyCard({ company }: { company: ServiceCompany }) {
         </p>
       )}
       <span className="text-[10px] font-semibold text-[#737373] bg-[#F5F2EE] px-2 py-0.5 rounded-full">
-        Empresa de Serviço
+        {t('contrate.service_company_badge')}
       </span>
       {waLink && (
         <a
@@ -191,7 +197,7 @@ function ServiceCompanyCard({ company }: { company: ServiceCompany }) {
           className="flex items-center justify-center gap-1.5 w-full bg-[#1A1A1A] text-white rounded-xl py-2 text-xs font-semibold hover:bg-[#333] transition-colors mt-3"
         >
           <MessageCircle className="w-3.5 h-3.5" />
-          Pedir orçamento
+          {t('contrate.pedir_orcamento')}
         </a>
       )}
     </div>
@@ -213,6 +219,9 @@ export default function Contrate() {
   const [activeTab, setActiveTab] = useState<Tab>('profissionais')
   const [categoryFilter, setCategoryFilter] = useState<ProfessionalCategory | 'all'>('all')
 
+  const { t } = useTranslation()
+  const lp = useLocalePath()
+
   const { data: professionals = [], isLoading: prosLoading } = useProfessionals(categoryFilter)
   const { data: companies = [], isLoading: companiesLoading } = useServiceCompanies()
   const { data: jobs = [], isLoading: jobsLoading } = useJobListings()
@@ -223,21 +232,21 @@ export default function Contrate() {
       <section className="bg-[#1A1A1A]">
         <div className="max-w-5xl mx-auto px-5 md:px-8 pt-12 pb-0">
           <div className="inline-flex items-center gap-2 bg-teal/20 text-teal text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
-            <Briefcase className="w-3.5 h-3.5" /> Contrate
+            <Briefcase className="w-3.5 h-3.5" /> {t('contrate.badge')}
           </div>
           <h1 className="font-display text-3xl md:text-4xl font-bold text-white leading-tight mb-2">
-            Profissionais e empresas<br className="hidden md:block" /> de São Miguel do Gostoso
+            <Trans i18nKey="contrate.hero_title" components={{ br: <br className="hidden md:block" /> }} />
           </h1>
           <p className="text-[#888] text-sm mb-8 max-w-lg">
-            Encontre quem você precisa — autônomos, agências e serviços da cidade.
+            {t('contrate.hero_sub')}
           </p>
 
           {/* Tabs */}
           <div className="flex gap-1 border-b border-[#333]">
             {[
-              { id: 'profissionais' as Tab, label: 'Profissionais', icon: <User className="w-3.5 h-3.5" />, count: professionals.length },
-              { id: 'empresas' as Tab, label: 'Empresas', icon: <Building2 className="w-3.5 h-3.5" />, count: companies.length },
-              { id: 'vagas' as Tab, label: 'Vagas', icon: <Briefcase className="w-3.5 h-3.5" />, count: jobs.length },
+              { id: 'profissionais' as Tab, label: t('contrate.tab_profissionais'), icon: <User className="w-3.5 h-3.5" />, count: professionals.length },
+              { id: 'empresas' as Tab, label: t('contrate.tab_empresas'), icon: <Building2 className="w-3.5 h-3.5" />, count: companies.length },
+              { id: 'vagas' as Tab, label: t('contrate.tab_vagas'), icon: <Briefcase className="w-3.5 h-3.5" />, count: jobs.length },
             ].map(tab => (
               <button
                 key={tab.id}
@@ -278,7 +287,7 @@ export default function Contrate() {
                     : 'bg-white border border-[#E8E4DF] text-[#555] hover:bg-[#F5F2EE]'
                 }`}
               >
-                Todos
+                {t('professional.all_categories')}
               </button>
               {PROFESSIONAL_CATEGORIES.map(cat => (
                 <button
@@ -299,7 +308,7 @@ export default function Contrate() {
             {prosLoading ? <Spinner /> : professionals.length === 0 ? (
               <div className="text-center py-16">
                 <User className="w-10 h-10 text-[#E8E4DF] mx-auto mb-3" />
-                <p className="text-sm text-[#737373]">Nenhum profissional encontrado nessa categoria.</p>
+                <p className="text-sm text-[#737373]">{t('professional.no_professionals')}</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -314,7 +323,7 @@ export default function Contrate() {
           companiesLoading ? <Spinner /> : companies.length === 0 ? (
             <div className="text-center py-16">
               <Building2 className="w-10 h-10 text-[#E8E4DF] mx-auto mb-3" />
-              <p className="text-sm text-[#737373]">Nenhuma empresa de serviço cadastrada ainda.</p>
+              <p className="text-sm text-[#737373]">{t('contrate.sem_empresas')}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -328,7 +337,7 @@ export default function Contrate() {
           jobsLoading ? <Spinner /> : jobs.length === 0 ? (
             <div className="text-center py-16">
               <Briefcase className="w-10 h-10 text-[#E8E4DF] mx-auto mb-3" />
-              <p className="text-sm text-[#737373]">Nenhuma vaga publicada no momento.</p>
+              <p className="text-sm text-[#737373]">{t('contrate.sem_vagas')}</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -358,7 +367,7 @@ export default function Contrate() {
                       className="mt-3 inline-flex items-center gap-1.5 bg-teal text-white text-xs font-semibold px-4 py-2 rounded-xl hover:bg-teal/90 transition-colors"
                     >
                       <MessageCircle className="w-3.5 h-3.5" />
-                      Candidatar pelo WhatsApp
+                      {t('contrate.candidatar_whatsapp')}
                     </a>
                   )}
                 </div>
@@ -370,16 +379,16 @@ export default function Contrate() {
         {/* CTA */}
         <div className="mt-12 bg-[#1A1A1A] rounded-3xl px-8 py-10 text-center">
           <p className="text-white font-display text-xl font-bold mb-2">
-            Você é profissional ou tem uma empresa de serviço?
+            {t('contrate.cta_titulo')}
           </p>
           <p className="text-[#888] text-sm mb-6 max-w-sm mx-auto">
-            Crie seu perfil gratuitamente e apareça aqui para toda a cidade.
+            {t('contrate.cta_desc')}
           </p>
           <Link
             href="/cadastre"
             className="inline-flex items-center gap-2 bg-teal text-white px-7 py-3.5 rounded-2xl font-semibold text-sm hover:bg-teal/90 transition-colors"
           >
-            Criar meu perfil grátis
+            {t('contrate.cta_btn')}
           </Link>
         </div>
       </section>

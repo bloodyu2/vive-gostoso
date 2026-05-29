@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Search, Store, CheckCircle, ArrowRight, ExternalLink, X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { supabase } from '@/lib/supabase'
 
@@ -15,9 +17,11 @@ interface BusinessResult {
 }
 
 export default function Reivindicar() {
+  const { t } = useTranslation()
+  const localePath = useLocalePath()
   usePageMeta({
-    title: 'Reivindique seu negócio — Vive Gostoso',
-    description: 'Seu negócio pode já estar no Vive Gostoso. Encontre e reivindique gratuitamente em poucos minutos.',
+    title: t('reivindicar:hero_titulo', 'Reivindique seu negócio — Vive Gostoso'),
+    description: t('reivindicar:hero_desc', 'Seu negócio pode já estar no Vive Gostoso. Encontre e reivindique gratuitamente em poucos minutos.'),
   })
 
   const [query, setQuery] = useState('')
@@ -65,16 +69,16 @@ export default function Reivindicar() {
         <div className="max-w-3xl mx-auto px-5 md:px-8 py-14 md:py-20">
           <div className="inline-flex items-center gap-2 bg-ocre/20 text-ocre text-xs font-semibold px-3 py-1.5 rounded-full mb-5">
             <Store className="w-3.5 h-3.5" />
-            Para donos de negócios em São Miguel do Gostoso
+            {t('reivindicar:badge')}
           </div>
 
           <h1 className="font-display text-3xl md:text-4xl font-bold leading-tight mb-4 max-w-xl">
-            Seu negócio já pode estar no{' '}
+            {t('reivindicar:hero_titulo')}{' '}
             <span className="text-teal">Vive Gostoso</span>
           </h1>
 
           <p className="text-[#A0A0A0] text-base leading-relaxed max-w-lg mb-8">
-            Mais de 180 estabelecimentos de São Miguel do Gostoso já estão listados na plataforma. O seu pode ser um deles, esperando por você.
+            {t('reivindicar:hero_desc')}
           </p>
 
           {/* ── Search box ── */}
@@ -83,7 +87,7 @@ export default function Reivindicar() {
             <input
               ref={inputRef}
               type="text"
-              placeholder="Digite o nome do seu negócio..."
+              placeholder={t('reivindicar:search_placeholder')}
               value={query}
               onChange={e => setQuery(e.target.value)}
               className="w-full bg-white text-[#1A1A1A] rounded-2xl pl-11 pr-10 py-4 text-sm font-medium placeholder:text-[#A0A0A0] focus:outline-none focus:ring-2 focus:ring-teal"
@@ -102,22 +106,22 @@ export default function Reivindicar() {
           {(results.length > 0 || searched) && (
             <div className="mt-3 bg-white rounded-2xl shadow-lg overflow-hidden max-w-lg">
               {loading && (
-                <div className="px-5 py-4 text-sm text-[#737373]">Buscando...</div>
+                <div className="px-5 py-4 text-sm text-[#737373]">{t('reivindicar:search_loading')}</div>
               )}
 
               {!loading && results.length === 0 && searched && (
                 <div className="px-5 py-5">
                   <p className="text-sm font-semibold text-[#1A1A1A] mb-1">
-                    Negócio não encontrado
+                    {t('reivindicar:not_found_titulo')}
                   </p>
                   <p className="text-xs text-[#737373] mb-3">
-                    Parece que seu negócio ainda não está listado. Crie seu perfil grátis agora.
+                    {t('reivindicar:not_found_desc')}
                   </p>
                   <Link
-                    href="/cadastre"
+                    href={localePath('/cadastre')}
                     className="inline-flex items-center gap-2 bg-teal text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-teal/90 transition-colors"
                   >
-                    Cadastrar meu negócio
+                    {t('reivindicar:not_found_cta')}
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
@@ -140,14 +144,14 @@ export default function Reivindicar() {
                   <div className="flex-shrink-0">
                     {biz.profile_id ? (
                       <span className="text-xs text-[#A0A0A0] bg-[#F5F2EE] px-2.5 py-1 rounded-full">
-                        Reivindicado
+                        {t('reivindicar:claimed_badge')}
                       </span>
                     ) : (
                       <Link
-                        href={`/cadastre/claim/${biz.slug}`}
+                        href={localePath(`/cadastre/claim/${biz.slug}`)}
                         className="text-xs font-semibold text-teal border border-teal/30 bg-teal/5 px-3 py-1.5 rounded-xl hover:bg-teal/10 transition-colors"
                       >
-                        Reivindicar →
+                        {t('reivindicar:claim_cta')} →
                       </Link>
                     )}
                   </div>
@@ -162,10 +166,10 @@ export default function Reivindicar() {
       <section className="max-w-3xl mx-auto px-5 md:px-8 py-16">
         <div className="text-center mb-10">
           <h2 className="font-display text-2xl font-bold text-[#1A1A1A] mb-2">
-            Como reivindicar seu negócio
+            {t('reivindicar:how_titulo')}
           </h2>
           <p className="text-[#737373] text-sm">
-            Em menos de 5 minutos você assume o controle do perfil.
+            {t('reivindicar:how_desc')}
           </p>
         </div>
 
@@ -173,18 +177,18 @@ export default function Reivindicar() {
           {[
             {
               step: '1',
-              title: 'Pesquise seu negócio',
-              desc: 'Use o campo acima para encontrar o nome do seu estabelecimento no diretório.',
+              title: t('reivindicar:how_step1_titulo'),
+              desc: t('reivindicar:how_step1_desc'),
             },
             {
               step: '2',
-              title: 'Clique em Reivindicar',
-              desc: 'Se ainda não tem dono, é só criar uma conta gratuita e assumir o perfil.',
+              title: t('reivindicar:how_step2_titulo'),
+              desc: t('reivindicar:how_step2_desc'),
             },
             {
               step: '3',
-              title: 'Complete e publique',
-              desc: 'Adicione fotos, horários, WhatsApp e descrição. Clique em Publicar e apareça.',
+              title: t('reivindicar:how_step3_titulo'),
+              desc: t('reivindicar:how_step3_desc'),
             },
           ].map(({ step, title, desc }) => (
             <div key={step} className="text-center">
@@ -203,18 +207,11 @@ export default function Reivindicar() {
         <div className="max-w-3xl mx-auto px-5 md:px-8">
           <div className="text-center mb-8">
             <h2 className="font-display text-xl font-bold text-[#1A1A1A] mb-2">
-              Ao reivindicar, você passa a controlar
+              {t('reivindicar:control_titulo')}
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg mx-auto">
-            {[
-              'Fotos e descrição do negócio',
-              'Horários de funcionamento',
-              'WhatsApp, Instagram e website',
-              'Status publicado ou rascunho',
-              'Serviços e comodidades',
-              'Visibilidade no diretório local',
-            ].map(item => (
+            {t('reivindicar:control_items').split('|').map(item => (
               <div key={item} className="flex items-start gap-2.5 text-sm text-[#3D3D3D]">
                 <CheckCircle className="w-4 h-4 text-teal flex-shrink-0 mt-0.5" />
                 {item}
@@ -229,29 +226,29 @@ export default function Reivindicar() {
         <div className="bg-[#1A1A1A] text-white rounded-3xl px-8 py-12">
           <Store className="w-10 h-10 text-teal mx-auto mb-4" />
           <h2 className="font-display text-2xl font-bold mb-3">
-            Não encontrou seu negócio?
+            {t('reivindicar:not_found_cta_titulo')}
           </h2>
           <p className="text-[#A0A0A0] text-sm mb-8 max-w-sm mx-auto">
-            Sem problema. Crie seu perfil do zero. É gratuito e leva menos de 5 minutos.
+            {t('reivindicar:not_found_cta_desc')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
-              href="/cadastre"
+              href={localePath('/cadastre')}
               className="inline-flex items-center justify-center gap-2 bg-teal text-white px-7 py-3.5 rounded-2xl font-semibold text-sm hover:bg-teal/90 transition-colors"
             >
               <Store className="w-4 h-4" />
-              Cadastrar meu negócio grátis
+              {t('reivindicar:not_found_cta_btn')}
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
-              href="/parceiros"
+              href={localePath('/parceiros')}
               className="inline-flex items-center justify-center gap-2 border border-white/20 text-white px-7 py-3.5 rounded-2xl font-semibold text-sm hover:bg-white/5 transition-colors"
             >
               <ExternalLink className="w-4 h-4" />
-              Saiba mais sobre planos
+              {t('reivindicar:not_found_cta_alt')}
             </Link>
           </div>
-          <p className="text-xs text-[#737373] mt-5">Grátis · Sem comissão · Pronto em 5 minutos</p>
+          <p className="text-xs text-[#737373] mt-5">{t('reivindicar:not_found_fineprint')}</p>
         </div>
       </section>
 

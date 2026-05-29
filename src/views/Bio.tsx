@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { AtSign, MapPin, Utensils, BedDouble, Wind, CalendarDays, Map, Briefcase, Heart, Waves, Store } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import type { LucideIcon } from 'lucide-react'
 
 const LINKS: { to: string; icon: LucideIcon; label: string; sub: string; color: string }[] = [
@@ -16,6 +18,8 @@ const LINKS: { to: string; icon: LucideIcon; label: string; sub: string; color: 
 ]
 
 export default function Bio() {
+  const { t } = useTranslation()
+  const localePath = useLocalePath()
   return (
     <div className="min-h-screen bg-areia flex flex-col items-center px-5 py-10">
 
@@ -31,7 +35,7 @@ export default function Bio() {
             São Miguel do Gostoso, RN
           </p>
           <p className="text-sm text-[#3D3D3D] mt-2 max-w-xs leading-snug">
-            O guia digital da cidade. Come. Fique. Passeie. <span className="text-teal font-semibold">Vive Gostoso.</span>
+            {t('bio:caption')} <span className="text-teal font-semibold">Vive Gostoso.</span>
           </p>
         </div>
       </div>
@@ -56,17 +60,17 @@ export default function Bio() {
       {/* B2B CTA — for business owners */}
       <div className="w-full max-w-sm mt-4">
         <div className="rounded-2xl border border-teal/20 bg-teal/5 px-5 py-4">
-          <p className="text-xs text-[#737373] mb-2">Você tem um negócio em Gostoso?</p>
+          <p className="text-xs text-[#737373] mb-2">{t('bio:business_cta')}</p>
           <Link
-            href="/parceiros"
+            href={localePath('/parceiros')}
             className="flex items-center gap-3 group"
           >
             <Store className="w-5 h-5 text-teal flex-shrink-0" />
             <div className="min-w-0 flex-1">
               <div className="font-display font-bold text-sm text-[#1A1A1A] group-hover:text-teal transition-colors">
-                Apareça no diretório
+                {t('bio:business_link')}
               </div>
-              <div className="text-xs text-[#737373]">Cadastre seu negócio grátis</div>
+              <div className="text-xs text-[#737373]">{t('bio:business_sub')}</div>
             </div>
             <span className="text-teal text-xs font-semibold flex-shrink-0">→</span>
           </Link>

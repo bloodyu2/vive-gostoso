@@ -5,6 +5,13 @@ import pt from './locales/pt.json'
 import en from './locales/en.json'
 import es from './locales/es.json'
 
+const ns = [
+  'cadastro', 'auth', 'painel', 'meus_negocios', 'perfil', 'preview',
+  'claim', 'professional_panel', 'admin',
+  'admin_businesses', 'admin_professionals', 'admin_services', 'admin_jobs',
+  'admin_events', 'admin_claims', 'admin_transfers', 'admin_reviews',
+] as const
+
 /**
  * i18next is initialised with PT as the default language.
  * The actual language is set at runtime by the LocaleSync component,
@@ -15,9 +22,9 @@ i18n
   .use(initReactI18next)
   .init({
     resources: {
-      pt: { translation: pt },
-      en: { translation: en },
-      es: { translation: es },
+      pt: { translation: pt, ...Object.fromEntries(ns.map(n => [n, (pt as any)[n]])) },
+      en: { translation: en, ...Object.fromEntries(ns.map(n => [n, (en as any)[n]])) },
+      es: { translation: es, ...Object.fromEntries(ns.map(n => [n, (es as any)[n]])) },
     },
     lng: 'pt',
     fallbackLng: 'pt',

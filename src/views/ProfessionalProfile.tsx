@@ -3,9 +3,11 @@
 
 import Link from 'next/link'
 import { ArrowLeft, ExternalLink, AtSign, Globe, MessageCircle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useProfessional } from '@/hooks/useProfessionals'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import { PROFESSIONAL_CATEGORY_LABELS } from '@/types/professional'
 import type { PortfolioItem } from '@/types/professional'
 
@@ -31,6 +33,8 @@ function initials(name: string): string {
 }
 
 export default function ProfessionalProfile({ slug }: { slug: string }) {
+  const { t } = useTranslation()
+  const lp = useLocalePath()
   const { data: pro, isLoading } = useProfessional(slug)
 
   usePageMeta(
@@ -56,9 +60,9 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
     return (
       <div className="min-h-screen bg-[#FAFAF9] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-2xl font-bold text-[#1A1A1A] mb-2">Perfil não encontrado</p>
-          <Link href="/contrate" className="text-teal text-sm hover:underline">
-            ← Voltar para Contrate
+          <p className="text-2xl font-bold text-[#1A1A1A] mb-2">{t('professional.profile_not_found')}</p>
+          <Link href={lp('/contrate')} className="text-teal text-sm hover:underline">
+            {t('professional.back_to_contrate')}
           </Link>
         </div>
       </div>
@@ -79,11 +83,11 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
       <section className="bg-[#1A1A1A]">
         <div className="max-w-3xl mx-auto px-5 md:px-8 py-10">
           <Link
-            href="/contrate"
+            href={lp('/contrate')}
             className="inline-flex items-center gap-1.5 text-[#888] text-sm hover:text-white mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Profissionais
+            {t('contrate.tab_profissionais')}
           </Link>
 
           <div className="flex items-start gap-5">
@@ -128,7 +132,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
         {/* Sobre */}
         {pro.bio && (
           <div>
-            <h2 className="text-xs font-bold text-[#737373] uppercase tracking-wide mb-3">Sobre</h2>
+            <h2 className="text-xs font-bold text-[#737373] uppercase tracking-wide mb-3">{t('professional.sobre')}</h2>
             <p className="text-sm text-[#3D3D3D] leading-relaxed">{pro.bio}</p>
           </div>
         )}
@@ -155,7 +159,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
                 className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-[#1A1A1A] transition-colors"
               >
                 <Globe className="w-4 h-4" />
-                Website
+                {t('professional.website')}
                 <ExternalLink className="w-3 h-3" />
               </a>
             )}
@@ -165,7 +169,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
         {/* Portfólio */}
         {pro.portfolio_items.length > 0 && (
           <div>
-            <h2 className="text-xs font-bold text-[#737373] uppercase tracking-wide mb-3">Portfólio</h2>
+            <h2 className="text-xs font-bold text-[#737373] uppercase tracking-wide mb-3">{t('professional.portfolio_label')}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {pro.portfolio_items.map((item: PortfolioItem) => (
                 <div key={item.id} className="bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden">
@@ -188,7 +192,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-xs text-teal mt-2 hover:underline"
                       >
-                        Ver projeto <ExternalLink className="w-3 h-3" />
+                        {t('professional.ver_projeto')} <ExternalLink className="w-3 h-3" />
                       </a>
                     )}
                   </div>
@@ -202,7 +206,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
         {pro.hourly_rate && (
           <div className="bg-white rounded-2xl border border-[#E8E4DF] p-5">
             <p className="text-xs font-bold text-[#737373] uppercase tracking-wide mb-1">
-              Valor por hora
+              {t('professional.hourly_rate_label')}
             </p>
             <p className="text-2xl font-bold text-[#1A1A1A]">
               R$ {(pro.hourly_rate / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
@@ -214,11 +218,10 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
         {pro.review_count > 0 && (
           <div>
             <h2 className="text-xs font-bold text-[#737373] uppercase tracking-wide mb-3">
-              Avaliações · <Stars rating={pro.rating_avg} /> {pro.rating_avg.toFixed(1)} ({pro.review_count})
+              {t('professional.reviews_label')} · <Stars rating={pro.rating_avg} /> {pro.rating_avg.toFixed(1)} ({pro.review_count})
             </h2>
             <p className="text-xs text-[#aaa]">
-              {/* Future: fetch and render individual reviews */}
-              Sistema de avaliações em breve.
+              {t('professional.reviews_coming_soon')}
             </p>
           </div>
         )}
@@ -236,8 +239,8 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
               className="flex items-center justify-center gap-2 w-full bg-teal text-white rounded-2xl py-3.5 font-semibold text-sm hover:bg-teal/90 transition-colors"
             >
               <MessageCircle className="w-4 h-4" />
-              Falar no WhatsApp
-              <span className="text-xs font-normal opacity-75">— menciona Vive Gostoso</span>
+              {t('professional.falar_whatsapp')}
+              <span className="text-xs font-normal opacity-75">{t('professional.cta_whatsapp_hint')}</span>
             </a>
           </div>
         </div>

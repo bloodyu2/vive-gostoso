@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { StarRating } from '@/components/reviews/star-rating'
 import { useAdminPendingReviews, useModerateReview } from '@/hooks/useReviews'
@@ -15,17 +17,19 @@ function formatDate(iso: string) {
 }
 
 function AdminReviewsInner() {
+  const { t } = useTranslation('admin_reviews')
+  const lp = useLocalePath()
   const { data: reviews = [], isLoading } = useAdminPendingReviews()
   const { mutate: moderate, isPending } = useModerateReview()
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
-      <Link href="/cadastre/admin" className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
-        <ArrowLeft className="w-4 h-4" /> Admin
+      <Link href={lp('/cadastre/admin')} className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
+        <ArrowLeft className="w-4 h-4" /> {t('back_to_admin')}
       </Link>
 
-      <h1 className="font-display text-3xl font-semibold mb-2">Avaliações Pendentes</h1>
-      <p className="text-sm text-[#737373] mb-8">Aprove ou rejeite avaliações antes de publicar.</p>
+      <h1 className="font-display text-3xl font-semibold mb-2">{t('title')}</h1>
+      <p className="text-sm text-[#737373] mb-8">{t('subtitle')}</p>
 
       {isLoading && (
         <div className="space-y-3">
@@ -36,7 +40,7 @@ function AdminReviewsInner() {
       {!isLoading && !reviews.length && (
         <div className="text-center py-16 text-[#B0A99F]">
           <div className="text-4xl mb-3">✅</div>
-          <p className="font-semibold">Nenhuma avaliação pendente</p>
+          <p className="font-semibold">{t('empty_state')}</p>
         </div>
       )}
 
@@ -45,7 +49,7 @@ function AdminReviewsInner() {
           <div key={r.id} className="bg-white border border-[#E8E4DF] rounded-2xl p-5">
             <div className="flex items-start justify-between gap-3 mb-1">
               <div>
-                <p className="font-semibold text-sm text-[#1A1A1A]">{r.author_name ?? 'Anônimo'}</p>
+                <p className="font-semibold text-sm text-[#1A1A1A]">{r.author_name ?? t('anonymous')}</p>
                 <p className="text-xs text-[#B0A99F]">{r.business_name} · {formatDate(r.created_at)}</p>
               </div>
               <StarRating value={r.rating} readonly size="sm" />
@@ -57,14 +61,14 @@ function AdminReviewsInner() {
                 disabled={isPending}
                 className="flex-1 bg-teal text-white rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-teal-dark transition-colors disabled:opacity-50"
               >
-                Aprovar
+                {t('approve')}
               </button>
               <button
                 onClick={() => moderate({ id: r.id, approve: false })}
                 disabled={isPending}
                 className="flex-1 bg-[#F5F2EE] text-[#737373] rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#E8E4DF] transition-colors disabled:opacity-50"
               >
-                Rejeitar
+                {t('reject')}
               </button>
             </div>
           </div>

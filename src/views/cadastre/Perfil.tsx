@@ -11,6 +11,8 @@ import { useInvalidateMyBusinesses } from '@/hooks/useMyBusinesses'
 import type { Business } from '@/types/database'
 import { ArrowLeft, Camera, ExternalLink, Loader2 } from 'lucide-react'
 import { validateImageFile, compressImage } from '@/lib/image-upload'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 
 export default function Perfil() {
   return <AuthGuard><PerfilInner /></AuthGuard>
@@ -66,18 +68,10 @@ const INPUT_CLS =
 
 const SECTION_CLS = 'mb-8 pb-8 border-b border-[#F0ECE8]'
 
-const DAYS: { key: DayKey; label: string }[] = [
-  { key: 'dom', label: 'Domingo' },
-  { key: 'seg', label: 'Segunda-feira' },
-  { key: 'ter', label: 'Terça-feira' },
-  { key: 'qua', label: 'Quarta-feira' },
-  { key: 'qui', label: 'Quinta-feira' },
-  { key: 'sex', label: 'Sexta-feira' },
-  { key: 'sab', label: 'Sábado' },
-]
+const DAYS: DayKey[] = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab']
 
 const EMPTY_HOURS: OpeningHoursValue = Object.fromEntries(
-  DAYS.map(d => [d.key, { open: '', close: '', closed: true }])
+  DAYS.map(d => [d, { open: '', close: '', closed: true }])
 ) as OpeningHoursValue
 
 // ---------------------------------------------------------------------------
@@ -93,6 +87,7 @@ function StatusBanner({
   bizId: string | undefined
   onToggle: (next: boolean) => void
 }) {
+  const { t } = useTranslation()
   const [loading, setLoading] = useState(false)
 
   async function toggle() {
@@ -126,12 +121,12 @@ function StatusBanner({
           <span
             className={`w-1.5 h-1.5 rounded-full ${isPublished ? 'bg-white' : 'bg-[#737373]'}`}
           />
-          {isPublished ? 'Publicado' : 'Rascunho'}
+          {isPublished ? t('perfil:status_published') : t('perfil:status_draft')}
         </span>
         <span className="text-sm text-[#737373]">
           {isPublished
-            ? 'Seu negócio está visível no Vive Gostoso.'
-            : 'Seu negócio ainda não está visível para o público.'}
+            ? t('perfil:status_published_desc')
+            : t('perfil:status_draft_desc')}
         </span>
       </div>
       {bizId && (
@@ -145,7 +140,7 @@ function StatusBanner({
               : 'bg-teal text-white hover:bg-teal/90'
           }`}
         >
-          {loading ? '...' : isPublished ? 'Despublicar' : 'Publicar agora'}
+          {loading ? '...' : isPublished ? t('perfil:status_unpublish') : t('perfil:status_publish')}
         </button>
       )}
     </div>
@@ -165,6 +160,7 @@ function PhotoSection({
   onCoverChange: (url: string) => void
   onPhotosChange: (urls: string[]) => void
 }) {
+  const { t } = useTranslation()
   const coverRef = useRef<HTMLInputElement>(null)
   const galleryRef = useRef<HTMLInputElement>(null)
   const [uploadingCover, setUploadingCover] = useState(false)
@@ -202,7 +198,7 @@ function PhotoSection({
       onCoverChange(url)
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'erro inesperado'
-      setError(`Erro ao enviar foto de capa: ${msg}`)
+      setError(t('perfil:error_cover', { msg }))
     } finally {
       setUploadingCover(false)
       if (coverRef.current) coverRef.current.value = ''
@@ -225,7 +221,7 @@ function PhotoSection({
 
     const slots = 10 - currentPhotos.length
     if (slots <= 0) {
-      setError('Galeria cheia (máximo 10 fotos).')
+      setError(t('perfil:error_gallery_full'))
       return
     }
     const toUpload = files.slice(0, slots)
@@ -240,7 +236,7 @@ function PhotoSection({
       onPhotosChange(next)
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'erro inesperado'
-      setError(`Erro ao enviar fotos: ${msg}`)
+      setError(t('perfil:error_gallery', { msg }))
     } finally {
       setUploadingGallery(false)
       if (galleryRef.current) galleryRef.current.value = ''
@@ -256,22 +252,22 @@ function PhotoSection({
 
   return (
     <section className={SECTION_CLS}>
-      <h2 className="font-display text-lg font-semibold mb-4">Fotos</h2>
+      <h2 className="font-display text-lg font-semibold mb-4">{t('perfil:photos_title')}</h2>
       {error && (
         <p className="text-sm text-red-500 mb-3">{error}</p>
       )}
 
       {/* Cover photo */}
       <div className="mb-5">
-        <label className="block text-sm font-medium mb-2">Foto de capa</label>
+        <label className="block text-sm font-medium mb-2">{t('perfil:photos_cover_label')}</label>
         {coverUrl ? (
           <div className="relative w-full h-40 rounded-2xl overflow-hidden mb-2 border border-[#E8E4DF]">
-            <img src={coverUrl} alt="Capa" className="w-full h-full object-cover" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
+            <img src={coverUrl} alt={t('perfil:photos_cover_label')} className="w-full h-full object-cover" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
           </div>
         ) : (
           <div className="w-full h-40 rounded-2xl border-2 border-dashed border-[#E8E4DF] flex flex-col items-center justify-center gap-2 text-sm text-[#A0A0A0] mb-2 bg-[#FAFAF9]">
             <Camera className="w-7 h-7 text-[#C4BFBA]" />
-            <span>Sem foto de capa</span>
+            <span>{t('perfil:photos_no_cover')}</span>
           </div>
         )}
         <input
@@ -288,17 +284,17 @@ function PhotoSection({
           onClick={() => coverRef.current?.click()}
           className="text-sm font-medium px-4 py-2 rounded-xl border border-[#E8E4DF] hover:border-teal transition-colors disabled:opacity-50"
         >
-          {uploadingCover ? 'Enviando...' : coverUrl ? 'Trocar foto de capa' : 'Adicionar foto de capa'}
+          {uploadingCover ? t('perfil:photos_uploading') : coverUrl ? t('perfil:photos_change_cover') : t('perfil:photos_add_cover')}
         </button>
         {!bizId && (
-          <p className="text-xs text-[#737373] mt-1">Salve o negócio primeiro para enviar fotos.</p>
+          <p className="text-xs text-[#737373] mt-1">{t('perfil:photos_save_first')}</p>
         )}
       </div>
 
       {/* Gallery */}
       <div>
         <label className="block text-sm font-medium mb-2">
-          Galeria
+          {t('perfil:photos_gallery')}
           <span className="text-[#737373] font-normal ml-1">({currentPhotos.length}/10)</span>
         </label>
         {currentPhotos.length > 0 && (
@@ -315,7 +311,7 @@ function PhotoSection({
                   type="button"
                   onClick={() => removePhoto(url)}
                   className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/60 text-white text-xs flex items-center justify-center hover:bg-black/80 transition-colors"
-                  title="Remover foto"
+                  title={t('perfil:photos_remove')}
                 >
                   x
                 </button>
@@ -340,7 +336,7 @@ function PhotoSection({
               onClick={() => galleryRef.current?.click()}
               className="text-sm font-medium px-4 py-2 rounded-xl border border-[#E8E4DF] hover:border-teal transition-colors disabled:opacity-50"
             >
-              {uploadingGallery ? 'Enviando...' : 'Adicionar fotos'}
+              {uploadingGallery ? t('perfil:photos_uploading') : t('perfil:photos_add')}
             </button>
           </>
         )}
@@ -360,12 +356,11 @@ function OpeningHoursSection({
   value: OpeningHoursValue | null
   onChange: (v: OpeningHoursValue) => void
 }) {
-  // If no saved value yet, start empty (all closed, no times)
+  const { t } = useTranslation()
   const [hours, setHours] = useState<OpeningHoursValue>(() =>
     value ? (value as OpeningHoursValue) : { ...EMPTY_HOURS }
   )
 
-  // Sync if parent loads data after mount
   useEffect(() => {
     if (value) setHours(value as OpeningHoursValue)
   }, [value])
@@ -378,12 +373,12 @@ function OpeningHoursSection({
 
   return (
     <section className={SECTION_CLS}>
-      <h2 className="font-display text-lg font-semibold mb-1">Horários de funcionamento</h2>
+      <h2 className="font-display text-lg font-semibold mb-1">{t('perfil:hours_title')}</h2>
       <p className="text-sm text-[#737373] mb-4">
-        Marque "Fechado" nos dias em que não atende. Deixe os campos em branco se o horário não se aplica.
+        {t('perfil:hours_desc')}
       </p>
       <div className="space-y-2">
-        {DAYS.map(({ key, label }) => {
+        {DAYS.map(key => {
           const day = hours[key] ?? { open: '', close: '', closed: true }
           return (
             <div
@@ -394,10 +389,8 @@ function OpeningHoursSection({
                   : 'border-[#E8E4DF] bg-white'
               }`}
             >
-              {/* Day label */}
-              <span className="text-sm font-medium text-[#1A1A1A] w-28 flex-shrink-0">{label}</span>
+              <span className="text-sm font-medium text-[#1A1A1A] w-28 flex-shrink-0">{t('perfil:day_' + key)}</span>
 
-              {/* Time inputs or "Fechado" text */}
               {!day.closed ? (
                 <div className="flex items-center gap-2 flex-1 min-w-0 flex-wrap">
                   <input
@@ -406,7 +399,7 @@ function OpeningHoursSection({
                     onChange={e => update(key, 'open', e.target.value)}
                     className="border border-[#E8E4DF] rounded-lg px-3 py-1.5 text-sm w-28 focus:border-teal focus:outline-none"
                   />
-                  <span className="text-xs text-[#737373]">até</span>
+                  <span className="text-xs text-[#737373]">{t('perfil:hours_until')}</span>
                   <input
                     type="time"
                     value={day.close}
@@ -415,10 +408,9 @@ function OpeningHoursSection({
                   />
                 </div>
               ) : (
-                <span className="text-sm text-[#A0A0A0] flex-1">Fechado</span>
+                <span className="text-sm text-[#A0A0A0] flex-1">{t('perfil:hours_closed')}</span>
               )}
 
-              {/* Closed toggle */}
               <label className="flex items-center gap-1.5 cursor-pointer ml-auto flex-shrink-0">
                 <input
                   type="checkbox"
@@ -426,7 +418,7 @@ function OpeningHoursSection({
                   onChange={e => update(key, 'closed', e.target.checked)}
                   className="w-4 h-4 rounded border-[#E8E4DF] accent-teal"
                 />
-                <span className="text-xs text-[#737373]">Fechado</span>
+                <span className="text-xs text-[#737373]">{t('perfil:hours_closed')}</span>
               </label>
             </div>
           )
@@ -447,6 +439,9 @@ function ServicesSection({
   services: ServiceItem[]
   onChange: (items: ServiceItem[]) => void
 }) {
+  const { t } = useTranslation()
+  const lp = useLocalePath()
+
   function addService() {
     if (services.length >= 10) return
     onChange([...services, { name: '', description: '', price: '' }])
@@ -464,15 +459,15 @@ function ServicesSection({
     <section className={SECTION_CLS}>
       <div className="flex items-start justify-between mb-1 gap-3">
         <div>
-          <h2 className="font-display text-lg font-semibold">Serviços do negócio</h2>
+          <h2 className="font-display text-lg font-semibold">{t('perfil:services_title')}</h2>
           <p className="text-sm text-[#737373] mt-0.5">
-            Aparecem no perfil do negócio.{' '}
+            {t('perfil:services_desc')}{' '}
             <Link
-              href="/contrate"
+              href={lp('/contrate')}
               target="_blank"
               className="inline-flex items-center gap-1 text-teal hover:underline"
             >
-              Para listar no diretório CONTRATE clique aqui
+              {t('perfil:services_contrate_link')}
               <ExternalLink className="w-3 h-3" />
             </Link>
           </p>
@@ -483,14 +478,14 @@ function ServicesSection({
             onClick={addService}
             className="flex-shrink-0 text-sm font-semibold text-teal hover:text-teal/80 transition-colors"
           >
-            + Adicionar
+            {t('perfil:services_add')}
           </button>
         )}
       </div>
 
       {services.length === 0 && (
         <p className="text-sm text-[#737373] mt-3">
-          Nenhum serviço cadastrado ainda. Clique em "+ Adicionar" para começar.
+          {t('perfil:services_empty')}
         </p>
       )}
 
@@ -499,13 +494,13 @@ function ServicesSection({
           <div key={i} className="rounded-2xl border border-[#E8E4DF] p-4 space-y-3">
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1">
-                <label className="block text-xs font-medium mb-1 text-[#737373]">Nome do serviço *</label>
+                <label className="block text-xs font-medium mb-1 text-[#737373]">{t('perfil:services_name_label')}</label>
                 <input
                   type="text"
                   required
                   value={svc.name}
                   onChange={e => updateService(i, 'name', e.target.value)}
-                  placeholder="Ex: Corte de cabelo"
+                  placeholder={t('perfil:services_name_placeholder')}
                   className={INPUT_CLS}
                 />
               </div>
@@ -513,32 +508,32 @@ function ServicesSection({
                 type="button"
                 onClick={() => removeService(i)}
                 className="mt-5 text-sm text-[#737373] hover:text-red-500 transition-colors shrink-0"
-                title="Remover"
+                title={t('perfil:services_remove')}
               >
-                Remover
+                {t('perfil:services_remove')}
               </button>
             </div>
             <div>
               <label className="block text-xs font-medium mb-1 text-[#737373]">
-                Descrição <span className="font-normal">(opcional)</span>
+                {t('perfil:services_desc_label')} <span className="font-normal">{t('perfil:services_desc_optional')}</span>
               </label>
               <input
                 type="text"
                 value={svc.description ?? ''}
                 onChange={e => updateService(i, 'description', e.target.value)}
-                placeholder="Breve descrição do serviço"
+                placeholder={t('perfil:services_desc_label')}
                 className={INPUT_CLS}
               />
             </div>
             <div>
               <label className="block text-xs font-medium mb-1 text-[#737373]">
-                Preço <span className="font-normal">(opcional)</span>
+                {t('perfil:services_price_label')} <span className="font-normal">{t('perfil:services_price_optional')}</span>
               </label>
               <input
                 type="text"
                 value={svc.price ?? ''}
                 onChange={e => updateService(i, 'price', e.target.value)}
-                placeholder="Ex: R$ 50 ou A partir de R$ 80"
+                placeholder={t('perfil:services_price_placeholder')}
                 className={INPUT_CLS}
               />
             </div>
@@ -558,6 +553,8 @@ function PerfilInner() {
   const { data: categories = [] } = useCategories()
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { t } = useTranslation()
+  const lp = useLocalePath()
   const bizId = searchParams?.get('bizId') ?? null
   const invalidateMyBusinesses = useInvalidateMyBusinesses()
 
@@ -612,7 +609,7 @@ function PerfilInner() {
         .single()
 
       if (insertErr || !newProfile) {
-        setSaveError('Erro ao inicializar seu perfil. Tente recarregar a página.')
+        setSaveError(t('perfil:error_init_profile'))
       } else {
         setProfileId((newProfile as { id: string }).id)
       }
@@ -641,7 +638,7 @@ function PerfilInner() {
     setSaveError(null)
 
     if (!profileId) {
-      setSaveError('Perfil ainda não carregado. Aguarde um momento e tente novamente.')
+      setSaveError(t('perfil:error_profile'))
       return
     }
 
@@ -714,20 +711,20 @@ function PerfilInner() {
       }
 
       invalidateMyBusinesses()
-      router.push(isNew ? '/cadastre/negocios?new=1' : '/cadastre/negocios')
+      router.push(isNew ? lp('/cadastre/negocios?new=1') : lp('/cadastre/negocios'))
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err)
-      setSaveError(`Erro ao salvar: ${msg}. Tente novamente ou entre em contato pelo WhatsApp.`)
+      setSaveError(t('perfil:error_save', { msg }))
       setSaving(false)
     }
   }
 
   const textFields = [
-    { label: 'Nome do negócio', key: 'name' as const, required: true },
-    { label: 'Endereço',        key: 'address' as const },
-    { label: 'WhatsApp',        key: 'whatsapp' as const },
-    { label: 'Instagram (sem @)', key: 'instagram' as const },
-    { label: 'Website',         key: 'website' as const },
+    { key: 'name' as const, required: true },
+    { key: 'address' as const },
+    { key: 'whatsapp' as const },
+    { key: 'instagram' as const },
+    { key: 'website' as const },
   ]
 
   return (
@@ -736,15 +733,15 @@ function PerfilInner() {
       <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
         <div className="max-w-2xl mx-auto px-5 md:px-8 h-14 flex items-center gap-3">
           <Link
-            href="/cadastre/negocios"
+            href={lp('/cadastre/negocios')}
             className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            Meus negócios
+            {t('perfil:my_businesses')}
           </Link>
           <span className="text-[#E8E4DF]">/</span>
           <span className="text-sm font-medium text-[#1A1A1A] truncate">
-            {bizId ? (biz.name || 'Editar negócio') : 'Novo negócio'}
+            {bizId ? (biz.name || t('perfil:edit_business')) : t('perfil:new_business')}
           </span>
         </div>
       </div>
@@ -752,12 +749,12 @@ function PerfilInner() {
       <main className="max-w-2xl mx-auto px-5 md:px-8 py-8">
         <div className="mb-7">
           <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">
-            {bizId ? 'Editar negócio' : 'Novo negócio'}
+            {bizId ? t('perfil:edit_business') : t('perfil:new_business')}
           </h1>
           <p className="text-sm text-[#737373] mt-1">
             {bizId
-              ? 'Atualize as informações que aparecem no diretório.'
-              : 'Preencha os dados básicos e publique quando estiver pronto.'}
+              ? t('perfil:edit_desc')
+              : t('perfil:new_desc')}
           </p>
         </div>
 
@@ -765,10 +762,10 @@ function PerfilInner() {
       {!bizId && dupMatches.length > 0 && (
         <div className="mb-8 rounded-2xl border border-ocre/40 bg-ocre/5 px-5 py-4">
           <p className="text-sm font-semibold text-ocre mb-2">
-            Negócio similar já existe na plataforma
+            {t('perfil:dup_title')}
           </p>
           <p className="text-xs text-[#737373] mb-3">
-            Antes de criar um novo, verifique se o seu já está cadastrado. Se for seu, você pode reivindicá-lo e assumir o controle.
+            {t('perfil:dup_desc')}
           </p>
           <div className="space-y-2">
             {dupMatches.map(m => (
@@ -776,14 +773,14 @@ function PerfilInner() {
                 <div className="min-w-0">
                   <p className="text-sm font-semibold truncate">{m.name}</p>
                   <p className="text-xs text-[#737373]">
-                    {m.profile_id ? 'Já tem proprietário' : 'Sem proprietário, pode ser seu'}
+                    {m.profile_id ? t('perfil:dup_has_owner') : t('perfil:dup_no_owner')}
                   </p>
                 </div>
                 <a
-                  href={`/cadastre/claim/${m.slug}`}
+                  href={lp(`/cadastre/claim/${m.slug}`)}
                   className="flex-shrink-0 text-xs font-semibold text-teal border border-teal/30 px-3 py-1.5 rounded-xl hover:bg-teal/5 transition-colors"
                 >
-                  {m.profile_id ? 'Contestar' : 'Reivindicar'}
+                  {m.profile_id ? t('perfil:dup_contest') : t('perfil:dup_claim')}
                 </a>
               </div>
             ))}
@@ -803,20 +800,20 @@ function PerfilInner() {
       <form ref={formRef} onSubmit={handleSave}>
         {/* Basic info */}
         <section className={SECTION_CLS}>
-          <h2 className="font-display text-lg font-semibold mb-1">Informações básicas</h2>
-          <p className="text-sm text-[#737373] mb-4">Nome, endereço, contato e como os turistas vão encontrar você.</p>
+          <h2 className="font-display text-lg font-semibold mb-1">{t('perfil:basic_title')}</h2>
+          <p className="text-sm text-[#737373] mb-4">{t('perfil:basic_desc')}</p>
           <div className="space-y-4">
-            {textFields.map(({ label, key, required }) => {
-              const helperText: Partial<Record<typeof key, string>> = {
-                whatsapp: 'Somente números com DDD, ex: 84999990000',
-                instagram: 'Sem @, ex: vivegostoso',
-                website: 'URL completa com https://',
-                address: 'Rua, número ou referência de localização',
+            {textFields.map(({ key, required }) => {
+              const helpers: Record<string, string> = {
+                whatsapp: t('perfil:helper_whatsapp'),
+                instagram: t('perfil:helper_instagram'),
+                website: t('perfil:helper_website'),
+                address: t('perfil:helper_address'),
               }
               return (
                 <div key={key}>
                   <label className="block text-sm font-medium mb-1.5">
-                    {label}
+                    {t('perfil:field_' + key)}
                     {required && <span className="text-coral ml-0.5">*</span>}
                   </label>
                   <input
@@ -826,30 +823,30 @@ function PerfilInner() {
                     onChange={e => setBiz(b => ({ ...b, [key]: e.target.value }))}
                     className={INPUT_CLS}
                   />
-                  {helperText[key] && (
-                    <p className="text-xs text-[#A0A0A0] mt-1">{helperText[key]}</p>
+                  {helpers[key] && (
+                    <p className="text-xs text-[#A0A0A0] mt-1">{helpers[key]}</p>
                   )}
                 </div>
               )
             })}
             <div>
-              <label className="block text-sm font-medium mb-1.5">Descrição</label>
+              <label className="block text-sm font-medium mb-1.5">{t('perfil:field_desc')}</label>
               <textarea
                 rows={4}
                 value={biz.description ?? ''}
                 onChange={e => setBiz(b => ({ ...b, description: e.target.value }))}
-                placeholder="Descreva seu negócio em poucas frases: o que oferece, o que torna especial..."
+                placeholder={t('perfil:field_desc_placeholder')}
                 className={`${INPUT_CLS} resize-none`}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1.5">Categoria</label>
+              <label className="block text-sm font-medium mb-1.5">{t('perfil:field_category')}</label>
               <select
                 value={biz.category_id ?? ''}
                 onChange={e => setBiz(b => ({ ...b, category_id: e.target.value }))}
                 className={`${INPUT_CLS} bg-white`}
               >
-                <option value="">Selecione uma categoria</option>
+                <option value="">{t('perfil:field_category_placeholder')}</option>
                 {categories.map(cat => (
                   <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
@@ -866,11 +863,11 @@ function PerfilInner() {
 
         {/* Details */}
         <section className={SECTION_CLS}>
-          <h2 className="font-display text-lg font-semibold mb-4">Detalhes</h2>
+          <h2 className="font-display text-lg font-semibold mb-4">{t('perfil:details_title')}</h2>
           <div className="space-y-4">
             {/* Faixa de preco */}
             <div>
-              <label className="block text-sm font-medium mb-1.5">Faixa de preço</label>
+              <label className="block text-sm font-medium mb-1.5">{t('perfil:price_label')}</label>
               <div className="flex gap-2 flex-wrap">
                 {(['', '$', '$$', '$$$'] as const).map(v => (
                   <button
@@ -885,7 +882,7 @@ function PerfilInner() {
                         : 'bg-white text-[#737373] border-[#E8E4DF] hover:border-teal'
                     }`}
                   >
-                    {v || 'Não informar'}
+                    {v || t('perfil:price_none')}
                   </button>
                 ))}
               </div>
@@ -894,27 +891,27 @@ function PerfilInner() {
             {/* Link do cardapio */}
             <div>
               <label className="block text-sm font-medium mb-1.5">
-                Link do cardápio{' '}
-                <span className="text-[#737373] font-normal">(opcional)</span>
+                {t('perfil:menu_label')}{' '}
+                <span className="text-[#737373] font-normal">{t('perfil:menu_optional')}</span>
               </label>
               <input
                 type="url"
                 value={biz.menu_url ?? ''}
                 onChange={e => setBiz(b => ({ ...b, menu_url: e.target.value || null }))}
-                placeholder="https://... link do PDF, site ou WhatsApp"
+                placeholder={t('perfil:menu_placeholder')}
                 className={INPUT_CLS}
               />
             </div>
 
             {/* Comodidades */}
             <div>
-              <label className="block text-sm font-medium mb-2">Comodidades</label>
+              <label className="block text-sm font-medium mb-2">{t('perfil:amenities_label')}</label>
               <div className="grid grid-cols-2 gap-2">
                 {([
-                  { key: 'wifi' as const,         label: 'WiFi grátis' },
-                  { key: 'parking' as const,      label: 'Estacionamento' },
-                  { key: 'accessible' as const,   label: 'Acessível' },
-                  { key: 'reservations' as const, label: 'Aceita reservas' },
+                  { key: 'wifi' as const,         label: t('perfil:amenity_wifi') },
+                  { key: 'parking' as const,      label: t('perfil:amenity_parking') },
+                  { key: 'accessible' as const,   label: t('perfil:amenity_accessible') },
+                  { key: 'reservations' as const, label: t('perfil:amenity_reservations') },
                 ]).map(({ key, label }) => (
                   <label key={key} className="flex items-center gap-2 cursor-pointer select-none">
                     <input
@@ -963,10 +960,10 @@ function PerfilInner() {
         )}
         <div className="max-w-2xl mx-auto px-5 py-3 flex items-center gap-3">
           <Link
-            href="/cadastre/negocios"
+            href={lp('/cadastre/negocios')}
             className="flex-shrink-0 px-4 py-2.5 rounded-xl border border-[#E8E4DF] text-sm font-medium text-[#737373] hover:border-[#737373] transition-colors"
           >
-            Cancelar
+            {t('perfil:cancel')}
           </Link>
           <Button
             type="button"
@@ -976,10 +973,10 @@ function PerfilInner() {
             onClick={() => formRef.current?.requestSubmit()}
           >
             {saving
-              ? <><Loader2 className="w-4 h-4 animate-spin" />Salvando...</>
+              ? <><Loader2 className="w-4 h-4 animate-spin" />{t('perfil:saving')}</>
               : profileLoading
-              ? <><Loader2 className="w-4 h-4 animate-spin" />Carregando...</>
-              : 'Salvar negócio'}
+              ? <><Loader2 className="w-4 h-4 animate-spin" />{t('perfil:profile_loading')}</>
+              : t('perfil:save_business')}
           </Button>
         </div>
       </div>

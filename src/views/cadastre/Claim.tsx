@@ -5,6 +5,8 @@ import type { User } from '@supabase/supabase-js'
 import { CheckCircle } from 'lucide-react'
 import { Logo } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import { useBusiness } from '@/hooks/useBusinesses'
@@ -13,6 +15,8 @@ import { useSubmitClaim, useMyClaimStatus } from '@/hooks/useClaims'
 type Props = { slug?: string; user?: User | null }
 
 export default function Claim({ slug: slugProp }: Props) {
+  const { t } = useTranslation()
+  const lp = useLocalePath()
   const { data: business } = useBusiness(slugProp ?? '')
   const { user, loading: authLoading } = useAuth()
   // Auth form state
@@ -62,10 +66,10 @@ export default function Claim({ slug: slugProp }: Props) {
 
     if (mode === 'login') {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) setAuthError('E-mail ou senha incorretos.')
+      if (error) setAuthError(t('claim:error_auth'))
     } else {
       if (password.length < 8) {
-        setAuthError('A senha deve ter pelo menos 8 caracteres.')
+        setAuthError(t('claim:error_password'))
         setAuthLoading2(false)
         return
       }
@@ -77,7 +81,7 @@ export default function Claim({ slug: slugProp }: Props) {
 
   if (!business) return (
     <div className="min-h-screen bg-areia flex items-center justify-center px-4">
-      <p className="text-[#737373] text-sm">Carregando...</p>
+      <p className="text-[#737373] text-sm">{t('claim:loading')}</p>
     </div>
   )
 
@@ -87,16 +91,15 @@ export default function Claim({ slug: slugProp }: Props) {
       <div className="bg-white rounded-2xl border border-[#E8E4DF] p-10 w-full max-w-md text-center">
         <div className="flex justify-center mb-8"><Logo height={32} /></div>
         <div className="text-4xl mb-4">🔒</div>
-        <h2 className="font-display text-2xl font-semibold mb-2">Negócio já tem proprietário</h2>
+        <h2 className="font-display text-2xl font-semibold mb-2">{t('claim:owned_title')}</h2>
         <p className="text-[#737373] text-sm mb-6">
-          <strong>{business.name}</strong> já está vinculado a uma conta.
-          Se você acredita que é o proprietário legítimo, pode enviar uma contestação.
+          {t('claim:owned_desc', { name: business.name })}
         </p>
         <Link
-          href={`/negocio/${business.slug}`}
+          href={lp(`/negocio/${business.slug}`)}
           className="text-teal text-sm font-semibold"
         >
-          ← Ver o negócio
+          {t('claim:owned_back')}
         </Link>
       </div>
     </div>
@@ -108,13 +111,12 @@ export default function Claim({ slug: slugProp }: Props) {
       <div className="bg-white rounded-2xl border border-[#E8E4DF] p-10 w-full max-w-md text-center">
         <div className="flex justify-center mb-8"><Logo height={32} /></div>
         <CheckCircle className="w-10 h-10 mb-4 text-teal mx-auto" />
-        <h2 className="font-display text-2xl font-semibold mb-2">Pedido enviado!</h2>
+        <h2 className="font-display text-2xl font-semibold mb-2">{t('claim:success_title')}</h2>
         <p className="text-[#737373] text-sm mb-6">
-          Recebemos seu pedido para reivindicar <strong>{business.name}</strong>.
-          Nossa equipe analisa em até 48 horas e você receberá confirmação por e-mail.
+          {t('claim:success_desc', { name: business.name })}
         </p>
-        <Link href={`/negocio/${business.slug}`} className="text-teal text-sm font-semibold">
-          ← Voltar ao negócio
+        <Link href={lp(`/negocio/${business.slug}`)} className="text-teal text-sm font-semibold">
+          {t('claim:success_back')}
         </Link>
       </div>
     </div>
@@ -124,13 +126,13 @@ export default function Claim({ slug: slugProp }: Props) {
     <div className="min-h-screen bg-areia flex items-center justify-center px-4">
       <div className="bg-white rounded-2xl border border-[#E8E4DF] p-10 w-full max-w-md text-center">
         <div className="flex justify-center mb-8"><Logo height={32} /></div>
-        <div className="text-4xl mb-4">✅</div>
-        <h2 className="font-display text-2xl font-semibold mb-2">Já aprovado!</h2>
+        <div className="text-4xl mb-4">&#x2705;</div>
+        <h2 className="font-display text-2xl font-semibold mb-2">{t('claim:approved_title')}</h2>
         <p className="text-[#737373] text-sm mb-6">
-          Seu perfil está vinculado a <strong>{business.name}</strong>.
+          {t('claim:approved_desc', { name: business.name })}
         </p>
-        <Link href="/cadastre/painel" className="text-teal text-sm font-semibold">
-          Ir para o painel →
+        <Link href={lp('/cadastre/painel')} className="text-teal text-sm font-semibold">
+          {t('claim:approved_cta')}
         </Link>
       </div>
     </div>
@@ -141,7 +143,7 @@ export default function Claim({ slug: slugProp }: Props) {
     <div className="min-h-screen bg-areia flex items-center justify-center px-4">
       <div className="bg-white rounded-2xl border border-[#E8E4DF] p-10 w-full max-w-md text-center">
         <div className="flex justify-center mb-8"><Logo height={32} /></div>
-        <p className="text-[#737373] text-sm">Enviando pedido...</p>
+        <p className="text-[#737373] text-sm">{t('claim:submitting')}</p>
       </div>
     </div>
   )
@@ -153,28 +155,28 @@ export default function Claim({ slug: slugProp }: Props) {
         <div className="flex justify-center mb-6"><Logo height={32} /></div>
 
         <div className="text-center mb-6">
-          <h1 className="font-display text-2xl font-semibold mb-1">Reivindicar negócio</h1>
-          <p className="text-[#737373] text-sm">Você está reivindicando</p>
+          <h1 className="font-display text-2xl font-semibold mb-1">{t('claim:main_title')}</h1>
+          <p className="text-[#737373] text-sm">{t('claim:main_sub')}</p>
           <p className="font-semibold text-[#1A1A1A] mt-1">{business.name}</p>
         </div>
 
         {/* Message to admin */}
         <div className="mb-5">
           <label className="block text-sm font-medium mb-1.5">
-            Mensagem para análise <span className="text-[#737373] font-normal">(opcional)</span>
+            {t('claim:message_label')} <span className="text-[#737373] font-normal">{t('claim:message_optional')}</span>
           </label>
           <textarea
             rows={2}
             value={message}
             onChange={e => setMessage(e.target.value)}
-            placeholder="Ex: Sou o proprietário desde 2019, posso enviar documentação..."
+            placeholder={t('claim:message_placeholder')}
             className="w-full px-4 py-3 rounded-xl border border-[#E8E4DF] text-sm focus:outline-none focus:border-teal focus:ring-2 focus:ring-teal/20 resize-none"
           />
         </div>
 
         <div className="border-t border-[#F5F2EE] pt-5">
           <p className="text-xs text-[#737373] mb-4 text-center">
-            {mode === 'login' ? 'Entre com sua conta para continuar' : 'Crie sua conta para continuar'}
+            {mode === 'login' ? t('claim:form_login_hint') : t('claim:form_register_hint')}
           </p>
 
           {/* Mode toggle */}
@@ -184,14 +186,14 @@ export default function Claim({ slug: slugProp }: Props) {
               onClick={() => setMode('login')}
               className={`flex-1 py-2 transition-colors ${mode === 'login' ? 'bg-teal text-white' : 'text-[#737373] hover:bg-areia'}`}
             >
-              Entrar
+              {t('claim:tab_login')}
             </button>
             <button
               type="button"
               onClick={() => setMode('register')}
               className={`flex-1 py-2 transition-colors ${mode === 'register' ? 'bg-teal text-white' : 'text-[#737373] hover:bg-areia'}`}
             >
-              Criar conta
+              {t('claim:tab_register')}
             </button>
           </div>
 
@@ -201,7 +203,7 @@ export default function Claim({ slug: slugProp }: Props) {
               required
               value={email}
               onChange={e => setEmail(e.target.value)}
-              placeholder="seu@email.com"
+              placeholder={t('claim:email_placeholder')}
               className="w-full px-4 py-3 rounded-xl border border-[#E8E4DF] text-sm focus:outline-none focus:border-teal focus:ring-2 focus:ring-teal/20"
             />
             <input
@@ -210,21 +212,20 @@ export default function Claim({ slug: slugProp }: Props) {
               minLength={8}
               value={password}
               onChange={e => setPassword(e.target.value)}
-              placeholder="Senha (mínimo 8 caracteres)"
+              placeholder={t('claim:password_placeholder')}
               className="w-full px-4 py-3 rounded-xl border border-[#E8E4DF] text-sm focus:outline-none focus:border-teal focus:ring-2 focus:ring-teal/20"
             />
             {authError && (
               <p className="text-xs text-red-500">{authError}</p>
             )}
             <Button type="submit" variant="primary" className="w-full" disabled={authLoading2}>
-              {authLoading2 ? 'Aguarde...' : mode === 'login' ? 'Entrar e reivindicar' : 'Criar conta e reivindicar'}
+              {authLoading2 ? t('claim:submit_loading') : mode === 'login' ? t('claim:submit_login') : t('claim:submit_register')}
             </Button>
           </form>
         </div>
 
         <p className="text-xs text-[#737373] text-center mt-5 leading-relaxed">
-          Após confirmar, nossa equipe analisa o pedido em até 48h.
-          Você pode enviar documentação comprobatória por e-mail.
+          {t('claim:footer')}
         </p>
       </div>
     </div>

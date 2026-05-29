@@ -7,6 +7,8 @@ import { AdminGuard } from '@/components/auth/admin-guard'
 import { supabase } from '@/lib/supabase'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Business } from '@/types/database'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 
 export default function AdminBusinesses() {
   return <AdminGuard><AdminBusinessesInner /></AdminGuard>
@@ -31,6 +33,7 @@ function useAdminBusinesses() {
 }
 
 function SlugEditor({ biz, onDone }: { biz: BusinessRow; onDone: () => void }) {
+  const { t } = useTranslation('admin_businesses')
   const [editing, setEditing] = useState(false)
   const [value, setValue] = useState(biz.slug)
   const [saving, setSaving] = useState(false)
@@ -48,7 +51,7 @@ function SlugEditor({ biz, onDone }: { biz: BusinessRow; onDone: () => void }) {
     return (
       <span className="inline-flex items-center gap-1 font-mono text-xs text-[#737373]">
         {biz.slug}
-        <button onClick={() => setEditing(true)} title="Editar slug" className="ml-1 text-[#B0A99F] hover:text-teal transition-colors">
+        <button onClick={() => setEditing(true)} title={t('edit_slug')} className="ml-1 text-[#B0A99F] hover:text-teal transition-colors">
           <Pencil className="w-3 h-3" />
         </button>
       </span>
@@ -75,6 +78,7 @@ function SlugEditor({ biz, onDone }: { biz: BusinessRow; onDone: () => void }) {
 }
 
 function PublishToggle({ biz, onDone }: { biz: BusinessRow; onDone: () => void }) {
+  const { t } = useTranslation('admin_businesses')
   const [loading, setLoading] = useState(false)
 
   async function toggle() {
@@ -88,7 +92,7 @@ function PublishToggle({ biz, onDone }: { biz: BusinessRow; onDone: () => void }
     <button
       onClick={toggle}
       disabled={loading}
-      title={biz.is_published ? 'Despublicar' : 'Publicar'}
+      title={biz.is_published ? t('unpublish') : t('publish')}
       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-colors disabled:opacity-50 ${
         biz.is_published
           ? 'border-teal/30 text-teal hover:bg-teal/5'
@@ -96,13 +100,15 @@ function PublishToggle({ biz, onDone }: { biz: BusinessRow; onDone: () => void }
       }`}
     >
       {biz.is_published
-        ? <><EyeOff className="w-3.5 h-3.5" /> Despublicar</>
-        : <><Eye className="w-3.5 h-3.5" /> Publicar</>}
+        ? <><EyeOff className="w-3.5 h-3.5" /> {t('unpublish')}</>
+        : <><Eye className="w-3.5 h-3.5" /> {t('publish')}</>}
     </button>
   )
 }
 
 function AdminBusinessesInner() {
+  const { t } = useTranslation('admin_businesses')
+  const lp = useLocalePath()
   const { data: businesses = [], isLoading } = useAdminBusinesses()
   const qc = useQueryClient()
   const [filter, setFilter] = useState<'all' | 'draft' | 'published'>('all')
@@ -119,15 +125,15 @@ function AdminBusinessesInner() {
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
-      <Link href="/cadastre/admin" className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
-        <ArrowLeft className="w-4 h-4" /> Admin
+      <Link href={lp('/cadastre/admin')} className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
+        <ArrowLeft className="w-4 h-4" /> {t('back')}
       </Link>
 
       <div className="flex flex-wrap items-center gap-3 mb-6">
         <div>
-          <h1 className="font-display text-3xl font-semibold">Negócios</h1>
+          <h1 className="font-display text-3xl font-semibold">{t('title')}</h1>
           <p className="text-sm text-[#737373] mt-0.5">
-            {businesses.length} total · {draftCount} rascunho{draftCount !== 1 ? 's' : ''}
+            {t('count', { total: businesses.length, draft: draftCount, count: draftCount })}
           </p>
         </div>
         <div className="ml-auto flex items-center gap-1 bg-[#F5F2EE] rounded-xl p-1">
@@ -139,7 +145,7 @@ function AdminBusinessesInner() {
                 filter === f ? 'bg-white text-[#1A1A1A] shadow-sm' : 'text-[#737373] hover:text-[#1A1A1A]'
               }`}
             >
-              {f === 'all' ? 'Todos' : f === 'draft' ? 'Rascunho' : 'Publicados'}
+              {f === 'all' ? t('filter_all') : f === 'draft' ? t('filter_draft') : t('filter_published')}
             </button>
           ))}
         </div>
@@ -154,7 +160,7 @@ function AdminBusinessesInner() {
       {!isLoading && !filtered.length && (
         <div className="text-center py-16 text-[#B0A99F]">
           <div className="text-4xl mb-3">✅</div>
-          <p className="font-semibold">Nenhum negócio nessa categoria</p>
+          <p className="font-semibold">{t('empty')}</p>
         </div>
       )}
 
@@ -169,7 +175,7 @@ function AdminBusinessesInner() {
                     b.is_published ? 'bg-teal/10 text-teal' : 'bg-[#E8E4DF] text-[#737373]'
                   }`}>
                     <span className={`w-1.5 h-1.5 rounded-full ${b.is_published ? 'bg-teal' : 'bg-[#A0A0A0]'}`} />
-                    {b.is_published ? 'Publicado' : 'Rascunho'}
+                    {b.is_published ? t('status_published') : t('status_draft')}
                   </span>
                   {b.category && (
                     <span className="text-xs text-[#737373] bg-[#F5F2EE] px-2 py-0.5 rounded-full">{b.category.name}</span>
@@ -178,7 +184,7 @@ function AdminBusinessesInner() {
                     <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
                       b.plan === 'destaque' ? 'text-ocre bg-ocre/10' : 'text-teal bg-teal/10'
                     }`}>
-                      {b.plan === 'destaque' ? '★ Destaque' : '✓ Associado'}
+                      {b.plan === 'destaque' ? t('plan_destaque') : t('plan_associado')}
                     </span>
                   )}
                 </div>
@@ -187,10 +193,10 @@ function AdminBusinessesInner() {
                 </div>
               </div>
               <a
-                href={`/negocio/${b.slug}`}
+                href={lp('/negocio/' + b.slug)}
                 target="_blank"
                 rel="noopener noreferrer"
-                title="Ver página"
+                title={t('view_page')}
                 className="flex-shrink-0 text-[#B0A99F] hover:text-teal transition-colors mt-0.5"
               >
                 <ExternalLink className="w-4 h-4" />

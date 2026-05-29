@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { CalendarCheck } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { usePendingEventSubmissions, useApproveEventSubmission, useRejectEventSubmission } from '@/hooks/useEventSubmissions'
 import { Button } from '@/components/ui/button'
@@ -12,6 +14,7 @@ export default function AdminEvents() {
 }
 
 function EventRow({ sub }: { sub: EventSubmission }) {
+  const { t } = useTranslation('admin_events')
   const approve = useApproveEventSubmission()
   const reject = useRejectEventSubmission()
   const start = new Date(sub.starts_at)
@@ -33,15 +36,15 @@ function EventRow({ sub }: { sub: EventSubmission }) {
             disabled={approve.isPending}
             onClick={() => approve.mutate(sub)}
           >
-            Aprovar
+            {t('approve')}
           </Button>
           <Button
             variant="ghost"
             className="text-xs px-3 py-1.5 min-h-0 text-coral border border-coral/30 hover:bg-coral/5"
             disabled={reject.isPending}
-            onClick={() => reject.mutate({ id: sub.id, note: 'Rejeitado pelo admin' })}
+            onClick={() => reject.mutate({ id: sub.id, note: t('rejected_note') })}
           >
-            Rejeitar
+            {t('reject')}
           </Button>
         </div>
       </div>
@@ -52,7 +55,7 @@ function EventRow({ sub }: { sub: EventSubmission }) {
         </a>
       )}
       <div className="text-xs text-[#A0A0A0] border-t border-[#F0EDE8] pt-3">
-        Enviado por: <span className="text-[#737373]">{sub.submitter_name}</span>
+        {t('submitted_by')} <span className="text-[#737373]">{sub.submitter_name}</span>
         {sub.submitter_email ? ` · ${sub.submitter_email}` : ''}
         {sub.submitter_phone ? ` · ${sub.submitter_phone}` : ''}
       </div>
@@ -61,15 +64,17 @@ function EventRow({ sub }: { sub: EventSubmission }) {
 }
 
 function AdminEventsInner() {
+  const { t } = useTranslation('admin_events')
+  const lp = useLocalePath()
   const { data: submissions = [], isLoading } = usePendingEventSubmissions()
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
-      <Link href="/cadastre/admin" className="text-sm text-[#737373] hover:text-teal transition-colors inline-block mb-6">
-        ← Admin
+      <Link href={lp('/cadastre/admin')} className="text-sm text-[#737373] hover:text-teal transition-colors inline-block mb-6">
+        {t('back_to_admin')}
       </Link>
-      <h1 className="font-display text-3xl font-semibold mb-2">Eventos pendentes</h1>
-      <p className="text-sm text-[#737373] mb-8">Submissões da comunidade aguardando aprovação.</p>
+      <h1 className="font-display text-3xl font-semibold mb-2">{t('title')}</h1>
+      <p className="text-sm text-[#737373] mb-8">{t('subtitle')}</p>
 
       {isLoading ? (
         <div className="space-y-4">
@@ -78,7 +83,7 @@ function AdminEventsInner() {
       ) : submissions.length === 0 ? (
         <div className="text-center py-16 border-2 border-dashed border-[#E8E4DF] rounded-2xl">
           <CalendarCheck className="w-10 h-10 mb-3 text-teal mx-auto" />
-          <p className="text-[#737373] text-sm">Nenhuma submissão pendente. Tudo em dia!</p>
+          <p className="text-[#737373] text-sm">{t('empty_state')}</p>
         </div>
       ) : (
         <div className="space-y-4">

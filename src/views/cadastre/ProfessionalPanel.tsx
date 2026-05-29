@@ -3,6 +3,8 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import { Eye, EyeOff, Save, ExternalLink, Plus, Trash2 } from 'lucide-react'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { useMyProfessional, useUpsertProfessional } from '@/hooks/useProfessionals'
@@ -26,6 +28,8 @@ const PRESET_SPECIALTIES = [
 
 function ProfessionalPanelInner() {
   const router = useRouter()
+  const { t } = useTranslation()
+  const lp = useLocalePath()
   const { data: pro, isLoading } = useMyProfessional()
   const upsert = useUpsertProfessional()
 
@@ -86,18 +90,18 @@ function ProfessionalPanelInner() {
 
   async function handleSave(publishOverride?: boolean) {
     setError(null)
-    if (!displayName.trim()) { setError('Nome de exibição é obrigatório.'); return }
-    if (!headline.trim()) { setError('Headline é obrigatório.'); return }
+    if (!displayName.trim()) { setError(t('professional_panel.error_display_name_required')); return }
+    if (!headline.trim()) { setError(t('professional_panel.error_headline_required')); return }
 
     const sanitizedWa = whatsapp ? validateWhatsApp(whatsapp) : undefined
     if (whatsapp && !sanitizedWa) {
-      setError('WhatsApp inválido. Use apenas números com DDI 55 (ex: 5584999991111).')
+      setError(t('professional_panel.error_invalid_whatsapp'))
       return
     }
 
     const invalidPortfolioItem = portfolioItems.find(i => !i.title.trim())
     if (invalidPortfolioItem) {
-      setError('Todos os itens do portfólio precisam ter um título.')
+      setError(t('professional_panel.error_portfolio_title_required'))
       return
     }
 
@@ -118,7 +122,7 @@ function ProfessionalPanelInner() {
       setSuccess(true)
       setTimeout(() => setSuccess(false), 3000)
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : 'Erro ao salvar.')
+      setError(e instanceof Error ? e.message : t('professional_panel.error_save'))
     } finally {
       setSaving(false)
     }
@@ -137,9 +141,9 @@ function ProfessionalPanelInner() {
   }
 
   const tabs = [
-    { id: 'perfil' as const, label: 'Meu perfil' },
-    { id: 'portfolio' as const, label: 'Portfólio' },
-    { id: 'visibilidade' as const, label: 'Visibilidade' },
+    { id: 'perfil' as const, label: t('professional_panel.tab_profile') },
+    { id: 'portfolio' as const, label: t('professional_panel.tab_portfolio') },
+    { id: 'visibilidade' as const, label: t('professional_panel.tab_visibility') },
   ]
 
   return (
@@ -147,18 +151,18 @@ function ProfessionalPanelInner() {
       {/* Top bar */}
       <header className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-5 md:px-8 h-14 flex items-center gap-4">
-          <button type="button" onClick={() => router.push('/cadastre/painel')} className="text-sm text-[#737373] hover:text-[#1A1A1A]">
-            ← Painel
+          <button type="button" onClick={() => router.push(lp('/cadastre/painel'))} className="text-sm text-[#737373] hover:text-[#1A1A1A]">
+            {t('professional_panel.back_to_painel')}
           </button>
-          <span className="text-sm font-semibold text-[#1A1A1A]">Perfil profissional</span>
+          <span className="text-sm font-semibold text-[#1A1A1A]">{t('professional_panel.title')}</span>
           {pro?.is_published && (
             <a
-              href={`/contrate/profissional/${pro.slug}`}
+              href={lp(`/contrate/profissional/${pro.slug}`)}
               target="_blank"
               rel="noopener noreferrer"
               className="ml-auto flex items-center gap-1 text-xs text-teal hover:underline"
             >
-              Ver perfil <ExternalLink className="w-3 h-3" />
+              {t('professional_panel.view_profile')} <ExternalLink className="w-3 h-3" />
             </a>
           )}
         </div>
@@ -191,7 +195,7 @@ function ProfessionalPanelInner() {
         )}
         {success && (
           <div className="mb-4 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl">
-            Salvo com sucesso!
+            {t('professional_panel.saved_success')}
           </div>
         )}
 
@@ -200,29 +204,29 @@ function ProfessionalPanelInner() {
           <div className="space-y-5">
             <div>
               <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1.5">
-                Nome de exibição *
+                {t('professional_panel.display_name_label')}
               </label>
               <input
                 value={displayName}
                 onChange={e => setDisplayName(e.target.value)}
-                placeholder="Seu nome completo"
+                placeholder={t('professional_panel.display_name_placeholder')}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
               />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1.5">
-                Headline (aparece nos cards) *
+                {t('professional_panel.headline_label')}
               </label>
               <input
                 value={headline}
                 onChange={e => setHeadline(e.target.value)}
-                placeholder="Ex: Coach executivo & mentor de líderes"
+                placeholder={t('professional_panel.headline_placeholder')}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
               />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1.5">
-                Categoria
+                {t('professional_panel.category_label')}
               </label>
               <select
                 value={category}
@@ -236,7 +240,7 @@ function ProfessionalPanelInner() {
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1.5">
-                Especialidades
+                {t('professional_panel.specialties_label')}
               </label>
               <div className="flex flex-wrap gap-2">
                 {PRESET_SPECIALTIES.map(s => (
@@ -257,48 +261,48 @@ function ProfessionalPanelInner() {
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1.5">
-                Bio
+                {t('professional_panel.bio_label')}
               </label>
               <textarea
                 value={bio}
                 onChange={e => setBio(e.target.value)}
                 rows={4}
-                placeholder="Conte sobre sua experiência e como você pode ajudar..."
+                placeholder={t('professional_panel.bio_placeholder')}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal resize-none"
               />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1.5">
-                  WhatsApp
+                  {t('professional_panel.whatsapp_label')}
                 </label>
                 <input
                   value={whatsapp}
                   onChange={e => setWhatsapp(e.target.value)}
-                  placeholder="5584999991111"
+                  placeholder={t('professional_panel.whatsapp_placeholder')}
                   className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
                 />
-                <p className="text-[10px] text-[#aaa] mt-1">Só números com DDI 55</p>
+                <p className="text-[10px] text-[#aaa] mt-1">{t('professional_panel.whatsapp_hint')}</p>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1.5">
-                  Instagram
+                  {t('professional_panel.instagram_label')}
                 </label>
                 <input
                   value={instagram}
                   onChange={e => setInstagram(e.target.value)}
-                  placeholder="@seuhandle"
+                  placeholder={t('professional_panel.instagram_placeholder')}
                   className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
                 />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1.5">
-                  Website
+                  {t('professional_panel.website_label')}
                 </label>
                 <input
                   value={website}
                   onChange={e => setWebsite(e.target.value)}
-                  placeholder="https://..."
+                  placeholder={t('professional_panel.website_placeholder')}
                   className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
                 />
               </div>
@@ -310,13 +314,13 @@ function ProfessionalPanelInner() {
         {tab === 'portfolio' && (
           <div className="space-y-4">
             {portfolioItems.length === 0 && (
-              <p className="text-sm text-[#737373]">Nenhum item no portfólio ainda.</p>
+              <p className="text-sm text-[#737373]">{t('professional_panel.no_portfolio_items')}</p>
             )}
             {portfolioItems.map((item, idx) => (
               <div key={item.id} className="bg-white border border-[#E8E4DF] rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-semibold text-[#737373] uppercase tracking-wide">
-                    Item {idx + 1}
+                    {t('professional_panel.portfolio_item_label', { n: idx + 1 })}
                   </span>
                   <button
                     type="button"
@@ -329,25 +333,25 @@ function ProfessionalPanelInner() {
                 <input
                   value={item.title}
                   onChange={e => updatePortfolioItem(item.id, 'title', e.target.value)}
-                  placeholder="Título do projeto"
+                  placeholder={t('professional_panel.portfolio_title_placeholder')}
                   className="w-full border border-[#E8E4DF] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
                 />
                 <input
                   value={item.description ?? ''}
                   onChange={e => updatePortfolioItem(item.id, 'description', e.target.value)}
-                  placeholder="Descrição breve (opcional)"
+                  placeholder={t('professional_panel.portfolio_desc_placeholder')}
                   className="w-full border border-[#E8E4DF] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
                 />
                 <input
                   value={item.image_url ?? ''}
                   onChange={e => updatePortfolioItem(item.id, 'image_url', e.target.value)}
-                  placeholder="URL da imagem (opcional)"
+                  placeholder={t('professional_panel.portfolio_image_placeholder')}
                   className="w-full border border-[#E8E4DF] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
                 />
                 <input
                   value={item.url ?? ''}
                   onChange={e => updatePortfolioItem(item.id, 'url', e.target.value)}
-                  placeholder="Link externo (opcional)"
+                  placeholder={t('professional_panel.portfolio_url_placeholder')}
                   className="w-full border border-[#E8E4DF] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
                 />
               </div>
@@ -358,7 +362,7 @@ function ProfessionalPanelInner() {
               className="flex items-center gap-2 text-sm font-semibold text-teal border border-teal/30 bg-teal/5 px-4 py-2.5 rounded-xl hover:bg-teal/10 transition-colors"
             >
               <Plus className="w-4 h-4" />
-              Adicionar item
+              {t('professional_panel.add_portfolio_item')}
             </button>
           </div>
         )}
@@ -370,12 +374,12 @@ function ProfessionalPanelInner() {
               <div className="flex items-start justify-between">
                 <div>
                   <p className="font-semibold text-[#1A1A1A] text-sm mb-1">
-                    Status do perfil
+                    {t('professional_panel.profile_status')}
                   </p>
                   <p className="text-xs text-[#737373]">
                     {pro?.is_published
-                      ? 'Seu perfil está visível em /contrate.'
-                      : 'Seu perfil está em rascunho. Ninguém pode vê-lo ainda.'}
+                      ? t('professional_panel.profile_visible')
+                      : t('professional_panel.profile_draft')}
                   </p>
                 </div>
                 <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
@@ -383,17 +387,17 @@ function ProfessionalPanelInner() {
                     ? 'bg-green-100 text-green-700'
                     : 'bg-[#F5F2EE] text-[#737373]'
                 }`}>
-                  {pro?.is_published ? 'Publicado' : 'Rascunho'}
+                  {pro?.is_published ? t('professional_panel.published') : t('professional_panel.draft')}
                 </span>
               </div>
               <p className="text-xs text-[#aaa] mt-3">
-                Nota: perfis passam por aprovação admin antes de ficarem visíveis.
+                {t('professional_panel.approval_note')}
               </p>
             </div>
             {pro?.slug && (
               <div className="bg-white border border-[#E8E4DF] rounded-xl p-5">
                 <p className="text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1">
-                  URL pública
+                  {t('professional_panel.public_url')}
                 </p>
                 <p className="text-sm text-[#1A1A1A] font-mono">
                   vivegostoso.com.br/contrate/profissional/{pro.slug}
@@ -412,7 +416,7 @@ function ProfessionalPanelInner() {
             className="flex items-center gap-2 bg-teal text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-teal/90 transition-colors disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
-            {saving ? 'Salvando...' : 'Salvar'}
+            {saving ? t('professional_panel.saving') : t('professional_panel.save')}
           </button>
           <button
             type="button"
@@ -421,8 +425,8 @@ function ProfessionalPanelInner() {
             className="flex items-center gap-2 border border-[#E8E4DF] text-[#737373] px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#F5F2EE] transition-colors disabled:opacity-50"
           >
             {pro?.is_published
-              ? <><EyeOff className="w-4 h-4" /> Despublicar</>
-              : <><Eye className="w-4 h-4" /> Publicar</>
+              ? <><EyeOff className="w-4 h-4" /> {t('professional_panel.unpublish')}</>
+              : <><Eye className="w-4 h-4" /> {t('professional_panel.publish')}</>
             }
           </button>
         </div>

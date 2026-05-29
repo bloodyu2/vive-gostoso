@@ -2,6 +2,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import {
   CheckCircle, Store, PlusCircle, Eye, LayoutDashboard,
   Sparkles, ArrowRight, LogOut, User,
@@ -44,59 +46,63 @@ function StatCard({ label, value, sub }: { label: string; value: string | number
 
 function TypeFork() {
   const router = useRouter()
+  const { t } = useTranslation('painel')
+  const lp = useLocalePath()
+  const businessTags = t('typefork.business_tags').split('|')
+  const professionalTags = t('typefork.professional_tags').split('|')
   return (
     <div className="min-h-screen bg-[#FAFAF9] flex items-center justify-center px-5">
       <div className="w-full max-w-xl">
         <div className="bg-white rounded-3xl border border-[#E8E4DF] overflow-hidden shadow-sm">
           <div className="bg-[#1A1A1A] px-8 py-6">
             <h2 className="font-display text-xl font-bold text-white mb-1">
-              O que você quer fazer no Vive Gostoso?
+              {t('typefork.title')}
             </h2>
             <p className="text-[#888] text-sm">
-              Escolha o tipo de perfil — você pode mudar depois
+              {t('typefork.subtitle')}
             </p>
           </div>
           <div className="p-6">
             <p className="text-xs font-semibold text-[#737373] uppercase tracking-wide mb-4">
-              Selecione uma opção para continuar:
+              {t('typefork.select_prompt')}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
                 type="button"
-                onClick={() => router.push('/cadastre/negocios')}
+                onClick={() => router.push(lp('/cadastre/negocios'))}
                 className="text-left border-2 border-[#E8E4DF] rounded-2xl p-5 hover:border-teal hover:bg-teal/5 transition-all"
               >
                 <Store className="w-8 h-8 text-teal mb-3" />
                 <p className="font-semibold text-[#1A1A1A] text-sm mb-1">
-                  Tenho um negócio local
+                  {t('typefork.business_title')}
                 </p>
                 <p className="text-xs text-[#737373] leading-relaxed">
-                  Restaurante, pousada, loja, serviço com endereço físico em São Miguel do Gostoso.
+                  {t('typefork.business_desc')}
                 </p>
                 <div className="flex flex-wrap gap-1 mt-3">
-                  {['Restaurante', 'Pousada', 'Loja'].map(t => (
-                    <span key={t} className="bg-[#F5F2EE] text-[#888] text-[10px] px-2 py-0.5 rounded-md">
-                      {t}
+                  {businessTags.map(tag => (
+                    <span key={tag} className="bg-[#F5F2EE] text-[#888] text-[10px] px-2 py-0.5 rounded-md">
+                      {tag}
                     </span>
                   ))}
                 </div>
               </button>
               <button
                 type="button"
-                onClick={() => router.push('/cadastre/profissional')}
+                onClick={() => router.push(lp('/cadastre/profissional'))}
                 className="text-left border-2 border-[#E8E4DF] rounded-2xl p-5 hover:border-teal hover:bg-teal/5 transition-all"
               >
                 <User className="w-8 h-8 text-teal mb-3" />
                 <p className="font-semibold text-[#1A1A1A] text-sm mb-1">
-                  Sou profissional autônomo
+                  {t('typefork.professional_title')}
                 </p>
                 <p className="text-xs text-[#737373] leading-relaxed">
-                  Ofereço serviços como pessoa física — consultoria, mentoria, design, fotografia, etc.
+                  {t('typefork.professional_desc')}
                 </p>
                 <div className="flex flex-wrap gap-1 mt-3">
-                  {['Coach', 'Consultor', 'Fotógrafo'].map(t => (
-                    <span key={t} className="bg-[#F5F2EE] text-[#888] text-[10px] px-2 py-0.5 rounded-md">
-                      {t}
+                  {professionalTags.map(tag => (
+                    <span key={tag} className="bg-[#F5F2EE] text-[#888] text-[10px] px-2 py-0.5 rounded-md">
+                      {tag}
                     </span>
                   ))}
                 </div>
@@ -117,6 +123,8 @@ function PainelInner() {
   const { data: myProfessional, isLoading: profLoading } = useMyProfessional()
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { t } = useTranslation('painel')
+  const lp = useLocalePath()
   const successMsg = searchParams?.get('associado') === 'success'
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
@@ -128,7 +136,7 @@ function PainelInner() {
       <div className="w-8 h-8 border-4 border-teal border-t-transparent rounded-full animate-spin" />
     </div>
   )
-  if (role === 'admin') { router.replace('/cadastre/admin'); return null }
+  if (role === 'admin') { router.replace(lp('/cadastre/admin')); return null }
 
   // If no businesses and no professional profile, show the fork
   if (!profileLoading && !businessesLoading && !profLoading && businesses.length === 0 && !myProfessional) {
@@ -153,19 +161,18 @@ function PainelInner() {
     try {
       await startCheckout(bizId, plan, getBilling(bizId))
     } catch (err) {
-      setCheckoutError(err instanceof Error ? err.message : 'Erro ao iniciar pagamento. Tente novamente.')
+      setCheckoutError(err instanceof Error ? err.message : t('plans_checkout_error'))
       setCheckoutLoading(null)
     }
   }
 
   return (
     <div className="min-h-screen bg-[#FAFAF9]">
-      {/* ── Top bar ── */}
       <header className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-5 md:px-8 h-14 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <LayoutDashboard className="w-4 h-4 text-[#737373]" />
-            <span className="text-sm font-semibold text-[#1A1A1A]">Painel do Prestador</span>
+            <span className="text-sm font-semibold text-[#1A1A1A]">{t('header_title')}</span>
           </div>
           <div className="flex items-center gap-3">
             {user?.email && (
@@ -176,11 +183,11 @@ function PainelInner() {
             )}
             <button
               onClick={() => supabase.auth.signOut()}
-              title="Sair"
+              title={t('sair')}
               className="flex items-center gap-1.5 text-xs text-[#737373] hover:text-[#1A1A1A] border border-[#E8E4DF] hover:border-[#C4BFBA] rounded-xl px-3 py-1.5 transition-colors"
             >
               <LogOut className="w-3.5 h-3.5" />
-              Sair
+              {t('sair')}
             </button>
           </div>
         </div>
@@ -188,112 +195,107 @@ function PainelInner() {
 
       <main className="max-w-4xl mx-auto px-5 md:px-8 py-8">
 
-        {/* ── Success banner ── */}
         {successMsg && (
           <div className="mb-6 bg-teal/10 border border-teal/20 rounded-2xl p-4 flex items-center gap-3">
             <CheckCircle className="w-5 h-5 text-teal flex-shrink-0" />
             <div>
-              <p className="font-semibold text-teal text-sm">Associação confirmada!</p>
-              <p className="text-xs text-teal/80 mt-0.5">Seu negócio agora aparece com o selo verificado.</p>
+              <p className="font-semibold text-teal text-sm">{t('success_title')}</p>
+              <p className="text-xs text-teal/80 mt-0.5">{t('success_desc')}</p>
             </div>
           </div>
         )}
 
-        {/* ── Greeting ── */}
         <div className="mb-6">
-          <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">Olá!</h1>
-          <p className="text-sm text-[#737373] mt-1">Gerencie seus negócios e planos no Vive Gostoso.</p>
+          <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">{t('greeting')}</h1>
+          <p className="text-sm text-[#737373] mt-1">{t('greeting_sub')}</p>
         </div>
 
-        {/* ── Stats bar ── */}
         {businesses.length > 0 && (
           <div className="grid grid-cols-3 gap-3 mb-8">
             <StatCard
-              label="Negócios cadastrados"
+              label={t('stats_businesses')}
               value={businesses.length}
             />
             <StatCard
-              label="Publicados"
+              label={t('stats_published')}
               value={publishedCount}
-              sub={publishedCount > 0 ? 'Visíveis no diretório' : undefined}
+              sub={publishedCount > 0 ? t('stats_published_sub') : undefined}
             />
             <StatCard
-              label="Rascunhos"
+              label={t('stats_drafts')}
               value={draftCount}
-              sub={draftCount > 0 ? 'Não visíveis ainda' : undefined}
+              sub={draftCount > 0 ? t('stats_drafts_sub') : undefined}
             />
           </div>
         )}
 
-        {/* ── Draft alert ── */}
         {draftCount > 0 && (
           <div className="mb-6 bg-ocre/8 border border-ocre/25 rounded-2xl px-5 py-4 flex items-start gap-3">
             <Eye className="w-4 h-4 text-ocre mt-0.5 flex-shrink-0" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-ocre">
-                {draftCount === 1 ? '1 negócio em rascunho' : `${draftCount} negócios em rascunho`}
+                {t('draft_alert_title', { count: draftCount })}
               </p>
               <p className="text-xs text-[#737373] mt-0.5">
-                Complete o perfil e publique para aparecer no diretório.
+                {t('draft_alert_desc')}
               </p>
             </div>
             <Link
-              href="/cadastre/negocios"
+              href={lp('/cadastre/negocios')}
               className="flex items-center gap-1 text-xs font-semibold text-ocre hover:underline flex-shrink-0"
             >
-              Ver <ArrowRight className="w-3 h-3" />
+              {t('draft_alert_cta')} <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
         )}
 
-        {/* ── Module grid ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-10">
           <Link
-            href="/cadastre/negocios"
+            href={lp('/cadastre/negocios')}
             className="group bg-white border border-[#E8E4DF] rounded-2xl p-5 hover:shadow-md hover:-translate-y-0.5 transition-all"
           >
             <Store className="w-5 h-5 mb-3 text-teal" />
             <h2 className="font-semibold text-[15px] text-[#1A1A1A] group-hover:text-teal transition-colors">
-              Gerenciar negócios
+              {t('module_manage')}
             </h2>
             <p className="text-xs text-[#737373] mt-1 leading-relaxed">
-              Veja, edite e publique seus negócios cadastrados.
+              {t('module_manage_desc')}
             </p>
             {businesses.length > 0 && (
               <p className="text-[11px] text-teal mt-2.5 font-medium flex items-center gap-1">
-                {businesses.length} negócio{businesses.length !== 1 ? 's' : ''} <ArrowRight className="w-3 h-3" />
+                {t('module_manage_count', { count: businesses.length })} <ArrowRight className="w-3 h-3" />
               </p>
             )}
           </Link>
 
           <Link
-            href="/cadastre/perfil"
+            href={lp('/cadastre/perfil')}
             className="group bg-white border border-[#E8E4DF] rounded-2xl p-5 hover:shadow-md hover:-translate-y-0.5 transition-all"
           >
             <PlusCircle className="w-5 h-5 mb-3 text-teal" />
             <h2 className="font-semibold text-[15px] text-[#1A1A1A] group-hover:text-teal transition-colors">
-              Adicionar negócio
+              {t('module_add')}
             </h2>
             <p className="text-xs text-[#737373] mt-1 leading-relaxed">
-              Cadastre um novo negócio na plataforma Vive Gostoso.
+              {t('module_add_desc')}
             </p>
           </Link>
 
           <Link
-            href="/cadastre/preview"
+            href={lp('/cadastre/preview')}
             className="group bg-white border border-[#E8E4DF] rounded-2xl p-5 hover:shadow-md hover:-translate-y-0.5 transition-all"
           >
             <Eye className="w-5 h-5 mb-3 text-teal" />
             <h2 className="font-semibold text-[15px] text-[#1A1A1A] group-hover:text-teal transition-colors">
-              Preview
+              {t('module_preview')}
             </h2>
             <p className="text-xs text-[#737373] mt-1 leading-relaxed">
-              Veja como seu negócio aparece para visitantes do diretório.
+              {t('module_preview_desc')}
             </p>
           </Link>
 
           {myProfessional && (
-            <Link href="/cadastre/profissional" className="block bg-white rounded-2xl border border-[#E8E4DF] p-5 hover:shadow-md transition-shadow">
+            <Link href={lp('/cadastre/profissional')} className="block bg-white rounded-2xl border border-[#E8E4DF] p-5 hover:shadow-md transition-shadow">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 rounded-xl bg-teal/10 flex items-center justify-center">
                   <User className="w-5 h-5 text-teal" />
@@ -303,20 +305,19 @@ function PainelInner() {
                   <p className="text-xs text-[#737373]">{myProfessional.headline}</p>
                 </div>
               </div>
-              <p className="text-xs text-[#0D7C7C] font-semibold">Editar perfil profissional →</p>
+              <p className="text-xs text-[#0D7C7C] font-semibold">{t('module_edit_professional')}</p>
             </Link>
           )}
         </div>
 
-        {/* ── Subscription section ── */}
         {businesses.length > 0 && (
           <section>
             <div className="flex items-center gap-2 mb-1">
               <Sparkles className="w-4 h-4 text-ocre" />
-              <h2 className="font-display text-lg font-semibold">Planos</h2>
+              <h2 className="font-display text-lg font-semibold">{t('plans_title')}</h2>
             </div>
             <p className="text-sm text-[#737373] mb-5">
-              Destaque seu negócio e apoie o Vive Gostoso.
+              {t('plans_desc')}
             </p>
 
             {checkoutError && (
@@ -347,7 +348,7 @@ function PainelInner() {
                       <div className="min-w-0">
                         <p className="font-semibold text-sm text-[#1A1A1A] truncate">{b.name}</p>
                         <p className="text-xs text-[#737373] mt-0.5">
-                          Plano:{' '}
+                          {t('plan_label')}{' '}
                           <span className={
                             b.plan === 'destaque'
                               ? 'font-semibold text-ocre'
@@ -355,16 +356,15 @@ function PainelInner() {
                               ? 'font-semibold text-teal'
                               : 'text-[#A0A0A0]'
                           }>
-                            {b.plan === 'destaque' ? '★ Destaque' : b.plan === 'associado' ? '✓ Associado' : 'Gratuito'}
+                            {b.plan === 'destaque' ? t('plan_destaque') : b.plan === 'associado' ? t('plan_associado') : t('plan_free')}
                           </span>
                           {b.plan_expires_at && (
                             <span className="ml-1 text-[#A0A0A0]">
-                              · válido até {new Date(b.plan_expires_at).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' })}
+                              {t('plan_expires', { date: new Date(b.plan_expires_at).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' }) })}
                             </span>
                           )}
                         </p>
                       </div>
-                      {/* Billing toggle — only show for upgradeable plans */}
                       {b.plan !== 'destaque' && (
                         <div className="flex items-center gap-0.5 bg-[#F5F2EE] rounded-xl p-1 flex-shrink-0">
                           <button
@@ -375,7 +375,7 @@ function PainelInner() {
                                 : 'text-[#737373] hover:text-[#1A1A1A]'
                             }`}
                           >
-                            Mensal
+                            {t('billing_monthly')}
                           </button>
                           <button
                             onClick={() => toggleBillingMode(b.id, 'annual')}
@@ -385,7 +385,7 @@ function PainelInner() {
                                 : 'text-[#737373] hover:text-[#1A1A1A]'
                             }`}
                           >
-                            Anual
+                            {t('billing_annual')}
                             <span className="bg-ocre text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full leading-none">
                               -10%
                             </span>
@@ -394,14 +394,12 @@ function PainelInner() {
                       )}
                     </div>
 
-                    {/* Annual info pill */}
                     {billing === 'annual' && b.plan !== 'destaque' && (
                       <div className="mb-3 text-xs text-ocre bg-ocre/10 border border-ocre/20 rounded-xl px-3 py-2">
-                        Pague uma vez por ano e economize 10%. Cartão e boleto aceitos.
+                        {t('annual_info')}
                       </div>
                     )}
 
-                    {/* Action buttons */}
                     <div className="flex gap-2 flex-wrap">
                       {b.plan === 'free' && (
                         <>
@@ -410,14 +408,14 @@ function PainelInner() {
                             disabled={isLoading}
                             className="text-xs font-semibold bg-teal text-white px-4 py-2 rounded-xl hover:bg-teal/90 transition-colors disabled:opacity-50"
                           >
-                            {isLoading ? '...' : `Associar: ${prices.associado}`}
+                            {isLoading ? '...' : t('btn_associate', { price: prices.associado })}
                           </button>
                           <button
                             onClick={() => handleCheckout(b.id, 'destaque')}
                             disabled={isLoading}
                             className="text-xs font-semibold bg-ocre text-white px-4 py-2 rounded-xl hover:bg-ocre/90 transition-colors disabled:opacity-50"
                           >
-                            {isLoading ? '...' : `Destaque: ${prices.destaque}`}
+                            {isLoading ? '...' : t('btn_destaque', { price: prices.destaque })}
                           </button>
                         </>
                       )}
@@ -427,13 +425,13 @@ function PainelInner() {
                           disabled={isLoading}
                           className="text-xs font-semibold bg-ocre text-white px-4 py-2 rounded-xl hover:bg-ocre/90 transition-colors disabled:opacity-50"
                         >
-                          {isLoading ? '...' : `Upgrade para Destaque: ${prices.destaque}`}
+                          {isLoading ? '...' : t('btn_upgrade', { price: prices.destaque })}
                         </button>
                       )}
                       {b.plan === 'destaque' && (
                         <div className="flex items-center gap-1.5 text-xs text-ocre font-semibold">
                           <CheckCircle className="w-3.5 h-3.5" />
-                          Plano Destaque ativo
+                          {t('plan_destaque_active')}
                         </div>
                       )}
                     </div>
@@ -442,19 +440,18 @@ function PainelInner() {
               })}
             </div>
 
-            {/* Plan feature comparison */}
             {businesses.some(b => b.plan === 'free') && (
               <div className="mt-5 rounded-2xl border border-[#E8E4DF] overflow-hidden">
                 <div className="grid grid-cols-3 text-xs">
-                  <div className="px-4 py-3 font-semibold text-[#737373] border-b border-[#E8E4DF]">Benefício</div>
-                  <div className="px-4 py-3 font-semibold text-teal text-center border-b border-[#E8E4DF]">Associado</div>
-                  <div className="px-4 py-3 font-semibold text-ocre text-center border-b border-[#E8E4DF]">Destaque</div>
+                  <div className="px-4 py-3 font-semibold text-[#737373] border-b border-[#E8E4DF]">{t('feature_header_benefit')}</div>
+                  <div className="px-4 py-3 font-semibold text-teal text-center border-b border-[#E8E4DF]">{t('feature_header_associado')}</div>
+                  <div className="px-4 py-3 font-semibold text-ocre text-center border-b border-[#E8E4DF]">{t('feature_header_destaque')}</div>
                   {[
-                    ['Listado no diretório', '✓', '✓'],
-                    ['Selo verificado', '✓', '✓'],
-                    ['Posição prioritária', '—', '✓'],
-                    ['Foto de capa em destaque', '—', '✓'],
-                    ['Suporte prioritário', '—', '✓'],
+                    [t('feature_listed'), '✓', '✓'],
+                    [t('feature_verified'), '✓', '✓'],
+                    [t('feature_priority'), '—', '✓'],
+                    [t('feature_cover'), '—', '✓'],
+                    [t('feature_support'), '—', '✓'],
                   ].map(([feat, a, d]) => (
                     <>
                       <div key={`f-${feat}`} className="px-4 py-2.5 text-[#737373] border-b border-[#F5F2EE] last:border-0">{feat}</div>
@@ -468,10 +465,9 @@ function PainelInner() {
           </section>
         )}
 
-        {/* ── Footer note ── */}
         <div className="mt-12 pt-6 border-t border-[#E8E4DF] text-center">
           <p className="text-xs text-[#C4BFBA]">
-            Dúvidas? Fale com a equipe pelo{' '}
+            {t('footer_help')}{' '}
             <a href="https://www.instagram.com/vivegostoso" target="_blank" rel="noopener noreferrer" className="text-teal hover:underline">
               @vivegostoso
             </a>

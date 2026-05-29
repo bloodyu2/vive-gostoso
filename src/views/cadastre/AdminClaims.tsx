@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { useClaimsAdmin, useApproveClaim, useRejectClaim } from '@/hooks/useClaims'
 import { Button } from '@/components/ui/button'
@@ -11,6 +13,8 @@ export default function AdminClaims() {
 }
 
 function AdminClaimsInner() {
+  const { t } = useTranslation('admin_claims')
+  const lp = useLocalePath()
   const { data: claims = [], isLoading } = useClaimsAdmin()
   const approve = useApproveClaim()
   const reject = useRejectClaim()
@@ -27,13 +31,13 @@ function AdminClaimsInner() {
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
       <div className="flex items-center gap-4 mb-8">
-        <Link href="/cadastre/admin" className="text-sm text-[#737373] hover:text-teal transition-colors">
-          ← Admin
+        <Link href={lp('/cadastre/admin')} className="text-sm text-[#737373] hover:text-teal transition-colors">
+          {t('back_to_admin')}
         </Link>
-        <h1 className="font-display text-3xl font-semibold">Pedidos de Reivindicação</h1>
+        <h1 className="font-display text-3xl font-semibold">{t('title')}</h1>
         {claims.length > 0 && (
           <span className="ml-auto bg-coral text-white text-xs font-bold px-2.5 py-1 rounded-full">
-            {claims.length} pendente{claims.length > 1 ? 's' : ''}
+            {t('pending_count', { count: claims.length })}
           </span>
         )}
       </div>
@@ -41,7 +45,7 @@ function AdminClaimsInner() {
       {claims.length === 0 ? (
         <div className="text-center py-20">
           <div className="text-5xl mb-4">✅</div>
-          <p className="text-[#737373]">Nenhum pedido pendente.</p>
+          <p className="text-[#737373]">{t('empty_state')}</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -50,7 +54,7 @@ function AdminClaimsInner() {
               <div className="flex flex-col sm:flex-row sm:items-start gap-4">
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-[#1A1A1A] truncate">
-                    {claim.business?.name ?? <span className="text-[#B0A99F] italic">Negócio removido</span>}
+                    {claim.business?.name ?? <span className="text-[#B0A99F] italic">{t('business_removed')}</span>}
                   </p>
                   <p className="text-sm text-teal font-medium">
                     {claim.profile?.email ?? '—'}{' '}
@@ -62,7 +66,7 @@ function AdminClaimsInner() {
                     <p className="text-sm text-[#3D3D3D] mt-2 italic">"{claim.message}"</p>
                   )}
                   <p className="text-xs text-[#737373] mt-2">
-                    Solicitado em{' '}
+                    {t('requested_at')}{' '}
                     {new Date(claim.created_at).toLocaleDateString('pt-BR', {
                       day: '2-digit', month: 'short', year: 'numeric',
                     })}
@@ -71,11 +75,11 @@ function AdminClaimsInner() {
                 <div className="flex flex-col gap-2 sm:items-end sm:min-w-[200px]">
                   {claim.business?.slug && (
                     <Link
-                      href={`/negocio/${claim.business.slug}`}
+                      href={lp(`/negocio/${claim.business.slug}`)}
                       target="_blank"
                       className="text-xs text-[#737373] underline hover:text-teal transition-colors"
                     >
-                      Ver negócio ↗
+                      {t('view_business')}
                     </Link>
                   )}
                   <Button
@@ -87,12 +91,12 @@ function AdminClaimsInner() {
                       profileId: claim.profile_id,
                     })}
                   >
-                    Aprovar
+                    {t('approve')}
                   </Button>
                   <div className="flex gap-2 w-full">
                     <input
                       type="text"
-                      placeholder="Nota (opcional)"
+                      placeholder={t('note_optional')}
                       value={rejectNote[claim.id] ?? ''}
                       onChange={e => setRejectNote(n => ({ ...n, [claim.id]: e.target.value }))}
                       className="flex-1 px-3 py-2 rounded-xl border border-[#E8E4DF] text-xs focus:outline-none focus:border-coral focus:ring-2 focus:ring-coral/20 min-w-0"
@@ -107,7 +111,7 @@ function AdminClaimsInner() {
                       })}
                       className="text-coral hover:text-coral flex-shrink-0"
                     >
-                      Rejeitar
+                      {t('reject')}
                     </Button>
                   </div>
                 </div>

@@ -2,6 +2,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useTranslation, Trans } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import {
   Plus, Pencil, Eye, EyeOff, ExternalLink, Copy, Check,
   Store, X, PartyPopper, ArrowLeft, ChevronRight,
@@ -23,11 +25,12 @@ function completionScore(b: BusinessSummary): number {
 }
 
 function CompletionBar({ score }: { score: number }) {
+  const { t } = useTranslation('painel')
   const color = score >= 80 ? 'bg-teal' : score >= 40 ? 'bg-ocre' : 'bg-coral'
   return (
     <div className="mt-2">
       <div className="flex items-center justify-between mb-1">
-        <span className="text-[10px] text-[#737373]">Perfil completo</span>
+        <span className="text-[10px] text-[#737373]">{t('completion_label')}</span>
         <span className={`text-[10px] font-semibold ${score >= 80 ? 'text-teal' : score >= 40 ? 'text-ocre' : 'text-coral'}`}>
           {score}%
         </span>
@@ -44,6 +47,7 @@ function CompletionBar({ score }: { score: number }) {
 
 function CopyLinkButton({ slug }: { slug: string }) {
   const [copied, setCopied] = useState(false)
+  const { t } = useTranslation('painel')
   const url = `${window.location.origin}/negocio/${slug}`
 
   async function copy() {
@@ -66,11 +70,11 @@ function CopyLinkButton({ slug }: { slug: string }) {
   return (
     <button
       onClick={copy}
-      title={copied ? 'Link copiado!' : 'Copiar link público'}
+      title={copied ? t('copy_success_title') : t('copy_title')}
       className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-medium border border-[#E8E4DF] text-[#737373] hover:border-teal hover:text-teal transition-colors"
     >
       {copied ? <Check className="w-3.5 h-3.5 text-teal" /> : <Copy className="w-3.5 h-3.5" />}
-      {copied ? 'Copiado!' : 'Copiar link'}
+      {copied ? t('copy_success') : t('copy_label')}
     </button>
   )
 }
@@ -81,6 +85,7 @@ export default function MeusNegocios() {
 
 function PublishToggle({ biz, onDone }: { biz: BusinessSummary; onDone: () => void }) {
   const [loading, setLoading] = useState(false)
+  const { t } = useTranslation('painel')
 
   async function toggle() {
     setLoading(true)
@@ -96,7 +101,7 @@ function PublishToggle({ biz, onDone }: { biz: BusinessSummary; onDone: () => vo
     <button
       onClick={toggle}
       disabled={loading}
-      title={biz.is_published ? 'Despublicar' : 'Publicar agora'}
+      title={biz.is_published ? t('btn_unpublish') : t('btn_publish_now')}
       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-colors disabled:opacity-50 ${
         biz.is_published
           ? 'border-[#E8E4DF] text-[#737373] hover:border-coral hover:text-coral'
@@ -110,12 +115,14 @@ function PublishToggle({ biz, onDone }: { biz: BusinessSummary; onDone: () => vo
       ) : (
         <Eye className="w-3.5 h-3.5" />
       )}
-      {biz.is_published ? 'Despublicar' : 'Publicar'}
+      {biz.is_published ? t('btn_unpublish') : t('btn_publish')}
     </button>
   )
 }
 
 function MeusNegociosInner() {
+  const { t } = useTranslation('painel')
+  const lp = useLocalePath()
   const { data: businesses = [], isLoading } = useMyBusinesses()
   const invalidate = useInvalidateMyBusinesses()
   const router = useRouter()
@@ -123,7 +130,7 @@ function MeusNegociosInner() {
   const isNew = searchParams?.get('new') === '1'
 
   function dismissNew() {
-    router.replace('/cadastre/negocios', { scroll: false })
+    router.replace(lp('/cadastre/negocios'), { scroll: false })
   }
 
   if (isLoading) {
@@ -143,24 +150,21 @@ function MeusNegociosInner() {
   return (
     <div className="min-h-screen bg-[#FAFAF9]">
       <main className="max-w-3xl mx-auto px-5 md:px-8 py-8">
-        {/* ── Back nav ── */}
         <Link
-          href="/cadastre/painel"
+          href={lp('/cadastre/painel')}
           className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          Painel
+          {t('back_to_painel')}
         </Link>
 
-        {/* ── Post-creation banner ── */}
         {isNew && (
           <div className="relative flex items-start gap-3 bg-teal/5 border border-teal/30 rounded-2xl px-5 py-4 mb-6">
             <PartyPopper className="w-5 h-5 text-teal flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="font-semibold text-sm text-[#1A1A1A]">Negócio criado com sucesso!</p>
+              <p className="font-semibold text-sm text-[#1A1A1A]">{t('created_title')}</p>
               <p className="text-sm text-[#737373] mt-0.5">
-                Seu negócio está salvo como <strong>rascunho</strong>. Complete o perfil e clique em{' '}
-                <strong>Publicar</strong> quando estiver pronto.
+                <Trans t={t} i18nKey="created_desc" components={[<strong />, <strong />]} />
               </p>
             </div>
             <button onClick={dismissNew} className="text-[#B0A99F] hover:text-[#737373] transition-colors flex-shrink-0">
@@ -169,36 +173,34 @@ function MeusNegociosInner() {
           </div>
         )}
 
-        {/* ── Header ── */}
         <div className="flex items-start justify-between gap-4 mb-6">
           <div>
-            <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">Meus negócios</h1>
+            <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">{t('page_title')}</h1>
             <p className="text-sm text-[#737373] mt-1">
               {businesses.length === 0
-                ? 'Nenhum negócio cadastrado ainda.'
-                : `${businesses.length} negócio${businesses.length !== 1 ? 's' : ''} cadastrado${businesses.length !== 1 ? 's' : ''}`}
+                ? t('empty_count')
+                : t('business_count', { count: businesses.length })}
             </p>
           </div>
-          <Link href="/cadastre/perfil">
+          <Link href={lp('/cadastre/perfil')}>
             <Button variant="primary" className="flex items-center gap-2 whitespace-nowrap">
               <Plus className="w-4 h-4" />
-              Novo negócio
+              {t('btn_new')}
             </Button>
           </Link>
         </div>
 
-        {/* ── Empty state ── */}
         {businesses.length === 0 ? (
           <div className="text-center py-16 border-2 border-dashed border-[#E8E4DF] rounded-2xl bg-white">
             <Store className="w-10 h-10 mb-3 text-[#C4BFBA] mx-auto" />
             <h2 className="font-display text-base font-semibold text-[#1A1A1A] mb-2">
-              Nenhum negócio ainda
+              {t('empty_title')}
             </h2>
             <p className="text-sm text-[#737373] mb-5 max-w-xs mx-auto">
-              Cadastre seu negócio e apareça para os turistas que visitam São Miguel do Gostoso.
+              {t('empty_desc')}
             </p>
-            <Link href="/cadastre/perfil">
-              <Button variant="primary">Cadastrar meu negócio</Button>
+            <Link href={lp('/cadastre/perfil')}>
+              <Button variant="primary">{t('empty_cta')}</Button>
             </Link>
           </div>
         ) : (
@@ -234,7 +236,7 @@ function MeusNegociosInner() {
                             }`}
                           >
                             <span className={`w-1.5 h-1.5 rounded-full ${b.is_published ? 'bg-teal' : 'bg-[#A0A0A0]'}`} />
-                            {b.is_published ? 'Publicado' : 'Rascunho'}
+                            {b.is_published ? t('status_published') : t('status_draft')}
                           </span>
                         </div>
                         {b.category && (
@@ -249,26 +251,25 @@ function MeusNegociosInner() {
                       </div>
                     </div>
 
-                    {/* Action row */}
                     <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-[#F5F2EE]">
                       <CopyLinkButton slug={b.slug} />
                       <a
-                        href={`/negocio/${b.slug}`}
+                        href={lp(`/negocio/${b.slug}`)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        title="Ver página pública"
+                        title={t('view_public_title')}
                         className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-medium border border-[#E8E4DF] text-[#737373] hover:border-teal hover:text-teal transition-colors"
                       >
                         <ExternalLink className="w-3.5 h-3.5" />
-                        Ver
+                        {t('view_label')}
                       </a>
                       <PublishToggle biz={b} onDone={() => invalidate()} />
                       <Link
-                        href={`/cadastre/perfil?bizId=${b.id}`}
+                        href={lp(`/cadastre/perfil?bizId=${b.id}`)}
                         className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-teal text-white hover:bg-teal/90 transition-colors"
                       >
                         <Pencil className="w-3.5 h-3.5" />
-                        Editar
+                        {t('edit_label')}
                         <ChevronRight className="w-3 h-3 opacity-60" />
                       </Link>
                     </div>

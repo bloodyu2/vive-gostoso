@@ -6,6 +6,8 @@ import { useAdminPendingServices, useModerateService } from '@/hooks/useServices
 import { SERVICE_CATEGORY_LABELS } from '@/types/database'
 import type { ServiceListing } from '@/types/database'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 
 export default function AdminServices() {
   return <AdminGuard><AdminServicesInner /></AdminGuard>
@@ -18,6 +20,7 @@ function formatDate(iso: string) {
 }
 
 function ServiceRow({ svc }: { svc: ServiceListing }) {
+  const { t } = useTranslation('admin_services')
   const { mutate: moderate, isPending } = useModerateService()
 
   return (
@@ -26,7 +29,7 @@ function ServiceRow({ svc }: { svc: ServiceListing }) {
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-[#1A1A1A]">{svc.name}</h3>
           <p className="text-xs text-[#737373] mt-0.5">
-            {SERVICE_CATEGORY_LABELS[svc.service_category]} · Enviado em {formatDate(svc.created_at)}
+            {SERVICE_CATEGORY_LABELS[svc.service_category]} · {t('submitted_at', { date: formatDate(svc.created_at) })}
           </p>
         </div>
         <div className="flex gap-2 flex-shrink-0">
@@ -35,14 +38,14 @@ function ServiceRow({ svc }: { svc: ServiceListing }) {
             disabled={isPending}
             className="bg-teal text-white text-xs font-semibold px-4 py-2 rounded-xl hover:bg-teal-dark transition-colors disabled:opacity-50"
           >
-            Publicar
+            {t('publish')}
           </button>
           <button
             onClick={() => moderate({ id: svc.id, approve: false })}
             disabled={isPending}
             className="bg-[#F5F2EE] text-coral text-xs font-semibold px-4 py-2 rounded-xl border border-coral/30 hover:bg-coral/5 transition-colors disabled:opacity-50"
           >
-            Rejeitar
+            {t('reject')}
           </button>
         </div>
       </div>
@@ -57,7 +60,7 @@ function ServiceRow({ svc }: { svc: ServiceListing }) {
 
       <div className="flex items-center gap-3 pt-1 border-t border-[#F0EDE8] text-xs text-[#A0A0A0]">
         <span>
-          WhatsApp:{' '}
+          {t('whatsapp')}{' '}
           <a
             href={buildWhatsAppLink(svc.whatsapp)}
             target="_blank"
@@ -69,7 +72,7 @@ function ServiceRow({ svc }: { svc: ServiceListing }) {
         </span>
         {svc.is_featured && (
           <span className="bg-ocre/10 text-ocre border border-ocre/20 px-2 py-0.5 rounded-full font-semibold">
-            Destaque
+            {t('featured')}
           </span>
         )}
       </div>
@@ -78,19 +81,21 @@ function ServiceRow({ svc }: { svc: ServiceListing }) {
 }
 
 function AdminServicesInner() {
+  const { t } = useTranslation('admin_services')
+  const lp = useLocalePath()
   const { data: services = [], isLoading } = useAdminPendingServices()
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
       <Link
-        href="/cadastre/admin"
+        href={lp('/cadastre/admin')}
         className="text-sm text-[#737373] hover:text-teal transition-colors inline-block mb-6"
       >
-        ← Admin
+        ← {t('back')}
       </Link>
-      <h1 className="font-display text-3xl font-semibold mb-2">Serviços pendentes</h1>
+      <h1 className="font-display text-3xl font-semibold mb-2">{t('title')}</h1>
       <p className="text-sm text-[#737373] mb-8">
-        Publique ou rejeite serviços enviados por moradores via CONTRATE.
+        {t('desc')}
       </p>
 
       {isLoading ? (
@@ -102,8 +107,8 @@ function AdminServicesInner() {
       ) : services.length === 0 ? (
         <div className="text-center py-16 border-2 border-dashed border-[#E8E4DF] rounded-2xl">
           <div className="text-4xl mb-3">💼</div>
-          <p className="text-[#737373] text-sm font-semibold">Nenhum serviço pendente.</p>
-          <p className="text-xs text-[#B0A99F] mt-1">Tudo moderado!</p>
+          <p className="text-[#737373] text-sm font-semibold">{t('empty')}</p>
+          <p className="text-xs text-[#B0A99F] mt-1">{t('empty_sub')}</p>
         </div>
       ) : (
         <div className="space-y-4">

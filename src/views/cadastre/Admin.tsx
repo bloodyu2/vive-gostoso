@@ -1,6 +1,8 @@
 'use client'
 
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import {
   Star, Tag, Calendar, Briefcase, ClipboardList, Car, Store,
   LogOut, LayoutDashboard, User,
@@ -28,62 +30,64 @@ function AdminInner() {
   const statsQuery = useAdminStats()
   const stats = statsQuery.data
   const { user, supabase } = useAuth()
+  const { t } = useTranslation()
+  const lp = useLocalePath()
 
   const modules: { href: string; icon: LucideIcon; title: string; desc: string; badge: number }[] = [
     {
-      href: '/cadastre/admin/reviews',
+      href: lp('/cadastre/admin/reviews'),
       icon: Star,
-      title: 'Avaliações',
-      desc: 'Aprovar ou rejeitar avaliações de negócios.',
+      title: t('admin.module_reviews'),
+      desc: t('admin.module_reviews_desc'),
       badge: stats?.pendingReviews ?? 0,
     },
     {
-      href: '/cadastre/admin/claims',
+      href: lp('/cadastre/admin/claims'),
       icon: Tag,
-      title: 'Reivindicações',
-      desc: 'Aprovar ou rejeitar pedidos de ownership.',
+      title: t('admin.module_claims'),
+      desc: t('admin.module_claims_desc'),
       badge: stats?.pendingClaims ?? 0,
     },
     {
-      href: '/cadastre/admin/events',
+      href: lp('/cadastre/admin/events'),
       icon: Calendar,
-      title: 'Eventos',
-      desc: 'Aprovar eventos submetidos pela comunidade.',
+      title: t('admin.module_events'),
+      desc: t('admin.module_events_desc'),
       badge: stats?.pendingEvents ?? 0,
     },
     {
-      href: '/cadastre/admin/services',
+      href: lp('/cadastre/admin/services'),
       icon: Briefcase,
-      title: 'Serviços CONTRATE',
-      desc: 'Publicar ou rejeitar serviços de moradores.',
+      title: t('admin.module_services'),
+      desc: t('admin.module_services_desc'),
       badge: stats?.pendingServices ?? 0,
     },
     {
-      href: '/cadastre/admin/jobs',
+      href: lp('/cadastre/admin/jobs'),
       icon: ClipboardList,
-      title: 'Vagas CONTRATE',
-      desc: 'Publicar ou rejeitar vagas de emprego.',
+      title: t('admin.module_jobs'),
+      desc: t('admin.module_jobs_desc'),
       badge: stats?.pendingJobs ?? 0,
     },
     {
-      href: '/cadastre/admin/transfers',
+      href: lp('/cadastre/admin/transfers'),
       icon: Car,
-      title: 'Transfers',
-      desc: 'Publicar ou rejeitar prestadores de transfer.',
+      title: t('admin.module_transfers'),
+      desc: t('admin.module_transfers_desc'),
       badge: stats?.pendingTransfers ?? 0,
     },
     {
-      href: '/cadastre/admin/businesses',
+      href: lp('/cadastre/admin/businesses'),
       icon: Store,
-      title: 'Negócios',
-      desc: 'Publicar, despublicar e editar slugs de negócios.',
+      title: t('admin.module_businesses'),
+      desc: t('admin.module_businesses_desc'),
       badge: stats?.draftBusinesses ?? 0,
     },
     {
-      href: '/cadastre/admin/profissionais',
+      href: lp('/cadastre/admin/profissionais'),
       icon: User,
-      title: 'Profissionais',
-      desc: 'Publicar, despublicar e deletar perfis de profissionais autônomos.',
+      title: t('admin.module_professionals'),
+      desc: t('admin.module_professionals_desc'),
       badge: 0,
     },
   ]
@@ -96,14 +100,14 @@ function AdminInner() {
     + (stats?.pendingTransfers ?? 0)
 
   const statItems = [
-    { value: stats?.pendingReviews ?? '—', label: 'Avaliações', urgent: (stats?.pendingReviews ?? 0) > 0 },
-    { value: stats?.pendingClaims ?? '—', label: 'Reivind.', urgent: (stats?.pendingClaims ?? 0) > 0 },
-    { value: stats?.pendingEvents ?? '—', label: 'Eventos', urgent: (stats?.pendingEvents ?? 0) > 0 },
-    { value: stats?.pendingServices ?? '—', label: 'Serviços', urgent: false },
-    { value: stats?.pendingJobs ?? '—', label: 'Vagas', urgent: false },
-    { value: stats?.pendingTransfers ?? '—', label: 'Transfers', urgent: false },
-    { value: stats?.totalBusinesses ?? '—', label: 'Negócios', urgent: false },
-    { value: stats?.draftBusinesses ?? '—', label: 'Rascunhos', urgent: (stats?.draftBusinesses ?? 0) > 0 },
+    { value: stats?.pendingReviews ?? '—', label: t('admin.stat_reviews'), urgent: (stats?.pendingReviews ?? 0) > 0 },
+    { value: stats?.pendingClaims ?? '—', label: t('admin.stat_claims'), urgent: (stats?.pendingClaims ?? 0) > 0 },
+    { value: stats?.pendingEvents ?? '—', label: t('admin.stat_events'), urgent: (stats?.pendingEvents ?? 0) > 0 },
+    { value: stats?.pendingServices ?? '—', label: t('admin.stat_services'), urgent: false },
+    { value: stats?.pendingJobs ?? '—', label: t('admin.stat_jobs'), urgent: false },
+    { value: stats?.pendingTransfers ?? '—', label: t('admin.stat_transfers'), urgent: false },
+    { value: stats?.totalBusinesses ?? '—', label: t('admin.stat_businesses'), urgent: false },
+    { value: stats?.draftBusinesses ?? '—', label: t('admin.stat_drafts'), urgent: (stats?.draftBusinesses ?? 0) > 0 },
   ]
 
   return (
@@ -113,10 +117,10 @@ function AdminInner() {
         <div className="max-w-4xl mx-auto px-5 md:px-8 h-14 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <LayoutDashboard className="w-4 h-4 text-[#737373]" />
-            <span className="text-sm font-semibold text-[#1A1A1A]">Admin</span>
+            <span className="text-sm font-semibold text-[#1A1A1A]">{t('admin.title')}</span>
             {totalPending > 0 && (
               <span className="bg-coral text-white text-[10px] font-bold px-2 py-0.5 rounded-full tabular-nums">
-                {totalPending} pendente{totalPending !== 1 ? 's' : ''}
+                {t('admin.pending_count', { count: totalPending })}
               </span>
             )}
           </div>
@@ -128,11 +132,11 @@ function AdminInner() {
             )}
             <button
               onClick={() => supabase.auth.signOut()}
-              title="Sair"
+              title={t('admin.logout')}
               className="flex items-center gap-1.5 text-xs text-[#737373] hover:text-[#1A1A1A] border border-[#E8E4DF] hover:border-[#C4BFBA] rounded-xl px-3 py-1.5 transition-colors"
             >
               <LogOut className="w-3.5 h-3.5" />
-              Sair
+              {t('admin.logout')}
             </button>
           </div>
         </div>
@@ -141,16 +145,16 @@ function AdminInner() {
       <main className="max-w-4xl mx-auto px-5 md:px-8 py-8">
         {/* ── Back link ── */}
         <Link
-          href="/cadastre/painel"
+          href={lp('/cadastre/painel')}
           className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6"
         >
-          ← Painel do prestador
+          {t('admin.back_to_painel')}
         </Link>
 
         {/* ── Heading ── */}
         <div className="mb-6">
-          <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">Painel Admin</h1>
-          <p className="text-sm text-[#737373] mt-1">Moderação e gestão do diretório Vive Gostoso.</p>
+          <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">{t('admin.heading')}</h1>
+          <p className="text-sm text-[#737373] mt-1">{t('admin.subtitle')}</p>
         </div>
 
         {/* ── Stats bar ── */}
