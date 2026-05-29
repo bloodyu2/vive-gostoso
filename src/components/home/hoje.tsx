@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import { Clock, CalendarDays } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useBusinesses } from '@/hooks/useBusinesses'
@@ -10,6 +12,8 @@ function TodayDot() {
 }
 
 export function Hoje() {
+  const { t } = useTranslation('hoje')
+  const lp = useLocalePath()
   const { data: allBusinesses = [] } = useBusinesses()
   const { data: events = [] } = useEvents()
 
@@ -32,31 +36,29 @@ export function Hoje() {
   return (
     <section className="max-w-6xl mx-auto px-5 md:px-8 pb-12 md:pb-16">
       <div className="bg-[#1A1A1A] rounded-2xl overflow-hidden">
-        {/* Header */}
         <div className="flex items-center justify-between px-5 md:px-7 pt-5 md:pt-7 pb-4 md:pb-5 border-b border-white/10">
           <div>
             <div className="flex items-center gap-2 mb-1">
               <TodayDot />
-              <span className="text-xs font-semibold tracking-widest uppercase text-white/60">Agora em Gostoso</span>
+              <span className="text-xs font-semibold tracking-widest uppercase text-white/60">{t('section_label')}</span>
             </div>
             <h2 className="font-display font-bold text-xl md:text-2xl text-white capitalize">{dayLabel}</h2>
           </div>
         </div>
 
         <div className={`grid ${colCount === 2 ? 'md:grid-cols-2 md:divide-x' : ''} divide-y md:divide-y-0 divide-white/10`}>
-          {/* Abertos agora */}
           {openNow.length > 0 && (
             <div className="p-5 md:p-7">
               <div className="flex items-center gap-2 mb-4">
                 <Clock className="w-4 h-4 text-[#3D8B5A]" />
-                <span className="text-sm font-semibold text-white/80">Abertos agora</span>
-                <span className="ml-auto text-xs text-white/40">{openNow.length} negócio{openNow.length !== 1 ? 's' : ''}</span>
+                <span className="text-sm font-semibold text-white/80">{t('abertos_label')}</span>
+                <span className="ml-auto text-xs text-white/40">{t('negocio_count', { count: openNow.length })}</span>
               </div>
               <div className="space-y-2">
                 {openNow.slice(0, 5).map(b => (
                   <Link
                     key={b.id}
-                    href={`/negocio/${b.slug}`}
+                    href={lp(`/negocio/${b.slug}`)}
                     className="flex items-center gap-3 group"
                   >
                     <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal to-teal-dark flex-shrink-0 overflow-hidden">
@@ -65,28 +67,27 @@ export function Hoje() {
                     <div className="min-w-0 flex-1">
                       <div className="text-white text-sm font-medium group-hover:text-teal-light transition-colors truncate">{b.name}</div>
                       <div className="flex items-center gap-1.5 mt-0.5">
-                        <Badge kind="open" dot className="flex-shrink-0">Aberto</Badge>
+                        <Badge kind="open" dot className="flex-shrink-0">{t('aberto_badge')}</Badge>
                         {b.category && <span className="text-white/40 text-xs truncate">{b.category.name}</span>}
                       </div>
                     </div>
                   </Link>
                 ))}
                 {openNow.length > 5 && (
-                  <Link href="/come" className="block text-xs text-white/40 hover:text-teal-light pt-1 transition-colors">
-                    +{openNow.length - 5} mais abertos →
+                  <Link href={lp('/come')} className="block text-xs text-white/40 hover:text-teal-light pt-1 transition-colors">
+                    {t('mais_abertos', { count: openNow.length - 5 })} →
                   </Link>
                 )}
               </div>
             </div>
           )}
 
-          {/* Eventos de hoje */}
           {todayEvents.length > 0 && (
             <div className="p-5 md:p-7">
               <div className="flex items-center gap-2 mb-4">
                 <CalendarDays className="w-4 h-4 text-coral" />
-                <span className="text-sm font-semibold text-white/80">Acontecendo hoje</span>
-                <span className="ml-auto text-xs text-white/40">{todayEvents.length} evento{todayEvents.length !== 1 ? 's' : ''}</span>
+                <span className="text-sm font-semibold text-white/80">{t('acontecendo_label')}</span>
+                <span className="ml-auto text-xs text-white/40">{t('evento_count', { count: todayEvents.length })}</span>
               </div>
               <div className="space-y-3">
                 {todayEvents.slice(0, 4).map(e => (
@@ -101,8 +102,8 @@ export function Hoje() {
                   </div>
                 ))}
                 {todayEvents.length > 4 && (
-                  <Link href="/participe" className="block text-xs text-white/40 hover:text-coral pt-1 transition-colors">
-                    Ver todos os eventos →
+                  <Link href={lp('/participe')} className="block text-xs text-white/40 hover:text-coral pt-1 transition-colors">
+                    {t('ver_todos_eventos')} →
                   </Link>
                 )}
               </div>

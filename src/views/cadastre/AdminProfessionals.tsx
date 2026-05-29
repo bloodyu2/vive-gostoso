@@ -16,7 +16,7 @@ export default function AdminProfessionals() {
 }
 
 function AdminProfessionalsInner() {
-  const { t } = useTranslation('admin_professionals')
+  const { t, i18n } = useTranslation('admin_professionals')
   const { data: professionals = [], isLoading } = useAdminProfessionals()
   const togglePublished = useToggleProfessionalPublished()
   const deletePro = useDeleteProfessional()
@@ -85,7 +85,7 @@ function AdminProfessionalsInner() {
                       </span>
                     </td>
                     <td className="px-5 py-3.5 text-[#737373] text-xs">
-                      {new Date(pro.created_at).toLocaleDateString('pt-BR')}
+                      {new Date(pro.created_at).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR')}
                     </td>
                     <td className="px-5 py-3.5">
                       <div className="flex items-center gap-2 justify-end">

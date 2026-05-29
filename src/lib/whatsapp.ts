@@ -23,7 +23,26 @@ export type WhatsAppContext =
   | { source: 'business_page'; name: string }
   | { source: 'business_card'; name: string }
 
-function buildContextMessage(ctx: WhatsAppContext): string {
+function buildContextMessage(
+  ctx: WhatsAppContext,
+  t?: (key: string, options?: Record<string, unknown>) => string
+): string {
+  if (t) {
+    switch (ctx.source) {
+      case 'professional_profile':
+        return ctx.specialty
+          ? t('whatsapp:professional_with_specialty', { name: ctx.name, specialty: ctx.specialty })
+          : t('whatsapp:professional_without_specialty', { name: ctx.name })
+      case 'professional_card':
+        return t('whatsapp:professional_card', { name: ctx.name })
+      case 'service_company_card':
+        return t('whatsapp:service_company_card', { name: ctx.name })
+      case 'business_page':
+        return t('whatsapp:business_page', { name: ctx.name })
+      case 'business_card':
+        return t('whatsapp:business_card', { name: ctx.name })
+    }
+  }
   switch (ctx.source) {
     case 'professional_profile':
       return ctx.specialty
@@ -49,14 +68,17 @@ function buildContextMessage(ctx: WhatsAppContext): string {
  */
 export function buildWhatsAppLink(
   phone: string,
-  messageOrContext?: string | WhatsAppContext
+  messageOrContext?: string | WhatsAppContext,
+  t?: (key: string, options?: Record<string, unknown>) => string
 ): string {
   const number = sanitizePhone(phone)
   const message =
     typeof messageOrContext === 'string'
       ? messageOrContext
       : messageOrContext
-      ? buildContextMessage(messageOrContext)
+      ? buildContextMessage(messageOrContext, t)
+      : t
+      ? t('whatsapp:default_message')
       : DEFAULT_MESSAGE
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`
 }

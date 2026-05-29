@@ -1,6 +1,7 @@
 // src/components/ui/lightbox.tsx
 import { useEffect, useState, useCallback } from 'react'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 interface LightboxProps {
   photos: string[]       // array de URLs — índice 0 é capa, demais são galeria
@@ -9,6 +10,7 @@ interface LightboxProps {
 }
 
 export function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
+  const { t } = useTranslation('lightbox')
   const [current, setCurrent] = useState(initialIndex)
 
   const prev = useCallback(() =>
@@ -47,7 +49,7 @@ export function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
       <button
         onClick={onClose}
         className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
-        aria-label="Fechar"
+        aria-label={t('close')}
       >
         <X className="w-6 h-6" />
       </button>
@@ -57,7 +59,7 @@ export function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
         <button
           onClick={e => { e.stopPropagation(); prev() }}
           className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors bg-black/30 rounded-full p-2"
-          aria-label="Foto anterior"
+          aria-label={t('prev')}
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
@@ -66,7 +68,7 @@ export function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
       {/* Foto */}
       <img
         src={photos[current]}
-        alt={`Foto ${current + 1}`}
+        alt={t('photo_alt', { number: current + 1 })}
         className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-2xl"
         onClick={e => e.stopPropagation()}
       />
@@ -76,7 +78,7 @@ export function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
         <button
           onClick={e => { e.stopPropagation(); next() }}
           className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors bg-black/30 rounded-full p-2"
-          aria-label="Próxima foto"
+          aria-label={t('next')}
         >
           <ChevronRight className="w-6 h-6" />
         </button>

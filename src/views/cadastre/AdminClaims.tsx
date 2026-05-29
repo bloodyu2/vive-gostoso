@@ -13,7 +13,7 @@ export default function AdminClaims() {
 }
 
 function AdminClaimsInner() {
-  const { t } = useTranslation('admin_claims')
+  const { t, i18n } = useTranslation('admin_claims')
   const lp = useLocalePath()
   const { data: claims = [], isLoading } = useClaimsAdmin()
   const approve = useApproveClaim()
@@ -67,7 +67,7 @@ function AdminClaimsInner() {
                   )}
                   <p className="text-xs text-[#737373] mt-2">
                     {t('requested_at')}{' '}
-                    {new Date(claim.created_at).toLocaleDateString('pt-BR', {
+                    {new Date(claim.created_at).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR', {
                       day: '2-digit', month: 'short', year: 'numeric',
                     })}
                   </p>

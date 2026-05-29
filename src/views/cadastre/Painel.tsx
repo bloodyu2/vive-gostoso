@@ -123,7 +123,7 @@ function PainelInner() {
   const { data: myProfessional, isLoading: profLoading } = useMyProfessional()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { t } = useTranslation('painel')
+  const { t, i18n: painelI18n } = useTranslation('painel')
   const lp = useLocalePath()
   const successMsg = searchParams?.get('associado') === 'success'
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null)
@@ -360,7 +360,7 @@ function PainelInner() {
                           </span>
                           {b.plan_expires_at && (
                             <span className="ml-1 text-[#A0A0A0]">
-                              {t('plan_expires', { date: new Date(b.plan_expires_at).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' }) })}
+                              {t('plan_expires', { date: new Date(b.plan_expires_at).toLocaleDateString(painelI18n.language === 'en' ? 'en-US' : painelI18n.language === 'es' ? 'es' : 'pt-BR', { day: 'numeric', month: 'short', year: 'numeric' }) })}
                             </span>
                           )}
                         </p>

@@ -2,13 +2,14 @@
 // src/components/reviews/review-list.tsx
 import { StarRating } from './star-rating'
 import { useReviews } from '@/hooks/useReviews'
+import i18n from '@/i18n'
 
 interface ReviewListProps {
   businessId: string
 }
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })
+  return new Date(iso).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })
 }
 
 export function ReviewList({ businessId }: ReviewListProps) {

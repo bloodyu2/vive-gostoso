@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Car } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import i18n from '@/i18n'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { useAdminTransfers, useModerateTransfer } from '@/hooks/useTransfers'
 import type { Transfer } from '@/types/database'
@@ -14,7 +15,7 @@ export default function AdminTransfers() {
 }
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('pt-BR', {
+  return new Date(iso).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR', {
     day: '2-digit', month: 'short', year: 'numeric',
   })
 }

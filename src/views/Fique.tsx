@@ -20,8 +20,8 @@ export default function Fique({ initialBusinesses = [] }: FiqueProps) {
   const { t } = useTranslation()
   const lp = useLocalePath()
   usePageMeta({
-    title: 'Pousadas e Hospedagem',
-    description: 'As melhores pousadas de São Miguel do Gostoso. Encontre onde ficar pertinho do mar.',
+    title: t('fique.meta_title'),
+    description: t('fique.meta_desc'),
   })
   const [activeCat, setActiveCat] = useState<string | null>(null)
   const [view, setView] = useState<ViewMode>('grid')

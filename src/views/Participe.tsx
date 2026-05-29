@@ -12,8 +12,8 @@ import { Button } from '@/components/ui/button'
 export default function Participe() {
   const { t } = useTranslation()
   usePageMeta({
-    title: 'Eventos em Gostoso',
-    description: 'Festivais, eventos culturais e agenda completa de São Miguel do Gostoso.',
+    title: t('participe.meta_title'),
+    description: t('participe.meta_desc'),
   })
   const { data: events = [], isLoading } = useEvents()
   const [showForm, setShowForm] = useState(false)
@@ -33,7 +33,7 @@ export default function Participe() {
           className="flex items-center gap-2 flex-shrink-0 mt-4 sm:mt-0"
         >
           <Plus className="w-4 h-4" />
-          Submeter evento
+          {t('participe.submeter_evento')}
         </Button>
       </div>
 

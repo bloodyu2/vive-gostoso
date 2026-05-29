@@ -61,15 +61,21 @@
   },
   "come": {
     "desc": "Del pescado frito en la playa a la cena en la posada. Todo lo que Gostoso tiene para comer.",
-    "abrir_mapa": "Abrir en el mapa"
+    "abrir_mapa": "Abrir en el mapa",
+    "meta_title": "Restaurantes y Gastronomía",
+    "meta_desc": "Los mejores restaurantes de São Miguel do Gostoso. Mariscos, comida regional y mucho sol."
   },
   "fique": {
     "desc": "Desde posadas frente al mar hasta chalets tranquilos. Dónde hospedarse en Gostoso.",
-    "abrir_mapa": "Abrir en el mapa"
+    "abrir_mapa": "Abrir en el mapa",
+    "meta_title": "Posadas y Alojamiento",
+    "meta_desc": "Las mejores posadas de São Miguel do Gostoso. Encuentra dónde hospedarte cerca del mar."
   },
   "passeie": {
     "desc": "Kite, surf, buggy y mucho más. Qué hacer en São Miguel do Gostoso.",
-    "abrir_mapa": "Abrir en el mapa"
+    "abrir_mapa": "Abrir en el mapa",
+    "meta_title": "Paseos y Deportes",
+    "meta_desc": "Kitesurf, windsurf, buggy, tours y deportes náuticos en São Miguel do Gostoso."
   },
   "explore": {
     "titulo": "Explorar el mapa",
@@ -79,14 +85,22 @@
     "titulo": "Agenda de eventos",
     "desc": "Shows, festivales, ferias y todo lo que pasa en São Miguel do Gostoso.",
     "sem_eventos": "Ningún evento próximo",
-    "sem_eventos_sub": "Estáte atento — la agenda se actualiza con frecuencia."
+    "sem_eventos_sub": "Estáte atento — la agenda se actualiza con frecuencia.",
+    "meta_title": "Eventos en Gostoso",
+    "meta_desc": "Festivales, eventos culturales y agenda completa de São Miguel do Gostoso.",
+    "submeter_evento": "Enviar evento"
   },
   "blog": {
     "subtitulo": "Historias, consejos y novedades de São Miguel do Gostoso.",
     "sem_artigos": "Ningún artículo publicado aún.",
     "sem_artigos_sub": "Vuelve pronto.",
     "nao_encontrado": "Artículo no encontrado.",
-    "voltar_blog": "Volver al blog"
+    "voltar_blog": "Volver al blog",
+    "meta_title": "Blog — São Miguel do Gostoso",
+    "meta_desc": "Artículos, consejos y novedades sobre São Miguel do Gostoso. Gastronomía, surf, kite, eventos y cultura local.",
+    "blog_h1": "Blog",
+    "breadcrumb_inicio": "Inicio",
+    "breadcrumb_blog": "Blog"
   },
   "evento": {
     "nao_encontrado": "Evento no encontrado",
@@ -282,7 +296,9 @@
     "custos_titulo": "Costos operativos",
     "custos_desc": "Lo que cuesta mantener el Vive Gostoso funcionando cada mes.",
     "status_ativo": "Activo",
-    "status_planejado": "Planificado"
+    "status_planejado": "Planificado",
+    "meta_title": "Apoya Gostoso",
+    "meta_desc": "Fondo público transparente para promover São Miguel do Gostoso. Vea cómo se usa el dinero."
   },
   "conheca": {
     "badge": "DESCUBRE.",
@@ -310,7 +326,9 @@
     "epoca_reveillon_label": "Nochevieja:",
     "epoca_reveillon_desc": "una de las más famosas de Brasil, unas 2.500 personas por noche, 5 a 6 días.",
     "reveillon_titulo": "El Réveillon do Gostoso — Nochevieja",
-    "reveillon_desc": "Cada año, entre el 28 de diciembre y el 2 de enero, Gostoso recibe visitantes de todo Brasil. Música en vivo en la playa, fuegos artificiales sobre el mar, gastronomía local en su mejor momento. Reserva tu posada con antelación: se llena desde octubre."
+    "reveillon_desc": "Cada año, entre el 28 de diciembre y el 2 de enero, Gostoso recibe visitantes de todo Brasil. Música en vivo en la playa, fuegos artificiales sobre el mar, gastronomía local en su mejor momento. Reserva tu posada con antelación: se llena desde octubre.",
+    "meta_title": "Descubre Gostoso",
+    "meta_desc": "La historia, las playas, cómo llegar y la mejor época para visitar São Miguel do Gostoso."
   },
   "negocio": {
     "abrir_mapa": "Ver en el mapa",
@@ -353,7 +371,9 @@
   },
   "resolva": {
     "desc": "Farmacia, lavandería, mercado, barbería. Todo lo que necesitas en tu día en Gostoso.",
-    "abrir_mapa": "Abrir en el mapa"
+    "abrir_mapa": "Abrir en el mapa",
+    "meta_title": "Comercio y Servicios en Gostoso",
+    "meta_desc": "Farmacia, lavandería, mercado, barbería y todo lo que necesitas en tu día en São Miguel do Gostoso."
   },
   "footer": {
     "tagline1": "Gostoso en la palma de tu mano.",
@@ -611,5 +631,89 @@
     "approve": "Aprobar",
     "reject": "Rechazar",
     "empty": "No hay rese\u00f1as pendientes"
+  },
+  "fund": {
+    "section_label": "Fondo p\u00fablico transparente \u00b7 {{month}}",
+    "title": "APOYA.",
+    "desc": "Cada real recaudado aqu\u00ed se queda en Gostoso. Cada centavo es p\u00fablico y auditable.",
+    "launch_title": "Plataforma en lanzamiento",
+    "launch_desc": "El fondo a\u00fan no tiene movimientos registrados. La plataforma se est\u00e1 presentando a los primeros negocios de Gostoso. Cuando los primeros asociados confirmen, todo aparece aqu\u00ed en tiempo real.",
+    "launch_associados": "asociados",
+    "launch_city_share": "va a la ciudad",
+    "launch_no_profit": "de ganancia",
+    "launch_cta": "Asocia tu negocio: s\u00e9 el primero",
+    "raised_month": "recaudado este mes \u00b7 {{count}} negocio asociado",
+    "raised_month_plural": "recaudado este mes \u00b7 {{count}} negocios asociados",
+    "allocated_80": "80% destinado",
+    "allocated_20": "20% operaci\u00f3n",
+    "dest_desc": "{{value}} ya tienen destino: eventos, festivales, divulgaci\u00f3n.",
+    "ops_desc": "{{value}} cubren dominio, servidor, mantenimiento. No lucramos.",
+    "card_marketing": "Marketing de la Ciudad",
+    "card_marketing_sub": "Eventos, divulgaci\u00f3n, festivales",
+    "card_operacao": "Operaci\u00f3n",
+    "card_operacao_sub": "Dominio, servidor, dev",
+    "card_acumulado": "Acumulado",
+    "card_acumulado_sub": "Pr\u00f3ximos proyectos"
+  },
+  "event_submit": {
+    "title": "Enviar evento",
+    "close": "Cerrar",
+    "success_title": "\u00a1Evento enviado!",
+    "success_desc": "Recibimos tu sugerencia. La revisaremos y publicaremos pronto.",
+    "close_btn": "Cerrar",
+    "field_name_label": "Nombre del evento *",
+    "field_name_placeholder": "Ej: Gostoso Sunset Festival",
+    "field_desc_label": "Descripci\u00f3n",
+    "field_desc_placeholder": "\u00bfQu\u00e9 va a pasar?",
+    "field_start_label": "Inicio *",
+    "field_end_label": "Fin",
+    "field_location_label": "Ubicaci\u00f3n",
+    "field_location_placeholder": "Ej: Praia da Malhada",
+    "field_type_label": "Tipo",
+    "select_placeholder": "Seleccione...",
+    "type_festival": "Festival",
+    "type_esporte": "Deporte",
+    "type_cultural": "Cultural",
+    "type_gastronomia": "Gastronom\u00eda",
+    "field_source_url_label": "Enlace externo (sitio web, Instagram etc)",
+    "field_cover_url_label": "URL de la foto (opcional)",
+    "submitter_section": "\u00bfQui\u00e9n env\u00eda?",
+    "submitter_name_placeholder": "Tu nombre *",
+    "submitter_email_placeholder": "tu@email.com *",
+    "submitter_phone_placeholder": "WhatsApp (opcional)",
+    "error_text": "Ocurri\u00f3 un error. Intenta de nuevo.",
+    "submit": "Enviar sugerencia de evento",
+    "submitting": "Enviando..."
+  },
+  "event_card": {
+    "badge_destaque": "Destacado",
+    "type_festival": "Festival",
+    "type_esporte": "Deporte",
+    "type_cultural": "Cultural",
+    "type_gastronomia": "Gastronom\u00eda",
+    "saiba_mais": "M\u00e1s informaci\u00f3n"
+  },
+  "hoje": {
+    "section_label": "Ahora en Gostoso",
+    "abertos_label": "Abiertos ahora",
+    "aberto_badge": "Abierto",
+    "acontecendo_label": "Sucediendo hoy",
+    "negocio_count": "{{count}} negocio",
+    "negocio_count_plural": "{{count}} negocios",
+    "evento_count": "{{count}} evento",
+    "evento_count_plural": "{{count}} eventos",
+    "mais_abertos": "+{{count}} m\u00e1s abiertos",
+    "ver_todos_eventos": "Ver todos los eventos"
+  },
+  "global_search": {
+    "placeholder": "Buscar negocio en Gostoso...",
+    "hint": "Escribe el nombre del negocio, categor\u00eda o barrio",
+    "loading": "Buscando...",
+    "not_found": "No se encontraron negocios para <strong>\"{{query}}\"</strong>.",
+    "not_found_cta": "Registrar este negocio \u2192",
+    "results_count": "{{count}} resultado",
+    "results_count_plural": "{{count}} resultados",
+    "esc_hint": "Presiona <kbd>Esc</kbd> para cerrar",
+    "city_label": "S\u00e3o Miguel do Gostoso"
   }
 }

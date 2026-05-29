@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next'
 export default function Conheca() {
   const { t } = useTranslation()
   usePageMeta({
-    title: 'Conheça Gostoso',
-    description: 'A história, as praias, como chegar e a melhor época para visitar São Miguel do Gostoso.',
+    title: t('conheca.meta_title'),
+    description: t('conheca.meta_desc'),
   })
   return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-16">

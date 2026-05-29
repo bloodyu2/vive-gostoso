@@ -8,13 +8,14 @@ import type { ServiceListing } from '@/types/database'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import i18n from '@/i18n'
 
 export default function AdminServices() {
   return <AdminGuard><AdminServicesInner /></AdminGuard>
 }
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('pt-BR', {
+  return new Date(iso).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR', {
     day: '2-digit', month: 'short', year: 'numeric',
   })
 }

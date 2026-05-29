@@ -28,18 +28,18 @@ type BlogProps = {
 }
 
 export default function Blog({ initialPosts = [] }: BlogProps) {
+  const { t, i18n } = useTranslation()
   usePageMeta({
-    title: 'Blog — São Miguel do Gostoso',
-    description: 'Artigos, dicas e novidades sobre São Miguel do Gostoso. Gastronomia, surf, kite, eventos e cultura local.',
+    title: t('blog.meta_title'),
+    description: t('blog.meta_desc'),
   })
   const { data: posts = [], isLoading } = useBlogPosts({ initialData: initialPosts })
-  const { t } = useTranslation()
 
   return (
     <main className="max-w-6xl mx-auto px-5 md:px-8 py-12">
       <div className="mb-10">
         <h1 className="font-display text-4xl md:text-5xl font-bold text-[#1A1A1A] dark:text-white">
-          Blog
+          {t('blog.blog_h1')}
         </h1>
         <p className="mt-3 text-lg text-[#3D3D3D] dark:text-[#C0BCB8] max-w-xl leading-relaxed">
           {t('blog.subtitulo')}
@@ -108,7 +108,7 @@ export default function Blog({ initialPosts = [] }: BlogProps) {
                     <>
                       <span>·</span>
                       <span>
-                        {new Date(post.published_at).toLocaleDateString('pt-BR', {
+                        {new Date(post.published_at).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR', {
                           day: 'numeric', month: 'short', year: 'numeric'
                         })}
                       </span>

@@ -1,8 +1,11 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import { Search, X, MapPin } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { Trans } from 'react-i18next'
 
 interface SearchResult {
   id: string
@@ -27,9 +30,6 @@ function useSearch(query: string) {
     clearTimeout(debounceTimer)
     debounceTimer = setTimeout(async () => {
       setLoading(true)
-      // Sanitize for PostgREST .or() filter syntax: comma, parens, backslash
-      // and asterisk are filter delimiters / wildcards. Strip them so that
-      // user input cannot break out of the ilike pattern.
       const q = query.trim().replace(/[,()\\*]/g, '').slice(0, 80)
       if (q.length < 2) {
         setResults([])
@@ -61,11 +61,12 @@ interface Props {
 }
 
 export function GlobalSearch({ onClose }: Props) {
+  const { t } = useTranslation('global_search')
+  const lp = useLocalePath()
   const [query, setQuery] = useState('')
   const { results, loading } = useSearch(query)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Focus input on mount, close on Escape
   useEffect(() => {
     inputRef.current?.focus()
     function onKey(e: KeyboardEvent) {
@@ -75,7 +76,6 @@ export function GlobalSearch({ onClose }: Props) {
     return () => document.removeEventListener('keydown', onKey)
   }, [onClose])
 
-  // Prevent body scroll while open
   useEffect(() => {
     document.body.style.overflow = 'hidden'
     return () => { document.body.style.overflow = '' }
@@ -90,7 +90,6 @@ export function GlobalSearch({ onClose }: Props) {
         className="w-full max-w-xl bg-white dark:bg-[#1A1A1A] rounded-2xl shadow-2xl border border-[#E8E4DF] dark:border-[#2D2D2D] overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
-        {/* Input */}
         <div className="flex items-center gap-3 px-4 py-3 border-b border-[#E8E4DF] dark:border-[#2D2D2D]">
           <Search className="w-5 h-5 text-[#737373] flex-shrink-0" />
           <input
@@ -98,7 +97,7 @@ export function GlobalSearch({ onClose }: Props) {
             type="text"
             value={query}
             onChange={e => setQuery(e.target.value)}
-            placeholder="Buscar negócio em Gostoso..."
+            placeholder={t('placeholder')}
             className="flex-1 text-sm bg-transparent outline-none text-[#1A1A1A] dark:text-white placeholder:text-[#737373]"
           />
           {query ? (
@@ -112,31 +111,32 @@ export function GlobalSearch({ onClose }: Props) {
           )}
         </div>
 
-        {/* Results */}
         <div className="max-h-[60vh] overflow-y-auto">
           {query.trim().length < 2 && (
             <div className="px-4 py-10 text-center text-sm text-[#737373]">
-              Digite o nome do negócio, categoria ou bairro
+              {t('hint')}
             </div>
           )}
 
           {query.trim().length >= 2 && loading && (
             <div className="px-4 py-8 text-center text-sm text-[#737373]">
-              Buscando...
+              {t('loading')}
             </div>
           )}
 
           {query.trim().length >= 2 && !loading && results.length === 0 && (
             <div className="px-4 py-8 text-center">
               <p className="text-sm text-[#737373] mb-3">
-                Nenhum negócio encontrado para <strong>"{query}"</strong>.
+                <Trans t={t} i18nKey="not_found" values={{ query }}>
+                  Nenhum negócio encontrado para <strong>"{query}"</strong>.
+                </Trans>
               </p>
               <Link
-                href="/cadastre"
+                href={lp('/cadastre')}
                 onClick={onClose}
                 className="text-sm text-teal font-semibold hover:underline"
               >
-                Cadastrar este negócio →
+                {t('not_found_cta')}
               </Link>
             </div>
           )}
@@ -146,17 +146,15 @@ export function GlobalSearch({ onClose }: Props) {
               {results.map(r => (
                 <li key={r.id}>
                   <Link
-                    href={`/negocio/${r.slug}`}
+                    href={lp(`/negocio/${r.slug}`)}
                     onClick={onClose}
                     className="flex items-center gap-3 px-4 py-3 hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors"
                   >
-                    {/* Thumb */}
                     <div className="w-10 h-10 rounded-xl flex-shrink-0 overflow-hidden bg-gradient-to-br from-teal to-teal-dark">
                       {r.cover_url && (
                         <img src={r.cover_url} alt={r.name} className="w-full h-full object-cover" />
                       )}
                     </div>
-                    {/* Info */}
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-[#1A1A1A] dark:text-white truncate">{r.name}</p>
                       <div className="flex items-center gap-2 mt-0.5">
@@ -178,16 +176,19 @@ export function GlobalSearch({ onClose }: Props) {
                 </li>
               ))}
               <li className="px-4 py-2 border-t border-[#F5F2EE] dark:border-[#2D2D2D] text-center">
-                <span className="text-xs text-[#737373]">{results.length} resultado{results.length !== 1 ? 's' : ''}</span>
+                <span className="text-xs text-[#737373]">{t('results_count', { count: results.length })}</span>
               </li>
             </ul>
           )}
         </div>
 
-        {/* Footer hint */}
         <div className="px-4 py-2.5 border-t border-[#F5F2EE] dark:border-[#2D2D2D] flex items-center justify-between">
-          <span className="text-xs text-[#737373]">Pressione <kbd className="bg-[#F5F2EE] dark:bg-[#2D2D2D] px-1.5 py-0.5 rounded text-[#3D3D3D] dark:text-white font-mono text-[10px]">Esc</kbd> para fechar</span>
-          <span className="text-xs text-[#737373]">São Miguel do Gostoso</span>
+          <span className="text-xs text-[#737373]">
+            <Trans t={t} i18nKey="esc_hint">
+              Pressione <kbd className="bg-[#F5F2EE] dark:bg-[#2D2D2D] px-1.5 py-0.5 rounded text-[#3D3D3D] dark:text-white font-mono text-[10px]">Esc</kbd> para fechar
+            </Trans>
+          </span>
+          <span className="text-xs text-[#737373]">{t('city_label')}</span>
         </div>
       </div>
     </div>

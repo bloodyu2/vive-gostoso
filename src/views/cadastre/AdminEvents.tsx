@@ -14,11 +14,11 @@ export default function AdminEvents() {
 }
 
 function EventRow({ sub }: { sub: EventSubmission }) {
-  const { t } = useTranslation('admin_events')
+  const { t, i18n } = useTranslation('admin_events')
   const approve = useApproveEventSubmission()
   const reject = useRejectEventSubmission()
   const start = new Date(sub.starts_at)
-  const dateStr = start.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })
+  const dateStr = start.toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })
 
   return (
     <div className="bg-white border border-[#E8E4DF] rounded-2xl p-5 space-y-3">

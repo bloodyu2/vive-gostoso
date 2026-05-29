@@ -113,10 +113,10 @@ type ApoieProps = {
 }
 
 export default function Apoie({ initialEntries = [] }: ApoieProps) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   usePageMeta({
-    title: 'Apoie Gostoso',
-    description: 'Fundo público transparente para promover São Miguel do Gostoso. Veja como o dinheiro é usado.',
+    title: t('apoie.meta_title'),
+    description: t('apoie.meta_desc'),
   })
 
   const searchParams = useSearchParams()
@@ -384,7 +384,7 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
                           </span>
                           {goal.target_date && (
                             <span className="text-xs text-[#A0A0A0]">
-                              Meta: {new Date(goal.target_date).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+                              Meta: {new Date(goal.target_date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR', { month: 'long', year: 'numeric' })}
                             </span>
                           )}
                         </div>

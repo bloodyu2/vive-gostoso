@@ -1,8 +1,10 @@
 import { formatCurrency } from '@/lib/utils'
 import type { FundEntry } from '@/types/database'
+import i18n from '@/i18n'
 
 export function FundEntryRow({ entry: e, last }: { entry: FundEntry; last?: boolean }) {
-  const date = new Date(e.entry_date).toLocaleDateString('pt-BR', {
+  const locale = i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR'
+  const date = new Date(e.entry_date).toLocaleDateString(locale, {
     day: 'numeric',
     month: 'long',
     year: 'numeric',

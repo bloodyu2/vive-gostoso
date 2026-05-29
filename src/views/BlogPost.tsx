@@ -43,7 +43,7 @@ type BlogPostPageProps = {
 export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPageProps) {
   const slug = slugProp
   const { data: post, isLoading } = useBlogPost(slug ?? '', initialPost !== undefined ? { initialData: initialPost } : undefined)
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const url = slug ? `${SITE_URL}/blog/${slug}` : SITE_URL
   const description = post?.excerpt ? clampDescription(post.excerpt, 160) : undefined
@@ -81,8 +81,8 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
   }, [post, description, url])
 
   usePageMeta({
-    title: post?.title ?? 'Blog — São Miguel do Gostoso',
-    description: description ?? 'Artigos e dicas sobre São Miguel do Gostoso.',
+    title: post?.title ?? t('blog.meta_title'),
+    description: description ?? t('blog.meta_desc'),
     image: post?.cover_url ?? undefined,
     url,
     type: 'article',
@@ -124,7 +124,7 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
         className="inline-flex items-center gap-2 text-sm text-[#737373] hover:text-teal transition-colors mb-8"
       >
         <ArrowLeft className="w-4 h-4" />
-        Blog
+        {t('blog.breadcrumb_blog')}
       </Link>
 
       {post.tags && post.tags.length > 0 && (
@@ -153,7 +153,7 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
           <>
             <span>·</span>
             <time dateTime={post.published_at}>
-              {new Date(post.published_at).toLocaleDateString('pt-BR', {
+              {new Date(post.published_at).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR', {
                 day: 'numeric', month: 'long', year: 'numeric'
               })}
             </time>

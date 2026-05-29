@@ -20,8 +20,8 @@ export default function Come({ initialBusinesses = [] }: ComeProps) {
   const { t } = useTranslation()
   const lp = useLocalePath()
   usePageMeta({
-    title: 'Restaurantes e Gastronomia',
-    description: 'Os melhores restaurantes de São Miguel do Gostoso. Frutos do mar, comida regional e muito sol.',
+    title: t('come.meta_title'),
+    description: t('come.meta_desc'),
   })
   const [activeCat, setActiveCat] = useState<string | null>(null)
   const [view, setView] = useState<ViewMode>('grid')

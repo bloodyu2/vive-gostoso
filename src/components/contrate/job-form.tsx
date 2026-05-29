@@ -3,12 +3,14 @@ import { X } from 'lucide-react'
 import { CONTRACT_TYPE_LABELS } from '@/types/database'
 import type { ContractType } from '@/types/database'
 import { useSubmitJob } from '@/hooks/useJobs'
+import { useTranslation } from 'react-i18next'
 
 interface Props { onClose: () => void }
 
 const CONTRACT_TYPES = Object.entries(CONTRACT_TYPE_LABELS) as [ContractType, string][]
 
 export function JobForm({ onClose }: Props) {
+  const { t } = useTranslation('job_form')
   const { mutateAsync, isPending } = useSubmitJob()
   const [sent, setSent] = useState(false)
   const [form, setForm] = useState({
@@ -35,8 +37,8 @@ export function JobForm({ onClose }: Props) {
       <div className="relative bg-white w-full sm:max-w-lg sm:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
         <div className="flex items-center justify-between px-6 py-5 border-b border-[#E8E4DF] sticky top-0 bg-white z-10">
           <div>
-            <h2 className="font-display font-bold text-xl text-[#1A1A1A]">Publicar vaga</h2>
-            <p className="text-xs text-[#737373] mt-0.5">A vaga fica ativa após revisão, normalmente em 24h</p>
+            <h2 className="font-display font-bold text-xl text-[#1A1A1A]">{t('title')}</h2>
+            <p className="text-xs text-[#737373] mt-0.5">{t('subtitle')}</p>
           </div>
           <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-[#F5F2EE] transition-colors">
             <X className="w-5 h-5" />
@@ -46,49 +48,49 @@ export function JobForm({ onClose }: Props) {
         {sent ? (
           <div className="px-6 py-10 text-center">
             <div className="text-4xl mb-4">✅</div>
-            <h3 className="font-display font-bold text-xl mb-2">Vaga recebida!</h3>
+            <h3 className="font-display font-bold text-xl mb-2">{t('received_title')}</h3>
             <p className="text-[#737373] text-sm leading-relaxed">
-              Vamos revisar e publicar em até 24 horas. Se precisarmos de mais informações, entraremos em contato pelo WhatsApp.
+              {t('received_desc')}
             </p>
             <button onClick={onClose} className="mt-6 bg-ocre text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity">
-              Fechar
+              {t('close')}
             </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">Nome do negócio / empregador *</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_business_name')}</label>
               <input
                 type="text"
                 value={form.business_name}
                 onChange={e => set('business_name', e.target.value)}
-                placeholder="Ex: Pousada Ventania"
+                placeholder={t('placeholder_business_name')}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ocre/30 focus:border-ocre transition-colors"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">Cargo / função *</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_title')}</label>
               <input
                 type="text"
                 value={form.title}
                 onChange={e => set('title', e.target.value)}
-                placeholder="Ex: Garçom, Recepcionista, Cozinheiro..."
+                placeholder={t('placeholder_title')}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ocre/30 focus:border-ocre transition-colors"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">Tipo de contrato *</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_contract_type')}</label>
               <select
                 value={form.contract_type}
                 onChange={e => set('contract_type', e.target.value)}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ocre/30 focus:border-ocre bg-white transition-colors"
                 required
               >
-                <option value="">Selecione...</option>
+                <option value="">{t('select_placeholder')}</option>
                 {CONTRACT_TYPES.map(([k, v]) => (
                   <option key={k} value={k}>{v}</option>
                 ))}
@@ -96,30 +98,30 @@ export function JobForm({ onClose }: Props) {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">Descrição da vaga</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_description')}</label>
               <textarea
                 value={form.description}
                 onChange={e => set('description', e.target.value)}
-                placeholder="Requisitos, horário, salário (opcional), diferenciais..."
+                placeholder={t('placeholder_description')}
                 rows={3}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ocre/30 focus:border-ocre transition-colors resize-none"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">WhatsApp para contato *</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_whatsapp')}</label>
               <input
                 type="tel"
                 value={form.whatsapp}
                 onChange={e => set('whatsapp', e.target.value)}
-                placeholder="84 99999-9999"
+                placeholder={t('placeholder_whatsapp')}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ocre/30 focus:border-ocre transition-colors"
                 required
               />
             </div>
 
             <p className="text-xs text-[#737373] leading-relaxed">
-              Publicação gratuita. A vaga fica disponível até você solicitar remoção. Negócios associados ganham destaque automático.
+              {t('info_text')}
             </p>
 
             <button
@@ -127,7 +129,7 @@ export function JobForm({ onClose }: Props) {
               disabled={!valid || isPending}
               className="w-full bg-ocre text-white rounded-xl py-3 text-sm font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
             >
-              {isPending ? 'Enviando...' : 'Publicar vaga'}
+              {isPending ? t('submitting') : t('submit')}
             </button>
           </form>
         )}

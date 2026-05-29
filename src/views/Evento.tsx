@@ -19,7 +19,7 @@ type EventoProps = {
 export default function Evento({ initialEvent, id: idProp }: EventoProps) {
   const id = idProp
   const { data: event, isLoading } = useEvent(id ?? '', initialEvent !== undefined ? { initialData: initialEvent } : undefined)
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   usePageMeta({
     title: event ? event.name : 'Evento',
@@ -44,9 +44,10 @@ export default function Evento({ initialEvent, id: idProp }: EventoProps) {
 
   const start = new Date(event.starts_at)
   const end = event.ends_at ? new Date(event.ends_at) : null
-  const dateStr = start.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+  const locale = i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR'
+  const dateStr = start.toLocaleDateString(locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
   const timeStr = start.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
-  const endStr = end ? end.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' }) : null
+  const endStr = end ? end.toLocaleDateString(locale, { day: 'numeric', month: 'long' }) : null
 
   return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-10">

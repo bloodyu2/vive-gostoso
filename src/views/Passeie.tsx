@@ -20,8 +20,8 @@ export default function Passeie({ initialBusinesses = [] }: PasseieProps) {
   const { t } = useTranslation()
   const lp = useLocalePath()
   usePageMeta({
-    title: 'Passeios e Esportes',
-    description: 'Kitesurf, windsurf, buggy, tours e esportes náuticos em São Miguel do Gostoso.',
+    title: t('passeie.meta_title'),
+    description: t('passeie.meta_desc'),
   })
   const [activeCat, setActiveCat] = useState<string | null>(null)
   const [view, setView] = useState<ViewMode>('grid')

@@ -3,12 +3,14 @@ import { X, CheckCircle } from 'lucide-react'
 import { SERVICE_CATEGORY_LABELS } from '@/types/database'
 import type { ServiceCategory } from '@/types/database'
 import { useSubmitService } from '@/hooks/useServices'
+import { useTranslation } from 'react-i18next'
 
 interface Props { onClose: () => void }
 
 const CATEGORIES = Object.entries(SERVICE_CATEGORY_LABELS) as [ServiceCategory, string][]
 
 export function ServiceForm({ onClose }: Props) {
+  const { t } = useTranslation('service_form')
   const { mutateAsync, isPending } = useSubmitService()
   const [sent, setSent] = useState(false)
   const [form, setForm] = useState({
@@ -36,8 +38,8 @@ export function ServiceForm({ onClose }: Props) {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-[#E8E4DF] sticky top-0 bg-white z-10">
           <div>
-            <h2 className="font-display font-bold text-xl text-[#1A1A1A]">Ofereço meu serviço</h2>
-            <p className="text-xs text-[#737373] mt-0.5">Seu cadastro fica ativo após revisão, normalmente em 24h</p>
+            <h2 className="font-display font-bold text-xl text-[#1A1A1A]">{t('title')}</h2>
+            <p className="text-xs text-[#737373] mt-0.5">{t('subtitle')}</p>
           </div>
           <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-[#F5F2EE] transition-colors">
             <X className="w-5 h-5" />
@@ -47,49 +49,49 @@ export function ServiceForm({ onClose }: Props) {
         {sent ? (
           <div className="px-6 py-10 text-center">
             <CheckCircle className="w-10 h-10 mb-4 text-teal mx-auto" />
-            <h3 className="font-display font-bold text-xl mb-2">Recebemos!</h3>
+            <h3 className="font-display font-bold text-xl mb-2">{t('received_title')}</h3>
             <p className="text-[#737373] text-sm leading-relaxed">
-              Vamos revisar e publicar em até 24 horas. Fique de olho no WhatsApp, podemos entrar em contato para confirmar.
+              {t('received_desc')}
             </p>
             <button onClick={onClose} className="mt-6 bg-teal text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-teal-dark transition-colors">
-              Fechar
+              {t('close')}
             </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">Seu nome completo *</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_name')}</label>
               <input
                 type="text"
                 value={form.name}
                 onChange={e => set('name', e.target.value)}
-                placeholder="Ex: João Silva"
+                placeholder={t('placeholder_name')}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-colors"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">Título do serviço *</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_headline')}</label>
               <input
                 type="text"
                 value={form.headline}
                 onChange={e => set('headline', e.target.value)}
-                placeholder="Ex: Guia de kitesurf e passeios de barco"
+                placeholder={t('placeholder_headline')}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-colors"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">Categoria *</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_category')}</label>
               <select
                 value={form.service_category}
                 onChange={e => set('service_category', e.target.value)}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal bg-white transition-colors"
                 required
               >
-                <option value="">Selecione...</option>
+                <option value="">{t('select_placeholder')}</option>
                 {CATEGORIES.map(([k, v]) => (
                   <option key={k} value={k}>{v}</option>
                 ))}
@@ -97,30 +99,30 @@ export function ServiceForm({ onClose }: Props) {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">Descrição do serviço</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_description')}</label>
               <textarea
                 value={form.description}
                 onChange={e => set('description', e.target.value)}
-                placeholder="Conte um pouco mais sobre o que você faz, experiência, área de atuação..."
+                placeholder={t('placeholder_description')}
                 rows={3}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-colors resize-none"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">WhatsApp *</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_whatsapp')}</label>
               <input
                 type="tel"
                 value={form.whatsapp}
                 onChange={e => set('whatsapp', e.target.value)}
-                placeholder="84 99999-9999"
+                placeholder={t('placeholder_whatsapp')}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-colors"
                 required
               />
             </div>
 
             <p className="text-xs text-[#737373] leading-relaxed">
-              Ao enviar, você concorda que seu nome e WhatsApp fiquem visíveis para quem buscar o serviço. Sem taxas. A plataforma é da cidade.
+              {t('consent_text')}
             </p>
 
             <button
@@ -128,7 +130,7 @@ export function ServiceForm({ onClose }: Props) {
               disabled={!valid || isPending}
               className="w-full bg-teal text-white rounded-xl py-3 text-sm font-semibold hover:bg-teal-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {isPending ? 'Enviando...' : 'Enviar cadastro'}
+              {isPending ? t('submitting') : t('submit')}
             </button>
           </form>
         )}

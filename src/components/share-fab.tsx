@@ -1,13 +1,15 @@
 import { Share2, Check } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export function ShareFab() {
+  const { t } = useTranslation('share')
   const [copied, setCopied] = useState(false)
 
   async function handleShare() {
     const data = {
-      title: 'Vive Gostoso',
-      text: 'Descubra São Miguel do Gostoso: restaurantes, pousadas, passeios e muito mais.',
+      title: t('share_title'),
+      text: t('share_text'),
       url: window.location.href,
     }
 
@@ -27,7 +29,7 @@ export function ShareFab() {
   return (
     <button
       onClick={handleShare}
-      aria-label="Compartilhar esta página"
+      aria-label={t('aria_share')}
       className="fixed bottom-20 right-4 z-30 w-11 h-11 rounded-full bg-white dark:bg-[#1A1A1A] border border-[#E8E4DF] dark:border-[#2D2D2D] shadow-md flex items-center justify-center text-[#737373] hover:text-teal hover:border-teal dark:hover:text-teal transition-colors md:hidden"
     >
       {copied

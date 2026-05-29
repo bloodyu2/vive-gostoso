@@ -15,8 +15,8 @@ export default function Servicos() {
   const { t } = useTranslation()
   const lp = useLocalePath()
   usePageMeta({
-    title: 'Comércio e Serviços em Gostoso',
-    description: 'Farmácia, lavanderia, mercado, barbearia e tudo que resolve o seu dia em São Miguel do Gostoso.',
+    title: t('resolva.meta_title'),
+    description: t('resolva.meta_desc'),
   })
   const [activeCat, setActiveCat] = useState<string | null>(null)
   const [view, setView] = useState<ViewMode>('grid')

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import i18n from '@/i18n'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { StarRating } from '@/components/reviews/star-rating'
 import { useAdminPendingReviews, useModerateReview } from '@/hooks/useReviews'
@@ -13,7 +14,7 @@ export default function AdminReviews() {
 }
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+  return new Date(iso).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
 }
 
 function AdminReviewsInner() {
