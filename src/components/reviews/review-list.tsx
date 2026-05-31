@@ -2,18 +2,21 @@
 // src/components/reviews/review-list.tsx
 import { StarRating } from './star-rating'
 import { useReviews } from '@/hooks/useReviews'
+import { useTranslation } from 'react-i18next'
 import i18n from '@/i18n'
 
 interface ReviewListProps {
-  businessId: string
+  targetType: 'business' | 'professional' | 'transfer'
+  targetId: string
 }
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })
 }
 
-export function ReviewList({ businessId }: ReviewListProps) {
-  const { data: reviews = [], isLoading } = useReviews(businessId)
+export function ReviewList({ targetType, targetId }: ReviewListProps) {
+  const { t } = useTranslation('review_list')
+  const { data: reviews = [], isLoading } = useReviews(targetType, targetId)
 
   if (isLoading) return (
     <div className="space-y-3">
@@ -25,7 +28,7 @@ export function ReviewList({ businessId }: ReviewListProps) {
 
   if (!reviews.length) return (
     <p className="text-sm text-[#B0A99F] text-center py-4">
-      Nenhuma avaliação ainda. Seja o primeiro a avaliar!
+      {t('empty')}
     </p>
   )
 

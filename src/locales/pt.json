@@ -440,7 +440,14 @@
     "modal_enviando": "Enviando...",
     "modal_sucesso_titulo": "Recebemos!",
     "modal_sucesso_desc": "Vamos revisar e publicar em até 24 horas.",
-    "modal_fechar": "Fechar"
+    "modal_fechar": "Fechar",
+    "routes_title": "Rotas",
+    "routes_desc": "Adicione as rotas que você atende",
+    "route_from": "De (ex: Aeroporto de Natal)",
+    "route_to": "Para (ex: São Miguel do Gostoso)",
+    "route_price": "Preço (R$)",
+    "route_add": "+ Adicionar rota",
+    "route_remove": "Remover"
   },
   "conheca": {
     "badge": "CONHEÇA.",
@@ -710,7 +717,10 @@
     "anonymous": "An\u00f4nimo",
     "approve": "Aprovar",
     "reject": "Rejeitar",
-    "empty": "Nenhuma avalia\u00e7\u00e3o pendente"
+    "empty": "Nenhuma avalia\u00e7\u00e3o pendente",
+    "type_business": "Neg\u00f3cio",
+    "type_professional": "Profissional",
+    "type_transfer": "Transfer"
   },
   "parceiros": {
     "badge": "PARCEIROS",

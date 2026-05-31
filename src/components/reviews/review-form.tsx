@@ -6,10 +6,11 @@ import { useSubmitReview } from '@/hooks/useReviews'
 import { useTranslation } from 'react-i18next'
 
 interface ReviewFormProps {
-  businessId: string
+  targetType: 'business' | 'professional' | 'transfer'
+  targetId: string
 }
 
-export function ReviewForm({ businessId }: ReviewFormProps) {
+export function ReviewForm({ targetType, targetId }: ReviewFormProps) {
   const { t } = useTranslation('review_form')
   const [rating, setRating] = useState<1 | 2 | 3 | 4 | 5 | 0>(0)
   const [comment, setComment] = useState('')
@@ -21,10 +22,11 @@ export function ReviewForm({ businessId }: ReviewFormProps) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!rating) return
-    mutate(
-      { business_id: businessId, rating: rating as 1 | 2 | 3 | 4 | 5, comment: comment.trim() || undefined, author_name: authorName.trim() || undefined },
-      { onSuccess: () => setSubmitted(true) }
-    )
+    const payload: any = { rating: rating as 1 | 2 | 3 | 4 | 5, comment: comment.trim() || undefined, author_name: authorName.trim() || undefined }
+    if (targetType === 'business') payload.business_id = targetId
+    else if (targetType === 'professional') payload.professional_id = targetId
+    else payload.transfer_id = targetId
+    mutate(payload, { onSuccess: () => setSubmitted(true) })
   }
 
   if (submitted) {

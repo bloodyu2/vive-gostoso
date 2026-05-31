@@ -14,6 +14,7 @@ export interface TransferFormData {
   payment_methods: string[]
   meeting_point: string
   observations: string
+  routes: { from: string; to: string; price_brl: number }[]
 }
 
 export function useTransfers() {
@@ -87,7 +88,7 @@ export function useSubmitTransfer() {
           meeting_point: form.meeting_point || null,
           observations: form.observations || null,
           photo_url: null,
-          routes: null,
+          routes: form.routes.length > 0 ? form.routes : null,
           active: false,
         })
       if (error) throw error

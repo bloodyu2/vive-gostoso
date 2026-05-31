@@ -8,6 +8,8 @@ import { useProfessional } from '@/hooks/useProfessionals'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import { ReviewList } from '@/components/reviews/review-list'
+import { ReviewForm } from '@/components/reviews/review-form'
 import { PROFESSIONAL_CATEGORY_LABELS } from '@/types/professional'
 import type { PortfolioItem } from '@/types/professional'
 
@@ -214,17 +216,14 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
           </div>
         )}
 
-        {/* Avaliações */}
-        {pro.review_count > 0 && (
-          <div>
-            <h2 className="text-xs font-bold text-[#737373] uppercase tracking-wide mb-3">
-              {t('professional.reviews_label')} · <Stars rating={pro.rating_avg} /> {pro.rating_avg.toFixed(1)} ({pro.review_count})
-            </h2>
-            <p className="text-xs text-[#aaa]">
-              {t('professional.reviews_coming_soon')}
-            </p>
+        {/* Reviews */}
+        <div className="border-t border-[#E8E4DF] pt-8 mt-8">
+          <h3 className="font-display text-lg font-semibold mb-4">Avaliações</h3>
+          <ReviewList targetType="professional" targetId={pro.id} />
+          <div className="mt-6">
+            <ReviewForm targetType="professional" targetId={pro.id} />
           </div>
-        )}
+        </div>
 
       </section>
 

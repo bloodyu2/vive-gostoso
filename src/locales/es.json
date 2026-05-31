@@ -470,7 +470,14 @@
     "modal_pagamentos": "Formas de pago",
     "modal_antecedencia": "Antelación mínima",
     "modal_encontro": "Punto de encuentro en el aeropuerto",
-    "modal_observacoes": "Observaciones / notas extra"
+    "modal_observacoes": "Observaciones / notas extra",
+    "routes_title": "Rutas",
+    "routes_desc": "Añade las rutas que atiendes",
+    "route_from": "Desde (ej: Aeropuerto de Natal)",
+    "route_to": "Hasta (ej: São Miguel do Gostoso)",
+    "route_price": "Precio (R$)",
+    "route_add": "+ Añadir ruta",
+    "route_remove": "Eliminar"
   },
   "cadastro": {
     "subtitle": "Para que tu negocio crezca",
@@ -630,7 +637,10 @@
     "anonymous": "An\u00f3nimo",
     "approve": "Aprobar",
     "reject": "Rechazar",
-    "empty": "No hay rese\u00f1as pendientes"
+    "empty": "No hay rese\u00f1as pendientes",
+    "type_business": "Negocio",
+    "type_professional": "Profesional",
+    "type_transfer": "Transfer"
   },
   "fund": {
     "section_label": "Fondo p\u00fablico transparente \u00b7 {{month}}",

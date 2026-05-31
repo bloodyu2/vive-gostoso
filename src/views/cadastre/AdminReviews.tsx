@@ -51,7 +51,15 @@ function AdminReviewsInner() {
             <div className="flex items-start justify-between gap-3 mb-1">
               <div>
                 <p className="font-semibold text-sm text-[#1A1A1A]">{r.author_name ?? t('anonymous')}</p>
-                <p className="text-xs text-[#B0A99F]">{r.business_name} · {formatDate(r.created_at)}</p>
+                <p className="text-xs text-[#B0A99F]">
+                  {r.target_name}
+                  <span className="mx-1">·</span>
+                  {r.target_type === 'business' ? t('type_business') :
+                   r.target_type === 'professional' ? t('type_professional') :
+                   t('type_transfer')}
+                  <span className="mx-1">·</span>
+                  {formatDate(r.created_at)}
+                </p>
               </div>
               <StarRating value={r.rating} readonly size="sm" />
             </div>

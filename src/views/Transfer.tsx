@@ -10,6 +10,8 @@ import type { TransferFormData } from '@/hooks/useTransfers'
 import type { Transfer, TransferRoute } from '@/types/database'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
+import { ReviewList } from '@/components/reviews/review-list'
+import { ReviewForm } from '@/components/reviews/review-form'
 
 const VEHICLE_TYPES = ['Van', 'Carro', 'Buggy', 'SUV']
 const LANGUAGES_LIST = ['Português', 'Inglês', 'Espanhol', 'Francês']
@@ -313,6 +315,15 @@ function TransferDetailModal({ transfer, initialRoute, onClose }: TransferDetail
               </section>
             )}
 
+            {/* Reviews section */}
+            <div className="border-t border-[#E8E4DF] pt-6 mt-6">
+              <h3 className="font-display text-lg font-semibold mb-4">Avaliações</h3>
+              <ReviewList targetType="transfer" targetId={transfer.id} />
+              <div className="mt-6">
+                <ReviewForm targetType="transfer" targetId={transfer.id} />
+              </div>
+            </div>
+
             {/* spacing for sticky footer */}
             <div className="h-2" />
           </div>
@@ -359,6 +370,7 @@ function RegistrationModal({ onClose }: RegistrationModalProps) {
     payment_methods: [],
     meeting_point: '',
     observations: '',
+    routes: [{ from: '', to: '', price_brl: 0 }],
   })
 
   function setField<K extends keyof TransferFormData>(k: K, v: TransferFormData[K]) {
@@ -382,6 +394,7 @@ function RegistrationModal({ onClose }: RegistrationModalProps) {
     if (!form.max_passengers || form.max_passengers < 1) errs.push('max_passengers')
     if (!form.available_hours.trim()) errs.push('available_hours')
     if (form.languages.length === 0) errs.push('languages')
+    if (form.routes.length === 0 || form.routes.some(r => !r.from.trim() || !r.to.trim() || !r.price_brl)) errs.push('routes')
     return errs
   }
 
@@ -512,6 +525,36 @@ function RegistrationModal({ onClose }: RegistrationModalProps) {
               <textarea value={form.observations} onChange={e => setField('observations', e.target.value)}
                 placeholder="Ex: Bagagem extra, pets, taxa adicional..." rows={2}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-colors resize-none" />
+            </div>
+
+            {/* Routes section */}
+            <div className="space-y-3">
+              <p className="text-sm font-medium text-[#1A1A1A]">{t('transfer.routes_title')}</p>
+              <p className="text-xs text-[#737373]">{t('transfer.routes_desc')}</p>
+              {form.routes.map((route, i) => (
+                <div key={i} className="flex gap-2 items-start bg-[#F5F2EE] rounded-xl p-3">
+                  <div className="flex-1 space-y-2">
+                    <input value={route.from} onChange={e => {
+                      const r = [...form.routes]; r[i] = { ...r[i], from: e.target.value }; setForm(f => ({ ...f, routes: r }))
+                    }} placeholder={t('transfer.route_from')} className="w-full border border-[#E8E4DF] rounded-xl px-3 py-2 text-sm" />
+                    <input value={route.to} onChange={e => {
+                      const r = [...form.routes]; r[i] = { ...r[i], to: e.target.value }; setForm(f => ({ ...f, routes: r }))
+                    }} placeholder={t('transfer.route_to')} className="w-full border border-[#E8E4DF] rounded-xl px-3 py-2 text-sm" />
+                    <input type="number" value={route.price_brl || ''} onChange={e => {
+                      const r = [...form.routes]; r[i] = { ...r[i], price_brl: Number(e.target.value) }; setForm(f => ({ ...f, routes: r }))
+                    }} placeholder={t('transfer.route_price')} className="w-full border border-[#E8E4DF] rounded-xl px-3 py-2 text-sm" />
+                  </div>
+                  <button type="button" onClick={() => setForm(f => ({ ...f, routes: f.routes.filter((_, j) => j !== i) }))}
+                    className="text-xs text-red-500 mt-2 hover:text-red-700 shrink-0">{t('transfer.route_remove')}</button>
+                </div>
+              ))}
+              {errors.includes('routes') && (
+                <p className="text-xs text-red-500">Adicione ao menos uma rota com origem, destino e preço.</p>
+              )}
+              <button type="button" onClick={() => setForm(f => ({ ...f, routes: [...f.routes, { from: '', to: '', price_brl: 0 }] }))}
+                className="text-sm text-teal font-semibold hover:text-teal-dark transition-colors">
+                {t('transfer.route_add')}
+              </button>
             </div>
 
             <button type="submit" disabled={isPending}

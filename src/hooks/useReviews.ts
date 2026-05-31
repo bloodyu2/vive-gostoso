@@ -1,26 +1,26 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
-import type { Review, ReviewInsert } from '@/types/reviews'
+import type { Review, ReviewInsert, ReviewTarget } from '@/types/reviews'
 
-/** Approved reviews for a business — public */
-export function useReviews(businessId: string) {
+/** Approved reviews for a target (business/professional/transfer) — public */
+export function useReviews(targetType: ReviewTarget, targetId: string) {
+  const idField = targetType === 'business' ? 'business_id' : targetType === 'professional' ? 'professional_id' : 'transfer_id'
   return useQuery({
-    queryKey: ['reviews', businessId],
+    queryKey: ['reviews', targetType, targetId],
     queryFn: async (): Promise<Review[]> => {
       const { data, error } = await supabase
         .from('gostoso_reviews')
         .select('*')
-        .eq('business_id', businessId)
+        .eq(idField, targetId)
         .eq('approved', true)
         .order('created_at', { ascending: false })
       if (error) throw error
       return (data ?? []) as Review[]
     },
-    enabled: !!businessId,
+    enabled: !!targetId,
   })
 }
 
-/** Submit a new review — inserts with approved=false */
 export function useSubmitReview() {
   const qc = useQueryClient()
   return useMutation({
@@ -31,31 +31,33 @@ export function useSubmitReview() {
       if (error) throw error
     },
     onSuccess: (_data, variables) => {
-      qc.invalidateQueries({ queryKey: ['reviews', variables.business_id] })
+      const targetType: ReviewTarget = variables.business_id ? 'business' : variables.professional_id ? 'professional' : 'transfer'
+      const targetId = variables.business_id ?? variables.professional_id ?? variables.transfer_id ?? ''
+      qc.invalidateQueries({ queryKey: ['reviews', targetType, targetId] })
     },
   })
 }
 
-/** All pending reviews — admin only (relies on admin_full_access RLS policy) */
 export function useAdminPendingReviews() {
   return useQuery({
     queryKey: ['reviews', 'admin', 'pending'],
-    queryFn: async (): Promise<(Review & { business_name?: string })[]> => {
+    queryFn: async (): Promise<(Review & { target_name?: string; target_type?: string })[]> => {
       const { data, error } = await supabase
         .from('gostoso_reviews')
-        .select('*, business:gostoso_businesses(name)')
+        .select('*, business:gostoso_businesses(name), professional:gostoso_professionals(name), transfer:gostoso_transfers(provider_name)')
         .eq('approved', false)
         .order('created_at', { ascending: true })
       if (error) throw error
-      return ((data ?? []) as unknown as (Review & { business: { name: string } })[]).map(r => ({
+
+      return ((data ?? []) as any[]).map(r => ({
         ...r,
-        business_name: r.business?.name,
+        target_name: r.business?.name || r.professional?.name || r.transfer?.provider_name || 'Desconhecido',
+        target_type: r.business_id ? 'business' : r.professional_id ? 'professional' : 'transfer',
       }))
     },
   })
 }
 
-/** Approve or reject a review — admin only */
 export function useModerateReview() {
   const qc = useQueryClient()
   return useMutation({

@@ -30,7 +30,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
   const { data: b, isLoading } = useBusiness(slug ?? '', initialBusiness !== undefined ? { initialData: initialBusiness } : undefined)
   const [copied, setCopied] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
-  const { data: reviews = [] } = useReviews(b?.id ?? '')
+  const { data: reviews = [] } = useReviews('business', b?.id ?? '')
   const { t } = useTranslation()
   const lp = useLocalePath()
 
@@ -180,12 +180,12 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
           {/* Avaliações */}
           <div className="mt-8">
             <h2 className="font-display font-semibold text-2xl mb-5">{t('negocio.avaliacoes')}</h2>
-            <ReviewList businessId={b.id} />
+            <ReviewList targetType="business" targetId={b.id} />
           </div>
 
           {/* Avaliar */}
           <div className="mt-6">
-            <ReviewForm businessId={b.id} />
+            <ReviewForm targetType="business" targetId={b.id} />
           </div>
         </div>
 
