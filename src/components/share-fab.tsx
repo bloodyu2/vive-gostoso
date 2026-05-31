@@ -9,9 +9,10 @@ export function ShareFab() {
   const [copied, setCopied] = useState(false)
 
   async function handleShare() {
+    const metaDesc = document.querySelector('meta[name="description"]')?.getAttribute('content') || ''
     const data = {
-      title: t('title'),
-      text: t('text'),
+      title: document.title,
+      text: metaDesc || t('text'),
       url: window.location.href,
     }
 
@@ -32,7 +33,7 @@ export function ShareFab() {
     <button
       onClick={handleShare}
       aria-label={t('aria_label')}
-      className="fixed bottom-20 right-4 z-30 w-11 h-11 rounded-full bg-white dark:bg-[#1A1A1A] border border-[#E8E4DF] dark:border-[#2D2D2D] shadow-md flex items-center justify-center text-[#737373] hover:text-teal hover:border-teal dark:hover:text-teal transition-colors md:hidden"
+      className="fixed bottom-20 right-4 z-[60] w-11 h-11 rounded-full bg-white dark:bg-[#1A1A1A] border border-[#E8E4DF] dark:border-[#2D2D2D] shadow-md flex items-center justify-center text-[#737373] hover:text-teal hover:border-teal dark:hover:text-teal transition-colors md:hidden"
     >
       {copied
         ? <Check className="w-4 h-4 text-teal" />

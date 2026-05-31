@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   X, Car, Users, Clock, Languages, MessageCircle, Plus,
-  CreditCard, AlertCircle, MapPin, CheckCircle,
+  CreditCard, AlertCircle, MapPin, CheckCircle, Share2,
 } from 'lucide-react'
 import { useTransfers, useSubmitTransfer } from '@/hooks/useTransfers'
 import type { TransferFormData } from '@/hooks/useTransfers'
@@ -142,9 +142,23 @@ interface TransferDetailModalProps {
 function TransferDetailModal({ transfer, initialRoute, onClose }: TransferDetailModalProps) {
   const { t } = useTranslation()
   const [selectedRouteKey, setSelectedRouteKey] = useState(initialRoute)
+  const [shareCopied, setShareCopied] = useState(false)
 
   const selectedRoute = transfer.routes?.find(r => routeKey(r) === selectedRouteKey) ?? null
   const waUrl = buildWhatsAppLink(transfer.whatsapp, buildWaMessage(transfer, selectedRoute))
+
+  async function handleShare() {
+    const url = window.location.href
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: transfer.provider_name, text: t('transfer.modal_share_text', { name: transfer.provider_name }), url })
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(url)
+        setShareCopied(true)
+        setTimeout(() => setShareCopied(false), 2000)
+      }
+    } catch { /* user cancelled */ }
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
@@ -161,9 +175,14 @@ function TransferDetailModal({ transfer, initialRoute, onClose }: TransferDetail
               </p>
             )}
           </div>
-          <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-[#F5F2EE] transition-colors">
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-1">
+            <button onClick={handleShare} title={t('transfer.modal_compartilhar')} className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-[#F5F2EE] transition-colors text-[#737373] hover:text-teal">
+              {shareCopied ? <CheckCircle className="w-5 h-5 text-teal" /> : <Share2 className="w-5 h-5" />}
+            </button>
+            <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-[#F5F2EE] transition-colors">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Scrollable body */}

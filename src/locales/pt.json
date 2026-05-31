@@ -447,7 +447,9 @@
     "route_to": "Para (ex: São Miguel do Gostoso)",
     "route_price": "Preço (R$)",
     "route_add": "+ Adicionar rota",
-    "route_remove": "Remover"
+    "route_remove": "Remover",
+    "modal_share_text": "Transfer com {{name}} em São Miguel do Gostoso",
+    "modal_compartilhar": "Compartilhar"
   },
   "conheca": {
     "badge": "CONHEÇA.",

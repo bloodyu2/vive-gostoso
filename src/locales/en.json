@@ -477,7 +477,9 @@
     "route_to": "To (e.g. São Miguel do Gostoso)",
     "route_price": "Price (BRL)",
     "route_add": "+ Add route",
-    "route_remove": "Remove"
+    "route_remove": "Remove",
+    "modal_share_text": "Transfer with {{name}} in São Miguel do Gostoso",
+    "modal_compartilhar": "Share"
   },
   "cadastro": {
     "subtitle": "For your business to grow",
