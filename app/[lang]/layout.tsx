@@ -6,6 +6,7 @@ import { routing } from '../../i18n/routing'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { LocaleSync } from '@/components/i18n/locale-sync'
+import { ShareFab } from '@/components/share-fab'
 
 type Props = {
   children: React.ReactNode
@@ -31,6 +32,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       <Header />
       <main>{children}</main>
       <Footer />
+      <ShareFab />
     </NextIntlClientProvider>
   )
 }

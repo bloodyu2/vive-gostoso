@@ -8,8 +8,8 @@ export function ShareFab() {
 
   async function handleShare() {
     const data = {
-      title: t('share_title'),
-      text: t('share_text'),
+      title: t('title'),
+      text: t('text'),
       url: window.location.href,
     }
 
@@ -29,7 +29,7 @@ export function ShareFab() {
   return (
     <button
       onClick={handleShare}
-      aria-label={t('aria_share')}
+      aria-label={t('aria_label')}
       className="fixed bottom-20 right-4 z-30 w-11 h-11 rounded-full bg-white dark:bg-[#1A1A1A] border border-[#E8E4DF] dark:border-[#2D2D2D] shadow-md flex items-center justify-center text-[#737373] hover:text-teal hover:border-teal dark:hover:text-teal transition-colors md:hidden"
     >
       {copied
