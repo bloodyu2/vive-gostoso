@@ -725,5 +725,23 @@
     "results_count_plural": "{{count}} resultados",
     "esc_hint": "Presiona <kbd>Esc</kbd> para cerrar",
     "city_label": "S\u00e3o Miguel do Gostoso"
+  },
+  "review_form": {
+    "success_title": "\u00a1Rese\u00f1a enviada!",
+    "success_desc": "Aparecer\u00e1 aqu\u00ed despu\u00e9s de la moderaci\u00f3n.",
+    "title": "Deja tu rese\u00f1a",
+    "label_rating": "Tu nota *",
+    "label_comment": "Comentario (opcional)",
+    "placeholder_comment": "Cuenta tu experiencia...",
+    "label_name": "Tu nombre (opcional)",
+    "placeholder_name": "\u00bfC\u00f3mo quieres ser identificado?",
+    "submit": "Enviar rese\u00f1a",
+    "submitting": "Enviando..."
+  },
+  "review_list": {
+    "empty": "A\u00fan no hay rese\u00f1as. \u00a1S\u00e9 el primero!",
+    "count": "rese\u00f1a",
+    "count_plural": "rese\u00f1as",
+    "anonymous": "Visitante"
   }
 }

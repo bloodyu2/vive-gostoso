@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, CheckCircle2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import i18n from '@/i18n'
@@ -26,11 +26,11 @@ function AdminReviewsInner() {
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
       <Link href={lp('/cadastre/admin')} className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
-        <ArrowLeft className="w-4 h-4" /> {t('back_to_admin')}
+        <ArrowLeft className="w-4 h-4" /> {t('back')}
       </Link>
 
       <h1 className="font-display text-3xl font-semibold mb-2">{t('title')}</h1>
-      <p className="text-sm text-[#737373] mb-8">{t('subtitle')}</p>
+      <p className="text-sm text-[#737373] mb-8">{t('desc')}</p>
 
       {isLoading && (
         <div className="space-y-3">
@@ -40,8 +40,8 @@ function AdminReviewsInner() {
 
       {!isLoading && !reviews.length && (
         <div className="text-center py-16 text-[#B0A99F]">
-          <div className="text-4xl mb-3">✅</div>
-          <p className="font-semibold">{t('empty_state')}</p>
+          <CheckCircle2 className="w-10 h-10 mx-auto mb-3 text-teal" />
+          <p className="font-semibold">{t('empty')}</p>
         </div>
       )}
 

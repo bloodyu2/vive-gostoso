@@ -317,7 +317,7 @@ function TransferDetailModal({ transfer, initialRoute, onClose }: TransferDetail
 
             {/* Reviews section */}
             <div className="border-t border-[#E8E4DF] pt-6 mt-6">
-              <h3 className="font-display text-lg font-semibold mb-4">Avaliações</h3>
+              <h3 className="font-display text-lg font-semibold mb-4">{t('negocio.avaliacoes')}</h3>
               <ReviewList targetType="transfer" targetId={transfer.id} />
               <div className="mt-6">
                 <ReviewForm targetType="transfer" targetId={transfer.id} />

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { StarRating } from './star-rating'
 import { useSubmitReview } from '@/hooks/useReviews'
 import { useTranslation } from 'react-i18next'
+import { CheckCircle } from 'lucide-react'
 
 interface ReviewFormProps {
   targetType: 'business' | 'professional' | 'transfer'
@@ -32,7 +33,7 @@ export function ReviewForm({ targetType, targetId }: ReviewFormProps) {
   if (submitted) {
     return (
       <div className="bg-teal-light border border-teal/20 rounded-2xl p-6 text-center">
-        <div className="text-3xl mb-2">🙏</div>
+        <CheckCircle className="w-10 h-10 mx-auto mb-2 text-teal" />
         <p className="font-semibold text-teal">{t('success_title')}</p>
         <p className="text-sm text-[#737373] mt-1">{t('success_desc')}</p>
       </div>

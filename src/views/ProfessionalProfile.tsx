@@ -218,7 +218,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
 
         {/* Reviews */}
         <div className="border-t border-[#E8E4DF] pt-8 mt-8">
-          <h3 className="font-display text-lg font-semibold mb-4">Avaliações</h3>
+          <h3 className="font-display text-lg font-semibold mb-4">{t('negocio.avaliacoes')}</h3>
           <ReviewList targetType="professional" targetId={pro.id} />
           <div className="mt-6">
             <ReviewForm targetType="professional" targetId={pro.id} />

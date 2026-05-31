@@ -1047,17 +1047,22 @@
     "close": "Fechar"
   },
   "review_form": {
-    "success_emoji": "\ud83d\ude4f",
     "success_title": "Avalia\u00e7\u00e3o enviada!",
     "success_desc": "Ela aparece aqui ap\u00f3s aprova\u00e7\u00e3o da modera\u00e7\u00e3o.",
-    "form_title": "Deixe sua avalia\u00e7\u00e3o",
-    "rating_label": "Sua nota *",
-    "comment_label": "Coment\u00e1rio (opcional)",
-    "comment_placeholder": "Conte sua experi\u00eancia...",
-    "name_label": "Seu nome (opcional)",
-    "name_placeholder": "Como quer ser identificado?",
+    "title": "Deixe sua avalia\u00e7\u00e3o",
+    "label_rating": "Sua nota *",
+    "label_comment": "Coment\u00e1rio (opcional)",
+    "placeholder_comment": "Conte sua experi\u00eancia...",
+    "label_name": "Seu nome (opcional)",
+    "placeholder_name": "Como quer ser identificado?",
     "submit": "Enviar avalia\u00e7\u00e3o",
     "submitting": "Enviando..."
+  },
+  "review_list": {
+    "empty": "Nenhuma avalia\u00e7\u00e3o ainda. Seja o primeiro!",
+    "count": "avalia\u00e7\u00e3o",
+    "count_plural": "avalia\u00e7\u00f5es",
+    "anonymous": "Visitante"
   },
   "share": {
     "aria_label": "Compartilhar esta p\u00e1gina",

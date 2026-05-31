@@ -967,17 +967,22 @@
     "close": "Close"
   },
   "review_form": {
-    "success_emoji": "\ud83d\ude4f",
     "success_title": "Review submitted!",
     "success_desc": "It will appear here after moderation approval.",
-    "form_title": "Leave your review",
-    "rating_label": "Your rating *",
-    "comment_label": "Comment (optional)",
-    "comment_placeholder": "Tell about your experience...",
-    "name_label": "Your name (optional)",
-    "name_placeholder": "How would you like to be identified?",
+    "title": "Leave your review",
+    "label_rating": "Your rating *",
+    "label_comment": "Comment (optional)",
+    "placeholder_comment": "Tell about your experience...",
+    "label_name": "Your name (optional)",
+    "placeholder_name": "How would you like to be identified?",
     "submit": "Submit review",
     "submitting": "Submitting..."
+  },
+  "review_list": {
+    "empty": "No reviews yet. Be the first!",
+    "count": "review",
+    "count_plural": "reviews",
+    "anonymous": "Visitor"
   },
   "share": {
     "aria_label": "Share this page",

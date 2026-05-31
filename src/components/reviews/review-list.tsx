@@ -40,7 +40,7 @@ export function ReviewList({ targetType, targetId }: ReviewListProps) {
         <span className="font-display font-bold text-3xl text-[#1A1A1A]">{avg.toFixed(1)}</span>
         <div>
           <StarRating value={Math.round(avg)} readonly size="sm" />
-          <p className="text-xs text-[#737373] mt-0.5">{reviews.length} {reviews.length === 1 ? 'avaliação' : 'avaliações'}</p>
+          <p className="text-xs text-[#737373] mt-0.5">{reviews.length} {t('count', { count: reviews.length })}</p>
         </div>
       </div>
 
@@ -48,7 +48,7 @@ export function ReviewList({ targetType, targetId }: ReviewListProps) {
         <div key={r.id} className="bg-white border border-[#E8E4DF] rounded-2xl p-5">
           <div className="flex items-start justify-between gap-3 mb-2">
             <div>
-              <p className="font-semibold text-sm text-[#1A1A1A]">{r.author_name ?? 'Visitante'}</p>
+              <p className="font-semibold text-sm text-[#1A1A1A]">{r.author_name ?? t('anonymous')}</p>
               <p className="text-xs text-[#B0A99F]">{formatDate(r.created_at)}</p>
             </div>
             <StarRating value={r.rating} readonly size="sm" />
