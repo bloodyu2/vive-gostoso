@@ -1,3 +1,5 @@
+'use client'
+
 import { Share2, Check } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
