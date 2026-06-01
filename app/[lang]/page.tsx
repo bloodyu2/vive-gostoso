@@ -6,15 +6,22 @@ import Home from '@/views/Home'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Vive Gostoso -- São Miguel do Gostoso, RN',
-  description: 'A infraestrutura digital de São Miguel do Gostoso. Restaurantes, pousadas, passeios, eventos e mais.',
+  title: 'Vive Gostoso: Sao Miguel do Gostoso, RN',
+  description: 'A infraestrutura digital de Sao Miguel do Gostoso. Restaurantes, pousadas, passeios, eventos e mais.',
   openGraph: {
     title: 'Vive Gostoso',
-    description: 'O sistema operacional de São Miguel do Gostoso, RN.',
+    description: 'O sistema operacional de Sao Miguel do Gostoso, RN.',
     url: 'https://vivegostoso.com.br',
     siteName: 'Vive Gostoso',
     locale: 'pt_BR',
     type: 'website',
+    images: [{ url: 'https://vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Vive Gostoso',
+    description: 'O sistema operacional de Sao Miguel do Gostoso, RN.',
+    images: ['https://vivegostoso.com.br/og-image.png'],
   },
 }
 

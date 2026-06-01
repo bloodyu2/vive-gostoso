@@ -1,15 +1,18 @@
 'use client'
+import { useState } from 'react'
 import Link from 'next/link'
 import { Sun, Moon } from 'lucide-react'
 import { Logo } from '@/components/brand/logo'
 import { useTheme } from '@/hooks/useTheme'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import { CookieBanner } from '@/components/cookie-banner'
 
 export function Footer() {
   const { theme, toggle } = useTheme()
   const { t } = useTranslation()
   const lp = useLocalePath()
+  const [showCookieBanner, setShowCookieBanner] = useState(false)
 
   const MODULOS = [
     { to: lp('/come'),     label: t('nav.come') },
@@ -91,9 +94,10 @@ export function Footer() {
         </div>
       </div>
 
+      {showCookieBanner && <CookieBanner forceOpen />}
       <div className="border-t border-[#3D3D3D] mt-10 pt-5 text-xs max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
         <span className="opacity-50 text-center sm:text-left">
-          vivegostoso.com.br · São Miguel do Gostoso, RN ·{' '}
+          vivegostoso.com.br · Sao Miguel do Gostoso, RN ·{' '}
           <a href="mailto:contato@vivegostoso.com.br" className="hover:opacity-100 transition-opacity">
             contato@vivegostoso.com.br
           </a>
@@ -107,6 +111,18 @@ export function Footer() {
           >
             {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
+          <button
+            onClick={() => setShowCookieBanner(true)}
+            className="opacity-60 hover:opacity-100 transition-opacity"
+          >
+            {t('footer.gerenciar_cookies') ?? 'Gerenciar cookies'}
+          </button>
+          <Link
+            href={lp('/privacidade')}
+            className="opacity-60 hover:opacity-100 transition-opacity"
+          >
+            {t('footer.privacidade') ?? 'Privacidade'}
+          </Link>
           <a
             href="https://balaio.net"
             target="_blank"

@@ -741,9 +741,29 @@
     "submitting": "Enviando..."
   },
   "review_list": {
-    "empty": "A\u00fan no hay rese\u00f1as. \u00a1S\u00e9 el primero!",
-    "count": "rese\u00f1a",
-    "count_plural": "rese\u00f1as",
+    "empty": "Aún no hay reseñas. ¡Sé el primero!",
+    "count": "reseña",
+    "count_plural": "reseñas",
     "anonymous": "Visitante"
+  },
+  "privacidade": {
+    "title": "Política de Privacidad",
+    "sec1_title": "1. Quiénes somos",
+    "sec1_text": "Vive Gostoso es la infraestructura digital de São Miguel do Gostoso, RN. Operamos sin fines de lucro con total transparencia.",
+    "sec2_title": "2. Datos que recopilamos",
+    "sec2_text": "Recopilamos solo datos necesarios: nombre, correo y teléfono para registro de prestadores; datos públicos de negocios (nombre, dirección, contacto); y datos de navegación mediante cookies analíticas (con su consentimiento).",
+    "sec3_title": "3. Cómo usamos sus datos",
+    "sec3_text": "Sus datos se usan para: mostrar su perfil/negocio en la plataforma; permitir contacto directo (WhatsApp); análisis de uso anónimo para mejorar el sitio; y procesamiento de pagos (Stripe).",
+    "sec4_title": "4. Cookies",
+    "sec4_text": "Usamos cookies esenciales (funcionamiento del sitio) y cookies analíticas (Google Analytics) solo con su consentimiento. Puede rechazar o gestionarlas en cualquier momento haciendo clic en \"Gestionar cookies\" en el pie de página.",
+    "sec5_title": "5. Sus derechos (LGPD)",
+    "sec5_text": "Tiene derecho a: acceder, corregir, eliminar, portar y revocar consentimiento. Para ejercerlos, envíe un correo a: privacidade@vivegostoso.com.br",
+    "sec6_title": "6. Retención",
+    "sec6_text": "Mantenemos sus datos mientras su cuenta o negocio esté activo en la plataforma. Después de la eliminación, los removemos en hasta 30 días, salvo obligaciones legales."
+  },
+  "footer": {
+    "privacidade": "Privacidad",
+    "gerenciar_cookies": "Gestionar cookies"
   }
+}
 }

@@ -1167,6 +1167,25 @@
     "accept": "Accept",
     "decline": "Decline"
   },
+  "privacidade": {
+    "title": "Privacy Policy",
+    "sec1_title": "1. Who we are",
+    "sec1_text": "Vive Gostoso is the digital infrastructure of São Miguel do Gostoso, RN. We operate non-profit with total transparency.",
+    "sec2_title": "2. Data we collect",
+    "sec2_text": "We only collect necessary data: name, email and phone for provider registration; public business data (name, address, contact); and navigation data via analytics cookies (with your consent).",
+    "sec3_title": "3. How we use your data",
+    "sec3_text": "Your data is used to: display your profile/business on the platform; enable direct contact (WhatsApp); anonymous usage analysis to improve the site; and payment processing (Stripe).",
+    "sec4_title": "4. Cookies",
+    "sec4_text": "We use essential cookies (site functionality) and analytics cookies (Google Analytics) only with your consent. You can refuse or manage them at any time by clicking \"Manage cookies\" in the footer.",
+    "sec5_title": "5. Your rights (LGPD)",
+    "sec5_text": "You have the right to: access, correct, delete, port and revoke consent. To exercise them, email: privacidade@vivegostoso.com.br",
+    "sec6_title": "6. Retention",
+    "sec6_text": "We keep your data while your account or business is active on the platform. After deletion, we remove it within 30 days, unless legally required."
+  },
+  "footer": {
+    "privacidade": "Privacy",
+    "gerenciar_cookies": "Manage cookies"
+  },
   "whatsapp": {
     "default_message": "Hi! I saw Vive Gostoso and would like more information.",
     "professional_with_specialty": "Hi {{name}}! I saw your profile on Vive Gostoso and I'm interested in your {{specialty}}. Can you tell me more?",

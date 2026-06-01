@@ -1167,6 +1167,25 @@
     "accept": "Aceitar",
     "decline": "Recusar"
   },
+  "privacidade": {
+    "title": "Política de Privacidade",
+    "sec1_title": "1. Quem somos",
+    "sec1_text": "Vive Gostoso é a infraestrutura digital de São Miguel do Gostoso, RN. Operamos sem fins lucrativos e com transparência total.",
+    "sec2_title": "2. Dados que coletamos",
+    "sec2_text": "Coletamos apenas dados necessários: nome, e-mail e telefone para cadastro de prestadores; dados públicos de negócios (nome, endereço, contato); e dados de navegação via cookies analíticos (com seu consentimento).",
+    "sec3_title": "3. Como usamos seus dados",
+    "sec3_text": "Seus dados são usados para: exibir seu perfil/negócio na plataforma; permitir contato direto (WhatsApp); análise de uso anônima para melhorar o site; e processamento de pagamentos (Stripe).",
+    "sec4_title": "4. Cookies",
+    "sec4_text": "Usamos cookies essenciais (funcionamento do site) e cookies analíticos (Google Analytics) apenas com seu consentimento. Você pode recusar ou gerenciar a qualquer momento clicando em \"Gerenciar cookies\" no rodapé.",
+    "sec5_title": "5. Seus direitos (LGPD)",
+    "sec5_text": "Você tem direito a: acessar, corrigir, excluir, portar e revogar consentimento. Para exercer, envie e-mail para: privacidade@vivegostoso.com.br",
+    "sec6_title": "6. Retenção",
+    "sec6_text": "Mantemos seus dados enquanto sua conta ou negócio estiver ativo na plataforma. Após exclusão, removemos em até 30 dias, salvo obrigações legais."
+  },
+  "footer": {
+    "privacidade": "Privacidade",
+    "gerenciar_cookies": "Gerenciar cookies"
+  },
   "whatsapp": {
     "default_message": "Ol\u00e1! Vi o Vive Gostoso e gostaria de mais informa\u00e7\u00f5es.",
     "professional_with_specialty": "Ol\u00e1 {{name}}! Vi seu perfil no Vive Gostoso e tenho interesse na sua {{specialty}}. Pode me contar mais?",
