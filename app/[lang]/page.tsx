@@ -2,6 +2,7 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import Home from '@/views/Home'
+import { organizationSchema } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -58,5 +59,14 @@ async function getHomeData() {
 
 export default async function HomePage() {
   const initialData = await getHomeData()
-  return <Home initialData={initialData} />
+  const jsonLd = organizationSchema()
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Home initialData={initialData} />
+    </>
+  )
 }

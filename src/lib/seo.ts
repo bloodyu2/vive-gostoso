@@ -88,6 +88,62 @@ export function breadcrumbSchema(crumbs: { name: string; url: string }[]): Recor
   }
 }
 
+export interface LocalBusinessInput {
+  name: string
+  description: string
+  url: string
+  image?: string
+  telephone?: string
+  address?: {
+    streetAddress?: string
+    addressLocality: string
+    addressRegion: string
+    postalCode?: string
+    addressCountry: string
+  }
+  geo?: { latitude: number; longitude: number }
+  priceRange?: string
+}
+
+export function localBusinessSchema(input: LocalBusinessInput): Record<string, unknown> {
+  const schema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: input.name,
+    description: input.description,
+    url: input.url,
+    image: input.image ?? `${BASE_URL}/og-image.png`,
+    telephone: input.telephone,
+    address: input.address ? {
+      '@type': 'PostalAddress',
+      ...input.address,
+    } : undefined,
+    geo: input.geo ? {
+      '@type': 'GeoCoordinates',
+      latitude: input.geo.latitude,
+      longitude: input.geo.longitude,
+    } : undefined,
+    priceRange: input.priceRange,
+  }
+  Object.keys(schema).forEach((key) => {
+    if (schema[key] === undefined) delete schema[key]
+  })
+  return schema
+}
+
+export function organizationSchema(): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: SITE_NAME,
+    url: BASE_URL,
+    logo: PUBLISHER_LOGO,
+    sameAs: [
+      'https://instagram.com/vivegostoso',
+    ],
+  }
+}
+
 /** Truncate a description to ~160 chars on a word boundary for meta descriptions */
 export function clampDescription(text: string, max = 160): string {
   if (text.length <= max) return text
