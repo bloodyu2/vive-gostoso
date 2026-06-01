@@ -66,7 +66,7 @@ export default async function BlogPostRoute({ params }: Props) {
     url: `${baseUrl}/${lang === 'pt' ? '' : lang + '/'}blog/${slug}`,
     image: post.cover_url ?? undefined,
     publishedTime: post.published_at ?? undefined,
-    modifiedTime: post.updated_at ?? undefined,
+    modifiedTime: post.created_at ?? undefined,
     tags: post.tags ?? undefined,
   })
 
