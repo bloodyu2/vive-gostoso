@@ -5,10 +5,8 @@ import Link from 'next/link'
 import { ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
-import { EventCard } from '@/components/events/event-card'
 import { BusinessCard } from '@/components/business/business-card'
 import { Hoje } from '@/components/home/hoje'
-import { useEvents } from '@/hooks/useEvents'
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useStats } from '@/hooks/useStats'
 import { usePageMeta } from '@/hooks/usePageMeta'
@@ -61,7 +59,6 @@ export default function Home({ initialData: _initialData }: HomeProps) {
     title: 'São Miguel do Gostoso, RN',
     description: 'Come. Fique. Passeie. O guia completo de São Miguel do Gostoso: restaurantes, pousadas, passeios e muito mais.',
   })
-  const { data: events = [] } = useEvents(true)
   const { data: allBusinesses = [] } = useBusinesses()
   const featured = allBusinesses.filter(b => b.is_featured)
   const { data: stats } = useStats()
@@ -226,19 +223,6 @@ export default function Home({ initialData: _initialData }: HomeProps) {
 
       {/* ── Agora em Gostoso ── */}
       <Hoje />
-
-      {/* ── Próximos eventos ── */}
-      {events.length > 0 && (
-        <section className="max-w-6xl mx-auto px-5 md:px-8 pb-12 md:pb-16">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="font-display text-xl md:text-2xl font-semibold">{t('home.eventos_titulo')}</h2>
-            <Link href={lp('/participe')} className="text-teal text-sm font-semibold">{t('home.ver_todos')}</Link>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {events.slice(0, 3).map(e => <EventCard key={e.id} event={e} />)}
-          </div>
-        </section>
-      )}
 
       {/* ── Instagram ── */}
       <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10">
