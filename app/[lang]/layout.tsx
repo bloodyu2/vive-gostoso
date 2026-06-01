@@ -7,6 +7,7 @@ import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { LocaleSync } from '@/components/i18n/locale-sync'
 import { ShareFab } from '@/components/share-fab'
+import { CookieBanner } from '@/components/cookie-banner'
 
 type Props = {
   children: React.ReactNode
@@ -33,6 +34,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       <main>{children}</main>
       <Footer />
       <ShareFab />
+      <CookieBanner />
     </NextIntlClientProvider>
   )
 }

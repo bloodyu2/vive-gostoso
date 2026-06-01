@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import { CookieBanner } from '@/components/cookie-banner'
 
 export default function CadastreLayout({ children }: { children: React.ReactNode }) {
   const lp = useLocalePath()
@@ -18,6 +19,7 @@ export default function CadastreLayout({ children }: { children: React.ReactNode
         </Link>
       </div>
       {children}
+      <CookieBanner />
     </>
   )
 }

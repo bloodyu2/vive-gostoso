@@ -3,14 +3,22 @@ import { useTranslation } from 'react-i18next'
 
 declare function gtag(...args: unknown[]): void
 
-export function CookieBanner() {
+interface CookieBannerProps {
+  forceOpen?: boolean
+}
+
+export function CookieBanner({ forceOpen }: CookieBannerProps = {}) {
   const { t } = useTranslation('cookie')
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
+    if (forceOpen) {
+      setVisible(true)
+      return
+    }
     const stored = localStorage.getItem('vg_cookie_consent')
     if (!stored) setVisible(true)
-  }, [])
+  }, [forceOpen])
 
   function accept() {
     localStorage.setItem('vg_cookie_consent', 'accepted')
