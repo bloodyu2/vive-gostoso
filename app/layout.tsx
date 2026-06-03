@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: { default: 'Vive Gostoso', template: '%s | Vive Gostoso' },
   description: 'A infraestrutura digital de São Miguel do Gostoso, RN.',
   manifest: '/manifest.json',
+  verification: {
+    google: 'google342626b66cf2cdc9',
+  },
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },
