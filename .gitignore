@@ -29,6 +29,11 @@ public/workbox-*.js
 .cursorrules
 CLAUDE.md
 memory.md
+opencode.json
+opencode.jsonc
+.opencode/
+AGENTS.md
+*.md.backup
 .superpowers/
 docs/superpowers/
 

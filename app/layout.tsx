@@ -1,6 +1,6 @@
-// app/layout.tsx
 import type { Metadata, Viewport } from 'next'
 import { Providers } from '@/components/providers'
+import { GTMScript } from '@/components/gtm-script'
 import '@/styles/globals.css'
 
 export const viewport: Viewport = {
@@ -32,11 +32,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet"
+      />
+      <GTMScript />
+    </head>
       <body className="bg-areia text-[#1A1A1A] font-sans antialiased">
         <Providers>{children}</Providers>
       </body>

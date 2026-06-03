@@ -1,12 +1,24 @@
 import type { Metadata } from 'next'
 import { getBusinessesByVerb } from '@/lib/supabase/queries'
+import { itemListSchema } from '@/lib/seo'
 import Come from '@/views/Come'
+
+const baseUrl = 'https://vivegostoso.com.br'
 
 export const revalidate = 1800
 
 export const metadata: Metadata = {
   title: 'COME. -- Restaurantes e Gastronomia',
   description: 'Restaurantes, bares e experiencias gastronomicas em Sao Miguel do Gostoso, RN.',
+  alternates: {
+    canonical: `${baseUrl}/come`,
+    languages: {
+      'pt-BR': `${baseUrl}/come`,
+      'en': `${baseUrl}/en/come`,
+      'es': `${baseUrl}/es/come`,
+      'x-default': `${baseUrl}/come`,
+    },
+  },
   openGraph: {
     title: 'COME. -- Restaurantes e Gastronomia',
     description: 'Restaurantes, bares e experiencias gastronomicas em Sao Miguel do Gostoso, RN.',
@@ -26,5 +38,19 @@ export const metadata: Metadata = {
 
 export default async function ComePage() {
   const businesses = await getBusinessesByVerb('come')
-  return <Come initialBusinesses={businesses} />
+  const jsonLd = itemListSchema({
+    name: 'Restaurantes em Sao Miguel do Gostoso',
+    description: 'Restaurantes, bares e experiencias gastronomicas em Sao Miguel do Gostoso, RN.',
+    url: `${baseUrl}/come`,
+    items: businesses.map(b => ({ name: b.name, url: `${baseUrl}/negocio/${b.slug}` })),
+  })
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Come initialBusinesses={businesses} />
+    </>
+  )
 }

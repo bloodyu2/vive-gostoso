@@ -5,6 +5,15 @@ import Sobre from '@/views/Sobre'
 export const metadata: Metadata = {
   title: 'Sobre o Projeto',
   description: 'Conheca o projeto Vive Gostoso e sua missao para Sao Miguel do Gostoso.',
+  alternates: {
+    canonical: 'https://vivegostoso.com.br/sobre',
+    languages: {
+      'pt-BR': 'https://vivegostoso.com.br/sobre',
+      'en': 'https://vivegostoso.com.br/en/sobre',
+      'es': 'https://vivegostoso.com.br/es/sobre',
+      'x-default': 'https://vivegostoso.com.br/sobre',
+    },
+  },
   openGraph: {
     title: 'Sobre o Projeto',
     description: 'Conheca o projeto Vive Gostoso e sua missao para Sao Miguel do Gostoso.',

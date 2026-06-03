@@ -6,6 +6,15 @@ export const revalidate = 1800
 export const metadata: Metadata = {
   title: 'PARTICIPE. -- Eventos em Sao Miguel do Gostoso',
   description: 'Festivais, eventos culturais e agenda completa de Sao Miguel do Gostoso, RN.',
+  alternates: {
+    canonical: 'https://vivegostoso.com.br/participe',
+    languages: {
+      'pt-BR': 'https://vivegostoso.com.br/participe',
+      'en': 'https://vivegostoso.com.br/en/participe',
+      'es': 'https://vivegostoso.com.br/es/participe',
+      'x-default': 'https://vivegostoso.com.br/participe',
+    },
+  },
   openGraph: {
     title: 'PARTICIPE. -- Eventos em Sao Miguel do Gostoso',
     description: 'Festivais, eventos culturais e agenda completa de Sao Miguel do Gostoso, RN.',

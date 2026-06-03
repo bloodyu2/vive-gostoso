@@ -8,6 +8,15 @@ export const revalidate = 1800
 export const metadata: Metadata = {
   title: 'EXPLORE. -- Mapa de Sao Miguel do Gostoso',
   description: 'Explore restaurantes, pousadas e passeios em Sao Miguel do Gostoso no mapa interativo.',
+  alternates: {
+    canonical: 'https://vivegostoso.com.br/explore',
+    languages: {
+      'pt-BR': 'https://vivegostoso.com.br/explore',
+      'en': 'https://vivegostoso.com.br/en/explore',
+      'es': 'https://vivegostoso.com.br/es/explore',
+      'x-default': 'https://vivegostoso.com.br/explore',
+    },
+  },
   openGraph: {
     title: 'EXPLORE. -- Mapa de Sao Miguel do Gostoso',
     description: 'Explore restaurantes, pousadas e passeios em Sao Miguel do Gostoso no mapa interativo.',

@@ -2,13 +2,22 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import Home from '@/views/Home'
-import { organizationSchema } from '@/lib/seo'
+import { organizationSchema, webSiteSchema } from '@/lib/seo'
 
 export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Vive Gostoso: Sao Miguel do Gostoso, RN',
   description: 'A infraestrutura digital de Sao Miguel do Gostoso. Restaurantes, pousadas, passeios, eventos e mais.',
+  alternates: {
+    canonical: 'https://vivegostoso.com.br',
+    languages: {
+      'pt-BR': 'https://vivegostoso.com.br',
+      'en': 'https://vivegostoso.com.br/en',
+      'es': 'https://vivegostoso.com.br/es',
+      'x-default': 'https://vivegostoso.com.br',
+    },
+  },
   openGraph: {
     title: 'Vive Gostoso',
     description: 'O sistema operacional de Sao Miguel do Gostoso, RN.',
@@ -59,12 +68,17 @@ async function getHomeData() {
 
 export default async function HomePage() {
   const initialData = await getHomeData()
-  const jsonLd = organizationSchema()
+  const jsonLdOrg = organizationSchema()
+  const jsonLdWeb = webSiteSchema()
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrg) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWeb) }}
       />
       <Home initialData={initialData} />
     </>

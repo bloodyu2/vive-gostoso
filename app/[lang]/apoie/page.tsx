@@ -7,6 +7,15 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: 'APOIE. -- Fundo Publico de Sao Miguel do Gostoso',
   description: 'Apoie o fundo publico transparente de Sao Miguel do Gostoso. Cada real arrecadado vai para o marketing da cidade.',
+  alternates: {
+    canonical: 'https://vivegostoso.com.br/apoie',
+    languages: {
+      'pt-BR': 'https://vivegostoso.com.br/apoie',
+      'en': 'https://vivegostoso.com.br/en/apoie',
+      'es': 'https://vivegostoso.com.br/es/apoie',
+      'x-default': 'https://vivegostoso.com.br/apoie',
+    },
+  },
   openGraph: {
     title: 'APOIE. -- Fundo Publico de Sao Miguel do Gostoso',
     description: 'Apoie o fundo publico transparente de Sao Miguel do Gostoso. Cada real arrecadado vai para o marketing da cidade.',

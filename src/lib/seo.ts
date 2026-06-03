@@ -144,6 +144,72 @@ export function organizationSchema(): Record<string, unknown> {
   }
 }
 
+export function webSiteSchema(): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE_NAME,
+    url: BASE_URL,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${BASE_URL}/explore?q={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+  }
+}
+
+export function citySchema(): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'City',
+    name: 'Sao Miguel do Gostoso',
+    alternateName: ['Gostoso', 'Sao Miguel'],
+    url: BASE_URL,
+    containedInPlace: {
+      '@type': 'State',
+      name: 'Rio Grande do Norte',
+      containedInPlace: {
+        '@type': 'Country',
+        name: 'Brazil',
+      },
+    },
+    population: 10636,
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: -5.1189,
+      longitude: -35.3583,
+    },
+    touristDestination: {
+      '@type': 'TouristDestination',
+      name: 'Sao Miguel do Gostoso',
+      description: 'Coastal city in Rio Grande do Norte known for kitesurfing, windsurfing and pristine beaches.',
+    },
+  }
+}
+
+export interface ItemListSchemaInput {
+  name: string
+  description: string
+  url: string
+  items: Array<{ name: string; url: string }>
+}
+
+export function itemListSchema(input: ItemListSchemaInput): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: input.name,
+    description: input.description,
+    url: input.url,
+    itemListElement: input.items.map((item, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      name: item.name,
+      url: item.url,
+    })),
+  }
+}
+
 /** Truncate a description to ~160 chars on a word boundary for meta descriptions */
 export function clampDescription(text: string, max = 160): string {
   if (text.length <= max) return text

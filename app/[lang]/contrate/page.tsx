@@ -4,6 +4,15 @@ import Contrate from '@/views/Contrate'
 export const metadata: Metadata = {
   title: 'CONTRATE. -- Profissionais e Empresas em Sao Miguel do Gostoso',
   description: 'Contrate profissionais e empresas de servico em Sao Miguel do Gostoso, RN. Encontre autonomos, agencias e vagas de emprego.',
+  alternates: {
+    canonical: 'https://vivegostoso.com.br/contrate',
+    languages: {
+      'pt-BR': 'https://vivegostoso.com.br/contrate',
+      'en': 'https://vivegostoso.com.br/en/contrate',
+      'es': 'https://vivegostoso.com.br/es/contrate',
+      'x-default': 'https://vivegostoso.com.br/contrate',
+    },
+  },
   openGraph: {
     title: 'CONTRATE. -- Profissionais e Empresas em Sao Miguel do Gostoso',
     description: 'Contrate profissionais e empresas de servico em Sao Miguel do Gostoso, RN. Encontre autonomos, agencias e vagas de emprego.',
