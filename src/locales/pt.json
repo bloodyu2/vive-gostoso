@@ -460,7 +460,7 @@
   "conheca": {
     "badge": "CONHEÇA.",
     "titulo": "São Miguel do Gostoso",
-    "desc": "Uma vila de pescadores no litoral norte do Rio Grande do Norte. De agosto a janeiro, o vento não para — temporada de kite e windsurf. O pôr do sol da praia do Minhoto vira foto toda noite.",
+    "desc": "Uma vila de pescadores no litoral norte do Rio Grande do Norte. De agosto a janeiro, o vento nao para: temporada de kite e windsurf. O por do sol na Praia da Xepa vira foto toda noite.",
     "praias_titulo": "Praias",
     "praias_minhoto_nome": "Praia do Minhoto",
     "praias_minhoto_desc": "a principal, com restaurantes, bares e kite na beira d'água.",
@@ -508,7 +508,11 @@
     "reveillon_titulo": "O Réveillon do Gostoso",
     "reveillon_desc": "Todo ano, entre 28 de dezembro e 2 de janeiro, Gostoso recebe turistas de todo o Brasil. Música ao vivo na beira da praia, fogos sobre o mar, gastronomia local em plena forma. Reserve pousada com antecedência: lota desde outubro.",
     "meta_title": "Conheça Gostoso",
-    "meta_desc": "A história, as praias, como chegar e a melhor época para visitar São Miguel do Gostoso."
+    "meta_desc": "A história, as praias, como chegar e a melhor época para visitar São Miguel do Gostoso.",
+    "praias_xepa_nome": "Praia da Xepa",
+    "praias_xepa_desc": "O coracao de Gostoso. E ali que a cidade se encontra todo fim de tarde para o por do sol. Barraquinhas de drinks, musica ao vivo, gente de todo lugar do Brasil e do mundo. O point obrigatorio de toda visita.",
+    "historia_titulo": "Historia",
+    "historia_desc": "Sao Miguel do Gostoso nasceu como vila de pescadores. O nome Gostoso vem de uma antiga fazenda da regiao que produzia cana-de-acucar e caju. A praia do Minhoto era o porto natural onde as jangadas atracavam. Nas decadas de 1980 e 1990, os primeiros kitesurfistas descobriram o vento constante e a agua plana. De la pra ca, Gostoso virou referencia mundial do esporte sem perder a alma de vila."
   },
   "cadastro": {
     "subtitle": "Para seu negócio crescer",

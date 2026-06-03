@@ -307,7 +307,7 @@
   "conheca": {
     "badge": "DISCOVER.",
     "titulo": "São Miguel do Gostoso",
-    "desc": "A fishing village on the northern coast of Rio Grande do Norte. From August to January, the wind doesn't stop — kite and windsurfing season. The sunset at Praia do Minhoto turns into a photo every evening.",
+    "desc": "A fishing village on the north coast of Rio Grande do Norte. From August to January, the wind never stops: kite and windsurf season. The sunset at Praia da Xepa becomes a photo every single night.",
     "praias_titulo": "Beaches",
     "praias_minhoto_nome": "Praia do Minhoto",
     "praias_minhoto_desc": "the main beach, with restaurants, bars and kite right on the waterfront.",
@@ -355,7 +355,11 @@
     "reveillon_titulo": "Réveillon do Gostoso — New Year's Eve",
     "reveillon_desc": "Every year, between December 28 and January 2, Gostoso welcomes visitors from all over Brazil. Live music on the beach, fireworks over the sea, local food at its best. Book your guesthouse early — it sells out since October.",
     "meta_title": "Discover Gostoso",
-    "meta_desc": "The history, beaches, how to get there and the best time to visit São Miguel do Gostoso."
+    "meta_desc": "The history, beaches, how to get there and the best time to visit São Miguel do Gostoso.",
+    "praias_xepa_nome": "Praia da Xepa",
+    "praias_xepa_desc": "The heart of Gostoso. This is where the city gathers every late afternoon for sunset. Drink stalls, live music, people from all over Brazil and the world. The must-visit spot.",
+    "historia_titulo": "History",
+    "historia_desc": "Sao Miguel do Gostoso was born as a fishing village. The name Gostoso comes from an old sugarcane and cashew plantation in the region called Fazenda Gostoso. Minhoto beach was the natural port where the fishing boats docked. In the 1980s and 1990s, the first kitesurfers discovered the constant wind and flat water. Since then, Gostoso has become a world reference for the sport without losing its village soul."
   },
   "negocio": {
     "abrir_mapa": "View on map",

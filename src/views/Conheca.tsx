@@ -25,8 +25,17 @@ export default function Conheca() {
       </section>
 
       <section className="mb-12">
+        <h2 className="font-display text-2xl font-semibold mb-3">{t('conheca.historia_titulo')}</h2>
+        <p className="text-[#3D3D3D] leading-relaxed">{t('conheca.historia_desc')}</p>
+      </section>
+
+      <section className="mb-12">
         <h2 className="font-display text-2xl font-semibold mb-3">{t('conheca.praias_titulo')}</h2>
         <div className="space-y-4 text-[#3D3D3D] leading-relaxed">
+          <div>
+            <strong className="text-[#1A1A1A]">{t('conheca.praias_xepa_nome')}:</strong>{' '}
+            {t('conheca.praias_xepa_desc')}
+          </div>
           <div>
             <strong className="text-[#1A1A1A]">{t('conheca.praias_minhoto_nome')}:</strong>{' '}
             {t('conheca.praias_minhoto_desc')}

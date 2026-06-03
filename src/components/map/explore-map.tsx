@@ -49,6 +49,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
   const sidebarRef = useRef<HTMLDivElement>(null)
   const sidebarHeaderRef = useRef<HTMLDivElement>(null)
   const [popup, setPopup] = useState<PopupBusiness | null>(null)
+  const [mapReady, setMapReady] = useState(false)
   const lp = useLocalePath()
 
   const geo = businesses.filter(b => b.lat != null && b.lng != null)
@@ -93,6 +94,13 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
 
       // Close popup on map click
       map.current.on('click', () => setPopup(null))
+
+      // Signal that map is ready for markers
+      map.current.on('load', () => setMapReady(true))
+
+      // Fallback: if map loads very fast, markers fire before the load
+      // event. Set ready after a short delay as a safety net.
+      setTimeout(() => setMapReady(true), 3000)
     })
 
     return () => {
@@ -101,9 +109,9 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
     }
   }, [])
 
-  // Add markers when businesses load
+  // Add markers when map is ready and businesses have loaded
   useEffect(() => {
-    if (!map.current || !mapboxRef.current) return
+    if (!map.current || !mapboxRef.current || !mapReady) return
 
     const mapboxgl = mapboxRef.current
 
@@ -147,7 +155,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
 
       markers.current.push(marker)
     })
-  }, [geo.length])
+  }, [geo.length, mapReady])
 
   const VERB_LABEL: Record<string, string> = { come: 'Restaurantes', fique: 'Hospedagem', passeie: 'Passeios', resolva: 'Serviços' }
   const VERB_TO: Record<string, string>    = { come: '/come', fique: '/fique', passeie: '/passeie', resolva: '/resolva' }

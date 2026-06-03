@@ -307,7 +307,7 @@
   "conheca": {
     "badge": "DESCUBRE.",
     "titulo": "São Miguel do Gostoso",
-    "desc": "Un pueblo de pescadores en la costa norte de Rio Grande do Norte. De agosto a enero, el viento no para — temporada de kite y windsurf. El atardecer de Praia do Minhoto se convierte en fotografía cada noche.",
+    "desc": "Una aldea de pescadores en la costa norte de Rio Grande do Norte. De agosto a enero, el viento no para: temporada de kite y windsurf. La puesta de sol en la Praia da Xepa se convierte en foto todas las noches.",
     "praias_titulo": "Playas",
     "praias_minhoto_nome": "Praia do Minhoto",
     "praias_minhoto_desc": "la principal, con restaurantes, bares y kite en la orilla del agua.",
@@ -355,7 +355,11 @@
     "reveillon_titulo": "El Réveillon do Gostoso — Nochevieja",
     "reveillon_desc": "Cada año, entre el 28 de diciembre y el 2 de enero, Gostoso recibe visitantes de todo Brasil. Música en vivo en la playa, fuegos artificiales sobre el mar, gastronomía local en su mejor momento. Reserva tu posada con antelación: se llena desde octubre.",
     "meta_title": "Descubre Gostoso",
-    "meta_desc": "La historia, las playas, cómo llegar y la mejor época para visitar São Miguel do Gostoso."
+    "meta_desc": "La historia, las playas, cómo llegar y la mejor época para visitar São Miguel do Gostoso.",
+    "praias_xepa_nome": "Praia da Xepa",
+    "praias_xepa_desc": "El corazon de Gostoso. Ahí es donde la ciudad se reúne cada atardecer. Puestos de bebidas, musica en vivo, gente de todo Brasil y del mundo. El punto obligatorio de toda visita.",
+    "historia_titulo": "Historia",
+    "historia_desc": "Sao Miguel do Gostoso nacio como aldea de pescadores. El nombre Gostoso viene de una antigua hacienda de la region que producia caña de azucar y maranon. La playa de Minhoto era el puerto natural donde atracaban las balsas. En las decadas de 1980 y 1990, los primeros kitesurfistas descubrieron el viento constante y el agua plana. Desde entonces, Gostoso se ha convertido en referencia mundial del deporte sin perder el alma de aldea."
   },
   "negocio": {
     "abrir_mapa": "Ver en el mapa",
