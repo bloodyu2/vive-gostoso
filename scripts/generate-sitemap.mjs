@@ -65,13 +65,25 @@ function readEnv() {
 
 const localEnv = readEnv()
 const SUPABASE_URL =
-  localEnv.VITE_SUPABASE_URL   || process.env.VITE_SUPABASE_URL   || ''
+  localEnv.VITE_SUPABASE_URL ||
+  localEnv.NEXT_PUBLIC_SUPABASE_URL ||
+  process.env.VITE_SUPABASE_URL ||
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  ''
 const SUPABASE_KEY =
-  localEnv.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || ''
+  localEnv.VITE_SUPABASE_ANON_KEY ||
+  localEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  process.env.VITE_SUPABASE_ANON_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  ''
 
-if (!SUPABASE_URL || !SUPABASE_KEY) {
-  console.error('Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY')
-  process.exit(1)
+const SUPABASE_AVAILABLE = !!(SUPABASE_URL && SUPABASE_KEY)
+if (!SUPABASE_AVAILABLE) {
+  console.warn(
+    '⚠ Missing VITE_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_URL or ANON_KEY\n' +
+    '  DB-backed slugs (businesses, posts, events) will be omitted from sitemap.\n' +
+    '  Set these env vars in Vercel project → Settings → Environment Variables.'
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -139,25 +151,31 @@ function urlGroup(path, freq, priority, lastmod = '') {
 async function main() {
   console.log('Generating sitemap...')
 
-  // 1. Businesses
-  const businesses = await fetchRows('gostoso_businesses', 'slug')
-  console.log(`  → ${businesses.length} businesses`)
+  let businesses = [], posts = [], events = []
 
-  // 2. Published blog posts
-  const posts = await fetchRows(
-    'gostoso_blog_posts',
-    'slug,published_at',
-    '&is_published=eq.true'
-  )
-  console.log(`  → ${posts.length} blog posts`)
+  if (SUPABASE_AVAILABLE) {
+    // 1. Businesses
+    businesses = await fetchRows('gostoso_businesses', 'slug')
+    console.log(`  → ${businesses.length} businesses`)
 
-  // 3. Active events (keyed by UUID, no slug)
-  const events = await fetchRows(
-    'gostoso_events',
-    'id,starts_at',
-    '&active=eq.true'
-  )
-  console.log(`  → ${events.length} events`)
+    // 2. Published blog posts
+    posts = await fetchRows(
+      'gostoso_blog_posts',
+      'slug,published_at',
+      '&is_published=eq.true'
+    )
+    console.log(`  → ${posts.length} blog posts`)
+
+    // 3. Active events (keyed by UUID, no slug)
+    events = await fetchRows(
+      'gostoso_events',
+      'id,starts_at',
+      '&active=eq.true'
+    )
+    console.log(`  → ${events.length} events`)
+  } else {
+    console.log('  → Skipping DB queries (Supabase env vars not set)')
+  }
 
   const sections = []
 
