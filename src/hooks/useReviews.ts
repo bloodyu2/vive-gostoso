@@ -44,14 +44,14 @@ export function useAdminPendingReviews() {
     queryFn: async (): Promise<(Review & { target_name?: string; target_type?: string })[]> => {
       const { data, error } = await supabase
         .from('gostoso_reviews')
-        .select('*, business:gostoso_businesses(name), professional:gostoso_professionals(name), transfer:gostoso_transfers(provider_name)')
+        .select('*, business:gostoso_businesses(name), professional:gostoso_professionals(display_name), transfer:gostoso_transfers(provider_name)')
         .eq('approved', false)
         .order('created_at', { ascending: true })
       if (error) throw error
 
       return ((data ?? []) as any[]).map(r => ({
         ...r,
-        target_name: r.business?.name || r.professional?.name || r.transfer?.provider_name || 'Desconhecido',
+        target_name: r.business?.name || r.professional?.display_name || r.transfer?.provider_name || 'Desconhecido',
         target_type: r.business_id ? 'business' : r.professional_id ? 'professional' : 'transfer',
       }))
     },
