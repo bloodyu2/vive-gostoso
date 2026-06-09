@@ -334,12 +334,19 @@ function TransferDetailModal({ transfer, initialRoute, onClose }: TransferDetail
               </section>
             )}
 
-            {/* Reviews section */}
+            {/* Reviews section — use business_id when the provider is also a business,
+                so reviews submitted here also appear on the /negocio/[slug] profile page. */}
             <div className="border-t border-[#E8E4DF] pt-6 mt-6">
               <h3 className="font-display text-lg font-semibold mb-4">{t('negocio.avaliacoes')}</h3>
-              <ReviewList targetType="transfer" targetId={transfer.id} />
+              <ReviewList
+                targetType={transfer.business_id ? 'business' : 'transfer'}
+                targetId={transfer.business_id ?? transfer.id}
+              />
               <div className="mt-6">
-                <ReviewForm targetType="transfer" targetId={transfer.id} />
+                <ReviewForm
+                  targetType={transfer.business_id ? 'business' : 'transfer'}
+                  targetId={transfer.business_id ?? transfer.id}
+                />
               </div>
             </div>
 

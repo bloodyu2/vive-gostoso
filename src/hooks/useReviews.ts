@@ -77,7 +77,10 @@ export function useModerateReview() {
       }
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['reviews', 'admin', 'pending'] })
+      // Invalidate all review caches: admin pending + all public business/professional/transfer caches.
+      // Without this, after approving a review the business profile page keeps showing the stale
+      // empty array (cached before approval) until staleTime expires.
+      qc.invalidateQueries({ queryKey: ['reviews'] })
     },
   })
 }
