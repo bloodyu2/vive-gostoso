@@ -76,6 +76,8 @@ export function useClaimsAdmin() {
 }
 
 // Admin: aprovar claim — vincula perfil ao negócio + is_verified = true
+// Usa RPC atômica (gostoso_approve_claim): as 4 operações rodam numa transação.
+// Antes eram 4 mutations sequenciais — falha parcial deixava o banco inconsistente.
 export function useApproveClaim() {
   const qc = useQueryClient()
   return useMutation({
@@ -84,32 +86,12 @@ export function useApproveClaim() {
       businessId: string
       profileId: string
     }) => {
-      const { error: e1 } = await supabase
-        .from('gostoso_claim_requests')
-        .update({ status: 'approved', resolved_at: new Date().toISOString() })
-        .eq('id', claimId)
-      if (e1) throw e1
-
-      const { error: e2 } = await supabase
-        .from('gostoso_businesses')
-        .update({ profile_id: profileId, is_verified: true })
-        .eq('id', businessId)
-      if (e2) throw e2
-
-      const { error: e3 } = await supabase
-        .from('gostoso_profiles')
-        .update({ business_id: businessId })
-        .eq('id', profileId)
-      if (e3) throw e3
-
-      // Notify the profile owner
-      await supabase.from('gostoso_notifications').insert({
-        profile_id: profileId,
-        type: 'claim_approved',
-        title: 'Negócio aprovado!',
-        body: 'Seu pedido foi aprovado. Você já pode gerenciar seu perfil.',
-        link: '/cadastre/painel',
+      const { error } = await supabase.rpc('gostoso_approve_claim', {
+        p_claim_id: claimId,
+        p_business_id: businessId,
+        p_profile_id: profileId,
       })
+      if (error) throw error
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['claims-admin'] })

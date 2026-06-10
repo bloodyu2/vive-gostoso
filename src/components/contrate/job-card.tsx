@@ -1,4 +1,5 @@
 import { Briefcase, Phone } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import type { JobListing } from '@/types/database'
 import { CONTRACT_TYPE_LABELS } from '@/types/database'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
@@ -6,6 +7,7 @@ import { buildWhatsAppLink } from '@/lib/whatsapp'
 interface Props { job: JobListing }
 
 export function JobCard({ job }: Props) {
+  const { t } = useTranslation()
   const wa = buildWhatsAppLink(
     job.whatsapp,
     `Olá! Vi a vaga de ${job.title} no Vive Gostoso e tenho interesse. Podemos conversar?`,
@@ -38,7 +40,7 @@ export function JobCard({ job }: Props) {
         className="mt-4 flex items-center justify-center gap-2 w-full bg-[#25D366] text-white rounded-xl py-2.5 text-sm font-semibold hover:bg-[#1ebe5d] transition-colors"
       >
         <Phone className="w-4 h-4" />
-        Tenho interesse
+        {t('contrate.tenho_interesse')}
       </a>
     </div>
   )

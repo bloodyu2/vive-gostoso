@@ -127,20 +127,23 @@ export default function Home({ initialData: _initialData }: HomeProps) {
           <div className="flex flex-wrap gap-x-10 gap-y-4 mt-14 pt-10 border-t border-white/10">
             {[
               {
+                id: 'negocios',
                 n: stats?.businesses ? `${stats.businesses}` : '—',
                 label: t('home.stat_negocios'),
               },
               {
+                id: 'hospedagens',
                 n: stats?.accommodations ? `${stats.accommodations}` : '—',
                 label: t('home.stat_hospedagens'),
               },
               {
+                id: 'eventos',
                 n: stats?.events ? `${stats.events}` : '—',
                 label: t('home.stat_eventos'),
               },
-              { n: '100%', label: t('home.stat_dinheiro') },
+              { id: 'dinheiro', n: '100%', label: t('home.stat_dinheiro') },
             ].map(s => (
-              <div key={s.label}>
+              <div key={s.id}>
                 <div className="font-display font-bold text-2xl text-white">{s.n}</div>
                 <div className="text-xs text-white/50 mt-0.5">{s.label}</div>
               </div>
@@ -206,14 +209,14 @@ export default function Home({ initialData: _initialData }: HomeProps) {
               >
                 <div className="aspect-square bg-gradient-to-br from-teal to-teal-dark overflow-hidden">
                   {b.cover_url
-                    ? <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
+                    ? <img src={b.cover_url} alt={b.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                     : <div className="w-full h-full flex items-center justify-center text-white/30 text-3xl font-bold">{b.name[0]}</div>
                   }
                 </div>
                 <div className="p-3">
                   <p className="text-xs font-semibold text-[#1A1A1A] truncate leading-snug">{b.name}</p>
                   {b.category && <p className="text-[10px] text-[#737373] mt-0.5 truncate">{b.category.name}</p>}
-                  {b.is_verified && <span className="inline-block mt-1.5 text-[9px] font-bold tracking-wide uppercase text-teal bg-teal-light px-1.5 py-0.5 rounded-full">Verificado</span>}
+                  {b.is_verified && <span className="inline-block mt-1.5 text-[9px] font-bold tracking-wide uppercase text-teal bg-teal-light px-1.5 py-0.5 rounded-full">{t('filters.verificado')}</span>}
                 </div>
               </Link>
             ))}

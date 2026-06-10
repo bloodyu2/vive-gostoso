@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { AdminGuard } from '@/components/auth/admin-guard'
+import { ErrorState } from '@/components/ui/error-state'
 import { useAdminPendingJobs, useModerateJob } from '@/hooks/useJobs'
 import { CONTRACT_TYPE_LABELS } from '@/types/database'
 import type { JobListing } from '@/types/database'
@@ -73,7 +74,7 @@ function JobRow({ job }: { job: JobListing }) {
 function AdminJobsInner() {
   const { t } = useTranslation('admin_jobs')
   const lp = useLocalePath()
-  const { data: jobs = [], isLoading } = useAdminPendingJobs()
+  const { data: jobs = [], isLoading, isError, refetch } = useAdminPendingJobs()
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
@@ -94,6 +95,8 @@ function AdminJobsInner() {
             <div key={i} className="h-24 bg-[#E8E4DF] rounded-2xl animate-pulse" />
           ))}
         </div>
+      ) : isError ? (
+        <ErrorState onRetry={() => refetch()} />
       ) : jobs.length === 0 ? (
         <div className="text-center py-16 border-2 border-dashed border-[#E8E4DF] rounded-2xl">
           <div className="text-4xl mb-3">📋</div>

@@ -112,8 +112,10 @@ export function BusinessFilters({
               key={v}
               onClick={() => onView(v)}
               title={t(labelKey)}
+              aria-label={t(labelKey)}
+              aria-pressed={view === v}
               className={cn(
-                'w-8 h-8 flex items-center justify-center rounded-lg transition-all',
+                'w-9 h-9 flex items-center justify-center rounded-lg transition-all',
                 view === v
                   ? 'bg-teal text-white'
                   : 'text-[#737373] hover:bg-areia dark:hover:bg-[#2D2D2D]'

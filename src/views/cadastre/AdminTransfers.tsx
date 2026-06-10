@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import i18n from '@/i18n'
 import { AdminGuard } from '@/components/auth/admin-guard'
+import { ErrorState } from '@/components/ui/error-state'
 import { useAdminTransfers, useModerateTransfer } from '@/hooks/useTransfers'
 import type { Transfer } from '@/types/database'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
@@ -107,7 +108,7 @@ function TransferRow({ transfer }: { transfer: Transfer }) {
 function AdminTransfersInner() {
   const { t } = useTranslation('admin_transfers')
   const lp = useLocalePath()
-  const { data: transfers = [], isLoading } = useAdminTransfers()
+  const { data: transfers = [], isLoading, isError, refetch } = useAdminTransfers()
   const pending = transfers.filter(t => !t.active)
   const active  = transfers.filter(t => t.active)
 
@@ -130,6 +131,8 @@ function AdminTransfersInner() {
             <div key={i} className="h-28 bg-[#E8E4DF] rounded-2xl animate-pulse" />
           ))}
         </div>
+      ) : isError ? (
+        <ErrorState onRetry={() => refetch()} />
       ) : (
         <div className="space-y-8">
           <section>

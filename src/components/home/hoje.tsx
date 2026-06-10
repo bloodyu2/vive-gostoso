@@ -62,7 +62,7 @@ export function Hoje() {
                     className="flex items-center gap-3 group"
                   >
                     <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal to-teal-dark flex-shrink-0 overflow-hidden">
-                      {b.cover_url && <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />}
+                      {b.cover_url && <img src={b.cover_url} alt={b.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />}
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="text-white text-sm font-medium group-hover:text-teal-light transition-colors truncate">{b.name}</div>

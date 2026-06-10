@@ -17,17 +17,22 @@ export function ReviewForm({ targetType, targetId }: ReviewFormProps) {
   const [comment, setComment] = useState('')
   const [authorName, setAuthorName] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [submitError, setSubmitError] = useState(false)
 
   const { mutate, isPending } = useSubmitReview()
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!rating) return
+    setSubmitError(false)
     const payload: any = { rating: rating as 1 | 2 | 3 | 4 | 5, comment: comment.trim() || undefined, author_name: authorName.trim() || undefined }
     if (targetType === 'business') payload.business_id = targetId
     else if (targetType === 'professional') payload.professional_id = targetId
     else payload.transfer_id = targetId
-    mutate(payload, { onSuccess: () => setSubmitted(true) })
+    mutate(payload, {
+      onSuccess: () => setSubmitted(true),
+      onError: () => setSubmitError(true),
+    })
   }
 
   if (submitted) {
@@ -73,6 +78,12 @@ export function ReviewForm({ targetType, targetId }: ReviewFormProps) {
           className="w-full border border-[#E8E4DF] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition"
         />
       </div>
+
+      {submitError && (
+        <p role="alert" className="text-sm text-coral bg-coral/10 border border-coral/20 rounded-xl px-4 py-2.5">
+          {t('common.erro_desc', { ns: 'translation', defaultValue: 'Nao conseguimos enviar. Verifique sua conexao e tente de novo.' })}
+        </p>
+      )}
 
       <button
         type="submit"

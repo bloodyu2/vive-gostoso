@@ -1,4 +1,5 @@
 import { Phone } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import type { ServiceListing } from '@/types/database'
 import { SERVICE_CATEGORY_LABELS } from '@/types/database'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
@@ -6,6 +7,7 @@ import { buildWhatsAppLink } from '@/lib/whatsapp'
 interface Props { service: ServiceListing }
 
 export function ServiceCard({ service }: Props) {
+  const { t } = useTranslation()
   const wa = buildWhatsAppLink(
     service.whatsapp,
     `Olá ${service.name}, vi seu perfil no Vive Gostoso e gostaria de saber mais sobre: ${service.headline}`,
@@ -16,7 +18,7 @@ export function ServiceCard({ service }: Props) {
       {/* Avatar / foto */}
       <div className="aspect-[4/3] bg-gradient-to-br from-teal/20 to-teal-dark/30 relative overflow-hidden">
         {service.photo_url
-          ? <img src={service.photo_url} alt={service.name} className="w-full h-full object-cover" />
+          ? <img src={service.photo_url} alt={service.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
           : (
             <div className="w-full h-full flex items-center justify-center">
               <div className="w-16 h-16 rounded-full bg-teal/20 flex items-center justify-center">
@@ -29,7 +31,7 @@ export function ServiceCard({ service }: Props) {
         }
         {service.is_featured && (
           <div className="absolute top-3 right-3 bg-ocre text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide">
-            Destaque
+            {t('filters.destaque')}
           </div>
         )}
         {/* Category pill */}
@@ -51,7 +53,7 @@ export function ServiceCard({ service }: Props) {
           className="mt-4 flex items-center justify-center gap-2 w-full bg-[#25D366] text-white rounded-xl py-2.5 text-sm font-semibold hover:bg-[#1ebe5d] transition-colors"
         >
           <Phone className="w-4 h-4" />
-          Chamar no WhatsApp
+          {t('contrate.chamar_whatsapp')}
         </a>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Phone, MapPin, Navigation, ExternalLink } from 'lucide-react'
+import { Phone, MapPin, Navigation, ExternalLink, Star } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Badge } from '@/components/ui/badge'
 import { ManagedBadge } from '@/components/business/managed-badge'
@@ -7,7 +7,22 @@ import { isBusinessOpen } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import { useBusinessRatings } from '@/hooks/useReviews'
 import type { Business } from '@/types/database'
+
+/** Compact star + average + count chip. Single shared query feeds every card (no N+1). */
+function RatingChip({ businessId }: { businessId: string }) {
+  const { data: ratings } = useBusinessRatings()
+  const rating = ratings?.get(businessId)
+  if (!rating) return null
+  return (
+    <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#1A1A1A] dark:text-white">
+      <Star className="w-3.5 h-3.5 fill-ocre text-ocre" aria-hidden="true" />
+      {rating.avg.toFixed(1)}
+      <span className="text-[#737373] font-normal">({rating.count})</span>
+    </span>
+  )
+}
 
 function mapsUrl(b: Business) {
   if (b.lat && b.lng) return `https://www.google.com/maps/dir/?api=1&destination=${b.lat},${b.lng}`
@@ -37,7 +52,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
         {/* Thumb */}
         <Link href={lp(`/negocio/${b.slug}`)} className="relative w-36 sm:w-48 flex-shrink-0">
           <div className="w-full h-full bg-gradient-to-br from-teal to-teal-dark">
-            {b.cover_url && <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />}
+            {b.cover_url && <img src={b.cover_url} alt={b.name} loading="lazy" decoding="async" className="w-full h-full object-cover" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />}
           </div>
           {b.is_featured && (
             <div className="absolute top-2 left-2">
@@ -57,6 +72,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
               <h3 className="font-display font-semibold text-lg tracking-tight hover:text-teal transition-colors">{b.name}</h3>
             </Link>
             <div className="mt-1.5 flex flex-wrap gap-1.5 items-center">
+              <RatingChip businessId={b.id} />
               <ManagedBadge profileId={b.profile_id} isVerified={b.is_verified} size="sm" />
               {b.price_range && (
                 <span className="inline-flex items-center text-xs font-semibold text-[#737373] bg-[#F0EDEA] px-2 py-0.5 rounded-full">
@@ -123,7 +139,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
     )}>
       {/* Cover */}
       <Link href={lp(`/negocio/${b.slug}`)} className="relative overflow-hidden aspect-[4/3] bg-gradient-to-br from-teal to-teal-dark flex-shrink-0">
-        {b.cover_url && <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />}
+        {b.cover_url && <img src={b.cover_url} alt={b.name} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />}
         {b.is_featured && (
           <div className="absolute top-3 right-3">
             <Badge kind="verif">✓ {t('filters.verificado')}</Badge>
@@ -153,6 +169,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
           <h3 className="font-display font-semibold text-xl tracking-tight hover:text-teal transition-colors">{b.name}</h3>
         </Link>
         <div className="mt-1.5 flex flex-wrap gap-1.5 items-center">
+          <RatingChip businessId={b.id} />
           <ManagedBadge profileId={b.profile_id} isVerified={b.is_verified} size="sm" />
           {b.price_range && (
             <span className="inline-flex items-center text-xs font-semibold text-[#737373] bg-[#F0EDEA] px-2 py-0.5 rounded-full">

@@ -7,6 +7,7 @@ import { useLocalePath } from '@/hooks/useLocalePath'
 import i18n from '@/i18n'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { StarRating } from '@/components/reviews/star-rating'
+import { ErrorState } from '@/components/ui/error-state'
 import { useAdminPendingReviews, useModerateReview } from '@/hooks/useReviews'
 
 export default function AdminReviews() {
@@ -20,7 +21,7 @@ function formatDate(iso: string) {
 function AdminReviewsInner() {
   const { t } = useTranslation('admin_reviews')
   const lp = useLocalePath()
-  const { data: reviews = [], isLoading } = useAdminPendingReviews()
+  const { data: reviews = [], isLoading, isError, refetch } = useAdminPendingReviews()
   const { mutate: moderate, isPending } = useModerateReview()
 
   return (
@@ -38,7 +39,9 @@ function AdminReviewsInner() {
         </div>
       )}
 
-      {!isLoading && !reviews.length && (
+      {isError && <ErrorState onRetry={() => refetch()} />}
+
+      {!isLoading && !isError && !reviews.length && (
         <div className="text-center py-16 text-[#B0A99F]">
           <CheckCircle2 className="w-10 h-10 mx-auto mb-3 text-teal" />
           <p className="font-semibold">{t('empty')}</p>

@@ -13,6 +13,7 @@ export function JobForm({ onClose }: Props) {
   const { t } = useTranslation('job_form')
   const { mutateAsync, isPending } = useSubmitJob()
   const [sent, setSent] = useState(false)
+  const [submitError, setSubmitError] = useState(false)
   const [form, setForm] = useState({
     business_name: '',
     title: '',
@@ -27,8 +28,13 @@ export function JobForm({ onClose }: Props) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!valid) return
-    await mutateAsync({ ...form, contract_type: form.contract_type as ContractType })
-    setSent(true)
+    setSubmitError(false)
+    try {
+      await mutateAsync({ ...form, contract_type: form.contract_type as ContractType })
+      setSent(true)
+    } catch {
+      setSubmitError(true)
+    }
   }
 
   return (
@@ -123,6 +129,12 @@ export function JobForm({ onClose }: Props) {
             <p className="text-xs text-[#737373] leading-relaxed">
               {t('info_text')}
             </p>
+
+            {submitError && (
+              <p role="alert" className="text-sm text-coral bg-coral/10 border border-coral/20 rounded-xl px-4 py-2.5">
+                {t('common.erro_desc', { ns: 'translation' })}
+              </p>
+            )}
 
             <button
               type="submit"

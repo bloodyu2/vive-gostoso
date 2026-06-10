@@ -13,6 +13,7 @@ export function ServiceForm({ onClose }: Props) {
   const { t } = useTranslation('service_form')
   const { mutateAsync, isPending } = useSubmitService()
   const [sent, setSent] = useState(false)
+  const [submitError, setSubmitError] = useState(false)
   const [form, setForm] = useState({
     name: '',
     headline: '',
@@ -27,8 +28,13 @@ export function ServiceForm({ onClose }: Props) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!valid) return
-    await mutateAsync({ ...form, service_category: form.service_category as ServiceCategory })
-    setSent(true)
+    setSubmitError(false)
+    try {
+      await mutateAsync({ ...form, service_category: form.service_category as ServiceCategory })
+      setSent(true)
+    } catch {
+      setSubmitError(true)
+    }
   }
 
   return (
@@ -124,6 +130,12 @@ export function ServiceForm({ onClose }: Props) {
             <p className="text-xs text-[#737373] leading-relaxed">
               {t('consent_text')}
             </p>
+
+            {submitError && (
+              <p role="alert" className="text-sm text-coral bg-coral/10 border border-coral/20 rounded-xl px-4 py-2.5">
+                {t('common.erro_desc', { ns: 'translation' })}
+              </p>
+            )}
 
             <button
               type="submit"

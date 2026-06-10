@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { AdminGuard } from '@/components/auth/admin-guard'
+import { ErrorState } from '@/components/ui/error-state'
 import { useAdminPendingServices, useModerateService } from '@/hooks/useServices'
 import { SERVICE_CATEGORY_LABELS } from '@/types/database'
 import type { ServiceListing } from '@/types/database'
@@ -84,7 +85,7 @@ function ServiceRow({ svc }: { svc: ServiceListing }) {
 function AdminServicesInner() {
   const { t } = useTranslation('admin_services')
   const lp = useLocalePath()
-  const { data: services = [], isLoading } = useAdminPendingServices()
+  const { data: services = [], isLoading, isError, refetch } = useAdminPendingServices()
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
@@ -105,6 +106,8 @@ function AdminServicesInner() {
             <div key={i} className="h-28 bg-[#E8E4DF] rounded-2xl animate-pulse" />
           ))}
         </div>
+      ) : isError ? (
+        <ErrorState onRetry={() => refetch()} />
       ) : services.length === 0 ? (
         <div className="text-center py-16 border-2 border-dashed border-[#E8E4DF] rounded-2xl">
           <div className="text-4xl mb-3">💼</div>

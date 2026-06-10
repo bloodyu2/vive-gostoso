@@ -135,7 +135,9 @@
     "cta_titulo": "¿Quiere anunciar su servicio o vacante?",
     "cta_desc": "El registro es gratuito y la plataforma es de la ciudad.",
     "cta_btn": "Registrarse ahora",
-    "candidatar_whatsapp": "Postularse por WhatsApp"
+    "candidatar_whatsapp": "Postularse por WhatsApp",
+    "chamar_whatsapp": "Hablar por WhatsApp",
+    "tenho_interesse": "Me interesa"
   },
   "professional": {
     "categories": {
@@ -435,7 +437,11 @@
     "whatsapp": "WhatsApp",
     "instagram": "Instagram",
     "site": "Sitio web",
-    "ligacao": "Llamar"
+    "ligacao": "Llamar",
+    "selecione": "Seleccione...",
+    "erro_titulo": "Algo salió mal",
+    "erro_desc": "No pudimos cargar los datos. Verifique su conexión e intente de nuevo.",
+    "tentar_novamente": "Intentar de nuevo"
   },
   "not_found": {
     "titulo": "Página no encontrada",
@@ -512,7 +518,9 @@
     "route_add": "+ Añadir ruta",
     "route_remove": "Eliminar",
     "modal_share_text": "Transfer con {{name}} en São Miguel do Gostoso",
-    "modal_compartilhar": "Compartir"
+    "modal_compartilhar": "Compartir",
+    "erro_idiomas": "Seleccione al menos un idioma.",
+    "erro_rotas": "Añada al menos una ruta con origen, destino y precio."
   },
   "cadastro": {
     "subtitle": "Para que tu negocio crezca",

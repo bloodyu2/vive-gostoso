@@ -66,7 +66,7 @@ function TransferCard({ transfer, selectedRoute, onOpen }: TransferCardProps) {
     >
       <div className="relative h-36 bg-gradient-to-br from-teal/20 to-teal/5 flex items-center justify-center flex-shrink-0">
         {transfer.photo_url ? (
-          <img src={transfer.photo_url} alt={transfer.provider_name} className="w-full h-full object-cover" />
+          <img src={transfer.photo_url} alt={transfer.provider_name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
         ) : (
           <Car className="w-12 h-12 text-teal/40" />
         )}
@@ -85,7 +85,7 @@ function TransferCard({ transfer, selectedRoute, onOpen }: TransferCardProps) {
         <div className="flex flex-col gap-1.5 text-sm text-[#737373]">
           <div className="flex items-center gap-2">
             <Users className="w-3.5 h-3.5 flex-shrink-0" />
-            <span>{transfer.max_passengers} passageiros</span>
+            <span>{transfer.max_passengers} {t('transfer.detail_passageiros')}</span>
           </div>
           {transfer.available_hours && (
             <div className="flex items-center gap-2">
@@ -176,7 +176,7 @@ function TransferDetailModal({ transfer, initialRoute, onClose }: TransferDetail
             )}
           </div>
           <div className="flex items-center gap-1">
-            <button onClick={handleShare} title={t('transfer.modal_compartilhar')} className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-[#F5F2EE] transition-colors text-[#737373] hover:text-teal">
+            <button onClick={handleShare} title={t('transfer.modal_compartilhar')} aria-label={t('transfer.modal_compartilhar')} className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-[#F5F2EE] transition-colors text-[#737373] hover:text-teal">
               {shareCopied ? <CheckCircle className="w-5 h-5 text-teal" /> : <Share2 className="w-5 h-5" />}
             </button>
             <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-[#F5F2EE] transition-colors">
@@ -189,7 +189,7 @@ function TransferDetailModal({ transfer, initialRoute, onClose }: TransferDetail
         <div className="overflow-y-auto flex-1">
           {transfer.photo_url && (
             <div className="h-48 w-full flex-shrink-0">
-              <img src={transfer.photo_url} alt={transfer.provider_name} className="w-full h-full object-cover" />
+              <img src={transfer.photo_url} alt={transfer.provider_name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           )}
 
@@ -483,7 +483,7 @@ function RegistrationModal({ onClose }: RegistrationModalProps) {
             <div>
               <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('transfer.modal_veiculo')}</label>
               <select value={form.vehicle_type} onChange={e => setField('vehicle_type', e.target.value)} className={fieldCls('vehicle_type')}>
-                <option value="">Selecione...</option>
+                <option value="">{t('common.selecione')}</option>
                 {VEHICLE_TYPES.map(v => <option key={v} value={v}>{v}</option>)}
               </select>
             </div>
@@ -511,7 +511,7 @@ function RegistrationModal({ onClose }: RegistrationModalProps) {
                 ))}
               </div>
               {errors.includes('languages') && (
-                <p className="text-xs text-red-500 mt-1.5">Selecione ao menos um idioma.</p>
+                <p className="text-xs text-red-500 mt-1.5">{t('transfer.erro_idiomas')}</p>
               )}
             </div>
 
@@ -575,7 +575,7 @@ function RegistrationModal({ onClose }: RegistrationModalProps) {
                 </div>
               ))}
               {errors.includes('routes') && (
-                <p className="text-xs text-red-500">Adicione ao menos uma rota com origem, destino e preço.</p>
+                <p className="text-xs text-red-500">{t('transfer.erro_rotas')}</p>
               )}
               <button type="button" onClick={() => setForm(f => ({ ...f, routes: [...f.routes, { from: '', to: '', price_brl: 0 }] }))}
                 className="text-sm text-teal font-semibold hover:text-teal-dark transition-colors">

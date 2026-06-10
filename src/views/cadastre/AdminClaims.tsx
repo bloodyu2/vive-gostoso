@@ -7,6 +7,7 @@ import { useLocalePath } from '@/hooks/useLocalePath'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { useClaimsAdmin, useApproveClaim, useRejectClaim } from '@/hooks/useClaims'
 import { Button } from '@/components/ui/button'
+import { ErrorState } from '@/components/ui/error-state'
 
 export default function AdminClaims() {
   return <AdminGuard><AdminClaimsInner /></AdminGuard>
@@ -15,7 +16,7 @@ export default function AdminClaims() {
 function AdminClaimsInner() {
   const { t, i18n } = useTranslation('admin_claims')
   const lp = useLocalePath()
-  const { data: claims = [], isLoading } = useClaimsAdmin()
+  const { data: claims = [], isLoading, isError, refetch } = useClaimsAdmin()
   const approve = useApproveClaim()
   const reject = useRejectClaim()
   const [rejectNote, setRejectNote] = useState<Record<string, string>>({})
@@ -25,6 +26,12 @@ function AdminClaimsInner() {
       <div className="animate-pulse space-y-4">
         {[1, 2, 3].map(i => <div key={i} className="h-24 bg-[#E8E4DF] rounded-2xl" />)}
       </div>
+    </main>
+  )
+
+  if (isError) return (
+    <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
+      <ErrorState onRetry={() => refetch()} />
     </main>
   )
 

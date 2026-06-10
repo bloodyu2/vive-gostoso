@@ -21,6 +21,28 @@ export function useReviews(targetType: ReviewTarget, targetId: string) {
   })
 }
 
+/** Aggregated ratings for ALL businesses in one query (view gostoso_business_ratings).
+ *  Every BusinessCard calls this hook with the same queryKey, so TanStack Query
+ *  dedupes it into a single shared fetch -- no N+1. Key starts with 'reviews' so
+ *  useModerateReview's broad invalidation refreshes card stars too. */
+export function useBusinessRatings() {
+  return useQuery({
+    queryKey: ['reviews', 'ratings', 'business'],
+    queryFn: async (): Promise<Map<string, { avg: number; count: number }>> => {
+      const { data, error } = await supabase
+        .from('gostoso_business_ratings')
+        .select('*')
+      if (error) throw error
+      const map = new Map<string, { avg: number; count: number }>()
+      for (const row of (data ?? []) as { business_id: string; avg_rating: string | number; review_count: number }[]) {
+        map.set(row.business_id, { avg: Number(row.avg_rating), count: row.review_count })
+      }
+      return map
+    },
+    staleTime: 5 * 60 * 1000,
+  })
+}
+
 export function useSubmitReview() {
   const qc = useQueryClient()
   return useMutation({

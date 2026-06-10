@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Eye, EyeOff, Pencil, Check, X, ExternalLink } from 'lucide-react'
 import { AdminGuard } from '@/components/auth/admin-guard'
+import { ErrorState } from '@/components/ui/error-state'
 import { supabase } from '@/lib/supabase'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Business } from '@/types/database'
@@ -109,7 +110,7 @@ function PublishToggle({ biz, onDone }: { biz: BusinessRow; onDone: () => void }
 function AdminBusinessesInner() {
   const { t } = useTranslation('admin_businesses')
   const lp = useLocalePath()
-  const { data: businesses = [], isLoading } = useAdminBusinesses()
+  const { data: businesses = [], isLoading, isError, refetch } = useAdminBusinesses()
   const qc = useQueryClient()
   const [filter, setFilter] = useState<'all' | 'draft' | 'published'>('all')
 
@@ -157,7 +158,9 @@ function AdminBusinessesInner() {
         </div>
       )}
 
-      {!isLoading && !filtered.length && (
+      {isError && <ErrorState onRetry={() => refetch()} />}
+
+      {!isLoading && !isError && !filtered.length && (
         <div className="text-center py-16 text-[#B0A99F]">
           <div className="text-4xl mb-3">✅</div>
           <p className="font-semibold">{t('empty')}</p>
