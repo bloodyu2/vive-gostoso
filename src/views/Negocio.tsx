@@ -137,7 +137,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
             <ManagedBadge profileId={b.profile_id} isVerified={b.is_verified} />
           </div>
 
-          <h1 className="font-display font-bold text-4xl tracking-tight mb-1">{b.name}</h1>
+          <h1 className="font-display font-bold text-3xl sm:text-4xl tracking-tight mb-1 break-words">{b.name}</h1>
           {avgRating !== null && (
             <div className="flex items-center gap-2 mb-4">
               <StarRating value={Math.round(avgRating)} readonly size="sm" />

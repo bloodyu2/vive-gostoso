@@ -9,8 +9,7 @@ function ExploreMapLoading() {
   const { t } = useTranslation()
   return (
     <div
-      style={{ height: 'calc(100vh - 70px)' }}
-      className="w-full bg-teal/10 animate-pulse flex items-center justify-center"
+      className="w-full h-[calc(100dvh-69px)] md:h-[calc(100dvh-77px)] bg-teal/10 animate-pulse flex items-center justify-center"
     >
       <span className="text-teal font-medium">{t('common.carregando')}</span>
     </div>
@@ -37,7 +36,7 @@ export default function Explore({ initialBusinesses = [] }: ExploreProps) {
   })
   const { data: businesses = initialBusinesses } = useBusinesses(undefined, { initialData: initialBusinesses })
   return (
-    <div style={{ height: 'calc(100vh - 70px)' }}>
+    <div className="h-[calc(100dvh-69px)] md:h-[calc(100dvh-77px)]">
       <ExploreMap businesses={businesses} />
     </div>
   )

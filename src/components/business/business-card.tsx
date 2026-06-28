@@ -101,7 +101,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
               <a
                 href={buildWhatsAppLink(b.whatsapp)}
                 target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-1.5 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C4A] text-xs font-semibold px-3 py-1.5 rounded-full transition-colors"
+                className="flex items-center gap-1.5 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C4A] text-xs font-semibold px-3 py-2 rounded-full transition-colors"
               >
                 <Phone className="w-3 h-3" />WhatsApp
               </a>
@@ -109,14 +109,14 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
             <a
               href={mapsUrl(b)}
               target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-1.5 bg-[#4285F4]/10 hover:bg-[#4285F4]/20 text-[#4285F4] text-xs font-semibold px-3 py-1.5 rounded-full transition-colors"
+              className="flex items-center gap-1.5 bg-[#4285F4]/10 hover:bg-[#4285F4]/20 text-[#4285F4] text-xs font-semibold px-3 py-2 rounded-full transition-colors"
             >
               <Navigation className="w-3 h-3" />Maps
             </a>
             <a
               href={wazeUrl(b)}
               target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-1.5 bg-[#33CCFF]/10 hover:bg-[#33CCFF]/20 text-[#0099CC] text-xs font-semibold px-3 py-1.5 rounded-full transition-colors"
+              className="flex items-center gap-1.5 bg-[#33CCFF]/10 hover:bg-[#33CCFF]/20 text-[#0099CC] text-xs font-semibold px-3 py-2 rounded-full transition-colors"
             >
               <Navigation className="w-3 h-3" />Waze
             </a>

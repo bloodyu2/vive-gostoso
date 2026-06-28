@@ -186,7 +186,7 @@ export function Header() {
         <div className="flex md:hidden items-center justify-between px-5 py-3">
           <button
             onClick={() => setSearchOpen(true)}
-            className="w-10 h-10 flex items-center justify-center rounded-xl text-[#3D3D3D] dark:text-[#C0BCB8] hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors"
+            className="w-11 h-11 flex items-center justify-center rounded-xl text-[#3D3D3D] dark:text-[#C0BCB8] hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors"
             aria-label={t('nav.buscar')}
           >
             <Search className="w-5 h-5" />
@@ -196,7 +196,7 @@ export function Header() {
           </Link>
           <button
             onClick={() => setDrawerOpen(o => !o)}
-            className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors"
+            className="w-11 h-11 flex items-center justify-center rounded-xl hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors"
             aria-label="Menu"
           >
             {drawerOpen ? <X className="w-5 h-5 text-[#1A1A1A] dark:text-white" /> : <Menu className="w-5 h-5 text-[#1A1A1A] dark:text-white" />}
@@ -206,8 +206,8 @@ export function Header() {
 
       {/* Mobile drawer */}
       {drawerOpen && (
-        <div className="md:hidden fixed inset-0 z-30 pt-[69px]" onClick={() => setDrawerOpen(false)}>
-          <div className="bg-white dark:bg-[#1A1A1A] border-b border-[#E8E4DF] dark:border-[#2D2D2D] shadow-xl overflow-y-auto max-h-[calc(100vh-69px)]" onClick={e => e.stopPropagation()}>
+        <div className="md:hidden fixed inset-0 top-[69px] z-30" onClick={() => setDrawerOpen(false)}>
+          <div className="bg-white dark:bg-[#1A1A1A] border-b border-[#E8E4DF] dark:border-[#2D2D2D] shadow-xl overflow-y-auto max-h-[calc(100dvh-69px)]" onClick={e => e.stopPropagation()}>
             <nav className="px-5 py-4 space-y-1">
               {NAV_ALL.map(v => (
                 <Link
@@ -248,7 +248,6 @@ export function Header() {
               </Link>
             </div>
           </div>
-          <div className="flex-1 bg-black/20 backdrop-blur-sm h-full" />
         </div>
       )}
     </>

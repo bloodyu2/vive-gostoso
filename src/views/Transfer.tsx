@@ -236,7 +236,7 @@ function TransferDetailModal({ transfer, initialRoute, onClose }: TransferDetail
               <h3 className="text-xs font-bold uppercase tracking-widest text-[#737373] mb-3">
                 {t('transfer.detail_detalhes')}
               </h3>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {transfer.available_hours && (
                   <div className="flex items-start gap-2.5">
                     <Clock className="w-4 h-4 text-teal flex-shrink-0 mt-0.5" />

@@ -193,7 +193,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
 
         {/* Popup card */}
         {popup && (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 w-72 bg-white rounded-2xl shadow-xl border border-[#E8E4DF] overflow-hidden z-10">
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 w-72 max-w-[calc(100%-2rem)] bg-white rounded-2xl shadow-xl border border-[#E8E4DF] overflow-hidden z-10">
             {popup.cover_url && (
               <div className="h-32 bg-gradient-to-br from-teal/30 to-teal-dark/30 overflow-hidden">
                 <img src={popup.cover_url} alt={popup.name} className="w-full h-full object-cover" />
@@ -217,7 +217,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
                     </div>
                   )}
                 </div>
-                <button onClick={() => setPopup(null)} className="text-[#B0A89E] hover:text-[#1A1A1A] flex-shrink-0 mt-0.5">
+                <button onClick={() => setPopup(null)} className="p-1.5 -m-1.5 text-[#B0A89E] hover:text-[#1A1A1A] flex-shrink-0">
                   <X className="w-4 h-4" />
                 </button>
               </div>

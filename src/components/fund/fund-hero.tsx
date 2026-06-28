@@ -26,7 +26,7 @@ export function FundHero({
         <div className="text-xs font-medium tracking-widest uppercase opacity-80 mb-3">
           {t('section_label', { month })}
         </div>
-        <h1 className="font-display font-bold text-5xl sm:text-6xl md:text-[80px] leading-none tracking-tight mb-4">
+        <h1 className="font-display font-bold text-5xl sm:text-6xl md:text-8xl leading-none tracking-tight mb-4">
           {t('title')}
         </h1>
         <p className="text-base md:text-lg opacity-90 max-w-lg leading-relaxed">

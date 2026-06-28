@@ -57,7 +57,7 @@ export default function Sobre() {
             <MapPin className="w-3.5 h-3.5" />
             {t('sobre.badge')}
           </div>
-          <h1 className="font-display font-bold text-5xl md:text-6xl leading-[1.1] tracking-tight mb-6">
+          <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl leading-[1.1] tracking-tight mb-6">
             {t('sobre.titulo')}
           </h1>
           <p className="text-white/70 text-lg md:text-xl max-w-2xl leading-relaxed mb-10">

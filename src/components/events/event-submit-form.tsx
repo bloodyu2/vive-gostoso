@@ -70,7 +70,7 @@ export function EventSubmitForm({ open, onClose }: Props) {
       >
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#E8E4DF]">
           <h2 className="font-display font-semibold text-xl">{t('title')}</h2>
-          <button onClick={onClose} className="text-[#737373] hover:text-[#1A1A1A] transition-colors">
+          <button onClick={onClose} className="p-2 -m-2 text-[#737373] hover:text-[#1A1A1A] transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -94,7 +94,7 @@ export function EventSubmitForm({ open, onClose }: Props) {
               <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wider mb-1.5">{t('field_desc_label')}</label>
               <textarea value={form.description} onChange={e => set('description', e.target.value)} rows={3} placeholder={t('field_desc_placeholder')} className={INPUT_CLS} />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wider mb-1.5">{t('field_start_label')}</label>
                 <input required type="datetime-local" value={form.starts_at} onChange={e => set('starts_at', e.target.value)} className={INPUT_CLS} />

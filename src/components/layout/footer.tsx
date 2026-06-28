@@ -36,7 +36,7 @@ export function Footer() {
 
   return (
     <footer className="bg-[#1A1A1A] text-[#E6F5F5] px-5 md:px-8 pt-12 pb-8 mt-16">
-      <div className="max-w-6xl mx-auto flex justify-between items-start flex-wrap gap-8">
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:justify-between items-start gap-8">
 
         {/* Brand */}
         <div className="max-w-xs">
@@ -106,20 +106,20 @@ export function Footer() {
           {/* Dark mode toggle — discrete, white icon */}
           <button
             onClick={toggle}
-            className="opacity-60 hover:opacity-100 transition-opacity text-white"
+            className="p-2 -m-2 opacity-60 hover:opacity-100 transition-opacity text-white"
             aria-label={theme === 'dark' ? t('footer.modo_claro') : t('footer.modo_escuro')}
           >
             {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
           <button
             onClick={() => setShowCookieBanner(true)}
-            className="opacity-60 hover:opacity-100 transition-opacity"
+            className="p-2 -m-2 opacity-60 hover:opacity-100 transition-opacity"
           >
             {t('footer.gerenciar_cookies') ?? 'Gerenciar cookies'}
           </button>
           <Link
             href={lp('/privacidade')}
-            className="opacity-60 hover:opacity-100 transition-opacity"
+            className="p-2 -m-2 opacity-60 hover:opacity-100 transition-opacity"
           >
             {t('footer.privacidade') ?? 'Privacidade'}
           </Link>

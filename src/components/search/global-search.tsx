@@ -83,7 +83,7 @@ export function GlobalSearch({ onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-start justify-center pt-[10vh] px-4"
+      className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-start justify-center pt-[max(5dvh,env(safe-area-inset-top))] px-4"
       onClick={onClose}
     >
       <div
@@ -111,7 +111,7 @@ export function GlobalSearch({ onClose }: Props) {
           )}
         </div>
 
-        <div className="max-h-[60vh] overflow-y-auto">
+        <div className="max-h-[min(60vh,calc(100dvh-160px))] overflow-y-auto">
           {query.trim().length < 2 && (
             <div className="px-4 py-10 text-center text-sm text-[#737373]">
               {t('hint')}
