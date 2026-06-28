@@ -211,7 +211,7 @@ function PainelInner() {
         </div>
 
         {businesses.length > 0 && (
-          <div className="grid grid-cols-3 gap-3 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
             <StatCard
               label={t('stats_businesses')}
               value={businesses.length}
@@ -441,8 +441,8 @@ function PainelInner() {
             </div>
 
             {businesses.some(b => b.plan === 'free') && (
-              <div className="mt-5 rounded-2xl border border-[#E8E4DF] overflow-hidden">
-                <div className="grid grid-cols-3 text-xs">
+              <div className="mt-5 rounded-2xl border border-[#E8E4DF] overflow-x-auto">
+                <div className="grid grid-cols-3 text-xs min-w-[420px] sm:min-w-0">
                   <div className="px-4 py-3 font-semibold text-[#737373] border-b border-[#E8E4DF]">{t('feature_header_benefit')}</div>
                   <div className="px-4 py-3 font-semibold text-teal text-center border-b border-[#E8E4DF]">{t('feature_header_associado')}</div>
                   <div className="px-4 py-3 font-semibold text-ocre text-center border-b border-[#E8E4DF]">{t('feature_header_destaque')}</div>

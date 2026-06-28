@@ -159,13 +159,13 @@ function AdminInner() {
 
         {/* ── Stats bar ── */}
         {statsQuery.isLoading ? (
-          <div className="grid grid-cols-4 sm:grid-cols-8 gap-2 mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 mb-8">
             {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
               <div key={i} className="h-16 bg-[#E8E4DF] rounded-xl animate-pulse" />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-4 sm:grid-cols-8 gap-2 mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 mb-8">
             {statItems.map(({ value, label, urgent }) => (
               <div
                 key={label}

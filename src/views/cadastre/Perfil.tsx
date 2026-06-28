@@ -298,7 +298,7 @@ function PhotoSection({
           <span className="text-[#737373] font-normal ml-1">({currentPhotos.length}/10)</span>
         </label>
         {currentPhotos.length > 0 && (
-          <div className="grid grid-cols-3 gap-2 mb-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mb-3">
             {currentPhotos.map(url => (
               <div key={url} className="relative aspect-square">
                 <img
@@ -906,7 +906,7 @@ function PerfilInner() {
             {/* Comodidades */}
             <div>
               <label className="block text-sm font-medium mb-2">{t('perfil:amenities_label')}</label>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {([
                   { key: 'wifi' as const,         label: t('perfil:amenity_wifi') },
                   { key: 'parking' as const,      label: t('perfil:amenity_parking') },

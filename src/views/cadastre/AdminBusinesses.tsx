@@ -62,7 +62,7 @@ function SlugEditor({ biz, onDone }: { biz: BusinessRow; onDone: () => void }) {
   return (
     <span className="inline-flex items-center gap-1">
       <input
-        className="font-mono text-xs border border-teal rounded-lg px-2 py-0.5 focus:outline-none w-56"
+        className="font-mono text-xs border border-teal rounded-lg px-2 py-0.5 focus:outline-none w-full sm:w-56"
         value={value}
         onChange={e => setValue(e.target.value)}
         onKeyDown={e => { if (e.key === 'Enter') save(); if (e.key === 'Escape') setEditing(false) }}

@@ -266,7 +266,7 @@ function MeusNegociosInner() {
                       <PublishToggle biz={b} onDone={() => invalidate()} />
                       <Link
                         href={lp(`/cadastre/perfil?bizId=${b.id}`)}
-                        className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-teal text-white hover:bg-teal/90 transition-colors"
+                        className="w-full sm:w-auto sm:ml-auto flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-teal text-white hover:bg-teal/90 transition-colors"
                       >
                         <Pencil className="w-3.5 h-3.5" />
                         {t('edit_label')}
