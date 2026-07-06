@@ -5,7 +5,6 @@ import { useQuery } from '@tanstack/react-query'
 import type { UseQueryOptions } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import DOMPurify from 'isomorphic-dompurify'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
 import { usePageMeta } from '@/hooks/usePageMeta'
@@ -179,10 +178,7 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
 
       <article
         className="blog-prose mt-2 max-w-none"
-        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content, {
-          ADD_TAGS: ['details', 'summary'],
-          ADD_ATTR: ['open'],
-        }) }}
+        dangerouslySetInnerHTML={{ __html: post.content }}
       />
 
       <RelatedPosts currentSlug={post.slug} tags={post.tags} />
