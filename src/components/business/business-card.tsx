@@ -19,7 +19,7 @@ function RatingChip({ businessId }: { businessId: string }) {
     <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#1A1A1A] dark:text-white">
       <Star className="w-3.5 h-3.5 fill-ocre text-ocre" aria-hidden="true" />
       {rating.avg.toFixed(1)}
-      <span className="text-[#737373] font-normal">({rating.count})</span>
+      <span className="text-fg-3 font-normal">({rating.count})</span>
     </span>
   )
 }
@@ -48,7 +48,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
 
   if (view === 'list') {
     return (
-      <div className="group bg-white dark:bg-[#1C1C1C] rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] hover:border-ocre hover:shadow-lg transition-all duration-200 flex">
+      <div className="group bg-white dark:bg-card rounded-2xl overflow-hidden border border-border-1 hover:border-ocre hover:shadow-lg transition-all duration-200 flex">
         {/* Thumb */}
         <Link href={lp(`/negocio/${b.slug}`)} className="relative w-36 sm:w-48 flex-shrink-0">
           <div className="w-full h-full bg-gradient-to-br from-teal to-teal-dark">
@@ -75,7 +75,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
               <RatingChip businessId={b.id} />
               <ManagedBadge profileId={b.profile_id} isVerified={b.is_verified} size="sm" />
               {b.price_range && (
-                <span className="inline-flex items-center text-xs font-semibold text-[#737373] bg-[#F0EDEA] px-2 py-0.5 rounded-full">
+                <span className="inline-flex items-center text-xs font-semibold text-fg-3 bg-[#F0EDEA] px-2 py-0.5 rounded-full">
                   {b.price_range}
                 </span>
               )}
@@ -86,12 +86,12 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
               )}
             </div>
             {b.address && (
-              <p className="flex items-center gap-1 text-xs text-[#737373] mt-0.5">
+              <p className="flex items-center gap-1 text-xs text-fg-3 mt-0.5">
                 <MapPin className="w-3 h-3 flex-shrink-0" />{b.address}
               </p>
             )}
             {b.description && (
-              <p className="text-sm text-[#737373] mt-1.5 line-clamp-2">{b.description}</p>
+              <p className="text-sm text-fg-3 mt-1.5 line-clamp-2">{b.description}</p>
             )}
           </div>
 
@@ -135,7 +135,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
   // grid / gallery
   return (
     <div className={cn(
-      'group bg-white dark:bg-[#1C1C1C] rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] hover:border-ocre hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 flex flex-col',
+      'group bg-white dark:bg-card rounded-2xl overflow-hidden border border-border-1 hover:border-ocre hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 flex flex-col',
     )}>
       {/* Cover */}
       <Link href={lp(`/negocio/${b.slug}`)} className="relative overflow-hidden aspect-[4/3] bg-gradient-to-br from-teal to-teal-dark flex-shrink-0">
@@ -172,7 +172,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
           <RatingChip businessId={b.id} />
           <ManagedBadge profileId={b.profile_id} isVerified={b.is_verified} size="sm" />
           {b.price_range && (
-            <span className="inline-flex items-center text-xs font-semibold text-[#737373] bg-[#F0EDEA] px-2 py-0.5 rounded-full">
+            <span className="inline-flex items-center text-xs font-semibold text-fg-3 bg-[#F0EDEA] px-2 py-0.5 rounded-full">
               {b.price_range}
             </span>
           )}
@@ -184,14 +184,14 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
         </div>
 
         {b.address && (
-          <p className="flex items-center gap-1 text-xs text-[#737373] mt-0.5">
+          <p className="flex items-center gap-1 text-xs text-fg-3 mt-0.5">
             <MapPin className="w-3 h-3 flex-shrink-0" />
             <span className="truncate">{b.address}</span>
           </p>
         )}
 
         {b.description && (
-          <p className="text-sm text-[#737373] mt-2 line-clamp-2 flex-1">{b.description}</p>
+          <p className="text-sm text-fg-3 mt-2 line-clamp-2 flex-1">{b.description}</p>
         )}
 
         {/* Actions */}

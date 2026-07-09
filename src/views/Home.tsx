@@ -196,7 +196,7 @@ export default function Home({ initialData: _initialData }: HomeProps) {
           <div className="flex justify-between items-center mb-5">
             <div>
               <span className="text-xs font-bold tracking-widest uppercase text-[#737373]">{t('home.novos_eyebrow')}</span>
-              <h2 className="font-display text-xl md:text-2xl font-semibold mt-0.5">{t('home.novos_titulo')}</h2>
+              <h2 className="font-display text-h3 font-semibold mt-0.5">{t('home.novos_titulo')}</h2>
             </div>
             <Link href={lp('/come')} className="text-teal text-sm font-semibold">{t('home.ver_todos')}</Link>
           </div>
@@ -271,7 +271,7 @@ export default function Home({ initialData: _initialData }: HomeProps) {
           <div className="flex justify-between items-end mb-5">
             <div>
               <span className="text-xs font-bold tracking-widest uppercase text-[#737373]">{t('home.blog_eyebrow')}</span>
-              <h2 className="font-display text-xl md:text-2xl font-semibold mt-0.5">{t('home.blog_titulo')}</h2>
+              <h2 className="font-display text-h3 font-semibold mt-0.5">{t('home.blog_titulo')}</h2>
             </div>
             <Link href={lp('/blog')} className="text-teal text-sm font-semibold hover:underline">
               {t('home.blog_ver_todos')} →
@@ -355,7 +355,7 @@ export default function Home({ initialData: _initialData }: HomeProps) {
       {featured.length > 0 && (
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-16 md:pb-20">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="font-display text-xl md:text-2xl font-semibold">Verificados pela cidade</h2>
+            <h2 className="font-display text-h3 font-semibold">Verificados pela cidade</h2>
             <Link href={lp('/come')} className="text-teal text-sm font-semibold">Ver diretório →</Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">

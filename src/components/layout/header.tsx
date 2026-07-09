@@ -70,9 +70,9 @@ export function Header() {
     { href: lp('/explore'),   label: t('nav.explore'),   sub: t('nav.mapa_interativo'),   color: 'text-coral',      bare: '/explore' },
     { href: lp('/participe'), label: t('nav.participe'),  sub: t('nav.eventos_festivais'), color: 'text-teal',       bare: '/participe' },
     { href: lp('/conheca'),   label: t('nav.conheca'),    sub: t('nav.cidade_praias'),     color: 'text-[#3D8B5A]', bare: '/conheca' },
-    { href: lp('/resolva'),   label: t('nav.resolva'),    sub: t('nav.comercio_servicos'), color: 'text-[#7C3AED]', bare: '/resolva' },
+    { href: lp('/resolva'),   label: t('nav.resolva'),    sub: t('nav.comercio_servicos'), color: 'text-[#3D8B5A]', bare: '/resolva' },
     { href: lp('/contrate'),  label: t('nav.contrate'),   sub: t('nav.freelancers_vagas'), color: 'text-ocre',       bare: '/contrate' },
-    { href: lp('/transfer'),  label: t('nav.transfer'),   sub: t('nav.transfer_sub'),      color: 'text-[#1A6FD6]', bare: '/transfer' },
+    { href: lp('/transfer'),  label: t('nav.transfer'),   sub: t('nav.transfer_sub'),      color: 'text-[#1E7A9E]', bare: '/transfer' },
   ]
 
   const NAV_ALL = [...NAV_MAIN, ...NAV_DISCOVER]
@@ -80,7 +80,7 @@ export function Header() {
   return (
     <>
       {searchOpen && <GlobalSearch onClose={() => setSearchOpen(false)} />}
-      <header className="sticky top-0 z-40 bg-white dark:bg-[#1A1A1A] border-b border-[#E8E4DF] dark:border-[#2D2D2D]">
+      <header className="sticky top-0 z-40 bg-elev border-b border-border-1">
         {/* Desktop */}
         <div className="hidden md:flex items-center justify-between gap-4 px-8 py-2">
           <Link href={lp('/')} className="flex-shrink-0">
@@ -96,8 +96,8 @@ export function Header() {
                 className={cn(
                   'px-3.5 py-2 rounded-full text-sm font-semibold tracking-wide transition-all duration-150',
                   isActive(v.href)
-                    ? cn('bg-teal-light dark:bg-teal/20', v.color)
-                    : 'text-[#3D3D3D] dark:text-[#C0BCB8] hover:bg-areia dark:hover:bg-[#2D2D2D]',
+                    ? cn('bg-teal-light', v.color)
+                    : 'text-fg-2 hover:bg-areia dark:hover:bg-[#2D2D2D]',
                 )}
               >
                 {v.label}
@@ -120,9 +120,9 @@ export function Header() {
               </button>
 
               {discoverOpen && (
-                <div className="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-[#222] rounded-2xl border border-[#E8E4DF] dark:border-[#2D2D2D] shadow-lg overflow-hidden z-50">
+                <div className="absolute top-full right-0 mt-2 w-56 bg-elev rounded-2xl border border-border-1 shadow-lg overflow-hidden z-50">
                   <div className="px-4 py-2.5 border-b border-[#F5F2EE] dark:border-[#2D2D2D]">
-                    <span className="text-[10px] font-bold tracking-widest uppercase text-[#737373]">{t('nav.explorar_cidade')}</span>
+                    <span className="text-[10px] font-bold tracking-widest uppercase text-fg-3">{t('nav.explorar_cidade')}</span>
                   </div>
                   {NAV_DISCOVER.map(v => (
                     <Link
@@ -135,7 +135,7 @@ export function Header() {
                     >
                       <div>
                         <div className={cn('text-sm font-bold', v.color)}>{v.label}</div>
-                        <div className="text-xs text-[#737373] mt-0.5">{v.sub}</div>
+                        <div className="text-xs text-fg-3 mt-0.5">{v.sub}</div>
                       </div>
                       <svg className="w-4 h-4 text-[#C4BFBA]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -151,12 +151,12 @@ export function Header() {
             {/* Search button */}
             <button
               onClick={() => setSearchOpen(true)}
-              className="flex items-center gap-2 pl-3 pr-4 py-1.5 rounded-full border border-[#E8E4DF] dark:border-[#2D2D2D] text-[#737373] hover:border-teal hover:text-teal transition-colors text-xs"
+              className="flex items-center gap-2 pl-3 pr-4 py-1.5 rounded-full border border-border-1 text-fg-3 hover:border-teal hover:text-teal transition-colors text-xs"
               aria-label={t('nav.buscar')}
             >
               <Search className="w-3.5 h-3.5" />
               <span className="hidden lg:inline">{t('nav.buscar')}</span>
-              <kbd className="hidden lg:inline bg-[#F5F2EE] dark:bg-[#2D2D2D] px-1.5 py-0.5 rounded font-mono text-[10px] text-[#3D3D3D] dark:text-[#C0BCB8]">⌘K</kbd>
+              <kbd className="hidden lg:inline bg-[#F5F2EE] dark:bg-[#2D2D2D] px-1.5 py-0.5 rounded font-mono text-[10px] text-fg-2">⌘K</kbd>
             </button>
             {/* Language selector */}
             <LanguageSelector />
@@ -170,7 +170,7 @@ export function Header() {
               </Link>
             ) : (
               <>
-                <Link href="/cadastre" className="flex items-center gap-1.5 text-sm font-medium text-[#3D3D3D] dark:text-[#C0BCB8] hover:text-teal dark:hover:text-teal transition-colors px-2">
+                <Link href="/cadastre" className="flex items-center gap-1.5 text-sm font-medium text-fg-2 hover:text-teal dark:hover:text-teal transition-colors px-2">
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                   {t('nav.negocios')}
                 </Link>
@@ -186,7 +186,7 @@ export function Header() {
         <div className="flex md:hidden items-center justify-between px-5 py-3">
           <button
             onClick={() => setSearchOpen(true)}
-            className="w-11 h-11 flex items-center justify-center rounded-xl text-[#3D3D3D] dark:text-[#C0BCB8] hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors"
+            className="w-11 h-11 flex items-center justify-center rounded-xl text-fg-2 hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors"
             aria-label={t('nav.buscar')}
           >
             <Search className="w-5 h-5" />
@@ -207,7 +207,7 @@ export function Header() {
       {/* Mobile drawer */}
       {drawerOpen && (
         <div className="md:hidden fixed inset-0 top-[69px] z-30" onClick={() => setDrawerOpen(false)}>
-          <div className="bg-white dark:bg-[#1A1A1A] border-b border-[#E8E4DF] dark:border-[#2D2D2D] shadow-xl overflow-y-auto max-h-[calc(100dvh-69px)]" onClick={e => e.stopPropagation()}>
+          <div className="bg-elev border-b border-border-1 shadow-xl overflow-y-auto max-h-[calc(100dvh-69px)]" onClick={e => e.stopPropagation()}>
             <nav className="px-5 py-4 space-y-1">
               {NAV_ALL.map(v => (
                 <Link
@@ -217,8 +217,8 @@ export function Header() {
                   className={cn(
                     'block px-4 py-3 rounded-xl text-sm font-semibold tracking-wide transition-all',
                     isActive(v.href)
-                      ? cn('bg-teal-light dark:bg-teal/20', v.color)
-                      : 'text-[#3D3D3D] dark:text-[#C0BCB8] hover:bg-areia dark:hover:bg-[#2D2D2D]',
+                      ? cn('bg-teal-light', v.color)
+                      : 'text-fg-2 hover:bg-areia dark:hover:bg-[#2D2D2D]',
                   )}
                 >
                   {v.label}
@@ -226,7 +226,7 @@ export function Header() {
               ))}
             </nav>
             {/* Language selector — inline style in drawer */}
-            <div className="px-5 border-t border-[#E8E4DF] dark:border-[#2D2D2D]">
+            <div className="px-5 border-t border-border-1">
               <LanguageSelector variant="inline" />
             </div>
             <div className="px-5 pb-5 pt-3 space-y-2">
