@@ -13,15 +13,6 @@ import { ReviewForm } from '@/components/reviews/review-form'
 import { PROFESSIONAL_CATEGORY_LABELS } from '@/types/professional'
 import type { PortfolioItem } from '@/types/professional'
 
-function Stars({ rating }: { rating: number }) {
-  const full = Math.floor(rating)
-  return (
-    <span className="text-[#C2760C]">
-      {'★'.repeat(full)}{'☆'.repeat(5 - full)}
-    </span>
-  )
-}
-
 const AVATAR_COLORS = [
   'bg-teal', 'bg-[#C2760C]', 'bg-[#4A5568]', 'bg-[#6B46C1]',
   'bg-[#C05621]', 'bg-[#276749]',

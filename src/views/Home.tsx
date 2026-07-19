@@ -41,7 +41,10 @@ type HomeProps = {
   initialData?: HomeInitialData
 }
 
-export default function Home({ initialData: _initialData }: HomeProps) {
+// _props kept for the SSR type contract with app/[lang]/page.tsx (which passes
+// initialData); the body below fetches everything via TanStack Query hooks independently.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function Home(_props: HomeProps) {
   const { t } = useTranslation()
   const lp = useLocalePath()
 
@@ -123,32 +126,10 @@ export default function Home({ initialData: _initialData }: HomeProps) {
             </div>
           </div>
 
-          {/* Stats strip */}
-          <div className="flex flex-wrap gap-x-10 gap-y-4 mt-14 pt-10 border-t border-white/10">
-            {[
-              {
-                id: 'negocios',
-                n: stats?.businesses ? `${stats.businesses}` : '—',
-                label: t('home.stat_negocios'),
-              },
-              {
-                id: 'hospedagens',
-                n: stats?.accommodations ? `${stats.accommodations}` : '—',
-                label: t('home.stat_hospedagens'),
-              },
-              {
-                id: 'eventos',
-                n: stats?.events ? `${stats.events}` : '—',
-                label: t('home.stat_eventos'),
-              },
-              { id: 'dinheiro', n: '100%', label: t('home.stat_dinheiro') },
-            ].map(s => (
-              <div key={s.id}>
-                <div className="font-display font-bold text-2xl text-white">{s.n}</div>
-                <div className="text-xs text-white/50 mt-0.5">{s.label}</div>
-              </div>
-            ))}
-          </div>
+          {/* Stats — one sentence, not a tile grid */}
+          <p className="mt-14 pt-10 border-t border-white/10 text-white/70 text-sm md:text-base max-w-xl">
+            {t('home.stats_sentence', { count: stats?.businesses ?? '120+' })}
+          </p>
         </div>
 
         {/* Scroll incentive */}
@@ -194,10 +175,7 @@ export default function Home({ initialData: _initialData }: HomeProps) {
       {recentBusinesses.length > 0 && (
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10 md:pb-14">
           <div className="flex justify-between items-center mb-5">
-            <div>
-              <span className="text-xs font-bold tracking-widest uppercase text-[#737373]">{t('home.novos_eyebrow')}</span>
-              <h2 className="font-display text-h3 font-semibold mt-0.5">{t('home.novos_titulo')}</h2>
-            </div>
+            <h2 className="font-display text-h3 font-semibold">{t('home.novos_titulo')}</h2>
             <Link href={lp('/come')} className="text-teal text-sm font-semibold">{t('home.ver_todos')}</Link>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -269,10 +247,7 @@ export default function Home({ initialData: _initialData }: HomeProps) {
       {latestPosts.length > 0 && (
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10 md:pb-14">
           <div className="flex justify-between items-end mb-5">
-            <div>
-              <span className="text-xs font-bold tracking-widest uppercase text-[#737373]">{t('home.blog_eyebrow')}</span>
-              <h2 className="font-display text-h3 font-semibold mt-0.5">{t('home.blog_titulo')}</h2>
-            </div>
+            <h2 className="font-display text-h3 font-semibold">{t('home.blog_titulo')}</h2>
             <Link href={lp('/blog')} className="text-teal text-sm font-semibold hover:underline">
               {t('home.blog_ver_todos')} →
             </Link>
@@ -338,12 +313,12 @@ export default function Home({ initialData: _initialData }: HomeProps) {
               <span className="text-teal text-lg">?</span>
             </div>
             <div>
-              <p className="font-semibold text-white text-base">Quer saber como o Vive Gostoso funciona?</p>
-              <p className="text-white/50 text-sm mt-0.5">Entenda o modelo, a transparência financeira e como participar.</p>
+              <p className="font-semibold text-white text-base">{t('home.como_funciona_titulo')}</p>
+              <p className="text-white/50 text-sm mt-0.5">{t('home.como_funciona_desc')}</p>
             </div>
           </div>
           <span className="flex-shrink-0 flex items-center gap-1.5 text-teal text-sm font-semibold group-hover:gap-2.5 transition-all">
-            Saiba mais
+            {t('home.como_funciona_cta')}
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
@@ -355,8 +330,8 @@ export default function Home({ initialData: _initialData }: HomeProps) {
       {featured.length > 0 && (
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-16 md:pb-20">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="font-display text-h3 font-semibold">Verificados pela cidade</h2>
-            <Link href={lp('/come')} className="text-teal text-sm font-semibold">Ver diretório →</Link>
+            <h2 className="font-display text-h3 font-semibold">{t('home.verificados_titulo')}</h2>
+            <Link href={lp('/come')} className="text-teal text-sm font-semibold">{t('home.verificados_cta')} →</Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {featured.slice(0, 3).map(b => <BusinessCard key={b.id} business={b} />)}

@@ -26,9 +26,9 @@ i18n
   .use(initReactI18next)
   .init({
     resources: {
-      pt: { translation: pt, ...Object.fromEntries(ns.map(n => [n, (pt as any)[n]])) },
-      en: { translation: en, ...Object.fromEntries(ns.map(n => [n, (en as any)[n]])) },
-      es: { translation: es, ...Object.fromEntries(ns.map(n => [n, (es as any)[n]])) },
+      pt: { translation: pt, ...Object.fromEntries(ns.map(n => [n, (pt as Record<string, unknown>)[n]])) },
+      en: { translation: en, ...Object.fromEntries(ns.map(n => [n, (en as Record<string, unknown>)[n]])) },
+      es: { translation: es, ...Object.fromEntries(ns.map(n => [n, (es as Record<string, unknown>)[n]])) },
     },
     lng: 'pt',
     fallbackLng: 'pt',

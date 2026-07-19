@@ -1,3 +1,4 @@
+import { SearchX } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { BusinessCard } from './business-card'
 import type { Business } from '@/types/database'
@@ -8,9 +9,11 @@ interface BusinessGridProps {
   businesses: Business[]
   loading?: boolean
   view?: ViewMode
+  /** Clears whatever combination of category/search/"aberto agora" filters produced zero results. */
+  onResetFilters?: () => void
 }
 
-export function BusinessGrid({ businesses, loading, view = 'grid' }: BusinessGridProps) {
+export function BusinessGrid({ businesses, loading, view = 'grid', onResetFilters }: BusinessGridProps) {
   const { t } = useTranslation()
 
   if (loading) return (
@@ -29,8 +32,23 @@ export function BusinessGrid({ businesses, loading, view = 'grid' }: BusinessGri
   )
 
   if (!businesses.length) return (
-    <div className="text-center py-20 text-[#737373]">
-      <p className="text-lg">{t('filters.nenhum_negocio')}</p>
+    <div className="text-center py-20">
+      <div className="w-14 h-14 rounded-2xl bg-teal/10 flex items-center justify-center mx-auto mb-4">
+        <SearchX className="w-6 h-6 text-teal" aria-hidden="true" />
+      </div>
+      <h3 className="font-display font-semibold text-lg text-fg-1 mb-1.5">{t('filters.nenhum_negocio')}</h3>
+      <p className="text-sm text-fg-3 max-w-xs mx-auto leading-relaxed">
+        Tente remover algum filtro ou buscar por outro termo.
+      </p>
+      {onResetFilters && (
+        <button
+          type="button"
+          onClick={onResetFilters}
+          className="mt-5 bg-teal text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-teal-dark transition-colors"
+        >
+          Limpar filtros
+        </button>
+      )}
     </div>
   )
 

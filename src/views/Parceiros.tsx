@@ -128,7 +128,7 @@ export default function Parceiros() {
               <span className="text-teal">Vive Gostoso</span>
             </h1>
 
-            <p className="text-[#A0A0A0] text-lg leading-relaxed max-w-xl mb-8">
+            <p className="text-[#737373] text-lg leading-relaxed max-w-xl mb-8">
               {t('parceiros:hero_desc')}
             </p>
 
@@ -333,7 +333,7 @@ export default function Parceiros() {
           <h2 className="font-display text-2xl md:text-3xl font-bold mb-3">
             {t('parceiros:final_titulo')}
           </h2>
-          <p className="text-[#A0A0A0] text-base mb-8 max-w-md mx-auto">
+          <p className="text-[#737373] text-base mb-8 max-w-md mx-auto">
             {t('parceiros:final_desc')}
           </p>
           <Link

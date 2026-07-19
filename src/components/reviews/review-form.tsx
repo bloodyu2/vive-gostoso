@@ -5,6 +5,7 @@ import { StarRating } from './star-rating'
 import { useSubmitReview } from '@/hooks/useReviews'
 import { useTranslation } from 'react-i18next'
 import { CheckCircle } from 'lucide-react'
+import type { ReviewInsert } from '@/types/reviews'
 
 interface ReviewFormProps {
   targetType: 'business' | 'professional' | 'transfer'
@@ -25,7 +26,7 @@ export function ReviewForm({ targetType, targetId }: ReviewFormProps) {
     e.preventDefault()
     if (!rating) return
     setSubmitError(false)
-    const payload: any = { rating: rating as 1 | 2 | 3 | 4 | 5, comment: comment.trim() || undefined, author_name: authorName.trim() || undefined }
+    const payload: ReviewInsert = { rating: rating as 1 | 2 | 3 | 4 | 5, comment: comment.trim() || undefined, author_name: authorName.trim() || undefined }
     if (targetType === 'business') payload.business_id = targetId
     else if (targetType === 'professional') payload.professional_id = targetId
     else payload.transfer_id = targetId

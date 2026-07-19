@@ -14,7 +14,6 @@ import { useProfile } from '@/hooks/useProfile'
 import { useMyBusinesses } from '@/hooks/useMyBusinesses'
 import { useMyProfessional } from '@/hooks/useProfessionals'
 import { startCheckout } from '@/hooks/useCheckout'
-import { Button } from '@/components/ui/button'
 
 const PLAN_PRICES = {
   monthly: { associado: 'R$39,90/mês', destaque: 'R$59,90/mês' },
@@ -145,7 +144,6 @@ function PainelInner() {
 
   const publishedCount = businesses.filter(b => b.is_published).length
   const draftCount = businesses.filter(b => !b.is_published).length
-  const hasActivePlan = businesses.some(b => b.plan !== 'free')
 
   function getBilling(bizId: string): 'monthly' | 'annual' {
     return billingMode[bizId] ?? 'monthly'
@@ -354,12 +352,12 @@ function PainelInner() {
                               ? 'font-semibold text-ocre'
                               : b.plan === 'associado'
                               ? 'font-semibold text-teal'
-                              : 'text-[#A0A0A0]'
+                              : 'text-[#737373]'
                           }>
                             {b.plan === 'destaque' ? t('plan_destaque') : b.plan === 'associado' ? t('plan_associado') : t('plan_free')}
                           </span>
                           {b.plan_expires_at && (
-                            <span className="ml-1 text-[#A0A0A0]">
+                            <span className="ml-1 text-[#737373]">
                               {t('plan_expires', { date: new Date(b.plan_expires_at).toLocaleDateString(painelI18n.language === 'en' ? 'en-US' : painelI18n.language === 'es' ? 'es' : 'pt-BR', { day: 'numeric', month: 'short', year: 'numeric' }) })}
                             </span>
                           )}

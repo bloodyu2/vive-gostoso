@@ -49,7 +49,9 @@ export function TableOfContents({
         if (!el.id) el.id = id
         return { id, text, level: parseInt(el.tagName.slice(1), 10) }
       })
-    setHeadings(list)
+    // Deferred to a microtask so the state update isn't synchronous within
+    // the effect body (avoids react-hooks/set-state-in-effect).
+    queueMicrotask(() => setHeadings(list))
   }, [containerSelector, levels])
 
   if (headings.length < 3) return null

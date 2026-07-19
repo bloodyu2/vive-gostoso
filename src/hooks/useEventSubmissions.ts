@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { EventSubmission } from '@/types/database'
+import { showToast } from '@/components/ui/toast'
 
 // Public: submit a new event
 export function useSubmitEvent() {
@@ -76,6 +77,9 @@ export function useApproveEventSubmission() {
       qc.invalidateQueries({ queryKey: ['admin-stats'] })
       qc.invalidateQueries({ queryKey: ['events'] })
     },
+    onError: () => {
+      showToast('Não foi possível aprovar o evento. Tente novamente.', 'error')
+    },
   })
 }
 
@@ -97,6 +101,9 @@ export function useRejectEventSubmission() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-event-submissions'] })
       qc.invalidateQueries({ queryKey: ['admin-stats'] })
+    },
+    onError: () => {
+      showToast('Não foi possível rejeitar o evento. Tente novamente.', 'error')
     },
   })
 }

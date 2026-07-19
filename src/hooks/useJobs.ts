@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { UseQueryOptions } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { JobListing, ContractType } from '@/types/database'
+import { useModerateListing } from '@/hooks/useModeration'
 
 /** Pending job listings awaiting admin approval — admin only */
 export function useAdminPendingJobs() {
@@ -21,27 +22,11 @@ export function useAdminPendingJobs() {
 
 /** Approve or reject a pending job listing — admin only */
 export function useModerateJob() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: async ({ id, approve }: { id: string; approve: boolean }) => {
-      if (approve) {
-        const { error } = await supabase
-          .from('gostoso_job_listings')
-          .update({ is_active: true })
-          .eq('id', id)
-        if (error) throw error
-      } else {
-        const { error } = await supabase
-          .from('gostoso_job_listings')
-          .delete()
-          .eq('id', id)
-        if (error) throw error
-      }
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['jobs'] })
-      qc.invalidateQueries({ queryKey: ['admin-stats'] })
-    },
+  return useModerateListing({
+    table: 'gostoso_job_listings',
+    activeField: 'is_active',
+    invalidateKeys: [['jobs'], ['admin-stats']],
+    errorMessage: 'Não foi possível moderar a vaga. Tente novamente.',
   })
 }
 

@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import type { User } from '@supabase/supabase-js'
 import { CheckCircle } from 'lucide-react'
@@ -11,6 +11,7 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import { useBusiness } from '@/hooks/useBusinesses'
 import { useSubmitClaim, useMyClaimStatus } from '@/hooks/useClaims'
+import { showToast } from '@/components/ui/toast'
 
 type Props = { slug?: string; user?: User | null }
 
@@ -28,36 +29,65 @@ export default function Claim({ slug: slugProp }: Props) {
   const [message, setMessage] = useState('')
 
   const [submitted, setSubmitted] = useState(false)
+  const [claimError, setClaimError] = useState<string | null>(null)
+  const [retryKey, setRetryKey] = useState(0)
   const submitClaim = useSubmitClaim()
-  const { data: existingClaim } = useMyClaimStatus(business?.id ?? '')
+  const { data: existingClaim, isLoading: claimStatusLoading } = useMyClaimStatus(business?.id ?? '')
 
-  // Once user is authenticated, auto-submit the claim
+  // `message` and `submitClaim` are read through refs so the effect doesn't need to
+  // depend on them: `message` changes on every keystroke and `submitClaim` (the
+  // mutation object) gets a new identity on re-render, either of which would
+  // otherwise re-fire this effect (and could double-submit the claim) while
+  // typing in the optional message field.
+  const messageRef = useRef(message)
+  useEffect(() => { messageRef.current = message }, [message])
+  const submitClaimRef = useRef(submitClaim)
+  useEffect(() => { submitClaimRef.current = submitClaim })
+
+  // Once user is authenticated, auto-submit the claim.
+  // Waits for claimStatusLoading to resolve so it doesn't race the existingClaim
+  // query and double-submit while that data is still in flight.
   useEffect(() => {
-    if (!user || !business || submitted || existingClaim) return
+    if (!user || !business || submitted || claimStatusLoading || existingClaim || claimError) return
+    let cancelled = false
     ;(async () => {
-      const { data: profile } = await supabase
-        .from('gostoso_profiles')
-        .select('id')
-        .eq('auth_user_id', user.id)
-        .maybeSingle()
-
-      let pid: string
-      if (profile) {
-        pid = (profile as { id: string }).id
-      } else {
-        const { data: newP } = await supabase
+      try {
+        const { data: profile, error: profileError } = await supabase
           .from('gostoso_profiles')
-          .insert([{ auth_user_id: user.id, email: user.email ?? '' }])
           .select('id')
-          .single()
-        if (!newP) return
-        pid = (newP as { id: string }).id
-      }
+          .eq('auth_user_id', user.id)
+          .maybeSingle()
+        if (profileError) throw profileError
 
-      await submitClaim.mutateAsync({ businessId: business.id, profileId: pid, message: message || undefined })
-      setSubmitted(true)
+        let pid: string
+        if (profile) {
+          pid = (profile as { id: string }).id
+        } else {
+          const { data: newP, error: insertError } = await supabase
+            .from('gostoso_profiles')
+            .insert([{ auth_user_id: user.id, email: user.email ?? '' }])
+            .select('id')
+            .single()
+          if (insertError) throw insertError
+          if (!newP) throw new Error('Falha ao criar perfil')
+          pid = (newP as { id: string }).id
+        }
+
+        await submitClaimRef.current.mutateAsync({
+          businessId: business.id,
+          profileId: pid,
+          message: messageRef.current || undefined,
+        })
+        if (!cancelled) setSubmitted(true)
+      } catch (err) {
+        if (cancelled) return
+        const msg = err instanceof Error ? err.message : 'Não foi possível enviar a reivindicação. Tente novamente.'
+        setClaimError(msg)
+        showToast(msg, 'error')
+      }
     })()
-  }, [user, business])
+    return () => { cancelled = true }
+  }, [user, business, submitted, existingClaim, claimStatusLoading, claimError, retryKey])
 
   async function handleAuth(e: React.FormEvent) {
     e.preventDefault()
@@ -143,7 +173,22 @@ export default function Claim({ slug: slugProp }: Props) {
     <div className="min-h-screen bg-areia flex items-center justify-center px-4">
       <div className="bg-white rounded-2xl border border-[#E8E4DF] p-10 w-full max-w-md text-center">
         <div className="flex justify-center mb-8"><Logo height={32} /></div>
-        <p className="text-[#737373] text-sm">{t('claim:submitting')}</p>
+        {claimError ? (
+          <>
+            <p className="text-red-500 text-sm mb-4">{claimError}</p>
+            <Button
+              variant="primary"
+              onClick={() => {
+                setClaimError(null)
+                setRetryKey(k => k + 1)
+              }}
+            >
+              Tentar novamente
+            </Button>
+          </>
+        ) : (
+          <p className="text-[#737373] text-sm">{t('claim:submitting')}</p>
+        )}
       </div>
     </div>
   )

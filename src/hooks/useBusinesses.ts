@@ -11,10 +11,11 @@ export function useBusinesses(
     queryKey: ['businesses', verb],
     queryFn: async (): Promise<Business[]> => {
       if (verb) {
-        const { data: cats } = await supabase
+        const { data: cats, error: catsError } = await supabase
           .from('gostoso_categories')
           .select('id')
           .eq('verb', verb)
+        if (catsError) throw catsError
         const catIds = ((cats ?? []) as { id: string }[]).map(c => c.id)
         if (!catIds.length) return []
 
@@ -63,23 +64,6 @@ export function useBusiness(
       return data as Business
     },
     ...options,
-  })
-}
-
-export function useAllBusinessesWithCoords() {
-  return useQuery({
-    queryKey: ['businesses-map'],
-    queryFn: async (): Promise<Business[]> => {
-      const { data, error } = await supabase
-        .from('gostoso_businesses')
-        .select('*, category:gostoso_categories(*)')
-        .eq('active', true)
-        .eq('is_published', true)
-        .not('lat', 'is', null)
-        .not('lng', 'is', null)
-      if (error) throw error
-      return (data ?? []) as Business[]
-    },
   })
 }
 

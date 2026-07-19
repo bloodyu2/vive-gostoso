@@ -43,7 +43,10 @@ export default function ResetarSenha() {
     })
 
     return () => subscription.unsubscribe()
-  }, [])
+    // `supabase` comes from createClient(), which returns a cached singleton
+    // in the browser (@supabase/ssr caches `cachedBrowserClient`), so
+    // `supabase.auth` is referentially stable across renders here.
+  }, [supabase.auth])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

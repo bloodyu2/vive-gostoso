@@ -42,14 +42,19 @@ export async function startCheckout(
   if (url) window.location.href = url
 }
 
-export async function startDonation(amountCents: number) {
+/**
+ * `apoiePath` deve vir de `useLocalePath()('/apoie')` no chamador — este arquivo
+ * não é um componente/hook e não pode chamar `useLocalePath` diretamente, então
+ * o caminho já com o prefixo de idioma correto é passado pronto.
+ */
+export async function startDonation(amountCents: number, apoiePath = '/apoie') {
   const resp = await fetch(`${SUPABASE_URL}/functions/v1/create-donation-session`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       amountCents,
-      successUrl: `${window.location.origin}/apoie?doacao=success`,
-      cancelUrl: `${window.location.origin}/apoie`,
+      successUrl: `${window.location.origin}${apoiePath}?doacao=success`,
+      cancelUrl: `${window.location.origin}${apoiePath}`,
     }),
   })
 

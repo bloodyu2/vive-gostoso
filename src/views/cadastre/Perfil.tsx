@@ -13,6 +13,7 @@ import { ArrowLeft, Camera, ExternalLink, Loader2 } from 'lucide-react'
 import { validateImageFile, compressImage } from '@/lib/image-upload'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import { showToast } from '@/components/ui/toast'
 
 export default function Perfil() {
   return <AuthGuard><PerfilInner /></AuthGuard>
@@ -194,7 +195,8 @@ function PhotoSection({
     try {
       const path = `${bizId}/${Date.now()}-${file.name.replace(/\.[^.]+$/, '')}.jpg`
       const url = await uploadFile(file, path)
-      await supabase.from('gostoso_businesses').update({ cover_url: url }).eq('id', bizId)
+      const { error: updateError } = await supabase.from('gostoso_businesses').update({ cover_url: url }).eq('id', bizId)
+      if (updateError) throw updateError
       onCoverChange(url)
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'erro inesperado'
@@ -232,7 +234,8 @@ function PhotoSection({
         toUpload.map(f => uploadFile(f, `${bizId}/${Date.now()}-${f.name.replace(/\.[^.]+$/, '')}.jpg`))
       )
       const next = [...currentPhotos, ...urls]
-      await supabase.from('gostoso_businesses').update({ photos: next }).eq('id', bizId)
+      const { error: updateError } = await supabase.from('gostoso_businesses').update({ photos: next }).eq('id', bizId)
+      if (updateError) throw updateError
       onPhotosChange(next)
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'erro inesperado'
@@ -246,7 +249,11 @@ function PhotoSection({
   async function removePhoto(url: string) {
     if (!bizId) return
     const next = currentPhotos.filter(p => p !== url)
-    await supabase.from('gostoso_businesses').update({ photos: next }).eq('id', bizId)
+    const { error: updateError } = await supabase.from('gostoso_businesses').update({ photos: next }).eq('id', bizId)
+    if (updateError) {
+      showToast(t('perfil:error_gallery', { msg: updateError.message }), 'error')
+      return
+    }
     onPhotosChange(next)
   }
 
@@ -265,7 +272,7 @@ function PhotoSection({
             <img src={coverUrl} alt={t('perfil:photos_cover_label')} className="w-full h-full object-cover" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
           </div>
         ) : (
-          <div className="w-full h-40 rounded-2xl border-2 border-dashed border-[#E8E4DF] flex flex-col items-center justify-center gap-2 text-sm text-[#A0A0A0] mb-2 bg-[#FAFAF9]">
+          <div className="w-full h-40 rounded-2xl border-2 border-dashed border-[#E8E4DF] flex flex-col items-center justify-center gap-2 text-sm text-[#737373] mb-2 bg-[#FAFAF9]">
             <Camera className="w-7 h-7 text-[#C4BFBA]" />
             <span>{t('perfil:photos_no_cover')}</span>
           </div>
@@ -408,7 +415,7 @@ function OpeningHoursSection({
                   />
                 </div>
               ) : (
-                <span className="text-sm text-[#A0A0A0] flex-1">{t('perfil:hours_closed')}</span>
+                <span className="text-sm text-[#737373] flex-1">{t('perfil:hours_closed')}</span>
               )}
 
               <label className="flex items-center gap-1.5 cursor-pointer ml-auto flex-shrink-0">
@@ -824,7 +831,7 @@ function PerfilInner() {
                     className={INPUT_CLS}
                   />
                   {helpers[key] && (
-                    <p className="text-xs text-[#A0A0A0] mt-1">{helpers[key]}</p>
+                    <p className="text-xs text-[#737373] mt-1">{helpers[key]}</p>
                   )}
                 </div>
               )

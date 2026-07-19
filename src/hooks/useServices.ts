@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { UseQueryOptions } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { ServiceListing, ServiceCategory } from '@/types/database'
+import { useModerateListing } from '@/hooks/useModeration'
 
 /** Pending services awaiting admin approval — admin only */
 export function useAdminPendingServices() {
@@ -21,27 +22,11 @@ export function useAdminPendingServices() {
 
 /** Approve or reject a pending service — admin only */
 export function useModerateService() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: async ({ id, approve }: { id: string; approve: boolean }) => {
-      if (approve) {
-        const { error } = await supabase
-          .from('gostoso_service_listings')
-          .update({ is_active: true })
-          .eq('id', id)
-        if (error) throw error
-      } else {
-        const { error } = await supabase
-          .from('gostoso_service_listings')
-          .delete()
-          .eq('id', id)
-        if (error) throw error
-      }
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['services'] })
-      qc.invalidateQueries({ queryKey: ['admin-stats'] })
-    },
+  return useModerateListing({
+    table: 'gostoso_service_listings',
+    activeField: 'is_active',
+    invalidateKeys: [['services'], ['admin-stats']],
+    errorMessage: 'Não foi possível moderar o serviço. Tente novamente.',
   })
 }
 

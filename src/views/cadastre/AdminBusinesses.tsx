@@ -177,7 +177,7 @@ function AdminBusinessesInner() {
                   <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full flex-shrink-0 ${
                     b.is_published ? 'bg-teal/10 text-teal' : 'bg-[#E8E4DF] text-[#737373]'
                   }`}>
-                    <span className={`w-1.5 h-1.5 rounded-full ${b.is_published ? 'bg-teal' : 'bg-[#A0A0A0]'}`} />
+                    <span className={`w-1.5 h-1.5 rounded-full ${b.is_published ? 'bg-teal' : 'bg-[#737373]'}`} />
                     {b.is_published ? t('status_published') : t('status_draft')}
                   </span>
                   {b.category && (

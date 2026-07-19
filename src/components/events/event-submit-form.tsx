@@ -3,6 +3,7 @@ import { X, CheckCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { useSubmitEvent } from '@/hooks/useEventSubmissions'
+import { showToast } from '@/components/ui/toast'
 import type { EventSubmission } from '@/types/database'
 
 const INPUT_CLS = 'w-full rounded-xl border border-[#E8E4DF] px-4 py-3 text-sm focus:border-teal focus:ring-2 focus:ring-teal/20 focus:outline-none'
@@ -45,20 +46,24 @@ export function EventSubmitForm({ open, onClose }: Props) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    await submit.mutateAsync({
-      name: form.name,
-      description: form.description || undefined,
-      starts_at: form.starts_at,
-      ends_at: form.ends_at || undefined,
-      location: form.location || undefined,
-      cover_url: form.cover_url || undefined,
-      event_type: (form.event_type as EventSubmission['event_type']) || undefined,
-      source_url: form.source_url || undefined,
-      submitter_name: form.submitter_name,
-      submitter_email: form.submitter_email,
-      submitter_phone: form.submitter_phone || undefined,
-    })
-    setDone(true)
+    try {
+      await submit.mutateAsync({
+        name: form.name,
+        description: form.description || undefined,
+        starts_at: form.starts_at,
+        ends_at: form.ends_at || undefined,
+        location: form.location || undefined,
+        cover_url: form.cover_url || undefined,
+        event_type: (form.event_type as EventSubmission['event_type']) || undefined,
+        source_url: form.source_url || undefined,
+        submitter_name: form.submitter_name,
+        submitter_email: form.submitter_email,
+        submitter_phone: form.submitter_phone || undefined,
+      })
+      setDone(true)
+    } catch {
+      showToast(t('error_text'), 'error')
+    }
   }
 
   return (
@@ -131,7 +136,7 @@ export function EventSubmitForm({ open, onClose }: Props) {
                 <input type="tel" value={form.submitter_phone} onChange={e => set('submitter_phone', e.target.value)} placeholder={t('submitter_phone_placeholder')} className={INPUT_CLS} />
               </div>
             </div>
-            {submit.error && (
+            {submit.isError && (
               <p className="text-coral text-sm text-center">{t('error_text')}</p>
             )}
             <Button variant="primary" className="w-full" disabled={submit.isPending}>

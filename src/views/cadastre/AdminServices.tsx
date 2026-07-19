@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { ErrorState } from '@/components/ui/error-state'
+import { AdminListSkeleton } from '@/components/ui/admin-list-skeleton'
 import { useAdminPendingServices, useModerateService } from '@/hooks/useServices'
 import { SERVICE_CATEGORY_LABELS } from '@/types/database'
 import type { ServiceListing } from '@/types/database'
@@ -60,7 +61,7 @@ function ServiceRow({ svc }: { svc: ServiceListing }) {
         <p className="text-sm text-[#737373] leading-relaxed">{svc.description}</p>
       )}
 
-      <div className="flex items-center gap-3 pt-1 border-t border-[#F0EDE8] text-xs text-[#A0A0A0]">
+      <div className="flex items-center gap-3 pt-1 border-t border-[#F0EDE8] text-xs text-[#737373]">
         <span>
           {t('whatsapp')}{' '}
           <a
@@ -101,11 +102,7 @@ function AdminServicesInner() {
       </p>
 
       {isLoading ? (
-        <div className="space-y-4">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="h-28 bg-[#E8E4DF] rounded-2xl animate-pulse" />
-          ))}
-        </div>
+        <AdminListSkeleton rows={3} height="h-28" />
       ) : isError ? (
         <ErrorState onRetry={() => refetch()} />
       ) : services.length === 0 ? (

@@ -30,12 +30,16 @@ export default function Reivindicar() {
   const [searched, setSearched] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    if (query.trim().length < 2) {
+  function handleQueryChange(value: string) {
+    setQuery(value)
+    if (value.trim().length < 2) {
       setResults([])
       setSearched(false)
-      return
     }
+  }
+
+  useEffect(() => {
+    if (query.trim().length < 2) return
     const timer = setTimeout(async () => {
       setLoading(true)
       const { data } = await supabase
@@ -77,7 +81,7 @@ export default function Reivindicar() {
             <span className="text-teal">Vive Gostoso</span>
           </h1>
 
-          <p className="text-[#A0A0A0] text-base leading-relaxed max-w-lg mb-8">
+          <p className="text-[#737373] text-base leading-relaxed max-w-lg mb-8">
             {t('reivindicar:hero_desc')}
           </p>
 
@@ -89,13 +93,13 @@ export default function Reivindicar() {
               type="text"
               placeholder={t('reivindicar:search_placeholder')}
               value={query}
-              onChange={e => setQuery(e.target.value)}
-              className="w-full bg-white text-[#1A1A1A] rounded-2xl pl-11 pr-10 py-4 text-sm font-medium placeholder:text-[#A0A0A0] focus:outline-none focus:ring-2 focus:ring-teal"
+              onChange={e => handleQueryChange(e.target.value)}
+              className="w-full bg-white text-[#1A1A1A] rounded-2xl pl-11 pr-10 py-4 text-sm font-medium placeholder:text-[#737373] focus:outline-none focus:ring-2 focus:ring-teal"
             />
             {query && (
               <button
                 onClick={() => { setQuery(''); setResults([]); setSearched(false) }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#A0A0A0] hover:text-[#737373] transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#737373] hover:text-[#737373] transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -143,7 +147,7 @@ export default function Reivindicar() {
                   </div>
                   <div className="flex-shrink-0">
                     {biz.profile_id ? (
-                      <span className="text-xs text-[#A0A0A0] bg-[#F5F2EE] px-2.5 py-1 rounded-full">
+                      <span className="text-xs text-[#737373] bg-[#F5F2EE] px-2.5 py-1 rounded-full">
                         {t('reivindicar:claimed_badge')}
                       </span>
                     ) : (
@@ -228,7 +232,7 @@ export default function Reivindicar() {
           <h2 className="font-display text-2xl font-bold mb-3">
             {t('reivindicar:not_found_cta_titulo')}
           </h2>
-          <p className="text-[#A0A0A0] text-sm mb-8 max-w-sm mx-auto">
+          <p className="text-[#737373] text-sm mb-8 max-w-sm mx-auto">
             {t('reivindicar:not_found_cta_desc')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">

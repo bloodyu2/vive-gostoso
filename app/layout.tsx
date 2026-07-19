@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Providers } from '@/components/providers'
 import { GTMScript } from '@/components/gtm-script'
+import { ToastContainer } from '@/components/ui/toast'
 import '@/styles/globals.css'
 
 export const viewport: Viewport = {
@@ -41,8 +42,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       />
       <GTMScript />
     </head>
-      <body className="bg-areia text-[#1A1A1A] font-sans antialiased">
+      <body className="bg-page text-fg-1 font-sans antialiased">
         <Providers>{children}</Providers>
+        <ToastContainer />
       </body>
     </html>
   )

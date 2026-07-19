@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { ErrorState } from '@/components/ui/error-state'
+import { AdminListSkeleton } from '@/components/ui/admin-list-skeleton'
 import { useAdminPendingJobs, useModerateJob } from '@/hooks/useJobs'
 import { CONTRACT_TYPE_LABELS } from '@/types/database'
 import type { JobListing } from '@/types/database'
@@ -56,7 +57,7 @@ function JobRow({ job }: { job: JobListing }) {
         <p className="text-sm text-[#3D3D3D] leading-relaxed">{job.description}</p>
       )}
 
-      <div className="pt-1 border-t border-[#F0EDE8] text-xs text-[#A0A0A0]">
+      <div className="pt-1 border-t border-[#F0EDE8] text-xs text-[#737373]">
         {t('whatsapp')}{' '}
         <a
           href={buildWhatsAppLink(job.whatsapp)}
@@ -90,11 +91,7 @@ function AdminJobsInner() {
       </p>
 
       {isLoading ? (
-        <div className="space-y-4">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="h-24 bg-[#E8E4DF] rounded-2xl animate-pulse" />
-          ))}
-        </div>
+        <AdminListSkeleton rows={3} height="h-24" />
       ) : isError ? (
         <ErrorState onRetry={() => refetch()} />
       ) : jobs.length === 0 ? (

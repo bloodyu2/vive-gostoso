@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { Transfer } from '@/types/database'
+import { showToast } from '@/components/ui/toast'
 
 export interface TransferFormData {
   provider_name: string
@@ -65,6 +66,9 @@ export function useModerateTransfer() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['transfers'] })
       qc.invalidateQueries({ queryKey: ['admin-stats'] })
+    },
+    onError: () => {
+      showToast('Não foi possível moderar o transfer. Tente novamente.', 'error')
     },
   })
 }

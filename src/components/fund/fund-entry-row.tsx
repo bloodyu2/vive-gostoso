@@ -29,21 +29,21 @@ export function FundEntryRow({ entry: e, last }: { entry: FundEntry; last?: bool
         <div className="font-medium text-sm text-[#1A1A1A] dark:text-white truncate">
           {e.description}
         </div>
-        <div className="text-xs text-[#A0A0A0] mt-0.5">{date}</div>
+        <div className="text-xs text-[#737373] mt-0.5">{date}</div>
       </div>
 
       {/* Amount + status */}
       <div className="flex-shrink-0 text-right">
         <div
           className={`font-display font-bold text-base tabular-nums ${
-            isRealizado ? 'text-teal' : 'text-[#A0A0A0]'
+            isRealizado ? 'text-teal' : 'text-[#737373]'
           }`}
         >
           {formatCurrency(e.amount_cents)}
         </div>
         <div
           className={`text-xs mt-0.5 font-medium ${
-            isRealizado ? 'text-teal/70' : 'text-[#B0A89E]'
+            isRealizado ? 'text-teal/70' : 'text-[#737373]'
           }`}
         >
           {isRealizado ? 'Realizado' : 'Programado'}

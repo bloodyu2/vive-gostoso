@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { ClaimRequest } from '@/types/database'
+import { showToast } from '@/components/ui/toast'
 
 // Submete um pedido de claim (usuário autenticado)
 export function useSubmitClaim() {
@@ -97,6 +98,9 @@ export function useApproveClaim() {
       qc.invalidateQueries({ queryKey: ['claims-admin'] })
       qc.invalidateQueries({ queryKey: ['businesses'] })
     },
+    onError: () => {
+      showToast('Não foi possível aprovar a reivindicação. Tente novamente.', 'error')
+    },
   })
 }
 
@@ -123,6 +127,9 @@ export function useRejectClaim() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['claims-admin'] })
+    },
+    onError: () => {
+      showToast('Não foi possível rejeitar a reivindicação. Tente novamente.', 'error')
     },
   })
 }

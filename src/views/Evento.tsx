@@ -4,6 +4,7 @@ import { CalendarDays, MapPin, ArrowLeft, ExternalLink } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useEvent } from '@/hooks/useEvents'
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import { Badge } from '@/components/ui/badge'
 import type { GostosoEvent } from '@/types/database'
 
@@ -20,6 +21,7 @@ export default function Evento({ initialEvent, id: idProp }: EventoProps) {
   const id = idProp
   const { data: event, isLoading } = useEvent(id ?? '', initialEvent !== undefined ? { initialData: initialEvent } : undefined)
   const { t, i18n } = useTranslation()
+  const lp = useLocalePath()
 
   usePageMeta({
     title: event ? event.name : 'Evento',
@@ -38,7 +40,7 @@ export default function Evento({ initialEvent, id: idProp }: EventoProps) {
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-12 text-center">
       <div className="text-5xl mb-4">🗓️</div>
       <h1 className="font-display text-2xl font-semibold mb-2">{t('evento.nao_encontrado')}</h1>
-      <Link href="/participe" className="text-teal text-sm font-semibold">{t('evento.ver_todos')}</Link>
+      <Link href={lp('/participe')} className="text-teal text-sm font-semibold">{t('evento.ver_todos')}</Link>
     </main>
   )
 
@@ -51,7 +53,7 @@ export default function Evento({ initialEvent, id: idProp }: EventoProps) {
 
   return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-10">
-      <Link href="/participe" className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
+      <Link href={lp('/participe')} className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
         <ArrowLeft className="w-4 h-4" /> {t('evento.todos_eventos')}
       </Link>
 

@@ -76,13 +76,31 @@ serve(async (req) => {
 
     const { data: biz } = await supabase
       .from('gostoso_businesses')
-      .select('id, name, stripe_customer_id')
+      .select('id, name, stripe_customer_id, profile_id')
       .eq('id', businessId)
       .maybeSingle()
 
     if (!biz) {
       return new Response(JSON.stringify({ error: 'Business not found' }), {
         status: 404,
+        headers: { ...cors, 'Content-Type': 'application/json' },
+      })
+    }
+
+    // IDOR guard: only the profile that owns this business may start a
+    // checkout session for it. Without this check, any authenticated caller
+    // could pass an arbitrary businessId and attach their Stripe customer /
+    // trigger a checkout that (via the webhook) activates a paid plan on a
+    // business they don't own.
+    const { data: profile, error: profileErr } = await supabase
+      .from('gostoso_profiles')
+      .select('id')
+      .eq('auth_user_id', user.id)
+      .maybeSingle()
+
+    if (profileErr || !profile || biz.profile_id !== profile.id) {
+      return new Response(JSON.stringify({ error: 'Forbidden' }), {
+        status: 403,
         headers: { ...cors, 'Content-Type': 'application/json' },
       })
     }

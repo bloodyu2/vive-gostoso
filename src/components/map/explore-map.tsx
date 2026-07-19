@@ -7,20 +7,12 @@ import type { LucideIcon } from 'lucide-react'
 // initial bundle entry graph (prevents Vite from adding a modulepreload for it)
 import { useLocalePath } from '@/hooks/useLocalePath'
 import type { Business } from '@/types/database'
+import { MAPBOX_TOKEN, MAP_STYLE, GOSTOSO_CENTER, GOSTOSO_ZOOM, PIN_COLORS } from '@/lib/mapbox'
 
 // Lazy type reference only — no static import of mapbox-gl
 type MapboxGLModule = typeof import('mapbox-gl')
 
-// Centro de São Miguel do Gostoso [lng, lat] — formato Mapbox
-const CENTER: [number, number] = [-35.6419, -5.1167]
-const ZOOM = 14
-
-const VERB_COLOR: Record<string, string> = {
-  come:    '#C97D2A',
-  fique:   '#0D7C7C',
-  passeie: '#3D8B5A',
-  resolva: '#1A1A1A',
-}
+const VERB_COLOR: Record<string, string> = PIN_COLORS
 
 const VERB_ICON: Record<string, LucideIcon> = {
   come:    Utensils,
@@ -79,13 +71,13 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
     import('mapbox-gl').then((mapboxgl) => {
       if (map.current || !mapContainer.current) return
       mapboxRef.current = mapboxgl as MapboxGLModule
-      mapboxgl.default.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string
+      mapboxgl.default.accessToken = MAPBOX_TOKEN
 
       map.current = new mapboxgl.default.Map({
         container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/streets-v12',
-        center: CENTER,
-        zoom: ZOOM,
+        style: MAP_STYLE,
+        center: GOSTOSO_CENTER,
+        zoom: GOSTOSO_ZOOM,
         attributionControl: false,
       })
 
@@ -188,7 +180,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
         {/* Stats chip */}
         <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur border border-[#E8E4DF] rounded-xl px-3 py-2 text-xs text-[#3D3D3D] shadow-sm pointer-events-none">
           <span className="font-semibold text-teal">{geo.length}</span> no mapa
-          {noGeo.length > 0 && <span className="text-[#B0A89E] ml-1.5">· {noGeo.length} sem localização</span>}
+          {noGeo.length > 0 && <span className="text-[#737373] ml-1.5">· {noGeo.length} sem localização</span>}
         </div>
 
         {/* Popup card */}
@@ -217,7 +209,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
                     </div>
                   )}
                 </div>
-                <button onClick={() => setPopup(null)} className="p-1.5 -m-1.5 text-[#B0A89E] hover:text-[#1A1A1A] flex-shrink-0">
+                <button onClick={() => setPopup(null)} className="p-1.5 -m-1.5 text-[#737373] hover:text-[#1A1A1A] flex-shrink-0">
                   <X className="w-4 h-4" />
                 </button>
               </div>

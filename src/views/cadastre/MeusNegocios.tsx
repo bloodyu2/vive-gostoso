@@ -235,7 +235,7 @@ function MeusNegociosInner() {
                                 : 'bg-[#F5F2EE] text-[#737373]'
                             }`}
                           >
-                            <span className={`w-1.5 h-1.5 rounded-full ${b.is_published ? 'bg-teal' : 'bg-[#A0A0A0]'}`} />
+                            <span className={`w-1.5 h-1.5 rounded-full ${b.is_published ? 'bg-teal' : 'bg-[#737373]'}`} />
                             {b.is_published ? t('status_published') : t('status_draft')}
                           </span>
                         </div>

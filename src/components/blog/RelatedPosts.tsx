@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import type { BlogPost } from '@/types/database'
 
 interface RelatedPostsProps {
@@ -18,6 +19,7 @@ interface RelatedPostsProps {
  * Fallback para posts mais recentes se não houver overlap.
  */
 export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPostsProps) {
+  const lp = useLocalePath()
   const { data: posts = [] } = useQuery({
     queryKey: ['related-posts', currentSlug, tags.join(',')],
     queryFn: async () => {
@@ -68,7 +70,7 @@ export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPosts
         {posts.map(post => (
           <Link
             key={post.id}
-            href={`/blog/${post.slug}`}
+            href={lp(`/blog/${post.slug}`)}
             className="group rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] bg-white dark:bg-[#222] hover:shadow-lg transition-shadow"
           >
             {post.cover_url ? (

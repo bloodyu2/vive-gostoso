@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useProfile } from '@/hooks/useProfile'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import { showToast } from '@/components/ui/toast'
 
 type Mode = 'login' | 'register' | 'forgot'
 
@@ -60,25 +61,29 @@ export default function Login() {
     e.preventDefault()
     setLoading(true)
     setError(null)
-    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
-    if (authError) {
-      setError(t('cadastro.error_invalid_credentials'))
+    try {
+      const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
+      if (authError) {
+        setError(t('cadastro.error_invalid_credentials'))
+        return
+      }
+      // Fetch profile immediately to route admin users directly
+      const userId = data.user?.id
+      if (userId) {
+        const { data: prof } = await supabase
+          .from('gostoso_profiles')
+          .select('role')
+          .eq('auth_user_id', userId)
+          .maybeSingle()
+        router.push(prof?.role === 'admin' ? lp('/cadastre/admin') : lp('/cadastre/painel'))
+      } else {
+        router.push(lp('/cadastre/painel'))
+      }
+    } catch {
+      showToast(t('cadastro.error_invalid_credentials'), 'error')
+    } finally {
       setLoading(false)
-      return
     }
-    // Fetch profile immediately to route admin users directly
-    const userId = data.user?.id
-    if (userId) {
-      const { data: prof } = await supabase
-        .from('gostoso_profiles')
-        .select('role')
-        .eq('auth_user_id', userId)
-        .maybeSingle()
-      router.push(prof?.role === 'admin' ? lp('/cadastre/admin') : lp('/cadastre/painel'))
-    } else {
-      router.push(lp('/cadastre/painel'))
-    }
-    setLoading(false)
   }
 
   async function handleRegister(e: React.FormEvent) {
@@ -93,28 +98,38 @@ export default function Login() {
     }
     setLoading(true)
     setError(null)
-    const { error: authError } = await supabase.auth.signUp({ email, password })
-    if (authError) {
-      setError(t('cadastro.error_create_account'))
-    } else {
-      setSuccess(t('cadastro.success_account_created'))
+    try {
+      const { error: authError } = await supabase.auth.signUp({ email, password })
+      if (authError) {
+        setError(t('cadastro.error_create_account'))
+      } else {
+        setSuccess(t('cadastro.success_account_created'))
+      }
+    } catch {
+      showToast(t('cadastro.error_create_account'), 'error')
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   async function handleForgot(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError(null)
-    const { error: authError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}${lp('/cadastre/resetar-senha')}`,
-    })
-    if (authError) {
-      setError(t('cadastro.error_send_email'))
-    } else {
-      setSuccess(t('cadastro.success_email_sent'))
+    try {
+      const { error: authError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}${lp('/cadastre/resetar-senha')}`,
+      })
+      if (authError) {
+        setError(t('cadastro.error_send_email'))
+      } else {
+        setSuccess(t('cadastro.success_email_sent'))
+      }
+    } catch {
+      showToast(t('cadastro.error_send_email'), 'error')
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   return (

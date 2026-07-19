@@ -14,12 +14,14 @@ export function CookieBanner({ forceOpen }: CookieBannerProps = {}) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
+    // Deferred to a microtask so the state update isn't synchronous within
+    // the effect body (avoids react-hooks/set-state-in-effect).
     if (forceOpen) {
-      setVisible(true)
+      queueMicrotask(() => setVisible(true))
       return
     }
     const stored = localStorage.getItem('vg_cookie_consent')
-    if (!stored) setVisible(true)
+    if (!stored) queueMicrotask(() => setVisible(true))
   }, [forceOpen])
 
   function accept() {

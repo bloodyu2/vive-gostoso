@@ -5,11 +5,48 @@ import { useQuery } from '@tanstack/react-query'
 import type { UseQueryOptions } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import sanitizeHtml from 'sanitize-html'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import { articleSchema, breadcrumbSchema, clampDescription } from '@/lib/seo'
 import { RelatedPosts, TableOfContents } from '@/components/blog'
+
+// Allow-list tuned to what gostoso_blog_posts.content actually contains:
+// comparison tables (table.comparison-table), tip/warn/info callouts
+// (div.callout), inline CTA cards (a.inline-cta with nested spans), FAQ
+// accordions (details.faq > summary), figures/captions, and the usual
+// headings/prose. See .blog-prose in src/styles/globals.css for the full
+// list of expected structures.
+const BLOG_SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
+  allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+    'img',
+    'details',
+    'summary',
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'figure',
+    'figcaption',
+    'span',
+  ]),
+  allowedAttributes: {
+    ...sanitizeHtml.defaults.allowedAttributes,
+    img: ['src', 'alt', 'width', 'height', 'loading', 'decoding'],
+    details: ['open'],
+    a: ['href', 'name', 'target', 'rel', 'class'],
+    h2: ['id'],
+    h3: ['id'],
+    '*': ['class'],
+  },
+  allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+}
+
+function sanitizeBlogContent(html: string): string {
+  return sanitizeHtml(html, BLOG_SANITIZE_OPTIONS)
+}
 
 const SITE_URL = 'https://vivegostoso.com.br'
 
@@ -43,6 +80,12 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
   const slug = slugProp
   const { data: post, isLoading } = useBlogPost(slug ?? '', initialPost !== undefined ? { initialData: initialPost } : undefined)
   const { t, i18n } = useTranslation()
+  const lp = useLocalePath()
+
+  const sanitizedContent = useMemo(
+    () => (post?.content ? sanitizeBlogContent(post.content) : ''),
+    [post],
+  )
 
   const url = slug ? `${SITE_URL}/blog/${slug}` : SITE_URL
   const description = post?.excerpt ? clampDescription(post.excerpt, 160) : undefined
@@ -108,7 +151,7 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
     return (
       <main className="max-w-3xl mx-auto px-5 md:px-8 py-20 text-center">
         <p className="text-[#737373] text-lg">{t('blog.nao_encontrado')}</p>
-        <Link href="/blog" className="mt-4 inline-flex items-center gap-2 text-teal font-semibold hover:underline">
+        <Link href={lp('/blog')} className="mt-4 inline-flex items-center gap-2 text-teal font-semibold hover:underline">
           <ArrowLeft className="w-4 h-4" />
           {t('blog.voltar_blog')}
         </Link>
@@ -119,7 +162,7 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
   return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-12">
       <Link
-        href="/blog"
+        href={lp('/blog')}
         className="inline-flex items-center gap-2 text-sm text-[#737373] hover:text-teal transition-colors mb-8"
       >
         <ArrowLeft className="w-4 h-4" />
@@ -178,7 +221,7 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
 
       <article
         className="blog-prose mt-2 max-w-none"
-        dangerouslySetInnerHTML={{ __html: post.content }}
+        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
       />
 
       <RelatedPosts currentSlug={post.slug} tags={post.tags} />

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { useLocalePath } from '@/hooks/useLocalePath'
 import { FundHero } from '@/components/fund/fund-hero'
 import { FundEntryRow } from '@/components/fund/fund-entry-row'
 import { useFundEntries, useFundSummary, useAssociadosCount } from '@/hooks/useFund'
@@ -17,67 +18,20 @@ import type { FundEntry, Goal } from '@/types/database'
 
 // ─── Static data ────────────────────────────────────────────────────────────
 
+// label/detalhe/valor vêm de apoie.custo_<key>_* — ver src/locales/*.json
 const CUSTOS_ATIVOS = [
-  {
-    icon: Layers,
-    label: 'Vercel Hobby',
-    detalhe: 'Hospedagem, CDN global, deploys automáticos',
-    valor_display: 'R$0/mês',
-    valor_sub: 'Plano gratuito',
-    valor_mes: 0,
-  },
-  {
-    icon: Database,
-    label: 'Supabase Pro',
-    detalhe: 'Banco de dados, autenticação, storage e Edge Functions',
-    valor_display: '~R$58/mês',
-    valor_sub: 'USD 10 · cobrado em dólar',
-    valor_mes: 58.00,
-  },
-  {
-    icon: Mail,
-    label: 'E-mail dedicado',
-    detalhe: 'contato@vivegostoso.com.br',
-    valor_display: 'R$9,90/mês',
-    valor_sub: 'Plano anual',
-    valor_mes: 9.90,
-  },
-  {
-    icon: Globe,
-    label: 'Domínio vivegostoso.com.br',
-    detalhe: 'Registro.br · renovação anual',
-    valor_display: 'R$40/ano',
-    valor_sub: '≈ R$3,33/mês',
-    valor_mes: 3.33,
-  },
+  { icon: Layers,   key: 'vercel_hobby', valor_mes: 0 },
+  { icon: Database, key: 'supabase',     valor_mes: 58.00 },
+  { icon: Mail,     key: 'email',        valor_mes: 9.90 },
+  { icon: Globe,    key: 'dominio',      valor_mes: 3.33 },
 ]
 
 const CUSTOS_PLANEJADOS = [
-  {
-    icon: Layers,
-    label: 'Vercel Pro',
-    detalhe: 'Hospedagem avançada com analytics e limites maiores, quando o tráfego justificar (USD 20/mês)',
-  },
-  {
-    icon: Phone,
-    label: 'Número de telefone dedicado',
-    detalhe: 'Atendimento à comunidade e negócios',
-  },
-  {
-    icon: Smartphone,
-    label: 'WhatsApp Business verificado',
-    detalhe: 'Canal oficial de suporte e anúncios',
-  },
-  {
-    icon: Zap,
-    label: 'Marketing digital',
-    detalhe: 'E-mail marketing e anúncios locais quando a arrecadação justificar',
-  },
-  {
-    icon: Server,
-    label: 'Produção de conteúdo',
-    detalhe: 'Fotos e vídeos dos negócios da cidade',
-  },
+  { icon: Layers,     key: 'vercel_pro' },
+  { icon: Phone,      key: 'telefone' },
+  { icon: Smartphone, key: 'whatsapp_biz' },
+  { icon: Zap,        key: 'marketing' },
+  { icon: Server,     key: 'conteudo' },
 ]
 
 const DONATION_PRESETS = [25, 50, 100, 250]
@@ -93,13 +47,14 @@ const GOAL_COLORS: Record<Goal['category'], { bg: string; text: string; bar: str
   comunidade:    { bg: 'bg-teal/10',    text: 'text-teal',  bar: 'bg-teal' },
   operacao:      { bg: 'bg-ocre/10',    text: 'text-ocre',  bar: 'bg-ocre' },
   marketing:     { bg: 'bg-coral/10',   text: 'text-coral', bar: 'bg-coral' },
-  infraestrutura:{ bg: 'bg-[#E8E4DF]',  text: 'text-[#737373]', bar: 'bg-[#A0A0A0]' },
+  infraestrutura:{ bg: 'bg-[#E8E4DF]',  text: 'text-[#737373]', bar: 'bg-[#737373]' },
 }
 
-const STATUS_LABEL: Record<Goal['status'], { label: string; cls: string }> = {
-  pendente:     { label: 'Pendente',      cls: 'bg-[#E8E4DF] text-[#737373]' },
-  em_andamento: { label: 'Em andamento',  cls: 'bg-ocre/10 text-ocre' },
-  concluido:    { label: 'Concluído',     cls: 'bg-teal/10 text-teal' },
+// label vem de apoie.status_<status> — ver src/locales/*.json
+const STATUS_CLS: Record<Goal['status'], string> = {
+  pendente:     'bg-[#E8E4DF] text-[#737373]',
+  em_andamento: 'bg-ocre/10 text-ocre',
+  concluido:    'bg-teal/10 text-teal',
 }
 
 function fmt(cents: number) {
@@ -114,6 +69,7 @@ type ApoieProps = {
 
 export default function Apoie({ initialEntries = [] }: ApoieProps) {
   const { t, i18n } = useTranslation()
+  const lp = useLocalePath()
   usePageMeta({
     title: t('apoie.meta_title'),
     description: t('apoie.meta_desc'),
@@ -138,15 +94,15 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
 
   async function handleDonate() {
     if (!amountBRL || amountBRL < 5) {
-      setDonationError('Valor mínimo de R$5,00.')
+      setDonationError(t('apoie.erro_valor_minimo'))
       return
     }
     setDonationLoading(true)
     setDonationError(null)
     try {
-      await startDonation(Math.round(amountBRL * 100))
+      await startDonation(Math.round(amountBRL * 100), lp('/apoie'))
     } catch (err) {
-      setDonationError(err instanceof Error ? err.message : 'Erro ao processar. Tente novamente.')
+      setDonationError(err instanceof Error ? err.message : t('apoie.erro_generico'))
       setDonationLoading(false)
     }
   }
@@ -227,8 +183,8 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
                     const v = e.target.value.replace(/[^0-9,]/g, '')
                     setCustomAmount(v)
                   }}
-                  placeholder="Quanto você quer apoiar?"
-                  className="flex-1 bg-transparent text-sm outline-none text-[#1A1A1A] dark:text-white placeholder:text-[#B0A89E]"
+                  placeholder={t('apoie.valor_placeholder')}
+                  className="flex-1 bg-transparent text-sm outline-none text-[#1A1A1A] dark:text-white placeholder:text-[#737373]"
                 />
               </div>
             )}
@@ -244,13 +200,13 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
             >
               <Heart className="w-4 h-4" />
               {donationLoading
-                ? 'Redirecionando...'
+                ? t('apoie.redirecionando')
                 : amountBRL && amountBRL >= 5
                 ? `${t('apoie.doe_btn')} R$${amountBRL.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}`
-                : 'Escolha um valor'}
+                : t('apoie.escolha_valor')}
             </button>
-            <p className="text-xs text-[#B0A89E] mt-3 text-center">
-              Pagamento seguro via Stripe · sem vínculo de mensalidade
+            <p className="text-xs text-[#737373] mt-3 text-center">
+              {t('apoie.pagamento_seguro')}
             </p>
           </div>
         </section>
@@ -265,7 +221,7 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
           {/* Em operação */}
           <div className="flex items-center gap-2 mb-3">
             <CheckCircle className="w-3.5 h-3.5 text-teal" />
-            <span className="text-xs font-semibold uppercase tracking-widest text-[#737373]">Em operação</span>
+            <span className="text-xs font-semibold uppercase tracking-widest text-[#737373]">{t('apoie.em_operacao')}</span>
           </div>
 
           <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl overflow-hidden mb-4">
@@ -274,7 +230,7 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
               const isLast = i === CUSTOS_ATIVOS.length - 1
               return (
                 <div
-                  key={c.label}
+                  key={c.key}
                   className={`flex items-center gap-4 px-5 py-4 ${!isLast ? 'border-b border-[#F5F2EE] dark:border-[#2D2D2D]' : ''}`}
                 >
                   {/* Icon */}
@@ -285,17 +241,17 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
                   {/* Label + detail */}
                   <div className="flex-1 min-w-0">
                     <div className="font-semibold text-sm text-[#1A1A1A] dark:text-white leading-snug">
-                      {c.label}
+                      {t(`apoie.custo_${c.key}_label`)}
                     </div>
-                    <div className="text-xs text-[#A0A0A0] mt-0.5 truncate">{c.detalhe}</div>
+                    <div className="text-xs text-[#737373] mt-0.5 truncate">{t(`apoie.custo_${c.key}_detalhe`)}</div>
                   </div>
 
                   {/* Price */}
                   <div className="flex-shrink-0 text-right">
                     <div className="font-display font-bold text-base text-teal tabular-nums">
-                      {c.valor_display}
+                      {t(`apoie.custo_${c.key}_valor_display`)}
                     </div>
-                    <div className="text-xs text-[#A0A0A0] mt-0.5 whitespace-nowrap">{c.valor_sub}</div>
+                    <div className="text-xs text-[#737373] mt-0.5 whitespace-nowrap">{t(`apoie.custo_${c.key}_valor_sub`)}</div>
                   </div>
                 </div>
               )
@@ -303,7 +259,7 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
 
             {/* Total row */}
             <div className="flex items-center justify-between px-5 py-4 bg-[#F5F2EE] dark:bg-[#222]">
-              <span className="text-sm font-semibold text-[#1A1A1A] dark:text-white">Total/mês</span>
+              <span className="text-sm font-semibold text-[#1A1A1A] dark:text-white">{t('apoie.total_mes')}</span>
               <span className="font-display font-bold text-xl text-teal tabular-nums">
                 R${totalMes.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
@@ -313,7 +269,7 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
           {/* Planejado */}
           <div className="flex items-center gap-2 mb-3 mt-8">
             <Clock className="w-3.5 h-3.5 text-ocre" />
-            <span className="text-xs font-semibold uppercase tracking-widest text-[#737373]">Planejado para quando a arrecadação permitir</span>
+            <span className="text-xs font-semibold uppercase tracking-widest text-[#737373]">{t('apoie.planejado_label')}</span>
           </div>
 
           <div className="bg-white dark:bg-[#1C1C1C] border border-dashed border-[#D4CFCA] dark:border-[#333] rounded-2xl overflow-hidden opacity-75">
@@ -322,7 +278,7 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
               const isLast = i === CUSTOS_PLANEJADOS.length - 1
               return (
                 <div
-                  key={c.label}
+                  key={c.key}
                   className={`flex items-center gap-4 px-5 py-4 ${!isLast ? 'border-b border-[#F5F2EE] dark:border-[#2D2D2D]' : ''}`}
                 >
                   <div className="w-9 h-9 rounded-xl bg-ocre/10 flex items-center justify-center flex-shrink-0">
@@ -330,13 +286,13 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="font-semibold text-sm text-[#1A1A1A] dark:text-white leading-snug">
-                      {c.label}
+                      {t(`apoie.custo_${c.key}_label`)}
                     </div>
-                    <div className="text-xs text-[#A0A0A0] mt-0.5 leading-relaxed">{c.detalhe}</div>
+                    <div className="text-xs text-[#737373] mt-0.5 leading-relaxed">{t(`apoie.custo_${c.key}_detalhe`)}</div>
                   </div>
                   <div className="flex-shrink-0">
                     <span className="text-xs font-medium text-ocre bg-ocre/10 px-3 py-1 rounded-full whitespace-nowrap">
-                      Em breve
+                      {t('apoie.em_breve')}
                     </span>
                   </div>
                 </div>
@@ -350,17 +306,17 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
           <section>
             <div className="flex items-center gap-2 mb-1">
               <Target className="w-4 h-4 text-teal" />
-              <h2 className="font-display font-semibold text-2xl">Para onde vai o dinheiro</h2>
+              <h2 className="font-display font-semibold text-2xl">{t('apoie.metas_titulo')}</h2>
             </div>
             <p className="text-sm text-[#737373] mb-6">
-              Metas concretas que a arrecadação financia. Sem promessas vazias.
+              {t('apoie.metas_desc')}
             </p>
 
             <div className="space-y-3">
               {goals.map(goal => {
                 const Icon = GOAL_ICONS[goal.category]
                 const col = GOAL_COLORS[goal.category]
-                const status = STATUS_LABEL[goal.status]
+                const statusCls = STATUS_CLS[goal.status]
                 const pct = goal.target_cents > 0
                   ? Math.min(100, Math.round((goal.raised_cents / goal.target_cents) * 100))
                   : 0
@@ -379,12 +335,12 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
                           <span className="font-semibold text-sm text-[#1A1A1A] dark:text-white">
                             {goal.title}
                           </span>
-                          <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${status.cls}`}>
-                            {status.label}
+                          <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${statusCls}`}>
+                            {t(`apoie.status_${goal.status}`)}
                           </span>
                           {goal.target_date && (
-                            <span className="text-xs text-[#A0A0A0]">
-                              Meta: {new Date(goal.target_date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR', { month: 'long', year: 'numeric' })}
+                            <span className="text-xs text-[#737373]">
+                              {t('apoie.meta_data_prefix')} {new Date(goal.target_date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR', { month: 'long', year: 'numeric' })}
                             </span>
                           )}
                         </div>
@@ -413,8 +369,8 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
 
         {/* ── Movimentações ── */}
         <section>
-          <h2 className="font-display font-semibold text-2xl mb-1">Movimentações</h2>
-          <p className="text-sm text-[#737373] mb-5">Cada real que entra ou sai. Auditável. Público.</p>
+          <h2 className="font-display font-semibold text-2xl mb-1">{t('apoie.movimentacoes_titulo')}</h2>
+          <p className="text-sm text-[#737373] mb-5">{t('apoie.movimentacoes_desc')}</p>
 
           {entriesList.length > 0 ? (
             <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl overflow-hidden">
@@ -425,10 +381,10 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
           ) : (
             <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl px-6 py-10 text-center">
               <p className="text-sm font-medium text-[#1A1A1A] dark:text-white">
-                Nenhuma movimentação ainda
+                {t('apoie.movimentacoes_vazio_titulo')}
               </p>
-              <p className="text-xs text-[#A0A0A0] mt-1">
-                Quando os primeiros associados confirmarem, o extrato aparece aqui em tempo real.
+              <p className="text-xs text-[#737373] mt-1">
+                {t('apoie.movimentacoes_vazio_desc')}
               </p>
             </div>
           )}
@@ -447,27 +403,20 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
             <div className="relative">
               <span className="inline-flex items-center gap-1.5 bg-teal text-white text-xs font-bold px-3 py-1 rounded-full mb-4">
                 <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                Objetivo 1º semestre
+                {t('apoie.aprende_badge')}
               </span>
-              <h3 className="font-display font-bold text-3xl text-white mb-3">Programa APRENDE</h3>
-              <p className="text-white/70 text-sm leading-relaxed max-w-xl mb-6">
-                Capacitação digital para os negócios da plataforma: fotografia com celular, redes sociais,
-                atendimento ao turista e gestão básica. O dinheiro que entra no fundo financia esse programa antes de qualquer outra coisa.
+              <h3 className="font-display font-bold text-3xl text-white mb-3">{t('apoie.aprende_titulo')}</h3>
+              <p className="text-white/70 text-sm leading-relaxed max-w-xl mb-5">
+                {t('apoie.aprende_desc')}
               </p>
-              <div className="flex flex-wrap gap-3">
-                {[
-                  { value: '1º sem.', label: 'Meta de entrega' },
-                  { value: '100%',    label: 'Gratuito p/ associados' },
-                  { value: 'Gostoso', label: 'Feito por quem é da cidade', teal: true },
-                ].map(s => (
-                  <div key={s.label} className="bg-white/10 rounded-xl px-4 py-2.5 text-center">
-                    <div className={`font-display font-bold text-lg ${s.teal ? 'text-teal' : 'text-white'}`}>
-                      {s.value}
-                    </div>
-                    <div className="text-white/50 text-xs mt-0.5">{s.label}</div>
-                  </div>
+              <ul className="space-y-2 max-w-xl">
+                {[0, 1, 2].map(i => (
+                  <li key={i} className="flex items-start gap-2.5 text-sm text-white/80">
+                    <CheckCircle className="w-4 h-4 text-teal flex-shrink-0 mt-0.5" />
+                    {t(`apoie.aprende_item_${i}`)}
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           </div>
         </section>
@@ -478,7 +427,7 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
             href="/cadastre"
             className="inline-flex items-center gap-2 bg-teal text-white font-semibold px-6 py-3 rounded-xl hover:bg-teal-dark transition-colors text-sm"
           >
-            Associar meu negócio
+            {t('apoie.associar_negocio_btn')}
           </Link>
         </div>
 

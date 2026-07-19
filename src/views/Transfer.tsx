@@ -64,14 +64,14 @@ function TransferCard({ transfer, selectedRoute, onOpen }: TransferCardProps) {
       onClick={onOpen}
       className="bg-white border border-[#E8E4DF] rounded-2xl overflow-hidden flex flex-col text-left w-full hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer group"
     >
-      <div className="relative h-36 bg-gradient-to-br from-teal/20 to-teal/5 flex items-center justify-center flex-shrink-0">
+      <div className="relative h-36 bg-gradient-to-br from-[#1E7A9E]/20 to-[#1E7A9E]/5 flex items-center justify-center flex-shrink-0">
         {transfer.photo_url ? (
           <img src={transfer.photo_url} alt={transfer.provider_name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
         ) : (
-          <Car className="w-12 h-12 text-teal/40" />
+          <Car className="w-12 h-12 text-[#1E7A9E]/40" />
         )}
         {transfer.vehicle_type && (
-          <span className="absolute top-3 left-3 bg-white/90 text-teal text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
+          <span className="absolute top-3 left-3 bg-white/90 text-[#1E7A9E] text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
             {transfer.vehicle_type}
           </span>
         )}
@@ -111,7 +111,7 @@ function TransferCard({ transfer, selectedRoute, onOpen }: TransferCardProps) {
           {matchedRoute ? (
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs text-[#737373]">{matchedRoute.from} → {matchedRoute.to}</span>
-              <span className="font-display font-bold text-teal text-base">
+              <span className="font-display font-bold text-[#1E7A9E] text-base">
                 R${matchedRoute.price_brl.toLocaleString('pt-BR')}
               </span>
             </div>
@@ -122,7 +122,7 @@ function TransferCard({ transfer, selectedRoute, onOpen }: TransferCardProps) {
               </span>
             </div>
           )}
-          <div className="flex items-center justify-center gap-2 w-full bg-[#F5F2EE] text-teal px-4 py-2.5 rounded-xl text-sm font-semibold group-hover:bg-teal group-hover:text-white transition-colors">
+          <div className="flex items-center justify-center gap-2 w-full bg-[#1E7A9E]/10 text-[#1E7A9E] px-4 py-2.5 rounded-xl text-sm font-semibold group-hover:bg-[#1E7A9E] group-hover:text-white transition-colors">
             {t('transfer.ver_detalhes')}
           </div>
         </div>
@@ -638,16 +638,19 @@ export default function Transfer() {
 
   return (
     <>
-      <section className="bg-teal text-white px-5 md:px-8 py-12 md:py-16">
+      {/* Sky (#87CEEB) is reserved for Transfer so it reads as its own product, not a teal-tinted
+          clone of FIQUE. Pale wash background + the same deepened #1E7A9E used in the header nav
+          (raw #87CEEB fails text contrast, ~1.9:1). */}
+      <section className="bg-sky/10 text-[#1E7A9E] px-5 md:px-8 py-12 md:py-16">
         <div className="max-w-6xl mx-auto">
           <div className="text-xs font-medium tracking-widest uppercase opacity-80 mb-3">{t('transfer.badge')}</div>
-          <h1 className="font-display font-bold text-5xl sm:text-6xl leading-none tracking-tight mb-4">
+          <h1 className="font-display font-bold text-5xl sm:text-6xl leading-none tracking-tight mb-4 text-[#1E7A9E]">
             {t('transfer.titulo')}
           </h1>
-          <p className="text-white/80 text-base md:text-lg max-w-xl leading-relaxed">{t('transfer.desc')}</p>
+          <p className="text-[#1E7A9E]/80 text-base md:text-lg max-w-xl leading-relaxed">{t('transfer.desc')}</p>
           <div className="flex flex-wrap gap-3 mt-6">
             {[{ label: '110 km' }, { label: '~1h50' }, { label: 'Aeroporto de Natal (NAT)' }].map(c => (
-              <div key={c.label} className="bg-white/15 rounded-xl px-4 py-2 text-sm font-semibold">{c.label}</div>
+              <div key={c.label} className="bg-white text-[#1E7A9E] border border-[#1E7A9E]/15 rounded-xl px-4 py-2 text-sm font-semibold">{c.label}</div>
             ))}
           </div>
         </div>
@@ -669,7 +672,7 @@ export default function Transfer() {
 
           <button
             onClick={() => setShowRegistration(true)}
-            className="flex items-center gap-2 bg-teal text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-teal-dark transition-colors flex-shrink-0"
+            className="flex items-center gap-2 bg-[#1E7A9E] text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#175E7B] transition-colors flex-shrink-0"
           >
             <Plus className="w-4 h-4" />
             {t('transfer.cadastre_btn')}

@@ -10,6 +10,7 @@ import { isBusinessOpen } from '@/lib/utils'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import { ErrorState } from '@/components/ui/error-state'
 import type { Business } from '@/types/database'
 
 type PasseieProps = {
@@ -28,7 +29,7 @@ export default function Passeie({ initialBusinesses = [] }: PasseieProps) {
   const [openOnly, setOpenOnly] = useState(false)
   const [search, setSearch] = useState('')
   const { data: categories = [] } = useCategories('passeie')
-  const { data: businesses, isLoading } = useBusinesses('passeie', { initialData: initialBusinesses })
+  const { data: businesses, isLoading, isError, refetch } = useBusinesses('passeie', { initialData: initialBusinesses })
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
@@ -51,14 +52,20 @@ export default function Passeie({ initialBusinesses = [] }: PasseieProps) {
           {t('passeie.abrir_mapa')}
         </Link>
       </div>
-      <BusinessFilters
-        categories={categories} active={activeCat} onSelect={setActiveCat}
-        view={view} onView={setView}
-        total={filtered.length}
-        openOnly={openOnly} onOpenOnly={setOpenOnly}
-        search={search} onSearch={setSearch}
-      />
-      <BusinessGrid businesses={filtered} loading={isLoading} view={view} />
+      {isError ? (
+        <ErrorState onRetry={() => refetch()} />
+      ) : (
+        <>
+          <BusinessFilters
+            categories={categories} active={activeCat} onSelect={setActiveCat}
+            view={view} onView={setView}
+            total={filtered.length}
+            openOnly={openOnly} onOpenOnly={setOpenOnly}
+            search={search} onSearch={setSearch}
+          />
+          <BusinessGrid businesses={filtered} loading={isLoading} view={view} />
+        </>
+      )}
     </main>
   )
 }

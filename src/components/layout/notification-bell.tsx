@@ -68,27 +68,29 @@ export function NotificationBell() {
                 <p className="text-sm">Nenhuma notificação ainda.</p>
               </div>
             ) : notifications.map(n => {
-              const Wrapper = n.link ? Link : 'div'
-              const wrapperProps = n.link
-                ? { href: n.link, onClick: () => setOpen(false) }
-                : {}
-              return (
-                <Wrapper
-                  key={n.id}
-                  {...(wrapperProps as any)}
-                  className={cn(
-                    'flex gap-3 px-4 py-3 transition-colors',
-                    n.link ? 'hover:bg-areia dark:hover:bg-[#2D2D2D] cursor-pointer' : 'cursor-default',
-                    !n.read && 'bg-teal/5',
-                  )}
-                >
+              const itemClassName = cn(
+                'flex gap-3 px-4 py-3 transition-colors',
+                n.link ? 'hover:bg-areia dark:hover:bg-[#2D2D2D] cursor-pointer' : 'cursor-default',
+                !n.read && 'bg-teal/5',
+              )
+              const content = (
+                <>
                   <div className={cn('w-2 h-2 rounded-full mt-1.5 flex-shrink-0 transition-colors', !n.read ? 'bg-teal' : 'bg-transparent')} />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-[#1A1A1A] dark:text-white leading-snug">{n.title}</p>
                     {n.body && <p className="text-xs text-[#737373] mt-0.5 leading-snug">{n.body}</p>}
-                    <p className="text-[10px] text-[#A0A0A0] mt-1">{relativeTime(n.created_at)}</p>
+                    <p className="text-[10px] text-[#737373] mt-1">{relativeTime(n.created_at)}</p>
                   </div>
-                </Wrapper>
+                </>
+              )
+              return n.link ? (
+                <Link key={n.id} href={n.link} onClick={() => setOpen(false)} className={itemClassName}>
+                  {content}
+                </Link>
+              ) : (
+                <div key={n.id} className={itemClassName}>
+                  {content}
+                </div>
               )
             })}
           </div>

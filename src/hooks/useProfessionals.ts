@@ -4,6 +4,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import { useProfile } from '@/hooks/useProfile'
+import { showToast } from '@/components/ui/toast'
 import type { Professional, ProfessionalCategory } from '@/types/professional'
 import { generateSlug } from '@/types/professional'
 
@@ -104,10 +105,23 @@ export function useUpsertProfessional() {
 
       const slug = existing?.slug ?? generateSlug(input.display_name)
 
+      // Explicitly whitelist writable fields -- rating_avg/review_count are
+      // server-computed (gostoso_professional_ratings view + DB guard trigger)
+      // and must never be accepted from client input, even if a caller's
+      // object happens to carry stray extra properties at runtime.
+      const {
+        display_name, headline, bio, photo_url, category, specialties,
+        portfolio_items, whatsapp, instagram, website, hourly_rate, is_published,
+      } = input
+      const payload = {
+        display_name, headline, bio, photo_url, category, specialties,
+        portfolio_items, whatsapp, instagram, website, hourly_rate, is_published,
+      }
+
       if (existing) {
         const { data, error } = await supabase
           .from('gostoso_professionals')
-          .update({ ...input, slug })
+          .update({ ...payload, slug })
           .eq('id', existing.id)
           .select()
           .single()
@@ -116,7 +130,7 @@ export function useUpsertProfessional() {
       } else {
         const { data, error } = await supabase
           .from('gostoso_professionals')
-          .insert({ ...input, profile_id: profile.id, slug })
+          .insert({ ...payload, profile_id: profile.id, slug })
           .select()
           .single()
         if (error) throw error
@@ -162,6 +176,9 @@ export function useToggleProfessionalPublished() {
       qc.invalidateQueries({ queryKey: ['admin-professionals'] })
       qc.invalidateQueries({ queryKey: ['professionals'] })
     },
+    onError: () => {
+      showToast('Não foi possível atualizar a publicação. Tente novamente.', 'error')
+    },
   })
 }
 
@@ -180,6 +197,9 @@ export function useDeleteProfessional() {
       qc.invalidateQueries({ queryKey: ['admin-professionals'] })
       qc.invalidateQueries({ queryKey: ['professionals'] })
       qc.invalidateQueries({ queryKey: ['professional'] })  // clears all slug caches
+    },
+    onError: () => {
+      showToast('Não foi possível excluir o profissional. Tente novamente.', 'error')
     },
   })
 }

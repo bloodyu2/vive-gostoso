@@ -54,7 +54,7 @@ function EventRow({ sub }: { sub: EventSubmission }) {
           {sub.source_url}
         </a>
       )}
-      <div className="text-xs text-[#A0A0A0] border-t border-[#F0EDE8] pt-3">
+      <div className="text-xs text-[#737373] border-t border-[#F0EDE8] pt-3">
         {t('submitted_by')} <span className="text-[#737373]">{sub.submitter_name}</span>
         {sub.submitter_email ? ` · ${sub.submitter_email}` : ''}
         {sub.submitter_phone ? ` · ${sub.submitter_phone}` : ''}

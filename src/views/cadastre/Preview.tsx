@@ -95,7 +95,7 @@ function PreviewInner() {
           <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-8 items-start">
             {/* Card preview */}
             <div>
-              <p className="text-xs text-[#A0A0A0] font-medium uppercase tracking-wide mb-3">
+              <p className="text-xs text-[#737373] font-medium uppercase tracking-wide mb-3">
                 {t('preview:card_label')}
               </p>
               <div className="max-w-sm">
@@ -111,7 +111,7 @@ function PreviewInner() {
                   ? 'bg-teal/10 text-teal'
                   : 'bg-[#F5F2EE] text-[#737373]'
               }`}>
-                <span className={`w-2 h-2 rounded-full ${business.is_published ? 'bg-teal' : 'bg-[#A0A0A0]'}`} />
+                <span className={`w-2 h-2 rounded-full ${business.is_published ? 'bg-teal' : 'bg-[#737373]'}`} />
                 {business.is_published ? t('preview:status_published') : t('preview:status_draft')}
               </div>
 

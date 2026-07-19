@@ -7,6 +7,7 @@ import { useLocalePath } from '@/hooks/useLocalePath'
 import i18n from '@/i18n'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { ErrorState } from '@/components/ui/error-state'
+import { AdminListSkeleton } from '@/components/ui/admin-list-skeleton'
 import { useAdminTransfers, useModerateTransfer } from '@/hooks/useTransfers'
 import type { Transfer } from '@/types/database'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
@@ -81,7 +82,7 @@ function TransferRow({ transfer }: { transfer: Transfer }) {
         <p className="text-sm text-[#737373] leading-relaxed">{transfer.description}</p>
       )}
 
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1 border-t border-[#F0EDE8] text-xs text-[#A0A0A0]">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1 border-t border-[#F0EDE8] text-xs text-[#737373]">
         <span>
           {t('whatsapp_label')}{' '}
           <a
@@ -126,11 +127,7 @@ function AdminTransfersInner() {
       </p>
 
       {isLoading ? (
-        <div className="space-y-4">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="h-28 bg-[#E8E4DF] rounded-2xl animate-pulse" />
-          ))}
-        </div>
+        <AdminListSkeleton rows={3} height="h-28" />
       ) : isError ? (
         <ErrorState onRetry={() => refetch()} />
       ) : (

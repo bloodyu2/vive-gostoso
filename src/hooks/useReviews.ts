@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { Review, ReviewInsert, ReviewTarget } from '@/types/reviews'
+import { useModerateListing } from '@/hooks/useModeration'
 
 /** Approved reviews for a target (business/professional/transfer) — public */
 export function useReviews(targetType: ReviewTarget, targetId: string) {
@@ -60,6 +61,12 @@ export function useSubmitReview() {
   })
 }
 
+type PendingReviewRow = Review & {
+  business: { name: string } | null
+  professional: { display_name: string } | null
+  transfer: { provider_name: string } | null
+}
+
 export function useAdminPendingReviews() {
   return useQuery({
     queryKey: ['reviews', 'admin', 'pending'],
@@ -71,7 +78,7 @@ export function useAdminPendingReviews() {
         .order('created_at', { ascending: true })
       if (error) throw error
 
-      return ((data ?? []) as any[]).map(r => ({
+      return ((data ?? []) as PendingReviewRow[]).map(r => ({
         ...r,
         target_name: r.business?.name || r.professional?.display_name || r.transfer?.provider_name || 'Desconhecido',
         target_type: r.business_id ? 'business' : r.professional_id ? 'professional' : 'transfer',
@@ -81,28 +88,33 @@ export function useAdminPendingReviews() {
 }
 
 export function useModerateReview() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: async ({ id, approve }: { id: string; approve: boolean }) => {
-      if (approve) {
-        const { error } = await supabase
-          .from('gostoso_reviews')
-          .update({ approved: true })
-          .eq('id', id)
-        if (error) throw error
-      } else {
-        const { error } = await supabase
-          .from('gostoso_reviews')
-          .delete()
-          .eq('id', id)
-        if (error) throw error
+  // Invalidates all review caches: admin pending + all public business/professional/transfer caches.
+  // Without this, after approving a review the business profile page keeps showing the stale
+  // empty array (cached before approval) until staleTime expires.
+  return useModerateListing({
+    table: 'gostoso_reviews',
+    activeField: 'approved',
+    invalidateKeys: [['reviews']],
+    errorMessage: 'Não foi possível moderar a avaliação. Tente novamente.',
+  })
+}
+
+/** Aggregated ratings for ALL professionals in one query (view gostoso_professional_ratings).
+ *  Mirrors useBusinessRatings() above -- same shared-fetch dedupe rationale. */
+export function useProfessionalRatings() {
+  return useQuery({
+    queryKey: ['reviews', 'ratings', 'professional'],
+    queryFn: async (): Promise<Map<string, { avg: number; count: number }>> => {
+      const { data, error } = await supabase
+        .from('gostoso_professional_ratings')
+        .select('*')
+      if (error) throw error
+      const map = new Map<string, { avg: number; count: number }>()
+      for (const row of (data ?? []) as { professional_id: string; avg_rating: string | number; review_count: number }[]) {
+        map.set(row.professional_id, { avg: Number(row.avg_rating), count: row.review_count })
       }
+      return map
     },
-    onSuccess: () => {
-      // Invalidate all review caches: admin pending + all public business/professional/transfer caches.
-      // Without this, after approving a review the business profile page keeps showing the stale
-      // empty array (cached before approval) until staleTime expires.
-      qc.invalidateQueries({ queryKey: ['reviews'] })
-    },
+    staleTime: 5 * 60 * 1000,
   })
 }

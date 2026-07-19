@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
 import { usePageMeta } from '@/hooks/usePageMeta'
+import { ErrorState } from '@/components/ui/error-state'
 
 function useBlogPosts(options?: Pick<UseQueryOptions<BlogPost[]>, 'initialData'>) {
   return useQuery({
@@ -33,7 +34,7 @@ export default function Blog({ initialPosts = [] }: BlogProps) {
     title: t('blog.meta_title'),
     description: t('blog.meta_desc'),
   })
-  const { data: posts = [], isLoading } = useBlogPosts({ initialData: initialPosts })
+  const { data: posts = [], isLoading, isError, refetch } = useBlogPosts({ initialData: initialPosts })
 
   return (
     <main className="max-w-6xl mx-auto px-5 md:px-8 py-12">
@@ -54,14 +55,18 @@ export default function Blog({ initialPosts = [] }: BlogProps) {
         </div>
       )}
 
-      {!isLoading && posts.length === 0 && (
+      {!isLoading && isError && (
+        <ErrorState onRetry={() => refetch()} />
+      )}
+
+      {!isLoading && !isError && posts.length === 0 && (
         <div className="text-center py-20 text-[#737373]">
           <p className="text-lg">{t('blog.sem_artigos')}</p>
           <p className="text-sm mt-2">{t('blog.sem_artigos_sub')}</p>
         </div>
       )}
 
-      {!isLoading && posts.length > 0 && (
+      {!isLoading && !isError && posts.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map(post => (
             <Link

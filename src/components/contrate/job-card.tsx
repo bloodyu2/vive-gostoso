@@ -6,6 +6,11 @@ import { buildWhatsAppLink } from '@/lib/whatsapp'
 
 interface Props { job: JobListing }
 
+/**
+ * Job postings are scanned, not browsed — a compact row (title, company,
+ * contract-type badge, one-line description) rather than a full padded
+ * image-card. The whole row is the WhatsApp CTA.
+ */
 export function JobCard({ job }: Props) {
   const { t } = useTranslation()
   const wa = buildWhatsAppLink(
@@ -14,34 +19,33 @@ export function JobCard({ job }: Props) {
   )
 
   return (
-    <div className="bg-white rounded-2xl border border-[#E8E4DF] p-5 hover:shadow-md transition-shadow">
-      <div className="flex items-start gap-4">
-        {/* Icon placeholder */}
-        <div className="w-12 h-12 rounded-xl bg-ocre/10 flex items-center justify-center flex-shrink-0">
-          <Briefcase className="w-5 h-5 text-ocre" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <h3 className="font-semibold text-[#1A1A1A] text-base leading-snug">{job.title}</h3>
-          <p className="text-ocre text-sm font-medium mt-0.5">{job.business_name}</p>
-        </div>
-        <span className="flex-shrink-0 bg-ocre/10 text-ocre text-xs font-semibold px-3 py-1 rounded-full">
-          {CONTRACT_TYPE_LABELS[job.contract_type]}
-        </span>
+    <a
+      href={wa}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex items-center gap-3 bg-white border border-[#E8E4DF] rounded-xl px-4 py-3 hover:border-ocre hover:shadow-sm transition-all"
+    >
+      <div className="w-9 h-9 rounded-lg bg-ocre/10 flex items-center justify-center flex-shrink-0">
+        <Briefcase className="w-4 h-4 text-ocre" />
       </div>
 
-      {job.description && (
-        <p className="text-[#737373] text-sm mt-3 leading-relaxed line-clamp-3">{job.description}</p>
-      )}
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2">
+          <h3 className="font-semibold text-[#1A1A1A] text-sm truncate">{job.title}</h3>
+          <span className="flex-shrink-0 bg-ocre/10 text-ocre text-[10px] font-semibold px-2 py-0.5 rounded-full">
+            {CONTRACT_TYPE_LABELS[job.contract_type]}
+          </span>
+        </div>
+        <p className="text-xs text-[#737373] truncate">
+          {job.business_name}
+          {job.description ? ` · ${job.description}` : ''}
+        </p>
+      </div>
 
-      <a
-        href={wa}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-4 flex items-center justify-center gap-2 w-full bg-[#25D366] text-white rounded-xl py-2.5 text-sm font-semibold hover:bg-[#1ebe5d] transition-colors"
-      >
-        <Phone className="w-4 h-4" />
+      <span className="flex-shrink-0 hidden sm:flex items-center gap-1.5 text-xs font-semibold text-teal group-hover:text-teal-dark">
+        <Phone className="w-3.5 h-3.5" />
         {t('contrate.tenho_interesse')}
-      </a>
-    </div>
+      </span>
+    </a>
   )
 }

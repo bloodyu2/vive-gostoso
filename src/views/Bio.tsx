@@ -91,7 +91,7 @@ export default function Bio() {
       </div>
 
       {/* Rodapé discreto */}
-      <p className="mt-10 text-xs text-[#B0A89E]">vivegostoso.com.br</p>
+      <p className="mt-10 text-xs text-[#737373]">vivegostoso.com.br</p>
     </div>
   )
 }

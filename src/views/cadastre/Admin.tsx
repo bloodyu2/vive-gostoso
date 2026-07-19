@@ -11,7 +11,6 @@ import type { LucideIcon } from 'lucide-react'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { useAdminStats } from '@/hooks/useAdminStats'
 import { useAuth } from '@/hooks/useAuth'
-import { Button } from '@/components/ui/button'
 
 export default function Admin() {
   return <AdminGuard><AdminInner /></AdminGuard>

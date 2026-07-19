@@ -228,109 +228,105 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
           {/* Claim */}
           {!b.profile_id && <ClaimCta businessSlug={b.slug} />}
 
-          {/* Contatos */}
-          <div className="bg-white border border-[#E8E4DF] rounded-2xl p-5 space-y-3">
-            <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide">{t('negocio.contato')}</h3>
+          {/* Contatos / Amenidades / Horários / Fundo — one surface, divide-y sections
+              instead of four stacked cards (was card-in-card-in-card). */}
+          <div className="bg-white border border-[#E8E4DF] rounded-2xl divide-y divide-[#E8E4DF] overflow-hidden">
+            {/* Contatos */}
+            <div className="p-5 space-y-3">
+              <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide">{t('negocio.contato')}</h3>
 
-            {b.whatsapp && (
-              <a href={buildWhatsAppLink(b.whatsapp)} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-sm text-[#3D3D3D] hover:text-teal transition-colors">
-                <div className="w-8 h-8 rounded-lg bg-[#25D366]/10 flex items-center justify-center flex-shrink-0">
-                  <Phone className="w-4 h-4 text-[#25D366]" />
+              {b.whatsapp && (
+                <a href={buildWhatsAppLink(b.whatsapp)} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 text-sm text-[#3D3D3D] hover:text-teal transition-colors">
+                  <Phone className="w-4 h-4 text-teal flex-shrink-0" />
+                  WhatsApp
+                </a>
+              )}
+
+              {b.phone && !b.whatsapp && (
+                <a href={`tel:${b.phone}`} className="flex items-center gap-2.5 text-sm text-[#3D3D3D] hover:text-teal transition-colors">
+                  <Phone className="w-4 h-4 text-teal flex-shrink-0" />
+                  {b.phone}
+                </a>
+              )}
+
+              {b.instagram && (
+                <a href={`https://instagram.com/${b.instagram}`} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 text-sm text-[#3D3D3D] hover:text-teal transition-colors">
+                  <AtSign className="w-4 h-4 text-teal flex-shrink-0" />
+                  @{b.instagram}
+                </a>
+              )}
+
+              {b.website && (
+                <a href={b.website} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 text-sm text-[#3D3D3D] hover:text-teal transition-colors">
+                  <Globe className="w-4 h-4 text-teal flex-shrink-0" />
+                  {t('common.site')}
+                </a>
+              )}
+            </div>
+
+            {/* Amenidades */}
+            {b.amenities && Object.values(b.amenities).some(Boolean) && (
+              <div className="p-5">
+                <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide mb-3">{t('negocio.comodidades')}</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {b.amenities.wifi && (
+                    <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
+                      <Wifi className="w-4 h-4 text-teal flex-shrink-0" /> {t('negocio.wifi')}
+                    </div>
+                  )}
+                  {b.amenities.parking && (
+                    <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
+                      <Car className="w-4 h-4 text-teal flex-shrink-0" /> {t('negocio.estacionamento')}
+                    </div>
+                  )}
+                  {b.amenities.accessible && (
+                    <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
+                      <UserCheck className="w-4 h-4 text-teal flex-shrink-0" /> {t('negocio.acessivel')}
+                    </div>
+                  )}
+                  {b.amenities.reservations && (
+                    <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
+                      <CalendarCheck className="w-4 h-4 text-teal flex-shrink-0" /> {t('negocio.reservas')}
+                    </div>
+                  )}
                 </div>
-                WhatsApp
-              </a>
+              </div>
             )}
 
-            {b.phone && !b.whatsapp && (
-              <a href={`tel:${b.phone}`} className="flex items-center gap-2.5 text-sm text-[#3D3D3D] hover:text-teal transition-colors">
-                <div className="w-8 h-8 rounded-lg bg-teal-light flex items-center justify-center flex-shrink-0">
-                  <Phone className="w-4 h-4 text-teal" />
+            {/* Horários */}
+            {b.opening_hours && Object.keys(b.opening_hours).length > 0 && (
+              <div className="p-5">
+                <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide mb-3 flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-teal" /> {t('negocio.horarios')}
+                </h3>
+                <div className="space-y-1.5">
+                  {DAY_ORDER.map(day => {
+                    const h = (b.opening_hours as Record<string, { open: string; close: string; closed: boolean }>)[day]
+                    if (!h) return null
+                    return (
+                      <div key={day} className="flex justify-between text-sm">
+                        <span className="text-[#737373]">{days[day]}</span>
+                        <span className={h.closed ? 'text-coral' : 'text-[#1A1A1A] font-medium'}>
+                          {h.closed ? t('negocio.fechado_dia') : `${h.open} – ${h.close}`}
+                        </span>
+                      </div>
+                    )
+                  })}
                 </div>
-                {b.phone}
-              </a>
+              </div>
             )}
 
-            {b.instagram && (
-              <a href={`https://instagram.com/${b.instagram}`} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-sm text-[#3D3D3D] hover:text-teal transition-colors">
-                <div className="w-8 h-8 rounded-lg bg-[#E8E4DF] flex items-center justify-center flex-shrink-0">
-                  <AtSign className="w-4 h-4 text-[#1A1A1A]" />
-                </div>
-                @{b.instagram}
-              </a>
-            )}
-
-            {b.website && (
-              <a href={b.website} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-sm text-[#3D3D3D] hover:text-teal transition-colors">
-                <div className="w-8 h-8 rounded-lg bg-[#E8E4DF] flex items-center justify-center flex-shrink-0">
-                  <Globe className="w-4 h-4 text-[#1A1A1A]" />
-                </div>
-                {t('common.site')}
-              </a>
+            {/* Fundo */}
+            {b.plan === 'associado' && (
+              <div className="p-5 bg-teal-light text-sm text-teal leading-relaxed">
+                <strong>{t('negocio.negocio_associado')}</strong> {t('negocio.negocio_associado_desc')}{' '}
+                <Link href={lp('/apoie')} className="underline">{t('negocio.saiba_mais')}</Link>
+              </div>
             )}
           </div>
-
-          {/* Amenidades */}
-          {b.amenities && Object.values(b.amenities).some(Boolean) && (
-            <div className="bg-white border border-[#E8E4DF] rounded-2xl p-5">
-              <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide mb-3">{t('negocio.comodidades')}</h3>
-              <div className="grid grid-cols-2 gap-2">
-                {b.amenities.wifi && (
-                  <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
-                    <Wifi className="w-4 h-4 text-teal flex-shrink-0" /> {t('negocio.wifi')}
-                  </div>
-                )}
-                {b.amenities.parking && (
-                  <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
-                    <Car className="w-4 h-4 text-teal flex-shrink-0" /> {t('negocio.estacionamento')}
-                  </div>
-                )}
-                {b.amenities.accessible && (
-                  <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
-                    <UserCheck className="w-4 h-4 text-teal flex-shrink-0" /> {t('negocio.acessivel')}
-                  </div>
-                )}
-                {b.amenities.reservations && (
-                  <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
-                    <CalendarCheck className="w-4 h-4 text-teal flex-shrink-0" /> {t('negocio.reservas')}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Horários */}
-          {b.opening_hours && Object.keys(b.opening_hours).length > 0 && (
-            <div className="bg-white border border-[#E8E4DF] rounded-2xl p-5">
-              <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide mb-3 flex items-center gap-2">
-                <Clock className="w-4 h-4" /> {t('negocio.horarios')}
-              </h3>
-              <div className="space-y-1.5">
-                {DAY_ORDER.map(day => {
-                  const h = (b.opening_hours as Record<string, { open: string; close: string; closed: boolean }>)[day]
-                  if (!h) return null
-                  return (
-                    <div key={day} className="flex justify-between text-sm">
-                      <span className="text-[#737373]">{days[day]}</span>
-                      <span className={h.closed ? 'text-coral' : 'text-[#1A1A1A] font-medium'}>
-                        {h.closed ? t('negocio.fechado_dia') : `${h.open} – ${h.close}`}
-                      </span>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* Fundo */}
-          {b.plan === 'associado' && (
-            <div className="bg-teal-light border border-teal/20 rounded-2xl p-5 text-sm text-teal leading-relaxed">
-              <strong>{t('negocio.negocio_associado')}</strong> {t('negocio.negocio_associado_desc')}{' '}
-              <Link href={lp('/apoie')} className="underline">{t('negocio.saiba_mais')}</Link>
-            </div>
-          )}
         </aside>
       </div>
       {/* Lightbox */}

@@ -9,6 +9,12 @@ import { Building2, User, Briefcase, MessageCircle } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useQuery } from '@tanstack/react-query'
 import { useProfessionals } from '@/hooks/useProfessionals'
+import { useServices } from '@/hooks/useServices'
+import { useJobs } from '@/hooks/useJobs'
+import { ServiceCard } from '@/components/contrate/service-card'
+import { JobCard } from '@/components/contrate/job-card'
+import { ServiceForm } from '@/components/contrate/service-form'
+import { JobForm } from '@/components/contrate/job-form'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import {
   PROFESSIONAL_CATEGORY_LABELS,
@@ -40,31 +46,6 @@ function useServiceCompanies() {
         .order('display_order', { ascending: true })
       if (error) throw error
       return (data ?? []) as unknown as ServiceCompany[]
-    },
-  })
-}
-
-// ── Job listings ─────────────────────────────────────────────────────────
-type JobListing = {
-  id: string
-  title: string
-  description: string | null
-  business_name: string | null
-  contract_type: string | null
-  whatsapp: string | null
-}
-
-function useJobListings() {
-  return useQuery<JobListing[]>({
-    queryKey: ['job-listings'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('gostoso_job_listings')
-        .select('id, title, description, business_name, contract_type, whatsapp')
-        .eq('is_active', true)
-        .order('created_at', { ascending: false })
-      if (error) throw error
-      return (data ?? []) as JobListing[]
     },
   })
 }
@@ -218,13 +199,16 @@ export default function Contrate() {
   type Tab = 'empresas' | 'profissionais' | 'vagas'
   const [activeTab, setActiveTab] = useState<Tab>('profissionais')
   const [categoryFilter, setCategoryFilter] = useState<ProfessionalCategory | 'all'>('all')
+  const [showServiceForm, setShowServiceForm] = useState(false)
+  const [showJobForm, setShowJobForm] = useState(false)
 
   const { t } = useTranslation()
   const lp = useLocalePath()
 
   const { data: professionals = [], isLoading: prosLoading } = useProfessionals(categoryFilter)
+  const { data: services = [], isLoading: servicesLoading } = useServices()
   const { data: companies = [], isLoading: companiesLoading } = useServiceCompanies()
-  const { data: jobs = [], isLoading: jobsLoading } = useJobListings()
+  const { data: jobs = [], isLoading: jobsLoading } = useJobs()
 
   return (
     <div className="min-h-screen bg-[#FAFAF9]">
@@ -244,7 +228,7 @@ export default function Contrate() {
           {/* Tabs */}
           <div className="flex gap-1 border-b border-[#333]">
             {[
-              { id: 'profissionais' as Tab, label: t('contrate.tab_profissionais'), icon: <User className="w-3.5 h-3.5" />, count: professionals.length },
+              { id: 'profissionais' as Tab, label: t('contrate.tab_profissionais'), icon: <User className="w-3.5 h-3.5" />, count: professionals.length + services.length },
               { id: 'empresas' as Tab, label: t('contrate.tab_empresas'), icon: <Building2 className="w-3.5 h-3.5" />, count: companies.length },
               { id: 'vagas' as Tab, label: t('contrate.tab_vagas'), icon: <Briefcase className="w-3.5 h-3.5" />, count: jobs.length },
             ].map(tab => (
@@ -277,35 +261,44 @@ export default function Contrate() {
         {/* ── Profissionais ── */}
         {activeTab === 'profissionais' && (
           <>
-            <div className="flex flex-wrap gap-2 mb-6">
-              <button
-                type="button"
-                onClick={() => setCategoryFilter('all')}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${
-                  categoryFilter === 'all'
-                    ? 'bg-teal text-white'
-                    : 'bg-white border border-[#E8E4DF] text-[#555] hover:bg-[#F5F2EE]'
-                }`}
-              >
-                {t('professional.all_categories')}
-              </button>
-              {PROFESSIONAL_CATEGORIES.map(cat => (
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+              <div className="flex flex-wrap gap-2">
                 <button
-                  key={cat}
                   type="button"
-                  onClick={() => setCategoryFilter(cat)}
+                  onClick={() => setCategoryFilter('all')}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${
-                    categoryFilter === cat
+                    categoryFilter === 'all'
                       ? 'bg-teal text-white'
                       : 'bg-white border border-[#E8E4DF] text-[#555] hover:bg-[#F5F2EE]'
                   }`}
                 >
-                  {PROFESSIONAL_CATEGORY_LABELS[cat]}
+                  {t('professional.all_categories')}
                 </button>
-              ))}
+                {PROFESSIONAL_CATEGORIES.map(cat => (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setCategoryFilter(cat)}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                      categoryFilter === cat
+                        ? 'bg-teal text-white'
+                        : 'bg-white border border-[#E8E4DF] text-[#555] hover:bg-[#F5F2EE]'
+                    }`}
+                  >
+                    {PROFESSIONAL_CATEGORY_LABELS[cat]}
+                  </button>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowServiceForm(true)}
+                className="flex-shrink-0 text-xs font-semibold text-teal border border-teal/30 bg-teal/5 hover:bg-teal/10 px-3.5 py-1.5 rounded-full transition-colors"
+              >
+                {t('contrate.oferecer_servico')}
+              </button>
             </div>
 
-            {prosLoading ? <Spinner /> : professionals.length === 0 ? (
+            {(prosLoading || servicesLoading) ? <Spinner /> : (professionals.length === 0 && services.length === 0) ? (
               <div className="text-center py-16">
                 <User className="w-10 h-10 text-[#E8E4DF] mx-auto mb-3" />
                 <p className="text-sm text-[#737373]">{t('professional.no_professionals')}</p>
@@ -313,6 +306,10 @@ export default function Contrate() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {professionals.map(pro => <ProfessionalCard key={pro.id} pro={pro} />)}
+                {/* Legacy freelancer listings (gostoso_service_listings) — approved by admin but had
+                    no public rendering anywhere before this fix. Own taxonomy (ServiceCategory), so
+                    only shown alongside the unfiltered "todas" view to avoid mixing category systems. */}
+                {categoryFilter === 'all' && services.map(svc => <ServiceCard key={svc.id} service={svc} />)}
               </div>
             )}
           </>
@@ -334,46 +331,27 @@ export default function Contrate() {
 
         {/* ── Vagas ── */}
         {activeTab === 'vagas' && (
-          jobsLoading ? <Spinner /> : jobs.length === 0 ? (
-            <div className="text-center py-16">
-              <Briefcase className="w-10 h-10 text-[#E8E4DF] mx-auto mb-3" />
-              <p className="text-sm text-[#737373]">{t('contrate.sem_vagas')}</p>
+          <>
+            <div className="flex justify-end mb-4">
+              <button
+                type="button"
+                onClick={() => setShowJobForm(true)}
+                className="flex-shrink-0 text-xs font-semibold text-ocre border border-ocre/30 bg-ocre/5 hover:bg-ocre/10 px-3.5 py-1.5 rounded-full transition-colors"
+              >
+                {t('contrate.publicar_vaga')}
+              </button>
             </div>
-          ) : (
-            <div className="space-y-3">
-              {jobs.map(job => (
-                <div key={job.id} className="bg-white rounded-2xl border border-[#E8E4DF] p-5">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="font-semibold text-[#1A1A1A] text-sm mb-0.5">{job.title}</p>
-                      {job.business_name && <p className="text-xs text-[#737373]">{job.business_name}</p>}
-                    </div>
-                    {job.contract_type && (
-                      <span className="text-[10px] font-semibold bg-[#F5F2EE] text-[#555] px-2 py-1 rounded-full flex-shrink-0">
-                        {job.contract_type}
-                      </span>
-                    )}
-                  </div>
-                  {job.description && (
-                    <p className="text-xs text-[#737373] mt-2 leading-relaxed line-clamp-2">
-                      {job.description}
-                    </p>
-                  )}
-                  {job.whatsapp && (
-                    <a
-                      href={buildWhatsAppLink(job.whatsapp, `Olá! Vi a vaga "${job.title}" no Vive Gostoso e tenho interesse.`)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-3 inline-flex items-center gap-1.5 bg-teal text-white text-xs font-semibold px-4 py-2 rounded-xl hover:bg-teal/90 transition-colors"
-                    >
-                      <MessageCircle className="w-3.5 h-3.5" />
-                      {t('contrate.candidatar_whatsapp')}
-                    </a>
-                  )}
-                </div>
-              ))}
-            </div>
-          )
+            {jobsLoading ? <Spinner /> : jobs.length === 0 ? (
+              <div className="text-center py-16">
+                <Briefcase className="w-10 h-10 text-[#E8E4DF] mx-auto mb-3" />
+                <p className="text-sm text-[#737373]">{t('contrate.sem_vagas')}</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {jobs.map(job => <JobCard key={job.id} job={job} />)}
+              </div>
+            )}
+          </>
         )}
 
         {/* CTA */}
@@ -385,13 +363,16 @@ export default function Contrate() {
             {t('contrate.cta_desc')}
           </p>
           <Link
-            href="/cadastre"
+            href={lp('/cadastre')}
             className="inline-flex items-center gap-2 bg-teal text-white px-7 py-3.5 rounded-2xl font-semibold text-sm hover:bg-teal/90 transition-colors"
           >
             {t('contrate.cta_btn')}
           </Link>
         </div>
       </section>
+
+      {showServiceForm && <ServiceForm onClose={() => setShowServiceForm(false)} />}
+      {showJobForm && <JobForm onClose={() => setShowJobForm(false)} />}
     </div>
   )
 }

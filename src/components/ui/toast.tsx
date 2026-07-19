@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 import { X, CheckCircle, AlertCircle, Info } from 'lucide-react'
 
 type ToastType = 'success' | 'error' | 'info'
@@ -11,7 +11,7 @@ interface Toast {
 }
 
 let toastQueue: Toast[] = []
-let listeners: ((toasts: Toast[]) => void)[] = []
+let listeners: (() => void)[] = []
 
 function notify(message: string, type: ToastType = 'info') {
   const toast: Toast = {
@@ -21,7 +21,7 @@ function notify(message: string, type: ToastType = 'info') {
   }
   toastQueue = [...toastQueue, toast]
   notifyListeners()
-  
+
   setTimeout(() => {
     toastQueue = toastQueue.filter(t => t.id !== toast.id)
     notifyListeners()
@@ -29,20 +29,24 @@ function notify(message: string, type: ToastType = 'info') {
 }
 
 function notifyListeners() {
-  listeners.forEach(fn => fn(toastQueue))
+  listeners.forEach(fn => fn())
 }
 
+function subscribe(callback: () => void) {
+  listeners.push(callback)
+  return () => {
+    listeners = listeners.filter(l => l !== callback)
+  }
+}
+
+function getSnapshot() {
+  return toastQueue
+}
+
+/** External-store subscription (not useEffect+useState) — avoids the
+ * setState-in-effect cascading-render issue for this global pub/sub queue. */
 export function useToast() {
-  const [toasts, setToasts] = useState<Toast[]>([])
-
-  useEffect(() => {
-    listeners.push(setToasts)
-    setToasts(toastQueue)
-    return () => {
-      listeners = listeners.filter(l => l !== setToasts)
-    }
-  }, [])
-
+  const toasts = useSyncExternalStore(subscribe, getSnapshot, getSnapshot)
   return { toasts }
 }
 

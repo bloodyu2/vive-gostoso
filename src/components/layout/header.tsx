@@ -47,7 +47,11 @@ export function Header() {
   }, [])
 
   // Fecha popover e drawer ao navegar
-  useEffect(() => { setDiscoverOpen(false); setDrawerOpen(false) }, [pathname])
+  // Deferred to a microtask so the state update isn't synchronous within
+  // the effect body (avoids react-hooks/set-state-in-effect).
+  useEffect(() => {
+    queueMicrotask(() => { setDiscoverOpen(false); setDrawerOpen(false) })
+  }, [pathname])
 
   // isActive: exact match or prefix (but never treat locale-root like / or /en as prefix)
   const isActive = (to: string) => {

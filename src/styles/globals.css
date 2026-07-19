@@ -104,6 +104,15 @@ html {
   overflow-x: hidden;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 body {
   font-family: var(--font-sans);
   background-color: #F5F2EE;
@@ -253,12 +262,11 @@ h4, h5, h6 {
 
 .blog-prose blockquote {
   margin: 1.5em 0;
-  padding: 0.75em 1.25em;
-  border-left: 4px solid var(--color-teal);
+  padding: 0.9em 1.25em;
   background: var(--color-sand);
   font-style: italic;
   color: var(--color-fg-2);
-  border-radius: 0 12px 12px 0;
+  border-radius: 12px;
 }
 
 .blog-prose hr {
@@ -312,7 +320,6 @@ h4, h5, h6 {
   margin: 1.75em 0;
   padding: 1.1em 1.25em 1.1em 1.25em;
   border-radius: 14px;
-  border-left: 4px solid var(--color-teal);
   background: var(--color-teal-light);
   color: var(--color-teal-dark);
   line-height: 1.6;
@@ -322,19 +329,16 @@ h4, h5, h6 {
 .blog-prose .callout > p + p { margin-top: 0.6em; }
 .blog-prose .callout--tip {
   background: var(--color-ocre-light);
-  border-left-color: var(--color-ocre);
   color: #6b3f0e;
 }
 .dark .blog-prose .callout--tip { color: var(--color-ocre-100); }
 .blog-prose .callout--warn {
   background: #FDECE5;
-  border-left-color: var(--color-coral);
   color: #8a2c10;
 }
 .dark .blog-prose .callout--warn { color: #ffd0c0; }
 .blog-prose .callout--info {
   background: var(--color-teal-light);
-  border-left-color: var(--color-teal);
   color: var(--color-teal-dark);
 }
 .dark .blog-prose .callout { background: #1d2929; color: #cfeaea; }

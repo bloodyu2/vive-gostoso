@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
@@ -113,9 +114,9 @@ export default function Conheca() {
           <a href={localePath('/transfer')} className="inline-block text-teal font-semibold hover:underline">
             {t('conheca.cta_transfer')} &rarr;
           </a>
-          <a href="/blog/como-chegar-sao-miguel-do-gostoso" className="inline-block text-teal font-semibold hover:underline">
+          <Link href={localePath('/blog/como-chegar-sao-miguel-do-gostoso')} className="inline-block text-teal font-semibold hover:underline">
             {t('conheca.cta_blog_chegar')} &rarr;
-          </a>
+          </Link>
         </div>
       </section>
 

@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { useEffect } from 'react'
+import { useLocalePath } from '@/hooks/useLocalePath'
 
 export default function Error({
   error,
@@ -9,6 +10,8 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
+  const lp = useLocalePath()
+
   useEffect(() => {
     console.error('[PageError]', error)
   }, [error])
@@ -32,7 +35,7 @@ export default function Error({
           Tentar novamente
         </button>
         <Link
-          href="/"
+          href={lp('/')}
           className="text-teal font-semibold text-sm hover:underline"
         >
           Voltar ao inicio

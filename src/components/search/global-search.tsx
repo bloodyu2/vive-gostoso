@@ -16,21 +16,31 @@ interface SearchResult {
   address: string | null
 }
 
+// Shape returned by the Supabase select below — `category` comes back as an
+// array (or a single object, depending on the relationship) before we
+// normalize it into `SearchResult['category']`.
+interface SearchRow {
+  id: string
+  name: string
+  slug: string
+  cover_url: string | null
+  address: string | null
+  category: { name: string }[] | { name: string } | null
+}
+
 let debounceTimer: ReturnType<typeof setTimeout>
 
 function useSearch(query: string) {
   const [results, setResults] = useState<SearchResult[]>([])
   const [loading, setLoading] = useState(false)
+  const trimmed = query.trim()
 
   useEffect(() => {
-    if (query.trim().length < 2) {
-      setResults([])
-      return
-    }
+    if (trimmed.length < 2) return
     clearTimeout(debounceTimer)
     debounceTimer = setTimeout(async () => {
       setLoading(true)
-      const q = query.trim().replace(/[,()\\*]/g, '').slice(0, 80)
+      const q = trimmed.replace(/[,()\\*]/g, '').slice(0, 80)
       if (q.length < 2) {
         setResults([])
         setLoading(false)
@@ -44,16 +54,19 @@ function useSearch(query: string) {
         .limit(8)
 
       setResults(
-        (data ?? []).map((b: any) => ({
+        ((data ?? []) as SearchRow[]).map((b) => ({
           ...b,
           category: Array.isArray(b.category) ? (b.category[0] ?? null) : b.category,
         }))
       )
       setLoading(false)
     }, 280)
-  }, [query])
+  }, [query, trimmed])
 
-  return { results, loading }
+  // Derive the visible result set from the current query instead of
+  // clearing state synchronously in the effect above — avoids the
+  // extra render that a set-state-in-effect call would trigger.
+  return { results: trimmed.length >= 2 ? results : [], loading }
 }
 
 interface Props {
