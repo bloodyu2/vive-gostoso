@@ -198,6 +198,7 @@ export interface Transfer {
   /** FK to gostoso_businesses — set when this transfer provider is also listed as a business.
    *  When present, reviews are submitted with business_id so they appear on the /negocio/[slug] profile. */
   business_id: string | null
+  slug: string | null
 }
 
 export interface ClaimRequest {

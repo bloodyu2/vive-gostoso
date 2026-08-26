@@ -12,7 +12,7 @@ import { Lightbox } from '@/components/ui/lightbox'
 import { ReviewList } from '@/components/reviews/review-list'
 import { ReviewForm } from '@/components/reviews/review-form'
 import { usePageMeta } from '@/hooks/usePageMeta'
-import { useReviews } from '@/hooks/useReviews'
+import { useBusinessRatings } from '@/hooks/useReviews'
 import { StarRating } from '@/components/reviews/star-rating'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
@@ -30,7 +30,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
   const { data: b, isLoading } = useBusiness(slug ?? '', initialBusiness !== undefined ? { initialData: initialBusiness } : undefined)
   const [copied, setCopied] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
-  const { data: reviews = [] } = useReviews('business', b?.id ?? '')
+  const { data: ratingsMap } = useBusinessRatings()
   const { t } = useTranslation()
   const lp = useLocalePath()
 
@@ -44,9 +44,9 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
     dom: t('negocio.dia_dom'),
   }
 
-  const avgRating = reviews.length > 0
-    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-    : null
+  const bizRating = b?.id ? ratingsMap?.get(b.id) : undefined
+  const avgRating = bizRating && bizRating.count > 0 ? bizRating.avg : null
+  const reviewCount = bizRating?.count ?? 0
 
   usePageMeta(b
     ? {
@@ -143,7 +143,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
               <StarRating value={Math.round(avgRating)} readonly size="sm" />
               <span className="text-sm font-semibold text-[#1A1A1A]">{avgRating.toFixed(1)}</span>
               <span className="text-sm text-[#737373]">
-                ({reviews.length} {reviews.length === 1 ? t('negocio.avaliacao_singular') : t('negocio.avaliacao_plural')})
+                ({reviewCount} {reviewCount === 1 ? t('negocio.avaliacao_singular') : t('negocio.avaliacao_plural')})
               </span>
             </div>
           )}

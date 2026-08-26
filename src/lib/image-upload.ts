@@ -1,6 +1,5 @@
 const MAX_DIMENSION = 1920
 const JPEG_QUALITY = 0.8
-const MAX_FILE_SIZE = 5 * 1024 * 1024
 
 const ALLOWED_TYPES = [
   'image/jpeg', 'image/jpg', 'image/png', 'image/webp',
@@ -8,21 +7,31 @@ const ALLOWED_TYPES = [
 ]
 
 export function validateImageFile(file: File): string | null {
-  if (file.size > MAX_FILE_SIZE) {
-    const mb = (file.size / 1024 / 1024).toFixed(1)
-    return `Arquivo grande demais (${mb}MB). O limite é 5MB.`
-  }
-  if (!ALLOWED_TYPES.includes(file.type)) {
+  // No size limit — compressImage handles weight automatically
+  if (file.type && !ALLOWED_TYPES.includes(file.type)) {
     const tipo = file.type || 'desconhecido'
-    return `Tipo de arquivo não suportado (${tipo}). Use JPEG, PNG ou WebP.`
+    return `Tipo de arquivo não suportado (${tipo}). Use JPEG, PNG, WebP ou HEIC.`
   }
   return null
 }
 
-export function compressImage(file: File): Promise<Blob> {
+async function toLoadableBlob(file: File): Promise<Blob> {
+  const type = file.type.toLowerCase()
+  if (type === 'image/heic' || type === 'image/heif' || file.name.match(/\.hei[cf]$/i)) {
+    // heic2any is heavy — lazy import so it only loads when needed
+    const heic2any = (await import('heic2any')).default
+    const result = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.9 })
+    return Array.isArray(result) ? result[0] : result
+  }
+  return file
+}
+
+export async function compressImage(file: File): Promise<Blob> {
+  const source = await toLoadableBlob(file)
+
   return new Promise((resolve, reject) => {
     const img = new Image()
-    const url = URL.createObjectURL(file)
+    const url = URL.createObjectURL(source)
 
     img.onload = () => {
       URL.revokeObjectURL(url)

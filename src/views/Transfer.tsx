@@ -1,17 +1,20 @@
 'use client'
 import { useState } from 'react'
+import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import {
   X, Car, Users, Clock, Languages, MessageCircle, Plus,
-  CreditCard, AlertCircle, MapPin, CheckCircle, Share2,
+  CreditCard, AlertCircle, MapPin, CheckCircle, Share2, Star,
 } from 'lucide-react'
 import { useTransfers, useSubmitTransfer } from '@/hooks/useTransfers'
 import type { TransferFormData } from '@/hooks/useTransfers'
 import type { Transfer, TransferRoute } from '@/types/database'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
+import { useTransferRatings } from '@/hooks/useReviews'
 import { ReviewList } from '@/components/reviews/review-list'
 import { ReviewForm } from '@/components/reviews/review-form'
+import { useLocalePath } from '@/hooks/useLocalePath'
 
 const VEHICLE_TYPES = ['Van', 'Carro', 'Buggy', 'SUV']
 const LANGUAGES_LIST = ['Português', 'Inglês', 'Espanhol', 'Francês']
@@ -46,11 +49,12 @@ function buildWaMessage(transfer: Transfer, route: TransferRoute | null): string
 interface TransferCardProps {
   transfer: Transfer
   selectedRoute: string
-  onOpen: () => void
+  ratings: Map<string, { avg: number; count: number }>
 }
 
-function TransferCard({ transfer, selectedRoute, onOpen }: TransferCardProps) {
+function TransferCard({ transfer, selectedRoute, ratings }: TransferCardProps) {
   const { t } = useTranslation()
+  const lp = useLocalePath()
 
   const matchedRoute =
     selectedRoute && transfer.routes
@@ -58,12 +62,12 @@ function TransferCard({ transfer, selectedRoute, onOpen }: TransferCardProps) {
       : null
 
   const routeCount = transfer.routes ? transfer.routes.length : 0
+  const rating = ratings.get(transfer.id)
 
-  return (
-    <button
-      onClick={onOpen}
-      className="bg-white border border-[#E8E4DF] rounded-2xl overflow-hidden flex flex-col text-left w-full hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer group"
-    >
+  const href = transfer.slug ? lp(`/transfer/${transfer.slug}`) : undefined
+
+  const inner = (
+    <>
       <div className="relative h-36 bg-gradient-to-br from-[#1E7A9E]/20 to-[#1E7A9E]/5 flex items-center justify-center flex-shrink-0">
         {transfer.photo_url ? (
           <img src={transfer.photo_url} alt={transfer.provider_name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
@@ -78,9 +82,18 @@ function TransferCard({ transfer, selectedRoute, onOpen }: TransferCardProps) {
       </div>
 
       <div className="p-4 flex flex-col flex-1 gap-3">
-        <h3 className="font-display font-bold text-[#1A1A1A] text-base leading-snug">
-          {transfer.provider_name}
-        </h3>
+        <div>
+          <h3 className="font-display font-bold text-[#1A1A1A] text-base leading-snug">
+            {transfer.provider_name}
+          </h3>
+          {rating && rating.count > 0 && (
+            <div className="flex items-center gap-1 mt-1">
+              <Star className="w-3.5 h-3.5 fill-ocre text-ocre" />
+              <span className="text-xs font-semibold text-[#1A1A1A]">{rating.avg.toFixed(1)}</span>
+              <span className="text-xs text-[#737373]">({rating.count})</span>
+            </div>
+          )}
+        </div>
 
         <div className="flex flex-col gap-1.5 text-sm text-[#737373]">
           <div className="flex items-center gap-2">
@@ -127,8 +140,15 @@ function TransferCard({ transfer, selectedRoute, onOpen }: TransferCardProps) {
           </div>
         </div>
       </div>
-    </button>
+    </>
   )
+
+  const cls = "bg-white border border-[#E8E4DF] rounded-2xl overflow-hidden flex flex-col text-left w-full hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer group"
+
+  if (href) {
+    return <Link href={href} className={cls}>{inner}</Link>
+  }
+  return <div className={cls}>{inner}</div>
 }
 
 // ─── TransferDetailModal ───────────────────────────────────────────────────────
@@ -626,8 +646,8 @@ export default function Transfer() {
   })
 
   const { data: transfers = [], isLoading } = useTransfers()
+  const { data: ratingsMap = new Map() } = useTransferRatings()
   const [selectedRoute, setSelectedRoute] = useState('')
-  const [detailTransfer, setDetailTransfer] = useState<Transfer | null>(null)
   const [showRegistration, setShowRegistration] = useState(false)
 
   const routes = uniqueRoutes(transfers)
@@ -698,20 +718,12 @@ export default function Transfer() {
                 key={transfer.id}
                 transfer={transfer}
                 selectedRoute={selectedRoute}
-                onOpen={() => setDetailTransfer(transfer)}
+                ratings={ratingsMap}
               />
             ))}
           </div>
         )}
       </main>
-
-      {detailTransfer && (
-        <TransferDetailModal
-          transfer={detailTransfer}
-          initialRoute={selectedRoute}
-          onClose={() => setDetailTransfer(null)}
-        />
-      )}
 
       {showRegistration && <RegistrationModal onClose={() => setShowRegistration(false)} />}
     </>

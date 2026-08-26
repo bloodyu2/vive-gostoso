@@ -3,20 +3,41 @@ import { supabase } from '@/lib/supabase'
 import type { Review, ReviewInsert, ReviewTarget } from '@/types/reviews'
 import { useModerateListing } from '@/hooks/useModeration'
 
-/** Approved reviews for a target (business/professional/transfer) — public */
-export function useReviews(targetType: ReviewTarget, targetId: string) {
+const PAGE_SIZE = 10
+
+export interface ReviewPage {
+  reviews: Review[]
+  total: number
+  page: number
+  pageSize: number
+  totalPages: number
+}
+
+/** Approved reviews for a target (business/professional/transfer) — paginated, public */
+export function useReviews(targetType: ReviewTarget, targetId: string, page = 1) {
   const idField = targetType === 'business' ? 'business_id' : targetType === 'professional' ? 'professional_id' : 'transfer_id'
+  const from = (page - 1) * PAGE_SIZE
+  const to = from + PAGE_SIZE - 1
+
   return useQuery({
-    queryKey: ['reviews', targetType, targetId],
-    queryFn: async (): Promise<Review[]> => {
-      const { data, error } = await supabase
+    queryKey: ['reviews', targetType, targetId, page],
+    queryFn: async (): Promise<ReviewPage> => {
+      const { data, error, count } = await supabase
         .from('gostoso_reviews')
-        .select('*')
+        .select('*', { count: 'exact' })
         .eq(idField, targetId)
         .eq('approved', true)
         .order('created_at', { ascending: false })
+        .range(from, to)
       if (error) throw error
-      return (data ?? []) as Review[]
+      const total = count ?? 0
+      return {
+        reviews: (data ?? []) as Review[],
+        total,
+        page,
+        pageSize: PAGE_SIZE,
+        totalPages: Math.max(1, Math.ceil(total / PAGE_SIZE)),
+      }
     },
     enabled: !!targetId,
   })
@@ -37,6 +58,25 @@ export function useBusinessRatings() {
       const map = new Map<string, { avg: number; count: number }>()
       for (const row of (data ?? []) as { business_id: string; avg_rating: string | number; review_count: number }[]) {
         map.set(row.business_id, { avg: Number(row.avg_rating), count: row.review_count })
+      }
+      return map
+    },
+    staleTime: 5 * 60 * 1000,
+  })
+}
+
+/** Aggregated ratings for ALL transfers in one query (view gostoso_transfer_ratings). */
+export function useTransferRatings() {
+  return useQuery({
+    queryKey: ['reviews', 'ratings', 'transfer'],
+    queryFn: async (): Promise<Map<string, { avg: number; count: number }>> => {
+      const { data, error } = await supabase
+        .from('gostoso_transfer_ratings')
+        .select('*')
+      if (error) throw error
+      const map = new Map<string, { avg: number; count: number }>()
+      for (const row of (data ?? []) as { transfer_id: string; avg_rating: string | number; review_count: number }[]) {
+        map.set(row.transfer_id, { avg: Number(row.avg_rating), count: row.review_count })
       }
       return map
     },
@@ -89,8 +129,6 @@ export function useAdminPendingReviews() {
 
 export function useModerateReview() {
   // Invalidates all review caches: admin pending + all public business/professional/transfer caches.
-  // Without this, after approving a review the business profile page keeps showing the stale
-  // empty array (cached before approval) until staleTime expires.
   return useModerateListing({
     table: 'gostoso_reviews',
     activeField: 'approved',
@@ -99,8 +137,7 @@ export function useModerateReview() {
   })
 }
 
-/** Aggregated ratings for ALL professionals in one query (view gostoso_professional_ratings).
- *  Mirrors useBusinessRatings() above -- same shared-fetch dedupe rationale. */
+/** Aggregated ratings for ALL professionals in one query (view gostoso_professional_ratings). */
 export function useProfessionalRatings() {
   return useQuery({
     queryKey: ['reviews', 'ratings', 'professional'],

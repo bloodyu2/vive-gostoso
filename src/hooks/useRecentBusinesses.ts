@@ -19,6 +19,7 @@ export function useRecentBusinesses(limit = 4) {
         .from('gostoso_businesses')
         .select('id, name, slug, cover_url, is_verified, category:gostoso_categories(name)')
         .eq('active', true)
+        .eq('is_published', true)
         .not('profile_id', 'is', null)
         .order('updated_at', { ascending: false })
         .limit(limit)

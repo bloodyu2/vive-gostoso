@@ -7,10 +7,11 @@ import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
 import { useCategories } from '@/hooks/useCategories'
-import { useInvalidateMyBusinesses } from '@/hooks/useMyBusinesses'
+import { useInvalidateMyBusinesses, useMyBusinesses } from '@/hooks/useMyBusinesses'
 import type { Business } from '@/types/database'
-import { ArrowLeft, Camera, ExternalLink, Loader2 } from 'lucide-react'
+import { ArrowLeft, Camera, ChevronDown, ExternalLink, Loader2 } from 'lucide-react'
 import { validateImageFile, compressImage } from '@/lib/image-upload'
+import { translateSupabaseError } from '@/lib/supabase-errors'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { showToast } from '@/components/ui/toast'
@@ -19,7 +20,7 @@ export default function Perfil() {
   return <AuthGuard><PerfilInner /></AuthGuard>
 }
 
-type ServiceItem = { name: string; description?: string; price?: string }
+type ServiceItem = { name: string; description?: string; price?: string; photos?: string[] }
 
 type DayKey = 'dom' | 'seg' | 'ter' | 'qua' | 'qui' | 'sex' | 'sab'
 type DayHours = { open: string; close: string; closed: boolean }
@@ -76,6 +77,106 @@ const EMPTY_HOURS: OpeningHoursValue = Object.fromEntries(
 ) as OpeningHoursValue
 
 // ---------------------------------------------------------------------------
+// Save result modal
+// ---------------------------------------------------------------------------
+
+function SaveResultModal({
+  type,
+  message,
+  onClose,
+}: {
+  type: 'success' | 'error'
+  message: string
+  onClose: () => void
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-5" onClick={onClose}>
+      <div
+        className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-4 mx-auto ${type === 'success' ? 'bg-teal/10' : 'bg-red-50'}`}>
+          {type === 'success' ? (
+            <svg className="w-6 h-6 text-teal" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          ) : (
+            <svg className="w-6 h-6 text-red-500" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v4m0 4h.01M12 3a9 9 0 100 18A9 9 0 0012 3z" />
+            </svg>
+          )}
+        </div>
+        <p className="text-center font-semibold text-[#1A1A1A] mb-2">
+          {type === 'success' ? 'Negócio salvo!' : 'Não foi possível salvar'}
+        </p>
+        <p className="text-center text-sm text-[#737373] mb-5">{message}</p>
+        <button
+          type="button"
+          onClick={onClose}
+          className={`w-full py-2.5 rounded-xl text-sm font-semibold transition-colors ${type === 'success' ? 'bg-teal text-white hover:bg-teal/90' : 'border border-[#E8E4DF] text-[#737373] hover:border-[#737373]'}`}
+        >
+          {type === 'success' ? 'Continuar editando' : 'Fechar'}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Business switcher (Spec 3)
+// ---------------------------------------------------------------------------
+
+function BusinessSwitcher({ currentBizId, currentName }: { currentBizId: string | null; currentName: string | undefined }) {
+  const { data: businesses = [] } = useMyBusinesses()
+  const lp = useLocalePath()
+  const [open, setOpen] = useState(false)
+
+  if (businesses.length <= 1) return null
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        className="flex items-center gap-1.5 text-sm font-medium text-[#1A1A1A] hover:text-teal transition-colors max-w-[180px] truncate"
+      >
+        <span className="truncate">{currentName || 'Negócio atual'}</span>
+        <ChevronDown className="w-3.5 h-3.5 flex-shrink-0" />
+      </button>
+      {open && (
+        <>
+          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
+          <div className="absolute top-full left-0 mt-1 bg-white border border-[#E8E4DF] rounded-xl shadow-lg z-20 min-w-[200px] py-1 max-h-60 overflow-y-auto">
+            {businesses.map(b => (
+              <Link
+                key={b.id}
+                href={lp(`/cadastre/perfil?bizId=${b.id}`)}
+                onClick={() => setOpen(false)}
+                className={`flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-[#F5F2EE] transition-colors ${b.id === currentBizId ? 'font-semibold text-teal' : 'text-[#1A1A1A]'}`}
+              >
+                {b.cover_url && (
+                  <img src={b.cover_url} alt="" className="w-6 h-6 rounded-full object-cover flex-shrink-0" />
+                )}
+                <span className="truncate">{b.name}</span>
+              </Link>
+            ))}
+            <div className="border-t border-[#F0ECE8] mt-1 pt-1">
+              <Link
+                href={lp('/cadastre/perfil')}
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 px-4 py-2.5 text-sm text-teal hover:bg-[#F5F2EE] font-semibold"
+              >
+                + Novo negócio
+              </Link>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // Sub-components
 // ---------------------------------------------------------------------------
 
@@ -101,6 +202,10 @@ function StatusBanner({
       .eq('id', bizId)
     onToggle(next)
     setLoading(false)
+    showToast(
+      next ? 'Negócio publicado! Já aparece nas buscas.' : 'Negócio despublicado.',
+      next ? 'success' : undefined
+    )
   }
 
   return (
@@ -198,9 +303,9 @@ function PhotoSection({
       const { error: updateError } = await supabase.from('gostoso_businesses').update({ cover_url: url }).eq('id', bizId)
       if (updateError) throw updateError
       onCoverChange(url)
+      showToast('Foto de capa atualizada!', 'success')
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'erro inesperado'
-      setError(t('perfil:error_cover', { msg }))
+      setError(translateSupabaseError(err))
     } finally {
       setUploadingCover(false)
       if (coverRef.current) coverRef.current.value = ''
@@ -238,8 +343,7 @@ function PhotoSection({
       if (updateError) throw updateError
       onPhotosChange(next)
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'erro inesperado'
-      setError(t('perfil:error_gallery', { msg }))
+      setError(translateSupabaseError(err))
     } finally {
       setUploadingGallery(false)
       if (galleryRef.current) galleryRef.current.value = ''
@@ -251,7 +355,7 @@ function PhotoSection({
     const next = currentPhotos.filter(p => p !== url)
     const { error: updateError } = await supabase.from('gostoso_businesses').update({ photos: next }).eq('id', bizId)
     if (updateError) {
-      showToast(t('perfil:error_gallery', { msg: updateError.message }), 'error')
+      showToast(translateSupabaseError(updateError), 'error')
       return
     }
     onPhotosChange(next)
@@ -331,8 +435,8 @@ function PhotoSection({
             <input
               ref={galleryRef}
               type="file"
-          accept="image/jpeg,image/jpg,image/png,image/webp,image/heic,image/heif"
-          multiple
+              accept="image/jpeg,image/jpg,image/png,image/webp,image/heic,image/heif"
+              multiple
               className="hidden"
               onChange={handleGalleryUpload}
               disabled={!bizId}
@@ -436,13 +540,125 @@ function OpeningHoursSection({
 }
 
 // ---------------------------------------------------------------------------
+// Service photo uploader (up to 3 photos per service)
+// ---------------------------------------------------------------------------
+
+function ServicePhotoUploader({
+  bizId,
+  serviceIndex,
+  photos,
+  onChange,
+}: {
+  bizId: string
+  serviceIndex: number
+  photos: string[]
+  onChange: (urls: string[]) => void
+}) {
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [uploading, setUploading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  async function uploadFile(file: File): Promise<string> {
+    const compressed = await compressImage(file)
+    const safeName = `${Date.now()}.jpg`
+    const path = `${bizId}/services/${serviceIndex}/${safeName}`
+    const toUpload = new File([compressed], safeName, { type: 'image/jpeg' })
+    const { error: upErr } = await supabase.storage
+      .from('business-photos')
+      .upload(path, toUpload, { upsert: true, contentType: 'image/jpeg' })
+    if (upErr) throw upErr
+    return supabase.storage.from('business-photos').getPublicUrl(path).data.publicUrl
+  }
+
+  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? [])
+    if (!files.length) return
+    setError(null)
+
+    const slots = 3 - photos.length
+    if (slots <= 0) {
+      setError('Limite de 3 fotos por serviço atingido.')
+      return
+    }
+
+    for (const f of files) {
+      const ve = validateImageFile(f)
+      if (ve) { setError(ve); return }
+    }
+
+    setUploading(true)
+    try {
+      const toUpload = files.slice(0, slots)
+      const urls = await Promise.all(toUpload.map(uploadFile))
+      onChange([...photos, ...urls])
+    } catch (err) {
+      setError(translateSupabaseError(err))
+    } finally {
+      setUploading(false)
+      if (inputRef.current) inputRef.current.value = ''
+    }
+  }
+
+  function remove(url: string) {
+    onChange(photos.filter(p => p !== url))
+  }
+
+  return (
+    <div>
+      <label className="block text-xs font-medium mb-1 text-[#737373]">
+        Fotos <span className="font-normal">({photos.length}/3)</span>
+      </label>
+      {photos.length > 0 && (
+        <div className="flex gap-2 flex-wrap mb-2">
+          {photos.map(url => (
+            <div key={url} className="relative w-16 h-16">
+              <img src={url} alt="" className="w-full h-full object-cover rounded-xl" />
+              <button
+                type="button"
+                onClick={() => remove(url)}
+                className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-black/60 text-white text-xs flex items-center justify-center hover:bg-black/80"
+              >
+                x
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+      {error && <p className="text-xs text-red-500 mb-1">{error}</p>}
+      {photos.length < 3 && (
+        <>
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/jpeg,image/jpg,image/png,image/webp,image/heic,image/heif"
+            multiple
+            className="hidden"
+            onChange={handleUpload}
+          />
+          <button
+            type="button"
+            disabled={uploading}
+            onClick={() => inputRef.current?.click()}
+            className="text-xs font-medium px-3 py-1.5 rounded-lg border border-[#E8E4DF] hover:border-teal transition-colors disabled:opacity-50"
+          >
+            {uploading ? 'Enviando...' : '+ Adicionar foto'}
+          </button>
+        </>
+      )}
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // Services section (inline services shown on business profile)
 // ---------------------------------------------------------------------------
 
 function ServicesSection({
+  bizId,
   services,
   onChange,
 }: {
+  bizId: string | undefined
   services: ServiceItem[]
   onChange: (items: ServiceItem[]) => void
 }) {
@@ -451,14 +667,14 @@ function ServicesSection({
 
   function addService() {
     if (services.length >= 10) return
-    onChange([...services, { name: '', description: '', price: '' }])
+    onChange([...services, { name: '', description: '', price: '', photos: [] }])
   }
 
   function removeService(i: number) {
     onChange(services.filter((_, idx) => idx !== i))
   }
 
-  function updateService(i: number, field: keyof ServiceItem, value: string) {
+  function updateService(i: number, field: keyof ServiceItem, value: string | string[]) {
     onChange(services.map((s, idx) => idx === i ? { ...s, [field]: value } : s))
   }
 
@@ -544,6 +760,15 @@ function ServicesSection({
                 className={INPUT_CLS}
               />
             </div>
+            {/* Fotos do serviço (Spec 1.4) */}
+            {bizId && (
+              <ServicePhotoUploader
+                bizId={bizId}
+                serviceIndex={i}
+                photos={svc.photos ?? []}
+                onChange={urls => updateService(i, 'photos', urls)}
+              />
+            )}
           </div>
         ))}
       </div>
@@ -567,8 +792,9 @@ function PerfilInner() {
 
   const [biz, setBiz] = useState<PartialBusiness>({})
   const [saving, setSaving] = useState(false)
-  const [saveError, setSaveError] = useState<string | null>(null)
+  const [saveModal, setSaveModal] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
   const [profileLoading, setProfileLoading] = useState(true)
+  const [notOwner, setNotOwner] = useState(false)
   const formRef = useRef<HTMLFormElement>(null)
   const [profileId, setProfileId] = useState<string | null>(null)
   const [dupMatches, setDupMatches] = useState<{ id: string; name: string; slug: string; profile_id: string | null }[]>([])
@@ -578,7 +804,7 @@ function PerfilInner() {
     if (bizId) return
     const name = biz.name?.trim() ?? ''
     if (name.length < 3) { setDupMatches([]); return }
-    const t = setTimeout(async () => {
+    const timer = setTimeout(async () => {
       const { data } = await supabase
         .from('gostoso_businesses')
         .select('id, name, slug, profile_id')
@@ -587,7 +813,7 @@ function PerfilInner() {
         .limit(3)
       setDupMatches((data ?? []) as typeof dupMatches)
     }, 500)
-    return () => clearTimeout(t)
+    return () => clearTimeout(timer)
   }, [biz.name, bizId])
 
   useEffect(() => {
@@ -616,7 +842,7 @@ function PerfilInner() {
         .single()
 
       if (insertErr || !newProfile) {
-        setSaveError(t('perfil:error_init_profile'))
+        setSaveModal({ type: 'error', message: t('perfil:error_init_profile') })
       } else {
         setProfileId((newProfile as { id: string }).id)
       }
@@ -631,21 +857,30 @@ function PerfilInner() {
       .from('gostoso_businesses')
       .select(
         'id, name, description, address, whatsapp, instagram, website, category_id, ' +
-        'price_range, menu_url, amenities, is_published, services, cover_url, photos, opening_hours'
+        'price_range, menu_url, amenities, is_published, services, cover_url, photos, opening_hours, profile_id'
       )
       .eq('id', bizId)
       .maybeSingle()
       .then(({ data: b }) => {
-        if (b) setBiz(b as PartialBusiness)
+        if (!b) return
+        // Spec 1.1: ownership guard — only allow editing if this profile owns the business
+        const bizProfileId = (b as unknown as { profile_id: string | null }).profile_id
+        if (profileId && bizProfileId !== profileId) {
+          setNotOwner(true)
+          return
+        }
+        if (!profileId && bizProfileId !== null) {
+          // profileId not loaded yet — we'll re-check after profileId is set
+        }
+        setBiz(b as PartialBusiness)
       })
-  }, [bizId])
+  }, [bizId, profileId])
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
-    setSaveError(null)
 
     if (!profileId) {
-      setSaveError(t('perfil:error_profile'))
+      setSaveModal({ type: 'error', message: t('perfil:error_profile') })
       return
     }
 
@@ -654,7 +889,6 @@ function PerfilInner() {
     try {
       const baseSlug = makeSlug(biz.name ?? '')
       const services = (biz.services ?? []).filter(s => s.name.trim())
-      let isNew = false
 
       if (biz.id) {
         // UPDATE
@@ -678,9 +912,10 @@ function PerfilInner() {
           })
           .eq('id', biz.id)
         if (error) throw error
+        invalidateMyBusinesses()
+        setSaveModal({ type: 'success', message: 'As informações do negócio foram atualizadas.' })
       } else {
         // INSERT
-        isNew = true
         const slug = await ensureUniqueSlug(baseSlug)
         const { data: newBiz, error: insertErr } = await supabase
           .from('gostoso_businesses')
@@ -715,13 +950,12 @@ function PerfilInner() {
             .update({ business_id: nb.id })
             .eq('id', profileId)
         }
+        invalidateMyBusinesses()
+        setSaveModal({ type: 'success', message: 'Negócio criado! Adicione fotos e publique quando estiver pronto.' })
       }
-
-      invalidateMyBusinesses()
-      router.push(isNew ? lp('/cadastre/negocios?new=1') : lp('/cadastre/negocios'))
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err)
-      setSaveError(t('perfil:error_save', { msg }))
+      setSaveModal({ type: 'error', message: translateSupabaseError(err) })
+    } finally {
       setSaving(false)
     }
   }
@@ -734,22 +968,73 @@ function PerfilInner() {
     { key: 'website' as const },
   ]
 
+  // Spec 1.1 — show "not owner" screen instead of broken form
+  if (notOwner) {
+    return (
+      <div className="min-h-screen bg-[#FAFAF9] flex flex-col">
+        <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
+          <div className="max-w-2xl mx-auto px-5 md:px-8 h-14 flex items-center gap-3">
+            <Link
+              href={lp('/cadastre/negocios')}
+              className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              {t('perfil:my_businesses')}
+            </Link>
+          </div>
+        </div>
+        <div className="flex-1 flex items-center justify-center px-5 py-16">
+          <div className="max-w-sm text-center">
+            <div className="w-14 h-14 rounded-full bg-ocre/10 flex items-center justify-center mx-auto mb-4">
+              <svg className="w-7 h-7 text-ocre" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m0-10v4m9 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h2 className="font-display text-xl font-semibold text-[#1A1A1A] mb-2">
+              Negócio ainda não vinculado
+            </h2>
+            <p className="text-sm text-[#737373] mb-6">
+              Você ainda não é o dono confirmado deste negócio. Reivindique-o para poder editar as informações.
+            </p>
+            <Link
+              href={lp('/cadastre/claim')}
+              className="inline-flex items-center gap-2 bg-teal text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-teal/90 transition-colors"
+            >
+              Reivindicar negócio
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-[#FAFAF9] pb-24">
+      {/* Save result modal */}
+      {saveModal && (
+        <SaveResultModal
+          type={saveModal.type}
+          message={saveModal.message}
+          onClose={() => setSaveModal(null)}
+        />
+      )}
+
       {/* ── Top bar ── */}
       <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
         <div className="max-w-2xl mx-auto px-5 md:px-8 h-14 flex items-center gap-3">
           <Link
             href={lp('/cadastre/negocios')}
-            className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors flex-shrink-0"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             {t('perfil:my_businesses')}
           </Link>
           <span className="text-[#E8E4DF]">/</span>
-          <span className="text-sm font-medium text-[#1A1A1A] truncate">
-            {bizId ? (biz.name || t('perfil:edit_business')) : t('perfil:new_business')}
-          </span>
+          {/* Business switcher (Spec 3) */}
+          {bizId
+            ? <BusinessSwitcher currentBizId={bizId} currentName={biz.name} />
+            : <span className="text-sm font-medium text-[#1A1A1A] truncate">{t('perfil:new_business')}</span>
+          }
         </div>
       </div>
 
@@ -951,6 +1236,7 @@ function PerfilInner() {
 
         {/* Services */}
         <ServicesSection
+          bizId={biz.id}
           services={biz.services ?? []}
           onChange={items => setBiz(b => ({ ...b, services: items }))}
         />
@@ -960,11 +1246,6 @@ function PerfilInner() {
 
       {/* ── Sticky save footer ── */}
       <div className="fixed bottom-0 left-0 right-0 z-20 bg-white border-t border-[#E8E4DF] shadow-[0_-2px_12px_rgba(0,0,0,0.06)]">
-        {saveError && (
-          <div className="bg-red-50 border-b border-red-100 px-5 py-2">
-            <p className="text-xs text-red-600 text-center max-w-2xl mx-auto">{saveError}</p>
-          </div>
-        )}
         <div className="max-w-2xl mx-auto px-5 py-3 flex items-center gap-3">
           <Link
             href={lp('/cadastre/negocios')}
