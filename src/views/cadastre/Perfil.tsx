@@ -11,7 +11,7 @@ import { useInvalidateMyBusinesses, useMyBusinesses } from '@/hooks/useMyBusines
 import type { Business } from '@/types/database'
 import { ArrowLeft, Camera, ChevronDown, ExternalLink, Loader2 } from 'lucide-react'
 import { validateImageFile, compressImage } from '@/lib/image-upload'
-import { translateSupabaseError } from '@/lib/supabase-errors'
+import { translateSupabaseError, assertSession } from '@/lib/supabase-errors'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { showToast } from '@/components/ui/toast'
@@ -195,6 +195,7 @@ function StatusBanner({
   async function toggle() {
     if (!bizId) return
     setLoading(true)
+    try { await assertSession(supabase) } catch { showToast('Sua sessão expirou. Faça login novamente.', 'error'); setLoading(false); return }
     const next = !isPublished
     await supabase
       .from('gostoso_businesses')
@@ -298,6 +299,7 @@ function PhotoSection({
     }
     setUploadingCover(true)
     try {
+      await assertSession(supabase)
       const path = `${bizId}/${Date.now()}-${file.name.replace(/\.[^.]+$/, '')}.jpg`
       const url = await uploadFile(file, path)
       const { error: updateError } = await supabase.from('gostoso_businesses').update({ cover_url: url }).eq('id', bizId)
@@ -335,6 +337,7 @@ function PhotoSection({
 
     setUploadingGallery(true)
     try {
+      await assertSession(supabase)
       const urls = await Promise.all(
         toUpload.map(f => uploadFile(f, `${bizId}/${Date.now()}-${f.name.replace(/\.[^.]+$/, '')}.jpg`))
       )
@@ -352,6 +355,7 @@ function PhotoSection({
 
   async function removePhoto(url: string) {
     if (!bizId) return
+    try { await assertSession(supabase) } catch { showToast('Sua sessão expirou. Faça login novamente.', 'error'); return }
     const next = currentPhotos.filter(p => p !== url)
     const { error: updateError } = await supabase.from('gostoso_businesses').update({ photos: next }).eq('id', bizId)
     if (updateError) {
@@ -588,6 +592,7 @@ function ServicePhotoUploader({
 
     setUploading(true)
     try {
+      await assertSession(supabase)
       const toUpload = files.slice(0, slots)
       const urls = await Promise.all(toUpload.map(uploadFile))
       onChange([...photos, ...urls])
@@ -887,6 +892,7 @@ function PerfilInner() {
     setSaving(true)
 
     try {
+      await assertSession(supabase)
       const baseSlug = makeSlug(biz.name ?? '')
       const services = (biz.services ?? []).filter(s => s.name.trim())
 
