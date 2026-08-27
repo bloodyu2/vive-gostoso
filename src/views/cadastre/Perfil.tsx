@@ -280,6 +280,8 @@ function PhotoSection({
     const compressed = await compressImage(file)
     const safeName = file.name.replace(/\.[^.]+$/, '') + '.jpg'
     const toUpload = new File([compressed], safeName, { type: 'image/jpeg' })
+    // Validate session right before the storage write, AFTER the slow compression step.
+    await assertSession(supabase)
     const { error: upErr } = await supabase.storage
       .from('business-photos')
       .upload(path, toUpload, { upsert: true, contentType: 'image/jpeg' })
@@ -299,14 +301,19 @@ function PhotoSection({
     }
     setUploadingCover(true)
     try {
-      await assertSession(supabase)
       const path = `${bizId}/${Date.now()}-${file.name.replace(/\.[^.]+$/, '')}.jpg`
       const url = await uploadFile(file, path)
+      // uploadFile already validated session before the storage write.
+      // Validate again right before the DB write — a separate protected call.
+      await assertSession(supabase)
       const { error: updateError } = await supabase.from('gostoso_businesses').update({ cover_url: url }).eq('id', bizId)
       if (updateError) throw updateError
       onCoverChange(url)
       showToast('Foto de capa atualizada!', 'success')
     } catch (err) {
+      if ((err as { code?: string })?.code === '42501') {
+        console.error('[vg] RLS 42501 on cover upload', { bizId, ts: Date.now() })
+      }
       setError(translateSupabaseError(err))
     } finally {
       setUploadingCover(false)
@@ -337,15 +344,19 @@ function PhotoSection({
 
     setUploadingGallery(true)
     try {
-      await assertSession(supabase)
       const urls = await Promise.all(
         toUpload.map(f => uploadFile(f, `${bizId}/${Date.now()}-${f.name.replace(/\.[^.]+$/, '')}.jpg`))
       )
       const next = [...currentPhotos, ...urls]
+      // Validate session right before the DB write (after all uploads complete).
+      await assertSession(supabase)
       const { error: updateError } = await supabase.from('gostoso_businesses').update({ photos: next }).eq('id', bizId)
       if (updateError) throw updateError
       onPhotosChange(next)
     } catch (err) {
+      if ((err as { code?: string })?.code === '42501') {
+        console.error('[vg] RLS 42501 on gallery upload', { bizId, ts: Date.now() })
+      }
       setError(translateSupabaseError(err))
     } finally {
       setUploadingGallery(false)
@@ -567,6 +578,8 @@ function ServicePhotoUploader({
     const safeName = `${Date.now()}.jpg`
     const path = `${bizId}/services/${serviceIndex}/${safeName}`
     const toUpload = new File([compressed], safeName, { type: 'image/jpeg' })
+    // Validate session right before the storage write, AFTER the slow compression step.
+    await assertSession(supabase)
     const { error: upErr } = await supabase.storage
       .from('business-photos')
       .upload(path, toUpload, { upsert: true, contentType: 'image/jpeg' })
@@ -592,11 +605,13 @@ function ServicePhotoUploader({
 
     setUploading(true)
     try {
-      await assertSession(supabase)
       const toUpload = files.slice(0, slots)
       const urls = await Promise.all(toUpload.map(uploadFile))
       onChange([...photos, ...urls])
     } catch (err) {
+      if ((err as { code?: string })?.code === '42501') {
+        console.error('[vg] RLS 42501 on service photo upload', { bizId, ts: Date.now() })
+      }
       setError(translateSupabaseError(err))
     } finally {
       setUploading(false)
@@ -804,6 +819,14 @@ function PerfilInner() {
   const [profileId, setProfileId] = useState<string | null>(null)
   const [dupMatches, setDupMatches] = useState<{ id: string; name: string; slug: string; profile_id: string | null }[]>([])
 
+  // Reset local state when account changes — prevents cross-account session contamination.
+  useEffect(() => {
+    setBiz({})
+    setProfileId(null)
+    setNotOwner(false)
+    setDupMatches([])
+  }, [user?.id])
+
   // Duplicate detection — only active in "new business" mode (no bizId)
   useEffect(() => {
     if (bizId) return
@@ -892,13 +915,14 @@ function PerfilInner() {
     setSaving(true)
 
     try {
-      await assertSession(supabase)
       const baseSlug = makeSlug(biz.name ?? '')
       const services = (biz.services ?? []).filter(s => s.name.trim())
 
       if (biz.id) {
         // UPDATE
         const slug = await ensureUniqueSlug(baseSlug, biz.id)
+        // Validate session right before the DB write, AFTER the slow ensureUniqueSlug step.
+        await assertSession(supabase)
         const { error } = await supabase
           .from('gostoso_businesses')
           .update({
@@ -923,6 +947,8 @@ function PerfilInner() {
       } else {
         // INSERT
         const slug = await ensureUniqueSlug(baseSlug)
+        // Validate session right before the DB write, AFTER the slow ensureUniqueSlug step.
+        await assertSession(supabase)
         const { data: newBiz, error: insertErr } = await supabase
           .from('gostoso_businesses')
           .insert([{
@@ -960,6 +986,9 @@ function PerfilInner() {
         setSaveModal({ type: 'success', message: 'Negócio criado! Adicione fotos e publique quando estiver pronto.' })
       }
     } catch (err: unknown) {
+      if ((err as { code?: string })?.code === '42501') {
+        console.error('[vg] RLS 42501 on handleSave', { bizId: biz.id, profileId, ts: Date.now() })
+      }
       setSaveModal({ type: 'error', message: translateSupabaseError(err) })
     } finally {
       setSaving(false)
