@@ -12,9 +12,9 @@ export function generateStaticParams() {
 }
 
 export default async function PrivacidadePage({ params }: { params: Promise<{ lang: string }> }) {
-  const { lang } = await params
+  await params
   const messages = await getMessages()
-  const t = (messages as any)?.privacidade ?? {}
+  const t = (messages as Record<string, Record<string, string>>)?.privacidade ?? {}
 
   return (
     <div className="max-w-3xl mx-auto px-5 md:px-8 py-10 md:py-16">

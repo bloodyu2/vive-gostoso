@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { useAuth } from '@/hooks/useAuth'
@@ -489,6 +489,7 @@ function OpeningHoursSection({
   )
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- sincroniza o estado local do formulario com a prop `value` quando ela chega do banco.
     if (value) setHours(value as OpeningHoursValue)
   }, [value])
 
@@ -804,7 +805,6 @@ function ServicesSection({
 function PerfilInner() {
   const { user } = useAuth()
   const { data: categories = [] } = useCategories()
-  const router = useRouter()
   const searchParams = useSearchParams()
   const { t } = useTranslation()
   const lp = useLocalePath()
@@ -822,6 +822,7 @@ function PerfilInner() {
 
   // Reset local state when account changes — prevents cross-account session contamination.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reset deliberado ao trocar de conta; e justamente a barreira contra contaminacao entre sessoes.
     setBiz({})
     setProfileId(null)
     setNotOwner(false)
@@ -832,6 +833,7 @@ function PerfilInner() {
   useEffect(() => {
     if (bizId) return
     const name = biz.name?.trim() ?? ''
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- limpa o resultado de duplicatas quando o nome fica curto demais para consultar.
     if (name.length < 3) { setDupMatches([]); return }
     const timer = setTimeout(async () => {
       const { data } = await supabase
@@ -877,6 +879,7 @@ function PerfilInner() {
       }
       setProfileLoading(false)
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `t` (i18n) muda de referencia a cada render; incluir aqui refaria a criacao do perfil a cada troca de idioma.
   }, [user])
 
   useEffect(() => {

@@ -147,6 +147,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
 
       markers.current.push(marker)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- geo.length e proposital: recriar os marcadores do Mapbox a cada nova referencia do array (mesmo com o mesmo conteudo) e caro e causa flicker.
   }, [geo.length, mapReady])
 
   const VERB_LABEL: Record<string, string> = { come: 'Restaurantes', fique: 'Hospedagem', passeie: 'Passeios', resolva: 'Serviços' }
