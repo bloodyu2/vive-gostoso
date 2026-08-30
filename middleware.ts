@@ -9,6 +9,13 @@ const intlMiddleware = createMiddleware(routing)
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  // Rotas de API nao passam pelo i18n nem pelo refresh de sessao do Supabase --
+  // sem isso, /api/csp-report cai no intlMiddleware e o POST do navegador nunca
+  // chega no Route Handler (next-intl reescreve/redireciona para /pt/api/csp-report).
+  if (pathname.startsWith('/api/')) {
+    return NextResponse.next()
+  }
+
   // Rotas autenticadas: supabase session primeiro (sem i18n prefix)
   if (pathname.startsWith('/cadastre') || pathname.startsWith('/auth')) {
     return await updateSession(request)
