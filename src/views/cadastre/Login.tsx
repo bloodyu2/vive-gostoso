@@ -99,7 +99,11 @@ export default function Login() {
     setLoading(true)
     setError(null)
     try {
-      const { error: authError } = await supabase.auth.signUp({ email, password })
+      const { error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { app: 'vive-gostoso' } },
+      })
       if (authError) {
         setError(t('cadastro.error_create_account'))
       } else {

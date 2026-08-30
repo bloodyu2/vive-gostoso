@@ -103,7 +103,11 @@ export default function Claim({ slug: slugProp }: Props) {
         setAuthLoading2(false)
         return
       }
-      const { error } = await supabase.auth.signUp({ email, password })
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { app: 'vive-gostoso' } },
+      })
       if (error) setAuthError(error.message)
     }
     setAuthLoading2(false)
