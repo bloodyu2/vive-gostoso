@@ -17,6 +17,7 @@ import { StarRating } from '@/components/reviews/star-rating'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import type { Business } from '@/types/database'
+import { SafeCoverImage } from '@/components/business/safe-cover-image'
 
 const DAY_ORDER = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']
 
@@ -112,7 +113,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
         className="aspect-[21/9] bg-gradient-to-br from-teal to-teal-dark rounded-2xl overflow-hidden mb-8 relative cursor-pointer"
         onClick={() => b.cover_url ? setLightboxIndex(0) : undefined}
       >
-        {b.cover_url && <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />}
+        {b.cover_url && <SafeCoverImage src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />}
         {b.is_featured && (
           <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-white/90 backdrop-blur text-teal text-xs font-semibold px-3 py-1.5 rounded-full">
             <CheckCircle className="w-3.5 h-3.5" />
@@ -173,7 +174,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
                   className="aspect-square rounded-xl overflow-hidden bg-[#E8E4DF] cursor-pointer hover:opacity-90 transition-opacity"
                   onClick={() => setLightboxIndex(b.cover_url ? i + 1 : i)}
                 >
-                  <img src={url} alt={`${b.name} foto ${i + 1}`} loading="lazy" decoding="async" className="w-full h-full object-cover" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
+                  <SafeCoverImage src={url} alt={`${b.name} foto ${i + 1}`} className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
