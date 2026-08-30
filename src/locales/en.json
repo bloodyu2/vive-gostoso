@@ -979,6 +979,7 @@
     "profile_loading": "Loading profile...",
     "save_business": "Save business",
     "error_profile": "Error with your user profile.",
+    "error_invalid_url": "Invalid link. Use an address starting with http:// or https://.",
     "error_save": "Error saving: {{msg}}"
   },
   "preview": {
@@ -1255,6 +1256,8 @@
     "error_display_name_required": "Display name is required.",
     "error_headline_required": "Headline is required.",
     "error_invalid_whatsapp": "Invalid WhatsApp number. Use numbers only with country code 55 (e.g.: 5584999991111).",
+    "error_invalid_website": "Invalid website. Use an address starting with http:// or https://.",
+    "error_invalid_portfolio_url": "One of the portfolio links is invalid. Use addresses starting with http:// or https://.",
     "error_portfolio_title_required": "All portfolio items need a title.",
     "error_save": "Error saving."
   },

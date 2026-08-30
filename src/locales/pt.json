@@ -679,6 +679,8 @@
     "error_display_name_required": "Nome de exibição é obrigatório.",
     "error_headline_required": "Headline é obrigatório.",
     "error_invalid_whatsapp": "WhatsApp inválido. Use apenas números com DDI 55 (ex: 5584999991111).",
+    "error_invalid_website": "Website inválido. Use um endereço começando com http:// ou https://.",
+    "error_invalid_portfolio_url": "Um dos links do portfólio é inválido. Use endereços começando com http:// ou https://.",
     "error_portfolio_title_required": "Todos os itens do portfólio precisam ter um título.",
     "error_save": "Erro ao salvar."
   },
@@ -1059,6 +1061,7 @@
     "profile_loading": "Carregando perfil...",
     "save_business": "Salvar negócio",
     "error_profile": "Erro com seu perfil de usuário.",
+    "error_invalid_url": "Link inválido. Use um endereço começando com http:// ou https://.",
     "error_save": "Erro ao salvar: {{msg}}"
   },
   "preview": {

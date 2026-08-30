@@ -6,6 +6,7 @@ import { ArrowLeft, ExternalLink, AtSign, Globe, MessageCircle } from 'lucide-re
 import { useTranslation } from 'react-i18next'
 import { useProfessional } from '@/hooks/useProfessionals'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
+import { safeExternalUrl } from '@/lib/utils'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { ReviewList } from '@/components/reviews/review-list'
@@ -69,6 +70,8 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
         specialty: pro.specialties[0],
       })
     : null
+
+  const websiteHref = safeExternalUrl(pro.website)
 
   return (
     <div className="min-h-screen bg-[#FAFAF9]">
@@ -144,9 +147,9 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
                 {pro.instagram}
               </a>
             )}
-            {pro.website && (
+            {websiteHref && (
               <a
-                href={pro.website}
+                href={websiteHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-[#1A1A1A] transition-colors"
@@ -164,7 +167,9 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
           <div>
             <h2 className="text-xs font-bold text-[#737373] uppercase tracking-wide mb-3">{t('professional.portfolio_label')}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {pro.portfolio_items.map((item: PortfolioItem) => (
+              {pro.portfolio_items.map((item: PortfolioItem) => {
+                const safeUrl = safeExternalUrl(item.url)
+                return (
                 <div key={item.id} className="bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden">
                   {item.image_url && (
                     <img
@@ -178,9 +183,9 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
                     {item.description && (
                       <p className="text-xs text-[#737373] leading-relaxed">{item.description}</p>
                     )}
-                    {item.url && (
+                    {safeUrl && (
                       <a
-                        href={item.url}
+                        href={safeUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-xs text-teal mt-2 hover:underline"
@@ -190,7 +195,8 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
                     )}
                   </div>
                 </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         )}

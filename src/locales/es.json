@@ -905,6 +905,8 @@
     "error_display_name_required": "El nombre a mostrar es obligatorio.",
     "error_headline_required": "El titular es obligatorio.",
     "error_invalid_whatsapp": "WhatsApp inválido. Usa solo números con código de país 55 (ej: 5584999991111).",
+    "error_invalid_website": "Sitio web inválido. Usa una dirección que empiece con http:// o https://.",
+    "error_invalid_portfolio_url": "Uno de los enlaces del portafolio no es válido. Usa direcciones que empiecen con http:// o https://.",
     "error_portfolio_title_required": "Todos los elementos del portafolio necesitan un título.",
     "error_save": "Error al guardar."
   },
@@ -1176,6 +1178,7 @@
     "profile_loading": "Cargando perfil...",
     "save_business": "Guardar negocio",
     "error_profile": "Error con tu perfil de usuario.",
+    "error_invalid_url": "Enlace no válido. Usa una dirección que empiece con http:// o https://.",
     "error_save": "Error al guardar: {{msg}}"
   },
   "preview": {

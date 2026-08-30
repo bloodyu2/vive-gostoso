@@ -15,6 +15,7 @@ import {
   type ProfessionalCategory,
   type PortfolioItem,
 } from '@/types/professional'
+import { safeExternalUrl } from '@/lib/utils'
 
 export default function ProfessionalPanel() {
   return <AuthGuard><ProfessionalPanelInner /></AuthGuard>
@@ -105,6 +106,18 @@ function ProfessionalPanelInner() {
       return
     }
 
+    const sanitizedWebsite = website.trim() ? safeExternalUrl(website.trim()) : undefined
+    if (website.trim() && !sanitizedWebsite) {
+      setError(t('professional_panel.error_invalid_website'))
+      return
+    }
+
+    const invalidPortfolioUrl = portfolioItems.find(i => i.url?.trim() && !safeExternalUrl(i.url.trim()))
+    if (invalidPortfolioUrl) {
+      setError(t('professional_panel.error_invalid_portfolio_url'))
+      return
+    }
+
     setSaving(true)
     try {
       await upsert.mutateAsync({
@@ -116,7 +129,7 @@ function ProfessionalPanelInner() {
         portfolio_items: portfolioItems,
         whatsapp: sanitizedWa ?? undefined,
         instagram: instagram.trim() || undefined,
-        website: website.trim() || undefined,
+        website: sanitizedWebsite,
         is_published: publishOverride ?? pro?.is_published ?? false,
       })
       setSuccess(true)

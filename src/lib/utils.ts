@@ -29,3 +29,35 @@ export function isBusinessOpen(
   const nowMinutes = now.getHours() * 60 + now.getMinutes()
   return nowMinutes >= openMin && nowMinutes <= closeMin
 }
+
+/**
+ * Only allow http/https URLs to be used in an href/src attribute fed by
+ * user-supplied data (business "website"/"menu_url", professional "website",
+ * portfolio item "url"). Returns undefined for anything else -- javascript:,
+ * data:, vbscript:, malformed strings -- so callers can simply omit the link
+ * instead of rendering a dangerous href.
+ *
+ * See docs/security-audit/relatorio-auditoria-seguranca.pdf (2026-08-29),
+ * finding F2. This is the actual security boundary: it MUST be applied at
+ * render time (not only on form submit), because RLS still lets a business
+ * owner write these columns directly via the Supabase REST API, bypassing
+ * any client-side form validation.
+ */
+export function safeExternalUrl(raw: string | null | undefined): string | undefined {
+  if (!raw) return undefined
+  const trimmed = raw.trim()
+  if (!trimmed) return undefined
+  try {
+    const url = new URL(trimmed)
+    return url.protocol === 'http:' || url.protocol === 'https:' ? url.toString() : undefined
+  } catch {
+    // Not an absolute URL -- business owners commonly type "example.com"
+    // without a scheme. Try once with an https:// prefix.
+    try {
+      const url = new URL(`https://${trimmed}`)
+      return url.protocol === 'https:' ? url.toString() : undefined
+    } catch {
+      return undefined
+    }
+  }
+}

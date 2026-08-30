@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle, Share2, Check, BookOpen, Wifi, Car, UserCheck, CalendarCheck } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useBusiness } from '@/hooks/useBusinesses'
-import { isBusinessOpen } from '@/lib/utils'
+import { isBusinessOpen, safeExternalUrl } from '@/lib/utils'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { ManagedBadge } from '@/components/business/managed-badge'
 import { ClaimCta } from '@/components/business/claim-cta'
@@ -78,6 +78,8 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
   )
 
   const open = isBusinessOpen(b.opening_hours)
+  const websiteHref = safeExternalUrl(b.website)
+  const menuUrlHref = safeExternalUrl(b.menu_url)
   const verb = b.category?.verb ?? 'come'
   const backTo = verb === 'fique' ? '/fique' : verb === 'passeie' ? '/passeie' : '/come'
   const backLabel = verb === 'fique' ? t('nav.fique') : verb === 'passeie' ? t('nav.passeie') : t('nav.come')
@@ -213,9 +215,9 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
           </button>
 
           {/* Cardápio */}
-          {b.menu_url && (
+          {menuUrlHref && (
             <a
-              href={b.menu_url}
+              href={menuUrlHref}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 bg-ocre/10 text-ocre border border-ocre/30 rounded-2xl px-5 py-3.5 text-sm font-semibold hover:bg-ocre/20 transition-colors"
@@ -258,8 +260,8 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
                 </a>
               )}
 
-              {b.website && (
-                <a href={b.website} target="_blank" rel="noopener noreferrer"
+              {websiteHref && (
+                <a href={websiteHref} target="_blank" rel="noopener noreferrer"
                   className="flex items-center gap-2.5 text-sm text-[#3D3D3D] hover:text-teal transition-colors">
                   <Globe className="w-4 h-4 text-teal flex-shrink-0" />
                   {t('common.site')}

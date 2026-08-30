@@ -6,6 +6,7 @@ import { AuthGuard } from '@/components/auth/auth-guard'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
+import { safeExternalUrl } from '@/lib/utils'
 import { useCategories } from '@/hooks/useCategories'
 import { useInvalidateMyBusinesses, useMyBusinesses } from '@/hooks/useMyBusinesses'
 import type { Business } from '@/types/database'
@@ -912,6 +913,17 @@ function PerfilInner() {
       return
     }
 
+    const safeWebsite = biz.website ? safeExternalUrl(biz.website) : null
+    if (biz.website && !safeWebsite) {
+      setSaveModal({ type: 'error', message: t('perfil:error_invalid_url') })
+      return
+    }
+    const safeMenuUrl = biz.menu_url ? safeExternalUrl(biz.menu_url) : null
+    if (biz.menu_url && !safeMenuUrl) {
+      setSaveModal({ type: 'error', message: t('perfil:error_invalid_url') })
+      return
+    }
+
     setSaving(true)
 
     try {
@@ -931,11 +943,11 @@ function PerfilInner() {
             address: biz.address,
             whatsapp: biz.whatsapp,
             instagram: biz.instagram,
-            website: biz.website,
+            website: safeWebsite,
             category_id: biz.category_id,
             slug,
             price_range: biz.price_range ?? null,
-            menu_url: biz.menu_url ?? null,
+            menu_url: safeMenuUrl,
             amenities: biz.amenities ?? {},
             services,
             opening_hours: biz.opening_hours ?? null,
@@ -961,10 +973,10 @@ function PerfilInner() {
             address: biz.address ?? null,
             whatsapp: biz.whatsapp ?? null,
             instagram: biz.instagram ?? null,
-            website: biz.website ?? null,
+            website: safeWebsite,
             category_id: biz.category_id ?? null,
             price_range: biz.price_range ?? null,
-            menu_url: biz.menu_url ?? null,
+            menu_url: safeMenuUrl,
             amenities: biz.amenities ?? {},
             services,
             opening_hours: biz.opening_hours ?? null,
