@@ -6,6 +6,11 @@ import createNextIntlPlugin from 'next-intl/plugin'
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 
 const SUPABASE_ORIGIN = 'https://wppsmvgbagalczoardfl.supabase.co'
+// Varias capas de negocio ainda apontam para o Unsplash (fotos de exemplo
+// cadastradas no banco). A CSP nao listava esses hosts, entao o navegador
+// bloqueava as imagens em silencio -- 5 das 8 <img> da home ficavam com
+// naturalWidth 0 mesmo com as URLs respondendo 200 e JPEG valido.
+const UNSPLASH_ORIGINS = 'https://images.unsplash.com https://plus.unsplash.com'
 const SUPABASE_WS_ORIGIN = 'wss://wppsmvgbagalczoardfl.supabase.co'
 
 // Content-Security-Policy -- ver docs/security-audit/relatorio-auditoria-seguranca.pdf (F5).
@@ -22,7 +27,7 @@ const CSP_DIRECTIVES = [
   "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.mapbox.com",
   "font-src 'self' https://fonts.gstatic.com",
-  `img-src 'self' data: blob: ${SUPABASE_ORIGIN} https://api.mapbox.com https://*.tiles.mapbox.com`,
+  `img-src 'self' data: blob: ${SUPABASE_ORIGIN} ${UNSPLASH_ORIGINS} https://api.mapbox.com https://*.tiles.mapbox.com`,
   `connect-src 'self' ${SUPABASE_ORIGIN} ${SUPABASE_WS_ORIGIN} https://api.mapbox.com https://events.mapbox.com https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com`,
   "worker-src 'self' blob:",
   "child-src 'self' blob:",
