@@ -18,10 +18,15 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
+      { url: '/favicon.ico', sizes: 'any' },
       { url: '/favicon.svg', type: 'image/svg+xml' },
-      { url: '/favicon.png', type: 'image/png' },
+      { url: '/icons/pwa/icon-32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/icons/pwa/icon-16.png', type: 'image/png', sizes: '16x16' },
     ],
-    apple: '/favicon.png',
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
+  },
+  openGraph: {
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
   },
   appleWebApp: {
     capable: true,
@@ -40,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
         rel="stylesheet"
       />
+      <link rel="apple-touch-startup-image" href="/splash/splash-1170x2532.png" />
       <GTMScript />
     </head>
       <body className="bg-page text-fg-1 font-sans antialiased">

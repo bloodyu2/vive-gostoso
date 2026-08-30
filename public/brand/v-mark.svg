@@ -1,14 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
-  
-  <defs>
-    
-  </defs>
-  <rect class="bg" width="200" height="200" rx="32"></rect>
-  
-  <path class="wave-1" d="&#xA;    M 38 50&#xA;    Q 50 55 60 70&#xA;    L 100 150&#xA;    L 92 158&#xA;    L 50 80&#xA;    Q 42 65 30 60&#xA;    Z&#xA;  "></path>
-  <path class="wave-1" d="&#xA;    M 162 50&#xA;    Q 150 55 140 70&#xA;    L 100 150&#xA;    L 108 158&#xA;    L 150 80&#xA;    Q 158 65 170 60&#xA;    Z&#xA;  "></path>
-  
-  <path class="wave-2" d="&#xA;    M 70 60&#xA;    L 100 130&#xA;    L 130 60&#xA;    L 122 58&#xA;    L 100 110&#xA;    L 78 58&#xA;    Z&#xA;  " opacity="0.95"></path>
-  
-  <circle cx="155" cy="148" r="9" fill="#C97D2A"></circle>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" fill="#F5F2EE"/>
+  <circle cx="49.6" cy="6.1" r="14.4" fill="#D08A33"/>
+  <rect y="50.6" width="64" height="13.4" fill="#0D7C7C"/>
+  <rect x="13.5" y="13.4" width="13.5" height="2.8" fill="#E05A3A"/>
+  <rect x="39.4" y="13.4" width="10.6" height="2.2" fill="#E05A3A"/>
+  <path d="M17 15 L24.5 15 L34.8 49.6 L29.6 49.6 Z" fill="#E05A3A"/>
+  <path d="M44 15 L46.6 15 L33.4 49.6 L31.6 49.6 Z" fill="#E05A3A"/>
 </svg>

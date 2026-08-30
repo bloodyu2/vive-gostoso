@@ -88,7 +88,7 @@ export function Header() {
         {/* Desktop */}
         <div className="hidden md:flex items-center justify-between gap-4 px-8 py-2">
           <Link href={lp('/')} className="flex-shrink-0">
-            <Logo height={60} />
+            <Logo height={40} />
           </Link>
 
           {/* Main nav */}
@@ -196,7 +196,7 @@ export function Header() {
             <Search className="w-5 h-5" />
           </button>
           <Link href={lp('/')} onClick={() => setDrawerOpen(false)}>
-            <Logo height={52} />
+            <Logo height={36} />
           </Link>
           <button
             onClick={() => setDrawerOpen(o => !o)}
