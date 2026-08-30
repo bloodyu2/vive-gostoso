@@ -39,12 +39,12 @@ function AdminClaimsInner() {
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
       <div className="flex items-center gap-4 mb-8">
         <Link href={lp('/cadastre/admin')} className="text-sm text-[#737373] hover:text-teal transition-colors">
-          {t('back_to_admin')}
+          {t('back')}
         </Link>
         <h1 className="font-display text-3xl font-semibold">{t('title')}</h1>
         {claims.length > 0 && (
           <span className="ml-auto bg-coral text-white text-xs font-bold px-2.5 py-1 rounded-full">
-            {t('pending_count', { count: claims.length })}
+            {t('count', { count: claims.length })}
           </span>
         )}
       </div>
@@ -52,7 +52,7 @@ function AdminClaimsInner() {
       {claims.length === 0 ? (
         <div className="text-center py-20">
           <div className="text-5xl mb-4">✅</div>
-          <p className="text-[#737373]">{t('empty_state')}</p>
+          <p className="text-[#737373]">{t('empty')}</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -103,7 +103,7 @@ function AdminClaimsInner() {
                   <div className="flex gap-2 w-full">
                     <input
                       type="text"
-                      placeholder={t('note_optional')}
+                      placeholder={t('note_placeholder')}
                       value={rejectNote[claim.id] ?? ''}
                       onChange={e => setRejectNote(n => ({ ...n, [claim.id]: e.target.value }))}
                       className="flex-1 px-3 py-2 rounded-xl border border-[#E8E4DF] text-xs focus:outline-none focus:border-coral focus:ring-2 focus:ring-coral/20 min-w-0"

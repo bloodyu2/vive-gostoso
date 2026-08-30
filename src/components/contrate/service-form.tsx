@@ -55,9 +55,9 @@ export function ServiceForm({ onClose }: Props) {
         {sent ? (
           <div className="px-6 py-10 text-center">
             <CheckCircle className="w-10 h-10 mb-4 text-teal mx-auto" />
-            <h3 className="font-display font-bold text-xl mb-2">{t('received_title')}</h3>
+            <h3 className="font-display font-bold text-xl mb-2">{t('success_title')}</h3>
             <p className="text-[#737373] text-sm leading-relaxed">
-              {t('received_desc')}
+              {t('success_desc')}
             </p>
             <button onClick={onClose} className="mt-6 bg-teal text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-teal-dark transition-colors">
               {t('close')}
@@ -66,31 +66,31 @@ export function ServiceForm({ onClose }: Props) {
         ) : (
           <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_name')}</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('field_name_label')}</label>
               <input
                 type="text"
                 value={form.name}
                 onChange={e => set('name', e.target.value)}
-                placeholder={t('placeholder_name')}
+                placeholder={t('field_name_placeholder')}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-colors"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_headline')}</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('field_headline_label')}</label>
               <input
                 type="text"
                 value={form.headline}
                 onChange={e => set('headline', e.target.value)}
-                placeholder={t('placeholder_headline')}
+                placeholder={t('field_headline_placeholder')}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-colors"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_category')}</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('field_category_label')}</label>
               <select
                 value={form.service_category}
                 onChange={e => set('service_category', e.target.value)}
@@ -105,30 +105,30 @@ export function ServiceForm({ onClose }: Props) {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_description')}</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('field_desc_label')}</label>
               <textarea
                 value={form.description}
                 onChange={e => set('description', e.target.value)}
-                placeholder={t('placeholder_description')}
+                placeholder={t('field_desc_placeholder')}
                 rows={3}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-colors resize-none"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_whatsapp')}</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('field_whatsapp_label')}</label>
               <input
                 type="tel"
                 value={form.whatsapp}
                 onChange={e => set('whatsapp', e.target.value)}
-                placeholder={t('placeholder_whatsapp')}
+                placeholder={t('field_whatsapp_placeholder')}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-colors"
                 required
               />
             </div>
 
             <p className="text-xs text-[#737373] leading-relaxed">
-              {t('consent_text')}
+              {t('privacy_text')}
             </p>
 
             {submitError && (

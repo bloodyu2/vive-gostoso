@@ -54,9 +54,9 @@ export function JobForm({ onClose }: Props) {
         {sent ? (
           <div className="px-6 py-10 text-center">
             <div className="text-4xl mb-4">✅</div>
-            <h3 className="font-display font-bold text-xl mb-2">{t('received_title')}</h3>
+            <h3 className="font-display font-bold text-xl mb-2">{t('success_title')}</h3>
             <p className="text-[#737373] text-sm leading-relaxed">
-              {t('received_desc')}
+              {t('success_desc')}
             </p>
             <button onClick={onClose} className="mt-6 bg-ocre text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity">
               {t('close')}
@@ -65,31 +65,31 @@ export function JobForm({ onClose }: Props) {
         ) : (
           <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_business_name')}</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('field_business_name_label')}</label>
               <input
                 type="text"
                 value={form.business_name}
                 onChange={e => set('business_name', e.target.value)}
-                placeholder={t('placeholder_business_name')}
+                placeholder={t('field_business_name_placeholder')}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ocre/30 focus:border-ocre transition-colors"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_title')}</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('field_title_label')}</label>
               <input
                 type="text"
                 value={form.title}
                 onChange={e => set('title', e.target.value)}
-                placeholder={t('placeholder_title')}
+                placeholder={t('field_title_placeholder')}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ocre/30 focus:border-ocre transition-colors"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_contract_type')}</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('field_contract_type_label')}</label>
               <select
                 value={form.contract_type}
                 onChange={e => set('contract_type', e.target.value)}
@@ -104,30 +104,30 @@ export function JobForm({ onClose }: Props) {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_description')}</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('field_desc_label')}</label>
               <textarea
                 value={form.description}
                 onChange={e => set('description', e.target.value)}
-                placeholder={t('placeholder_description')}
+                placeholder={t('field_desc_placeholder')}
                 rows={3}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ocre/30 focus:border-ocre transition-colors resize-none"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('label_whatsapp')}</label>
+              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('field_whatsapp_label')}</label>
               <input
                 type="tel"
                 value={form.whatsapp}
                 onChange={e => set('whatsapp', e.target.value)}
-                placeholder={t('placeholder_whatsapp')}
+                placeholder={t('field_whatsapp_placeholder')}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ocre/30 focus:border-ocre transition-colors"
                 required
               />
             </div>
 
             <p className="text-xs text-[#737373] leading-relaxed">
-              {t('info_text')}
+              {t('privacy_text')}
             </p>
 
             {submitError && (

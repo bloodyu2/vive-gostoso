@@ -49,7 +49,7 @@ export function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
       <button
         onClick={onClose}
         className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
-        aria-label={t('close')}
+        aria-label={t('close_aria')}
       >
         <X className="w-6 h-6" />
       </button>
@@ -59,7 +59,7 @@ export function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
         <button
           onClick={e => { e.stopPropagation(); prev() }}
           className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors bg-black/30 rounded-full p-2"
-          aria-label={t('prev')}
+          aria-label={t('prev_aria')}
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
@@ -68,7 +68,7 @@ export function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
       {/* Foto */}
       <img
         src={photos[current]}
-        alt={t('photo_alt', { number: current + 1 })}
+        alt={t('alt', { number: current + 1 })}
         className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-2xl"
         onClick={e => e.stopPropagation()}
       />
@@ -78,7 +78,7 @@ export function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
         <button
           onClick={e => { e.stopPropagation(); next() }}
           className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors bg-black/30 rounded-full p-2"
-          aria-label={t('next')}
+          aria-label={t('next_aria')}
         >
           <ChevronRight className="w-6 h-6" />
         </button>

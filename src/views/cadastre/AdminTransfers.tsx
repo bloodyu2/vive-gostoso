@@ -94,12 +94,12 @@ function TransferRow({ transfer }: { transfer: Transfer }) {
             {transfer.whatsapp}
           </a>
         </span>
-        {transfer.available_hours && <span>{t('hours_label')} {transfer.available_hours}</span>}
+        {transfer.available_hours && <span>{t('hours')} {transfer.available_hours}</span>}
         {transfer.languages && transfer.languages.length > 0 && (
-          <span>{t('languages_label')} {transfer.languages.join(', ')}</span>
+          <span>{t('languages')} {transfer.languages.join(', ')}</span>
         )}
         {transfer.routes && (
-          <span>{t('routes_count', { count: transfer.routes.length })}</span>
+          <span>{t('routes', { count: transfer.routes.length })}</span>
         )}
       </div>
     </div>
@@ -119,11 +119,11 @@ function AdminTransfersInner() {
         href={lp('/cadastre/admin')}
         className="text-sm text-[#737373] hover:text-teal transition-colors inline-block mb-6"
       >
-        {t('back_to_admin')}
+        {t('back')}
       </Link>
       <h1 className="font-display text-3xl font-semibold mb-2">{t('title')}</h1>
       <p className="text-sm text-[#737373] mb-8">
-        {t('subtitle')}
+        {t('desc')}
       </p>
 
       {isLoading ? (
@@ -135,14 +135,14 @@ function AdminTransfersInner() {
           <section>
             <div className="flex items-center gap-2 mb-4">
               <span className="text-xs font-bold uppercase tracking-widest text-ocre">
-                {t('pending_section', { count: pending.length })}
+                {t('section_pending', { count: pending.length })}
               </span>
             </div>
             {pending.length === 0 ? (
               <div className="text-center py-10 border-2 border-dashed border-[#E8E4DF] rounded-2xl">
                 <Car className="w-8 h-8 mb-2 text-[#737373] mx-auto" />
                 <p className="text-[#737373] text-sm font-semibold">{t('empty_pending')}</p>
-                <p className="text-xs text-[#B0A99F] mt-1">{t('empty_pending_sub')}</p>
+                <p className="text-xs text-[#B0A99F] mt-1">{t('empty_sub')}</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -154,7 +154,7 @@ function AdminTransfersInner() {
           <section>
             <div className="flex items-center gap-2 mb-4">
               <span className="text-xs font-bold uppercase tracking-widest text-teal">
-                {t('active_section', { count: active.length })}
+                {t('section_active', { count: active.length })}
               </span>
             </div>
             {active.length === 0 ? (

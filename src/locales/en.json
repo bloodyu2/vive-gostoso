@@ -143,7 +143,9 @@
     "cta_btn": "Register now",
     "candidatar_whatsapp": "Apply via WhatsApp",
     "chamar_whatsapp": "Message on WhatsApp",
-    "tenho_interesse": "I'm interested"
+    "tenho_interesse": "I'm interested",
+    "pedir_orcamento": "Request a quote",
+    "sem_empresas": "No companies registered yet."
   },
   "professional": {
     "categories": {
@@ -168,7 +170,12 @@
     "cta_whatsapp": "Message on WhatsApp",
     "cta_whatsapp_hint": "mentions Vive Gostoso",
     "no_professionals": "No professionals found in this category.",
-    "all_categories": "All"
+    "all_categories": "All",
+    "profile_not_found": "Profile not found",
+    "back_to_contrate": "Back to Hire",
+    "sobre": "About",
+    "website": "Website",
+    "ver_projeto": "View project"
   },
   "cadastre_fork": {
     "title": "What do you want to do on Vive Gostoso?",
@@ -698,7 +705,8 @@
     "approve": "Approve",
     "reject": "Reject",
     "submitted_by": "Submitted by: {{name}}",
-    "empty": "No pending submissions. All caught up!"
+    "empty": "No pending submissions. All caught up!",
+    "rejected_note": "Not approved by moderation."
   },
   "admin_claims": {
     "back": "Admin",
@@ -730,7 +738,9 @@
     "submitted_at": "Submitted on {{date}}",
     "hours": "Hours: {{hours}}",
     "languages": "Languages: {{languages}}",
-    "routes": "{{count}} route(s)"
+    "routes": "{{count}} route(s)",
+    "row_info": "{{vehicle}} · up to {{passengers}} passengers · submitted on {{date}}",
+    "whatsapp_label": "WhatsApp:"
   },
   "admin_reviews": {
     "back": "Admin",

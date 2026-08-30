@@ -71,10 +71,10 @@ function AdminEventsInner() {
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
       <Link href={lp('/cadastre/admin')} className="text-sm text-[#737373] hover:text-teal transition-colors inline-block mb-6">
-        {t('back_to_admin')}
+        {t('back')}
       </Link>
       <h1 className="font-display text-3xl font-semibold mb-2">{t('title')}</h1>
-      <p className="text-sm text-[#737373] mb-8">{t('subtitle')}</p>
+      <p className="text-sm text-[#737373] mb-8">{t('desc')}</p>
 
       {isLoading ? (
         <div className="space-y-4">
@@ -83,7 +83,7 @@ function AdminEventsInner() {
       ) : submissions.length === 0 ? (
         <div className="text-center py-16 border-2 border-dashed border-[#E8E4DF] rounded-2xl">
           <CalendarCheck className="w-10 h-10 mb-3 text-teal mx-auto" />
-          <p className="text-[#737373] text-sm">{t('empty_state')}</p>
+          <p className="text-[#737373] text-sm">{t('empty')}</p>
         </div>
       ) : (
         <div className="space-y-4">

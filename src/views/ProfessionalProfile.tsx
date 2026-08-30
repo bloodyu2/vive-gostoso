@@ -235,7 +235,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
               className="flex items-center justify-center gap-2 w-full bg-teal text-white rounded-2xl py-3.5 font-semibold text-sm hover:bg-teal/90 transition-colors"
             >
               <MessageCircle className="w-4 h-4" />
-              {t('professional.falar_whatsapp')}
+              {t('professional.cta_whatsapp')}
               <span className="text-xs font-normal opacity-75">{t('professional.cta_whatsapp_hint')}</span>
             </a>
           </div>
