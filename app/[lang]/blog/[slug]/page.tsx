@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getBlogPostForPage(slug)
   if (!post) return { title: 'Post nao encontrado' }
 
-  const baseUrl = 'https://vivegostoso.com.br'
+  const baseUrl = 'https://www.vivegostoso.com.br'
   const canonical = `${baseUrl}/${lang === 'pt' ? '' : lang + '/'}blog/${slug}`
   const description = post.excerpt ?? `${post.title} no blog do Vive Gostoso.`
   const image = post.cover_url ?? `${baseUrl}/og-image.png`
@@ -59,7 +59,7 @@ export default async function BlogPostRoute({ params }: Props) {
   const post = await getBlogPostForPage(slug)
   if (!post) notFound()
 
-  const baseUrl = 'https://vivegostoso.com.br'
+  const baseUrl = 'https://www.vivegostoso.com.br'
   const jsonLd = articleSchema({
     title: post.title,
     description: post.excerpt ?? `${post.title} no blog do Vive Gostoso.`,

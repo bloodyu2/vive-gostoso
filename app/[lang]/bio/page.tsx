@@ -8,17 +8,17 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Bio -- Vive Gostoso',
     description: 'Links e recursos oficiais do Vive Gostoso no Instagram e redes sociais.',
-    url: 'https://vivegostoso.com.br/bio',
+    url: 'https://www.vivegostoso.com.br/bio',
     siteName: 'Vive Gostoso',
     locale: 'pt_BR',
     type: 'website',
-    images: [{ url: 'https://vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://www.vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Bio -- Vive Gostoso',
     description: 'Links e recursos oficiais do Vive Gostoso no Instagram e redes sociais.',
-    images: ['https://vivegostoso.com.br/og-image.png'],
+    images: ['https://www.vivegostoso.com.br/og-image.png'],
   },
 }
 

@@ -4,7 +4,7 @@
  * facilitar testes e reuso.
  */
 
-const BASE_URL = 'https://vivegostoso.com.br'
+const BASE_URL = 'https://www.vivegostoso.com.br'
 const SITE_NAME = 'Vive Gostoso'
 const PUBLISHER_LOGO = `${BASE_URL}/icons/pwa/icon-512.png`
 

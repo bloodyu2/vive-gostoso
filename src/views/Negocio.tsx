@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { useBusiness } from '@/hooks/useBusinesses'
 import { isBusinessOpen, safeExternalUrl } from '@/lib/utils'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
+import { pushDataLayer } from '@/lib/analytics'
 import { ManagedBadge } from '@/components/business/managed-badge'
 import { ClaimCta } from '@/components/business/claim-cta'
 import { Lightbox } from '@/components/ui/lightbox'
@@ -54,7 +55,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
         title: b.name,
         description: b.description ?? `${b.name} em São Miguel do Gostoso. Encontre no Vive Gostoso.`,
         image: b.cover_url ?? undefined,
-        url: `https://vivegostoso.com.br/negocio/${b.slug}`,
+        url: `https://www.vivegostoso.com.br/negocio/${b.slug}`,
       }
     : { title: t('common.carregando') }
   )
@@ -86,7 +87,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
   const backLabel = verb === 'fique' ? t('nav.fique') : verb === 'passeie' ? t('nav.passeie') : t('nav.come')
 
   const business = b
-  const shareUrl = `https://vivegostoso.com.br/negocio/${business.slug}`
+  const shareUrl = `https://www.vivegostoso.com.br/negocio/${business.slug}`
   const shareText = `${business.name}: ${shareUrl}`
 
   async function handleShare() {
@@ -200,6 +201,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
               href={buildWhatsAppLink(b.whatsapp)}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => pushDataLayer('contato_negocio_click', { business_name: b.name })}
               className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1EBE57] text-white rounded-2xl px-5 py-4 text-sm font-semibold transition-colors"
             >
               <Phone className="w-4 h-4" />
@@ -240,6 +242,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
 
               {b.whatsapp && (
                 <a href={buildWhatsAppLink(b.whatsapp)} target="_blank" rel="noopener noreferrer"
+                  onClick={() => pushDataLayer('contato_negocio_click', { business_name: b.name })}
                   className="flex items-center gap-2.5 text-sm text-[#3D3D3D] hover:text-teal transition-colors">
                   <Phone className="w-4 h-4 text-teal flex-shrink-0" />
                   WhatsApp

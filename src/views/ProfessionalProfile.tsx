@@ -36,7 +36,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
       ? {
           title: `${pro.display_name} — Vive Gostoso`,
           description: pro.headline,
-          url: `https://vivegostoso.com.br/contrate/profissional/${pro.slug}`,
+          url: `https://www.vivegostoso.com.br/contrate/profissional/${pro.slug}`,
           image: pro.photo_url ?? undefined,
         }
       : { title: 'Profissional — Vive Gostoso' }

@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const event = await getEventForPage(id)
   if (!event) return { title: 'Evento nao encontrado' }
 
-  const baseUrl = 'https://vivegostoso.com.br'
+  const baseUrl = 'https://www.vivegostoso.com.br'
   const canonical = `${baseUrl}/${lang === 'pt' ? '' : lang + '/'}evento/${id}`
   const description = event.description ?? `${event.name} em Sao Miguel do Gostoso.`
   const image = event.cover_url ?? `${baseUrl}/og-image.png`

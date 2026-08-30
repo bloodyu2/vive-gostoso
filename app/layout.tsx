@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Providers } from '@/components/providers'
 import { GTMScript } from '@/components/gtm-script'
+import { PageViewTracker } from '@/components/page-view-tracker'
 import { ToastContainer } from '@/components/ui/toast'
 import '@/styles/globals.css'
 
@@ -9,7 +10,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://vivegostoso.com.br'),
+  metadataBase: new URL('https://www.vivegostoso.com.br'),
   title: { default: 'Vive Gostoso', template: '%s | Vive Gostoso' },
   description: 'A infraestrutura digital de São Miguel do Gostoso, RN.',
   manifest: '/manifest.json',
@@ -49,6 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <GTMScript />
     </head>
       <body className="bg-page text-fg-1 font-sans antialiased">
+        <PageViewTracker />
         <Providers>{children}</Providers>
         <ToastContainer />
       </body>

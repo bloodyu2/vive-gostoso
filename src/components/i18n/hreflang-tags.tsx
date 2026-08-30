@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { stripLocale } from '@/hooks/useLocalePath'
 
-const BASE = 'https://vivegostoso.com.br'
+const BASE = 'https://www.vivegostoso.com.br'
 
 /**
  * Injects hreflang <link> tags into <head> for the current page.

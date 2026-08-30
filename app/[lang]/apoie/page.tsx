@@ -8,28 +8,28 @@ export const metadata: Metadata = {
   title: 'APOIE. -- Fundo Publico de Sao Miguel do Gostoso',
   description: 'Apoie o fundo publico transparente de Sao Miguel do Gostoso. Cada real arrecadado vai para o marketing da cidade.',
   alternates: {
-    canonical: 'https://vivegostoso.com.br/apoie',
+    canonical: 'https://www.vivegostoso.com.br/apoie',
     languages: {
-      'pt-BR': 'https://vivegostoso.com.br/apoie',
-      'en': 'https://vivegostoso.com.br/en/apoie',
-      'es': 'https://vivegostoso.com.br/es/apoie',
-      'x-default': 'https://vivegostoso.com.br/apoie',
+      'pt-BR': 'https://www.vivegostoso.com.br/apoie',
+      'en': 'https://www.vivegostoso.com.br/en/apoie',
+      'es': 'https://www.vivegostoso.com.br/es/apoie',
+      'x-default': 'https://www.vivegostoso.com.br/apoie',
     },
   },
   openGraph: {
     title: 'APOIE. -- Fundo Publico de Sao Miguel do Gostoso',
     description: 'Apoie o fundo publico transparente de Sao Miguel do Gostoso. Cada real arrecadado vai para o marketing da cidade.',
-    url: 'https://vivegostoso.com.br/apoie',
+    url: 'https://www.vivegostoso.com.br/apoie',
     siteName: 'Vive Gostoso',
     locale: 'pt_BR',
     type: 'website',
-    images: [{ url: 'https://vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://www.vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'APOIE. -- Fundo Publico de Sao Miguel do Gostoso',
     description: 'Apoie o fundo publico transparente de Sao Miguel do Gostoso. Cada real arrecadado vai para o marketing da cidade.',
-    images: ['https://vivegostoso.com.br/og-image.png'],
+    images: ['https://www.vivegostoso.com.br/og-image.png'],
   },
 }
 

@@ -10,17 +10,17 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Blog -- Historias de Sao Miguel do Gostoso',
     description: 'Artigos, guias e historias sobre Sao Miguel do Gostoso, RN.',
-    url: 'https://vivegostoso.com.br/blog',
+    url: 'https://www.vivegostoso.com.br/blog',
     siteName: 'Vive Gostoso',
     locale: 'pt_BR',
     type: 'website',
-    images: [{ url: 'https://vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://www.vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Blog -- Historias de Sao Miguel do Gostoso',
     description: 'Artigos, guias e historias sobre Sao Miguel do Gostoso, RN.',
-    images: ['https://vivegostoso.com.br/og-image.png'],
+    images: ['https://www.vivegostoso.com.br/og-image.png'],
   },
 }
 

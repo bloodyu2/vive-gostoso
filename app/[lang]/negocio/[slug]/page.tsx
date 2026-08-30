@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const business = await getBusinessForPage(slug)
   if (!business) return { title: 'Negocio nao encontrado' }
 
-  const baseUrl = 'https://vivegostoso.com.br'
+  const baseUrl = 'https://www.vivegostoso.com.br'
   const canonical = `${baseUrl}/${lang === 'pt' ? '' : lang + '/'}negocio/${slug}`
   const description = business.description ?? `${business.name} em Sao Miguel do Gostoso.`
   const image = business.cover_url ?? `${baseUrl}/og-image.png`
@@ -61,7 +61,7 @@ export default async function NegocioPage({ params }: Props) {
   const business = await getBusinessForPage(slug)
   if (!business) notFound()
 
-  const baseUrl = 'https://vivegostoso.com.br'
+  const baseUrl = 'https://www.vivegostoso.com.br'
   const jsonLd = localBusinessSchema({
     name: business.name,
     description: business.description ?? `${business.name} em Sao Miguel do Gostoso.`,

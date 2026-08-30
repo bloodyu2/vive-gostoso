@@ -32,7 +32,11 @@ gtag('consent', 'default', {
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', '${gtmId}', { send_page_view: false });`,
+// send_page_view ficava false e NADA no projeto enviava page_view manualmente,
+// entao o GA4 nunca recebia hit de pagina nenhuma -- por isso a cobertura de
+// tag aparecia zerada. As navegacoes seguintes (client-side) sao enviadas pelo
+// PageViewTracker, que ignora a primeira para nao duplicar esta.
+gtag('config', '${gtmId}');`,
         }}
       />
     </>

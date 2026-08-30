@@ -48,7 +48,7 @@ function sanitizeBlogContent(html: string): string {
   return sanitizeHtml(html, BLOG_SANITIZE_OPTIONS)
 }
 
-const SITE_URL = 'https://vivegostoso.com.br'
+const SITE_URL = 'https://www.vivegostoso.com.br'
 
 function useBlogPost(
   slug: string,

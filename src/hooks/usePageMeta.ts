@@ -16,9 +16,9 @@ interface PageMetaOptions {
   jsonLd?: Array<Record<string, unknown>>
 }
 
-const DEFAULT_IMAGE = 'https://vivegostoso.com.br/og-image.png'
+const DEFAULT_IMAGE = 'https://www.vivegostoso.com.br/og-image.png'
 const SITE_NAME = 'Vive Gostoso'
-const BASE_URL = 'https://vivegostoso.com.br'
+const BASE_URL = 'https://www.vivegostoso.com.br'
 const JSONLD_DATA_ATTR = 'data-vg-jsonld'
 
 function setMeta(property: string, content: string, isName = false) {

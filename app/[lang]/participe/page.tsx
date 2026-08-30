@@ -7,28 +7,28 @@ export const metadata: Metadata = {
   title: 'PARTICIPE. -- Eventos em Sao Miguel do Gostoso',
   description: 'Festivais, eventos culturais e agenda completa de Sao Miguel do Gostoso, RN.',
   alternates: {
-    canonical: 'https://vivegostoso.com.br/participe',
+    canonical: 'https://www.vivegostoso.com.br/participe',
     languages: {
-      'pt-BR': 'https://vivegostoso.com.br/participe',
-      'en': 'https://vivegostoso.com.br/en/participe',
-      'es': 'https://vivegostoso.com.br/es/participe',
-      'x-default': 'https://vivegostoso.com.br/participe',
+      'pt-BR': 'https://www.vivegostoso.com.br/participe',
+      'en': 'https://www.vivegostoso.com.br/en/participe',
+      'es': 'https://www.vivegostoso.com.br/es/participe',
+      'x-default': 'https://www.vivegostoso.com.br/participe',
     },
   },
   openGraph: {
     title: 'PARTICIPE. -- Eventos em Sao Miguel do Gostoso',
     description: 'Festivais, eventos culturais e agenda completa de Sao Miguel do Gostoso, RN.',
-    url: 'https://vivegostoso.com.br/participe',
+    url: 'https://www.vivegostoso.com.br/participe',
     siteName: 'Vive Gostoso',
     locale: 'pt_BR',
     type: 'website',
-    images: [{ url: 'https://vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://www.vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'PARTICIPE. -- Eventos em Sao Miguel do Gostoso',
     description: 'Festivais, eventos culturais e agenda completa de Sao Miguel do Gostoso, RN.',
-    images: ['https://vivegostoso.com.br/og-image.png'],
+    images: ['https://www.vivegostoso.com.br/og-image.png'],
   },
 }
 

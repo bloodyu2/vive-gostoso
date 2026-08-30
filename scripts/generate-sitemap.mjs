@@ -17,7 +17,7 @@ const ROOT = resolve(__dirname, '..')
 // ---------------------------------------------------------------------------
 // Config
 // ---------------------------------------------------------------------------
-const BASE_URL = 'https://vivegostoso.com.br'
+const BASE_URL = 'https://www.vivegostoso.com.br'
 
 const STATIC_PAGES = [
   { path: '/',          freq: 'daily',   priority: '1.0' },

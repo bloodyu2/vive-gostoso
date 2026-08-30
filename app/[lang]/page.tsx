@@ -10,28 +10,28 @@ export const metadata: Metadata = {
   title: 'Vive Gostoso: Sao Miguel do Gostoso, RN',
   description: 'A infraestrutura digital de Sao Miguel do Gostoso. Restaurantes, pousadas, passeios, eventos e mais.',
   alternates: {
-    canonical: 'https://vivegostoso.com.br',
+    canonical: 'https://www.vivegostoso.com.br',
     languages: {
-      'pt-BR': 'https://vivegostoso.com.br',
-      'en': 'https://vivegostoso.com.br/en',
-      'es': 'https://vivegostoso.com.br/es',
-      'x-default': 'https://vivegostoso.com.br',
+      'pt-BR': 'https://www.vivegostoso.com.br',
+      'en': 'https://www.vivegostoso.com.br/en',
+      'es': 'https://www.vivegostoso.com.br/es',
+      'x-default': 'https://www.vivegostoso.com.br',
     },
   },
   openGraph: {
     title: 'Vive Gostoso',
     description: 'O sistema operacional de Sao Miguel do Gostoso, RN.',
-    url: 'https://vivegostoso.com.br',
+    url: 'https://www.vivegostoso.com.br',
     siteName: 'Vive Gostoso',
     locale: 'pt_BR',
     type: 'website',
-    images: [{ url: 'https://vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://www.vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Vive Gostoso',
     description: 'O sistema operacional de Sao Miguel do Gostoso, RN.',
-    images: ['https://vivegostoso.com.br/og-image.png'],
+    images: ['https://www.vivegostoso.com.br/og-image.png'],
   },
 }
 

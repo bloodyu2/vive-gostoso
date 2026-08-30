@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const title = `${transfer.provider_name} | Transfer São Miguel do Gostoso`
   const description = transfer.description ??
     `Serviço de transfer oferecido por ${transfer.provider_name} em São Miguel do Gostoso.`
-  const url = `https://vivegostoso.com.br/transfer/${slug}`
+  const url = `https://www.vivegostoso.com.br/transfer/${slug}`
 
   return {
     title,
@@ -37,8 +37,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       canonical: url,
       languages: {
         'pt-BR': url,
-        'en': `https://vivegostoso.com.br/en/transfer/${slug}`,
-        'es': `https://vivegostoso.com.br/es/transfer/${slug}`,
+        'en': `https://www.vivegostoso.com.br/en/transfer/${slug}`,
+        'es': `https://www.vivegostoso.com.br/es/transfer/${slug}`,
         'x-default': url,
       },
     },
@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: 'website',
       images: transfer.photo_url
         ? [{ url: transfer.photo_url, width: 1200, height: 630 }]
-        : [{ url: 'https://vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
+        : [{ url: 'https://www.vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
     },
   }
 }
