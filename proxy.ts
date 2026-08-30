@@ -1,4 +1,4 @@
-// middleware.ts
+// proxy.ts (era middleware.ts -- Next 16 renomeou a convencao)
 import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 import createMiddleware from 'next-intl/middleware'
@@ -6,7 +6,7 @@ import { routing } from './i18n/routing'
 
 const intlMiddleware = createMiddleware(routing)
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Rotas de API nao passam pelo i18n nem pelo refresh de sessao do Supabase --

@@ -36,10 +36,6 @@ const CSP_DIRECTIVES = [
 ].join('; ')
 
 const config: NextConfig = {
-  eslint: {
-    // ESLint runs separately in CI; skip during production build to avoid false failures
-    ignoreDuringBuilds: true,
-  },
   images: {
     remotePatterns: [
       {
