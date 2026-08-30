@@ -32,8 +32,10 @@ export interface Business {
   is_verified: boolean
   is_featured: boolean
   plan: 'free' | 'associado' | 'destaque'
-  stripe_customer_id: string | null
-  stripe_subscription_id: string | null
+  // Nunca vem nas leituras publicas -- ver PUBLIC_BUSINESS_COLUMNS
+  // (src/lib/supabase/business-columns.ts) e o achado F3 da auditoria de 2026-08.
+  stripe_customer_id?: string | null
+  stripe_subscription_id?: string | null
   active: boolean
   display_order: number
   created_at: string

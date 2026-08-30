@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Business, GostosoEvent, FundEntry, ServiceListing, JobListing, BlogPost } from '@/types/database'
+import { PUBLIC_BUSINESS_COLUMNS, PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY } from '@/lib/supabase/business-columns'
 
 // ─── Businesses ──────────────────────────────────────────────────────────────
 
@@ -22,15 +23,7 @@ export async function getBusinessesByVerb(verb: string): Promise<Business[]> {
 
   const { data, error } = await supabase
     .from('gostoso_businesses')
-    .select(`
-      id, name, slug, description, cover_url, photos,
-      is_featured, is_verified, plan, price_range,
-      phone, whatsapp, instagram, opening_hours,
-      lat, lng, address, display_order, active, is_published,
-      category_id, profile_id, website, menu_url, amenities,
-      services, created_at, updated_at,
-      stripe_customer_id, stripe_subscription_id
-    `)
+    .select(PUBLIC_BUSINESS_COLUMNS)
     .eq('active', true)
     .eq('is_published', true)
     .in('category_id', catIds)
@@ -38,7 +31,7 @@ export async function getBusinessesByVerb(verb: string): Promise<Business[]> {
     .order('display_order', { ascending: true })
 
   if (error) { console.error('[getBusinessesByVerb] businesses', error.message); return [] }
-  return (data ?? []) as Business[]
+  return (data ?? []) as unknown as Business[]
 }
 
 export async function getBusinessSlugs(limit = 50): Promise<string[]> {
@@ -58,7 +51,7 @@ export async function getBusiness(slug: string): Promise<Business | null> {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('gostoso_businesses')
-    .select('*, category:gostoso_categories(*)')
+    .select(PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY)
     .eq('slug', slug)
     .eq('active', true)
     .maybeSingle()

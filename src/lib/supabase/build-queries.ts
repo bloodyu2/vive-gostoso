@@ -3,6 +3,7 @@
 // Does NOT use cookies() — safe to call during next build AND at ISR render time.
 import { createClient } from '@supabase/supabase-js'
 import type { Business, GostosoEvent, BlogPost } from '@/types/database'
+import { PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY } from './business-columns'
 
 function getBuildClient() {
   return createClient(
@@ -68,7 +69,7 @@ export async function getBusinessForPage(slug: string): Promise<Business | null>
     const client = getBuildClient()
     const { data, error } = await client
       .from('gostoso_businesses')
-      .select('*, category:gostoso_categories(*)')
+      .select(PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY)
       .eq('slug', slug)
       .eq('active', true)
       .maybeSingle()

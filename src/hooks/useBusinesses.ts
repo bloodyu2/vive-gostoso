@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import type { UseQueryOptions } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { Business, Category } from '@/types/database'
+import { PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY } from '@/lib/supabase/business-columns'
 
 export function useBusinesses(
   verb?: 'come' | 'fique' | 'passeie' | 'resolva',
@@ -21,25 +22,25 @@ export function useBusinesses(
 
         const { data, error } = await supabase
           .from('gostoso_businesses')
-          .select('*, category:gostoso_categories(*)')
+          .select(PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY)
           .eq('active', true)
           .eq('is_published', true)
           .in('category_id', catIds)
           .order('is_featured', { ascending: false })
           .order('display_order')
         if (error) throw error
-        return (data ?? []) as Business[]
+        return (data ?? []) as unknown as Business[]
       }
 
       const { data, error } = await supabase
         .from('gostoso_businesses')
-        .select('*, category:gostoso_categories(*)')
+        .select(PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY)
         .eq('active', true)
         .eq('is_published', true)
         .order('is_featured', { ascending: false })
         .order('display_order')
       if (error) throw error
-      return (data ?? []) as Business[]
+      return (data ?? []) as unknown as Business[]
     },
     ...options,
   })
@@ -55,13 +56,13 @@ export function useBusiness(
     queryFn: async (): Promise<Business | null> => {
       const { data, error } = await supabase
         .from('gostoso_businesses')
-        .select('*, category:gostoso_categories(*)')
+        .select(PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY)
         .eq('slug', slug)
         .eq('active', true)
         .eq('is_published', true)
         .single()
       if (error) return null
-      return data as Business
+      return data as unknown as Business
     },
     ...options,
   })
