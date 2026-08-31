@@ -30,9 +30,15 @@ function CardContent({ event: e, t }: { event: GostosoEvent; t: (key: string) =>
         {e.location && <p className="text-xs text-[#737373] mt-1">{e.location}</p>}
         {e.description && <p className="text-sm text-[#3D3D3D] mt-2 line-clamp-2">{e.description}</p>}
         {e.source_url && (
-          <span className="mt-3 inline-block text-teal text-sm font-semibold">
-            {t('saiba_mais')} &rarr;
-          </span>
+          <a
+            href={e.source_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={ev => ev.stopPropagation()}
+            className="mt-3 inline-block text-xs text-[#737373] underline underline-offset-2 hover:text-teal transition-colors"
+          >
+            {t('fonte')} &nearr;
+          </a>
         )}
       </div>
     </>
@@ -44,14 +50,11 @@ export function EventCard({ event: e }: { event: GostosoEvent }) {
   const lp = useLocalePath()
   const baseClass = "bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 block"
 
-  if (e.source_url) {
-    return (
-      <a href={e.source_url} target="_blank" rel="noopener noreferrer" className={baseClass}>
-        <CardContent event={e} t={t} />
-      </a>
-    )
-  }
-
+  // O card inteiro aponta sempre para a pagina interna do evento. Antes, quando
+  // havia source_url, o card era um <a> para a fonte -- e o link "Fonte" nao
+  // caberia ali dentro, porque <a> dentro de <a> e HTML invalido (o navegador
+  // fecha o primeiro e o clique vira imprevisivel). Com isto a fonte fica
+  // visivel como link proprio e /evento/[id] volta a ser alcancavel.
   return (
     <Link href={lp(`/evento/${e.id}`)} className={baseClass}>
       <CardContent event={e} t={t} />

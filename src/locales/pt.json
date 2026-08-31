@@ -90,8 +90,9 @@
   "participe": {
     "titulo": "Agenda de eventos",
     "desc": "Shows, festivais, feiras e o que mais acontece em São Miguel do Gostoso.",
-    "sem_eventos": "Nenhum evento próximo",
-    "sem_eventos_sub": "Fique atento — a agenda é atualizada com frequência.",
+    "sem_eventos": "Nenhum evento na agenda no momento",
+    "sem_eventos_sub": "O Vive Gostoso só publica evento com data e fonte confirmadas. Por isso a lista às vezes fica vazia — é o comportamento correto, não um erro.",
+    "sem_eventos_cta": "Cadastrar um evento",
     "meta_title": "Eventos em Gostoso",
     "meta_desc": "Festivais, eventos culturais e agenda completa de São Miguel do Gostoso.",
     "submeter_evento": "Submeter evento"
@@ -1250,7 +1251,8 @@
     "type_esporte": "Esporte",
     "type_cultural": "Cultural",
     "type_gastronomia": "Gastronomia",
-    "saiba_mais": "Saiba mais"
+    "saiba_mais": "Saiba mais",
+    "fonte": "Fonte"
   },
   "hoje": {
     "section_label": "Agora em Gostoso",

@@ -49,6 +49,23 @@ export default function Participe() {
             </div>
           ))}
         </div>
+      ) : events.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-[#E8E4DF] px-6 py-12 text-center">
+          <h2 className="font-display font-semibold text-xl text-[#1A1A1A]">
+            {t('participe.sem_eventos')}
+          </h2>
+          <p className="mt-3 text-sm text-[#3D3D3D] max-w-md mx-auto leading-relaxed">
+            {t('participe.sem_eventos_sub')}
+          </p>
+          <Button
+            variant="secondary"
+            onClick={() => setShowForm(true)}
+            className="mt-6 inline-flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            {t('participe.sem_eventos_cta')}
+          </Button>
+        </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map(e => <EventCard key={e.id} event={e} />)}

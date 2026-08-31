@@ -90,8 +90,9 @@
   "participe": {
     "titulo": "Events calendar",
     "desc": "Shows, festivals, fairs and everything happening in São Miguel do Gostoso.",
-    "sem_eventos": "No upcoming events",
-    "sem_eventos_sub": "Keep an eye out — the calendar is updated regularly.",
+    "sem_eventos": "No events on the calendar right now",
+    "sem_eventos_sub": "Vive Gostoso only publishes events with a confirmed date and source. That is why the list is sometimes empty — this is the intended behaviour, not an error.",
+    "sem_eventos_cta": "Submit an event",
     "meta_title": "Events in Gostoso",
     "meta_desc": "Festivals, cultural events and full calendar of São Miguel do Gostoso.",
     "submeter_evento": "Submit event"
@@ -1168,7 +1169,8 @@
     "type_esporte": "Sports",
     "type_cultural": "Cultural",
     "type_gastronomia": "Gastronomy",
-    "saiba_mais": "Learn more"
+    "saiba_mais": "Learn more",
+    "fonte": "Source"
   },
   "hoje": {
     "section_label": "Now in Gostoso",
