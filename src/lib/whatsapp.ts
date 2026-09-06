@@ -22,6 +22,7 @@ export type WhatsAppContext =
   | { source: 'service_company_card'; name: string }
   | { source: 'business_page'; name: string }
   | { source: 'business_card'; name: string }
+  | { source: 'official_cta' }
 
 function buildContextMessage(
   ctx: WhatsAppContext,
@@ -41,6 +42,8 @@ function buildContextMessage(
         return t('whatsapp:business_page', { name: ctx.name })
       case 'business_card':
         return t('whatsapp:business_card', { name: ctx.name })
+      case 'official_cta':
+        return t('whatsapp:default_message')
     }
   }
   switch (ctx.source) {
@@ -56,6 +59,8 @@ function buildContextMessage(
       return `Olá ${ctx.name}! Vi vocês no Vive Gostoso e gostaria de conversar.`
     case 'business_card':
       return `Olá ${ctx.name}! Vi o ${ctx.name} no Vive Gostoso e tenho interesse.`
+    case 'official_cta':
+      return DEFAULT_MESSAGE
   }
 }
 
