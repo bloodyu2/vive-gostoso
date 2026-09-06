@@ -6,6 +6,7 @@ import { ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { BusinessCard } from '@/components/business/business-card'
+import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { Hoje } from '@/components/home/hoje'
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useStats } from '@/hooks/useStats'
@@ -178,7 +179,7 @@ export default function Home(_props: HomeProps) {
               >
                 <div className="aspect-square bg-gradient-to-br from-teal to-teal-dark overflow-hidden">
                   {b.cover_url
-                    ? <img src={b.cover_url} alt={b.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                    ? <SafeCoverImage src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
                     : <div className="w-full h-full flex items-center justify-center text-white/30 text-3xl font-bold">{b.name[0]}</div>
                   }
                 </div>

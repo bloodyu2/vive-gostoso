@@ -16,6 +16,7 @@ import { translateSupabaseError, assertSession } from '@/lib/supabase-errors'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { showToast } from '@/components/ui/toast'
+import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 
 export default function Perfil() {
   return <AuthGuard><PerfilInner /></AuthGuard>
@@ -389,7 +390,7 @@ function PhotoSection({
         <label className="block text-sm font-medium mb-2">{t('perfil:photos_cover_label')}</label>
         {coverUrl ? (
           <div className="relative w-full h-40 rounded-2xl overflow-hidden mb-2 border border-[#E8E4DF]">
-            <img src={coverUrl} alt={t('perfil:photos_cover_label')} className="w-full h-full object-cover" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
+            <SafeCoverImage src={coverUrl} alt={t('perfil:photos_cover_label')} className="w-full h-full object-cover" />
           </div>
         ) : (
           <div className="w-full h-40 rounded-2xl border-2 border-dashed border-[#E8E4DF] flex flex-col items-center justify-center gap-2 text-sm text-[#737373] mb-2 bg-[#FAFAF9]">
@@ -428,11 +429,10 @@ function PhotoSection({
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mb-3">
             {currentPhotos.map(url => (
               <div key={url} className="relative aspect-square">
-                <img
+                <SafeCoverImage
                   src={url}
                   alt=""
                   className="w-full h-full object-cover rounded-xl"
-                  onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
                 />
                 <button
                   type="button"

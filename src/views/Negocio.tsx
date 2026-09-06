@@ -17,7 +17,7 @@ import { StarRating } from '@/components/reviews/star-rating'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import type { Business } from '@/types/database'
-import { SafeCoverImage } from '@/components/business/safe-cover-image'
+import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 
 const DAY_ORDER = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']
 
