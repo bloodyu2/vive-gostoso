@@ -4,30 +4,39 @@ import { buildPageMetadata } from './page-metadata'
 const ROTAS = ['home','come','fique','passeie','explore','participe','conheca','contrate','apoie','blog','sobre','resolva','transparencia'] as const
 const LOCALES = ['pt','en','es'] as const
 
+/** O helper devolve `title` como `{ absolute }` para escapar do template do
+ *  layout raiz. Esta funcao le o texto em si, nos testes que so olham o texto. */
+function tituloDe(m: { title?: unknown }): string {
+  const t = m.title
+  return typeof t === 'object' && t !== null && 'absolute' in t
+    ? String((t as { absolute: unknown }).absolute)
+    : String(t)
+}
+
 describe('buildPageMetadata', () => {
   it('usa o titulo do locale pedido', () => {
     const pt = buildPageMetadata('come', 'pt')
     const en = buildPageMetadata('come', 'en')
-    expect(pt.title).toContain('Restaurantes em São Miguel do Gostoso')
-    expect(en.title).not.toBe(pt.title)
-    expect(String(en.title).length).toBeGreaterThan(10)
+    expect(tituloDe(pt)).toContain('Restaurantes em São Miguel do Gostoso')
+    expect(tituloDe(en)).not.toBe(tituloDe(pt))
+    expect(tituloDe(en).length).toBeGreaterThan(10)
   })
 
   it('nao deixa passar titulo sem acento nem travessao', () => {
     for (const lang of LOCALES) {
-      const t = String(buildPageMetadata('conheca', lang).title)
+      const t = tituloDe(buildPageMetadata('conheca', lang))
       expect(t).toContain('São Miguel do Gostoso')
       expect(t.length).toBeGreaterThan(20)
       expect(t).not.toContain('--')
       expect(t).not.toContain('—')
     }
-    expect(String(buildPageMetadata('conheca', 'pt').title)).toContain('Conheça')
+    expect(tituloDe(buildPageMetadata('conheca', 'pt'))).toContain('Conheça')
   })
 
   it('nao repete a marca no fim do titulo', () => {
     for (const lang of LOCALES) {
       for (const r of ROTAS) {
-        expect(String(buildPageMetadata(r, lang).title)).not.toContain('| Vive Gostoso')
+        expect(tituloDe(buildPageMetadata(r, lang))).not.toContain('| Vive Gostoso')
       }
     }
   })
@@ -57,7 +66,7 @@ describe('buildPageMetadata', () => {
     for (const r of ROTAS) {
       for (const lang of LOCALES) {
         const m = buildPageMetadata(r, lang)
-        const t = String(m.title), d = String(m.description)
+        const t = tituloDe(m), d = String(m.description)
         expect(t.length, `${r}/${lang} title`).toBeGreaterThan(20)
         expect(t.length, `${r}/${lang} title`).toBeLessThanOrEqual(60)
         expect(d.length, `${r}/${lang} desc`).toBeGreaterThanOrEqual(140)
@@ -70,8 +79,24 @@ describe('buildPageMetadata', () => {
 
   it('openGraph e twitter herdam o mesmo par title/description', () => {
     const m = buildPageMetadata('fique', 'es')
-    expect(m.openGraph?.title).toBe(m.title)
+    expect(m.openGraph?.title).toBe(tituloDe(m))
     expect(m.twitter?.description).toBe(m.description)
     expect(m.openGraph?.url).toBe(m.alternates?.canonical)
+  })
+
+  /* O teste que faltava, e que deixou passar um defeito real: asserir a saida
+     do helper nao basta, porque app/layout.tsx tem
+     title.template = '%s | Vive Gostoso'. Sem `absolute`, o Next reanexa a
+     marca e o titulo renderizado volta a estourar 60 caracteres, mesmo com o
+     helper devolvendo a string certa. */
+  it('devolve o titulo como absolute, para o template do layout nao reanexar a marca', () => {
+    for (const lang of LOCALES) {
+      for (const r of ROTAS) {
+        const t = buildPageMetadata(r, lang).title
+        expect(typeof t, `${r}/${lang}`).toBe('object')
+        expect(t).toHaveProperty('absolute')
+        expect(String((t as { absolute: string }).absolute).length).toBeGreaterThan(20)
+      }
+    }
   })
 })

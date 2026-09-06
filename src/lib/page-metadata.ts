@@ -42,7 +42,13 @@ export function buildPageMetadata(rota: RotaPublica, lang: Locale): Metadata {
   const url = urlDaRota(rota, lang)
 
   return {
-    title: textos.title,
+    /* `absolute` e nao string simples: app/layout.tsx define
+       title.template = '%s | Vive Gostoso', e sem o absolute o Next reanexa a
+       marca em todo titulo daqui. Isso desfaria a decisao de tirar a marca do
+       fim (os 13 titulos ja cabem em 60 caracteres justamente por nao te-la) e
+       jogaria seis deles de volta para acima do limite. As outras rotas do site,
+       que nao usam este helper, continuam herdando o template. */
+    title: { absolute: textos.title },
     description: textos.description,
     alternates: {
       canonical: url,
