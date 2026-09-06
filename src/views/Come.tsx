@@ -38,7 +38,7 @@ export default function Come({ initialBusinesses = [] }: ComeProps) {
     <main className="max-w-6xl mx-auto px-5 md:px-8 py-12">
       <div className="flex justify-between items-end flex-wrap gap-6 mb-10">
         <div>
-          <VerbPill verb="come" />
+          <VerbPill verb="come" srLabel={t('come.h1')} />
           <p className="mt-3 text-lg text-[#3D3D3D] max-w-xl leading-relaxed">
             {t('come.desc')}
           </p>

@@ -27,6 +27,7 @@ export function FundHero({
           {t('section_label', { month })}
         </div>
         <h1 className="font-display font-bold text-5xl sm:text-6xl md:text-8xl leading-none tracking-tight mb-4">
+          <span className="sr-only">{t('apoie.h1', { ns: 'translation' })}</span>
           {t('title')}
         </h1>
         <p className="text-base md:text-lg opacity-90 max-w-lg leading-relaxed">

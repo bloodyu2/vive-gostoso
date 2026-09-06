@@ -44,6 +44,7 @@
   },
   "home": {
     "eyebrow": "São Miguel do Gostoso · RN",
+    "hero_h1_cidade": "São Miguel do Gostoso, RN",
     "como_funciona_titulo": "¿Quieres saber cómo funciona Vive Gostoso?",
     "como_funciona_desc": "Conoce el modelo, la transparencia financiera y cómo participar.",
     "como_funciona_cta": "Saber más",
@@ -83,22 +84,27 @@
     "blog_ler": "Leer artículo"
   },
   "come": {
+    "h1": "Dónde comer en São Miguel do Gostoso",
     "desc": "Del pescado frito en la playa a la cena en la posada. Todo lo que Gostoso tiene para comer.",
     "abrir_mapa": "Abrir en el mapa"
   },
   "fique": {
+    "h1": "Dónde hospedarse en São Miguel do Gostoso",
     "desc": "Desde posadas frente al mar hasta chalets tranquilos. Dónde hospedarse en Gostoso.",
     "abrir_mapa": "Abrir en el mapa"
   },
   "passeie": {
+    "h1": "Paseos y deportes en São Miguel do Gostoso",
     "desc": "Kite, surf, buggy y mucho más. Qué hacer en São Miguel do Gostoso.",
     "abrir_mapa": "Abrir en el mapa"
   },
   "explore": {
+    "h1": "Mapa de São Miguel do Gostoso",
     "titulo": "Explorar el mapa",
     "desc": "Todos los negocios de Gostoso en el mapa. Haz clic para descubrir."
   },
   "participe": {
+    "h1": "Eventos en São Miguel do Gostoso",
     "titulo": "Agenda de eventos",
     "desc": "Shows, festivales, ferias y todo lo que pasa en São Miguel do Gostoso.",
     "sem_eventos": "Ningún evento en la agenda por ahora",
@@ -311,6 +317,7 @@
     "participar_morador_btn": "Ver Contrata"
   },
   "apoie": {
+    "h1": "Fondo público de São Miguel do Gostoso",
     "badge": "APOYA.",
     "titulo": "Fondo transparente de la ciudad",
     "desc": "El 100% de lo que recaudamos va directamente a mantener y mejorar la plataforma. Sin misterios.",

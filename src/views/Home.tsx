@@ -87,16 +87,12 @@ export default function Home(_props: HomeProps) {
         {/* Content */}
         <div className="relative max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-28">
           <div className="flex flex-col gap-6 max-w-2xl">
-            {/* Eyebrow */}
-            <div className="flex items-center gap-3">
-              <span className="inline-block w-2 h-2 rounded-full bg-teal animate-pulse" />
-              <span className="text-xs font-semibold tracking-widest uppercase text-white/60">
-                {t('home.eyebrow')}
-              </span>
-            </div>
-
             {/* Display headline */}
             <h1 className="font-display font-bold leading-none tracking-tight">
+              <span className="flex items-center gap-3 text-xs font-semibold tracking-widest uppercase text-white/60 mb-6">
+                <span className="inline-block w-2 h-2 rounded-full bg-teal animate-pulse" />
+                {t('home.hero_h1_cidade')}
+              </span>
               <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">{t('home.hero_h1_1')}</span>
               <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">{t('home.hero_h1_2')}</span>
               <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">{t('home.hero_h1_3')}</span>

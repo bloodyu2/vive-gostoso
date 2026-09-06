@@ -33,7 +33,7 @@ export default function Evento({ initialEvent, id: idProp }: EventoProps) {
   if (!event) return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-12 text-center">
       <div className="text-5xl mb-4">🗓️</div>
-      <h1 className="font-display text-2xl font-semibold mb-2">{t('evento.nao_encontrado')}</h1>
+      <h2 className="font-display text-2xl font-semibold mb-2">{t('evento.nao_encontrado')}</h2>
       <Link href={lp('/participe')} className="text-teal text-sm font-semibold">{t('evento.ver_todos')}</Link>
     </main>
   )
