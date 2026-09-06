@@ -84,16 +84,22 @@ export function Header() {
 
   const NAV_ALL = [...NAV_MAIN, ...NAV_DISCOVER]
 
+  /* O useTheme usa useSyncExternalStore com getServerSnapshot, entao `theme` ja
+     e seguro para hidratacao: na primeira renderizacao ele vale o mesmo no
+     servidor e no cliente. Ver o comentario no hook. */
+  const escuro = theme === 'dark'
+  const rotuloTema = escuro ? t('footer.modo_claro') : t('footer.modo_escuro')
+
   const botaoTema = (comRotulo: boolean) => (
     <button
       onClick={alternarTema}
       className={comRotulo
         ? 'flex items-center gap-2 w-full min-h-11 text-sm font-medium text-fg-2 hover:text-teal transition-colors motion-reduce:transition-none'
         : 'w-9 h-9 flex items-center justify-center rounded-full text-fg-3 hover:text-teal transition-colors motion-reduce:transition-none'}
-      aria-label={theme === 'dark' ? t('footer.modo_claro') : t('footer.modo_escuro')}
+      aria-label={rotuloTema}
     >
-      {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-      {comRotulo && <span>{theme === 'dark' ? t('footer.modo_claro') : t('footer.modo_escuro')}</span>}
+      {escuro ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+      {comRotulo && <span>{rotuloTema}</span>}
     </button>
   )
 
