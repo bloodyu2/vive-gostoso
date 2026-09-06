@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { buildPageMetadata, type Locale } from '@/lib/page-metadata'
 import { createClient } from '@/lib/supabase/server'
 import Home from '@/views/Home'
-import { organizationSchema, webSiteSchema } from '@/lib/seo'
+import { webSiteSchema, touristDestinationSchema } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -47,17 +47,17 @@ async function getHomeData() {
 
 export default async function HomePage() {
   const initialData = await getHomeData()
-  const jsonLdOrg = organizationSchema()
   const jsonLdWeb = webSiteSchema()
+  const jsonLdDestination = touristDestinationSchema()
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrg) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWeb) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWeb) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdDestination) }}
       />
       <Home initialData={initialData} />
     </>

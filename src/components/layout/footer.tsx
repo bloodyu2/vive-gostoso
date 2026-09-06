@@ -5,6 +5,7 @@ import { Logo } from '@/components/brand/logo'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { CookieBanner } from '@/components/cookie-banner'
+import { organizationSchema } from '@/lib/seo'
 
 export function Footer() {
   const { t } = useTranslation()
@@ -33,6 +34,10 @@ export function Footer() {
 
   return (
     <footer className="bg-[#1A1A1A] text-[#E6F5F5] px-5 md:px-8 pt-12 pb-8 mt-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }}
+      />
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:justify-between items-start gap-8">
 
         {/* Brand */}

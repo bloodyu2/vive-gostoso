@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { itemListSchema, localizedUrl, articleSchema, localBusinessSchema } from './seo'
+import { itemListSchema, localizedUrl, articleSchema, localBusinessSchema, touristDestinationSchema, organizationSchema } from './seo'
+import { OFFICIAL_WHATSAPP } from './whatsapp'
 
 const LOCALES = ['pt', 'en', 'es'] as const
 
@@ -88,5 +89,50 @@ describe('articleSchema e localBusinessSchema ecoam a url recebida', () => {
       expect(schema.url).toBe(url)
       if (lang !== 'pt') expect(String(schema.url)).toContain(`/${lang}/`)
     }
+  })
+})
+
+type TouristDestinationShape = {
+  '@type': string
+  name: string
+  geo: { latitude: number; longitude: number }
+  containedInPlace: { name: string; containedInPlace: { name: string } }
+  subjectOf: Array<{ url: string }>
+}
+
+type OrganizationWithContactPointShape = {
+  contactPoint?: { '@type': string; telephone: string }
+}
+
+describe('touristDestinationSchema', () => {
+  it('declara o tipo, a geo e o estado que contem a cidade', () => {
+    const s = touristDestinationSchema() as unknown as TouristDestinationShape
+    expect(s['@type']).toBe('TouristDestination')
+    expect(s.name).toBe('São Miguel do Gostoso')
+    expect(s.geo.latitude).toBeCloseTo(-5.1189, 3)
+    expect(s.geo.longitude).toBeCloseTo(-35.3583, 3)
+    expect(s.containedInPlace.name).toBe('Rio Grande do Norte')
+    expect(s.containedInPlace.containedInPlace.name).toBe('Brasil')
+  })
+
+  it('aponta para as paginas dos modulos, todas absolutas', () => {
+    const s = touristDestinationSchema() as unknown as TouristDestinationShape
+    expect(Array.isArray(s.subjectOf)).toBe(true)
+    expect(s.subjectOf.length).toBeGreaterThanOrEqual(5)
+    const urls = s.subjectOf.map((x) => x.url)
+    for (const p of ['/come', '/fique', '/passeie', '/explore', '/participe']) {
+      expect(urls).toContain(`https://www.vivegostoso.com.br${p}`)
+    }
+    for (const u of urls) expect(u).toMatch(/^https:\/\//)
+  })
+})
+
+describe('organizationSchema contactPoint', () => {
+  it('inclui o WhatsApp oficial como contactPoint, batendo com OFFICIAL_WHATSAPP', () => {
+    const s = organizationSchema() as unknown as OrganizationWithContactPointShape
+    expect(s.contactPoint).toBeDefined()
+    expect(s.contactPoint?.['@type']).toBe('ContactPoint')
+    expect(s.contactPoint?.telephone).toBe(`+${OFFICIAL_WHATSAPP}`)
+    expect(s.contactPoint?.telephone).toBe('+5584936180839')
   })
 })
