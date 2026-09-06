@@ -2,13 +2,15 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Compass, User, Search } from 'lucide-react'
+import { Menu, X, Compass, User, Search, Sun, Moon } from 'lucide-react'
 import { Logo } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
 import { GlobalSearch } from '@/components/search/global-search'
 import { LanguageSelector } from '@/components/i18n/language-selector'
+import { WhatsAppButton } from '@/components/layout/whatsapp-button'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/useAuth'
+import { useTheme } from '@/hooks/useTheme'
 import { NotificationBell } from '@/components/layout/notification-bell'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
@@ -22,6 +24,7 @@ export function Header() {
   const [searchOpen, setSearchOpen] = useState(false)
   const discoverRef = useRef<HTMLDivElement>(null)
   const { user } = useAuth()
+  const { theme, toggle: alternarTema } = useTheme()
 
   // Cmd/Ctrl+K opens search
   useEffect(() => {
@@ -80,6 +83,19 @@ export function Header() {
   ]
 
   const NAV_ALL = [...NAV_MAIN, ...NAV_DISCOVER]
+
+  const botaoTema = (comRotulo: boolean) => (
+    <button
+      onClick={alternarTema}
+      className={comRotulo
+        ? 'flex items-center gap-2 w-full min-h-11 text-sm font-medium text-fg-2 hover:text-teal transition-colors motion-reduce:transition-none'
+        : 'w-9 h-9 flex items-center justify-center rounded-full text-fg-3 hover:text-teal transition-colors motion-reduce:transition-none'}
+      aria-label={theme === 'dark' ? t('footer.modo_claro') : t('footer.modo_escuro')}
+    >
+      {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+      {comRotulo && <span>{theme === 'dark' ? t('footer.modo_claro') : t('footer.modo_escuro')}</span>}
+    </button>
+  )
 
   return (
     <>
@@ -162,6 +178,8 @@ export function Header() {
               <span className="hidden lg:inline">{t('nav.buscar')}</span>
               <kbd className="hidden lg:inline bg-[#F5F2EE] dark:bg-[#2D2D2D] px-1.5 py-0.5 rounded font-mono text-[10px] text-fg-2">⌘K</kbd>
             </button>
+            <WhatsAppButton variante="header" />
+            {botaoTema(false)}
             {/* Language selector */}
             <LanguageSelector />
             {user && <NotificationBell />}
@@ -188,13 +206,16 @@ export function Header() {
 
         {/* Mobile */}
         <div className="flex md:hidden items-center justify-between px-5 py-3">
-          <button
-            onClick={() => setSearchOpen(true)}
-            className="w-11 h-11 flex items-center justify-center rounded-xl text-fg-2 hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors"
-            aria-label={t('nav.buscar')}
-          >
-            <Search className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="w-11 h-11 flex items-center justify-center rounded-xl text-fg-2 hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors"
+              aria-label={t('nav.buscar')}
+            >
+              <Search className="w-5 h-5" />
+            </button>
+            <WhatsAppButton variante="header" />
+          </div>
           <Link href={lp('/')} onClick={() => setDrawerOpen(false)}>
             <Logo height={36} />
           </Link>
@@ -232,6 +253,9 @@ export function Header() {
             {/* Language selector — inline style in drawer */}
             <div className="px-5 border-t border-border-1">
               <LanguageSelector variant="inline" />
+              <div className="py-3 border-t border-border-1">
+                {botaoTema(true)}
+              </div>
             </div>
             <div className="px-5 pb-5 pt-3 space-y-2">
               {user && <NotificationBell />}
