@@ -3,6 +3,7 @@ import { Providers } from '@/components/providers'
 import { GTMScript } from '@/components/gtm-script'
 import { PageViewTracker } from '@/components/page-view-tracker'
 import { ToastContainer } from '@/components/ui/toast'
+import { SCRIPT_ANTI_FOUC } from '@/lib/tema'
 import '@/styles/globals.css'
 
 export const viewport: Viewport = {
@@ -40,6 +41,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt" suppressHydrationWarning>
       <head>
+        {/* Antes de qualquer outra coisa no <head>: aplica a classe do tema
+            escuro antes do primeiro paint, para quem usa escuro nao ver um
+            flash claro. Le a mesma chave e a mesma regra do useTheme, de
+            src/lib/tema.ts, com teste que compara os dois. O <html> acima tem
+            suppressHydrationWarning porque este script muta a classe dele de
+            proposito antes da hidratacao. */}
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_ANTI_FOUC }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link
