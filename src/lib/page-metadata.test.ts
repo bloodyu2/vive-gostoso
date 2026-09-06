@@ -41,6 +41,33 @@ describe('buildPageMetadata', () => {
     }
   })
 
+  /* O Search Console reportou ~428 URLs fora do indice com motivo de canonical:
+     em producao toda pagina /en e /es declarava a versao pt como canonica, e o
+     Google segue o canonical quando ele contradiz o hreflang. Cada locale tem
+     que ser canonico de si mesmo. */
+  it('cada locale e canonico de si mesmo, nunca da versao em portugues', () => {
+    for (const r of ROTAS) {
+      const en = String(buildPageMetadata(r, 'en').alternates?.canonical)
+      const es = String(buildPageMetadata(r, 'es').alternates?.canonical)
+      const pt = String(buildPageMetadata(r, 'pt').alternates?.canonical)
+      expect(en, `${r}/en`).toContain('/en')
+      expect(es, `${r}/es`).toContain('/es')
+      expect(en, `${r}/en`).not.toBe(pt)
+      expect(es, `${r}/es`).not.toBe(pt)
+      expect(pt, `${r}/pt`).not.toContain('/en')
+      expect(pt, `${r}/pt`).not.toContain('/es')
+    }
+  })
+
+  it('og:url acompanha o canonical do locale, nao o do portugues', () => {
+    for (const lang of LOCALES) {
+      for (const r of ROTAS) {
+        const m = buildPageMetadata(r, lang)
+        expect(m.openGraph?.url, `${r}/${lang}`).toBe(m.alternates?.canonical)
+      }
+    }
+  })
+
   it('monta canonical sem prefixo no pt e com prefixo nos outros', () => {
     expect(buildPageMetadata('come', 'pt').alternates?.canonical)
       .toBe('https://www.vivegostoso.com.br/come')
