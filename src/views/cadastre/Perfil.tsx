@@ -157,7 +157,7 @@ function BusinessSwitcher({ currentBizId, currentName }: { currentBizId: string 
                 className={`flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-[#F5F2EE] transition-colors ${b.id === currentBizId ? 'font-semibold text-teal' : 'text-[#1A1A1A]'}`}
               >
                 {b.cover_url && (
-                  <img src={b.cover_url} alt="" className="w-6 h-6 rounded-full object-cover flex-shrink-0" />
+                  <SafeCoverImage src={b.cover_url} alt="" className="w-6 h-6 rounded-full object-cover flex-shrink-0" />
                 )}
                 <span className="truncate">{b.name}</span>
               </Link>

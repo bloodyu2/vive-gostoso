@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import type { BlogPost } from '@/types/database'
+import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 
 interface RelatedPostsProps {
   /** Slug do post atual — para excluir da listagem */
@@ -74,11 +75,10 @@ export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPosts
             className="group rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] bg-white dark:bg-[#222] hover:shadow-lg transition-shadow"
           >
             {post.cover_url ? (
-              <div className="aspect-[16/10] overflow-hidden">
-                <img
+              <div className="aspect-[16/10] overflow-hidden bg-gradient-to-br from-teal to-teal-dark">
+                <SafeCoverImage
                   src={post.cover_url}
                   alt={post.title}
-                  loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>

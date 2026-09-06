@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
 import { ErrorState } from '@/components/ui/error-state'
+import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 
 function useBlogPosts(options?: Pick<UseQueryOptions<BlogPost[]>, 'initialData'>) {
   return useQuery({
@@ -70,8 +71,8 @@ export default function Blog({ initialPosts = [] }: BlogProps) {
               className="group rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] bg-white dark:bg-[#222] hover:shadow-lg transition-shadow"
             >
               {post.cover_url ? (
-                <div className="aspect-[4/3] overflow-hidden">
-                  <img
+                <div className="aspect-[4/3] overflow-hidden bg-gradient-to-br from-teal to-teal-dark">
+                  <SafeCoverImage
                     src={post.cover_url}
                     alt={post.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"

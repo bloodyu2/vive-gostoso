@@ -10,6 +10,7 @@ import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { RelatedPosts, TableOfContents } from '@/components/blog'
+import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 
 // Allow-list tuned to what gostoso_blog_posts.content actually contains:
 // comparison tables (table.comparison-table), tip/warn/info callouts
@@ -152,14 +153,13 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
       </div>
 
       {post.cover_url && (
-        <figure className="mt-8 rounded-2xl overflow-hidden aspect-[16/9]">
-          <img
+        <figure className="mt-8 rounded-2xl overflow-hidden aspect-[16/9] bg-gradient-to-br from-teal to-teal-dark">
+          <SafeCoverImage
             src={post.cover_url}
             alt={post.title}
             width={1200}
             height={675}
             loading="eager"
-            decoding="async"
             className="w-full h-full object-cover"
           />
         </figure>

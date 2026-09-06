@@ -6,6 +6,13 @@ interface Props {
   src: string
   alt: string
   className?: string
+  /** Dimensões intrínsecas, para o navegador reservar o espaço e não haver
+   *  salto de layout. Usadas na capa do artigo, que é o LCP daquela página. */
+  width?: number
+  height?: number
+  /** `eager` na imagem que já aparece na primeira tela: adiar o carregamento
+   *  dela atrasa o LCP em vez de melhorar. Padrão `lazy` para o resto. */
+  loading?: 'lazy' | 'eager'
 }
 
 /**
@@ -34,7 +41,14 @@ interface Props {
  * A conferência mora num callback de ref, e não num `useEffect`, porque o
  * projeto tem `react-hooks/set-state-in-effect` ligado.
  */
-export function SafeCoverImage({ src, alt, className }: Props) {
+export function SafeCoverImage({
+  src,
+  alt,
+  className,
+  width,
+  height,
+  loading = 'lazy',
+}: Props) {
   const [falhou, setFalhou] = useState(false)
 
   const conferirNaMontagem = useCallback((img: HTMLImageElement | null) => {
@@ -48,7 +62,9 @@ export function SafeCoverImage({ src, alt, className }: Props) {
       ref={conferirNaMontagem}
       src={src}
       alt={alt}
-      loading="lazy"
+      width={width}
+      height={height}
+      loading={loading}
       decoding="async"
       className={className}
       onError={() => setFalhou(true)}
