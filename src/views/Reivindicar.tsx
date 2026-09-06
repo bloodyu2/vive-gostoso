@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { Search, Store, CheckCircle, ArrowRight, ExternalLink, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { supabase } from '@/lib/supabase'
 
 interface BusinessResult {
@@ -19,10 +18,6 @@ interface BusinessResult {
 export default function Reivindicar() {
   const { t } = useTranslation()
   const localePath = useLocalePath()
-  usePageMeta({
-    title: t('reivindicar:hero_titulo', 'Reivindique seu negócio — Vive Gostoso'),
-    description: t('reivindicar:hero_desc', 'Seu negócio pode já estar no Vive Gostoso. Encontre e reivindique gratuitamente em poucos minutos.'),
-  })
 
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<BusinessResult[]>([])

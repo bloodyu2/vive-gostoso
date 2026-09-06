@@ -6,15 +6,10 @@ import { VerbPill } from '@/components/brand/verb-pill'
 import { EventCard } from '@/components/events/event-card'
 import { EventSubmitForm } from '@/components/events/event-submit-form'
 import { useEvents } from '@/hooks/useEvents'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { Button } from '@/components/ui/button'
 
 export default function Participe() {
   const { t } = useTranslation()
-  usePageMeta({
-    title: t('participe.meta_title'),
-    description: t('participe.meta_desc'),
-  })
   const { data: events = [], isLoading } = useEvents()
   const [showForm, setShowForm] = useState(false)
 

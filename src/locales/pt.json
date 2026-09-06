@@ -84,21 +84,15 @@
   },
   "come": {
     "desc": "Do peixe frito na praia ao jantar na pousada. Tudo que Gostoso tem pra comer.",
-    "abrir_mapa": "Abrir no mapa",
-    "meta_title": "Restaurantes e Gastronomia",
-    "meta_desc": "Os melhores restaurantes de São Miguel do Gostoso. Frutos do mar, comida regional e muito sol."
+    "abrir_mapa": "Abrir no mapa"
   },
   "fique": {
     "desc": "Da pousada de frente pra praia ao chalé no sossego. Onde ficar em Gostoso.",
-    "abrir_mapa": "Abrir no mapa",
-    "meta_title": "Pousadas e Hospedagem",
-    "meta_desc": "As melhores pousadas de São Miguel do Gostoso. Encontre onde ficar pertinho do mar."
+    "abrir_mapa": "Abrir no mapa"
   },
   "passeie": {
     "desc": "Kite, surf, buggy e muito mais. O que fazer em São Miguel do Gostoso.",
-    "abrir_mapa": "Abrir no mapa",
-    "meta_title": "Passeios e Esportes",
-    "meta_desc": "Kitesurf, windsurf, buggy, tours e esportes náuticos em São Miguel do Gostoso."
+    "abrir_mapa": "Abrir no mapa"
   },
   "explore": {
     "titulo": "Explore o mapa",
@@ -110,8 +104,6 @@
     "sem_eventos": "Nenhum evento na agenda no momento",
     "sem_eventos_sub": "O Vive Gostoso só publica evento com data e fonte confirmadas. Por isso a lista às vezes fica vazia — é o comportamento correto, não um erro.",
     "sem_eventos_cta": "Cadastrar um evento",
-    "meta_title": "Eventos em Gostoso",
-    "meta_desc": "Festivais, eventos culturais e agenda completa de São Miguel do Gostoso.",
     "submeter_evento": "Submeter evento"
   },
   "blog": {
@@ -120,8 +112,6 @@
     "sem_artigos_sub": "Volte em breve.",
     "nao_encontrado": "Artigo não encontrado.",
     "voltar_blog": "Voltar ao blog",
-    "meta_title": "Blog — São Miguel do Gostoso",
-    "meta_desc": "Artigos, dicas e novidades sobre São Miguel do Gostoso. Gastronomia, surf, kite, eventos e cultura local.",
     "blog_h1": "Blog",
     "breadcrumb_inicio": "Início",
     "breadcrumb_blog": "Blog"
@@ -334,8 +324,6 @@
     "custos_desc": "O que custa manter o Vive Gostoso funcionando todo mês.",
     "status_ativo": "Ativo",
     "status_planejado": "Planejado",
-    "meta_title": "Apoie Gostoso",
-    "meta_desc": "Fundo público transparente para promover São Miguel do Gostoso. Veja como o dinheiro é usado.",
     "erro_valor_minimo": "Valor mínimo de R$5,00.",
     "erro_generico": "Erro ao processar. Tente novamente.",
     "valor_placeholder": "Quanto você quer apoiar?",
@@ -599,8 +587,6 @@
     "epoca_reveillon_desc": "um dos mais famosos do Brasil, cerca de 2.500 pessoas por noite, 5 a 6 dias.",
     "reveillon_titulo": "O Réveillon do Gostoso",
     "reveillon_desc": "Todo ano, entre 28 de dezembro e 2 de janeiro, Gostoso recebe turistas de todo o Brasil. Música ao vivo na beira da praia, fogos sobre o mar, gastronomia local em plena forma. Reserve pousada com antecedência: lota desde outubro.",
-    "meta_title": "Conheça Gostoso",
-    "meta_desc": "A história, as praias, como chegar e a melhor época para visitar São Miguel do Gostoso.",
     "praias_xepa_nome": "Praia da Xepa",
     "praias_xepa_desc": "O coracao de Gostoso. E ali que a cidade se encontra todo fim de tarde para o por do sol. Barraquinhas de drinks, musica ao vivo, gente de todo lugar do Brasil e do mundo. O point obrigatorio de toda visita.",
     "historia_titulo": "Historia",

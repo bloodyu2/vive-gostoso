@@ -1,18 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 
 export default function Conheca() {
   const { t } = useTranslation()
   const localePath = useLocalePath()
-
-  usePageMeta({
-    title: t('conheca.meta_title'),
-    description: t('conheca.meta_desc'),
-  })
 
   return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-16">

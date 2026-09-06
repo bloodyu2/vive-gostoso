@@ -5,7 +5,6 @@ import type { UseQueryOptions } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { ErrorState } from '@/components/ui/error-state'
 
 function useBlogPosts(options?: Pick<UseQueryOptions<BlogPost[]>, 'initialData'>) {
@@ -30,10 +29,6 @@ type BlogProps = {
 
 export default function Blog({ initialPosts = [] }: BlogProps) {
   const { t, i18n } = useTranslation()
-  usePageMeta({
-    title: t('blog.meta_title'),
-    description: t('blog.meta_desc'),
-  })
   const { data: posts = [], isLoading, isError, refetch } = useBlogPosts({ initialData: initialPosts })
 
   return (

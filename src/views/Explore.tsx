@@ -2,7 +2,6 @@
 import { useTranslation } from 'react-i18next'
 import dynamic from 'next/dynamic'
 import { useBusinesses } from '@/hooks/useBusinesses'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { ErrorState } from '@/components/ui/error-state'
 import type { Business } from '@/types/database'
 
@@ -30,11 +29,6 @@ type ExploreProps = {
 }
 
 export default function Explore({ initialBusinesses = [] }: ExploreProps) {
-  const { t } = useTranslation()
-  usePageMeta({
-    title: t('explore.titulo'),
-    description: t('explore.desc'),
-  })
   const { data: businesses = initialBusinesses, isError, refetch } = useBusinesses(undefined, { initialData: initialBusinesses })
   return (
     <div className="h-[calc(100dvh-69px)] md:h-[calc(100dvh-77px)]">

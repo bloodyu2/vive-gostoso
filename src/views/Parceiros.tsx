@@ -7,7 +7,6 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useStats } from '@/hooks/useStats'
 import { buildWhatsAppLink, OFFICIAL_WHATSAPP } from '@/lib/whatsapp'
 
@@ -102,11 +101,6 @@ export default function Parceiros() {
       ctaStyle: 'bg-ocre text-white hover:bg-ocre/90',
     },
   ];
-
-  usePageMeta({
-    title: t('parceiros:hero_titulo', 'Cadastre seu negócio no Vive Gostoso'),
-    description: t('parceiros:hero_desc', 'Apareça no maior diretório digital de São Miguel do Gostoso. Cadastro gratuito para negócios locais.'),
-  })
 
   return (
     <div className="min-h-screen bg-[#FAFAF9]">

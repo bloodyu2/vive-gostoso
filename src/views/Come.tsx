@@ -7,7 +7,6 @@ import { BusinessGrid, type ViewMode } from '@/components/business/business-grid
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useCategories } from '@/hooks/useCategories'
 import { isBusinessOpen } from '@/lib/utils'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { ErrorState } from '@/components/ui/error-state'
@@ -20,10 +19,6 @@ type ComeProps = {
 export default function Come({ initialBusinesses = [] }: ComeProps) {
   const { t } = useTranslation()
   const lp = useLocalePath()
-  usePageMeta({
-    title: t('come.meta_title'),
-    description: t('come.meta_desc'),
-  })
   const [activeCat, setActiveCat] = useState<string | null>(null)
   const [view, setView] = useState<ViewMode>('grid')
   const [openOnly, setOpenOnly] = useState(false)

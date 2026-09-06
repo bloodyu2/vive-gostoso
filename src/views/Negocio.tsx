@@ -12,7 +12,6 @@ import { ClaimCta } from '@/components/business/claim-cta'
 import { Lightbox } from '@/components/ui/lightbox'
 import { ReviewList } from '@/components/reviews/review-list'
 import { ReviewForm } from '@/components/reviews/review-form'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useBusinessRatings } from '@/hooks/useReviews'
 import { StarRating } from '@/components/reviews/star-rating'
 import { useTranslation } from 'react-i18next'
@@ -49,16 +48,6 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
   const bizRating = b?.id ? ratingsMap?.get(b.id) : undefined
   const avgRating = bizRating && bizRating.count > 0 ? bizRating.avg : null
   const reviewCount = bizRating?.count ?? 0
-
-  usePageMeta(b
-    ? {
-        title: b.name,
-        description: b.description ?? `${b.name} em São Miguel do Gostoso. Encontre no Vive Gostoso.`,
-        image: b.cover_url ?? undefined,
-        url: `https://www.vivegostoso.com.br/negocio/${b.slug}`,
-      }
-    : { title: t('common.carregando') }
-  )
 
   if (isLoading) return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-16">

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getBlogSlugsForBuild, getBlogPostForPage } from '@/lib/supabase/build-queries'
 import BlogPostPage from '@/views/BlogPost'
-import { articleSchema } from '@/lib/seo'
+import { articleSchema, breadcrumbSchema } from '@/lib/seo'
 
 export const revalidate = 86400
 
@@ -60,15 +60,36 @@ export default async function BlogPostRoute({ params }: Props) {
   if (!post) notFound()
 
   const baseUrl = 'https://www.vivegostoso.com.br'
+  const langPrefix = lang === 'pt' ? '' : lang + '/'
+  const postUrl = `${baseUrl}/${langPrefix}blog/${slug}`
+
   const jsonLd = articleSchema({
     title: post.title,
     description: post.excerpt ?? `${post.title} no blog do Vive Gostoso.`,
-    url: `${baseUrl}/${lang === 'pt' ? '' : lang + '/'}blog/${slug}`,
+    url: postUrl,
     image: post.cover_url ?? undefined,
     publishedTime: post.published_at ?? undefined,
     modifiedTime: post.created_at ?? undefined,
     tags: post.tags ?? undefined,
   })
+
+  const breadcrumbJsonLd = breadcrumbSchema([
+    { name: 'Início', url: `${baseUrl}/${langPrefix}` },
+    { name: 'Blog', url: `${baseUrl}/${langPrefix}blog` },
+    { name: post.title, url: postUrl },
+  ])
+
+  let faqJsonLd: Record<string, unknown> | null = null
+  if (post.faq_jsonld) {
+    try {
+      const parsed = JSON.parse(post.faq_jsonld)
+      if (parsed && typeof parsed === 'object') {
+        faqJsonLd = parsed as Record<string, unknown>
+      }
+    } catch {
+      // ignora JSON-LD malformado
+    }
+  }
 
   return (
     <>
@@ -76,6 +97,16 @@ export default async function BlogPostRoute({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       <BlogPostPage initialPost={post} slug={slug} />
     </>
   )

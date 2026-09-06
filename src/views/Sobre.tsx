@@ -8,16 +8,10 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
-import { usePageMeta } from '@/hooks/usePageMeta'
 
 export default function Sobre() {
   const { t } = useTranslation()
   const lp = useLocalePath()
-
-  usePageMeta({
-    title: 'Sobre o Vive Gostoso',
-    description: 'Conheça o projeto por trás do guia digital de São Miguel do Gostoso, feito pela comunidade, para a comunidade.',
-  })
 
   const STEPS = [
     { icon: Gift,       color: 'bg-teal-light text-teal',       tag: t('sobre.step_0_tag'), title: t('sobre.step_0_title'), body: t('sobre.step_0_body') },

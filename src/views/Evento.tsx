@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { CalendarDays, MapPin, ArrowLeft, ExternalLink } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useEvent } from '@/hooks/useEvents'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { Badge } from '@/components/ui/badge'
 import type { GostosoEvent } from '@/types/database'
@@ -22,11 +21,6 @@ export default function Evento({ initialEvent, id: idProp }: EventoProps) {
   const { data: event, isLoading } = useEvent(id ?? '', initialEvent !== undefined ? { initialData: initialEvent } : undefined)
   const { t, i18n } = useTranslation()
   const lp = useLocalePath()
-
-  usePageMeta({
-    title: event ? event.name : 'Evento',
-    description: event?.description ?? 'Evento em São Miguel do Gostoso.',
-  })
 
   if (isLoading) return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-12 animate-pulse">

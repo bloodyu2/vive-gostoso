@@ -8,9 +8,7 @@ import { useTranslation } from 'react-i18next'
 import sanitizeHtml from 'sanitize-html'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useLocalePath } from '@/hooks/useLocalePath'
-import { articleSchema, breadcrumbSchema, clampDescription } from '@/lib/seo'
 import { RelatedPosts, TableOfContents } from '@/components/blog'
 
 // Allow-list tuned to what gostoso_blog_posts.content actually contains:
@@ -48,8 +46,6 @@ function sanitizeBlogContent(html: string): string {
   return sanitizeHtml(html, BLOG_SANITIZE_OPTIONS)
 }
 
-const SITE_URL = 'https://www.vivegostoso.com.br'
-
 function useBlogPost(
   slug: string,
   options?: Pick<UseQueryOptions<BlogPost | null>, 'initialData'>,
@@ -86,54 +82,6 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
     () => (post?.content ? sanitizeBlogContent(post.content) : ''),
     [post],
   )
-
-  const url = slug ? `${SITE_URL}/blog/${slug}` : SITE_URL
-  const description = post?.excerpt ? clampDescription(post.excerpt, 160) : undefined
-
-  const jsonLd = useMemo(() => {
-    if (!post) return undefined
-    const blocks: Array<Record<string, unknown>> = [
-      articleSchema({
-        title: post.title,
-        description: description ?? '',
-        url,
-        image: post.cover_url ?? undefined,
-        author: post.author,
-        publishedTime: post.published_at,
-        modifiedTime: post.published_at,
-        tags: post.tags,
-      }),
-      breadcrumbSchema([
-        { name: 'Início', url: SITE_URL },
-        { name: 'Blog', url: `${SITE_URL}/blog` },
-        { name: post.title, url },
-      ]),
-    ]
-    if (post.faq_jsonld) {
-      try {
-        const parsed = JSON.parse(post.faq_jsonld)
-        if (parsed && typeof parsed === 'object') {
-          blocks.push(parsed as Record<string, unknown>)
-        }
-      } catch {
-        // ignora JSON-LD malformado
-      }
-    }
-    return blocks
-  }, [post, description, url])
-
-  usePageMeta({
-    title: post?.title ?? t('blog.meta_title'),
-    description: description ?? t('blog.meta_desc'),
-    image: post?.cover_url ?? undefined,
-    url,
-    type: 'article',
-    publishedTime: post?.published_at ?? undefined,
-    modifiedTime: post?.published_at ?? undefined,
-    author: post?.author,
-    tags: post?.tags,
-    jsonLd,
-  })
 
   if (isLoading) {
     return (

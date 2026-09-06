@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next'
 import { useProfessional } from '@/hooks/useProfessionals'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { safeExternalUrl } from '@/lib/utils'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { ReviewList } from '@/components/reviews/review-list'
 import { ReviewForm } from '@/components/reviews/review-form'
@@ -30,17 +29,6 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
   const { t } = useTranslation()
   const lp = useLocalePath()
   const { data: pro, isLoading } = useProfessional(slug)
-
-  usePageMeta(
-    pro
-      ? {
-          title: `${pro.display_name} — Vive Gostoso`,
-          description: pro.headline,
-          url: `https://www.vivegostoso.com.br/contrate/profissional/${pro.slug}`,
-          image: pro.photo_url ?? undefined,
-        }
-      : { title: 'Profissional — Vive Gostoso' }
-  )
 
   if (isLoading) {
     return (

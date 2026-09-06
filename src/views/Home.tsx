@@ -9,7 +9,6 @@ import { BusinessCard } from '@/components/business/business-card'
 import { Hoje } from '@/components/home/hoje'
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useStats } from '@/hooks/useStats'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useRecentBusinesses } from '@/hooks/useRecentBusinesses'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { supabase } from '@/lib/supabase'
@@ -58,10 +57,6 @@ export default function Home(_props: HomeProps) {
     { href: lp('/contrate'),  label: t('nav.contrate') + '.',  color: 'text-[#1A1A1A]',  sub: t('home.verbs_contrate_sub') },
   ]
 
-  usePageMeta({
-    title: 'São Miguel do Gostoso, RN',
-    description: 'Come. Fique. Passeie. O guia completo de São Miguel do Gostoso: restaurantes, pousadas, passeios e muito mais.',
-  })
   const { data: allBusinesses = [] } = useBusinesses()
   const featured = allBusinesses.filter(b => b.is_featured)
   const { data: stats } = useStats()

@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { FundHero } from '@/components/fund/fund-hero'
 import { FundEntryRow } from '@/components/fund/fund-entry-row'
@@ -70,10 +69,6 @@ type ApoieProps = {
 export default function Apoie({ initialEntries = [] }: ApoieProps) {
   const { t, i18n } = useTranslation()
   const lp = useLocalePath()
-  usePageMeta({
-    title: t('apoie.meta_title'),
-    description: t('apoie.meta_desc'),
-  })
 
   const searchParams = useSearchParams()
   const donationSuccess = searchParams?.get('doacao') === 'success'
