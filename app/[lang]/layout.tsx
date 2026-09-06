@@ -1,11 +1,8 @@
 // app/[lang]/layout.tsx
 import { notFound } from 'next/navigation'
 import { routing } from '../../i18n/routing'
-import { Header } from '@/components/layout/header'
-import { Footer } from '@/components/layout/footer'
+import { ChromeDoSite } from '@/components/layout/chrome-do-site'
 import { LocaleSync } from '@/components/i18n/locale-sync'
-import { ShareFab } from '@/components/share-fab'
-import { CookieBanner } from '@/components/cookie-banner'
 
 type Props = {
   children: React.ReactNode
@@ -26,11 +23,9 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <>
       <LocaleSync lang={lang} />
-      <Header />
-      <main>{children}</main>
-      <Footer />
-      <ShareFab />
-      <CookieBanner />
+      {/* Cabeçalho, rodapé, botão de compartilhar e banner de cookies, menos nas
+          rotas onde eles cobrem o conteúdo. Ver components/layout/chrome-do-site. */}
+      <ChromeDoSite>{children}</ChromeDoSite>
     </>
   )
 }
