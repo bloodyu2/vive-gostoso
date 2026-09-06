@@ -1,4 +1,19 @@
 {
+  "meta": {
+    "home": { "title": "São Miguel do Gostoso: where to eat, stay and explore", "description": "City guide with restaurants, guesthouses, tours, a map, events and services, all listed directly by people who work here, no booking fees or commissions." },
+    "come": { "title": "Restaurants in São Miguel do Gostoso: where to eat", "description": "List of restaurants and bars in town, with address, opening hours and direct contact with the owner, so you can book a table or ask questions." },
+    "fique": { "title": "Guesthouses in São Miguel do Gostoso: where to stay", "description": "Guesthouses and rental homes in town, with photos, address and direct contact with the owner or host, and no middleman fee added to the booking." },
+    "passeie": { "title": "Things to do in São Miguel do Gostoso: tours and kite", "description": "Buggy rides, boat trips, kitesurf lessons and hikes around the region, with direct contact for the local guide or instructor running each tour." },
+    "explore": { "title": "Map of São Miguel do Gostoso", "description": "Interactive map with every business listed in town, so you can find restaurants, guesthouses, tours and services in the right neighborhood fast." },
+    "participe": { "title": "Events in São Miguel do Gostoso: 2026 calendar", "description": "Calendar of events and parties happening in town throughout the year, with the date, place and time for each one, handy for planning your visit." },
+    "conheca": { "title": "Get to know São Miguel do Gostoso: beaches and directions", "description": "Articles on the local beaches, the story behind the town name, how to get here by car or by plane, and what the weather is like each season." },
+    "contrate": { "title": "Services in São Miguel do Gostoso: pros and jobs", "description": "Local professionals and service providers you can hire directly for all kinds of jobs, plus current job openings at businesses around town today." },
+    "apoie": { "title": "Public fund of São Miguel do Gostoso", "description": "Public fund run for the town, with an open account of the money collected from local sources and a record of everything it has paid for so far." },
+    "blog": { "title": "Blog: stories and tips from São Miguel do Gostoso", "description": "Articles written by people who live in town, about daily life, local customs and what is worth knowing before visiting, working or moving here." },
+    "sobre": { "title": "How Vive Gostoso works, a guide to São Miguel do Gostoso", "description": "Explains how Vive Gostoso works, why signing up is free for every local business, and who is behind keeping the site running, without charging a cent." },
+    "resolva": { "title": "Shops and services in São Miguel do Gostoso", "description": "Everyday shops in town, like the market, the pharmacy and a repair shop, plus other services useful for residents and visitors passing through." },
+    "transparencia": { "title": "Transparency: how Vive Gostoso works behind the scenes", "description": "Explains the verified seal, the rules for a business to join or leave the list, and who pays the bills to keep this site online and running smoothly." }
+  },
   "nav": {
     "come": "EAT",
     "fique": "STAY",
