@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 interface Props {
   src: string
@@ -9,28 +9,49 @@ interface Props {
 }
 
 /**
- * <img> que esconde a si mesmo via estado do React quando a foto falha,
- * deixando aparecer o fundo decorativo em degrade que ja existe atras dela.
+ * <img> que some quando a foto falha, deixando aparecer o gradiente da marca
+ * que já existe no contêiner atrás dela.
  *
- * O padrao anterior (onError mexendo direto no style.display do elemento)
- * dependia de o erro disparar depois que o React anexou o listener. Quando o
- * navegador ja tinha em cache que a URL falha, o erro vinha antes da hidratacao,
- * o onError nunca rodava e o icone de imagem quebrada ficava presa na tela --
- * foi o que aconteceu em /fique e /passeie.
+ * DUAS FORMAS DE DETECTAR A FALHA, E PRECISA DAS DUAS:
+ *
+ * 1. `onError`, para a foto que falha depois que o React já hidratou.
+ *
+ * 2. A conferência no callback de ref, para a foto que **já falhou antes da
+ *    hidratação**. Esse é o caso comum, não o raro: a imagem vem no HTML do
+ *    servidor, o navegador começa a baixar na hora, e o erro chega antes de o
+ *    React anexar qualquer listener. O `onError` nunca dispara e a imagem
+ *    quebrada fica presa na tela.
+ *
+ * A versão anterior deste arquivo documentava exatamente o caso 2 no comentário
+ * e mesmo assim só implementava o caso 1. Resultado medido em 2026-09-06 em
+ * /come: 21 imagens quebradas na tela, cada uma ocupando 345x259px por cima do
+ * gradiente, com o componente montado e sem nunca ter rodado o onError.
+ *
+ * `complete && naturalWidth === 0` é a forma de perguntar ao navegador "você
+ * terminou de tentar e não veio imagem": `complete` sozinho é true também
+ * quando deu certo, e `naturalWidth` sozinho é 0 enquanto ainda está baixando.
+ *
+ * A conferência mora num callback de ref, e não num `useEffect`, porque o
+ * projeto tem `react-hooks/set-state-in-effect` ligado.
  */
 export function SafeCoverImage({ src, alt, className }: Props) {
-  const [failed, setFailed] = useState(false)
+  const [falhou, setFalhou] = useState(false)
 
-  if (failed) return null
+  const conferirNaMontagem = useCallback((img: HTMLImageElement | null) => {
+    if (img && img.complete && img.naturalWidth === 0) setFalhou(true)
+  }, [])
+
+  if (falhou) return null
 
   return (
     <img
+      ref={conferirNaMontagem}
       src={src}
       alt={alt}
       loading="lazy"
       decoding="async"
       className={className}
-      onError={() => setFailed(true)}
+      onError={() => setFalhou(true)}
     />
   )
 }
