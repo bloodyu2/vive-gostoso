@@ -8,6 +8,16 @@ const BASE_URL = 'https://www.vivegostoso.com.br'
 const SITE_NAME = 'Vive Gostoso'
 const PUBLISHER_LOGO = `${BASE_URL}/icons/pwa/icon-512.png`
 
+const LOCALE_PREFIX: Record<'pt' | 'en' | 'es', string> = { pt: '', en: '/en', es: '/es' }
+
+/** Monta a URL absoluta de um caminho (comecando com '/') respeitando o
+ *  prefixo do locale. Usado por paginas dinamicas/listas para que os
+ *  registros referenciados no JSON-LD (itens de ItemList, etc.) acompanhem o
+ *  idioma da pagina atual em vez de sempre apontar para a versao em pt. */
+export function localizedUrl(path: string, lang: 'pt' | 'en' | 'es'): string {
+  return `${BASE_URL}${LOCALE_PREFIX[lang]}${path}`
+}
+
 export interface ArticleSchemaInput {
   title: string
   description: string
