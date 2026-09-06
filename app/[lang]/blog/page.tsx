@@ -1,27 +1,15 @@
 import type { Metadata } from 'next'
+import { buildPageMetadata, type Locale } from '@/lib/page-metadata'
 import { getBlogPosts } from '@/lib/supabase/queries'
 import Blog from '@/views/Blog'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Blog -- Historias de Sao Miguel do Gostoso',
-  description: 'Artigos, guias e historias sobre Sao Miguel do Gostoso, RN.',
-  openGraph: {
-    title: 'Blog -- Historias de Sao Miguel do Gostoso',
-    description: 'Artigos, guias e historias sobre Sao Miguel do Gostoso, RN.',
-    url: 'https://www.vivegostoso.com.br/blog',
-    siteName: 'Vive Gostoso',
-    locale: 'pt_BR',
-    type: 'website',
-    images: [{ url: 'https://www.vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Blog -- Historias de Sao Miguel do Gostoso',
-    description: 'Artigos, guias e historias sobre Sao Miguel do Gostoso, RN.',
-    images: ['https://www.vivegostoso.com.br/og-image.png'],
-  },
+export async function generateMetadata(
+  { params }: { params: Promise<{ lang: string }> }
+): Promise<Metadata> {
+  const { lang } = await params
+  return buildPageMetadata('blog', lang as Locale)
 }
 
 export default async function BlogPage() {

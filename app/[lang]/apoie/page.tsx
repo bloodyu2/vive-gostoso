@@ -1,36 +1,15 @@
 import type { Metadata } from 'next'
+import { buildPageMetadata, type Locale } from '@/lib/page-metadata'
 import { getFundEntries } from '@/lib/supabase/queries'
 import Apoie from '@/views/Apoie'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'APOIE. -- Fundo Publico de Sao Miguel do Gostoso',
-  description: 'Apoie o fundo publico transparente de Sao Miguel do Gostoso. Cada real arrecadado vai para o marketing da cidade.',
-  alternates: {
-    canonical: 'https://www.vivegostoso.com.br/apoie',
-    languages: {
-      'pt-BR': 'https://www.vivegostoso.com.br/apoie',
-      'en': 'https://www.vivegostoso.com.br/en/apoie',
-      'es': 'https://www.vivegostoso.com.br/es/apoie',
-      'x-default': 'https://www.vivegostoso.com.br/apoie',
-    },
-  },
-  openGraph: {
-    title: 'APOIE. -- Fundo Publico de Sao Miguel do Gostoso',
-    description: 'Apoie o fundo publico transparente de Sao Miguel do Gostoso. Cada real arrecadado vai para o marketing da cidade.',
-    url: 'https://www.vivegostoso.com.br/apoie',
-    siteName: 'Vive Gostoso',
-    locale: 'pt_BR',
-    type: 'website',
-    images: [{ url: 'https://www.vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'APOIE. -- Fundo Publico de Sao Miguel do Gostoso',
-    description: 'Apoie o fundo publico transparente de Sao Miguel do Gostoso. Cada real arrecadado vai para o marketing da cidade.',
-    images: ['https://www.vivegostoso.com.br/og-image.png'],
-  },
+export async function generateMetadata(
+  { params }: { params: Promise<{ lang: string }> }
+): Promise<Metadata> {
+  const { lang } = await params
+  return buildPageMetadata('apoie', lang as Locale)
 }
 
 export default async function ApoiePage() {

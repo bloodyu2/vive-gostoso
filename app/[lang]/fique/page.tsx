@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { buildPageMetadata, type Locale } from '@/lib/page-metadata'
 import { getBusinessesByVerb } from '@/lib/supabase/queries'
 import { itemListSchema } from '@/lib/seo'
 import Fique from '@/views/Fique'
@@ -7,33 +8,11 @@ const baseUrl = 'https://www.vivegostoso.com.br'
 
 export const revalidate = 1800
 
-export const metadata: Metadata = {
-  title: 'FIQUE. -- Pousadas e Hospedagem',
-  description: 'As melhores pousadas e hospedagens em Sao Miguel do Gostoso, RN.',
-  alternates: {
-    canonical: `${baseUrl}/fique`,
-    languages: {
-      'pt-BR': `${baseUrl}/fique`,
-      'en': `${baseUrl}/en/fique`,
-      'es': `${baseUrl}/es/fique`,
-      'x-default': `${baseUrl}/fique`,
-    },
-  },
-  openGraph: {
-    title: 'FIQUE. -- Pousadas e Hospedagem',
-    description: 'As melhores pousadas e hospedagens em Sao Miguel do Gostoso, RN.',
-    url: 'https://www.vivegostoso.com.br/fique',
-    siteName: 'Vive Gostoso',
-    locale: 'pt_BR',
-    type: 'website',
-    images: [{ url: 'https://www.vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'FIQUE. -- Pousadas e Hospedagem',
-    description: 'As melhores pousadas e hospedagens em Sao Miguel do Gostoso, RN.',
-    images: ['https://www.vivegostoso.com.br/og-image.png'],
-  },
+export async function generateMetadata(
+  { params }: { params: Promise<{ lang: string }> }
+): Promise<Metadata> {
+  const { lang } = await params
+  return buildPageMetadata('fique', lang as Locale)
 }
 
 export default async function FiquePage() {

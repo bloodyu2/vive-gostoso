@@ -1,38 +1,17 @@
 // app/[lang]/page.tsx
 import type { Metadata } from 'next'
+import { buildPageMetadata, type Locale } from '@/lib/page-metadata'
 import { createClient } from '@/lib/supabase/server'
 import Home from '@/views/Home'
 import { organizationSchema, webSiteSchema } from '@/lib/seo'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Vive Gostoso: Sao Miguel do Gostoso, RN',
-  description: 'A infraestrutura digital de Sao Miguel do Gostoso. Restaurantes, pousadas, passeios, eventos e mais.',
-  alternates: {
-    canonical: 'https://www.vivegostoso.com.br',
-    languages: {
-      'pt-BR': 'https://www.vivegostoso.com.br',
-      'en': 'https://www.vivegostoso.com.br/en',
-      'es': 'https://www.vivegostoso.com.br/es',
-      'x-default': 'https://www.vivegostoso.com.br',
-    },
-  },
-  openGraph: {
-    title: 'Vive Gostoso',
-    description: 'O sistema operacional de Sao Miguel do Gostoso, RN.',
-    url: 'https://www.vivegostoso.com.br',
-    siteName: 'Vive Gostoso',
-    locale: 'pt_BR',
-    type: 'website',
-    images: [{ url: 'https://www.vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Vive Gostoso',
-    description: 'O sistema operacional de Sao Miguel do Gostoso, RN.',
-    images: ['https://www.vivegostoso.com.br/og-image.png'],
-  },
+export async function generateMetadata(
+  { params }: { params: Promise<{ lang: string }> }
+): Promise<Metadata> {
+  const { lang } = await params
+  return buildPageMetadata('home', lang as Locale)
 }
 
 async function getHomeData() {
