@@ -2,7 +2,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { Eye, EyeOff, Save, ExternalLink, Plus, Trash2 } from 'lucide-react'
@@ -10,7 +10,6 @@ import { AuthGuard } from '@/components/auth/auth-guard'
 import { useMyProfessional, useUpsertProfessional } from '@/hooks/useProfessionals'
 import {
   PROFESSIONAL_CATEGORIES,
-  PROFESSIONAL_CATEGORY_LABELS,
   validateWhatsApp,
   type ProfessionalCategory,
   type PortfolioItem,
@@ -29,6 +28,7 @@ const PRESET_SPECIALTIES = [
 
 function ProfessionalPanelInner() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { t } = useTranslation()
   const lp = useLocalePath()
   const { data: pro, isLoading } = useMyProfessional()
@@ -36,11 +36,21 @@ function ProfessionalPanelInner() {
 
   const initialized = useRef(false)
 
+  // Categoria vinda de /cadastre/profissional?categoria=<chave> (link do convite
+  // em /contrate quando uma categoria esta vazia). So serve de valor inicial
+  // para um cadastro NOVO -- se ja existe um perfil, o efeito abaixo sobrescreve
+  // com pro.category assim que os dados carregam.
+  const categoriaParam = searchParams.get('categoria')
+  const categoriaInicial: ProfessionalCategory =
+    categoriaParam && (PROFESSIONAL_CATEGORIES as string[]).includes(categoriaParam)
+      ? (categoriaParam as ProfessionalCategory)
+      : 'outro'
+
   const [tab, setTab] = useState<'perfil' | 'portfolio' | 'visibilidade'>('perfil')
   const [displayName, setDisplayName] = useState('')
   const [headline, setHeadline] = useState('')
   const [bio, setBio] = useState('')
-  const [category, setCategory] = useState<ProfessionalCategory>('outro')
+  const [category, setCategory] = useState<ProfessionalCategory>(categoriaInicial)
   const [specialties, setSpecialties] = useState<string[]>([])
   const [whatsapp, setWhatsapp] = useState('')
   const [instagram, setInstagram] = useState('')
@@ -247,7 +257,7 @@ function ProfessionalPanelInner() {
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal bg-white"
               >
                 {PROFESSIONAL_CATEGORIES.map(c => (
-                  <option key={c} value={c}>{PROFESSIONAL_CATEGORY_LABELS[c]}</option>
+                  <option key={c} value={c}>{t(`contrate.categorias.${c}`)}</option>
                 ))}
               </select>
             </div>
