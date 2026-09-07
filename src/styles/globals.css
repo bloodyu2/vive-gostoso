@@ -503,3 +503,98 @@ h4, h5, h6 {
   .blog-prose .comparison-table th,
   .blog-prose .comparison-table td { padding: 10px 12px; }
 }
+
+/* --- Capa tipografica de negocio ------------------------------------------
+   Desenhada em codigo porque o catalogo nao tem foto para 155 dos 182 negocios
+   ativos, e doze arquivos genericos por categoria faziam a mesma imagem
+   aparecer 42 vezes na mesma pagina. A logica de cor e corpo vive em
+   src/lib/capa-negocio.ts, com teste.
+
+   POR QUE TUDO E `min(Xcqi, Ycqh)`:
+
+   A mesma capa aparece em cinco formatos muito diferentes: o card 4:3 e 1:1 das
+   listagens, a miniatura de 144px da visao em lista, o topo 21:9 do perfil, o
+   cartao 288x128 do mapa, e as bolinhas de 36px das buscas. Dimensionar so pela
+   largura (cqi) funciona nos formatos altos e estoura nos largos e baixos: com
+   `container-type: inline-size`, o nome mais longo do banco ("Casa Reduto
+   Artesanato Colaborativo", 35 caracteres, tres linhas) vazava 36px pelo topo
+   do 21:9 e era cortado no meio da primeira linha.
+
+   Com `container-type: size` a altura tambem vira unidade, e cada medida passa
+   a ser o menor entre a fracao da largura e a fracao da altura. Quem manda e a
+   dimensao mais apertada, entao nenhum formato estoura. */
+.capa-negocio {
+  container-type: size;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: #fff;
+}
+
+.capa-negocio__conteudo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: min(7cqi, 9cqh);
+  gap: min(4cqi, 5cqh);
+}
+
+.capa-negocio__nome {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  /* Nome longo sem espaco (uma marca escrita junto) precisa poder quebrar, ou
+     vaza pela lateral do card. */
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+.capa-negocio__categoria {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  /* Piso de 9px: abaixo disso o rotulo vira sujeira, nao informacao. */
+  font-size: max(9px, min(3.4cqi, 5cqh));
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  /* Branco cheio, nao branco transparente: neste corpo o texto ja e pequeno, e
+     baixar a opacidade derrubaria o contraste abaixo de 4.5:1. */
+  color: #fff;
+  padding-top: min(3.5cqi, 4cqh);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Monograma: nas listas de 36 e 40 pixels do mapa, da busca e do "aberto
+   agora", nome nenhum cabe. Some o bloco de texto e fica so a inicial. */
+.capa-negocio__monograma {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: min(42cqi, 42cqh);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+/* Duas reducoes por tamanho, e cada uma tira o que ja nao da para ler.
+   Abaixo de 200px de largura (o mosaico da visao "galeria"), a categoria em
+   caixa alta com espacamento ficaria em 6px: sai, e fica so o nome.
+   Abaixo de 120px (as bolinhas de 36 e 40px do mapa, da busca e do "aberto
+   agora"), nome nenhum cabe: fica so a inicial. */
+@container (max-width: 199px) {
+  .capa-negocio__categoria { display: none; }
+}
+
+@container (max-width: 119px) {
+  .capa-negocio__conteudo { display: none; }
+  .capa-negocio__monograma { display: flex; }
+}

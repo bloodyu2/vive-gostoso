@@ -3,7 +3,8 @@ import { Phone, MapPin, Navigation, ExternalLink, Star, Wifi, Car, UserCheck, Ca
 import { useTranslation } from 'react-i18next'
 import { Badge } from '@/components/ui/badge'
 import { ManagedBadge } from '@/components/business/managed-badge'
-import { SafeCoverImage } from '@/components/ui/safe-cover-image'
+import { BusinessCover } from '@/components/business/business-cover'
+import { usaCapaTipografica } from '@/lib/capa-negocio'
 import { isBusinessOpen } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
@@ -132,8 +133,14 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
       <div className="group bg-white dark:bg-card rounded-2xl overflow-hidden border border-border-1 hover:border-teal hover:shadow-[0_8px_24px_rgba(13,124,124,0.12)] transition-all duration-200 flex">
         {/* Thumb */}
         <Link href={lp(`/negocio/${b.slug}`)} className="relative w-36 sm:w-48 flex-shrink-0">
-          <div className="w-full h-full bg-gradient-to-br from-teal to-teal-dark">
-            {b.cover_url && <SafeCoverImage src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />}
+          <div className="w-full h-full">
+            <BusinessCover
+              coverUrl={b.cover_url}
+              alt={b.name}
+              nome={b.name}
+              slug={b.slug}
+              categoria={b.category?.name}
+            />
           </div>
           {b.is_featured && (
             <div className="absolute top-2 left-2">
@@ -189,16 +196,26 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
     )}>
       {/* Cover — PASSEIE gets a taller, more immersive image since tours sell on imagery over copy */}
       <Link href={lp(`/negocio/${b.slug}`)} className={cn(
-        'relative overflow-hidden bg-gradient-to-br from-teal to-teal-dark flex-shrink-0',
+        'relative overflow-hidden flex-shrink-0',
         isPasseie ? 'aspect-[1/1]' : 'aspect-[4/3]',
       )}>
-        {b.cover_url && <SafeCoverImage src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />}
+        <BusinessCover
+          coverUrl={b.cover_url}
+          alt={b.name}
+          nome={b.name}
+          slug={b.slug}
+          categoria={b.category?.name}
+        />
         {b.is_featured && (
           <div className="absolute top-3 right-3">
             <Badge kind="verif">✓ {t('filters.verificado')}</Badge>
           </div>
         )}
-        <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-black/40 to-transparent" />
+        {/* Veu escuro no rodape da foto, para o badge e o contraste. Nao vai na
+            capa tipografica: ali o fundo ja e cor cheia e o veu so sujaria o nome. */}
+        {!usaCapaTipografica(b.cover_url) && (
+          <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-black/40 to-transparent" />
+        )}
       </Link>
 
       {/* Body */}

@@ -8,7 +8,7 @@ import type { LucideIcon } from 'lucide-react'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import type { Business } from '@/types/database'
 import { MAPBOX_TOKEN, MAP_STYLE, GOSTOSO_CENTER, GOSTOSO_ZOOM, PIN_COLORS } from '@/lib/mapbox'
-import { SafeCoverImage } from '@/components/ui/safe-cover-image'
+import { BusinessCover } from '@/components/business/business-cover'
 
 // Lazy type reference only — no static import of mapbox-gl
 type MapboxGLModule = typeof import('mapbox-gl')
@@ -188,11 +188,15 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
         {/* Popup card */}
         {popup && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 w-72 max-w-[calc(100%-2rem)] bg-white rounded-2xl shadow-xl border border-[#E8E4DF] overflow-hidden z-10">
-            {popup.cover_url && (
-              <div className="h-32 bg-gradient-to-br from-teal/30 to-teal-dark/30 overflow-hidden">
-                <SafeCoverImage src={popup.cover_url} alt={popup.name} className="w-full h-full object-cover" />
-              </div>
-            )}
+            <div className="h-32 overflow-hidden">
+              <BusinessCover
+                coverUrl={popup.cover_url}
+                alt={popup.name}
+                nome={popup.name}
+                slug={popup.slug}
+                categoria={popup.category?.name}
+              />
+            </div>
             <div className="p-4">
               <div className="flex items-start justify-between gap-2">
                 <div>
@@ -287,8 +291,14 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
                     }}
                     className="w-full flex items-center gap-3 px-5 py-3.5 hover:bg-[#F5F2EE] transition-colors group text-left"
                   >
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal/30 to-teal-dark/30 flex-shrink-0 overflow-hidden">
-                      {b.cover_url && <SafeCoverImage src={b.cover_url} alt="" className="w-full h-full object-cover" />}
+                    <div className="w-9 h-9 rounded-xl flex-shrink-0 overflow-hidden">
+                      <BusinessCover
+                        coverUrl={b.cover_url}
+                        alt=""
+                        nome={b.name}
+                        slug={b.slug}
+                        categoria={b.category?.name}
+                      />
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="text-sm font-medium text-[#1A1A1A] truncate group-hover:text-teal transition-colors">{b.name}</div>

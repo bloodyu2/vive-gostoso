@@ -6,7 +6,7 @@ import { useLocalePath } from '@/hooks/useLocalePath'
 import { Search, X, MapPin } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { Trans } from 'react-i18next'
-import { SafeCoverImage } from '@/components/ui/safe-cover-image'
+import { BusinessCover } from '@/components/business/business-cover'
 
 interface SearchResult {
   id: string
@@ -164,10 +164,14 @@ export function GlobalSearch({ onClose }: Props) {
                     onClick={onClose}
                     className="flex items-center gap-3 px-4 py-3 hover:bg-areia dark:hover:bg-[#2D2D2D] transition-colors"
                   >
-                    <div className="w-10 h-10 rounded-xl flex-shrink-0 overflow-hidden bg-gradient-to-br from-teal to-teal-dark">
-                      {r.cover_url && (
-                        <SafeCoverImage src={r.cover_url} alt="" className="w-full h-full object-cover" />
-                      )}
+                    <div className="w-10 h-10 rounded-xl flex-shrink-0 overflow-hidden">
+                      <BusinessCover
+                        coverUrl={r.cover_url}
+                        alt=""
+                        nome={r.name}
+                        slug={r.slug}
+                        categoria={r.category?.name}
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-[#1A1A1A] dark:text-white truncate">{r.name}</p>

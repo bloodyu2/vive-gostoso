@@ -18,6 +18,8 @@ import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import type { Business } from '@/types/database'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
+import { BusinessCover } from '@/components/business/business-cover'
+import { ehCapaGenerica } from '@/lib/capa-negocio'
 
 const DAY_ORDER = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']
 
@@ -76,6 +78,11 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
   const backLabel = verb === 'fique' ? t('nav.fique') : verb === 'passeie' ? t('nav.passeie') : t('nav.come')
 
   const business = b
+  /* A capa "de verdade": foto que o negocio tem, e nao o generico por categoria
+     que a capa tipografica substitui. So ela entra no lightbox, so ela faz o
+     topo virar clicavel. Abrir uma lupa em cima de um pousada.jpg generico
+     seria mostrar em tamanho grande uma foto que nem e daqui. */
+  const capaReal = b.cover_url && !ehCapaGenerica(b.cover_url) ? b.cover_url : null
   const shareUrl = `https://www.vivegostoso.com.br/negocio/${business.slug}`
   const shareText = `${business.name}: ${shareUrl}`
 
@@ -100,16 +107,17 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
 
       {/* Cover */}
       <div
-        className="aspect-[21/9] bg-gradient-to-br from-teal to-teal-dark rounded-2xl overflow-hidden mb-8 relative cursor-pointer"
-        onClick={() => b.cover_url ? setLightboxIndex(0) : undefined}
+        className={`aspect-[21/9] rounded-2xl overflow-hidden mb-8 relative ${capaReal ? 'cursor-pointer' : ''}`}
+        onClick={() => capaReal ? setLightboxIndex(0) : undefined}
       >
-        {b.cover_url && (
-          <SafeCoverImage
-            src={b.cover_url}
-            alt={b.category ? `${b.name}, ${b.category.name} em São Miguel do Gostoso` : `${b.name} em São Miguel do Gostoso`}
-            className="w-full h-full object-cover"
-          />
-        )}
+        <BusinessCover
+          coverUrl={b.cover_url}
+          alt={b.category ? `${b.name}, ${b.category.name} em São Miguel do Gostoso` : `${b.name} em São Miguel do Gostoso`}
+          nome={b.name}
+          slug={b.slug}
+          categoria={b.category?.name}
+          loading="eager"
+        />
         {b.is_featured && (
           <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-white/90 backdrop-blur text-teal text-xs font-semibold px-3 py-1.5 rounded-full">
             <CheckCircle className="w-3.5 h-3.5" />
@@ -168,7 +176,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
                 <div
                   key={i}
                   className="aspect-square rounded-xl overflow-hidden bg-[#E8E4DF] cursor-pointer hover:opacity-90 transition-opacity"
-                  onClick={() => setLightboxIndex(b.cover_url ? i + 1 : i)}
+                  onClick={() => setLightboxIndex(capaReal ? i + 1 : i)}
                 >
                   <SafeCoverImage src={url} alt={`${b.name} foto ${i + 1}`} className="w-full h-full object-cover" />
                 </div>
@@ -333,7 +341,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
       {/* Lightbox */}
       {lightboxIndex !== null && (
         <Lightbox
-          photos={[b.cover_url, ...(b.photos ?? [])].filter((u): u is string => !!u)}
+          photos={[capaReal, ...(b.photos ?? [])].filter((u): u is string => !!u)}
           initialIndex={lightboxIndex}
           onClose={() => setLightboxIndex(null)}
         />

@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { useCallback, useState, type ReactNode } from 'react'
 
 interface Props {
   src: string
@@ -13,11 +13,13 @@ interface Props {
   /** `eager` na imagem que já aparece na primeira tela: adiar o carregamento
    *  dela atrasa o LCP em vez de melhorar. Padrão `lazy` para o resto. */
   loading?: 'lazy' | 'eager'
+  /** O que desenhar no lugar quando a foto falha. Sem isto o componente some
+   *  com a imagem e deixa um buraco: quem chama passa a capa tipográfica. */
+  fallback?: ReactNode
 }
 
 /**
- * <img> que some quando a foto falha, deixando aparecer o gradiente da marca
- * que já existe no contêiner atrás dela.
+ * <img> que dá lugar ao `fallback` quando a foto falha. Sem `fallback`, some.
  *
  * DUAS FORMAS DE DETECTAR A FALHA, E PRECISA DAS DUAS:
  *
@@ -48,6 +50,7 @@ export function SafeCoverImage({
   width,
   height,
   loading = 'lazy',
+  fallback = null,
 }: Props) {
   const [falhou, setFalhou] = useState(false)
 
@@ -55,7 +58,7 @@ export function SafeCoverImage({
     if (img && img.complete && img.naturalWidth === 0) setFalhou(true)
   }, [])
 
-  if (falhou) return null
+  if (falhou) return <>{fallback}</>
 
   return (
     <img
