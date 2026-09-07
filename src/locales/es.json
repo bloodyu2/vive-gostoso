@@ -1184,7 +1184,7 @@
     "plan_expires": "· expira {{date}}",
     "billing_monthly": "Mensual",
     "billing_annual": "Anual",
-    "annual_info": "Pago único con 10% de descuento. Aseguras 12 meses de visibilidad.",
+    "annual_info": "Pago único con {{pct}}% de descuento. Usted garantiza 12 meses de visibilidad.",
     "btn_associate": "Asociarme por {{price}}",
     "btn_destaque": "Destacar por {{price}}",
     "btn_upgrade": "Mejorar a Destacado por {{price}}",

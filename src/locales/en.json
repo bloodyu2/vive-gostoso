@@ -984,7 +984,7 @@
     "plan_expires": "· expires {{date}}",
     "billing_monthly": "Monthly",
     "billing_annual": "Annual",
-    "annual_info": "One-time payment with 10% off. You lock in 12 months of visibility.",
+    "annual_info": "One-time payment with {{pct}}% off. You get 12 months of visibility.",
     "btn_associate": "Become a member for {{price}}",
     "btn_destaque": "Get Featured for {{price}}",
     "btn_upgrade": "Upgrade to Featured for {{price}}",

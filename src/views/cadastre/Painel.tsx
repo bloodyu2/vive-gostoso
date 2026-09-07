@@ -15,7 +15,7 @@ import { useMyBusinesses } from '@/hooks/useMyBusinesses'
 import { useMyProfessional } from '@/hooks/useProfessionals'
 import { startCheckout } from '@/hooks/useCheckout'
 import { useParametros } from '@/hooks/useParametros'
-import { precosDoPlano } from '@/lib/parametros'
+import { CHAVES, parametro, precosDoPlano } from '@/lib/parametros'
 
 export default function Painel() {
   return <AuthGuard><PainelInner /></AuthGuard>
@@ -117,6 +117,7 @@ function PainelInner() {
      quando os quatro divergiam. */
   const { data: paramProduto } = useParametros()
   const PRECOS = precosDoPlano(paramProduto)
+  const desconto = parametro(paramProduto, CHAVES.descontoAnual)
   const { user, supabase } = useAuth()
   const { data: profile, isLoading: profileLoading } = useProfile()
   const role = profile?.role ?? null
@@ -386,9 +387,11 @@ function PainelInner() {
                             }`}
                           >
                             {t('billing_annual')}
-                            <span className="bg-ocre text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full leading-none">
-                              -10%
-                            </span>
+                            {desconto !== undefined && (
+                              <span className="bg-ocre text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full leading-none">
+                                -{desconto}%
+                              </span>
+                            )}
                           </button>
                         </div>
                       )}
@@ -396,7 +399,7 @@ function PainelInner() {
 
                     {billing === 'annual' && b.plan !== 'destaque' && (
                       <div className="mb-3 text-xs text-ocre bg-ocre/10 border border-ocre/20 rounded-xl px-3 py-2">
-                        {t('annual_info')}
+                        {t('annual_info', { pct: desconto ?? '' })}
                       </div>
                     )}
 
