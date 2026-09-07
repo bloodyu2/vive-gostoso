@@ -1,29 +1,40 @@
 // src/types/professional.ts
 
+/** Taxonomia de cidade de praia (~10 mil habitantes), nao de consultoria
+ *  urbana. Os dois grupos refletem o que se procura em Sao Miguel do
+ *  Gostoso: manutencao da casa e servicos para quem mora ou visita. */
+export const GRUPOS_DE_CATEGORIA = {
+  casa: [
+    'pedreiro-reforma', 'eletrica', 'hidraulica', 'pintura', 'marcenaria',
+    'piscina', 'ar-condicionado', 'jardinagem', 'caseiro',
+    'diarista-limpeza', 'dedetizacao',
+  ],
+  servicos: [
+    'transfer-motorista', 'cozinheira-chef', 'baba', 'massagem-bem-estar',
+    'professor-esportes', 'fotografo', 'audiovisual', 'marketing-design',
+    'contabilidade-juridico', 'aulas-particulares',
+  ],
+} as const
+
 export type ProfessionalCategory =
-  | 'coach'
-  | 'mentor'
-  | 'consultor'
-  | 'designer'
-  | 'fotografo'
-  | 'juridico'
-  | 'educacao'
+  | (typeof GRUPOS_DE_CATEGORIA)['casa'][number]
+  | (typeof GRUPOS_DE_CATEGORIA)['servicos'][number]
   | 'outro'
 
-export const PROFESSIONAL_CATEGORY_LABELS: Record<ProfessionalCategory, string> = {
-  coach:     'Coach',
-  mentor:    'Mentor',
-  consultor: 'Consultor',
-  designer:  'Designer',
-  fotografo: 'Fotógrafo',
-  juridico:  'Jurídico / Advogado',
-  educacao:  'Educação',
-  outro:     'Outro',
-}
+export const PROFESSIONAL_CATEGORIES: ProfessionalCategory[] = [
+  ...GRUPOS_DE_CATEGORIA.casa,
+  ...GRUPOS_DE_CATEGORIA.servicos,
+  'outro',
+]
 
-export const PROFESSIONAL_CATEGORIES = Object.keys(
-  PROFESSIONAL_CATEGORY_LABELS
-) as ProfessionalCategory[]
+/** De onde vem cada cadastro da taxonomia antiga (coach/mentor/consultor/...).
+ *  Fica no codigo para a origem de um dado migrado ser rastreavel depois. */
+export const CATEGORIA_LEGADA: Record<string, ProfessionalCategory> = {
+  coach: 'outro', mentor: 'outro', consultor: 'outro',
+  designer: 'marketing-design', fotografo: 'fotografo',
+  juridico: 'contabilidade-juridico', educacao: 'aulas-particulares',
+  outro: 'outro',
+}
 
 export interface PortfolioItem {
   id: string

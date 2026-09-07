@@ -159,19 +159,42 @@
     "chamar_whatsapp": "Hablar por WhatsApp",
     "tenho_interesse": "Me interesa",
     "pedir_orcamento": "Pedir presupuesto",
-    "sem_empresas": "Todavía no hay empresas registradas."
-  },
-  "professional": {
-    "categories": {
-      "coach": "Coach",
-      "mentor": "Mentor",
-      "consultor": "Consultor",
-      "designer": "Diseñador",
+    "sem_empresas": "Todavía no hay empresas registradas.",
+    "grupos": {
+      "casa": "Casa y mantenimiento",
+      "servicos": "Servicios y turismo"
+    },
+    "categorias": {
+      "pedreiro-reforma": "Albañil y reforma",
+      "eletrica": "Electricidad",
+      "hidraulica": "Plomería",
+      "pintura": "Pintura",
+      "marcenaria": "Carpintería",
+      "piscina": "Piscina",
+      "ar-condicionado": "Aire acondicionado",
+      "jardinagem": "Jardinería",
+      "caseiro": "Cuidador de casa",
+      "diarista-limpeza": "Limpieza",
+      "dedetizacao": "Control de plagas",
+      "transfer-motorista": "Traslado y conductor",
+      "cozinheira-chef": "Cocinera y chef a domicilio",
+      "baba": "Niñera",
+      "massagem-bem-estar": "Masajes y bienestar",
+      "professor-esportes": "Profesor de kite, surf y yoga",
       "fotografo": "Fotógrafo",
-      "juridico": "Jurídico / Abogado",
-      "educacao": "Educación",
+      "audiovisual": "Audiovisual",
+      "marketing-design": "Marketing y diseño",
+      "contabilidade-juridico": "Contabilidad y jurídico",
+      "aulas-particulares": "Clases particulares",
       "outro": "Otro"
     },
+    "convite_primeiro": "Sé el primer profesional de {{categoria}} en Gostoso",
+    "convite_sub": "Todavía nadie está registrado en esta categoría. El registro es gratis y toma menos de cinco minutos.",
+    "convite_cta": "Quiero registrarme",
+    "categoria_desc": "Profesionales de la categoría {{categoria}} en São Miguel do Gostoso, contacto directo por WhatsApp, sin intermediario ni comisión de agencia.",
+    "categoria_title": "{{categoria}} en São Miguel do Gostoso"
+  },
+  "professional": {
     "headline_placeholder": "Ej: Coach ejecutivo y mentor de líderes",
     "bio_placeholder": "Cuéntanos sobre tu experiencia, especialidades y cómo puedes ayudar...",
     "whatsapp_hint": "Solo números: 5584999991111",

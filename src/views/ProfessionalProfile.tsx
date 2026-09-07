@@ -10,7 +10,6 @@ import { safeExternalUrl } from '@/lib/utils'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { ReviewList } from '@/components/reviews/review-list'
 import { ReviewForm } from '@/components/reviews/review-form'
-import { PROFESSIONAL_CATEGORY_LABELS } from '@/types/professional'
 import type { PortfolioItem } from '@/types/professional'
 
 const AVATAR_COLORS = [
@@ -94,7 +93,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
                   {pro.display_name}
                 </h1>
                 <span className="text-xs font-semibold bg-teal/20 text-teal px-2 py-0.5 rounded-full">
-                  {PROFESSIONAL_CATEGORY_LABELS[pro.category]}
+                  {t(`contrate.categorias.${pro.category}`)}
                 </span>
               </div>
               <p className="text-[#888] text-sm mb-3">{pro.headline}</p>

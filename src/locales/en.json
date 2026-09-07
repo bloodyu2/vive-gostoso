@@ -159,19 +159,42 @@
     "chamar_whatsapp": "Message on WhatsApp",
     "tenho_interesse": "I'm interested",
     "pedir_orcamento": "Request a quote",
-    "sem_empresas": "No companies registered yet."
-  },
-  "professional": {
-    "categories": {
-      "coach": "Coach",
-      "mentor": "Mentor",
-      "consultor": "Consultant",
-      "designer": "Designer",
+    "sem_empresas": "No companies registered yet.",
+    "grupos": {
+      "casa": "Home and maintenance",
+      "servicos": "Services and tourism"
+    },
+    "categorias": {
+      "pedreiro-reforma": "Builder and renovation",
+      "eletrica": "Electrical",
+      "hidraulica": "Plumbing",
+      "pintura": "Painting",
+      "marcenaria": "Carpentry",
+      "piscina": "Pool",
+      "ar-condicionado": "Air conditioning",
+      "jardinagem": "Gardening",
+      "caseiro": "House caretaker",
+      "diarista-limpeza": "Cleaning",
+      "dedetizacao": "Pest control",
+      "transfer-motorista": "Transfer and driver",
+      "cozinheira-chef": "Home cook and chef",
+      "baba": "Babysitter",
+      "massagem-bem-estar": "Massage and wellness",
+      "professor-esportes": "Kite, surf and yoga instructor",
       "fotografo": "Photographer",
-      "juridico": "Legal / Lawyer",
-      "educacao": "Education",
+      "audiovisual": "Audiovisual",
+      "marketing-design": "Marketing and design",
+      "contabilidade-juridico": "Accounting and legal",
+      "aulas-particulares": "Private lessons",
       "outro": "Other"
     },
+    "convite_primeiro": "Be the first {{categoria}} professional in Gostoso",
+    "convite_sub": "No one is registered in this category yet. Sign-up is free and takes less than five minutes.",
+    "convite_cta": "I want to sign up",
+    "categoria_desc": "Professionals in the {{categoria}} category in São Miguel do Gostoso, contact them directly on WhatsApp, no middleman or agency fee.",
+    "categoria_title": "{{categoria}} in São Miguel do Gostoso"
+  },
+  "professional": {
     "headline_placeholder": "E.g. Executive coach & leadership mentor",
     "bio_placeholder": "Tell about your experience, specialties and how you can help...",
     "whatsapp_hint": "Digits only: 5584999991111",
