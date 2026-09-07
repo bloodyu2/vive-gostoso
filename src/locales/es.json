@@ -1315,5 +1315,13 @@
     "service_company_card": "¡Hola {{name}}! Los vi en la sección Contrate de Vive Gostoso y me gustaría un presupuesto.",
     "business_page": "¡Hola {{name}}! Los vi en Vive Gostoso y me gustaría conversar.",
     "business_card": "¡Hola! Vi {{name}} en Vive Gostoso y tengo interés."
+  },
+  "links_modulos": {
+    "titulo": "Sigue conociendo la ciudad",
+    "come": "restaurantes en São Miguel do Gostoso",
+    "fique": "posadas en São Miguel do Gostoso",
+    "passeie": "paseos y kitesurf en São Miguel do Gostoso",
+    "explore": "el mapa de São Miguel do Gostoso",
+    "conheca": "playas, historia y cómo llegar a São Miguel do Gostoso"
   }
 }

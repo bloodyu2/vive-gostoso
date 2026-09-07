@@ -166,7 +166,7 @@ export function GlobalSearch({ onClose }: Props) {
                   >
                     <div className="w-10 h-10 rounded-xl flex-shrink-0 overflow-hidden bg-gradient-to-br from-teal to-teal-dark">
                       {r.cover_url && (
-                        <SafeCoverImage src={r.cover_url} alt={r.name} className="w-full h-full object-cover" />
+                        <SafeCoverImage src={r.cover_url} alt="" className="w-full h-full object-cover" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">

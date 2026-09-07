@@ -11,6 +11,24 @@ import type { BlogPost } from '@/types/database'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { RelatedPosts, TableOfContents } from '@/components/blog'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
+import type { RotaModulo } from '@/components/layout/links-modulos'
+
+// Escolhe o módulo do rodapé pela primeira tag do post que bater com o mapa
+// abaixo. Nenhuma tag bate -> cai em 'explore' (mapa da cidade), que serve
+// como destino genérico razoável para qualquer assunto.
+const MODULO_POR_TAG: Record<string, RotaModulo> = {
+  'onde comer': 'come', restaurantes: 'come', bares: 'come', gastronomia: 'come',
+  pousadas: 'fique', hospedagem: 'fique', 'onde ficar': 'fique',
+  kitesurf: 'passeie', passeios: 'passeie', praias: 'passeie',
+}
+
+function moduloDoPost(tags: string[] | null | undefined): RotaModulo {
+  for (const tag of tags ?? []) {
+    const modulo = MODULO_POR_TAG[tag.toLowerCase()]
+    if (modulo) return modulo
+  }
+  return 'explore'
+}
 
 // Allow-list tuned to what gostoso_blog_posts.content actually contains:
 // comparison tables (table.comparison-table), tip/warn/info callouts
@@ -83,6 +101,8 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
     () => (post?.content ? sanitizeBlogContent(post.content) : ''),
     [post],
   )
+
+  const modulo = useMemo(() => moduloDoPost(post?.tags), [post])
 
   if (isLoading) {
     return (
@@ -171,6 +191,12 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
         className="blog-prose mt-2 max-w-none"
         dangerouslySetInnerHTML={{ __html: sanitizedContent }}
       />
+
+      <nav className="mt-10 pt-8 border-t border-[#E8E4DF] dark:border-[#2D2D2D]">
+        <Link href={lp(`/${modulo}`)} className="text-teal hover:underline text-sm font-semibold">
+          {t(`links_modulos.${modulo}`)} →
+        </Link>
+      </nav>
 
       <RelatedPosts currentSlug={post.slug} tags={post.tags} />
     </main>

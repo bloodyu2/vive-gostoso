@@ -103,7 +103,13 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
         className="aspect-[21/9] bg-gradient-to-br from-teal to-teal-dark rounded-2xl overflow-hidden mb-8 relative cursor-pointer"
         onClick={() => b.cover_url ? setLightboxIndex(0) : undefined}
       >
-        {b.cover_url && <SafeCoverImage src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />}
+        {b.cover_url && (
+          <SafeCoverImage
+            src={b.cover_url}
+            alt={b.category ? `${b.name}, ${b.category.name} em São Miguel do Gostoso` : `${b.name} em São Miguel do Gostoso`}
+            className="w-full h-full object-cover"
+          />
+        )}
         {b.is_featured && (
           <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-white/90 backdrop-blur text-teal text-xs font-semibold px-3 py-1.5 rounded-full">
             <CheckCircle className="w-3.5 h-3.5" />

@@ -26,7 +26,7 @@ export function ServiceCard({ service }: Props) {
           {service.photo_url ? (
             <img
               src={service.photo_url}
-              alt={service.name}
+              alt=""
               loading="lazy"
               decoding="async"
               className="w-11 h-11 rounded-full object-cover"

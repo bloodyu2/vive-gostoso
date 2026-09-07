@@ -70,7 +70,11 @@ export default function TransferDetailPage({ transfer }: { transfer: Transfer })
 
       {transfer.photo_url && (
         <div className="w-full h-56 md:h-72">
-          <img src={transfer.photo_url} alt={transfer.provider_name} className="w-full h-full object-cover" />
+          <img
+            src={transfer.photo_url}
+            alt={transfer.vehicle_type ? `${transfer.provider_name}, ${transfer.vehicle_type} em São Miguel do Gostoso` : `${transfer.provider_name} em São Miguel do Gostoso`}
+            className="w-full h-full object-cover"
+          />
         </div>
       )}
 

@@ -10,6 +10,7 @@ import { isBusinessOpen } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { ErrorState } from '@/components/ui/error-state'
+import { LinksModulos } from '@/components/layout/links-modulos'
 import type { Business } from '@/types/database'
 
 type FiqueProps = {
@@ -61,6 +62,7 @@ export default function Fique({ initialBusinesses = [] }: FiqueProps) {
           <BusinessGrid businesses={filtered} loading={isLoading} view={view} />
         </>
       )}
+      <LinksModulos atual="fique" />
     </main>
   )
 }

@@ -79,7 +79,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
             {pro.photo_url ? (
               <img
                 src={pro.photo_url}
-                alt={pro.display_name}
+                alt=""
                 className="w-20 h-20 rounded-2xl object-cover flex-shrink-0"
               />
             ) : (

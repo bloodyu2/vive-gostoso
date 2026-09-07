@@ -54,7 +54,13 @@ export default function Evento({ initialEvent, id: idProp }: EventoProps) {
 
       {/* Cover */}
       <div className="aspect-[16/7] rounded-2xl overflow-hidden bg-gradient-to-br from-teal to-teal-dark mb-6">
-        {event.cover_url && <SafeCoverImage src={event.cover_url} alt={event.name} className="w-full h-full object-cover" />}
+        {event.cover_url && (
+          <SafeCoverImage
+            src={event.cover_url}
+            alt={`${event.name} em São Miguel do Gostoso`}
+            className="w-full h-full object-cover"
+          />
+        )}
       </div>
 
       {/* Badges + type */}

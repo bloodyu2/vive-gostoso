@@ -1315,5 +1315,13 @@
     "stat_transfers": "Transfers",
     "stat_businesses": "Businesses",
     "stat_drafts": "Drafts"
+  },
+  "links_modulos": {
+    "titulo": "Keep exploring the town",
+    "come": "restaurants in São Miguel do Gostoso",
+    "fique": "guesthouses in São Miguel do Gostoso",
+    "passeie": "tours and kitesurfing in São Miguel do Gostoso",
+    "explore": "the São Miguel do Gostoso map",
+    "conheca": "beaches, history and how to get to São Miguel do Gostoso"
   }
 }
