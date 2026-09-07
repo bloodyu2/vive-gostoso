@@ -41,6 +41,13 @@ const CSP_DIRECTIVES = [
 ].join('; ')
 
 const config: NextConfig = {
+  /* Os recortes de fonte do card de compartilhamento da /bio sao lidos do disco em
+     tempo de execucao, e o rastreador de arquivos do Next nao enxerga um readFile
+     montado com process.cwd(). Sem esta linha os .ttf ficam de fora do pacote e a
+     imagem quebra so em producao, que e o pior lugar para descobrir. */
+  outputFileTracingIncludes: {
+    '/[lang]/bio/opengraph-image': ['./app/[lang]/bio/*.ttf'],
+  },
   images: {
     remotePatterns: [
       {
