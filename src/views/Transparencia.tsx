@@ -1,10 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import {
-  ShieldCheck, ImageOff, LogIn, Coins, Building2,
-  MessageCircle, Mail, MapPin,
-} from 'lucide-react'
+import { Building2, Camera, Coins, ImageOff, LogIn, Mail, MapPin, MessageCircle, ShieldCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { FAQSection } from '@/components/blog'
@@ -108,6 +105,16 @@ export default function Transparencia() {
           <div className="text-sm text-[#737373] leading-relaxed space-y-2">
             <p>{t('transparencia.fotos_p1')}</p>
             <p>{t('transparencia.fotos_p2')}</p>
+          </div>
+        </div>
+
+        {/* Direitos de imagem. Fica junto de "sobre as fotos" de proposito: e a
+            mesma conversa, quem e dono da foto que voce esta vendo. */}
+        <div className="mt-4 p-5 bg-areia dark:bg-[#161616] rounded-2xl border border-[#E8E4DF] dark:border-[#2D2D2D] flex items-start gap-4">
+          <Camera className="w-5 h-5 text-teal flex-shrink-0 mt-0.5" />
+          <div className="text-sm text-[#737373] leading-relaxed space-y-2">
+            <p>{t('transparencia.fotos_p3')}</p>
+            <p>{t('transparencia.fotos_p4')}</p>
           </div>
         </div>
       </section>

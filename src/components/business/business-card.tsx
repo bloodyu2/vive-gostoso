@@ -5,6 +5,8 @@ import { Badge } from '@/components/ui/badge'
 import { ManagedBadge } from '@/components/business/managed-badge'
 import { BusinessCover } from '@/components/business/business-cover'
 import { usaCapaTipografica } from '@/lib/capa-negocio'
+import { temLicenca } from '@/lib/licenca-imagem'
+import { FotoPropriaBadge } from '@/components/business/foto-propria-badge'
 import { isBusinessOpen } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
@@ -215,6 +217,9 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
             capa tipografica: ali o fundo ja e cor cheia e o veu so sujaria o nome. */}
         {!usaCapaTipografica(b.cover_url) && (
           <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-black/40 to-transparent" />
+        )}
+        {temLicenca(b.imagens_licenciadas, b.cover_url) && (
+          <FotoPropriaBadge className="absolute bottom-3 left-3" />
         )}
       </Link>
 

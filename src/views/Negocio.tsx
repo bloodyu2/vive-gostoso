@@ -20,6 +20,8 @@ import type { Business } from '@/types/database'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { BusinessCover } from '@/components/business/business-cover'
 import { ehCapaGenerica } from '@/lib/capa-negocio'
+import { temLicenca } from '@/lib/licenca-imagem'
+import { FotoPropriaBadge } from '@/components/business/foto-propria-badge'
 
 const DAY_ORDER = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']
 
@@ -118,6 +120,9 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
           categoria={b.category?.name}
           loading="eager"
         />
+        {temLicenca(b.imagens_licenciadas, capaReal) && (
+          <FotoPropriaBadge className="absolute bottom-4 left-4" />
+        )}
         {b.is_featured && (
           <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-white/90 backdrop-blur text-teal text-xs font-semibold px-3 py-1.5 rounded-full">
             <CheckCircle className="w-3.5 h-3.5" />
@@ -175,10 +180,13 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
               {b.photos.map((url, i) => (
                 <div
                   key={i}
-                  className="aspect-square rounded-xl overflow-hidden bg-[#E8E4DF] cursor-pointer hover:opacity-90 transition-opacity"
+                  className="relative aspect-square rounded-xl overflow-hidden bg-[#E8E4DF] cursor-pointer hover:opacity-90 transition-opacity"
                   onClick={() => setLightboxIndex(capaReal ? i + 1 : i)}
                 >
                   <SafeCoverImage src={url} alt={`${b.name} foto ${i + 1}`} className="w-full h-full object-cover" />
+                  {temLicenca(b.imagens_licenciadas, url) && (
+                    <FotoPropriaBadge className="absolute bottom-2 left-2 scale-90 origin-bottom-left" />
+                  )}
                 </div>
               ))}
             </div>

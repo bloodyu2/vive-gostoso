@@ -448,7 +448,9 @@
         "question": "De onde vêm as fotos dos perfis?",
         "answer": "Muitos perfis foram criados pela nossa equipe para que a cidade tivesse um cadastro completo desde o primeiro dia, e nesses casos a foto usada é provisória. Vamos trocando essas imagens conforme falamos com cada negócio."
       }
-    ]
+    ],
+    "fotos_p3": "Quando a foto é do próprio negócio, ela aparece marcada como tal. A marca só entra depois que o dono envia a imagem pelo painel e aceita a cláusula de direitos de imagem, com data e usuário registrados. Foto que já estava no cadastro antes disso não recebe a marca, mesmo que tenha vindo do dono: preferimos poucas marcas verdadeiras a muitas duvidosas.",
+    "fotos_p4": "A cláusula diz que a imagem continua sendo de quem a enviou, que a permissão de exibição vale enquanto o cadastro estiver ativo, e que a remoção pode ser pedida a qualquer momento, pelo painel ou por contato@vivegostoso.com.br."
   },
   "apoie": {
     "h1": "Fundo público de São Miguel do Gostoso",
@@ -557,7 +559,8 @@
     "dia_sex": "Sexta",
     "dia_sab": "Sábado",
     "dia_dom": "Domingo",
-    "fechado_dia": "Fechado"
+    "fechado_dia": "Fechado",
+    "foto_propria": "Foto do próprio negócio"
   },
   "resolva": {
     "h1": "Comércio e serviços em São Miguel do Gostoso",
@@ -1218,7 +1221,15 @@
     "save_business": "Salvar negócio",
     "error_profile": "Erro com seu perfil de usuário.",
     "error_invalid_url": "Link inválido. Use um endereço começando com http:// ou https://.",
-    "error_save": "Erro ao salvar: {{msg}}"
+    "error_save": "Erro ao salvar: {{msg}}",
+    "licenca_titulo": "Direitos sobre as fotos",
+    "licenca_p1": "Ao enviar uma imagem, você declara que os direitos sobre ela são seus, ou que tem autorização de quem os detém.",
+    "licenca_p2": "Você dá ao Vive Gostoso permissão para exibir essa imagem na página do seu negócio, nas listagens do site e nos canais da plataforma, enquanto seu cadastro estiver ativo. A permissão é gratuita e não é exclusiva: você continua livre para usar a mesma foto onde quiser.",
+    "licenca_p3": "A foto continua sendo sua. Você pode pedir a remoção de qualquer uma a qualquer momento, pelo painel ou por contato@vivegostoso.com.br.",
+    "licenca_checkbox": "Li e concordo com os direitos sobre as fotos.",
+    "licenca_aceito_em": "Aceito em {{data}}.",
+    "licenca_pendente": "Marque a caixa acima para poder enviar fotos.",
+    "licenca_erro": "Não foi possível registrar o aceite. Tente de novo."
   },
   "preview": {
     "back": "← Voltar",

@@ -12,6 +12,11 @@ import { useInvalidateMyBusinesses, useMyBusinesses } from '@/hooks/useMyBusines
 import type { Business } from '@/types/database'
 import { ArrowLeft, Camera, ChevronDown, ExternalLink, Loader2 } from 'lucide-react'
 import { validateImageFile, compressImage } from '@/lib/image-upload'
+import {
+  useLicencaImagem,
+  useRegistrarAceite,
+  cobrirImagensPeloAceite,
+} from '@/hooks/useLicencaImagem'
 import { translateSupabaseError, assertSession } from '@/lib/supabase-errors'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
@@ -258,12 +263,14 @@ function StatusBanner({
 
 function PhotoSection({
   bizId,
+  profileId,
   coverUrl,
   photos,
   onCoverChange,
   onPhotosChange,
 }: {
   bizId: string | undefined
+  profileId: string | null
   coverUrl: string | null | undefined
   photos: string[] | undefined
   onCoverChange: (url: string) => void
@@ -277,6 +284,13 @@ function PhotoSection({
   const [error, setError] = useState<string | null>(null)
 
   const currentPhotos = photos ?? []
+
+  /* Sem aceite registrado, nenhum envio de foto acontece. E o aceite guarda
+     quais imagens ele cobre: e por imagem que o rotulo "foto do proprio
+     negocio" e decidido, la nas paginas publicas. */
+  const { data: aceite } = useLicencaImagem(bizId)
+  const registrarAceite = useRegistrarAceite(bizId, profileId ?? undefined)
+  const podeEnviar = !!bizId && !!aceite
 
   async function uploadFile(file: File, path: string): Promise<string> {
     const compressed = await compressImage(file)
@@ -293,7 +307,9 @@ function PhotoSection({
 
   async function handleCoverUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
-    if (!file || !bizId) return
+    /* Segunda tranca: o botao ja fica desligado sem aceite, mas quem mexer no
+       DOM nao passa por aqui. */
+    if (!file || !bizId || !aceite) return
     setError(null)
     const validationError = validateImageFile(file)
     if (validationError) {
@@ -310,6 +326,7 @@ function PhotoSection({
       await assertSession(supabase)
       const { error: updateError } = await supabase.from('gostoso_businesses').update({ cover_url: url }).eq('id', bizId)
       if (updateError) throw updateError
+      if (aceite) await cobrirImagensPeloAceite(aceite, [url])
       onCoverChange(url)
       showToast('Foto de capa atualizada!', 'success')
     } catch (err) {
@@ -325,7 +342,7 @@ function PhotoSection({
 
   async function handleGalleryUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files ?? [])
-    if (!files.length || !bizId) return
+    if (!files.length || !bizId || !aceite) return
     setError(null)
 
     for (const f of files) {
@@ -354,6 +371,7 @@ function PhotoSection({
       await assertSession(supabase)
       const { error: updateError } = await supabase.from('gostoso_businesses').update({ photos: next }).eq('id', bizId)
       if (updateError) throw updateError
+      if (aceite) await cobrirImagensPeloAceite(aceite, urls)
       onPhotosChange(next)
     } catch (err) {
       if ((err as { code?: string })?.code === '42501') {
@@ -385,6 +403,39 @@ function PhotoSection({
         <p className="text-sm text-red-500 mb-3">{error}</p>
       )}
 
+      {/* Direitos sobre as fotos. Fica ANTES dos botoes de envio, e nao num
+          link ou num rodape, porque e a condicao para enviar: sem aceite
+          registrado, os dois botoes ficam desligados. */}
+      <div className="mb-5 rounded-2xl border border-[#E8E4DF] bg-[#FAFAF9] dark:bg-white/5 p-4">
+        <h3 className="font-display font-semibold text-base mb-2">{t('perfil:licenca_titulo')}</h3>
+        <p className="text-sm text-fg-2 mb-2">{t('perfil:licenca_p1')}</p>
+        <p className="text-sm text-fg-2 mb-2">{t('perfil:licenca_p2')}</p>
+        <p className="text-sm text-fg-2">{t('perfil:licenca_p3')}</p>
+        {aceite ? (
+          <p className="mt-3 text-sm font-medium text-teal">
+            {t('perfil:licenca_aceito_em', {
+              data: new Date(aceite.aceito_em).toLocaleDateString('pt-BR'),
+            })}
+          </p>
+        ) : (
+          <>
+            <label className="mt-3 flex items-start gap-2.5 text-sm font-medium cursor-pointer">
+              <input
+                type="checkbox"
+                checked={false}
+                disabled={!bizId || registrarAceite.isPending}
+                onChange={() => registrarAceite.mutate('envio_de_fotos')}
+                className="mt-0.5 w-4 h-4 accent-teal"
+              />
+              <span>{t('perfil:licenca_checkbox')}</span>
+            </label>
+            {registrarAceite.isError && (
+              <p className="mt-2 text-sm text-red-500">{t('perfil:licenca_erro')}</p>
+            )}
+          </>
+        )}
+      </div>
+
       {/* Cover photo */}
       <div className="mb-5">
         <label className="block text-sm font-medium mb-2">{t('perfil:photos_cover_label')}</label>
@@ -404,19 +455,21 @@ function PhotoSection({
           accept="image/jpeg,image/jpg,image/png,image/webp,image/heic,image/heif"
           className="hidden"
           onChange={handleCoverUpload}
-          disabled={!bizId}
+          disabled={!podeEnviar}
         />
         <button
           type="button"
-          disabled={uploadingCover || !bizId}
+          disabled={uploadingCover || !podeEnviar}
           onClick={() => coverRef.current?.click()}
           className="text-sm font-medium px-4 py-2 rounded-xl border border-[#E8E4DF] hover:border-teal transition-colors disabled:opacity-50"
         >
           {uploadingCover ? t('perfil:photos_uploading') : coverUrl ? t('perfil:photos_change_cover') : t('perfil:photos_add_cover')}
         </button>
-        {!bizId && (
+        {!bizId ? (
           <p className="text-xs text-[#737373] mt-1">{t('perfil:photos_save_first')}</p>
-        )}
+        ) : !aceite ? (
+          <p className="text-xs text-[#737373] mt-1">{t('perfil:licenca_pendente')}</p>
+        ) : null}
       </div>
 
       {/* Gallery */}
@@ -455,11 +508,11 @@ function PhotoSection({
               multiple
               className="hidden"
               onChange={handleGalleryUpload}
-              disabled={!bizId}
+              disabled={!podeEnviar}
             />
             <button
               type="button"
-              disabled={uploadingGallery || !bizId}
+              disabled={uploadingGallery || !podeEnviar}
               onClick={() => galleryRef.current?.click()}
               className="text-sm font-medium px-4 py-2 rounded-xl border border-[#E8E4DF] hover:border-teal transition-colors disabled:opacity-50"
             >
@@ -1278,6 +1331,7 @@ function PerfilInner() {
         {/* Photos */}
         <PhotoSection
           bizId={biz.id}
+          profileId={profileId}
           coverUrl={biz.cover_url}
           photos={biz.photos}
           onCoverChange={url => setBiz(b => ({ ...b, cover_url: url }))}

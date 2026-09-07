@@ -448,7 +448,9 @@
         "question": "Where do the profile photos come from?",
         "answer": "Many profiles were created by our team so the town would have a complete listing from day one, and in those cases the photo used is a placeholder. We keep replacing these images as we talk to each business."
       }
-    ]
+    ],
+    "fotos_p3": "When a photo comes from the business itself, it is marked as such. The mark only appears after the owner uploads the image from the panel and agrees to the image rights terms, with the date and the user recorded. A photo that was already in the listing before that does not get the mark, even if it came from the owner: we would rather have few true marks than many doubtful ones.",
+    "fotos_p4": "The terms say the image still belongs to whoever uploaded it, that permission to display it lasts while the listing is active, and that removal can be requested at any time, from the panel or at contato@vivegostoso.com.br."
   },
   "apoie": {
     "h1": "Public fund of São Miguel do Gostoso",
@@ -612,7 +614,8 @@
     "dia_sex": "Friday",
     "dia_sab": "Saturday",
     "dia_dom": "Sunday",
-    "fechado_dia": "Closed"
+    "fechado_dia": "Closed",
+    "foto_propria": "The business's own photo"
   },
   "resolva": {
     "h1": "Shops and services in São Miguel do Gostoso",
@@ -1136,7 +1139,15 @@
     "save_business": "Save business",
     "error_profile": "Error with your user profile.",
     "error_invalid_url": "Invalid link. Use an address starting with http:// or https://.",
-    "error_save": "Error saving: {{msg}}"
+    "error_save": "Error saving: {{msg}}",
+    "licenca_titulo": "Photo rights",
+    "licenca_p1": "When you upload an image, you declare that the rights to it are yours, or that you have permission from whoever holds them.",
+    "licenca_p2": "You give Vive Gostoso permission to display that image on your business page, in the site listings and on the platform channels, for as long as your listing is active. The permission is free and not exclusive: you stay free to use the same photo anywhere else.",
+    "licenca_p3": "The photo is still yours. You can ask for any of them to be removed at any time, from the panel or at contato@vivegostoso.com.br.",
+    "licenca_checkbox": "I have read and agree to the photo rights terms.",
+    "licenca_aceito_em": "Agreed on {{data}}.",
+    "licenca_pendente": "Tick the box above to upload photos.",
+    "licenca_erro": "We could not record your agreement. Please try again."
   },
   "preview": {
     "back": "← Back",

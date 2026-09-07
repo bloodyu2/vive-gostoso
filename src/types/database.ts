@@ -28,6 +28,10 @@ export interface Business {
   instagram: string | null
   cover_url: string | null
   photos: string[]
+  /** Imagens cobertas por aceite da clausula de licenca. Coluna derivada,
+   *  mantida por gatilho a partir de gostoso_aceites_licenca_imagem. So estas
+   *  recebem o rotulo "foto do proprio negocio". */
+  imagens_licenciadas?: string[]
   opening_hours: Record<string, { open: string; close: string; closed: boolean }> | null
   is_verified: boolean
   is_featured: boolean

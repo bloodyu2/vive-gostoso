@@ -448,7 +448,9 @@
         "question": "¿De dónde vienen las fotos de los perfiles?",
         "answer": "Muchos perfiles fueron creados por nuestro equipo para que la ciudad tuviera un registro completo desde el primer día, y en esos casos la foto usada es provisional. Vamos cambiando esas imágenes a medida que hablamos con cada negocio."
       }
-    ]
+    ],
+    "fotos_p3": "Cuando la foto es del propio negocio, aparece marcada como tal. La marca solo entra después de que el dueño envía la imagen por el panel y acepta la cláusula de derechos de imagen, con fecha y usuario registrados. Una foto que ya estaba en el registro antes de eso no recibe la marca, aunque haya venido del dueño: preferimos pocas marcas verdaderas a muchas dudosas.",
+    "fotos_p4": "La cláusula dice que la imagen sigue siendo de quien la envió, que el permiso de exhibición vale mientras el registro esté activo, y que se puede pedir la retirada en cualquier momento, por el panel o por contato@vivegostoso.com.br."
   },
   "apoie": {
     "h1": "Fondo público de São Miguel do Gostoso",
@@ -612,7 +614,8 @@
     "dia_sex": "Viernes",
     "dia_sab": "Sábado",
     "dia_dom": "Domingo",
-    "fechado_dia": "Cerrado"
+    "fechado_dia": "Cerrado",
+    "foto_propria": "Foto del propio negocio"
   },
   "resolva": {
     "h1": "Comercio y servicios en São Miguel do Gostoso",
@@ -1336,7 +1339,15 @@
     "save_business": "Guardar negocio",
     "error_profile": "Error con tu perfil de usuario.",
     "error_invalid_url": "Enlace no válido. Usa una dirección que empiece con http:// o https://.",
-    "error_save": "Error al guardar: {{msg}}"
+    "error_save": "Error al guardar: {{msg}}",
+    "licenca_titulo": "Derechos sobre las fotos",
+    "licenca_p1": "Al enviar una imagen, usted declara que los derechos sobre ella son suyos, o que tiene autorización de quien los tiene.",
+    "licenca_p2": "Usted da a Vive Gostoso permiso para mostrar esa imagen en la página de su negocio, en los listados del sitio y en los canales de la plataforma, mientras su registro esté activo. El permiso es gratuito y no es exclusivo: usted sigue libre para usar la misma foto donde quiera.",
+    "licenca_p3": "La foto sigue siendo suya. Puede pedir que se retire cualquiera en cualquier momento, por el panel o por contato@vivegostoso.com.br.",
+    "licenca_checkbox": "Leí y acepto los derechos sobre las fotos.",
+    "licenca_aceito_em": "Aceptado el {{data}}.",
+    "licenca_pendente": "Marque la casilla de arriba para poder enviar fotos.",
+    "licenca_erro": "No fue posible registrar su aceptación. Intente de nuevo."
   },
   "preview": {
     "back": "← Volver",
