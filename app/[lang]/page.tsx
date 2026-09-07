@@ -17,7 +17,7 @@ export async function generateMetadata(
 async function getHomeData() {
   const supabase = await createClient()
 
-  const [businessesRes, eventsRes, statsRes] = await Promise.all([
+  const [businessesRes, eventsRes, statsRes, verifiedRes, catsRes, eventsCountRes] = await Promise.all([
     supabase
       .from('gostoso_businesses')
       .select('id, name, slug, cover_url, category_id, is_featured, is_verified, lat, lng')
@@ -36,12 +36,32 @@ async function getHomeData() {
       .from('gostoso_businesses')
       .select('id', { count: 'exact', head: true })
       .eq('active', true),
+    supabase
+      .from('gostoso_businesses')
+      .select('id', { count: 'exact', head: true })
+      .eq('active', true)
+      .eq('is_verified', true),
+    supabase
+      .from('gostoso_categories')
+      .select('id', { count: 'exact', head: true }),
+    supabase
+      .from('gostoso_events')
+      .select('id', { count: 'exact', head: true }),
   ])
 
   return {
     featuredBusinesses: businessesRes.data ?? [],
     upcomingEvents: eventsRes.data ?? [],
-    totalBusinesses: statsRes.count ?? 0,
+    /* Os numeros vao para o `initialData` do useStats: sem isso o HTML do
+       servidor sai sem contagem nenhuma e o numero so aparece depois da
+       hidratacao. */
+    stats: {
+      businesses: statsRes.count ?? 0,
+      verified: verifiedRes.count ?? 0,
+      accommodations: 0,
+      events: eventsCountRes.count ?? 0,
+      categories: catsRes.count ?? 0,
+    },
   }
 }
 

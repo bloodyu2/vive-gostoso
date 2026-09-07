@@ -9,7 +9,7 @@ import { BusinessCard } from '@/components/business/business-card'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { Hoje } from '@/components/home/hoje'
 import { useBusinesses } from '@/hooks/useBusinesses'
-import { useStats } from '@/hooks/useStats'
+import { useStats, type SiteStats } from '@/hooks/useStats'
 import { useRecentBusinesses } from '@/hooks/useRecentBusinesses'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { supabase } from '@/lib/supabase'
@@ -34,17 +34,14 @@ function useLatestBlogPosts(limit = 3) {
 type HomeInitialData = {
   featuredBusinesses: Record<string, unknown>[]
   upcomingEvents: Record<string, unknown>[]
-  totalBusinesses: number
+  stats: SiteStats
 }
 
 type HomeProps = {
   initialData?: HomeInitialData
 }
 
-// _props kept for the SSR type contract with app/[lang]/page.tsx (which passes
-// initialData); the body below fetches everything via TanStack Query hooks independently.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function Home(_props: HomeProps) {
+export default function Home({ initialData }: HomeProps) {
   const { t } = useTranslation()
   const lp = useLocalePath()
 
@@ -60,7 +57,7 @@ export default function Home(_props: HomeProps) {
 
   const { data: allBusinesses = [] } = useBusinesses()
   const featured = allBusinesses.filter(b => b.is_featured)
-  const { data: stats } = useStats()
+  const { data: stats } = useStats(initialData ? { initialData: initialData.stats } : undefined)
   const { data: recentBusinesses = [] } = useRecentBusinesses()
   const { data: latestPosts = [] } = useLatestBlogPosts(3)
 
@@ -119,9 +116,16 @@ export default function Home(_props: HomeProps) {
           </div>
 
           {/* Stats — one sentence, not a tile grid */}
+          {stats && (
           <p className="mt-14 pt-10 border-t border-white/10 text-white/70 text-sm md:text-base max-w-xl">
-            {t('home.stats_sentence', { count: stats?.businesses ?? '120+' })}
+            {/* Dois numeros, os dois calculados. Nunca um so numero com a
+                palavra "verificados" ao lado: e o que a home fazia ate hoje,
+                dizendo "+182 negocios verificados" com 67 verificados de fato.
+                Sem numero, o bloco inteiro nao aparece: um valor inventado
+                seria mentir justo quando a pagina perdeu como saber a verdade. */}
+            {t('home.stats_sentence', { cadastrados: stats.businesses, verificados: stats.verified })}
           </p>
+          )}
         </div>
 
         {/* Scroll incentive */}

@@ -83,7 +83,7 @@
     "como_funciona_cta": "Saiba mais",
     "verificados_titulo": "Verificados pela cidade",
     "verificados_cta": "Ver diretório",
-    "stats_sentence": "+{{count}} negócios verificados na cidade. 100% do que você gasta aqui fica aqui.",
+    "stats_sentence": "{{cadastrados}} negócios cadastrados na cidade, {{verificados}} verificados. Não cobramos comissão.",
     "hero_h1_1": "Come.",
     "hero_h1_2": "Fique.",
     "hero_h1_3": "Passeie.",
@@ -984,7 +984,6 @@
     "cta_equipe": "Falar com a equipe",
     "stats_negocios": "negócios cadastrados",
     "stats_categorias": "categorias",
-    "stats_local": "feito na cidade",
     "benefits_titulo": "Por que cadastrar seu negócio?",
     "benefits_desc": "Vantagens de estar no diretório digital de São Miguel do Gostoso.",
     "how_titulo": "Como funciona",
@@ -1004,7 +1003,8 @@
     "final_titulo": "Seu negócio merece estar aqui",
     "final_desc": "Junte-se aos negócios que já fazem parte do Vive Gostoso e apareça para quem visita a cidade.",
     "final_cta": "Cadastrar agora",
-    "final_fineprint": "Gratuito. Sem compromisso. Feito por quem vive em Gostoso."
+    "final_fineprint": "Gratuito. Sem compromisso. Feito por quem vive em Gostoso.",
+    "stats_verificados": "verificados"
   },
   "reivindicar": {
     "badge": "REIVINDICAR",

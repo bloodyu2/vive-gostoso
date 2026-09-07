@@ -83,7 +83,7 @@
     "como_funciona_cta": "Learn more",
     "verificados_titulo": "Verified by the city",
     "verificados_cta": "See directory",
-    "stats_sentence": "+{{count}} verified businesses in the city. 100% of what you spend here stays here.",
+    "stats_sentence": "{{cadastrados}} businesses listed in town, {{verificados}} verified. We charge no commission.",
     "hero_h1_1": "Eat.",
     "hero_h1_2": "Stay.",
     "hero_h1_3": "Explore.",
@@ -902,7 +902,6 @@
     "cta_equipe": "Talk to the team",
     "stats_negocios": "registered businesses",
     "stats_categorias": "categories",
-    "stats_local": "built in town",
     "benefits_titulo": "Why list your business?",
     "benefits_desc": "Advantages of being in São Miguel do Gostoso's digital directory.",
     "how_titulo": "How it works",
@@ -922,7 +921,8 @@
     "final_titulo": "Your business belongs here",
     "final_desc": "Join the businesses already on Vive Gostoso and get seen by visitors to the city.",
     "final_cta": "List now",
-    "final_fineprint": "Free. No commitment. Built by people who live in Gostoso."
+    "final_fineprint": "Free. No commitment. Built by people who live in Gostoso.",
+    "stats_verificados": "verified"
   },
   "reivindicar": {
     "badge": "CLAIM",

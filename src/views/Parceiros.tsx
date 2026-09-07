@@ -149,17 +149,20 @@ export default function Parceiros() {
             {/* Stats */}
             {stats && (
               <div className="flex flex-wrap gap-6 mt-10 pt-8 border-t border-white/10">
+                {/* Sem fallback numerico: `?? 179` e `13` escritos a mao
+                    mentiam quando a consulta falhava ou quando o catalogo
+                    mudava. O bloco inteiro so aparece com dado. */}
                 <div>
-                  <p className="text-2xl font-bold text-white tabular-nums">{stats.businesses ?? 179}+</p>
+                  <p className="text-2xl font-bold text-white tabular-nums">{stats.businesses}</p>
                   <p className="text-xs text-[#737373] mt-0.5">{t('parceiros:stats_negocios')}</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-white tabular-nums">13</p>
-                  <p className="text-xs text-[#737373] mt-0.5">{t('parceiros:stats_categorias')}</p>
+                  <p className="text-2xl font-bold text-white tabular-nums">{stats.verified}</p>
+                  <p className="text-xs text-[#737373] mt-0.5">{t('parceiros:stats_verificados')}</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-teal tabular-nums">100%</p>
-                  <p className="text-xs text-[#737373] mt-0.5">{t('parceiros:stats_local')}</p>
+                  <p className="text-2xl font-bold text-white tabular-nums">{stats.categories}</p>
+                  <p className="text-xs text-[#737373] mt-0.5">{t('parceiros:stats_categorias')}</p>
                 </div>
               </div>
             )}
