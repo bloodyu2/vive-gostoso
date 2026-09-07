@@ -344,6 +344,11 @@ export default function Sobre() {
               </a>
             </div>
           </div>
+          <p className="mt-6">
+            <Link href={lp('/transparencia')} className="text-teal text-sm font-semibold hover:underline inline-flex items-center gap-1">
+              {t('sobre.transparencia_link')} <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </p>
         </div>
       </section>
 

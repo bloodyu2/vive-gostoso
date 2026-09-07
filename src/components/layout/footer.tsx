@@ -19,12 +19,13 @@ export function Footer() {
     { to: lp('/explore'),  label: t('nav.explore') },
   ]
   const CIDADE = [
-    { to: lp('/sobre'),     label: t('footer.sobre_projeto') },
-    { to: lp('/blog'),      label: t('footer.blog') },
-    { to: lp('/conheca'),   label: t('nav.conheca') },
-    { to: lp('/participe'), label: t('nav.participe') },
-    { to: lp('/apoie'),     label: t('nav.apoie') },
-    { to: lp('/contrate'),  label: t('nav.contrate') },
+    { to: lp('/sobre'),          label: t('footer.sobre_projeto') },
+    { to: lp('/transparencia'),  label: t('footer.transparencia') },
+    { to: lp('/blog'),           label: t('footer.blog') },
+    { to: lp('/conheca'),        label: t('nav.conheca') },
+    { to: lp('/participe'),      label: t('nav.participe') },
+    { to: lp('/apoie'),          label: t('nav.apoie') },
+    { to: lp('/contrate'),       label: t('nav.contrate') },
   ]
   const NEGOCIOS = [
     { to: '/cadastre',        label: t('footer.cadastrar') },

@@ -37,7 +37,7 @@ const STATIC_PAGES = [
   { path: '/sobre', freq: 'monthly', priority: '0.6' },
   { path: '/blog', freq: 'weekly', priority: '0.6' },
   { path: '/transfer', freq: 'weekly', priority: '0.7' },
-  // /transparencia entra aqui quando a rota existir (fase 4)
+  { path: '/transparencia', freq: 'monthly', priority: '0.6' },
 ]
 
 // Locale config: [lang-code, hreflang-value, url-prefix]
