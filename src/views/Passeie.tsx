@@ -7,10 +7,10 @@ import { BusinessGrid, type ViewMode } from '@/components/business/business-grid
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useCategories } from '@/hooks/useCategories'
 import { isBusinessOpen } from '@/lib/utils'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { ErrorState } from '@/components/ui/error-state'
+import { LinksModulos } from '@/components/layout/links-modulos'
 import type { Business } from '@/types/database'
 
 type PasseieProps = {
@@ -20,10 +20,6 @@ type PasseieProps = {
 export default function Passeie({ initialBusinesses = [] }: PasseieProps) {
   const { t } = useTranslation()
   const lp = useLocalePath()
-  usePageMeta({
-    title: t('passeie.meta_title'),
-    description: t('passeie.meta_desc'),
-  })
   const [activeCat, setActiveCat] = useState<string | null>(null)
   const [view, setView] = useState<ViewMode>('grid')
   const [openOnly, setOpenOnly] = useState(false)
@@ -43,7 +39,7 @@ export default function Passeie({ initialBusinesses = [] }: PasseieProps) {
     <main className="max-w-6xl mx-auto px-5 md:px-8 py-12">
       <div className="flex justify-between items-end flex-wrap gap-6 mb-10">
         <div>
-          <VerbPill verb="passeie" />
+          <VerbPill verb="passeie" srLabel={t('passeie.h1')} />
           <p className="mt-3 text-lg text-[#3D3D3D] max-w-xl leading-relaxed">
             {t('passeie.desc')}
           </p>
@@ -66,6 +62,7 @@ export default function Passeie({ initialBusinesses = [] }: PasseieProps) {
           <BusinessGrid businesses={filtered} loading={isLoading} view={view} />
         </>
       )}
+      <LinksModulos atual="passeie" />
     </main>
   )
 }

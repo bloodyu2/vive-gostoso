@@ -5,7 +5,7 @@ export interface Category {
   id: string
   name: string
   slug: string
-  verb: 'come' | 'fique' | 'passeie' | 'resolva'
+  verb: 'come' | 'fique' | 'passeie'
   icon: string | null
   color: string | null
   display_order: number
@@ -28,6 +28,10 @@ export interface Business {
   instagram: string | null
   cover_url: string | null
   photos: string[]
+  /** Imagens cobertas por aceite da clausula de licenca. Coluna derivada,
+   *  mantida por gatilho a partir de gostoso_aceites_licenca_imagem. So estas
+   *  recebem o rotulo "foto do proprio negocio". */
+  imagens_licenciadas?: string[]
   opening_hours: Record<string, { open: string; close: string; closed: boolean }> | null
   is_verified: boolean
   is_featured: boolean
@@ -152,7 +156,10 @@ export interface Goal {
   target_cents: number
   raised_cents: number
   category: 'marketing' | 'operacao' | 'infraestrutura' | 'comunidade'
-  status: 'pendente' | 'em_andamento' | 'concluido'
+  /** `aguardando_arrecadacao` existe porque "em andamento" com o fundo em zero
+   *  descreve intencao como execucao, que e a mesma afirmacao falsa dos R$230
+   *  em outro campo. Ele diz a causa, nao so o efeito. */
+  status: 'aguardando_arrecadacao' | 'pendente' | 'em_andamento' | 'concluido'
   target_date: string | null
   display_order: number
   created_at: string

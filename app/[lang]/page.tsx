@@ -1,44 +1,23 @@
 // app/[lang]/page.tsx
 import type { Metadata } from 'next'
+import { buildPageMetadata, type Locale } from '@/lib/page-metadata'
 import { createClient } from '@/lib/supabase/server'
 import Home from '@/views/Home'
-import { organizationSchema, webSiteSchema } from '@/lib/seo'
+import { webSiteSchema, touristDestinationSchema } from '@/lib/seo'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Vive Gostoso: Sao Miguel do Gostoso, RN',
-  description: 'A infraestrutura digital de Sao Miguel do Gostoso. Restaurantes, pousadas, passeios, eventos e mais.',
-  alternates: {
-    canonical: 'https://www.vivegostoso.com.br',
-    languages: {
-      'pt-BR': 'https://www.vivegostoso.com.br',
-      'en': 'https://www.vivegostoso.com.br/en',
-      'es': 'https://www.vivegostoso.com.br/es',
-      'x-default': 'https://www.vivegostoso.com.br',
-    },
-  },
-  openGraph: {
-    title: 'Vive Gostoso',
-    description: 'O sistema operacional de Sao Miguel do Gostoso, RN.',
-    url: 'https://www.vivegostoso.com.br',
-    siteName: 'Vive Gostoso',
-    locale: 'pt_BR',
-    type: 'website',
-    images: [{ url: 'https://www.vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Vive Gostoso',
-    description: 'O sistema operacional de Sao Miguel do Gostoso, RN.',
-    images: ['https://www.vivegostoso.com.br/og-image.png'],
-  },
+export async function generateMetadata(
+  { params }: { params: Promise<{ lang: string }> }
+): Promise<Metadata> {
+  const { lang } = await params
+  return buildPageMetadata('home', lang as Locale)
 }
 
 async function getHomeData() {
   const supabase = await createClient()
 
-  const [businessesRes, eventsRes, statsRes] = await Promise.all([
+  const [businessesRes, eventsRes, statsRes, verifiedRes, catsRes, eventsCountRes] = await Promise.all([
     supabase
       .from('gostoso_businesses')
       .select('id, name, slug, cover_url, category_id, is_featured, is_verified, lat, lng')
@@ -57,28 +36,48 @@ async function getHomeData() {
       .from('gostoso_businesses')
       .select('id', { count: 'exact', head: true })
       .eq('active', true),
+    supabase
+      .from('gostoso_businesses')
+      .select('id', { count: 'exact', head: true })
+      .eq('active', true)
+      .eq('is_verified', true),
+    supabase
+      .from('gostoso_categories')
+      .select('id', { count: 'exact', head: true }),
+    supabase
+      .from('gostoso_events')
+      .select('id', { count: 'exact', head: true }),
   ])
 
   return {
     featuredBusinesses: businessesRes.data ?? [],
     upcomingEvents: eventsRes.data ?? [],
-    totalBusinesses: statsRes.count ?? 0,
+    /* Os numeros vao para o `initialData` do useStats: sem isso o HTML do
+       servidor sai sem contagem nenhuma e o numero so aparece depois da
+       hidratacao. */
+    stats: {
+      businesses: statsRes.count ?? 0,
+      verified: verifiedRes.count ?? 0,
+      accommodations: 0,
+      events: eventsCountRes.count ?? 0,
+      categories: catsRes.count ?? 0,
+    },
   }
 }
 
 export default async function HomePage() {
   const initialData = await getHomeData()
-  const jsonLdOrg = organizationSchema()
   const jsonLdWeb = webSiteSchema()
+  const jsonLdDestination = touristDestinationSchema()
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrg) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWeb) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWeb) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdDestination) }}
       />
       <Home initialData={initialData} />
     </>

@@ -1,35 +1,49 @@
 import type { Metadata } from 'next'
+import { buildPageMetadata, urlDaRota, type Locale } from '@/lib/page-metadata'
+import { createClient } from '@/lib/supabase/server'
+import { itemListSchema, localizedUrl } from '@/lib/seo'
 import Contrate from '@/views/Contrate'
 
-export const metadata: Metadata = {
-  title: 'CONTRATE. -- Profissionais e Empresas em Sao Miguel do Gostoso',
-  description: 'Contrate profissionais e empresas de servico em Sao Miguel do Gostoso, RN. Encontre autonomos, agencias e vagas de emprego.',
-  alternates: {
-    canonical: 'https://www.vivegostoso.com.br/contrate',
-    languages: {
-      'pt-BR': 'https://www.vivegostoso.com.br/contrate',
-      'en': 'https://www.vivegostoso.com.br/en/contrate',
-      'es': 'https://www.vivegostoso.com.br/es/contrate',
-      'x-default': 'https://www.vivegostoso.com.br/contrate',
-    },
-  },
-  openGraph: {
-    title: 'CONTRATE. -- Profissionais e Empresas em Sao Miguel do Gostoso',
-    description: 'Contrate profissionais e empresas de servico em Sao Miguel do Gostoso, RN. Encontre autonomos, agencias e vagas de emprego.',
-    url: 'https://www.vivegostoso.com.br/contrate',
-    siteName: 'Vive Gostoso',
-    locale: 'pt_BR',
-    type: 'website',
-    images: [{ url: 'https://www.vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'CONTRATE. -- Profissionais e Empresas em Sao Miguel do Gostoso',
-    description: 'Contrate profissionais e empresas de servico em Sao Miguel do Gostoso, RN. Encontre autonomos, agencias e vagas de emprego.',
-    images: ['https://www.vivegostoso.com.br/og-image.png'],
-  },
+export const revalidate = 1800
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ lang: string }> }
+): Promise<Metadata> {
+  const { lang } = await params
+  return buildPageMetadata('contrate', lang as Locale)
 }
 
-export default function ContratePage() {
-  return <Contrate />
+async function getPublishedProfessionals() {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('gostoso_professionals')
+    .select('display_name, slug')
+    .eq('is_published', true)
+  return data ?? []
+}
+
+export default async function ContratePage(
+  { params }: { params: Promise<{ lang: string }> }
+) {
+  const { lang } = await params
+  const locale = lang as Locale
+  const professionals = await getPublishedProfessionals()
+  const jsonLd = itemListSchema({
+    name: 'Profissionais e prestadores de servico em Sao Miguel do Gostoso',
+    description: 'Profissionais autonomos e empresas de servico disponiveis para contratar em Sao Miguel do Gostoso, RN.',
+    url: urlDaRota('contrate', locale),
+    items: professionals.map(p => ({
+      name: p.display_name,
+      url: localizedUrl(`/contrate/profissional/${p.slug}`, locale),
+    })),
+  })
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Contrate />
+    </>
+  )
 }

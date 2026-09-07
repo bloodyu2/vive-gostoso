@@ -6,11 +6,13 @@ import { CookieBanner } from '@/components/cookie-banner'
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
 import { ShareFab } from '@/components/share-fab'
+import { WhatsAppButton } from '@/components/layout/whatsapp-button'
 
 /** O que o layout de idioma põe em volta de toda página, e as rotas onde isso
  *  atrapalha.
  *
- *  Cabeçalho, rodapé, botão flutuante de compartilhar e banner de cookies são certos
+ *  Cabeçalho, rodapé, flutuante de compartilhar, flutuante de WhatsApp e banner
+ *  de cookies são certos
  *  no site. Na /bio os quatro viram ruído: ela é uma etiqueta NFC lida em pé, na rua,
  *  e ali o flutuante fica exatamente por cima do rodapé com o e-mail, enquanto o
  *  banner cobre a faixa de baixo inteira. Compartilhar também não faz sentido numa
@@ -43,6 +45,7 @@ export function ChromeDoSite({ children }: { children: React.ReactNode }) {
       <main>{children}</main>
       <Footer />
       <ShareFab />
+      <WhatsAppButton variante="fab" />
       <CookieBanner />
     </>
   )

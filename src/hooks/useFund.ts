@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import type { UseQueryOptions } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { FundEntry } from '@/types/database'
+import { resumirFundo, type LinhaDoFundo } from '@/lib/fundo'
 
 export function useFundEntries(
   options?: Pick<UseQueryOptions<FundEntry[]>, 'initialData'>,
@@ -56,21 +57,9 @@ export function useFundSummary() {
         .from('gostoso_fund_entries')
         .select('amount_cents, status, category')
       if (error) throw error
-      const entries = (data ?? []) as Pick<FundEntry, 'amount_cents' | 'status' | 'category'>[]
-      const realized = entries.filter(e => e.status === 'realizado')
-      const totalCents = realized
-        .filter(e => e.amount_cents > 0)
-        .reduce((s, e) => s + e.amount_cents, 0)
-      const marketingCents = realized
-        .filter(e => e.category === 'marketing')
-        .reduce((s, e) => s + e.amount_cents, 0)
-      const operacaoCents = realized
-        .filter(e => e.category === 'operacao')
-        .reduce((s, e) => s + e.amount_cents, 0)
-      const acumuladoCents = realized
-        .filter(e => e.category === 'acumulado')
-        .reduce((s, e) => s + e.amount_cents, 0)
-      return { totalCents, marketingCents, operacaoCents, acumuladoCents }
+      /* A conta mora em src/lib/fundo.ts, com teste. Ela ja publicou gasto como
+         arrecadacao uma vez: nao volta a ser calculo solto dentro do hook. */
+      return resumirFundo((data ?? []) as LinhaDoFundo[])
     },
   })
 }

@@ -1,12 +1,25 @@
 /**
- * seo.ts — helpers para gerar JSON-LD schema.org consumido pelo
- * hook usePageMeta. Mantém o schema fora dos componentes para
+ * seo.ts — helpers para gerar JSON-LD schema.org injetado nas rotas
+ * server-side via <script type="application/ld+json"> (ver
+ * app/[lang]/come/page.tsx). Mantém o schema fora dos componentes para
  * facilitar testes e reuso.
  */
+
+import { OFFICIAL_WHATSAPP } from './whatsapp'
 
 const BASE_URL = 'https://www.vivegostoso.com.br'
 const SITE_NAME = 'Vive Gostoso'
 const PUBLISHER_LOGO = `${BASE_URL}/icons/pwa/icon-512.png`
+
+const LOCALE_PREFIX: Record<'pt' | 'en' | 'es', string> = { pt: '', en: '/en', es: '/es' }
+
+/** Monta a URL absoluta de um caminho (comecando com '/') respeitando o
+ *  prefixo do locale. Usado por paginas dinamicas/listas para que os
+ *  registros referenciados no JSON-LD (itens de ItemList, etc.) acompanhem o
+ *  idioma da pagina atual em vez de sempre apontar para a versao em pt. */
+export function localizedUrl(path: string, lang: 'pt' | 'en' | 'es'): string {
+  return `${BASE_URL}${LOCALE_PREFIX[lang]}${path}`
+}
 
 export interface ArticleSchemaInput {
   title: string
@@ -141,6 +154,12 @@ export function organizationSchema(): Record<string, unknown> {
     sameAs: [
       'https://instagram.com/vivegostoso',
     ],
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer support',
+      telephone: `+${OFFICIAL_WHATSAPP}`,
+      availableLanguage: ['Portuguese', 'English', 'Spanish'],
+    },
   }
 }
 
@@ -184,6 +203,36 @@ export function citySchema(): Record<string, unknown> {
       name: 'Sao Miguel do Gostoso',
       description: 'Coastal city in Rio Grande do Norte known for kitesurfing, windsurfing and pristine beaches.',
     },
+  }
+}
+
+/** schema.org TouristDestination para a home. Diferente de citySchema, que
+ *  descreve o município: este descreve o destino e aponta para os módulos. */
+export function touristDestinationSchema(): Record<string, unknown> {
+  const modulos: Array<[string, string]> = [
+    ['Onde comer em São Miguel do Gostoso', '/come'],
+    ['Onde ficar em São Miguel do Gostoso', '/fique'],
+    ['Passeios em São Miguel do Gostoso', '/passeie'],
+    ['Mapa de São Miguel do Gostoso', '/explore'],
+    ['Eventos em São Miguel do Gostoso', '/participe'],
+  ]
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'TouristDestination',
+    name: 'São Miguel do Gostoso',
+    alternateName: ['Gostoso', 'São Miguel'],
+    url: BASE_URL,
+    description:
+      'Cidade litorânea do Rio Grande do Norte, conhecida pelo vento constante, pelo kitesurf e pelas praias de Tourinhos e Ponta do Santo Cristo.',
+    geo: { '@type': 'GeoCoordinates', latitude: -5.1189, longitude: -35.3583 },
+    containedInPlace: {
+      '@type': 'State',
+      name: 'Rio Grande do Norte',
+      containedInPlace: { '@type': 'Country', name: 'Brasil' },
+    },
+    subjectOf: modulos.map(([name, path]) => ({
+      '@type': 'WebPage', name, url: `${BASE_URL}${path}`,
+    })),
   }
 }
 

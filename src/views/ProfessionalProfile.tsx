@@ -7,11 +7,9 @@ import { useTranslation } from 'react-i18next'
 import { useProfessional } from '@/hooks/useProfessionals'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { safeExternalUrl } from '@/lib/utils'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { ReviewList } from '@/components/reviews/review-list'
 import { ReviewForm } from '@/components/reviews/review-form'
-import { PROFESSIONAL_CATEGORY_LABELS } from '@/types/professional'
 import type { PortfolioItem } from '@/types/professional'
 
 const AVATAR_COLORS = [
@@ -30,17 +28,6 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
   const { t } = useTranslation()
   const lp = useLocalePath()
   const { data: pro, isLoading } = useProfessional(slug)
-
-  usePageMeta(
-    pro
-      ? {
-          title: `${pro.display_name} — Vive Gostoso`,
-          description: pro.headline,
-          url: `https://www.vivegostoso.com.br/contrate/profissional/${pro.slug}`,
-          image: pro.photo_url ?? undefined,
-        }
-      : { title: 'Profissional — Vive Gostoso' }
-  )
 
   if (isLoading) {
     return (
@@ -91,7 +78,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
             {pro.photo_url ? (
               <img
                 src={pro.photo_url}
-                alt={pro.display_name}
+                alt=""
                 className="w-20 h-20 rounded-2xl object-cover flex-shrink-0"
               />
             ) : (
@@ -106,7 +93,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
                   {pro.display_name}
                 </h1>
                 <span className="text-xs font-semibold bg-teal/20 text-teal px-2 py-0.5 rounded-full">
-                  {PROFESSIONAL_CATEGORY_LABELS[pro.category]}
+                  {t(`contrate.categorias.${pro.category}`)}
                 </span>
               </div>
               <p className="text-[#888] text-sm mb-3">{pro.headline}</p>

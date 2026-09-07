@@ -6,10 +6,10 @@ import { ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { BusinessCard } from '@/components/business/business-card'
+import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { Hoje } from '@/components/home/hoje'
 import { useBusinesses } from '@/hooks/useBusinesses'
-import { useStats } from '@/hooks/useStats'
-import { usePageMeta } from '@/hooks/usePageMeta'
+import { useStats, type SiteStats } from '@/hooks/useStats'
 import { useRecentBusinesses } from '@/hooks/useRecentBusinesses'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { supabase } from '@/lib/supabase'
@@ -34,17 +34,14 @@ function useLatestBlogPosts(limit = 3) {
 type HomeInitialData = {
   featuredBusinesses: Record<string, unknown>[]
   upcomingEvents: Record<string, unknown>[]
-  totalBusinesses: number
+  stats: SiteStats
 }
 
 type HomeProps = {
   initialData?: HomeInitialData
 }
 
-// _props kept for the SSR type contract with app/[lang]/page.tsx (which passes
-// initialData); the body below fetches everything via TanStack Query hooks independently.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function Home(_props: HomeProps) {
+export default function Home({ initialData }: HomeProps) {
   const { t } = useTranslation()
   const lp = useLocalePath()
 
@@ -58,13 +55,9 @@ export default function Home(_props: HomeProps) {
     { href: lp('/contrate'),  label: t('nav.contrate') + '.',  color: 'text-[#1A1A1A]',  sub: t('home.verbs_contrate_sub') },
   ]
 
-  usePageMeta({
-    title: 'São Miguel do Gostoso, RN',
-    description: 'Come. Fique. Passeie. O guia completo de São Miguel do Gostoso: restaurantes, pousadas, passeios e muito mais.',
-  })
   const { data: allBusinesses = [] } = useBusinesses()
   const featured = allBusinesses.filter(b => b.is_featured)
-  const { data: stats } = useStats()
+  const { data: stats } = useStats(initialData ? { initialData: initialData.stats } : undefined)
   const { data: recentBusinesses = [] } = useRecentBusinesses()
   const { data: latestPosts = [] } = useLatestBlogPosts(3)
 
@@ -92,16 +85,12 @@ export default function Home(_props: HomeProps) {
         {/* Content */}
         <div className="relative max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-28">
           <div className="flex flex-col gap-6 max-w-2xl">
-            {/* Eyebrow */}
-            <div className="flex items-center gap-3">
-              <span className="inline-block w-2 h-2 rounded-full bg-teal animate-pulse" />
-              <span className="text-xs font-semibold tracking-widest uppercase text-white/60">
-                {t('home.eyebrow')}
-              </span>
-            </div>
-
             {/* Display headline */}
             <h1 className="font-display font-bold leading-none tracking-tight">
+              <span className="flex items-center gap-3 text-xs font-semibold tracking-widest uppercase text-white/60 mb-6">
+                <span className="inline-block w-2 h-2 rounded-full bg-teal animate-pulse" />
+                {t('home.hero_h1_cidade')}
+              </span>
               <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">{t('home.hero_h1_1')}</span>
               <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">{t('home.hero_h1_2')}</span>
               <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">{t('home.hero_h1_3')}</span>
@@ -127,9 +116,16 @@ export default function Home(_props: HomeProps) {
           </div>
 
           {/* Stats — one sentence, not a tile grid */}
+          {stats && (
           <p className="mt-14 pt-10 border-t border-white/10 text-white/70 text-sm md:text-base max-w-xl">
-            {t('home.stats_sentence', { count: stats?.businesses ?? '120+' })}
+            {/* Dois numeros, os dois calculados. Nunca um so numero com a
+                palavra "verificados" ao lado: e o que a home fazia ate hoje,
+                dizendo "+182 negocios verificados" com 67 verificados de fato.
+                Sem numero, o bloco inteiro nao aparece: um valor inventado
+                seria mentir justo quando a pagina perdeu como saber a verdade. */}
+            {t('home.stats_sentence', { cadastrados: stats.businesses, verificados: stats.verified })}
           </p>
+          )}
         </div>
 
         {/* Scroll incentive */}
@@ -187,7 +183,7 @@ export default function Home(_props: HomeProps) {
               >
                 <div className="aspect-square bg-gradient-to-br from-teal to-teal-dark overflow-hidden">
                   {b.cover_url
-                    ? <img src={b.cover_url} alt={b.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                    ? <SafeCoverImage src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
                     : <div className="w-full h-full flex items-center justify-center text-white/30 text-3xl font-bold">{b.name[0]}</div>
                   }
                 </div>

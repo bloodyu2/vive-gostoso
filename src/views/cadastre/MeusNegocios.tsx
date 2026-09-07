@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { Button } from '@/components/ui/button'
+import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { supabase } from '@/lib/supabase'
 import { useMyBusinesses, useInvalidateMyBusinesses, type BusinessSummary } from '@/hooks/useMyBusinesses'
 
@@ -220,7 +221,7 @@ function MeusNegociosInner() {
                       {/* Cover thumb */}
                       <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-teal/30 to-teal/10">
                         {b.cover_url && (
-                          <img src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
+                          <SafeCoverImage src={b.cover_url} alt="" className="w-full h-full object-cover" />
                         )}
                       </div>
 

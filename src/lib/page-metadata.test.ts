@@ -1,0 +1,133 @@
+import { describe, it, expect } from 'vitest'
+import { buildPageMetadata } from './page-metadata'
+
+const ROTAS = ['home','come','fique','passeie','explore','participe','conheca','contrate','apoie','blog','sobre','transparencia'] as const
+const LOCALES = ['pt','en','es'] as const
+
+/** O helper devolve `title` como `{ absolute }` para escapar do template do
+ *  layout raiz. Esta funcao le o texto em si, nos testes que so olham o texto. */
+function tituloDe(m: { title?: unknown }): string {
+  const t = m.title
+  return typeof t === 'object' && t !== null && 'absolute' in t
+    ? String((t as { absolute: unknown }).absolute)
+    : String(t)
+}
+
+describe('buildPageMetadata', () => {
+  it('usa o titulo do locale pedido', () => {
+    const pt = buildPageMetadata('come', 'pt')
+    const en = buildPageMetadata('come', 'en')
+    expect(tituloDe(pt)).toContain('Restaurantes em São Miguel do Gostoso')
+    expect(tituloDe(en)).not.toBe(tituloDe(pt))
+    expect(tituloDe(en).length).toBeGreaterThan(10)
+  })
+
+  it('nao deixa passar titulo sem acento nem travessao', () => {
+    for (const lang of LOCALES) {
+      const t = tituloDe(buildPageMetadata('conheca', lang))
+      expect(t).toContain('São Miguel do Gostoso')
+      expect(t.length).toBeGreaterThan(20)
+      expect(t).not.toContain('--')
+      expect(t).not.toContain('—')
+    }
+    expect(tituloDe(buildPageMetadata('conheca', 'pt'))).toContain('Conheça')
+  })
+
+  it('nao repete a marca no fim do titulo', () => {
+    for (const lang of LOCALES) {
+      for (const r of ROTAS) {
+        expect(tituloDe(buildPageMetadata(r, lang))).not.toContain('| Vive Gostoso')
+      }
+    }
+  })
+
+  /* O Search Console reportou ~428 URLs fora do indice com motivo de canonical:
+     em producao toda pagina /en e /es declarava a versao pt como canonica, e o
+     Google segue o canonical quando ele contradiz o hreflang. Cada locale tem
+     que ser canonico de si mesmo. */
+  it('cada locale e canonico de si mesmo, nunca da versao em portugues', () => {
+    for (const r of ROTAS) {
+      const en = String(buildPageMetadata(r, 'en').alternates?.canonical)
+      const es = String(buildPageMetadata(r, 'es').alternates?.canonical)
+      const pt = String(buildPageMetadata(r, 'pt').alternates?.canonical)
+      expect(en, `${r}/en`).toContain('/en')
+      expect(es, `${r}/es`).toContain('/es')
+      expect(en, `${r}/en`).not.toBe(pt)
+      expect(es, `${r}/es`).not.toBe(pt)
+      expect(pt, `${r}/pt`).not.toContain('/en')
+      expect(pt, `${r}/pt`).not.toContain('/es')
+    }
+  })
+
+  it('og:url acompanha o canonical do locale, nao o do portugues', () => {
+    for (const lang of LOCALES) {
+      for (const r of ROTAS) {
+        const m = buildPageMetadata(r, lang)
+        expect(m.openGraph?.url, `${r}/${lang}`).toBe(m.alternates?.canonical)
+      }
+    }
+  })
+
+  it('monta canonical sem prefixo no pt e com prefixo nos outros', () => {
+    expect(buildPageMetadata('come', 'pt').alternates?.canonical)
+      .toBe('https://www.vivegostoso.com.br/come')
+    expect(buildPageMetadata('come', 'es').alternates?.canonical)
+      .toBe('https://www.vivegostoso.com.br/es/come')
+  })
+
+  it('a home nao vira barra dupla', () => {
+    expect(buildPageMetadata('home', 'pt').alternates?.canonical)
+      .toBe('https://www.vivegostoso.com.br')
+    expect(buildPageMetadata('home', 'en').alternates?.canonical)
+      .toBe('https://www.vivegostoso.com.br/en')
+  })
+
+  it('declara as quatro alternates, com x-default no portugues', () => {
+    const langs = buildPageMetadata('apoie', 'pt').alternates?.languages ?? {}
+    expect(Object.keys(langs).sort()).toEqual(['en','es','pt-BR','x-default'])
+    expect(langs['x-default']).toBe(langs['pt-BR'])
+  })
+
+  it('cobre as 12 rotas nos 3 locales, com title e description na faixa', () => {
+    let contados = 0
+    for (const r of ROTAS) {
+      for (const lang of LOCALES) {
+        const m = buildPageMetadata(r, lang)
+        const t = tituloDe(m), d = String(m.description)
+        expect(t.length, `${r}/${lang} title`).toBeGreaterThan(20)
+        expect(t.length, `${r}/${lang} title`).toBeLessThanOrEqual(60)
+        expect(d.length, `${r}/${lang} desc`).toBeGreaterThanOrEqual(140)
+        expect(d.length, `${r}/${lang} desc`).toBeLessThanOrEqual(160)
+        contados++
+      }
+    }
+    /* 12 rotas x 3 idiomas. O numero fica preso aqui de proposito: se alguem
+       apagar uma rota da lista sem apagar do produto, ou o contrario, este
+       teste avisa. A /resolva saiu em 2026-09-07 e o numero caiu de 39 para 36. */
+    expect(ROTAS).toHaveLength(12)
+    expect(contados).toBe(36)
+  })
+
+  it('openGraph e twitter herdam o mesmo par title/description', () => {
+    const m = buildPageMetadata('fique', 'es')
+    expect(m.openGraph?.title).toBe(tituloDe(m))
+    expect(m.twitter?.description).toBe(m.description)
+    expect(m.openGraph?.url).toBe(m.alternates?.canonical)
+  })
+
+  /* O teste que faltava, e que deixou passar um defeito real: asserir a saida
+     do helper nao basta, porque app/layout.tsx tem
+     title.template = '%s | Vive Gostoso'. Sem `absolute`, o Next reanexa a
+     marca e o titulo renderizado volta a estourar 60 caracteres, mesmo com o
+     helper devolvendo a string certa. */
+  it('devolve o titulo como absolute, para o template do layout nao reanexar a marca', () => {
+    for (const lang of LOCALES) {
+      for (const r of ROTAS) {
+        const t = buildPageMetadata(r, lang).title
+        expect(typeof t, `${r}/${lang}`).toBe('object')
+        expect(t).toHaveProperty('absolute')
+        expect(String((t as { absolute: string }).absolute).length).toBeGreaterThan(20)
+      }
+    }
+  })
+})

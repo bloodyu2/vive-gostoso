@@ -3,11 +3,12 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { FundHero } from '@/components/fund/fund-hero'
 import { FundEntryRow } from '@/components/fund/fund-entry-row'
 import { useFundEntries, useFundSummary, useAssociadosCount } from '@/hooks/useFund'
+import { useParametros } from '@/hooks/useParametros'
+import type { Parametros } from '@/lib/parametros'
 import { useGoals } from '@/hooks/useGoals'
 import { startDonation } from '@/hooks/useCheckout'
 import {
@@ -21,7 +22,10 @@ import type { FundEntry, Goal } from '@/types/database'
 // label/detalhe/valor vêm de apoie.custo_<key>_* — ver src/locales/*.json
 const CUSTOS_ATIVOS = [
   { icon: Layers,   key: 'vercel_hobby', valor_mes: 0 },
-  { icon: Database, key: 'supabase',     valor_mes: 58.00 },
+  /* Sem valor: a assinatura Pro e da organizacao Balaio Digital, que hospeda
+     quatro projetos. Nao existe fracao defensavel para atribuir a este site, e
+     numero que nao se defende e a mesma familia de problema dos R$230. */
+  { icon: Database, key: 'supabase',     valor_mes: 0 },
   { icon: Mail,     key: 'email',        valor_mes: 9.90 },
   { icon: Globe,    key: 'dominio',      valor_mes: 3.33 },
 ]
@@ -52,6 +56,7 @@ const GOAL_COLORS: Record<Goal['category'], { bg: string; text: string; bar: str
 
 // label vem de apoie.status_<status> — ver src/locales/*.json
 const STATUS_CLS: Record<Goal['status'], string> = {
+  aguardando_arrecadacao: 'bg-[#E8E4DF] text-[#737373]',
   pendente:     'bg-[#E8E4DF] text-[#737373]',
   em_andamento: 'bg-ocre/10 text-ocre',
   concluido:    'bg-teal/10 text-teal',
@@ -65,15 +70,16 @@ function fmt(cents: number) {
 
 type ApoieProps = {
   initialEntries?: FundEntry[]
+  initialParametros?: Parametros
 }
 
-export default function Apoie({ initialEntries = [] }: ApoieProps) {
+export default function Apoie({ initialEntries = [], initialParametros }: ApoieProps) {
+  /* Mesma fonte de rateio da /sobre e da /transparencia. */
+  const { data: param } = useParametros(
+    initialParametros ? { initialData: initialParametros } : undefined
+  )
   const { t, i18n } = useTranslation()
   const lp = useLocalePath()
-  usePageMeta({
-    title: t('apoie.meta_title'),
-    description: t('apoie.meta_desc'),
-  })
 
   const searchParams = useSearchParams()
   const donationSuccess = searchParams?.get('doacao') === 'success'
@@ -111,13 +117,18 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
 
   return (
     <main>
+      {/* `temArrecadacao` decide entre o painel de lancamento e o de extrato.
+          Antes o gatilho era "existe alguma entrada", e como entrada de CUSTO
+          tambem conta, a pagina saia do modo lancamento sem ter recebido um
+          real. O que decide e a arrecadacao, nao o numero de linhas. */}
       <FundHero
+        parametros={param}
         totalCents={summary?.totalCents ?? 0}
         marketingCents={summary?.marketingCents ?? 0}
         operacaoCents={summary?.operacaoCents ?? 0}
         acumuladoCents={summary?.acumuladoCents ?? 0}
         associadosCount={associadosCount}
-        hasEntries={entriesList.length > 0}
+        temArrecadacao={(summary?.totalCents ?? 0) > 0}
       />
 
       <div className="max-w-3xl mx-auto px-5 md:px-8 py-14 space-y-14">
@@ -258,11 +269,16 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
             })}
 
             {/* Total row */}
-            <div className="flex items-center justify-between px-5 py-4 bg-[#F5F2EE] dark:bg-[#222]">
-              <span className="text-sm font-semibold text-[#1A1A1A] dark:text-white">{t('apoie.total_mes')}</span>
-              <span className="font-display font-bold text-xl text-teal tabular-nums">
-                R${totalMes.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </span>
+            <div className="px-5 py-4 bg-[#F5F2EE] dark:bg-[#222]">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-[#1A1A1A] dark:text-white">{t('apoie.total_mes')}</span>
+                <span className="font-display font-bold text-xl text-teal tabular-nums">
+                  R${totalMes.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
+              </div>
+              {/* Sem esta linha o total parece a conta inteira, e nao e: falta a
+                  infraestrutura, que nao tem valor atribuivel a este site. */}
+              <p className="text-xs text-[#737373] mt-1">{t('apoie.total_mes_nota')}</p>
             </div>
           </div>
 
@@ -422,12 +438,18 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
         </section>
 
         {/* ── CTA ── */}
-        <div className="flex gap-3 pb-4">
+        <div className="flex flex-col gap-3 pb-4">
           <Link
             href="/cadastre"
-            className="inline-flex items-center gap-2 bg-teal text-white font-semibold px-6 py-3 rounded-xl hover:bg-teal-dark transition-colors text-sm"
+            className="inline-flex items-center gap-2 bg-teal text-white font-semibold px-6 py-3 rounded-xl hover:bg-teal-dark transition-colors text-sm w-fit"
           >
             {t('apoie.associar_negocio_btn')}
+          </Link>
+          <Link
+            href={lp('/transparencia')}
+            className="text-teal text-sm font-semibold hover:underline w-fit"
+          >
+            {t('apoie.transparencia_link')}
           </Link>
         </div>
 

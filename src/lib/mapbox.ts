@@ -10,5 +10,4 @@ export const PIN_COLORS = {
   come:    '#C97D2A',
   fique:   '#0D7C7C',
   passeie: '#3D8B5A',
-  resolva: '#1A1A1A',
 } as const

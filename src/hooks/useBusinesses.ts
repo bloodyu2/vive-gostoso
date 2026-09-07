@@ -5,7 +5,7 @@ import type { Business, Category } from '@/types/database'
 import { PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY } from '@/lib/supabase/business-columns'
 
 export function useBusinesses(
-  verb?: 'come' | 'fique' | 'passeie' | 'resolva',
+  verb?: 'come' | 'fique' | 'passeie',
   options?: Pick<UseQueryOptions<Business[]>, 'initialData'>,
 ) {
   return useQuery({

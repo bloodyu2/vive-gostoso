@@ -3,9 +3,9 @@ import Link from 'next/link'
 import { CalendarDays, MapPin, ArrowLeft, ExternalLink } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useEvent } from '@/hooks/useEvents'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { Badge } from '@/components/ui/badge'
+import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import type { GostosoEvent } from '@/types/database'
 
 const typeMap: Record<string, string> = {
@@ -23,11 +23,6 @@ export default function Evento({ initialEvent, id: idProp }: EventoProps) {
   const { t, i18n } = useTranslation()
   const lp = useLocalePath()
 
-  usePageMeta({
-    title: event ? event.name : 'Evento',
-    description: event?.description ?? 'Evento em São Miguel do Gostoso.',
-  })
-
   if (isLoading) return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-12 animate-pulse">
       <div className="h-64 bg-[#E8E4DF] rounded-2xl mb-6" />
@@ -39,7 +34,7 @@ export default function Evento({ initialEvent, id: idProp }: EventoProps) {
   if (!event) return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-12 text-center">
       <div className="text-5xl mb-4">🗓️</div>
-      <h1 className="font-display text-2xl font-semibold mb-2">{t('evento.nao_encontrado')}</h1>
+      <h2 className="font-display text-2xl font-semibold mb-2">{t('evento.nao_encontrado')}</h2>
       <Link href={lp('/participe')} className="text-teal text-sm font-semibold">{t('evento.ver_todos')}</Link>
     </main>
   )
@@ -59,7 +54,13 @@ export default function Evento({ initialEvent, id: idProp }: EventoProps) {
 
       {/* Cover */}
       <div className="aspect-[16/7] rounded-2xl overflow-hidden bg-gradient-to-br from-teal to-teal-dark mb-6">
-        {event.cover_url && <img src={event.cover_url} alt={event.name} className="w-full h-full object-cover" />}
+        {event.cover_url && (
+          <SafeCoverImage
+            src={event.cover_url}
+            alt={`${event.name} em São Miguel do Gostoso`}
+            className="w-full h-full object-cover"
+          />
+        )}
       </div>
 
       {/* Badges + type */}

@@ -3,8 +3,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { indexarParametros, type Parametro } from '@/lib/parametros'
 import type { Business, GostosoEvent, FundEntry, ServiceListing, JobListing, BlogPost } from '@/types/database'
-import { PUBLIC_BUSINESS_COLUMNS, PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY } from '@/lib/supabase/business-columns'
+import { PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY } from '@/lib/supabase/business-columns'
 
 // ─── Businesses ──────────────────────────────────────────────────────────────
 
@@ -21,9 +22,13 @@ export async function getBusinessesByVerb(verb: string): Promise<Business[]> {
   const catIds = ((cats ?? []) as { id: string }[]).map(c => c.id)
   if (!catIds.length) return []
 
+  /* COM a categoria: esta consulta alimenta o `initialData` de useBusinesses,
+     que nao refaz a busca no cliente. Sem o join, `b.category` chegava vazio e
+     o chip de categoria do card nunca aparecia em /come, /fique e /passeie, nem
+     a linha de categoria da capa tipografica. */
   const { data, error } = await supabase
     .from('gostoso_businesses')
-    .select(PUBLIC_BUSINESS_COLUMNS)
+    .select(PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY)
     .eq('active', true)
     .eq('is_published', true)
     .in('category_id', catIds)
@@ -172,4 +177,17 @@ export async function requireAdmin(supabase: SupabaseClient, userId: string): Pr
   if (profile?.role !== 'admin') {
     redirect('/cadastre/painel')
   }
+}
+
+// ─── Parametros do produto ───────────────────────────────────────────────────
+
+/** Preco e percentual, para o servidor entregar ja no HTML. Sem isto a pagina
+ *  institucional sai sem numero e ele so aparece depois da hidratacao. */
+export async function getParametrosProduto(): Promise<Record<string, number>> {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('gostoso_parametros_produto')
+    .select('chave, valor, unidade')
+  if (error) { console.error('[getParametrosProduto]', error.message); return {} }
+  return indexarParametros((data ?? []) as Parametro[])
 }

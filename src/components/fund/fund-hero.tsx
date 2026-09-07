@@ -1,22 +1,29 @@
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { formatCurrency } from '@/lib/utils'
+import { CHAVES, parametro, type Parametros } from '@/lib/parametros'
 import Link from 'next/link'
 
 interface FundHeroProps {
+  parametros?: Parametros
   totalCents: number
   marketingCents: number
   operacaoCents: number
   acumuladoCents: number
   associadosCount: number
-  hasEntries: boolean
+  temArrecadacao: boolean
 }
 
 export function FundHero({
-  totalCents, marketingCents, operacaoCents, acumuladoCents,
-  associadosCount, hasEntries,
+  parametros, totalCents, marketingCents, operacaoCents, acumuladoCents,
+  associadosCount, temArrecadacao,
 }: FundHeroProps) {
   const { t } = useTranslation('fund')
+  /* O rateio vem da mesma tabela que a /sobre e a /transparencia leem. A barra
+     tambem: antes ela era `w-4/5`, oitenta por cento desenhados em pixel fixo
+     que nao mudariam se o rateio mudasse. */
+  const cidade = parametro(parametros, CHAVES.rateioCidade)
+  const operacao = parametro(parametros, CHAVES.rateioOperacao)
   const lp = useLocalePath()
   const month = new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
 
@@ -27,31 +34,34 @@ export function FundHero({
           {t('section_label', { month })}
         </div>
         <h1 className="font-display font-bold text-5xl sm:text-6xl md:text-8xl leading-none tracking-tight mb-4">
+          <span className="sr-only">{t('apoie.h1', { ns: 'translation' })}</span>
           {t('title')}
         </h1>
         <p className="text-base md:text-lg opacity-90 max-w-lg leading-relaxed">
           {t('desc')}
         </p>
 
-        {!hasEntries ? (
+        {!temArrecadacao ? (
           <div className="mt-10 md:mt-12 bg-white/10 border border-white/20 rounded-2xl p-8 max-w-2xl">
             <div className="text-3xl font-display font-bold mb-3">{t('launch_title')}</div>
             <p className="opacity-85 leading-relaxed mb-6">
               {t('launch_desc')}
             </p>
+            {/* Entrou, saiu e saldo, e nada de custo aqui. Os R$59,80 de dominio
+                e e-mail sairam da Balaio, nao do fundo: mostra-los como saida
+                diria que o fundo pagou. Tres zeros e o estado verdadeiro, e a
+                estrutura ja fica certa para quando o dinheiro existir. */}
             <div className="flex items-center gap-3 flex-wrap">
-              <div className="bg-white/15 rounded-xl px-4 py-3 text-center">
-                <div className="font-display font-bold text-2xl">{associadosCount}</div>
-                <div className="text-xs opacity-75 mt-0.5">{t('launch_associados')}</div>
-              </div>
-              <div className="bg-white/15 rounded-xl px-4 py-3 text-center">
-                <div className="font-display font-bold text-2xl">80%</div>
-                <div className="text-xs opacity-75 mt-0.5">{t('launch_city_share')}</div>
-              </div>
-              <div className="bg-white/15 rounded-xl px-4 py-3 text-center">
-                <div className="font-display font-bold text-2xl">0%</div>
-                <div className="text-xs opacity-75 mt-0.5">{t('launch_no_profit')}</div>
-              </div>
+              {([
+                ['entrou', totalCents],
+                ['saiu', 0],
+                ['saldo', totalCents],
+              ] as const).map(([chave, valor]) => (
+                <div key={chave} className="bg-white/15 rounded-xl px-4 py-3 text-center">
+                  <div className="font-display font-bold text-2xl">{formatCurrency(valor)}</div>
+                  <div className="text-xs opacity-75 mt-0.5">{t(`launch_${chave}`)}</div>
+                </div>
+              ))}
             </div>
             <Link
               href={lp('/cadastre')}
@@ -72,13 +82,17 @@ export function FundHero({
                 </div>
               </div>
               <div className="self-start md:self-end">
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="font-semibold">{t('allocated_80')}</span>
-                  <span className="opacity-80">{t('allocated_20')}</span>
-                </div>
-                <div className="h-4 bg-white/20 rounded-full overflow-hidden">
-                  <div className="w-4/5 h-full bg-ocre rounded-full" />
-                </div>
+                {cidade !== undefined && operacao !== undefined && (
+                  <>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span className="font-semibold">{t('allocated_cidade', { pct: cidade })}</span>
+                      <span className="opacity-80">{t('allocated_operacao', { pct: operacao })}</span>
+                    </div>
+                    <div className="h-4 bg-white/20 rounded-full overflow-hidden">
+                      <div className="h-full bg-ocre rounded-full" style={{ width: `${cidade}%` }} />
+                    </div>
+                  </>
+                )}
                 <p className="text-sm opacity-80 mt-4 leading-relaxed">
                   {t('dest_desc', { value: formatCurrency(marketingCents) })}<br />
                   {t('ops_desc', { value: formatCurrency(operacaoCents) })}

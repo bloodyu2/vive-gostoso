@@ -8,10 +8,27 @@ import { useTranslation } from 'react-i18next'
 import sanitizeHtml from 'sanitize-html'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useLocalePath } from '@/hooks/useLocalePath'
-import { articleSchema, breadcrumbSchema, clampDescription } from '@/lib/seo'
 import { RelatedPosts, TableOfContents } from '@/components/blog'
+import { SafeCoverImage } from '@/components/ui/safe-cover-image'
+import type { RotaModulo } from '@/components/layout/links-modulos'
+
+// Escolhe o módulo do rodapé pela primeira tag do post que bater com o mapa
+// abaixo. Nenhuma tag bate -> cai em 'explore' (mapa da cidade), que serve
+// como destino genérico razoável para qualquer assunto.
+const MODULO_POR_TAG: Record<string, RotaModulo> = {
+  'onde comer': 'come', restaurantes: 'come', bares: 'come', gastronomia: 'come',
+  pousadas: 'fique', hospedagem: 'fique', 'onde ficar': 'fique',
+  kitesurf: 'passeie', passeios: 'passeie', praias: 'passeie',
+}
+
+function moduloDoPost(tags: string[] | null | undefined): RotaModulo {
+  for (const tag of tags ?? []) {
+    const modulo = MODULO_POR_TAG[tag.toLowerCase()]
+    if (modulo) return modulo
+  }
+  return 'explore'
+}
 
 // Allow-list tuned to what gostoso_blog_posts.content actually contains:
 // comparison tables (table.comparison-table), tip/warn/info callouts
@@ -47,8 +64,6 @@ const BLOG_SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
 function sanitizeBlogContent(html: string): string {
   return sanitizeHtml(html, BLOG_SANITIZE_OPTIONS)
 }
-
-const SITE_URL = 'https://www.vivegostoso.com.br'
 
 function useBlogPost(
   slug: string,
@@ -87,53 +102,7 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
     [post],
   )
 
-  const url = slug ? `${SITE_URL}/blog/${slug}` : SITE_URL
-  const description = post?.excerpt ? clampDescription(post.excerpt, 160) : undefined
-
-  const jsonLd = useMemo(() => {
-    if (!post) return undefined
-    const blocks: Array<Record<string, unknown>> = [
-      articleSchema({
-        title: post.title,
-        description: description ?? '',
-        url,
-        image: post.cover_url ?? undefined,
-        author: post.author,
-        publishedTime: post.published_at,
-        modifiedTime: post.published_at,
-        tags: post.tags,
-      }),
-      breadcrumbSchema([
-        { name: 'Início', url: SITE_URL },
-        { name: 'Blog', url: `${SITE_URL}/blog` },
-        { name: post.title, url },
-      ]),
-    ]
-    if (post.faq_jsonld) {
-      try {
-        const parsed = JSON.parse(post.faq_jsonld)
-        if (parsed && typeof parsed === 'object') {
-          blocks.push(parsed as Record<string, unknown>)
-        }
-      } catch {
-        // ignora JSON-LD malformado
-      }
-    }
-    return blocks
-  }, [post, description, url])
-
-  usePageMeta({
-    title: post?.title ?? t('blog.meta_title'),
-    description: description ?? t('blog.meta_desc'),
-    image: post?.cover_url ?? undefined,
-    url,
-    type: 'article',
-    publishedTime: post?.published_at ?? undefined,
-    modifiedTime: post?.published_at ?? undefined,
-    author: post?.author,
-    tags: post?.tags,
-    jsonLd,
-  })
+  const modulo = useMemo(() => moduloDoPost(post?.tags), [post])
 
   if (isLoading) {
     return (
@@ -204,14 +173,13 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
       </div>
 
       {post.cover_url && (
-        <figure className="mt-8 rounded-2xl overflow-hidden aspect-[16/9]">
-          <img
+        <figure className="mt-8 rounded-2xl overflow-hidden aspect-[16/9] bg-gradient-to-br from-teal to-teal-dark">
+          <SafeCoverImage
             src={post.cover_url}
             alt={post.title}
             width={1200}
             height={675}
             loading="eager"
-            decoding="async"
             className="w-full h-full object-cover"
           />
         </figure>
@@ -223,6 +191,12 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
         className="blog-prose mt-2 max-w-none"
         dangerouslySetInnerHTML={{ __html: sanitizedContent }}
       />
+
+      <nav className="mt-10 pt-8 border-t border-[#E8E4DF] dark:border-[#2D2D2D]">
+        <Link href={lp(`/${modulo}`)} className="text-teal hover:underline text-sm font-semibold">
+          {t(`links_modulos.${modulo}`)} →
+        </Link>
+      </nav>
 
       <RelatedPosts currentSlug={post.slug} tags={post.tags} />
     </main>

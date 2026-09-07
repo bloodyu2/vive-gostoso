@@ -23,8 +23,8 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <>
       <LocaleSync lang={lang} />
-      {/* Cabeçalho, rodapé, botão de compartilhar e banner de cookies, menos nas
-          rotas onde eles cobrem o conteúdo. Ver components/layout/chrome-do-site. */}
+      {/* Cabeçalho, rodapé, flutuantes e banner de cookies, menos nas rotas onde
+          eles cobrem o conteúdo. Ver components/layout/chrome-do-site. */}
       <ChromeDoSite>{children}</ChromeDoSite>
     </>
   )
