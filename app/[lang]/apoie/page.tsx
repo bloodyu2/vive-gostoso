@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { buildPageMetadata, type Locale } from '@/lib/page-metadata'
-import { getFundEntries } from '@/lib/supabase/queries'
+import { getFundEntries, getParametrosProduto } from '@/lib/supabase/queries'
 import Apoie from '@/views/Apoie'
 
 export const revalidate = 3600
@@ -13,6 +13,6 @@ export async function generateMetadata(
 }
 
 export default async function ApoiePage() {
-  const entries = await getFundEntries()
-  return <Apoie initialEntries={entries} />
+  const [entries, parametros] = await Promise.all([getFundEntries(), getParametrosProduto()])
+  return <Apoie initialEntries={entries} initialParametros={parametros} />
 }

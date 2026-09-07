@@ -1,9 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { formatCurrency } from '@/lib/utils'
+import { CHAVES, parametro, type Parametros } from '@/lib/parametros'
 import Link from 'next/link'
 
 interface FundHeroProps {
+  parametros?: Parametros
   totalCents: number
   marketingCents: number
   operacaoCents: number
@@ -13,10 +15,15 @@ interface FundHeroProps {
 }
 
 export function FundHero({
-  totalCents, marketingCents, operacaoCents, acumuladoCents,
+  parametros, totalCents, marketingCents, operacaoCents, acumuladoCents,
   associadosCount, temArrecadacao,
 }: FundHeroProps) {
   const { t } = useTranslation('fund')
+  /* O rateio vem da mesma tabela que a /sobre e a /transparencia leem. A barra
+     tambem: antes ela era `w-4/5`, oitenta por cento desenhados em pixel fixo
+     que nao mudariam se o rateio mudasse. */
+  const cidade = parametro(parametros, CHAVES.rateioCidade)
+  const operacao = parametro(parametros, CHAVES.rateioOperacao)
   const lp = useLocalePath()
   const month = new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
 
@@ -75,13 +82,17 @@ export function FundHero({
                 </div>
               </div>
               <div className="self-start md:self-end">
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="font-semibold">{t('allocated_80')}</span>
-                  <span className="opacity-80">{t('allocated_20')}</span>
-                </div>
-                <div className="h-4 bg-white/20 rounded-full overflow-hidden">
-                  <div className="w-4/5 h-full bg-ocre rounded-full" />
-                </div>
+                {cidade !== undefined && operacao !== undefined && (
+                  <>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span className="font-semibold">{t('allocated_cidade', { pct: cidade })}</span>
+                      <span className="opacity-80">{t('allocated_operacao', { pct: operacao })}</span>
+                    </div>
+                    <div className="h-4 bg-white/20 rounded-full overflow-hidden">
+                      <div className="h-full bg-ocre rounded-full" style={{ width: `${cidade}%` }} />
+                    </div>
+                  </>
+                )}
                 <p className="text-sm opacity-80 mt-4 leading-relaxed">
                   {t('dest_desc', { value: formatCurrency(marketingCents) })}<br />
                   {t('ops_desc', { value: formatCurrency(operacaoCents) })}

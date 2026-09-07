@@ -7,6 +7,8 @@ import { useLocalePath } from '@/hooks/useLocalePath'
 import { FundHero } from '@/components/fund/fund-hero'
 import { FundEntryRow } from '@/components/fund/fund-entry-row'
 import { useFundEntries, useFundSummary, useAssociadosCount } from '@/hooks/useFund'
+import { useParametros } from '@/hooks/useParametros'
+import type { Parametros } from '@/lib/parametros'
 import { useGoals } from '@/hooks/useGoals'
 import { startDonation } from '@/hooks/useCheckout'
 import {
@@ -68,9 +70,14 @@ function fmt(cents: number) {
 
 type ApoieProps = {
   initialEntries?: FundEntry[]
+  initialParametros?: Parametros
 }
 
-export default function Apoie({ initialEntries = [] }: ApoieProps) {
+export default function Apoie({ initialEntries = [], initialParametros }: ApoieProps) {
+  /* Mesma fonte de rateio da /sobre e da /transparencia. */
+  const { data: param } = useParametros(
+    initialParametros ? { initialData: initialParametros } : undefined
+  )
   const { t, i18n } = useTranslation()
   const lp = useLocalePath()
 
@@ -115,6 +122,7 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
           tambem conta, a pagina saia do modo lancamento sem ter recebido um
           real. O que decide e a arrecadacao, nao o numero de linhas. */}
       <FundHero
+        parametros={param}
         totalCents={summary?.totalCents ?? 0}
         marketingCents={summary?.marketingCents ?? 0}
         operacaoCents={summary?.operacaoCents ?? 0}

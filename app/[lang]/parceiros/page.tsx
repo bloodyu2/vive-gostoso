@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 import Parceiros from '@/views/Parceiros'
+import { getParametrosProduto } from '@/lib/supabase/queries'
+
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Cadastre seu negócio — Vive Gostoso',
@@ -11,6 +14,7 @@ export const metadata: Metadata = {
   },
 }
 
-export default function ParceirosPage() {
-  return <Parceiros />
+export default async function ParceirosPage() {
+  const parametros = await getParametrosProduto()
+  return <Parceiros initialParametros={parametros} />
 }

@@ -3,12 +3,29 @@
 import Link from 'next/link'
 import { Building2, Camera, Coins, ImageOff, LogIn, Mail, MapPin, MessageCircle, ShieldCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useParametros } from '@/hooks/useParametros'
+import { CHAVES, parametro, precoEmReais, type Parametros } from '@/lib/parametros'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { FAQSection } from '@/components/blog'
 import { buildWhatsAppLink, OFFICIAL_WHATSAPP } from '@/lib/whatsapp'
 
-export default function Transparencia() {
+type TransparenciaProps = { initialParametros?: Parametros }
+
+export default function Transparencia({ initialParametros }: TransparenciaProps) {
   const { t, i18n } = useTranslation()
+  /* Mesma fonte da /sobre, da /parceiros e do painel. Ate 2026-09-07 esta
+     pagina dizia "R$30 ou R$50" enquanto o painel cobrava R$39,90 e R$59,90. */
+  const { data: param } = useParametros(
+    initialParametros ? { initialData: initialParametros } : undefined
+  )
+  const pct = (chave: string) => {
+    const v = parametro(param, chave)
+    return v === undefined ? null : `${v}%`
+  }
+  const preco = (chave: string) => {
+    const c = parametro(param, chave)
+    return c === undefined ? null : precoEmReais(c)
+  }
   const lp = useLocalePath()
 
   const faqItems = (i18n.getResource(i18n.language, 'translation', 'transparencia.faq') ??
@@ -152,13 +169,20 @@ export default function Transparencia() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
             {CONTA_STATS.map(i => (
               <div key={i} className="bg-white/10 rounded-2xl p-6 text-center">
-                <div className="text-4xl font-display font-bold mb-2">{t(`transparencia.conta_stat_${i}_n`)}</div>
+                <div className="text-4xl font-display font-bold mb-2">{pct([CHAVES.gratuito, CHAVES.rateioCidade, CHAVES.rateioOperacao, CHAVES.lucro][i])}</div>
                 <div className="text-teal-light text-sm font-medium leading-snug">{t(`transparencia.conta_stat_${i}_label`)}</div>
               </div>
             ))}
           </div>
           <div className="bg-white/10 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-white/80 text-sm leading-relaxed max-w-md">{t('transparencia.conta_desc')}</p>
+            <p className="text-white/80 text-sm leading-relaxed max-w-md">
+              {preco(CHAVES.planoAssociado) && preco(CHAVES.planoDestaque)
+                ? t('transparencia.conta_desc', {
+                    precoAssociado: preco(CHAVES.planoAssociado),
+                    precoDestaque: preco(CHAVES.planoDestaque),
+                  })
+                : t('transparencia.conta_desc_sem_preco')}
+            </p>
             <Link href={lp('/apoie')} className="flex-shrink-0 inline-flex items-center gap-2 bg-white text-teal font-semibold px-5 py-2.5 rounded-full hover:bg-teal-light transition-colors text-sm text-center">
               <Coins className="w-4 h-4" />
               {t('transparencia.conta_link_texto')}

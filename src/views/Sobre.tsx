@@ -8,16 +8,34 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import { useParametros } from '@/hooks/useParametros'
+import { CHAVES, parametro, precoEmReais, type Parametros } from '@/lib/parametros'
 
-export default function Sobre() {
+type SobreProps = { initialParametros?: Parametros }
+
+export default function Sobre({ initialParametros }: SobreProps) {
   const { t } = useTranslation()
   const lp = useLocalePath()
+  /* Preco e percentual vem da tabela gostoso_parametros_produto. Ate 2026-09-07
+     esta pagina publicava R$30 e R$50 em literal dentro do JSX, enquanto o
+     painel onde a pessoa assina cobrava R$39,90 e R$59,90. */
+  const { data: param } = useParametros(
+    initialParametros ? { initialData: initialParametros } : undefined
+  )
+  const preco = (chave: string) => {
+    const c = parametro(param, chave)
+    return c === undefined ? null : precoEmReais(c)
+  }
+  const pct = (chave: string) => {
+    const v = parametro(param, chave)
+    return v === undefined ? null : `${v}%`
+  }
 
   const STEPS = [
     { icon: Gift,       color: 'bg-teal-light text-teal',       tag: t('sobre.step_0_tag'), title: t('sobre.step_0_title'), body: t('sobre.step_0_body') },
     { icon: Search,     color: 'bg-teal-light text-teal',       tag: t('sobre.step_1_tag'), title: t('sobre.step_1_title'), body: t('sobre.step_1_body') },
     { icon: TrendingUp, color: 'bg-ocre-light text-ocre',       tag: t('sobre.step_2_tag'), title: t('sobre.step_2_title'), body: t('sobre.step_2_body') },
-    { icon: Megaphone,  color: 'bg-ocre-light text-ocre',       tag: t('sobre.step_3_tag'), title: t('sobre.step_3_title'), body: t('sobre.step_3_body') },
+    { icon: Megaphone,  color: 'bg-ocre-light text-ocre',       tag: t('sobre.step_3_tag'), title: t('sobre.step_3_title'), body: t('sobre.step_3_body', { pct: parametro(param, CHAVES.rateioCidade) ?? '' }) },
     { icon: Lightbulb,  color: 'bg-[#EDE9FE] text-[#7C3AED]',  tag: t('sobre.step_4_tag'), title: t('sobre.step_4_title'), body: t('sobre.step_4_body') },
   ]
 
@@ -60,7 +78,7 @@ export default function Sobre() {
           <div className="flex flex-wrap gap-x-10 gap-y-4 pt-8 border-t border-white/10">
             {([0, 1, 2] as const).map(i => (
               <div key={i}>
-                <div className="font-display font-bold text-2xl text-white">{t(`sobre.stat_${i}_n`)}</div>
+                <div className="font-display font-bold text-2xl text-white">{pct([CHAVES.gratuito, CHAVES.rateioCidade, CHAVES.lucro][i])}</div>
                 <div className="text-xs text-white/50 mt-0.5">{t(`sobre.stat_${i}_label`)}</div>
               </div>
             ))}
@@ -205,7 +223,7 @@ export default function Sobre() {
           {/* Gratuito */}
           <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl p-6 flex flex-col">
             <div className="flex items-baseline gap-1 mb-1">
-              <span className="font-display font-bold text-4xl text-[#1A1A1A] dark:text-white">R$0</span>
+              <span className="font-display font-bold text-4xl text-[#1A1A1A] dark:text-white">{preco(CHAVES.planoGratuito)}</span>
             </div>
             <div className="text-xs font-bold uppercase tracking-widest text-[#737373] mb-5">{t('sobre.planos_free_label')}</div>
             <ul className="space-y-2.5 text-sm text-[#3D3D3D] dark:text-[#C0BCB8] flex-1">
@@ -221,7 +239,7 @@ export default function Sobre() {
           {/* Associado */}
           <div className="bg-white dark:bg-[#1C1C1C] border border-teal/30 rounded-2xl p-6 flex flex-col">
             <div className="flex items-baseline gap-1 mb-1">
-              <span className="font-display font-bold text-4xl text-teal">R$30</span>
+              <span className="font-display font-bold text-4xl text-teal">{preco(CHAVES.planoAssociado)}</span>
               <span className="text-sm text-[#737373]">/mês</span>
             </div>
             <div className="text-xs font-bold uppercase tracking-widest text-teal mb-5">{t('sobre.planos_assoc_label')}</div>
@@ -232,7 +250,7 @@ export default function Sobre() {
               <li className="flex items-start gap-2"><span className="text-teal mt-0.5">✓</span>
                 <span><strong>{t('sobre.planos_assoc_item_3_label')}</strong> {t('sobre.planos_assoc_item_3_text')}</span>
               </li>
-              <li className="flex items-start gap-2"><span className="text-teal mt-0.5">✓</span> {t('sobre.planos_assoc_item_4')}</li>
+              <li className="flex items-start gap-2"><span className="text-teal mt-0.5">✓</span> {t('sobre.planos_assoc_item_4', { pct: parametro(param, CHAVES.rateioCidade) ?? '' })}</li>
             </ul>
             <Link href="/cadastre" className="mt-6 block text-center bg-teal text-white font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-teal-dark transition-colors">
               {t('sobre.planos_assoc_btn')}
@@ -245,7 +263,7 @@ export default function Sobre() {
               {t('sobre.planos_plus_badge')}
             </div>
             <div className="flex items-baseline gap-1 mb-1">
-              <span className="font-display font-bold text-4xl text-ocre">R$50</span>
+              <span className="font-display font-bold text-4xl text-ocre">{preco(CHAVES.planoDestaque)}</span>
               <span className="text-sm text-[#737373]">/mês</span>
             </div>
             <div className="text-xs font-bold uppercase tracking-widest text-ocre mb-5">{t('sobre.planos_plus_label')}</div>
@@ -255,7 +273,7 @@ export default function Sobre() {
                 <span>{t('sobre.planos_plus_item_1_pre')} <a href="https://balaio.net" target="_blank" rel="noopener noreferrer" className="text-teal underline">Balaio</a>{t('sobre.planos_plus_item_1_post')}</span>
               </li>
               <li className="flex items-start gap-2"><span className="text-ocre mt-0.5">✓</span> {t('sobre.planos_plus_item_2')}</li>
-              <li className="flex items-start gap-2"><span className="text-ocre mt-0.5">✓</span> {t('sobre.planos_plus_item_3')}</li>
+              <li className="flex items-start gap-2"><span className="text-ocre mt-0.5">✓</span> {t('sobre.planos_plus_item_3', { pct: parametro(param, CHAVES.rateioCidade) ?? '' })}</li>
             </ul>
             <Link href="/cadastre" className="mt-6 block text-center bg-ocre text-white font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-ocre-dark transition-colors">
               {t('sobre.planos_plus_btn')}
@@ -273,9 +291,9 @@ export default function Sobre() {
             {t('sobre.transp_h2')}
           </h2>
           <div className="grid md:grid-cols-3 gap-6 mb-10">
-            {(['80%', '20%', '0%'] as const).map((n, i) => (
+            {([CHAVES.rateioCidade, CHAVES.rateioOperacao, CHAVES.lucro] as const).map((chave, i) => (
               <div key={i} className="bg-white/10 rounded-2xl p-6 text-center">
-                <div className="text-5xl font-display font-bold mb-2">{n}</div>
+                <div className="text-5xl font-display font-bold mb-2">{pct(chave)}</div>
                 <div className="text-teal-light text-sm font-medium leading-snug">{t(`sobre.transp_stat_${i}`)}</div>
               </div>
             ))}
@@ -397,7 +415,7 @@ export default function Sobre() {
               <Heart className="w-5 h-5 text-ocre" />
             </div>
             <h3 className="font-semibold mb-2">{t('sobre.participar_alcance_h3')}</h3>
-            <p className="text-sm text-[#737373] leading-relaxed mb-4">{t('sobre.participar_alcance_desc')}</p>
+            <p className="text-sm text-[#737373] leading-relaxed mb-4">{t('sobre.participar_alcance_desc', { pct: parametro(param, CHAVES.rateioCidade) ?? '' })}</p>
             <Link href={lp('/apoie')} className="text-ocre text-sm font-semibold hover:underline flex items-center gap-1">
               {t('sobre.participar_alcance_btn')} <ArrowRight className="w-3.5 h-3.5" />
             </Link>

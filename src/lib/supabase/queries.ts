@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { indexarParametros, type Parametro } from '@/lib/parametros'
 import type { Business, GostosoEvent, FundEntry, ServiceListing, JobListing, BlogPost } from '@/types/database'
 import { PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY } from '@/lib/supabase/business-columns'
 
@@ -176,4 +177,17 @@ export async function requireAdmin(supabase: SupabaseClient, userId: string): Pr
   if (profile?.role !== 'admin') {
     redirect('/cadastre/painel')
   }
+}
+
+// ─── Parametros do produto ───────────────────────────────────────────────────
+
+/** Preco e percentual, para o servidor entregar ja no HTML. Sem isto a pagina
+ *  institucional sai sem numero e ele so aparece depois da hidratacao. */
+export async function getParametrosProduto(): Promise<Record<string, number>> {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('gostoso_parametros_produto')
+    .select('chave, valor, unidade')
+  if (error) { console.error('[getParametrosProduto]', error.message); return {} }
+  return indexarParametros((data ?? []) as Parametro[])
 }

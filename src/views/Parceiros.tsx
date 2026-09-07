@@ -8,6 +8,8 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { useStats } from '@/hooks/useStats'
+import { useParametros } from '@/hooks/useParametros'
+import { CHAVES, parametro, precoEmReais, type Parametros } from '@/lib/parametros'
 import { buildWhatsAppLink, OFFICIAL_WHATSAPP } from '@/lib/whatsapp'
 
 const BENEFITS = [
@@ -46,14 +48,24 @@ const TESTIMONIALS = [
   },
 ]
 
-export default function Parceiros() {
+type ParceirosProps = { initialParametros?: Parametros }
+
+export default function Parceiros({ initialParametros }: ParceirosProps) {
   const { t } = useTranslation()
+  /* Mesma fonte da /sobre, da /transparencia e do painel de assinatura. */
+  const { data: param } = useParametros(
+    initialParametros ? { initialData: initialParametros } : undefined
+  )
+  const preco = (chave: string) => {
+    const c = parametro(param, chave)
+    return c === undefined ? null : precoEmReais(c)
+  }
   const localePath = useLocalePath()
   const { data: stats } = useStats()
   const planData = [
     {
       name: t('parceiros:plan_gratuito'),
-      price: 'R$0',
+      precoChave: CHAVES.planoGratuito,
       period: t('parceiros:plan_period_forever'),
       color: 'border-[#E8E4DF]',
       badge: null,
@@ -69,7 +81,7 @@ export default function Parceiros() {
     },
     {
       name: t('parceiros:plan_associado'),
-      price: 'R$39,90',
+      precoChave: CHAVES.planoAssociado,
       period: t('parceiros:plan_period_month'),
       color: 'border-teal',
       badge: t('parceiros:plan_popular_badge'),
@@ -85,7 +97,7 @@ export default function Parceiros() {
     },
     {
       name: t('parceiros:plan_destaque'),
-      price: 'R$59,90',
+      precoChave: CHAVES.planoDestaque,
       period: t('parceiros:plan_period_month'),
       color: 'border-ocre',
       badge: t('parceiros:plan_destaque_badge'),
@@ -269,7 +281,7 @@ export default function Parceiros() {
               <div className="mb-4">
                 <p className="font-display text-lg font-bold text-[#1A1A1A]">{plan.name}</p>
                 <p className="mt-1">
-                  <span className="text-3xl font-bold text-[#1A1A1A] tabular-nums">{plan.price}</span>
+                  <span className="text-3xl font-bold text-[#1A1A1A] tabular-nums">{preco(plan.precoChave)}</span>
                   <span className="text-sm text-[#737373] ml-1">{plan.period}</span>
                 </p>
               </div>
@@ -292,7 +304,7 @@ export default function Parceiros() {
         </div>
 
         <p className="text-center text-xs text-[#737373] mt-6">
-          {t('parceiros:plan_disclaimer')}
+          {t('parceiros:plan_disclaimer', { pct: parametro(param, CHAVES.rateioCidade) ?? '' })}
         </p>
       </section>
 

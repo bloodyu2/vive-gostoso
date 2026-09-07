@@ -14,11 +14,8 @@ import { useProfile } from '@/hooks/useProfile'
 import { useMyBusinesses } from '@/hooks/useMyBusinesses'
 import { useMyProfessional } from '@/hooks/useProfessionals'
 import { startCheckout } from '@/hooks/useCheckout'
-
-const PLAN_PRICES = {
-  monthly: { associado: 'R$39,90/mês', destaque: 'R$59,90/mês' },
-  annual:  { associado: 'R$430,92/ano', destaque: 'R$646,92/ano' },
-} as const
+import { useParametros } from '@/hooks/useParametros'
+import { precosDoPlano } from '@/lib/parametros'
 
 export default function Painel() {
   return <AuthGuard><PainelInner /></AuthGuard>
@@ -115,6 +112,11 @@ function TypeFork() {
 }
 
 function PainelInner() {
+  /* Preco da mesma tabela que a /sobre, a /parceiros e a /transparencia leem.
+     Este e o painel onde a pessoa de fato assina, e por isso era o valor certo
+     quando os quatro divergiam. */
+  const { data: paramProduto } = useParametros()
+  const PRECOS = precosDoPlano(paramProduto)
   const { user, supabase } = useAuth()
   const { data: profile, isLoading: profileLoading } = useProfile()
   const role = profile?.role ?? null
@@ -328,7 +330,7 @@ function PainelInner() {
               {businesses.map(b => {
                 const billing = getBilling(b.id)
                 const isLoading = checkoutLoading === b.id
-                const prices = PLAN_PRICES[billing]
+                const prices = PRECOS[billing]
 
                 return (
                   <div

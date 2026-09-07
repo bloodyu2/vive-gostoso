@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { buildPageMetadata, type Locale } from '@/lib/page-metadata'
 import { faqSchema } from '@/lib/seo'
 import Transparencia from '@/views/Transparencia'
+import { getParametrosProduto } from '@/lib/supabase/queries'
 import pt from '@/locales/pt.json'
 import en from '@/locales/en.json'
 import es from '@/locales/es.json'
@@ -26,6 +27,7 @@ export default async function TransparenciaPage(
   const { lang } = await params
   const locale = (lang === 'en' || lang === 'es' ? lang : 'pt') as Locale
   const jsonLd = faqSchema(faqItemsFor(locale))
+  const parametros = await getParametrosProduto()
 
   return (
     <>
@@ -33,7 +35,7 @@ export default async function TransparenciaPage(
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Transparencia />
+      <Transparencia initialParametros={parametros} />
     </>
   )
 }
