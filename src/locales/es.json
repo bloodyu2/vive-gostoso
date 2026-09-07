@@ -1,18 +1,57 @@
 {
   "meta": {
-    "home": { "title": "São Miguel do Gostoso: dónde comer, alojarse y pasear", "description": "Guía de la ciudad con restaurantes, posadas, paseos, mapa, eventos y servicios, todo publicado directamente por quien trabaja aquí, sin comisiones." },
-    "come": { "title": "Restaurantes en São Miguel do Gostoso: dónde comer", "description": "Lista de restaurantes y bares de la ciudad, con dirección, horario de atención y contacto directo con el dueño para reservar mesa o preguntar algo." },
-    "fique": { "title": "Posadas en São Miguel do Gostoso: dónde alojarse", "description": "Posadas y casas para alquilar en la ciudad, con fotos, dirección y contacto directo con el dueño o anfitrión, sin comisión de intermediario alguna." },
-    "passeie": { "title": "Qué hacer en São Miguel do Gostoso: paseos y kite", "description": "Paseos en buggy, en barco, clases de kitesurf y caminatas por la región, con contacto directo del guía o instructor a cargo de cada paseo ofrecido." },
-    "explore": { "title": "Mapa de São Miguel do Gostoso", "description": "Mapa interactivo con todos los negocios registrados en la ciudad, para ubicar restaurantes, posadas, paseos y servicios en el barrio correcto." },
-    "participe": { "title": "Eventos en São Miguel do Gostoso: agenda 2026", "description": "Calendario con los eventos y fiestas de la ciudad a lo largo del año, con fecha, lugar y horario de cada uno, útil para planear la visita o la semana." },
-    "conheca": { "title": "Conoce São Miguel do Gostoso: playas y cómo llegar", "description": "Textos sobre las playas de la región, la historia detrás del nombre de la ciudad, cómo llegar en auto o avión y cómo es el clima en cada época." },
-    "contrate": { "title": "Servicios en São Miguel do Gostoso: profesionales y empleos", "description": "Profesionales y prestadores de servicios de la ciudad para contratar de forma directa, además de las vacantes de empleo abiertas en el comercio local." },
-    "apoie": { "title": "Fondo público de São Miguel do Gostoso", "description": "Fondo público mantenido por la ciudad, con rendición de cuentas abierta sobre el dinero recaudado y el registro de lo que ya se pagó con él." },
-    "blog": { "title": "Blog: historias y consejos de São Miguel do Gostoso", "description": "Artículos escritos por quienes viven en la ciudad, sobre el día a día, las costumbres locales y lo que conviene saber antes de venir a pasear o vivir aquí." },
-    "sobre": { "title": "Cómo funciona Vive Gostoso, guía de São Miguel do Gostoso", "description": "Explica cómo funciona Vive Gostoso, por qué el registro es gratuito para los negocios locales y quién mantiene el sitio funcionando sin cobrar nada." },
-    "resolva": { "title": "Comercio y servicios en São Miguel do Gostoso", "description": "Comercio del día a día de la ciudad, como el mercado, la farmacia y el taller mecánico, además de otros servicios útiles para quien vive o está de paso." },
-    "transparencia": { "title": "Transparencia: cómo funciona Vive Gostoso por dentro", "description": "Explica el sello de verificado, los criterios para que un negocio entre o salga de la lista, y quién paga las cuentas para mantener el sitio funcionando." }
+    "home": {
+      "title": "São Miguel do Gostoso: dónde comer, alojarse y pasear",
+      "description": "Guía de la ciudad con restaurantes, posadas, paseos, mapa, eventos y servicios, todo publicado directamente por quien trabaja aquí, sin comisiones."
+    },
+    "come": {
+      "title": "Restaurantes en São Miguel do Gostoso: dónde comer",
+      "description": "Lista de restaurantes y bares de la ciudad, con dirección, horario de atención y contacto directo con el dueño para reservar mesa o preguntar algo."
+    },
+    "fique": {
+      "title": "Posadas en São Miguel do Gostoso: dónde alojarse",
+      "description": "Posadas y casas para alquilar en la ciudad, con fotos, dirección y contacto directo con el dueño o anfitrión, sin comisión de intermediario alguna."
+    },
+    "passeie": {
+      "title": "Qué hacer en São Miguel do Gostoso: paseos y kite",
+      "description": "Paseos en buggy, en barco, clases de kitesurf y caminatas por la región, con contacto directo del guía o instructor a cargo de cada paseo ofrecido."
+    },
+    "explore": {
+      "title": "Mapa de São Miguel do Gostoso",
+      "description": "Mapa interactivo con todos los negocios registrados en la ciudad, para ubicar restaurantes, posadas, paseos y servicios en el barrio correcto."
+    },
+    "participe": {
+      "title": "Eventos en São Miguel do Gostoso: agenda 2026",
+      "description": "Calendario con los eventos y fiestas de la ciudad a lo largo del año, con fecha, lugar y horario de cada uno, útil para planear la visita o la semana."
+    },
+    "conheca": {
+      "title": "Conoce São Miguel do Gostoso: playas y cómo llegar",
+      "description": "Textos sobre las playas de la región, la historia detrás del nombre de la ciudad, cómo llegar en auto o avión y cómo es el clima en cada época."
+    },
+    "contrate": {
+      "title": "Servicios en São Miguel do Gostoso: profesionales y empleos",
+      "description": "Profesionales y prestadores de servicios de la ciudad para contratar de forma directa, además de las vacantes de empleo abiertas en el comercio local."
+    },
+    "apoie": {
+      "title": "Fondo público de São Miguel do Gostoso",
+      "description": "Fondo público mantenido por la ciudad, con rendición de cuentas abierta sobre el dinero recaudado y el registro de lo que ya se pagó con él."
+    },
+    "blog": {
+      "title": "Blog: historias y consejos de São Miguel do Gostoso",
+      "description": "Artículos escritos por quienes viven en la ciudad, sobre el día a día, las costumbres locales y lo que conviene saber antes de venir a pasear o vivir aquí."
+    },
+    "sobre": {
+      "title": "Cómo funciona Vive Gostoso, guía de São Miguel do Gostoso",
+      "description": "Explica cómo funciona Vive Gostoso, por qué el registro es gratuito para los negocios locales y quién mantiene el sitio funcionando sin cobrar nada."
+    },
+    "resolva": {
+      "title": "Comercio y servicios en São Miguel do Gostoso",
+      "description": "Comercio del día a día de la ciudad, como el mercado, la farmacia y el taller mecánico, además de otros servicios útiles para quien vive o está de paso."
+    },
+    "transparencia": {
+      "title": "Transparencia: cómo funciona Vive Gostoso por dentro",
+      "description": "Explica el sello de verificado, los criterios para que un negocio entre o salga de la lista, y quién paga las cuentas para mantener el sitio funcionando."
+    }
   },
   "nav": {
     "come": "COME",
@@ -50,7 +89,7 @@
     "como_funciona_cta": "Saber más",
     "verificados_titulo": "Verificados por la ciudad",
     "verificados_cta": "Ver directorio",
-    "stats_sentence": "+{{count}} negocios verificados en la ciudad — el 100% de lo que gastas aquí se queda aquí.",
+    "stats_sentence": "+{{count}} negocios verificados en la ciudad. El 100% de lo que gastas aquí se queda aquí.",
     "hero_h1_1": "Come.",
     "hero_h1_2": "Quédate.",
     "hero_h1_3": "Pasea.",
@@ -108,7 +147,7 @@
     "titulo": "Agenda de eventos",
     "desc": "Shows, festivales, ferias y todo lo que pasa en São Miguel do Gostoso.",
     "sem_eventos": "Ningún evento en la agenda por ahora",
-    "sem_eventos_sub": "Vive Gostoso solo publica eventos con fecha y fuente confirmadas. Por eso la lista a veces queda vacía — es el comportamiento correcto, no un error.",
+    "sem_eventos_sub": "Vive Gostoso solo publica eventos con fecha y fuente confirmadas. Por eso la lista a veces está vacía: es el comportamiento correcto, no un error.",
     "sem_eventos_cta": "Registrar un evento",
     "submeter_evento": "Enviar evento"
   },
@@ -150,7 +189,7 @@
     "tab_empresas": "Empresas",
     "tab_profissionais": "Profesionales",
     "hero_title": "Profesionales y empresas de São Miguel do Gostoso",
-    "hero_sub": "Encuentra a quien necesitas — autónomos, agencias y servicios de la ciudad",
+    "hero_sub": "Encuentra a quien necesitas: autónomos, agencias y servicios de la ciudad",
     "service_company_badge": "Empresa de Servicios",
     "cta_titulo": "¿Quiere anunciar su servicio o vacante?",
     "cta_desc": "El registro es gratuito y la plataforma es de la ciudad.",
@@ -216,12 +255,12 @@
   },
   "cadastre_fork": {
     "title": "¿Qué quieres hacer en Vive Gostoso?",
-    "subtitle": "Elige tu tipo de perfil — puedes cambiarlo después",
+    "subtitle": "Elige tu tipo de perfil, puedes cambiarlo después",
     "select_prompt": "Selecciona una opción para continuar:",
     "business_title": "Tengo un negocio local",
     "business_desc": "Restaurante, posada, tienda o servicio con dirección física en São Miguel do Gostoso.",
     "professional_title": "Soy profesional autónomo",
-    "professional_desc": "Ofrezco servicios como persona física — consultoría, mentoría, diseño, fotografía, etc."
+    "professional_desc": "Ofrezco servicios como persona física: consultoría, mentoría, diseño, fotografía, etc."
   },
   "sobre": {
     "badge": "SOBRE EL PROYECTO",
@@ -238,7 +277,7 @@
     "banner_btn": "Registrar mi negocio",
     "oque_h2_1": "No es un sitio de turismo.",
     "oque_h2_2": "Es el sistema operativo de la ciudad.",
-    "oque_p1": "Los sitios de turismo muestran lo que la ciudad quiere vender. Vive Gostoso muestra lo que la ciudad realmente es — incluyendo el restaurante pequeño que abre cada lunes, la posada gestionada por alguien nacido aquí, el instructor de kite que conoce cada viento.",
+    "oque_p1": "Los sitios de turismo muestran lo que la ciudad quiere vender. Vive Gostoso muestra lo que la ciudad realmente es, incluyendo el restaurante pequeño que abre cada lunes, la posada gestionada por alguien nacido aquí, el instructor de kite que conoce cada viento.",
     "oque_p2": "La plataforma pertenece a la ciudad. No existe para generar lucro para un inversor externo. Existe para que el dinero del turismo se quede en Gostoso, financie Gostoso, y haga crecer Gostoso como los residentes quieren.",
     "modelo_eyebrow": "El modelo",
     "modelo_h2": "Cómo funciona Vive Gostoso",
@@ -268,7 +307,7 @@
     "rede_ciclo_text": "Más clientes atraen más negocios, lo que hace la plataforma aún más fuerte. Nadie tiene que hacer esto solo.",
     "verbos_eyebrow": "Los módulos",
     "verbos_h2": "Ocho verbos. Una ciudad entera.",
-    "verbos_desc": "Cada módulo responde una pregunta que el visitante — y el residente — hace cada día.",
+    "verbos_desc": "Cada módulo responde una pregunta que el visitante, y el residente, se hace todos los días.",
     "verbos_come_desc": "Restaurantes, bares y gastronomía local",
     "verbos_fique_desc": "Posadas y alojamiento de todos los estilos",
     "verbos_passeie_desc": "Kite, buggy, paseos y deportes",
@@ -389,11 +428,26 @@
     "quem_whatsapp_btn": "Escribir por WhatsApp",
     "faq_titulo": "Preguntas frecuentes",
     "faq": [
-      { "question": "¿Qué significa el sello verificado de Vive Gostoso?", "answer": "Significa que el equipo confirmó, antes de publicar el perfil, que el negocio existe y opera en São Miguel do Gostoso, que alguien responsable confirmó el registro y que los datos mínimos están completos. La aprobación es manual, y cada perfil se revisa de nuevo una vez al año." },
-      { "question": "¿Se puede pagar para aparecer con mejor calificación o en destaque?", "answer": "No. Balaio no opera paseos, no opera alojamiento y no recibe comisión sobre reservas, y ningún negocio puede pagar para tener mejor calificación ni para saltarse las reglas públicas de destaque." },
-      { "question": "¿Cómo corrijo un dato incorrecto en mi perfil?", "answer": "Contáctanos por el WhatsApp o el correo indicados en esta página. Respondemos en un plazo de hasta 10 días hábiles." },
-      { "question": "¿Quién mantiene Vive Gostoso en funcionamiento?", "answer": "Balaio, CNPJ 57.463.091/0001-19, con atención remota de lunes a viernes, de 9 a 18 horas." },
-      { "question": "¿De dónde vienen las fotos de los perfiles?", "answer": "Muchos perfiles fueron creados por nuestro equipo para que la ciudad tuviera un registro completo desde el primer día, y en esos casos la foto usada es provisional. Vamos cambiando esas imágenes a medida que hablamos con cada negocio." }
+      {
+        "question": "¿Qué significa el sello verificado de Vive Gostoso?",
+        "answer": "Significa que el equipo confirmó, antes de publicar el perfil, que el negocio existe y opera en São Miguel do Gostoso, que alguien responsable confirmó el registro y que los datos mínimos están completos. La aprobación es manual, y cada perfil se revisa de nuevo una vez al año."
+      },
+      {
+        "question": "¿Se puede pagar para aparecer con mejor calificación o en destaque?",
+        "answer": "No. Balaio no opera paseos, no opera alojamiento y no recibe comisión sobre reservas, y ningún negocio puede pagar para tener mejor calificación ni para saltarse las reglas públicas de destaque."
+      },
+      {
+        "question": "¿Cómo corrijo un dato incorrecto en mi perfil?",
+        "answer": "Contáctanos por el WhatsApp o el correo indicados en esta página. Respondemos en un plazo de hasta 10 días hábiles."
+      },
+      {
+        "question": "¿Quién mantiene Vive Gostoso en funcionamiento?",
+        "answer": "Balaio, CNPJ 57.463.091/0001-19, con atención remota de lunes a viernes, de 9 a 18 horas."
+      },
+      {
+        "question": "¿De dónde vienen las fotos de los perfiles?",
+        "answer": "Muchos perfiles fueron creados por nuestro equipo para que la ciudad tuviera un registro completo desde el primer día, y en esos casos la foto usada es provisional. Vamos cambiando esas imágenes a medida que hablamos con cada negocio."
+      }
     ]
   },
   "apoie": {
@@ -476,7 +530,7 @@
     "praias_maceio_nome": "Praia do Maceó",
     "praias_maceio_desc": "la más tranquila, ideal para familias, aguas poco profundas y cálidas.",
     "praias_tourinhos_nome": "Praia de Tourinhos",
-    "praias_tourinhos_desc": "el favorito de los kitesurfistas avanzados — viento constante y olas.",
+    "praias_tourinhos_desc": "el favorito de los kitesurfistas avanzados: viento constante y olas.",
     "praias_santo_cristo_nome": "Ponta do Santo Cristo",
     "praias_santo_cristo_desc": "el spot más famoso de Gostoso para kitesurf. Vientos constantes y paisaje impresionante, con cocoteros y acantilados al fondo.",
     "praias_marco_nome": "Praia do Marco",
@@ -509,12 +563,12 @@
     "chegar_dica_desc": "al llegar a Natal, el transfer en furgoneta es la opción más cómoda.",
     "epoca_titulo": "Mejor época",
     "epoca_vento_label": "Temporada de viento:",
-    "epoca_vento_desc": "agosto a enero — ideal para kite y windsurf.",
+    "epoca_vento_desc": "agosto a enero: ideal para kite y windsurf.",
     "epoca_chuvas_label": "Temporada de lluvias:",
-    "epoca_chuvas_desc": "febrero a julio — más tranquilo, precios más bajos, menos turistas.",
+    "epoca_chuvas_desc": "febrero a julio: más tranquilo, precios más bajos, menos turistas.",
     "epoca_reveillon_label": "Nochevieja:",
     "epoca_reveillon_desc": "una de las más famosas de Brasil, unas 2.500 personas por noche, 5 a 6 días.",
-    "reveillon_titulo": "El Réveillon do Gostoso — Nochevieja",
+    "reveillon_titulo": "El Réveillon do Gostoso, Nochevieja",
     "reveillon_desc": "Cada año, entre el 28 de diciembre y el 2 de enero, Gostoso recibe visitantes de todo Brasil. Música en vivo en la playa, fuegos artificiales sobre el mar, gastronomía local en su mejor momento. Reserva tu posada con antelación: se llena desde octubre.",
     "praias_xepa_nome": "Praia da Xepa",
     "praias_xepa_desc": "El corazon de Gostoso. Ahí es donde la ciudad se reúne cada atardecer. Puestos de bebidas, musica en vivo, gente de todo Brasil y del mundo. El punto obligatorio de toda visita.",
@@ -636,7 +690,7 @@
     "sem_providers": "Aún no hay prestadores registrados.",
     "sem_providers_sub": "Sé el primero en ofrecer transfer en la plataforma.",
     "modal_titulo": "Registrar mi Transfer",
-    "modal_sub": "Tu perfil se activa tras revisión — normalmente en 24h",
+    "modal_sub": "Tu perfil se activa tras revisión, normalmente en 24h",
     "modal_nome": "Nombre del prestador / servicio",
     "modal_whatsapp": "WhatsApp",
     "modal_veiculo": "Tipo de vehículo",
@@ -663,7 +717,7 @@
     "detail_descricao": "Sobre el prestador",
     "detail_observacoes": "Notas importantes",
     "detail_entrar_contato": "Contactar por WhatsApp",
-    "detail_rota_selecionada": "Ruta seleccionada — mensaje pre-rellenado ✓",
+    "detail_rota_selecionada": "Ruta seleccionada, mensaje pre-rellenado ✓",
     "modal_pagamentos": "Formas de pago",
     "modal_antecedencia": "Antelación mínima",
     "modal_encontro": "Punto de encuentro en el aeropuerto",
@@ -1384,7 +1438,7 @@
     "alt": "Foto {{n}}"
   },
   "cookie": {
-    "text": "Usamos cookies para entender cómo se visita Gostoso y mejorar la plataforma. Tus datos se quedan aquí — nunca los vendemos a terceros.",
+    "text": "Usamos cookies para entender cómo se visita Gostoso y mejorar la plataforma. Tus datos se quedan aquí: nunca vendemos a terceros.",
     "accept": "Aceptar",
     "decline": "Rechazar"
   },
