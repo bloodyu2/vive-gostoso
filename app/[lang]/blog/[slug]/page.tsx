@@ -25,7 +25,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const image = post.cover_url ?? `${baseUrl}/og-image.png`
 
   return {
-    title: post.title,
+    /* `absolute` porque o title do post JA e um titulo de SEO completo, escrito
+       para a busca. O layout raiz define title.template = '%s | Vive Gostoso',
+       e sem isto o Next reanexa a marca, gastando 15 caracteres do limite de
+       ~65 que o Google mostra. Nas rotas de negocio e evento o template
+       continua valendo, porque la o title e so o nome do lugar e a marca ajuda. */
+    title: { absolute: post.title },
     description,
     alternates: {
       canonical,
