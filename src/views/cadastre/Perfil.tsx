@@ -624,9 +624,16 @@ function ServicePhotoUploader({
   photos: string[]
   onChange: (urls: string[]) => void
 }) {
+  const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  /* Foto de servico vai para o mesmo balde e para a mesma vitrine publica que a
+     foto do negocio. Se a clausula vale para uma, vale para a outra: seria
+     incoerente travar a galeria e deixar esta porta aberta. Mesma chave de
+     react-query da PhotoSection, entao nao ha busca duplicada. */
+  const { data: aceite } = useLicencaImagem(bizId)
 
   async function uploadFile(file: File): Promise<string> {
     const compressed = await compressImage(file)
@@ -644,7 +651,7 @@ function ServicePhotoUploader({
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files ?? [])
-    if (!files.length) return
+    if (!files.length || !aceite) return
     setError(null)
 
     const slots = 3 - photos.length
@@ -662,6 +669,7 @@ function ServicePhotoUploader({
     try {
       const toUpload = files.slice(0, slots)
       const urls = await Promise.all(toUpload.map(uploadFile))
+      await cobrirImagensPeloAceite(aceite, urls)
       onChange([...photos, ...urls])
     } catch (err) {
       if ((err as { code?: string })?.code === '42501') {
@@ -700,6 +708,9 @@ function ServicePhotoUploader({
         </div>
       )}
       {error && <p className="text-xs text-red-500 mb-1">{error}</p>}
+      {!aceite && (
+        <p className="text-xs text-[#737373] mb-1">{t('perfil:licenca_pendente')}</p>
+      )}
       {photos.length < 3 && (
         <>
           <input
@@ -709,10 +720,11 @@ function ServicePhotoUploader({
             multiple
             className="hidden"
             onChange={handleUpload}
+            disabled={!aceite}
           />
           <button
             type="button"
-            disabled={uploading}
+            disabled={uploading || !aceite}
             onClick={() => inputRef.current?.click()}
             className="text-xs font-medium px-3 py-1.5 rounded-lg border border-[#E8E4DF] hover:border-teal transition-colors disabled:opacity-50"
           >
