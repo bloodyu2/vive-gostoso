@@ -104,13 +104,21 @@ export default async function BioPage({ params }: Props) {
           faixa escura é o que separa "quem é isto" de "o que fazer". */}
       <header className="bg-[#1A1A1A] px-5 pt-9 pb-14 sm:px-6 sm:pt-12">
         <div className="mx-auto w-full max-w-[26rem] sm:max-w-[28rem]">
-          <p className="font-display text-[2.25rem] leading-none font-bold tracking-[-0.02em] text-[#F5F2EE] sm:text-[2.5rem]">
-            Vive Gostoso<span className="text-[#E05A3A]">.</span>
-          </p>
+          {/* A marca e o h1, e a linha de papel e paragrafo. Era o contrario, e
+              o desenho ja dizia qual dos dois era o titulo: o nome ocupa 2,5rem
+              no topo e o papel vem em 1,06rem embaixo. So a marcacao discordava.
+              Trocar as tags nao muda um pixel e resolve os tres idiomas de uma
+              vez, porque o nome da marca nao e traduzido.
 
-          <h1 className="mt-5 max-w-[30ch] text-[1.0625rem] leading-snug text-balance text-[#F5F2EE]">
-            {t.role}
+              Quem chega por aproximacao de NFC nao sabe de quem e a etiqueta, e o
+              h1 e onde ele descobre. */}
+          <h1 className="font-display text-[2.25rem] leading-none font-bold tracking-[-0.02em] text-[#F5F2EE] sm:text-[2.5rem]">
+            Vive Gostoso<span className="text-[#E05A3A]">.</span>
           </h1>
+
+          <p className="mt-5 max-w-[30ch] text-[1.0625rem] leading-snug text-balance text-[#F5F2EE]">
+            {t.role}
+          </p>
 
           <p className="mt-3 max-w-[36ch] text-pretty text-[0.9375rem] leading-relaxed text-[#C0BCB8]">
             {t.caption}
