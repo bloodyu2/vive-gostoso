@@ -19,10 +19,14 @@ const ROOT = resolve(__dirname, '..')
 // ---------------------------------------------------------------------------
 const BASE_URL = 'https://www.vivegostoso.com.br'
 
-// ATENÇÃO: esta lista é escrita à mão. Rota nova em app/[lang]/ NÃO entra no
-// sitemap sozinha: precisa ser adicionada aqui. Foi assim que /resolva ficou
-// listada por meses sem que a rota existisse, servindo 404 para o Google em
-// três idiomas.
+// ATENÇÃO: esta lista é escrita à mão, e a mão erra nos dois sentidos. Rota
+// nova em app/[lang]/ NÃO entra no sitemap sozinha: precisa ser adicionada
+// aqui. E rota removida não sai sozinha: precisa ser tirada daqui.
+// A antiga /resolva passou pelos dois lados. Ficou listada por meses sem que a
+// rota existisse, servindo 404 para o Google em três idiomas; depois a rota
+// foi criada e passou a servir uma página vazia, porque os negócios que
+// pertenceriam a ela estavam todos sob o verbo `contrate`. Em 2026-09-07 o
+// verbo inteiro saiu do produto.
 const STATIC_PAGES = [
   { path: '/',          freq: 'daily',   priority: '1.0' },
   { path: '/come',      freq: 'weekly',  priority: '0.9' },
@@ -33,7 +37,6 @@ const STATIC_PAGES = [
   { path: '/conheca',   freq: 'monthly', priority: '0.7' },
   { path: '/apoie',     freq: 'monthly', priority: '0.6' },
   { path: '/contrate',  freq: 'weekly',  priority: '0.7' },
-  { path: '/resolva',   freq: 'weekly',  priority: '0.7' },
   { path: '/sobre', freq: 'monthly', priority: '0.6' },
   { path: '/blog', freq: 'weekly', priority: '0.6' },
   { path: '/transfer', freq: 'weekly', priority: '0.7' },

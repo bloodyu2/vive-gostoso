@@ -44,10 +44,6 @@
       "title": "How Vive Gostoso works, a guide to São Miguel do Gostoso",
       "description": "Explains how Vive Gostoso works, why signing up is free for every local business, and who is behind keeping the site running, without charging a cent."
     },
-    "resolva": {
-      "title": "Shops and services in São Miguel do Gostoso",
-      "description": "Everyday shops in town, like the market, the pharmacy and a repair shop, plus other services useful for residents and visitors passing through."
-    },
     "transparencia": {
       "title": "Transparency: how Vive Gostoso works behind the scenes",
       "description": "Explains the verified seal, the rules for a business to join or leave the list, and who pays the bills to keep this site online and running smoothly."
@@ -61,7 +57,6 @@
     "explore": "MAP",
     "participe": "EVENTS",
     "conheca": "DISCOVER",
-    "resolva": "SERVICES",
     "contrate": "HIRE",
     "falar": "Chat",
     "falar_aria": "Chat with Vive Gostoso on WhatsApp",
@@ -70,7 +65,6 @@
     "mapa_interativo": "Interactive map",
     "eventos_festivais": "Events & festivals",
     "cidade_praias": "The town & beaches",
-    "comercio_servicos": "Shops & services",
     "freelancers_vagas": "Freelancers & jobs",
     "transfer": "TRANSFER",
     "transfer_sub": "Transfer & tours",
@@ -616,11 +610,6 @@
     "dia_dom": "Sunday",
     "fechado_dia": "Closed",
     "foto_propria": "The business's own photo"
-  },
-  "resolva": {
-    "h1": "Shops and services in São Miguel do Gostoso",
-    "desc": "Pharmacy, laundry, grocery, barbershop. Everything you need for your day in Gostoso.",
-    "abrir_mapa": "Open on map"
   },
   "footer": {
     "privacidade": "Privacy",

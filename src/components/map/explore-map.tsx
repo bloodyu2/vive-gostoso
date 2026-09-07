@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { MapPin, X, Utensils, BedDouble, Compass, Wrench } from 'lucide-react'
+import { MapPin, X, Utensils, BedDouble, Compass } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 // mapbox-gl is loaded dynamically on component mount to keep it out of the
 // initial bundle entry graph (prevents Vite from adding a modulepreload for it)
@@ -19,7 +19,6 @@ const VERB_ICON: Record<string, LucideIcon> = {
   come:    Utensils,
   fique:   BedDouble,
   passeie: Compass,
-  resolva: Wrench,
 }
 
 interface PopupBusiness {
@@ -151,8 +150,8 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- geo.length e proposital: recriar os marcadores do Mapbox a cada nova referencia do array (mesmo com o mesmo conteudo) e caro e causa flicker.
   }, [geo.length, mapReady])
 
-  const VERB_LABEL: Record<string, string> = { come: 'Restaurantes', fique: 'Hospedagem', passeie: 'Passeios', resolva: 'Serviços' }
-  const VERB_TO: Record<string, string>    = { come: '/come', fique: '/fique', passeie: '/passeie', resolva: '/resolva' }
+  const VERB_LABEL: Record<string, string> = { come: 'Restaurantes', fique: 'Hospedagem', passeie: 'Passeios' }
+  const VERB_TO: Record<string, string>    = { come: '/come', fique: '/fique', passeie: '/passeie' }
   const SIDEBAR_VERBS = ['come', 'fique', 'passeie']
 
   const activeVerbs = SIDEBAR_VERBS.filter(v => byVerb[v]?.length)

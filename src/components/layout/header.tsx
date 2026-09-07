@@ -77,7 +77,6 @@ export function Header() {
     { href: lp('/explore'),   label: t('nav.explore'),   sub: t('nav.mapa_interativo'),   color: 'text-coral',      bare: '/explore' },
     { href: lp('/participe'), label: t('nav.participe'),  sub: t('nav.eventos_festivais'), color: 'text-teal',       bare: '/participe' },
     { href: lp('/conheca'),   label: t('nav.conheca'),    sub: t('nav.cidade_praias'),     color: 'text-[#3D8B5A]', bare: '/conheca' },
-    { href: lp('/resolva'),   label: t('nav.resolva'),    sub: t('nav.comercio_servicos'), color: 'text-[#3D8B5A]', bare: '/resolva' },
     { href: lp('/contrate'),  label: t('nav.contrate'),   sub: t('nav.freelancers_vagas'), color: 'text-ocre',       bare: '/contrate' },
     { href: lp('/transfer'),  label: t('nav.transfer'),   sub: t('nav.transfer_sub'),      color: 'text-[#1E7A9E]', bare: '/transfer' },
   ]

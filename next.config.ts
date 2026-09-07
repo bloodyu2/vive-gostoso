@@ -68,14 +68,27 @@ const config: NextConfig = {
       ['flor-de-caju-cafe-livros', 'flor-de-caju'],
       ['positano', 'positano-restaurante'],
     ]
-    return duplicatas.flatMap(([de, para]) => [
-      { source: `/negocio/${de}`, destination: `/negocio/${para}`, permanent: true },
-      {
-        source: `/:lang(en|es)/negocio/${de}`,
-        destination: `/:lang/negocio/${para}`,
-        permanent: true,
-      },
-    ])
+    /* A rota /resolva saiu do produto em 2026-09-07. Ela esteve no sitemap nos
+       tres idiomas, entao existe URL indexada e existe quem tenha guardado o
+       link. O conteudo que ela prometia (mercado, farmacia, lavanderia,
+       barbearia) nunca esteve la: sempre esteve em /contrate, que e o sucessor
+       de verdade. Por isso 301 em vez de deixar dar 404. */
+    const rotasRemovidas: Array<[string, string]> = [['/resolva', '/contrate']]
+
+    return [
+      ...duplicatas.flatMap(([de, para]) => [
+        { source: `/negocio/${de}`, destination: `/negocio/${para}`, permanent: true },
+        {
+          source: `/:lang(en|es)/negocio/${de}`,
+          destination: `/:lang/negocio/${para}`,
+          permanent: true,
+        },
+      ]),
+      ...rotasRemovidas.flatMap(([de, para]) => [
+        { source: de, destination: para, permanent: true },
+        { source: `/:lang(en|es)${de}`, destination: `/:lang${para}`, permanent: true },
+      ]),
+    ]
   },
 
   async headers() {

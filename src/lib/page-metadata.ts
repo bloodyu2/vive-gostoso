@@ -26,7 +26,6 @@ const CAMINHOS: Record<RotaPublica, string> = {
   apoie: '/apoie',
   blog: '/blog',
   sobre: '/sobre',
-  resolva: '/resolva',
   transparencia: '/transparencia',
 }
 

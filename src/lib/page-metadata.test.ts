@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { buildPageMetadata } from './page-metadata'
 
-const ROTAS = ['home','come','fique','passeie','explore','participe','conheca','contrate','apoie','blog','sobre','resolva','transparencia'] as const
+const ROTAS = ['home','come','fique','passeie','explore','participe','conheca','contrate','apoie','blog','sobre','transparencia'] as const
 const LOCALES = ['pt','en','es'] as const
 
 /** O helper devolve `title` como `{ absolute }` para escapar do template do
@@ -88,7 +88,7 @@ describe('buildPageMetadata', () => {
     expect(langs['x-default']).toBe(langs['pt-BR'])
   })
 
-  it('cobre as 13 rotas nos 3 locales, com title e description na faixa', () => {
+  it('cobre as 12 rotas nos 3 locales, com title e description na faixa', () => {
     let contados = 0
     for (const r of ROTAS) {
       for (const lang of LOCALES) {
@@ -101,7 +101,11 @@ describe('buildPageMetadata', () => {
         contados++
       }
     }
-    expect(contados).toBe(39)
+    /* 12 rotas x 3 idiomas. O numero fica preso aqui de proposito: se alguem
+       apagar uma rota da lista sem apagar do produto, ou o contrario, este
+       teste avisa. A /resolva saiu em 2026-09-07 e o numero caiu de 39 para 36. */
+    expect(ROTAS).toHaveLength(12)
+    expect(contados).toBe(36)
   })
 
   it('openGraph e twitter herdam o mesmo par title/description', () => {

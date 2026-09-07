@@ -44,10 +44,6 @@
       "title": "Como funciona o Vive Gostoso, guia de São Miguel do Gostoso",
       "description": "Explica como o Vive Gostoso funciona, por que o cadastro é gratuito para os negócios locais e quem mantém o site no ar, sem cobrar comissão de ninguém."
     },
-    "resolva": {
-      "title": "Comércio e serviços em São Miguel do Gostoso",
-      "description": "Comércio do dia a dia da cidade, como mercado, farmácia e oficina mecânica, além de outros serviços úteis para quem mora aqui ou está de passagem."
-    },
     "transparencia": {
       "title": "Transparência: como o Vive Gostoso funciona por dentro",
       "description": "Explica o selo de verificado, os critérios para um negócio entrar ou sair da lista, e quem paga as contas do site e como esse dinheiro é usado."
@@ -61,7 +57,6 @@
     "explore": "EXPLORE",
     "participe": "PARTICIPE",
     "conheca": "CONHEÇA",
-    "resolva": "RESOLVA",
     "contrate": "CONTRATE",
     "falar": "Falar",
     "falar_aria": "Falar com o Vive Gostoso no WhatsApp",
@@ -70,7 +65,6 @@
     "mapa_interativo": "Mapa interativo",
     "eventos_festivais": "Eventos e festivais",
     "cidade_praias": "A cidade e as praias",
-    "comercio_servicos": "Comércio e serviços",
     "freelancers_vagas": "Freelancers e vagas",
     "transfer": "TRANSFER",
     "transfer_sub": "Transfer e passeios",
@@ -561,11 +555,6 @@
     "dia_dom": "Domingo",
     "fechado_dia": "Fechado",
     "foto_propria": "Foto do próprio negócio"
-  },
-  "resolva": {
-    "h1": "Comércio e serviços em São Miguel do Gostoso",
-    "desc": "Farmácia, lavanderia, mercado, barbearia. Tudo que resolve o seu dia em Gostoso.",
-    "abrir_mapa": "Abrir no mapa"
   },
   "footer": {
     "privacidade": "Privacidade",
