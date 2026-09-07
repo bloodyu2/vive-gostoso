@@ -6,6 +6,14 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {
   httpClient: Stripe.createFetchHttpClient(),
 })
 
+/* O host canonico do site e o www: o apex responde 308 para ele desde 07/09/2026.
+   Esta constante e a reserva usada quando a requisicao chega sem Origin
+   reconhecida, e ela alimenta a URL de retorno do Stripe. Apontada para o apex,
+   o cliente voltava do pagamento num endereco que redireciona. Redirecionamento
+   no meio de fluxo de pagamento e onde as coisas somem: foi assim que os
+   pagamentos do Acalanto pararam de chegar. */
+const HOST_CANONICO = 'https://www.vivegostoso.com.br'
+
 const ALLOWED_ORIGINS = new Set([
   'https://vivegostoso.com.br',
   'https://www.vivegostoso.com.br',
@@ -14,7 +22,7 @@ const ALLOWED_ORIGINS = new Set([
 ])
 
 function corsHeaders(origin: string | null) {
-  const allow = origin && ALLOWED_ORIGINS.has(origin) ? origin : 'https://vivegostoso.com.br'
+  const allow = origin && ALLOWED_ORIGINS.has(origin) ? origin : HOST_CANONICO
   return {
     'Access-Control-Allow-Origin': allow,
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -40,7 +48,7 @@ serve(async (req) => {
   try {
     const { amountCents, successUrl, cancelUrl } = await req.json()
     const reqOrigin = req.headers.get('origin')
-    const baseOrigin = reqOrigin && ALLOWED_ORIGINS.has(reqOrigin) ? reqOrigin : 'https://vivegostoso.com.br'
+    const baseOrigin = reqOrigin && ALLOWED_ORIGINS.has(reqOrigin) ? reqOrigin : HOST_CANONICO
 
     if (
       !amountCents ||
