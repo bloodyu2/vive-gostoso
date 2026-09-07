@@ -40,19 +40,21 @@ export function FundHero({
             <p className="opacity-85 leading-relaxed mb-6">
               {t('launch_desc')}
             </p>
+            {/* Entrou, saiu e saldo, e nada de custo aqui. Os R$59,80 de dominio
+                e e-mail sairam da Balaio, nao do fundo: mostra-los como saida
+                diria que o fundo pagou. Tres zeros e o estado verdadeiro, e a
+                estrutura ja fica certa para quando o dinheiro existir. */}
             <div className="flex items-center gap-3 flex-wrap">
-              <div className="bg-white/15 rounded-xl px-4 py-3 text-center">
-                <div className="font-display font-bold text-2xl">{associadosCount}</div>
-                <div className="text-xs opacity-75 mt-0.5">{t('launch_associados')}</div>
-              </div>
-              <div className="bg-white/15 rounded-xl px-4 py-3 text-center">
-                <div className="font-display font-bold text-2xl">80%</div>
-                <div className="text-xs opacity-75 mt-0.5">{t('launch_city_share')}</div>
-              </div>
-              <div className="bg-white/15 rounded-xl px-4 py-3 text-center">
-                <div className="font-display font-bold text-2xl">0%</div>
-                <div className="text-xs opacity-75 mt-0.5">{t('launch_no_profit')}</div>
-              </div>
+              {([
+                ['entrou', totalCents],
+                ['saiu', 0],
+                ['saldo', totalCents],
+              ] as const).map(([chave, valor]) => (
+                <div key={chave} className="bg-white/15 rounded-xl px-4 py-3 text-center">
+                  <div className="font-display font-bold text-2xl">{formatCurrency(valor)}</div>
+                  <div className="text-xs opacity-75 mt-0.5">{t(`launch_${chave}`)}</div>
+                </div>
+              ))}
             </div>
             <Link
               href={lp('/cadastre')}

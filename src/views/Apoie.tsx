@@ -20,7 +20,10 @@ import type { FundEntry, Goal } from '@/types/database'
 // label/detalhe/valor vêm de apoie.custo_<key>_* — ver src/locales/*.json
 const CUSTOS_ATIVOS = [
   { icon: Layers,   key: 'vercel_hobby', valor_mes: 0 },
-  { icon: Database, key: 'supabase',     valor_mes: 58.00 },
+  /* Sem valor: a assinatura Pro e da organizacao Balaio Digital, que hospeda
+     quatro projetos. Nao existe fracao defensavel para atribuir a este site, e
+     numero que nao se defende e a mesma familia de problema dos R$230. */
+  { icon: Database, key: 'supabase',     valor_mes: 0 },
   { icon: Mail,     key: 'email',        valor_mes: 9.90 },
   { icon: Globe,    key: 'dominio',      valor_mes: 3.33 },
 ]
@@ -51,6 +54,7 @@ const GOAL_COLORS: Record<Goal['category'], { bg: string; text: string; bar: str
 
 // label vem de apoie.status_<status> — ver src/locales/*.json
 const STATUS_CLS: Record<Goal['status'], string> = {
+  aguardando_arrecadacao: 'bg-[#E8E4DF] text-[#737373]',
   pendente:     'bg-[#E8E4DF] text-[#737373]',
   em_andamento: 'bg-ocre/10 text-ocre',
   concluido:    'bg-teal/10 text-teal',
@@ -257,11 +261,16 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
             })}
 
             {/* Total row */}
-            <div className="flex items-center justify-between px-5 py-4 bg-[#F5F2EE] dark:bg-[#222]">
-              <span className="text-sm font-semibold text-[#1A1A1A] dark:text-white">{t('apoie.total_mes')}</span>
-              <span className="font-display font-bold text-xl text-teal tabular-nums">
-                R${totalMes.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </span>
+            <div className="px-5 py-4 bg-[#F5F2EE] dark:bg-[#222]">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-[#1A1A1A] dark:text-white">{t('apoie.total_mes')}</span>
+                <span className="font-display font-bold text-xl text-teal tabular-nums">
+                  R${totalMes.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
+              </div>
+              {/* Sem esta linha o total parece a conta inteira, e nao e: falta a
+                  infraestrutura, que nao tem valor atribuivel a este site. */}
+              <p className="text-xs text-[#737373] mt-1">{t('apoie.total_mes_nota')}</p>
             </div>
           </div>
 

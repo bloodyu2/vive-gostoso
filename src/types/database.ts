@@ -156,7 +156,10 @@ export interface Goal {
   target_cents: number
   raised_cents: number
   category: 'marketing' | 'operacao' | 'infraestrutura' | 'comunidade'
-  status: 'pendente' | 'em_andamento' | 'concluido'
+  /** `aguardando_arrecadacao` existe porque "em andamento" com o fundo em zero
+   *  descreve intencao como execucao, que e a mesma afirmacao falsa dos R$230
+   *  em outro campo. Ele diz a causa, nao so o efeito. */
+  status: 'aguardando_arrecadacao' | 'pendente' | 'em_andamento' | 'concluido'
   target_date: string | null
   display_order: number
   created_at: string
