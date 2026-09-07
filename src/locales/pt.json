@@ -425,10 +425,9 @@
     "fechado_dia": "Fechado"
   },
   "resolva": {
+    "h1": "Comércio e serviços em São Miguel do Gostoso",
     "desc": "Farmácia, lavanderia, mercado, barbearia. Tudo que resolve o seu dia em Gostoso.",
-    "abrir_mapa": "Abrir no mapa",
-    "meta_title": "Comércio e Serviços em Gostoso",
-    "meta_desc": "Farmácia, lavanderia, mercado, barbearia e tudo que resolve o seu dia em São Miguel do Gostoso."
+    "abrir_mapa": "Abrir no mapa"
   },
   "footer": {
     "privacidade": "Privacidade",

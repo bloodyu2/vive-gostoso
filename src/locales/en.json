@@ -480,10 +480,9 @@
     "fechado_dia": "Closed"
   },
   "resolva": {
+    "h1": "Shops and services in São Miguel do Gostoso",
     "desc": "Pharmacy, laundry, grocery, barbershop. Everything you need for your day in Gostoso.",
-    "abrir_mapa": "Open on map",
-    "meta_title": "Shops & Services in Gostoso",
-    "meta_desc": "Pharmacy, laundry, grocery, barbershop and everything you need for your day in São Miguel do Gostoso."
+    "abrir_mapa": "Open on map"
   },
   "footer": {
     "privacidade": "Privacy",

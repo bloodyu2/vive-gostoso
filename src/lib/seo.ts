@@ -1,6 +1,7 @@
 /**
- * seo.ts — helpers para gerar JSON-LD schema.org consumido pelo
- * hook usePageMeta. Mantém o schema fora dos componentes para
+ * seo.ts — helpers para gerar JSON-LD schema.org injetado nas rotas
+ * server-side via <script type="application/ld+json"> (ver
+ * app/[lang]/come/page.tsx). Mantém o schema fora dos componentes para
  * facilitar testes e reuso.
  */
 

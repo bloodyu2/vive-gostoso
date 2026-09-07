@@ -15,8 +15,9 @@ interface FAQSectionProps {
 }
 
 /**
- * Acordeão de FAQ. O JSON-LD FAQPage correspondente
- * deve ser injetado via usePageMeta({ jsonLd: [faqSchema(items)] }).
+ * Acordeão de FAQ. O JSON-LD FAQPage correspondente deve ser injetado
+ * server-side via <script type="application/ld+json">{JSON.stringify(faqSchema(items))}</script>
+ * na page.tsx da rota (ver app/[lang]/come/page.tsx).
  */
 export function FAQSection({ items, heading = 'Perguntas frequentes' }: FAQSectionProps) {
   const [openIdx, setOpenIdx] = useState<number | null>(0)

@@ -19,6 +19,10 @@ const ROOT = resolve(__dirname, '..')
 // ---------------------------------------------------------------------------
 const BASE_URL = 'https://www.vivegostoso.com.br'
 
+// ATENÇÃO: esta lista é escrita à mão. Rota nova em app/[lang]/ NÃO entra no
+// sitemap sozinha: precisa ser adicionada aqui. Foi assim que /resolva ficou
+// listada por meses sem que a rota existisse, servindo 404 para o Google em
+// três idiomas.
 const STATIC_PAGES = [
   { path: '/',          freq: 'daily',   priority: '1.0' },
   { path: '/come',      freq: 'weekly',  priority: '0.9' },
@@ -33,6 +37,7 @@ const STATIC_PAGES = [
   { path: '/sobre', freq: 'monthly', priority: '0.6' },
   { path: '/blog', freq: 'weekly', priority: '0.6' },
   { path: '/transfer', freq: 'weekly', priority: '0.7' },
+  // /transparencia entra aqui quando a rota existir (fase 4)
 ]
 
 // Locale config: [lang-code, hreflang-value, url-prefix]
