@@ -6,7 +6,6 @@ import { BusinessFilters } from '@/components/business/business-filters'
 import { BusinessGrid, type ViewMode } from '@/components/business/business-grid'
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useCategories } from '@/hooks/useCategories'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { isBusinessOpen } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
@@ -14,10 +13,6 @@ import { useLocalePath } from '@/hooks/useLocalePath'
 export default function Servicos() {
   const { t } = useTranslation()
   const lp = useLocalePath()
-  usePageMeta({
-    title: t('resolva.meta_title'),
-    description: t('resolva.meta_desc'),
-  })
   const [activeCat, setActiveCat] = useState<string | null>(null)
   const [view, setView] = useState<ViewMode>('grid')
   const [openOnly, setOpenOnly] = useState(false)
@@ -42,7 +37,7 @@ export default function Servicos() {
     <main className="max-w-6xl mx-auto px-5 md:px-8 py-12">
       <div className="flex justify-between items-end flex-wrap gap-6 mb-10">
         <div>
-          <VerbPill verb="resolva" />
+          <VerbPill verb="resolva" srLabel={t('resolva.h1')} />
           <p className="mt-3 text-lg text-[#3D3D3D] max-w-xl leading-relaxed">
             {t('resolva.desc')}
           </p>

@@ -3,6 +3,7 @@
 // Does NOT use cookies() — safe to call during next build AND at ISR render time.
 import { createClient } from '@supabase/supabase-js'
 import type { Business, GostosoEvent, BlogPost } from '@/types/database'
+import type { Professional } from '@/types/professional'
 import { PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY } from './business-columns'
 
 function getBuildClient() {
@@ -77,6 +78,23 @@ export async function getBusinessForPage(slug: string): Promise<Business | null>
     return data as Business | null
   } catch (e) {
     console.error('[build] getBusiness exception:', e)
+    return null
+  }
+}
+
+export async function getProfessionalForPage(slug: string): Promise<Professional | null> {
+  try {
+    const client = getBuildClient()
+    const { data, error } = await client
+      .from('gostoso_professionals')
+      .select('*')
+      .eq('slug', slug)
+      .eq('is_published', true)
+      .maybeSingle()
+    if (error) { console.error('[build] getProfessional:', error.message); return null }
+    return data as Professional | null
+  } catch (e) {
+    console.error('[build] getProfessional exception:', e)
     return null
   }
 }

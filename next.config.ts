@@ -50,6 +50,34 @@ const config: NextConfig = {
       },
     ],
   },
+  /* Duplicatas de negocio: dois registros para a mesma casa, os dois indexados
+     pelo Google, que reportou "copia sem pagina canonica selecionada pelo
+     usuario". A duplicata e desativada no banco, mas desativar sozinho faz a
+     URL virar 404 e joga fora a autoridade que ela ja acumulou. O 301 manda
+     essa autoridade para o registro que fica.
+
+     O prefixo de idioma e preservado: /es/negocio/duplicata vai para
+     /es/negocio/mantido, nunca para a versao pt, senao o redirect contradiz o
+     hreflang e reintroduz o problema por outra porta.
+
+     Vitor B ficou de fora de proposito: os dois registros dividem telefone mas
+     tem nome e endereco diferentes, e a decisao de qual manter depende de
+     confirmacao do dono do projeto. */
+  async redirects() {
+    const duplicatas: Array<[string, string]> = [
+      ['flor-de-caju-cafe-livros', 'flor-de-caju'],
+      ['positano', 'positano-restaurante'],
+    ]
+    return duplicatas.flatMap(([de, para]) => [
+      { source: `/negocio/${de}`, destination: `/negocio/${para}`, permanent: true },
+      {
+        source: `/:lang(en|es)/negocio/${de}`,
+        destination: `/:lang/negocio/${para}`,
+        permanent: true,
+      },
+    ])
+  },
+
   async headers() {
     return [
       {

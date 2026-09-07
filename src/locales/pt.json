@@ -1,4 +1,19 @@
 {
+  "meta": {
+    "home": { "title": "São Miguel do Gostoso: onde comer, ficar e passear", "description": "Guia da cidade com restaurantes, pousadas, passeios, mapa, eventos e serviços, tudo cadastrado direto por quem trabalha aqui, sem comissão de reserva." },
+    "come": { "title": "Restaurantes em São Miguel do Gostoso: onde comer", "description": "Lista de restaurantes e bares da cidade, com endereço, horário de funcionamento e contato direto do estabelecimento para reservar mesa ou tirar dúvidas." },
+    "fique": { "title": "Pousadas em São Miguel do Gostoso: onde ficar", "description": "Pousadas e casas para alugar na cidade, com fotos, endereço e contato direto do dono ou anfitrião, sem taxa de intermediação cobrada na reserva do quarto." },
+    "passeie": { "title": "O que fazer em São Miguel do Gostoso: passeios e kite", "description": "Passeios de buggy, barco, aulas de kitesurf e trilhas pela região, com contato direto do guia ou instrutor responsável por cada passeio oferecido." },
+    "explore": { "title": "Mapa de São Miguel do Gostoso", "description": "Mapa interativo com todos os negócios cadastrados na cidade, para localizar restaurantes, pousadas, passeios e serviços de cada bairro antes de sair de casa." },
+    "participe": { "title": "Eventos em São Miguel do Gostoso: agenda 2026", "description": "Calendário com os eventos e festas marcados na cidade ao longo do ano, com data, local e horário de cada um, para organizar a visita ou a semana." },
+    "conheca": { "title": "Conheça São Miguel do Gostoso: praias e como chegar", "description": "Textos sobre as praias da região, a história por trás do nome da cidade, como chegar de carro ou avião e como é o clima em cada época do ano." },
+    "contrate": { "title": "Serviços em São Miguel do Gostoso: profissionais e vagas", "description": "Profissionais e prestadores de serviço da cidade para contratar diretamente, além das vagas de emprego abertas no comércio local no momento." },
+    "apoie": { "title": "Fundo público de São Miguel do Gostoso", "description": "Fundo público mantido pela cidade, com prestação de contas aberta sobre o dinheiro arrecadado e a lista do que já foi pago com esses recursos." },
+    "blog": { "title": "Blog: histórias e dicas de São Miguel do Gostoso", "description": "Artigos escritos por quem mora na cidade, sobre o dia a dia, os costumes locais e o que vale saber antes de vir para cá passear, trabalhar ou morar." },
+    "sobre": { "title": "Como funciona o Vive Gostoso, guia de São Miguel do Gostoso", "description": "Explica como o Vive Gostoso funciona, por que o cadastro é gratuito para os negócios locais e quem mantém o site no ar, sem cobrar comissão de ninguém." },
+    "resolva": { "title": "Comércio e serviços em São Miguel do Gostoso", "description": "Comércio do dia a dia da cidade, como mercado, farmácia e oficina mecânica, além de outros serviços úteis para quem mora aqui ou está de passagem." },
+    "transparencia": { "title": "Transparência: como o Vive Gostoso funciona por dentro", "description": "Explica o selo de verificado, os critérios para um negócio entrar ou sair da lista, e quem paga as contas do site e como esse dinheiro é usado." }
+  },
   "nav": {
     "come": "COME",
     "fique": "FIQUE",
@@ -9,6 +24,8 @@
     "conheca": "CONHEÇA",
     "resolva": "RESOLVA",
     "contrate": "CONTRATE",
+    "falar": "Falar",
+    "falar_aria": "Falar com o Vive Gostoso no WhatsApp",
     "explorar": "Explorar",
     "explorar_cidade": "Explorar a cidade",
     "mapa_interativo": "Mapa interativo",
@@ -27,6 +44,7 @@
   },
   "home": {
     "eyebrow": "São Miguel do Gostoso · RN",
+    "hero_h1_cidade": "São Miguel do Gostoso, RN",
     "como_funciona_titulo": "Quer saber como o Vive Gostoso funciona?",
     "como_funciona_desc": "Entenda o modelo, a transparência financeira e como participar.",
     "como_funciona_cta": "Saiba mais",
@@ -66,35 +84,32 @@
     "blog_ler": "Ler artigo"
   },
   "come": {
+    "h1": "Onde comer em São Miguel do Gostoso",
     "desc": "Do peixe frito na praia ao jantar na pousada. Tudo que Gostoso tem pra comer.",
-    "abrir_mapa": "Abrir no mapa",
-    "meta_title": "Restaurantes e Gastronomia",
-    "meta_desc": "Os melhores restaurantes de São Miguel do Gostoso. Frutos do mar, comida regional e muito sol."
+    "abrir_mapa": "Abrir no mapa"
   },
   "fique": {
+    "h1": "Onde ficar em São Miguel do Gostoso",
     "desc": "Da pousada de frente pra praia ao chalé no sossego. Onde ficar em Gostoso.",
-    "abrir_mapa": "Abrir no mapa",
-    "meta_title": "Pousadas e Hospedagem",
-    "meta_desc": "As melhores pousadas de São Miguel do Gostoso. Encontre onde ficar pertinho do mar."
+    "abrir_mapa": "Abrir no mapa"
   },
   "passeie": {
+    "h1": "Passeios e esportes em São Miguel do Gostoso",
     "desc": "Kite, surf, buggy e muito mais. O que fazer em São Miguel do Gostoso.",
-    "abrir_mapa": "Abrir no mapa",
-    "meta_title": "Passeios e Esportes",
-    "meta_desc": "Kitesurf, windsurf, buggy, tours e esportes náuticos em São Miguel do Gostoso."
+    "abrir_mapa": "Abrir no mapa"
   },
   "explore": {
+    "h1": "Mapa de São Miguel do Gostoso",
     "titulo": "Explore o mapa",
     "desc": "Todos os negócios de Gostoso no mapa. Clique para descobrir."
   },
   "participe": {
+    "h1": "Eventos em São Miguel do Gostoso",
     "titulo": "Agenda de eventos",
     "desc": "Shows, festivais, feiras e o que mais acontece em São Miguel do Gostoso.",
     "sem_eventos": "Nenhum evento na agenda no momento",
     "sem_eventos_sub": "O Vive Gostoso só publica evento com data e fonte confirmadas. Por isso a lista às vezes fica vazia — é o comportamento correto, não um erro.",
     "sem_eventos_cta": "Cadastrar um evento",
-    "meta_title": "Eventos em Gostoso",
-    "meta_desc": "Festivais, eventos culturais e agenda completa de São Miguel do Gostoso.",
     "submeter_evento": "Submeter evento"
   },
   "blog": {
@@ -103,8 +118,6 @@
     "sem_artigos_sub": "Volte em breve.",
     "nao_encontrado": "Artigo não encontrado.",
     "voltar_blog": "Voltar ao blog",
-    "meta_title": "Blog — São Miguel do Gostoso",
-    "meta_desc": "Artigos, dicas e novidades sobre São Miguel do Gostoso. Gastronomia, surf, kite, eventos e cultura local.",
     "blog_h1": "Blog",
     "breadcrumb_inicio": "Início",
     "breadcrumb_blog": "Blog"
@@ -146,19 +159,42 @@
     "chamar_whatsapp": "Chamar no WhatsApp",
     "tenho_interesse": "Tenho interesse",
     "pedir_orcamento": "Pedir orçamento",
-    "sem_empresas": "Nenhuma empresa cadastrada ainda."
-  },
-  "professional": {
-    "categories": {
-      "coach": "Coach",
-      "mentor": "Mentor",
-      "consultor": "Consultor",
-      "designer": "Designer",
+    "sem_empresas": "Nenhuma empresa cadastrada ainda.",
+    "grupos": {
+      "casa": "Casa e manutenção",
+      "servicos": "Serviços e turismo"
+    },
+    "categorias": {
+      "pedreiro-reforma": "Pedreiro e reforma",
+      "eletrica": "Elétrica",
+      "hidraulica": "Hidráulica",
+      "pintura": "Pintura",
+      "marcenaria": "Marcenaria",
+      "piscina": "Piscina",
+      "ar-condicionado": "Ar-condicionado",
+      "jardinagem": "Jardinagem",
+      "caseiro": "Caseiro",
+      "diarista-limpeza": "Diarista e limpeza",
+      "dedetizacao": "Dedetização",
+      "transfer-motorista": "Transfer e motorista",
+      "cozinheira-chef": "Cozinheira e chef em casa",
+      "baba": "Babá",
+      "massagem-bem-estar": "Massagem e bem-estar",
+      "professor-esportes": "Professor de kite, surf e yoga",
       "fotografo": "Fotógrafo",
-      "juridico": "Jurídico / Advogado",
-      "educacao": "Educação",
+      "audiovisual": "Audiovisual",
+      "marketing-design": "Marketing e design",
+      "contabilidade-juridico": "Contabilidade e jurídico",
+      "aulas-particulares": "Aulas particulares",
       "outro": "Outro"
     },
+    "convite_primeiro": "Seja o primeiro profissional de {{categoria}} em Gostoso",
+    "convite_sub": "Ninguém cadastrado nessa categoria ainda. O cadastro é gratuito e leva menos de cinco minutos.",
+    "convite_cta": "Quero me cadastrar",
+    "categoria_desc": "Profissionais da categoria {{categoria}} em São Miguel do Gostoso, contato direto pelo WhatsApp, sem intermediário nem taxa de agência.",
+    "categoria_title": "{{categoria}} em São Miguel do Gostoso"
+  },
+  "professional": {
     "headline_placeholder": "Ex: Coach executivo & mentor de líderes",
     "bio_placeholder": "Conte sobre sua experiência, especialidades e como você pode ajudar...",
     "whatsapp_hint": "Só números: 5584999991111",
@@ -286,6 +322,7 @@
     "quem_h2": "Desenvolvido pela Balaio.",
     "quem_balaio_sub": "Tecnologia e estratégia",
     "quem_balaio_desc": "Empresa responsável pelo desenvolvimento e manutenção da plataforma. O Vive Gostoso é o caso zero de um modelo pensado para outras cidades do litoral nordestino.",
+    "transparencia_link": "Veja como conferimos cada negócio antes de publicar o perfil",
     "cta_explorar_eyebrow": "Pronto para explorar?",
     "cta_explorar_h2_1": "Agora que você entende o projeto,",
     "cta_explorar_h2_2": "que tal explorar a cidade?",
@@ -303,7 +340,64 @@
     "participar_morador_desc": "Ofereça seus serviços ou divulgue vagas de emprego no módulo Contrate. Gratuito e sem intermediários.",
     "participar_morador_btn": "Ver o Contrate"
   },
+  "transparencia": {
+    "badge": "TRANSPARÊNCIA",
+    "titulo": "Por que confiar no que está aqui",
+    "desc": "Todo perfil passa por conferência antes de entrar no ar. Esta página explica o que o selo significa, quando ele pode ser retirado e quem responde pela plataforma.",
+    "vendemos_h2": "Não vendemos nada do que recomendamos.",
+    "vendemos_p1": "A Balaio desenvolve e mantém a plataforma. Não opera passeio, não opera hospedagem e não recebe comissão sobre reserva.",
+    "vendemos_p2": "Nenhum negócio pode pagar para ser mais bem avaliado, nem para furar as regras públicas de destaque.",
+    "selo_eyebrow": "O selo",
+    "selo_h2": "O que significa verificado.",
+    "selo_intro": "O selo significa que a equipe conferiu, antes de o perfil ir ao ar:",
+    "selo_item_a": "que o negócio existe e opera em São Miguel do Gostoso, com endereço conferido",
+    "selo_item_b": "que alguém responsável pelo negócio confirmou o cadastro, por WhatsApp ou pessoalmente",
+    "selo_item_c": "que os dados mínimos estão preenchidos: nome, categoria, endereço, contato e horário",
+    "selo_aprovacao": "A aprovação é manual. Nenhum cadastro entra no ar sozinho. Cada perfil é reconferido anualmente.",
+    "selo_retirada_intro": "O selo pode ser retirado quando:",
+    "selo_retirada_item_0": "o negócio fecha ou para de operar",
+    "selo_retirada_item_1": "o contato deixa de responder depois de tentativas registradas",
+    "selo_retirada_item_2": "um dado errado não é corrigido depois de aviso e de 30 dias",
+    "selo_retirada_item_3": "uma reclamação grave de cliente é apurada",
+    "selo_retirada_processo": "Nesse caso, o selo fica suspenso enquanto a reclamação é analisada, o negócio é notificado e tem direito de resposta antes de qualquer decisão, e a retirada só acontece depois disso.",
+    "fotos_eyebrow": "As fotos",
+    "fotos_h2": "Sobre as fotos.",
+    "fotos_p1": "Nem toda imagem que você vê aqui é do próprio negócio. Boa parte dos perfis foi criada por nós para que a cidade tivesse um cadastro completo desde o primeiro dia, e nesses casos usamos uma imagem provisória.",
+    "fotos_p2": "Estamos trocando essas imagens conforme falamos com cada negócio.",
+    "entrada_eyebrow": "Cadastro",
+    "entrada_h2": "Como um negócio entra e como sai.",
+    "entrada_p1": "O cadastro é gratuito, sem prazo e sem cobrança escondida.",
+    "entrada_p2": "Para corrigir um dado ou pedir a remoção de um perfil, fale com a gente pelos contatos desta página. Respondemos em até 10 dias úteis.",
+    "conta_eyebrow": "O dinheiro",
+    "conta_h2": "Quem paga a conta.",
+    "conta_stat_0_n": "100%",
+    "conta_stat_0_label": "gratuito para o negócio",
+    "conta_stat_1_n": "80%",
+    "conta_stat_1_label": "vai para o Fundo Público da cidade",
+    "conta_stat_2_n": "20%",
+    "conta_stat_2_label": "cobre o custo técnico",
+    "conta_stat_3_n": "0%",
+    "conta_stat_3_label": "de lucro",
+    "conta_desc": "Quem quiser contribuir além do cadastro gratuito pode assinar um dos planos de apoio, de R$30 ou R$50 por mês.",
+    "conta_link_texto": "Veja a movimentação completa do Fundo Público na página Apoie",
+    "quem_eyebrow": "Contato",
+    "quem_h2": "Quem faz.",
+    "quem_desc": "O Vive Gostoso é desenvolvido e mantido pela Balaio.",
+    "quem_cnpj": "CNPJ 57.463.091/0001-19",
+    "quem_email": "contato@balaio.net",
+    "quem_horario": "Atendimento remoto de segunda a sexta, das 9h às 18h.",
+    "quem_whatsapp_btn": "Falar no WhatsApp",
+    "faq_titulo": "Perguntas frequentes",
+    "faq": [
+      { "question": "O que significa o selo verificado do Vive Gostoso?", "answer": "Significa que a equipe conferiu, antes de o perfil entrar no ar, que o negócio existe e opera em São Miguel do Gostoso, que alguém responsável confirmou o cadastro e que os dados mínimos estão preenchidos. A aprovação é manual, e cada perfil é reconferido anualmente." },
+      { "question": "Dá para pagar para aparecer melhor avaliado ou em destaque?", "answer": "Não. A Balaio não opera passeio, não opera hospedagem e não recebe comissão sobre reserva, e nenhum negócio pode pagar para ser mais bem avaliado ou para furar as regras públicas de destaque." },
+      { "question": "Como eu corrijo um dado errado no meu perfil?", "answer": "Fale com a gente pelo WhatsApp ou pelo e-mail informados nesta página. Respondemos em até 10 dias úteis." },
+      { "question": "Quem mantém o Vive Gostoso no ar?", "answer": "A Balaio, CNPJ 57.463.091/0001-19, com atendimento remoto de segunda a sexta, das 9h às 18h." },
+      { "question": "De onde vêm as fotos dos perfis?", "answer": "Muitos perfis foram criados pela nossa equipe para que a cidade tivesse um cadastro completo desde o primeiro dia, e nesses casos a foto usada é provisória. Vamos trocando essas imagens conforme falamos com cada negócio." }
+    ]
+  },
   "apoie": {
+    "h1": "Fundo público de São Miguel do Gostoso",
     "badge": "APOIE.",
     "titulo": "Fundo transparente da cidade",
     "desc": "100% do que arrecadamos vai direto para manter e melhorar a plataforma. Sem mistério.",
@@ -317,8 +411,6 @@
     "custos_desc": "O que custa manter o Vive Gostoso funcionando todo mês.",
     "status_ativo": "Ativo",
     "status_planejado": "Planejado",
-    "meta_title": "Apoie Gostoso",
-    "meta_desc": "Fundo público transparente para promover São Miguel do Gostoso. Veja como o dinheiro é usado.",
     "erro_valor_minimo": "Valor mínimo de R$5,00.",
     "erro_generico": "Erro ao processar. Tente novamente.",
     "valor_placeholder": "Quanto você quer apoiar?",
@@ -371,7 +463,8 @@
     "aprende_item_0": "Meta de entrega: 1º semestre",
     "aprende_item_1": "100% gratuito para os associados",
     "aprende_item_2": "Feito por quem é da cidade",
-    "associar_negocio_btn": "Associar meu negócio"
+    "associar_negocio_btn": "Associar meu negócio",
+    "transparencia_link": "Entenda os critérios do selo verificado e como um negócio pode perder o selo"
   },
   "negocio": {
     "abrir_mapa": "Ver no mapa",
@@ -413,10 +506,9 @@
     "fechado_dia": "Fechado"
   },
   "resolva": {
+    "h1": "Comércio e serviços em São Miguel do Gostoso",
     "desc": "Farmácia, lavanderia, mercado, barbearia. Tudo que resolve o seu dia em Gostoso.",
-    "abrir_mapa": "Abrir no mapa",
-    "meta_title": "Comércio e Serviços em Gostoso",
-    "meta_desc": "Farmácia, lavanderia, mercado, barbearia e tudo que resolve o seu dia em São Miguel do Gostoso."
+    "abrir_mapa": "Abrir no mapa"
   },
   "footer": {
     "privacidade": "Privacidade",
@@ -425,6 +517,7 @@
     "tagline1": "A infraestrutura digital",
     "tagline2": "de São Miguel do Gostoso.",
     "sobre_projeto": "Sobre o projeto",
+    "transparencia": "Transparência",
     "blog": "Blog",
     "painel": "Painel do prestador",
     "selo_verificado": "Selo verificado",
@@ -582,8 +675,6 @@
     "epoca_reveillon_desc": "um dos mais famosos do Brasil, cerca de 2.500 pessoas por noite, 5 a 6 dias.",
     "reveillon_titulo": "O Réveillon do Gostoso",
     "reveillon_desc": "Todo ano, entre 28 de dezembro e 2 de janeiro, Gostoso recebe turistas de todo o Brasil. Música ao vivo na beira da praia, fogos sobre o mar, gastronomia local em plena forma. Reserve pousada com antecedência: lota desde outubro.",
-    "meta_title": "Conheça Gostoso",
-    "meta_desc": "A história, as praias, como chegar e a melhor época para visitar São Miguel do Gostoso.",
     "praias_xepa_nome": "Praia da Xepa",
     "praias_xepa_desc": "O coracao de Gostoso. E ali que a cidade se encontra todo fim de tarde para o por do sol. Barraquinhas de drinks, musica ao vivo, gente de todo lugar do Brasil e do mundo. O point obrigatorio de toda visita.",
     "historia_titulo": "Historia",
@@ -1305,5 +1396,13 @@
     "service_company_card": "Olá {{name}}! Vi vocês na seção Contrate do Vive Gostoso e gostaria de um orçamento.",
     "business_page": "Olá {{name}}! Vi vocês no Vive Gostoso e gostaria de conversar.",
     "business_card": "Olá! Vi o {{name}} no Vive Gostoso e tenho interesse."
+  },
+  "links_modulos": {
+    "titulo": "Continue pela cidade",
+    "come": "restaurantes em São Miguel do Gostoso",
+    "fique": "pousadas em São Miguel do Gostoso",
+    "passeie": "passeios e kite em São Miguel do Gostoso",
+    "explore": "o mapa de São Miguel do Gostoso",
+    "conheca": "praias, história e como chegar em São Miguel do Gostoso"
   }
 }

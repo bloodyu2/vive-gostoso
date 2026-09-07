@@ -8,7 +8,6 @@ import {
   useToggleProfessionalPublished,
   useDeleteProfessional,
 } from '@/hooks/useProfessionals'
-import { PROFESSIONAL_CATEGORY_LABELS } from '@/types/professional'
 import { useTranslation } from 'react-i18next'
 
 export default function AdminProfessionals() {
@@ -70,7 +69,7 @@ function AdminProfessionalsInner() {
                       <p className="text-xs text-[#737373] truncate max-w-xs">{pro.headline}</p>
                     </td>
                     <td className="px-5 py-3.5 text-[#555]">
-                      {PROFESSIONAL_CATEGORY_LABELS[pro.category]}
+                      {t(`contrate.categorias.${pro.category}`, { ns: 'translation' })}
                     </td>
                     <td className="px-5 py-3.5 text-[#555] font-mono text-xs">
                       {pro.whatsapp ?? '—'}

@@ -12,13 +12,12 @@ import { ClaimCta } from '@/components/business/claim-cta'
 import { Lightbox } from '@/components/ui/lightbox'
 import { ReviewList } from '@/components/reviews/review-list'
 import { ReviewForm } from '@/components/reviews/review-form'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useBusinessRatings } from '@/hooks/useReviews'
 import { StarRating } from '@/components/reviews/star-rating'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import type { Business } from '@/types/database'
-import { SafeCoverImage } from '@/components/business/safe-cover-image'
+import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 
 const DAY_ORDER = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']
 
@@ -49,16 +48,6 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
   const bizRating = b?.id ? ratingsMap?.get(b.id) : undefined
   const avgRating = bizRating && bizRating.count > 0 ? bizRating.avg : null
   const reviewCount = bizRating?.count ?? 0
-
-  usePageMeta(b
-    ? {
-        title: b.name,
-        description: b.description ?? `${b.name} em São Miguel do Gostoso. Encontre no Vive Gostoso.`,
-        image: b.cover_url ?? undefined,
-        url: `https://www.vivegostoso.com.br/negocio/${b.slug}`,
-      }
-    : { title: t('common.carregando') }
-  )
 
   if (isLoading) return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-16">
@@ -114,7 +103,13 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
         className="aspect-[21/9] bg-gradient-to-br from-teal to-teal-dark rounded-2xl overflow-hidden mb-8 relative cursor-pointer"
         onClick={() => b.cover_url ? setLightboxIndex(0) : undefined}
       >
-        {b.cover_url && <SafeCoverImage src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />}
+        {b.cover_url && (
+          <SafeCoverImage
+            src={b.cover_url}
+            alt={b.category ? `${b.name}, ${b.category.name} em São Miguel do Gostoso` : `${b.name} em São Miguel do Gostoso`}
+            className="w-full h-full object-cover"
+          />
+        )}
         {b.is_featured && (
           <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-white/90 backdrop-blur text-teal text-xs font-semibold px-3 py-1.5 rounded-full">
             <CheckCircle className="w-3.5 h-3.5" />

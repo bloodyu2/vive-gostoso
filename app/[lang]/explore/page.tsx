@@ -1,37 +1,16 @@
 import type { Metadata } from 'next'
+import { buildPageMetadata, type Locale } from '@/lib/page-metadata'
 import { getBusinessesForMap } from '@/lib/supabase/queries'
 import Explore from '@/views/Explore'
 import type { Business } from '@/types/database'
 
 export const revalidate = 1800
 
-export const metadata: Metadata = {
-  title: 'EXPLORE. -- Mapa de Sao Miguel do Gostoso',
-  description: 'Explore restaurantes, pousadas e passeios em Sao Miguel do Gostoso no mapa interativo.',
-  alternates: {
-    canonical: 'https://www.vivegostoso.com.br/explore',
-    languages: {
-      'pt-BR': 'https://www.vivegostoso.com.br/explore',
-      'en': 'https://www.vivegostoso.com.br/en/explore',
-      'es': 'https://www.vivegostoso.com.br/es/explore',
-      'x-default': 'https://www.vivegostoso.com.br/explore',
-    },
-  },
-  openGraph: {
-    title: 'EXPLORE. -- Mapa de Sao Miguel do Gostoso',
-    description: 'Explore restaurantes, pousadas e passeios em Sao Miguel do Gostoso no mapa interativo.',
-    url: 'https://www.vivegostoso.com.br/explore',
-    siteName: 'Vive Gostoso',
-    locale: 'pt_BR',
-    type: 'website',
-    images: [{ url: 'https://www.vivegostoso.com.br/og-image.png', width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'EXPLORE. -- Mapa de Sao Miguel do Gostoso',
-    description: 'Explore restaurantes, pousadas e passeios em Sao Miguel do Gostoso no mapa interativo.',
-    images: ['https://www.vivegostoso.com.br/og-image.png'],
-  },
+export async function generateMetadata(
+  { params }: { params: Promise<{ lang: string }> }
+): Promise<Metadata> {
+  const { lang } = await params
+  return buildPageMetadata('explore', lang as Locale)
 }
 
 export default async function ExplorePage() {

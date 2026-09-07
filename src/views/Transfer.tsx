@@ -8,7 +8,6 @@ import {
 import { useTransfers, useSubmitTransfer } from '@/hooks/useTransfers'
 import type { TransferFormData } from '@/hooks/useTransfers'
 import type { Transfer, TransferRoute } from '@/types/database'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useTransferRatings } from '@/hooks/useReviews'
 import { useLocalePath } from '@/hooks/useLocalePath'
 
@@ -30,7 +29,6 @@ function uniqueRoutes(transfers: Transfer[]): TransferRoute[] {
 }
 
 function routeKey(r: TransferRoute) { return `${r.from}|||${r.to}` }
-
 
 // ─── TransferCard ─────────────────────────────────────────────────────────────
 
@@ -385,12 +383,6 @@ function LoadingSkeleton() {
 
 export default function Transfer() {
   const { t } = useTranslation()
-
-  usePageMeta({
-    title: 'Transfer São Miguel do Gostoso | Aeroporto Natal',
-    description:
-      'Transfer do aeroporto de Natal para São Miguel do Gostoso. 110 km, ~1h50. Prestadores verificados, preço fixo, direto no WhatsApp.',
-  })
 
   const { data: transfers = [], isLoading } = useTransfers()
   const { data: ratingsMap = new Map() } = useTransferRatings()

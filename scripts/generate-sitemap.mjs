@@ -19,6 +19,10 @@ const ROOT = resolve(__dirname, '..')
 // ---------------------------------------------------------------------------
 const BASE_URL = 'https://www.vivegostoso.com.br'
 
+// ATENÇÃO: esta lista é escrita à mão. Rota nova em app/[lang]/ NÃO entra no
+// sitemap sozinha: precisa ser adicionada aqui. Foi assim que /resolva ficou
+// listada por meses sem que a rota existisse, servindo 404 para o Google em
+// três idiomas.
 const STATIC_PAGES = [
   { path: '/',          freq: 'daily',   priority: '1.0' },
   { path: '/come',      freq: 'weekly',  priority: '0.9' },
@@ -33,6 +37,7 @@ const STATIC_PAGES = [
   { path: '/sobre', freq: 'monthly', priority: '0.6' },
   { path: '/blog', freq: 'weekly', priority: '0.6' },
   { path: '/transfer', freq: 'weekly', priority: '0.7' },
+  { path: '/transparencia', freq: 'monthly', priority: '0.6' },
 ]
 
 // Locale config: [lang-code, hreflang-value, url-prefix]
@@ -41,6 +46,15 @@ const LOCALES = [
   { code: 'en', hreflang: 'en',    prefix: '/en' },
   { code: 'es', hreflang: 'es',    prefix: '/es' },
 ]
+
+// Categorias do Contrate (/contrate/<categoria>): lidas de src/locales/pt.json
+// em vez de repetidas a mao aqui, pra nao ter uma terceira lista desincronizada
+// da fonte real (PROFESSIONAL_CATEGORIES em src/types/professional.ts, que
+// gerou as chaves de contrate.categorias nos 3 locales). "outro" fica de fora:
+// e um catch-all, nao uma categoria que vale a pena indexar separadamente.
+const CONTRATE_CATEGORIAS = Object.keys(
+  JSON.parse(readFileSync(resolve(ROOT, 'src/locales/pt.json'), 'utf-8')).contrate.categorias
+).filter(c => c !== 'outro')
 
 // ---------------------------------------------------------------------------
 // Supabase credentials — read from .env (VITE_ prefixed keys)
@@ -185,6 +199,12 @@ async function main() {
     sections.push(urlGroup(path, freq, priority))
   }
 
+  // Contrate category pages
+  sections.push('\n  <!-- ===== Contrate category pages ===== -->')
+  for (const categoria of CONTRATE_CATEGORIAS) {
+    sections.push(urlGroup(`/contrate/${categoria}`, 'weekly', '0.6'))
+  }
+
   // Business pages
   sections.push('\n  <!-- ===== Business pages ===== -->')
   for (const b of businesses) {
@@ -215,6 +235,7 @@ async function main() {
   const today = new Date().toISOString().slice(0, 10)
   const totalUrls =
     STATIC_PAGES.length * 3 +
+    CONTRATE_CATEGORIAS.length * 3 +
     businesses.filter(b => b.slug).length * 3 +
     posts.filter(p => p.slug).length * 3 +
     events.filter(e => e.id).length * 3
@@ -234,8 +255,8 @@ ${sections.join('\n')}
   writeFileSync(outPath, xml, 'utf-8')
   console.log(
     `Sitemap written → public/sitemap.xml  ` +
-    `(${totalUrls} URLs | ${businesses.length} businesses | ` +
-    `${posts.length} posts | ${events.length} events)`
+    `(${totalUrls} URLs | ${CONTRATE_CATEGORIAS.length} contrate categories | ` +
+    `${businesses.length} businesses | ${posts.length} posts | ${events.length} events)`
   )
 }
 

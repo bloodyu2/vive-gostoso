@@ -1,4 +1,19 @@
 {
+  "meta": {
+    "home": { "title": "São Miguel do Gostoso: where to eat, stay and explore", "description": "City guide with restaurants, guesthouses, tours, a map, events and services, all listed directly by people who work here, no booking fees or commissions." },
+    "come": { "title": "Restaurants in São Miguel do Gostoso: where to eat", "description": "List of restaurants and bars in town, with address, opening hours and direct contact with the owner, so you can book a table or ask questions." },
+    "fique": { "title": "Guesthouses in São Miguel do Gostoso: where to stay", "description": "Guesthouses and rental homes in town, with photos, address and direct contact with the owner or host, and no middleman fee added to the booking." },
+    "passeie": { "title": "Things to do in São Miguel do Gostoso: tours and kite", "description": "Buggy rides, boat trips, kitesurf lessons and hikes around the region, with direct contact for the local guide or instructor running each tour." },
+    "explore": { "title": "Map of São Miguel do Gostoso", "description": "Interactive map with every business listed in town, so you can find restaurants, guesthouses, tours and services in the right neighborhood fast." },
+    "participe": { "title": "Events in São Miguel do Gostoso: 2026 calendar", "description": "Calendar of events and parties happening in town throughout the year, with the date, place and time for each one, handy for planning your visit." },
+    "conheca": { "title": "Get to know São Miguel do Gostoso: beaches and directions", "description": "Articles on the local beaches, the story behind the town name, how to get here by car or by plane, and what the weather is like each season." },
+    "contrate": { "title": "Services in São Miguel do Gostoso: pros and jobs", "description": "Local professionals and service providers you can hire directly for all kinds of jobs, plus current job openings at businesses around town today." },
+    "apoie": { "title": "Public fund of São Miguel do Gostoso", "description": "Public fund run for the town, with an open account of the money collected from local sources and a record of everything it has paid for so far." },
+    "blog": { "title": "Blog: stories and tips from São Miguel do Gostoso", "description": "Articles written by people who live in town, about daily life, local customs and what is worth knowing before visiting, working or moving here." },
+    "sobre": { "title": "How Vive Gostoso works, a guide to São Miguel do Gostoso", "description": "Explains how Vive Gostoso works, why signing up is free for every local business, and who is behind keeping the site running, without charging a cent." },
+    "resolva": { "title": "Shops and services in São Miguel do Gostoso", "description": "Everyday shops in town, like the market, the pharmacy and a repair shop, plus other services useful for residents and visitors passing through." },
+    "transparencia": { "title": "Transparency: how Vive Gostoso works behind the scenes", "description": "Explains the verified seal, the rules for a business to join or leave the list, and who pays the bills to keep this site online and running smoothly." }
+  },
   "nav": {
     "come": "EAT",
     "fique": "STAY",
@@ -9,6 +24,8 @@
     "conheca": "DISCOVER",
     "resolva": "SERVICES",
     "contrate": "HIRE",
+    "falar": "Chat",
+    "falar_aria": "Chat with Vive Gostoso on WhatsApp",
     "explorar": "Discover",
     "explorar_cidade": "Explore the city",
     "mapa_interativo": "Interactive map",
@@ -27,6 +44,7 @@
   },
   "home": {
     "eyebrow": "São Miguel do Gostoso · RN",
+    "hero_h1_cidade": "São Miguel do Gostoso, RN",
     "como_funciona_titulo": "Want to know how Vive Gostoso works?",
     "como_funciona_desc": "Understand the model, financial transparency and how to take part.",
     "como_funciona_cta": "Learn more",
@@ -66,35 +84,32 @@
     "blog_ler": "Read article"
   },
   "come": {
+    "h1": "Where to eat in São Miguel do Gostoso",
     "desc": "From fried fish on the beach to dinner at the guesthouse. Everything Gostoso has to eat.",
-    "abrir_mapa": "Open on map",
-    "meta_title": "Restaurants & Gastronomy",
-    "meta_desc": "The best restaurants in São Miguel do Gostoso. Seafood, regional cuisine and plenty of sun."
+    "abrir_mapa": "Open on map"
   },
   "fique": {
+    "h1": "Where to stay in São Miguel do Gostoso",
     "desc": "From beachfront guesthouses to cozy chalets. Where to stay in Gostoso.",
-    "abrir_mapa": "Open on map",
-    "meta_title": "Guesthouses & Accommodation",
-    "meta_desc": "The best guesthouses in São Miguel do Gostoso. Find where to stay right by the sea."
+    "abrir_mapa": "Open on map"
   },
   "passeie": {
+    "h1": "Tours and sports in São Miguel do Gostoso",
     "desc": "Kite, surf, buggy and much more. Things to do in São Miguel do Gostoso.",
-    "abrir_mapa": "Open on map",
-    "meta_title": "Tours & Sports",
-    "meta_desc": "Kitesurf, windsurf, buggy, tours and water sports in São Miguel do Gostoso."
+    "abrir_mapa": "Open on map"
   },
   "explore": {
+    "h1": "Map of São Miguel do Gostoso",
     "titulo": "Explore the map",
     "desc": "All businesses in Gostoso on the map. Click to discover."
   },
   "participe": {
+    "h1": "Events in São Miguel do Gostoso",
     "titulo": "Events calendar",
     "desc": "Shows, festivals, fairs and everything happening in São Miguel do Gostoso.",
     "sem_eventos": "No events on the calendar right now",
     "sem_eventos_sub": "Vive Gostoso only publishes events with a confirmed date and source. That is why the list is sometimes empty — this is the intended behaviour, not an error.",
     "sem_eventos_cta": "Submit an event",
-    "meta_title": "Events in Gostoso",
-    "meta_desc": "Festivals, cultural events and full calendar of São Miguel do Gostoso.",
     "submeter_evento": "Submit event"
   },
   "blog": {
@@ -103,8 +118,6 @@
     "sem_artigos_sub": "Check back soon.",
     "nao_encontrado": "Article not found.",
     "voltar_blog": "Back to blog",
-    "meta_title": "Blog — São Miguel do Gostoso",
-    "meta_desc": "Articles, tips and news about São Miguel do Gostoso. Gastronomy, surf, kite, events and local culture.",
     "blog_h1": "Blog",
     "breadcrumb_inicio": "Home",
     "breadcrumb_blog": "Blog"
@@ -146,19 +159,42 @@
     "chamar_whatsapp": "Message on WhatsApp",
     "tenho_interesse": "I'm interested",
     "pedir_orcamento": "Request a quote",
-    "sem_empresas": "No companies registered yet."
-  },
-  "professional": {
-    "categories": {
-      "coach": "Coach",
-      "mentor": "Mentor",
-      "consultor": "Consultant",
-      "designer": "Designer",
+    "sem_empresas": "No companies registered yet.",
+    "grupos": {
+      "casa": "Home and maintenance",
+      "servicos": "Services and tourism"
+    },
+    "categorias": {
+      "pedreiro-reforma": "Builder and renovation",
+      "eletrica": "Electrical",
+      "hidraulica": "Plumbing",
+      "pintura": "Painting",
+      "marcenaria": "Carpentry",
+      "piscina": "Pool",
+      "ar-condicionado": "Air conditioning",
+      "jardinagem": "Gardening",
+      "caseiro": "House caretaker",
+      "diarista-limpeza": "Cleaning",
+      "dedetizacao": "Pest control",
+      "transfer-motorista": "Transfer and driver",
+      "cozinheira-chef": "Home cook and chef",
+      "baba": "Babysitter",
+      "massagem-bem-estar": "Massage and wellness",
+      "professor-esportes": "Kite, surf and yoga instructor",
       "fotografo": "Photographer",
-      "juridico": "Legal / Lawyer",
-      "educacao": "Education",
+      "audiovisual": "Audiovisual",
+      "marketing-design": "Marketing and design",
+      "contabilidade-juridico": "Accounting and legal",
+      "aulas-particulares": "Private lessons",
       "outro": "Other"
     },
+    "convite_primeiro": "Be the first {{categoria}} professional in Gostoso",
+    "convite_sub": "No one is registered in this category yet. Sign-up is free and takes less than five minutes.",
+    "convite_cta": "I want to sign up",
+    "categoria_desc": "Professionals in the {{categoria}} category in São Miguel do Gostoso, contact them directly on WhatsApp, no middleman or agency fee.",
+    "categoria_title": "{{categoria}} in São Miguel do Gostoso"
+  },
+  "professional": {
     "headline_placeholder": "E.g. Executive coach & leadership mentor",
     "bio_placeholder": "Tell about your experience, specialties and how you can help...",
     "whatsapp_hint": "Digits only: 5584999991111",
@@ -286,6 +322,7 @@
     "quem_h2": "Built by Balaio.",
     "quem_balaio_sub": "Technology & strategy",
     "quem_balaio_desc": "The company behind the development and maintenance of the platform. Vive Gostoso is the first case of a model designed for other towns on Brazil's northeastern coast.",
+    "transparencia_link": "See how we check each business before publishing its profile",
     "cta_explorar_eyebrow": "Ready to explore?",
     "cta_explorar_h2_1": "Now that you understand the project,",
     "cta_explorar_h2_2": "how about exploring the city?",
@@ -303,7 +340,64 @@
     "participar_morador_desc": "Offer your services or post job listings in the Hire module. Free and without middlemen.",
     "participar_morador_btn": "See Hire"
   },
+  "transparencia": {
+    "badge": "TRANSPARENCY",
+    "titulo": "Why you can trust what's listed here",
+    "desc": "Every profile goes through a check before it goes live. This page explains what the seal means, when it can be withdrawn, and who is responsible for the platform.",
+    "vendemos_h2": "We don't sell anything we recommend.",
+    "vendemos_p1": "Balaio builds and maintains the platform. It doesn't run tours, doesn't run lodging, and doesn't take a commission on bookings.",
+    "vendemos_p2": "No business can pay to get a better rating, or to skip the public rules for featured placement.",
+    "selo_eyebrow": "The seal",
+    "selo_h2": "What verified means.",
+    "selo_intro": "The seal means our team checked, before the profile went live:",
+    "selo_item_a": "that the business exists and operates in São Miguel do Gostoso, with a confirmed address",
+    "selo_item_b": "that someone responsible for the business confirmed the listing, by WhatsApp or in person",
+    "selo_item_c": "that the minimum information is filled in: name, category, address, contact and hours",
+    "selo_aprovacao": "Approval is done by hand. No listing goes live on its own. Every profile is checked again once a year.",
+    "selo_retirada_intro": "The seal can be withdrawn when:",
+    "selo_retirada_item_0": "the business closes or stops operating",
+    "selo_retirada_item_1": "the contact stops responding after documented attempts",
+    "selo_retirada_item_2": "a wrong piece of information isn't fixed after a notice and 30 days",
+    "selo_retirada_item_3": "a serious customer complaint is being investigated",
+    "selo_retirada_processo": "In that case, the seal is suspended while the complaint is investigated, the business is notified and has the right to respond before any decision, and removal only happens after that.",
+    "fotos_eyebrow": "The photos",
+    "fotos_h2": "About the photos.",
+    "fotos_p1": "Not every image you see here belongs to the business itself. Many profiles were created by us so the town would have a complete listing from day one, and in those cases we use a placeholder image.",
+    "fotos_p2": "We're replacing these images as we talk to each business.",
+    "entrada_eyebrow": "Listings",
+    "entrada_h2": "How a business joins, and how it leaves.",
+    "entrada_p1": "Listing is free, with no time limit and no hidden fees.",
+    "entrada_p2": "To correct information or request removal of a profile, reach us through the contacts on this page. We reply within 10 business days.",
+    "conta_eyebrow": "The money",
+    "conta_h2": "Who pays the bills.",
+    "conta_stat_0_n": "100%",
+    "conta_stat_0_label": "free for the business",
+    "conta_stat_1_n": "80%",
+    "conta_stat_1_label": "goes to the town's Public Fund",
+    "conta_stat_2_n": "20%",
+    "conta_stat_2_label": "covers technical costs",
+    "conta_stat_3_n": "0%",
+    "conta_stat_3_label": "profit",
+    "conta_desc": "Anyone who wants to contribute beyond the free listing can subscribe to one of the support plans, at R$30 or R$50 a month.",
+    "conta_link_texto": "See the full record of the Public Fund on the Support page",
+    "quem_eyebrow": "Contact",
+    "quem_h2": "Who's behind it.",
+    "quem_desc": "Vive Gostoso is built and maintained by Balaio.",
+    "quem_cnpj": "CNPJ 57.463.091/0001-19",
+    "quem_email": "contato@balaio.net",
+    "quem_horario": "Remote support Monday to Friday, 9am to 6pm.",
+    "quem_whatsapp_btn": "Message on WhatsApp",
+    "faq_titulo": "Frequently asked questions",
+    "faq": [
+      { "question": "What does the Vive Gostoso verified seal mean?", "answer": "It means our team checked, before the profile went live, that the business exists and operates in São Miguel do Gostoso, that someone responsible confirmed the listing, and that the minimum information is filled in. Approval is done by hand, and every profile is checked again once a year." },
+      { "question": "Can a business pay to get a better rating or featured placement?", "answer": "No. Balaio doesn't run tours, doesn't run lodging, and doesn't take a commission on bookings, and no business can pay to get a better rating or to skip the public rules for featured placement." },
+      { "question": "How do I fix a wrong piece of information on my profile?", "answer": "Reach us through the WhatsApp or email listed on this page. We reply within 10 business days." },
+      { "question": "Who keeps Vive Gostoso running?", "answer": "Balaio, CNPJ 57.463.091/0001-19, with remote support Monday to Friday, 9am to 6pm." },
+      { "question": "Where do the profile photos come from?", "answer": "Many profiles were created by our team so the town would have a complete listing from day one, and in those cases the photo used is a placeholder. We keep replacing these images as we talk to each business." }
+    ]
+  },
   "apoie": {
+    "h1": "Public fund of São Miguel do Gostoso",
     "badge": "SUPPORT.",
     "titulo": "The city's transparent fund",
     "desc": "100% of what we raise goes directly to maintaining and improving the platform. No mystery.",
@@ -317,8 +411,6 @@
     "custos_desc": "What it costs to keep Vive Gostoso running every month.",
     "status_ativo": "Active",
     "status_planejado": "Planned",
-    "meta_title": "Support Gostoso",
-    "meta_desc": "Transparent public fund to promote São Miguel do Gostoso. See how the money is used.",
     "erro_valor_minimo": "Minimum amount of R$5.00.",
     "erro_generico": "Error processing. Please try again.",
     "valor_placeholder": "How much would you like to give?",
@@ -371,7 +463,8 @@
     "aprende_item_0": "Delivery target: 1st half of the year",
     "aprende_item_1": "100% free for members",
     "aprende_item_2": "Made by locals, for the city",
-    "associar_negocio_btn": "List my business"
+    "associar_negocio_btn": "List my business",
+    "transparencia_link": "See the verified seal's criteria and how a business can lose it"
   },
   "conheca": {
     "badge": "DISCOVER.",
@@ -423,8 +516,6 @@
     "epoca_reveillon_desc": "one of the most famous in Brazil, around 2,500 people per night, 5 to 6 days.",
     "reveillon_titulo": "Réveillon do Gostoso — New Year's Eve",
     "reveillon_desc": "Every year, between December 28 and January 2, Gostoso welcomes visitors from all over Brazil. Live music on the beach, fireworks over the sea, local food at its best. Book your guesthouse early — it sells out since October.",
-    "meta_title": "Discover Gostoso",
-    "meta_desc": "The history, beaches, how to get there and the best time to visit São Miguel do Gostoso.",
     "praias_xepa_nome": "Praia da Xepa",
     "praias_xepa_desc": "The heart of Gostoso. This is where the city gathers every late afternoon for sunset. Drink stalls, live music, people from all over Brazil and the world. The must-visit spot.",
     "historia_titulo": "History",
@@ -470,10 +561,9 @@
     "fechado_dia": "Closed"
   },
   "resolva": {
+    "h1": "Shops and services in São Miguel do Gostoso",
     "desc": "Pharmacy, laundry, grocery, barbershop. Everything you need for your day in Gostoso.",
-    "abrir_mapa": "Open on map",
-    "meta_title": "Shops & Services in Gostoso",
-    "meta_desc": "Pharmacy, laundry, grocery, barbershop and everything you need for your day in São Miguel do Gostoso."
+    "abrir_mapa": "Open on map"
   },
   "footer": {
     "privacidade": "Privacy",
@@ -482,6 +572,7 @@
     "tagline1": "The digital infrastructure",
     "tagline2": "of São Miguel do Gostoso.",
     "sobre_projeto": "About",
+    "transparencia": "Transparency",
     "blog": "Blog",
     "painel": "Provider panel",
     "selo_verificado": "Verified badge",
@@ -1305,5 +1396,13 @@
     "stat_transfers": "Transfers",
     "stat_businesses": "Businesses",
     "stat_drafts": "Drafts"
+  },
+  "links_modulos": {
+    "titulo": "Keep exploring the town",
+    "come": "restaurants in São Miguel do Gostoso",
+    "fique": "guesthouses in São Miguel do Gostoso",
+    "passeie": "tours and kitesurfing in São Miguel do Gostoso",
+    "explore": "the São Miguel do Gostoso map",
+    "conheca": "beaches, history and how to get to São Miguel do Gostoso"
   }
 }

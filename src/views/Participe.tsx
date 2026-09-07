@@ -6,15 +6,10 @@ import { VerbPill } from '@/components/brand/verb-pill'
 import { EventCard } from '@/components/events/event-card'
 import { EventSubmitForm } from '@/components/events/event-submit-form'
 import { useEvents } from '@/hooks/useEvents'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { Button } from '@/components/ui/button'
 
 export default function Participe() {
   const { t } = useTranslation()
-  usePageMeta({
-    title: t('participe.meta_title'),
-    description: t('participe.meta_desc'),
-  })
   const { data: events = [], isLoading } = useEvents()
   const [showForm, setShowForm] = useState(false)
 
@@ -22,7 +17,7 @@ export default function Participe() {
     <main className="max-w-6xl mx-auto px-5 md:px-8 py-12">
       <div className="flex items-start justify-between gap-4 mb-10 flex-wrap">
         <div>
-          <VerbPill verb="participe" />
+          <VerbPill verb="participe" srLabel={t('participe.h1')} />
           <p className="mt-3 text-lg text-[#3D3D3D] max-w-xl leading-relaxed">
             {t('participe.desc')}
           </p>

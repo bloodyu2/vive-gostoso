@@ -17,8 +17,7 @@ import { ServiceForm } from '@/components/contrate/service-form'
 import { JobForm } from '@/components/contrate/job-form'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import {
-  PROFESSIONAL_CATEGORY_LABELS,
-  PROFESSIONAL_CATEGORIES,
+  GRUPOS_DE_CATEGORIA,
   type ProfessionalCategory,
 } from '@/types/professional'
 import type { Professional } from '@/types/professional'
@@ -195,10 +194,10 @@ function Spinner() {
 }
 
 // ── Main component ─────────────────────────────────────────────────────────
-export default function Contrate() {
+export default function Contrate({ categoriaInicial }: { categoriaInicial?: ProfessionalCategory } = {}) {
   type Tab = 'empresas' | 'profissionais' | 'vagas'
   const [activeTab, setActiveTab] = useState<Tab>('profissionais')
-  const [categoryFilter, setCategoryFilter] = useState<ProfessionalCategory | 'all'>('all')
+  const [categoryFilter, setCategoryFilter] = useState<ProfessionalCategory | 'all'>(categoriaInicial ?? 'all')
   const [showServiceForm, setShowServiceForm] = useState(false)
   const [showJobForm, setShowJobForm] = useState(false)
 
@@ -244,11 +243,13 @@ export default function Contrate() {
               >
                 {tab.icon}
                 {tab.label}
-                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
-                  activeTab === tab.id ? 'bg-teal/20 text-teal' : 'bg-[#333] text-[#888]'
-                }`}>
-                  {tab.count}
-                </span>
+                {tab.count > 0 && (
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                    activeTab === tab.id ? 'bg-teal/20 text-teal' : 'bg-[#333] text-[#888]'
+                  }`}>
+                    {tab.count}
+                  </span>
+                )}
               </button>
             ))}
           </div>
@@ -261,8 +262,8 @@ export default function Contrate() {
         {/* ── Profissionais ── */}
         {activeTab === 'profissionais' && (
           <>
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-              <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap items-start justify-between gap-3 mb-6">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setCategoryFilter('all')}
@@ -274,20 +275,38 @@ export default function Contrate() {
                 >
                   {t('professional.all_categories')}
                 </button>
-                {PROFESSIONAL_CATEGORIES.map(cat => (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => setCategoryFilter(cat)}
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${
-                      categoryFilter === cat
-                        ? 'bg-teal text-white'
-                        : 'bg-white border border-[#E8E4DF] text-[#555] hover:bg-[#F5F2EE]'
-                    }`}
-                  >
-                    {PROFESSIONAL_CATEGORY_LABELS[cat]}
-                  </button>
+                {(['casa', 'servicos'] as const).map(grupo => (
+                  <div key={grupo} className="flex flex-wrap items-center gap-2">
+                    <span className="text-[10px] font-semibold text-[#aaa] uppercase tracking-wide pl-1">
+                      {t(`contrate.grupos.${grupo}`)}
+                    </span>
+                    {GRUPOS_DE_CATEGORIA[grupo].map(cat => (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => setCategoryFilter(cat)}
+                        className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                          categoryFilter === cat
+                            ? 'bg-teal text-white'
+                            : 'bg-white border border-[#E8E4DF] text-[#555] hover:bg-[#F5F2EE]'
+                        }`}
+                      >
+                        {t(`contrate.categorias.${cat}`)}
+                      </button>
+                    ))}
+                  </div>
                 ))}
+                <button
+                  type="button"
+                  onClick={() => setCategoryFilter('outro')}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                    categoryFilter === 'outro'
+                      ? 'bg-teal text-white'
+                      : 'bg-white border border-[#E8E4DF] text-[#555] hover:bg-[#F5F2EE]'
+                  }`}
+                >
+                  {t('contrate.categorias.outro')}
+                </button>
               </div>
               <button
                 type="button"
@@ -298,11 +317,31 @@ export default function Contrate() {
               </button>
             </div>
 
-            {(prosLoading || servicesLoading) ? <Spinner /> : (professionals.length === 0 && services.length === 0) ? (
-              <div className="text-center py-16">
-                <User className="w-10 h-10 text-[#E8E4DF] mx-auto mb-3" />
-                <p className="text-sm text-[#737373]">{t('professional.no_professionals')}</p>
-              </div>
+            {(prosLoading || servicesLoading) ? <Spinner /> : (
+              categoryFilter !== 'all' ? professionals.length === 0 : (professionals.length === 0 && services.length === 0)
+            ) ? (
+              categoryFilter !== 'all' ? (
+                <div className="text-center py-16">
+                  <User className="w-10 h-10 text-[#E8E4DF] mx-auto mb-3" />
+                  <p className="text-sm font-semibold text-[#1A1A1A] mb-1">
+                    {t('contrate.convite_primeiro', { categoria: t(`contrate.categorias.${categoryFilter}`) })}
+                  </p>
+                  <p className="text-sm text-[#737373] max-w-sm mx-auto mb-4">
+                    {t('contrate.convite_sub')}
+                  </p>
+                  <Link
+                    href={lp(`/cadastre/profissional?categoria=${categoryFilter}`)}
+                    className="inline-flex items-center justify-center bg-teal text-white rounded-xl px-5 py-2.5 text-xs font-semibold hover:bg-teal/90 transition-colors"
+                  >
+                    {t('contrate.convite_cta')}
+                  </Link>
+                </div>
+              ) : (
+                <div className="text-center py-16">
+                  <User className="w-10 h-10 text-[#E8E4DF] mx-auto mb-3" />
+                  <p className="text-sm text-[#737373]">{t('professional.no_professionals')}</p>
+                </div>
+              )
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {professionals.map(pro => <ProfessionalCard key={pro.id} pro={pro} />)}

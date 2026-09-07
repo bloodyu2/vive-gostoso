@@ -3,7 +3,7 @@ import { Phone, MapPin, Navigation, ExternalLink, Star, Wifi, Car, UserCheck, Ca
 import { useTranslation } from 'react-i18next'
 import { Badge } from '@/components/ui/badge'
 import { ManagedBadge } from '@/components/business/managed-badge'
-import { SafeCoverImage } from '@/components/business/safe-cover-image'
+import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { isBusinessOpen } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import { buildWhatsAppLink } from '@/lib/whatsapp'

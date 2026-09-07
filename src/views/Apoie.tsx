@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { usePageMeta } from '@/hooks/usePageMeta'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { FundHero } from '@/components/fund/fund-hero'
 import { FundEntryRow } from '@/components/fund/fund-entry-row'
@@ -70,10 +69,6 @@ type ApoieProps = {
 export default function Apoie({ initialEntries = [] }: ApoieProps) {
   const { t, i18n } = useTranslation()
   const lp = useLocalePath()
-  usePageMeta({
-    title: t('apoie.meta_title'),
-    description: t('apoie.meta_desc'),
-  })
 
   const searchParams = useSearchParams()
   const donationSuccess = searchParams?.get('doacao') === 'success'
@@ -422,12 +417,18 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
         </section>
 
         {/* ── CTA ── */}
-        <div className="flex gap-3 pb-4">
+        <div className="flex flex-col gap-3 pb-4">
           <Link
             href="/cadastre"
-            className="inline-flex items-center gap-2 bg-teal text-white font-semibold px-6 py-3 rounded-xl hover:bg-teal-dark transition-colors text-sm"
+            className="inline-flex items-center gap-2 bg-teal text-white font-semibold px-6 py-3 rounded-xl hover:bg-teal-dark transition-colors text-sm w-fit"
           >
             {t('apoie.associar_negocio_btn')}
+          </Link>
+          <Link
+            href={lp('/transparencia')}
+            className="text-teal text-sm font-semibold hover:underline w-fit"
+          >
+            {t('apoie.transparencia_link')}
           </Link>
         </div>
 

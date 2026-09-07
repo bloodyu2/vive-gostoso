@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { Badge } from '@/components/ui/badge'
+import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import type { GostosoEvent } from '@/types/database'
 
 const typeKindMap: Record<string, 'cat' | 'pous' | 'pass' | 'fest'> = {
@@ -18,7 +19,7 @@ function CardContent({ event: e, t }: { event: GostosoEvent; t: (key: string) =>
   return (
     <>
       <div className="aspect-[16/7] bg-gradient-to-br from-teal to-teal-dark relative overflow-hidden">
-        {e.cover_url && <img src={e.cover_url} alt={e.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />}
+        {e.cover_url && <SafeCoverImage src={e.cover_url} alt={e.name} className="w-full h-full object-cover" />}
         {e.is_featured && <div className="absolute top-3 left-3"><Badge kind="verif">{t('badge_destaque')}</Badge></div>}
       </div>
       <div className="p-5">
