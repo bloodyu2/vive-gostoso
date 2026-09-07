@@ -9,12 +9,12 @@ interface FundHeroProps {
   operacaoCents: number
   acumuladoCents: number
   associadosCount: number
-  hasEntries: boolean
+  temArrecadacao: boolean
 }
 
 export function FundHero({
   totalCents, marketingCents, operacaoCents, acumuladoCents,
-  associadosCount, hasEntries,
+  associadosCount, temArrecadacao,
 }: FundHeroProps) {
   const { t } = useTranslation('fund')
   const lp = useLocalePath()
@@ -34,7 +34,7 @@ export function FundHero({
           {t('desc')}
         </p>
 
-        {!hasEntries ? (
+        {!temArrecadacao ? (
           <div className="mt-10 md:mt-12 bg-white/10 border border-white/20 rounded-2xl p-8 max-w-2xl">
             <div className="text-3xl font-display font-bold mb-3">{t('launch_title')}</div>
             <p className="opacity-85 leading-relaxed mb-6">

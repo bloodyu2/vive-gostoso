@@ -106,13 +106,17 @@ export default function Apoie({ initialEntries = [] }: ApoieProps) {
 
   return (
     <main>
+      {/* `temArrecadacao` decide entre o painel de lancamento e o de extrato.
+          Antes o gatilho era "existe alguma entrada", e como entrada de CUSTO
+          tambem conta, a pagina saia do modo lancamento sem ter recebido um
+          real. O que decide e a arrecadacao, nao o numero de linhas. */}
       <FundHero
         totalCents={summary?.totalCents ?? 0}
         marketingCents={summary?.marketingCents ?? 0}
         operacaoCents={summary?.operacaoCents ?? 0}
         acumuladoCents={summary?.acumuladoCents ?? 0}
         associadosCount={associadosCount}
-        hasEntries={entriesList.length > 0}
+        temArrecadacao={(summary?.totalCents ?? 0) > 0}
       />
 
       <div className="max-w-3xl mx-auto px-5 md:px-8 py-14 space-y-14">
