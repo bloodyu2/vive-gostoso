@@ -105,7 +105,7 @@ export function Footer() {
             contato@vivegostoso.com.br
           </a>
         </span>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
           <button
             onClick={() => setShowCookieBanner(true)}
             className="p-2 -m-2 opacity-60 hover:opacity-100 transition-opacity"
@@ -122,7 +122,7 @@ export function Footer() {
             href="https://balaio.net"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity"
+            className="flex items-center gap-1.5 px-2 -mx-2 min-h-11 -my-1.5 opacity-60 hover:opacity-100 transition-opacity"
           >
             <svg width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M6 26 C6 26 4 16 16 10 C28 4 28 14 22 18 C16 22 14 18 16 14 C18 10 22 12 20 16" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
