@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { buildPageMetadata } from './page-metadata'
+import { buildPageMetadata, isLocale } from './page-metadata'
 
 const ROTAS = ['home','come','fique','passeie','explore','participe','conheca','contrate','apoie','blog','sobre','transparencia'] as const
 const LOCALES = ['pt','en','es'] as const
@@ -128,6 +128,33 @@ describe('buildPageMetadata', () => {
         expect(t).toHaveProperty('absolute')
         expect(String((t as { absolute: string }).absolute).length).toBeGreaterThan(20)
       }
+    }
+  })
+})
+
+/* KAN-226. MEDIDO no log da Vercel: GET /apple-touch-icon-precomposed.png cai
+   em app/[lang] com lang igual ao nome do arquivo. O layout chama notFound(),
+   mas o generateMetadata da pagina roda junto e lia DICIONARIOS[lang].meta de
+   um dicionario inexistente: TypeError reading 'meta'. Reproduzido em producao
+   em 15/09/2026. Idioma fora da lista tem que virar 404, nunca excecao. */
+describe('idioma fora da lista', () => {
+  const INVALIDOS = ['apple-touch-icon-precomposed.png', 'xx', 'PT', '']
+
+  it('isLocale aceita so pt, en e es', () => {
+    for (const lang of LOCALES) expect(isLocale(lang)).toBe(true)
+    for (const lang of INVALIDOS) expect(isLocale(lang), lang).toBe(false)
+  })
+
+  it('buildPageMetadata responde 404, e nao TypeError', () => {
+    for (const lang of INVALIDOS) {
+      let erro: unknown
+      try {
+        buildPageMetadata('home', lang)
+      } catch (e) {
+        erro = e
+      }
+      expect(erro, lang).not.toBeInstanceOf(TypeError)
+      expect(String((erro as { digest?: string } | undefined)?.digest), lang).toContain('404')
     }
   })
 })

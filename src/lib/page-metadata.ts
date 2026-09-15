@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import pt from '@/locales/pt.json'
 import en from '@/locales/en.json'
 import es from '@/locales/es.json'
@@ -36,7 +37,15 @@ export function urlDaRota(rota: RotaPublica, lang: Locale): string {
   return `${BASE_URL}${PREFIXO[lang]}${CAMINHOS[rota]}`
 }
 
-export function buildPageMetadata(rota: RotaPublica, lang: Locale): Metadata {
+/** KAN-226. Arquivo sem rota propria, como /apple-touch-icon-precomposed.png,
+ *  cai em app/[lang] com o nome do arquivo no lugar do idioma. O layout ja
+ *  responde 404, mas o generateMetadata da pagina roda junto com ele. */
+export function isLocale(lang: string): lang is Locale {
+  return Object.hasOwn(DICIONARIOS, lang)
+}
+
+export function buildPageMetadata(rota: RotaPublica, lang: string): Metadata {
+  if (!isLocale(lang)) notFound()
   const textos = DICIONARIOS[lang].meta[rota]
   const url = urlDaRota(rota, lang)
 
