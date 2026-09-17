@@ -10,13 +10,12 @@ interface FundHeroProps {
   marketingCents: number
   operacaoCents: number
   acumuladoCents: number
-  associadosCount: number
   temArrecadacao: boolean
 }
 
 export function FundHero({
   parametros, totalCents, marketingCents, operacaoCents, acumuladoCents,
-  associadosCount, temArrecadacao,
+  temArrecadacao,
 }: FundHeroProps) {
   const { t } = useTranslation('fund')
   /* O rateio vem da mesma tabela que a /sobre e a /transparencia leem. A barra
@@ -76,9 +75,6 @@ export function FundHero({
               <div>
                 <div className="font-display font-bold text-5xl sm:text-6xl md:text-7xl leading-none tracking-tight">
                   {formatCurrency(totalCents)}
-                </div>
-                <div className="text-sm opacity-85 mt-2">
-                  {t('raised_month', { count: associadosCount })}
                 </div>
               </div>
               <div className="self-start md:self-end">

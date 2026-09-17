@@ -1273,8 +1273,6 @@
     "launch_title": "The fund has not received its first real yet",
     "launch_desc": "It exists and it is set up. Vive Gostoso is paid for today by Balaio, which builds and maintains the platform. When the first contribution comes in, it shows up on this page with the date.",
     "launch_cta": "Associate your business: be the first",
-    "raised_month": "raised this month · {{count}} associated business",
-    "raised_month_plural": "raised this month · {{count}} associated businesses",
     "dest_desc": "{{value}} already have a destination: events, festivals, promotion.",
     "ops_desc": "{{value}} cover domain, server, maintenance. We don't profit.",
     "card_marketing": "City Marketing",

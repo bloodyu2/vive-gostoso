@@ -1355,8 +1355,6 @@
     "launch_title": "O fundo ainda não recebeu o primeiro real",
     "launch_desc": "Ele existe e está montado. Quem paga o Vive Gostoso hoje é a Balaio, que desenvolve e mantém a plataforma. Quando a primeira contribuição entrar, ela aparece nesta página com a data.",
     "launch_cta": "Associe seu negócio: seja o primeiro",
-    "raised_month": "arrecadados esse mês · {{count}} negócio associado",
-    "raised_month_plural": "arrecadados esse mês · {{count}} negócios associados",
     "dest_desc": "{{value}} já têm destino: eventos, festivais, divulgação.",
     "ops_desc": "{{value}} cobrem domínio, servidor, manutenção. A gente não lucra.",
     "card_marketing": "Marketing da Cidade",
