@@ -6,6 +6,7 @@ import { GTMScript } from '@/components/gtm-script'
 import { PageViewTracker } from '@/components/page-view-tracker'
 import { ToastContainer } from '@/components/ui/toast'
 import { SCRIPT_ANTI_FOUC } from '@/lib/tema'
+import { getNonce } from '@/lib/csp-nonce'
 import '@/styles/globals.css'
 
 /** O valor do atributo `lang`, por idioma.
@@ -66,6 +67,10 @@ export const metadata: Metadata = {
  *  nao. */
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const lang = await getLocale()
+  /* KAN-347: o nonce da requisicao, gerado no proxy. Vai no script anti-FOUC
+     abaixo e no bootstrap do GTM, para os dois rodarem sob a CSP que deixou de
+     ter 'unsafe-inline' em script-src. */
+  const nonce = await getNonce()
 
   return (
     <html lang={LANG_HTML[lang] ?? lang} suppressHydrationWarning>
@@ -76,7 +81,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             src/lib/tema.ts, com teste que compara os dois. O <html> acima tem
             suppressHydrationWarning porque este script muta a classe dele de
             proposito antes da hidratacao. */}
-        <script dangerouslySetInnerHTML={{ __html: SCRIPT_ANTI_FOUC }} />
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: SCRIPT_ANTI_FOUC }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link
@@ -84,7 +89,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         rel="stylesheet"
       />
       <link rel="apple-touch-startup-image" href="/splash/splash-1170x2532.png" />
-      <GTMScript />
+      <GTMScript nonce={nonce} />
     </head>
       <body className="bg-page text-fg-1 font-sans antialiased">
         <PageViewTracker />
