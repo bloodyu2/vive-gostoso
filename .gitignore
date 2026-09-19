@@ -47,3 +47,6 @@ docs/superpowers/
 *.njsproj
 *.sln
 *.sw?
+
+# Vercel (KAN-348 / VGO-07): projectId e orgId nao precisam estar versionados
+.vercel/
