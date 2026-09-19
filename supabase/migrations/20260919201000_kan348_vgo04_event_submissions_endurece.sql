@@ -6,9 +6,11 @@
 -- `created_at`/`id` arbitrarios, alem de nao haver teto de tamanho nem limite
 -- de taxa para uma tabela que recebe PII (nome, email, telefone).
 --
--- Este arquivo NAO foi aplicado: mudar o `with check` de uma policy de INSERT
--- anonima que esta no ar e decisao de release do dono. Aplique depois de
--- revisar junto com o rate-limit de aplicacao.
+-- APLICADO em 2026-09-19 (projeto wppsmvgbagalczoardfl), com ordem do Victor.
+-- Verificado depois de aplicar: policy `public_insert_submissions` com o
+-- `with check` reconstruido, e o insert do visitante (sem as colunas internas)
+-- passando. A tentativa de inserir com `is_approved=true` e `admin_note`
+-- preenchido continua reprovada pela policy, que era o ponto.
 --
 -- O `with check` reconstruido trava as colunas internas no default e mantem
 -- `is_approved` em false. As colunas de conteudo seguem aceitas do visitante,
