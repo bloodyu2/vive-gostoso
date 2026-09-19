@@ -12,7 +12,6 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 // requisicao, o que um cabecalho estatico do next.config nao faz. Lá ela sai com
 // `'nonce-<por requisicao>'` e `'strict-dynamic'`, que e o que tira o `unsafe-inline` do
 // caminho. Os demais cabecalhos de seguranca continuam estaticos aqui, logo abaixo.
-//
 // Se alguem um dia reclamar de script bloqueado, o lugar de olhar e o `montarCsp` do
 // proxy.ts, nao este arquivo. Nao readicione Content-Security-Policy aqui: dois cabecalhos
 // com o mesmo nome se sobrescrevem e o nonce desaparece sem aviso.
