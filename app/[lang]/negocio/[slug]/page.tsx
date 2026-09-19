@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { getBusinessSlugsForBuild, getBusinessForPage } from '@/lib/supabase/build-queries'
 import Negocio from '@/views/Negocio'
 import { localBusinessSchema } from '@/lib/seo'
+import { safeJsonLd } from '@/lib/json-ld'
 
 export const revalidate = 3600
 
@@ -81,7 +82,7 @@ export default async function NegocioPage({ params }: Props) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
       <Negocio initialBusiness={business} slug={slug} />
     </>

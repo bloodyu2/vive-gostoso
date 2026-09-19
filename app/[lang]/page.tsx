@@ -4,6 +4,7 @@ import { buildPageMetadata, type Locale } from '@/lib/page-metadata'
 import { createClient } from '@/lib/supabase/server'
 import Home from '@/views/Home'
 import { webSiteSchema, touristDestinationSchema } from '@/lib/seo'
+import { safeJsonLd } from '@/lib/json-ld'
 
 export const revalidate = 3600
 
@@ -73,11 +74,11 @@ export default async function HomePage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWeb) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLdWeb) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdDestination) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLdDestination) }}
       />
       <Home initialData={initialData} />
     </>

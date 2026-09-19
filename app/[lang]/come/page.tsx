@@ -3,6 +3,7 @@ import { buildPageMetadata, urlDaRota, type Locale } from '@/lib/page-metadata'
 import { getBusinessesByVerb } from '@/lib/supabase/queries'
 import { itemListSchema, localizedUrl } from '@/lib/seo'
 import Come from '@/views/Come'
+import { safeJsonLd } from '@/lib/json-ld'
 
 export const revalidate = 1800
 
@@ -29,7 +30,7 @@ export default async function ComePage(
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
       <Come initialBusinesses={businesses} />
     </>
