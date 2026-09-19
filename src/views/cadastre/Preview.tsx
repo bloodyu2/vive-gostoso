@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { BusinessCard } from '@/components/business/business-card'
 import { supabase } from '@/lib/supabase'
 import type { Business } from '@/types/database'
+import { PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY } from '@/lib/supabase/business-columns'
 
 export default function Preview() {
   return <AuthGuard><PreviewInner /></AuthGuard>
@@ -34,11 +35,13 @@ function PreviewInner() {
         if (!p.business_id) { setLoading(false); return }
         supabase
           .from('gostoso_businesses')
-          .select('*, category:gostoso_categories(*)')
+          // Colunas explicitas: `SELECT *` falha para o papel `anon` depois do
+          // revoke das colunas stripe_* (KAN-341).
+          .select(PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY)
           .eq('id', p.business_id)
           .single()
           .then(({ data: biz }) => {
-            if (biz) setBusiness(biz as Business)
+            if (biz) setBusiness(biz as unknown as Business)
             setLoading(false)
           })
       })

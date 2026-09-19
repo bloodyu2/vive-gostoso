@@ -3,6 +3,7 @@ import { buildPageMetadata, urlDaRota, type Locale } from '@/lib/page-metadata'
 import { createClient } from '@/lib/supabase/server'
 import { itemListSchema, localizedUrl } from '@/lib/seo'
 import Contrate from '@/views/Contrate'
+import { safeJsonLd } from '@/lib/json-ld'
 
 export const revalidate = 1800
 
@@ -41,7 +42,7 @@ export default async function ContratePage(
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
       <Contrate />
     </>

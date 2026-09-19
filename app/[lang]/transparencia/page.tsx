@@ -7,6 +7,7 @@ import { getParametrosProduto } from '@/lib/supabase/queries'
 import pt from '@/locales/pt.json'
 import en from '@/locales/en.json'
 import es from '@/locales/es.json'
+import { safeJsonLd } from '@/lib/json-ld'
 
 const DICIONARIOS = { pt, en, es } as const
 
@@ -33,7 +34,7 @@ export default async function TransparenciaPage(
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
       <Transparencia initialParametros={parametros} />
     </>

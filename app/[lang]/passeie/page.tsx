@@ -3,6 +3,7 @@ import { buildPageMetadata, urlDaRota, type Locale } from '@/lib/page-metadata'
 import { getBusinessesByVerb } from '@/lib/supabase/queries'
 import { itemListSchema, localizedUrl } from '@/lib/seo'
 import Passeie from '@/views/Passeie'
+import { safeJsonLd } from '@/lib/json-ld'
 
 export const revalidate = 1800
 
@@ -29,7 +30,7 @@ export default async function PasseiePage(
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
       <Passeie initialBusinesses={businesses} />
     </>

@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { buildPageMetadata, type Locale } from '@/lib/page-metadata'
 import { citySchema } from '@/lib/seo'
 import Conheca from '@/views/Conheca'
+import { safeJsonLd } from '@/lib/json-ld'
 
 export async function generateMetadata(
   { params }: { params: Promise<{ lang: string }> }
@@ -17,7 +18,7 @@ export default function ConhecaPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
       <Conheca />
     </>

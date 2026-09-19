@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { getBlogSlugsForBuild, getBlogPostForPage } from '@/lib/supabase/build-queries'
 import BlogPostPage from '@/views/BlogPost'
 import { articleSchema, breadcrumbSchema } from '@/lib/seo'
+import { safeJsonLd } from '@/lib/json-ld'
 
 export const revalidate = 86400
 
@@ -100,16 +101,16 @@ export default async function BlogPostRoute({ params }: Props) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbJsonLd) }}
       />
       {faqJsonLd && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(faqJsonLd) }}
         />
       )}
       <BlogPostPage initialPost={post} slug={slug} />
