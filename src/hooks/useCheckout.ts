@@ -17,7 +17,36 @@ export async function startCheckout(
   businessId: string,
   plan: 'associado' | 'destaque',
   billing: 'monthly' | 'annual' = 'monthly',
+  cpfCnpj?: string,
 ) {
+  /*
+   * Plano pago: tenta o Asaas e cai no Stripe.
+   *
+   * Os dois caminhos convivem de proposito. `/api/checkout` responde 503 com
+   * `code: 'asaas_off'` quando as variaveis do Asaas nao estao configuradas, e
+   * qualquer outra falha (rede, 5xx) tambem cai no Stripe. Ou seja: sem
+   * credencial do Asaas o comportamento e exatamente o de antes, e a migracao
+   * entra apagada ate a chave existir. Nada do Stripe foi removido.
+   */
+  try {
+    const respAsaas = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ plan, businessId, billing, cpfCnpj }),
+    })
+
+    if (respAsaas.ok) {
+      const { url } = await respAsaas.json()
+      if (url) {
+        window.location.href = url
+        return
+      }
+    }
+  } catch {
+    // Rede ou rota indisponivel: o Stripe abaixo e o caminho.
+  }
+
+  // Stripe: caminho original, mantido no ar durante a migracao.
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) throw new Error('Not authenticated')
 
@@ -47,7 +76,26 @@ export async function startCheckout(
  * não é um componente/hook e não pode chamar `useLocalePath` diretamente, então
  * o caminho já com o prefixo de idioma correto é passado pronto.
  */
-export async function startDonation(amountCents: number, apoiePath = '/apoie') {
+export async function startDonation(amountCents: number, apoiePath = '/apoie', cpfCnpj?: string) {
+  // Doacao: tenta o Asaas e cai no Stripe, mesma logica do plano.
+  try {
+    const respAsaas = await fetch('/api/doacao', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amountCents, cpfCnpj }),
+    })
+
+    if (respAsaas.ok) {
+      const { url } = await respAsaas.json()
+      if (url) {
+        window.location.href = url
+        return
+      }
+    }
+  } catch {
+    // Cai no Stripe.
+  }
+
   const resp = await fetch(`${SUPABASE_URL}/functions/v1/create-donation-session`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
