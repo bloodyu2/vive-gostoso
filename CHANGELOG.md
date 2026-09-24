@@ -6,6 +6,7 @@
 ---
 
 ## [Não publicado]
+- PR #23: a página 404 ganha título próprio, "Página não encontrada | Vive Gostoso", via `metadata` em `app/not-found.tsx`. Guarda em `src/lib/titulo-da-404.test.ts`. Sem `noindex`: a 404 já responde status 404. Merge `67528b2` na dev.
 - KAN-92: o contador de negócios associados sai da página do fundo. Os selos de associado e destaque continuam, como cortesia de pré-lançamento. Chaves `fund.raised_month` e `fund.raised_month_plural` removidas nos três idiomas, prop `associadosCount` removida de `FundHero` e o hook `useAssociadosCount` removido de `src/hooks/useFund.ts`. Guarda em `src/lib/contador-de-associados.test.ts`.
 - Adotados os seis arquivos de contexto na raiz: `PRD.md`, `decisoes.md`, `mistakes.md`, `design.md`, `CLAUDE.md` e `CHANGELOG.md`.
 
