@@ -1058,7 +1058,48 @@
     "role": "Guia de São Miguel do Gostoso",
     "page_title": "Vive Gostoso | Contato",
     "page_description": "Guia de São Miguel do Gostoso. Salve o contato, fale no WhatsApp e veja onde comer, ficar e passear.",
-    "whatsapp_msg": "Olá! Peguei o contato pela etiqueta do Vive Gostoso e queria uma informação."
+    "whatsapp_msg": "Olá! Peguei o contato pela etiqueta do Vive Gostoso e queria uma informação.",
+    "tagline": "O guia de São Miguel do Gostoso: onde comer, onde ficar, o que fazer e a maré do dia.",
+    "mare_titulo": "Maré de hoje",
+    "mare_local": "Praia do Cardeiro",
+    "mare_baixa": "Próxima baixa",
+    "mare_alta": "Próxima alta",
+    "mare_amanha": "amanhã",
+    "mare_botao": "Ver a tábua de marés",
+    "mare_vazio": "A previsão ainda não entrou. A tábua completa está no site.",
+    "blog_novo": "Post novo",
+    "idioma": "Idioma",
+    "contato_linha": "Para quem chegou pela etiqueta:",
+    "cartoes": {
+      "mapa": {
+        "titulo": "Mapa da região",
+        "linha": "Praias, restaurantes e pousadas no mesmo mapa"
+      },
+      "come": {
+        "titulo": "Onde comer",
+        "linha": "Restaurantes, bares e barracas da cidade"
+      },
+      "fique": {
+        "titulo": "Onde ficar",
+        "linha": "Pousadas e casas perto da praia"
+      },
+      "passeie": {
+        "titulo": "Passeios",
+        "linha": "Buggy, kitesurf, barco e guias locais"
+      },
+      "eventos": {
+        "titulo": "Eventos",
+        "linha": "Festas, feiras e festivais na cidade"
+      },
+      "blog": {
+        "titulo": "Blog",
+        "linha": "Guias e histórias de Gostoso"
+      },
+      "cadastre": {
+        "titulo": "Cadastre seu negócio",
+        "linha": "É grátis e seu negócio entra no guia"
+      }
+    }
   },
   "painel": {
     "header_title": "Painel do prestador",

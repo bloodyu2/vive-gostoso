@@ -976,7 +976,48 @@
     "role": "Guide to São Miguel do Gostoso",
     "page_title": "Vive Gostoso | Contact",
     "page_description": "Guide to São Miguel do Gostoso. Save the contact, talk on WhatsApp and see where to eat, stay and go.",
-    "whatsapp_msg": "Hi! I got this contact from the Vive Gostoso tag and I have a question."
+    "whatsapp_msg": "Hi! I got this contact from the Vive Gostoso tag and I have a question.",
+    "tagline": "The guide to São Miguel do Gostoso: where to eat, where to stay, what to do and today’s tide.",
+    "mare_titulo": "Today’s tide",
+    "mare_local": "Cardeiro Beach",
+    "mare_baixa": "Next low",
+    "mare_alta": "Next high",
+    "mare_amanha": "tomorrow",
+    "mare_botao": "See the tide table",
+    "mare_vazio": "The forecast is not in yet. The full table is on the site.",
+    "blog_novo": "New post",
+    "idioma": "Language",
+    "contato_linha": "If you came from the tag:",
+    "cartoes": {
+      "mapa": {
+        "titulo": "Area map",
+        "linha": "Beaches, restaurants and inns on one map"
+      },
+      "come": {
+        "titulo": "Where to eat",
+        "linha": "Restaurants, bars and beach stalls in town"
+      },
+      "fique": {
+        "titulo": "Where to stay",
+        "linha": "Inns and houses near the beach"
+      },
+      "passeie": {
+        "titulo": "Tours",
+        "linha": "Buggy, kitesurfing, boat trips and local guides"
+      },
+      "eventos": {
+        "titulo": "Events",
+        "linha": "Parties, fairs and festivals in town"
+      },
+      "blog": {
+        "titulo": "Blog",
+        "linha": "Guides and stories from Gostoso"
+      },
+      "cadastre": {
+        "titulo": "List your business",
+        "linha": "It is free and your business joins the guide"
+      }
+    }
   },
   "painel": {
     "header_title": "Provider dashboard",

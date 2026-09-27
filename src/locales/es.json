@@ -1174,7 +1174,48 @@
     "role": "Guía de São Miguel do Gostoso",
     "page_title": "Vive Gostoso | Contacto",
     "page_description": "Guía de São Miguel do Gostoso. Guarda el contacto, habla por WhatsApp y mira dónde comer, quedarte y pasear.",
-    "whatsapp_msg": "¡Hola! Tomé el contacto por la etiqueta de Vive Gostoso y tengo una pregunta."
+    "whatsapp_msg": "¡Hola! Tomé el contacto por la etiqueta de Vive Gostoso y tengo una pregunta.",
+    "tagline": "La guía de São Miguel do Gostoso: dónde comer, dónde dormir, qué hacer y la marea del día.",
+    "mare_titulo": "Marea de hoy",
+    "mare_local": "Playa do Cardeiro",
+    "mare_baixa": "Próxima baja",
+    "mare_alta": "Próxima alta",
+    "mare_amanha": "mañana",
+    "mare_botao": "Ver la tabla de mareas",
+    "mare_vazio": "El pronóstico todavía no entró. La tabla completa está en el sitio.",
+    "blog_novo": "Post nuevo",
+    "idioma": "Idioma",
+    "contato_linha": "Si llegaste por la etiqueta:",
+    "cartoes": {
+      "mapa": {
+        "titulo": "Mapa de la región",
+        "linha": "Playas, restaurantes y posadas en el mismo mapa"
+      },
+      "come": {
+        "titulo": "Dónde comer",
+        "linha": "Restaurantes, bares y puestos de la ciudad"
+      },
+      "fique": {
+        "titulo": "Dónde dormir",
+        "linha": "Posadas y casas cerca de la playa"
+      },
+      "passeie": {
+        "titulo": "Paseos",
+        "linha": "Buggy, kitesurf, barco y guías locales"
+      },
+      "eventos": {
+        "titulo": "Eventos",
+        "linha": "Fiestas, ferias y festivales en la ciudad"
+      },
+      "blog": {
+        "titulo": "Blog",
+        "linha": "Guías e historias de Gostoso"
+      },
+      "cadastre": {
+        "titulo": "Registra tu negocio",
+        "linha": "Es gratis y tu negocio entra en la guía"
+      }
+    }
   },
   "painel": {
     "header_title": "Panel del prestador",

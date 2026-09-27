@@ -20,3 +20,10 @@ describe('paginas fixas do sitemap', () => {
     expect(new Set(caminhos).size).toBe(caminhos.length)
   })
 })
+
+describe('a /bio fica fora do sitemap', () => {
+  it('nenhuma pagina fixa e a /bio', () => {
+    const caminhos = (paginasEstaticas(process.cwd()) as Array<{ path: string }>).map((p) => p.path)
+    expect(caminhos.some((c) => /(^|\/)bio(\/|$)/.test(c))).toBe(false)
+  })
+})
