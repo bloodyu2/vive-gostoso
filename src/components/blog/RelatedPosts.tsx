@@ -5,6 +5,8 @@ import { supabase } from '@/lib/supabase'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import type { BlogPost } from '@/types/database'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
+import { useTranslation } from 'react-i18next'
+import { normalizarIdioma, visivelNoIdioma } from '@/lib/blog/traducoes'
 
 interface RelatedPostsProps {
   /** Slug do post atual — para excluir da listagem */
@@ -21,7 +23,9 @@ interface RelatedPostsProps {
  */
 export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPostsProps) {
   const lp = useLocalePath()
-  const { data: posts = [] } = useQuery({
+  const { i18n } = useTranslation()
+  const idioma = normalizarIdioma(i18n.language)
+  const { data: todosPosts = [] } = useQuery({
     queryKey: ['related-posts', currentSlug, tags.join(',')],
     queryFn: async () => {
       let query = supabase
@@ -59,6 +63,8 @@ export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPosts
       return list.slice(0, limit)
     },
   })
+
+  const posts = todosPosts.filter(p => visivelNoIdioma(p.slug, idioma))
 
   if (posts.length === 0) return null
 
