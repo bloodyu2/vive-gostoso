@@ -1619,5 +1619,10 @@
   "blog_mares": {
     "titulo": "Mareas de las playas de este texto",
     "item": "Marea de hoy: {{praia}}"
+  },
+  "guia_mares": {
+    "leia": "Lee la guía",
+    "titulo": "Guía de la tabla de mareas",
+    "linha": "Cómo leer la marea y el mejor horario en cada playa"
   }
 }

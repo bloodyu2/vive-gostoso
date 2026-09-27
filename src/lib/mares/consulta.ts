@@ -11,9 +11,9 @@ export const SEGUNDOS_DE_CACHE = 3600
  *  por 1 h e a resposta do Supabase, no cache de dados do Next: a pagina
  *  continua calculando "hoje" e "agora" a cada visita, mas o banco e lido no
  *  maximo uma vez por hora por consulta. */
-export function fetchComCache(base: typeof fetch = fetch): typeof fetch {
+export function fetchComCache(base: typeof fetch = fetch, tag = 'gostoso_mares'): typeof fetch {
   return ((entrada: RequestInfo | URL, init?: RequestInit) =>
-    base(entrada, { ...init, next: { revalidate: SEGUNDOS_DE_CACHE, tags: ['gostoso_mares'] } } as RequestInit)) as typeof fetch
+    base(entrada, { ...init, next: { revalidate: SEGUNDOS_DE_CACHE, tags: [tag] } } as RequestInit)) as typeof fetch
 }
 
 /** Cliente anonimo sem cookies: a tabua e publica. */

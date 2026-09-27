@@ -1619,5 +1619,10 @@
   "blog_mares": {
     "titulo": "Tides for the beaches in this post",
     "item": "Today's tide: {{praia}}"
+  },
+  "guia_mares": {
+    "leia": "Read the guide",
+    "titulo": "Tide table guide",
+    "linha": "How to read the tide and the best time at each beach"
   }
 }
