@@ -10,8 +10,10 @@ import { melhorJanela } from '@/lib/mares/melhor-janela'
 import { formatarHora } from '@/lib/mares/tempo'
 import { CartaoDoDia, EstadoVazio, RodapeFonte, SeletorPraias, caminhoLocal } from '@/components/mares/partes'
 
-/* Tabua de mares, pagina indice. SSR com ISR de 1 h: a previsao vem do
-   Supabase (gostoso_mares) no servidor, e o navegador nao busca nada. */
+/* Tabua de mares, pagina indice. Renderizada no servidor; o navegador nao
+   busca nada. `revalidate` fica declarado, mas hoje o HTML de todo o site e
+   dinamico por causa do nonce de CSP (proxy.ts); quem segura a leitura por
+   1 h e o cache de dados em src/lib/mares/consulta.ts. */
 export const revalidate = 3600
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {

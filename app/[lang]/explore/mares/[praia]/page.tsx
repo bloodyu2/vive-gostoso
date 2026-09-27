@@ -10,6 +10,7 @@ import { safeJsonLd } from '@/lib/json-ld'
 import { CartaoDoDia, EstadoVazio, RodapeFonte, SeletorPraias, TabelaSemana, caminhoLocal } from '@/components/mares/partes'
 import { PainelDias } from '@/components/mares/painel-dias'
 
+// Ver o comentario de revalidate em ../page.tsx.
 export const revalidate = 3600
 export const dynamicParams = false
 

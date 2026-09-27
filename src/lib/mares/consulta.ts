@@ -4,13 +4,24 @@ import { inicioDoDia } from './tempo'
 
 export type ClienteMares = Pick<SupabaseClient, 'from'>
 
-/** Cliente anonimo sem cookies: a pagina das mares e publica e usa ISR, e o
- *  cliente de lib/supabase/server le cookies, o que tornaria a rota dinamica. */
+export const SEGUNDOS_DE_CACHE = 3600
+
+/** O HTML do site inteiro e dinamico (o nonce de CSP do proxy.ts e gerado por
+ *  requisicao), entao `revalidate` na pagina nao segura nada. O que se guarda
+ *  por 1 h e a resposta do Supabase, no cache de dados do Next: a pagina
+ *  continua calculando "hoje" e "agora" a cada visita, mas o banco e lido no
+ *  maximo uma vez por hora por consulta. */
+export function fetchComCache(base: typeof fetch = fetch): typeof fetch {
+  return ((entrada: RequestInfo | URL, init?: RequestInit) =>
+    base(entrada, { ...init, next: { revalidate: SEGUNDOS_DE_CACHE, tags: ['gostoso_mares'] } } as RequestInit)) as typeof fetch
+}
+
+/** Cliente anonimo sem cookies: a tabua e publica. */
 export function clienteAnonimo(): ClienteMares | null {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const chave = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   if (!url || !chave) return null
-  return createClient(url, chave, { auth: { persistSession: false } })
+  return createClient(url, chave, { auth: { persistSession: false }, global: { fetch: fetchComCache() } })
 }
 
 /** Mares de uma estacao entre duas datas locais (fim exclusivo). Qualquer erro,
