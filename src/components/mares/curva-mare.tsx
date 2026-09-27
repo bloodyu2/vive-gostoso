@@ -11,9 +11,9 @@ import type { MareDoDia } from '@/lib/mares/semana'
    de dado acontece aqui. */
 
 const L = 360
-const A = 150
+const A = 168
 const MARGEM_TOPO = 26
-const MARGEM_BASE = 22
+const MARGEM_BASE = 40
 const ALTURA_MIN = -0.2
 const ALTURA_MAX = 3
 
@@ -91,7 +91,7 @@ export function CurvaMare({ data, pontos, eventos, janela, rotuloAgora, descrica
         const ey = y(e.altura)
         return (
           <g key={e.iso}>
-            <circle cx={ex} cy={ey} r={3.5} className={e.tipo === 'alta' ? 'fill-teal' : 'fill-ocre-700'} />
+            <circle cx={ex} cy={ey} r={3.5} className={e.tipo === 'alta' ? 'fill-teal' : 'fill-ocre-700 dark:fill-ocre-400'} />
             <text
               x={Math.min(Math.max(ex, 16), L - 16)}
               y={e.tipo === 'alta' ? ey - 9 : ey + 16}

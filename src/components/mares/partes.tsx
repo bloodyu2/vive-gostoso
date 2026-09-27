@@ -33,8 +33,8 @@ export function IconeLua({ lua, tamanho = 28 }: { lua: FaseDaLua; tamanho?: numb
 export function SeletorPraias({ lang, atual }: { lang: Idioma; atual?: string }) {
   const t = textosMares(lang)
   return (
-    <nav aria-label={t.praias} className="-mx-5 px-5 md:mx-0 md:px-0">
-      <ul className="flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none]">
+    <nav aria-label={t.praias}>
+      <ul className="flex gap-2 overflow-x-auto pb-2 -mx-5 px-5 md:mx-0 md:px-0">
         {PRAIAS_MARES.map((p) => {
           const ativa = p.slug === atual
           return (

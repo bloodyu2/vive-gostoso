@@ -34,7 +34,7 @@ export function PainelDias({
 
   return (
     <div>
-      <div role="tablist" aria-label={rotulo} className="flex gap-2 overflow-x-auto pb-2 -mx-5 px-5 md:mx-0 md:px-0 [scrollbar-width:none]">
+      <div role="tablist" aria-label={rotulo} className="flex gap-2 overflow-x-auto pb-2 -mx-5 px-5 md:mx-0 md:px-0">
         {dias.map((d, i) => {
           const selecionado = i === indice
           return (
