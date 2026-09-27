@@ -6,16 +6,18 @@
  *   npx tsx scripts/mares/importar-tabua-marinha.ts --json saida.json  # grava as linhas num JSON
  *   npx tsx scripts/mares/importar-tabua-marinha.ts                    # grava no Supabase
  *   npx tsx scripts/mares/importar-tabua-marinha.ts --ano 2027         # so a edicao de 2027
+ *   npx tsx scripts/mares/importar-tabua-marinha.ts --estacao GUAMARE  # so uma estacao
  *
  * Le NEXT_PUBLIC_SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY do .env.local (ou do
  * ambiente). A chave nunca e impressa. Grava com upsert em (estacao, data_hora),
  * entao rodar de novo nao duplica nada.
  *
- * Para 2027: baixar o PDF do Porto de Natal da edicao 2027 em
+ * Para 2027: baixar os PDFs do Porto de Guamare e do Porto de Natal da edicao 2027 em
  * https://www.marinha.mil.br/chm/tabuas-de-mare (ou direto em
  * assets.marinha.mil.br/chm/.../dados_de_mare/), salvar como
- * scripts/mares/fontes/natal-2027.pdf, acrescentar a entrada em FONTES abaixo,
- * conferir 10 dias no teste src/lib/mares/extrair-tabua.test.ts e rodar.
+ * scripts/mares/fontes/guamare-2027.pdf e natal-2027.pdf, acrescentar as duas
+ * entradas em FONTES abaixo, conferir 10 dias de cada no teste
+ * src/lib/mares/extrair-tabua.test.ts e rodar.
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { resolve } from 'node:path'
@@ -29,6 +31,16 @@ const RAIZ = resolve(import.meta.dirname, '..', '..')
 type Fonte = { arquivo: string; estacao: string; ano: number; fonte: string; url: string }
 
 const FONTES: Fonte[] = [
+  {
+    // O PDF de Guamare nao traz codigo de estacao; GUAMARE e o codigo nosso.
+    // Copia local do PDF oficial (pagina 73 da edicao 2026); a Marinha publica
+    // em https://www.marinha.mil.br/chm/tabuas-de-mare.
+    arquivo: 'scripts/mares/fontes/guamare-2026.pdf',
+    estacao: 'GUAMARE',
+    ano: 2026,
+    fonte: 'Tabuas de Mare da Marinha do Brasil (CHM/DHN) 2026, Porto de Guamare',
+    url: 'https://www.marinha.mil.br/chm/tabuas-de-mare-6',
+  },
   {
     arquivo: 'scripts/mares/fontes/natal-2026.pdf',
     estacao: 'COM3DN',
@@ -60,8 +72,11 @@ async function main() {
   const dryRun = process.argv.includes('--dry-run')
   const saidaJson = argumento('--json')
   const anoFiltro = argumento('--ano')
-  const fontes = FONTES.filter((f) => !anoFiltro || String(f.ano) === anoFiltro)
-  if (fontes.length === 0) throw new Error(`Nenhuma fonte cadastrada para o ano ${anoFiltro}`)
+  const estacaoFiltro = argumento('--estacao')
+  const fontes = FONTES.filter(
+    (f) => (!anoFiltro || String(f.ano) === anoFiltro) && (!estacaoFiltro || f.estacao === estacaoFiltro),
+  )
+  if (fontes.length === 0) throw new Error(`Nenhuma fonte cadastrada para ano ${anoFiltro ?? '*'} e estacao ${estacaoFiltro ?? '*'}`)
 
   const linhas: LinhaMare[] = []
   for (const f of fontes) {
