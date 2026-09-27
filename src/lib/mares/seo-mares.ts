@@ -85,7 +85,7 @@ export function jsonLdMares(lang: Idioma, praia?: PraiaMare): Record<string, unk
     isPartOf: { '@type': 'WebSite', name: 'Vive Gostoso', url: localizedUrl('', lang) },
     isBasedOn: {
       '@type': 'CreativeWork',
-      name: 'Tábuas de Maré 2026, Porto de Natal',
+      name: 'Tábuas de Maré da Marinha do Brasil, Porto de Natal',
       url: ESTACOES.COM3DN.fonteUrl,
       publisher: { '@type': 'GovernmentOrganization', name: 'Marinha do Brasil, Centro de Hidrografia da Marinha (CHM/DHN)' },
     },
