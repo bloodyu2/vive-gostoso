@@ -17,6 +17,8 @@ export type DiaDeMare = {
   curva: PontoCurva[]
   lua: FaseDaLua
   janela: { inicio: string; fim: string; inicioMin: number; fimMin: number } | null
+  /** true quando a estacao principal nao tinha dado neste dia e a tela usa a reserva. */
+  usaReserva: boolean
 }
 
 export const DIAS_NA_TELA = 8 // hoje e os proximos 7
@@ -30,7 +32,27 @@ export function linhasParaEventos(linhas: LinhaLida[]): EventoLido[] {
     .sort((a, b) => a.instante.getTime() - b.instante.getTime())
 }
 
-export function montarSemana(eventos: EventoLido[], hoje: string, praia?: PraiaMare): DiaDeMare[] {
+/** Junta as mares de duas estacoes, dia a dia (dia local): o dia que a
+ *  principal tem fica com ela; o dia que so a reserva tem fica com a reserva e
+ *  entra em diasDaReserva, para a tela avisar. Nunca mistura as duas no mesmo dia. */
+export function combinarEstacoes(
+  principal: EventoLido[],
+  reserva: EventoLido[],
+): { eventos: EventoLido[]; diasDaReserva: Set<string> } {
+  const diasDaPrincipal = new Set(principal.map((e) => e.data))
+  const daReserva = reserva.filter((e) => !diasDaPrincipal.has(e.data))
+  return {
+    eventos: [...principal, ...daReserva].sort((a, b) => a.instante.getTime() - b.instante.getTime()),
+    diasDaReserva: new Set(daReserva.map((e) => e.data)),
+  }
+}
+
+export function montarSemana(
+  eventos: EventoLido[],
+  hoje: string,
+  praia?: PraiaMare,
+  diasDaReserva: ReadonlySet<string> = new Set(),
+): DiaDeMare[] {
   return diasAPartirDe(hoje, DIAS_NA_TELA).map((data) => {
     const doDia = eventos.filter((e) => e.data === data)
     const temDados = doDia.length > 0
@@ -54,6 +76,7 @@ export function montarSemana(eventos: EventoLido[], hoje: string, praia?: PraiaM
             fimMin: minutosLocais(janela.fim),
           }
         : null,
+      usaReserva: temDados && diasDaReserva.has(data),
     }
   })
 }

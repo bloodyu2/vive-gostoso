@@ -1,11 +1,11 @@
 import Link from 'next/link'
-import { ArrowDown, ArrowUp } from 'lucide-react'
+import { ArrowDown, ArrowUp, Info } from 'lucide-react'
 import type { Idioma, PraiaMare } from '@/data/praias-mares'
 import type { DiaDeMare } from '@/lib/mares/semana'
 import type { FaseDaLua } from '@/lib/mares/lua'
 import { formatarAltura, rotuloDoDia } from '@/lib/mares/formato'
 import { preencher, textosMares, caminhoMares } from '@/lib/mares/seo-mares'
-import { ESTACOES, PRAIAS_MARES } from '@/data/praias-mares'
+import { ESTACOES, PRAIAS_MARES, distanciaKm, praiasPorMunicipio, type CodigoEstacao } from '@/data/praias-mares'
 import { CurvaMare } from './curva-mare'
 
 const PREFIXO: Record<Idioma, string> = { pt: '', en: '/en', es: '/es' }
@@ -33,26 +33,44 @@ export function IconeLua({ lua, tamanho = 28 }: { lua: FaseDaLua; tamanho?: numb
 export function SeletorPraias({ lang, atual }: { lang: Idioma; atual?: string }) {
   const t = textosMares(lang)
   return (
-    <nav aria-label={t.praias}>
-      <ul className="flex gap-2 overflow-x-auto pb-2 -mx-5 px-5 md:mx-0 md:px-0">
-        {PRAIAS_MARES.map((p) => {
-          const ativa = p.slug === atual
-          return (
-            <li key={p.slug} className="shrink-0">
-              <Link
-                href={caminhoLocal(lang, p.slug)}
-                aria-current={ativa ? 'page' : undefined}
-                className={`inline-flex items-center min-h-11 rounded-full border px-4 text-sm font-semibold whitespace-nowrap transition-colors motion-reduce:transition-none ${
-                  ativa ? 'bg-teal border-teal text-white' : 'bg-elev border-border-1 text-fg-1 hover:border-teal hover:text-teal'
-                }`}
-              >
-                {p.nome.replace(/^Praia (do|da|de) /, '')}
-              </Link>
-            </li>
-          )
-        })}
-      </ul>
+    <nav aria-label={t.praias} className="space-y-3">
+      {praiasPorMunicipio().map(({ municipio, praias }, i) => (
+        <div key={municipio}>
+          <p id={`seletor-municipio-${i}`} className="text-xs font-semibold uppercase tracking-wide text-fg-3">
+            {municipio}
+          </p>
+          <ul aria-labelledby={`seletor-municipio-${i}`} className="mt-1.5 flex gap-2 overflow-x-auto pb-2 -mx-5 px-5 md:mx-0 md:px-0 md:flex-wrap md:overflow-visible">
+            {praias.map((p) => {
+              const ativa = p.slug === atual
+              return (
+                <li key={p.slug} className="shrink-0">
+                  <Link
+                    href={caminhoLocal(lang, p.slug)}
+                    aria-current={ativa ? 'page' : undefined}
+                    className={`inline-flex items-center min-h-11 rounded-full border px-4 text-sm font-semibold whitespace-nowrap transition-colors motion-reduce:transition-none ${
+                      ativa ? 'bg-teal border-teal text-white' : 'bg-elev border-border-1 text-fg-1 hover:border-teal hover:text-teal'
+                    }`}
+                  >
+                    {p.nome.replace(/^Praia (do|da|de) /, '')}
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      ))}
     </nav>
+  )
+}
+
+/** Aviso de que o dia usa a estacao reserva ("Hoje com dados do Porto de Natal"). */
+export function AvisoReserva({ rotuloDia, reserva, lang }: { rotuloDia: string; reserva: CodigoEstacao; lang: Idioma }) {
+  const t = textosMares(lang)
+  return (
+    <p role="note" className="mt-3 inline-flex items-start gap-2 rounded-lg bg-ocre/10 px-3 py-2 text-sm font-medium text-fg-1">
+      <Info className="mt-0.5 h-4 w-4 shrink-0 text-ocre-700 dark:text-ocre-400" aria-hidden="true" />
+      {preencher(t.com_reserva, { dia: rotuloDia, estacao: ESTACOES[reserva].nome })}
+    </p>
   )
 }
 
@@ -76,11 +94,13 @@ export function CartaoDoDia({
   hoje,
   lang,
   praia,
+  reserva,
 }: {
   dia: DiaDeMare
   hoje: string
   lang: Idioma
   praia?: PraiaMare
+  reserva: CodigoEstacao
 }) {
   const t = textosMares(lang)
   const rotulo = rotuloDoDia(dia.data, hoje, lang)
@@ -103,6 +123,8 @@ export function CartaoDoDia({
           <span>{nomeFase}</span>
         </p>
       </div>
+
+      {dia.usaReserva && <AvisoReserva rotuloDia={rotulo.nome} reserva={reserva} lang={lang} />}
 
       {!dia.temDados ? (
         <p className="mt-6 text-fg-2">{t.dia_sem_dado}</p>
@@ -143,7 +165,17 @@ export function CartaoDoDia({
   )
 }
 
-export function TabelaSemana({ semana, hoje, lang }: { semana: DiaDeMare[]; hoje: string; lang: Idioma }) {
+export function TabelaSemana({
+  semana,
+  hoje,
+  lang,
+  reserva,
+}: {
+  semana: DiaDeMare[]
+  hoje: string
+  lang: Idioma
+  reserva: CodigoEstacao
+}) {
   const t = textosMares(lang)
   return (
     <section className="mt-12">
@@ -164,6 +196,11 @@ export function TabelaSemana({ semana, hoje, lang }: { semana: DiaDeMare[]; hoje
                 <tr key={d.data} className="border-b border-border-1 align-top">
                   <th scope="row" className="py-3 pr-3 font-semibold text-fg-1 whitespace-nowrap">
                     {r.nome} <span className="block font-normal text-fg-3 tabular-nums">{r.data}</span>
+                    {d.usaReserva && (
+                      <span className="block font-normal text-xs text-ocre-700 dark:text-ocre-400">
+                        {preencher(t.dados_do, { estacao: ESTACOES[reserva].nome })}
+                      </span>
+                    )}
                   </th>
                   <td className="py-3 pr-3">
                     {d.temDados ? (
@@ -210,22 +247,60 @@ export function EstadoVazio({ lang }: { lang: Idioma }) {
   )
 }
 
-export function RodapeFonte({ lang, distanciaKm }: { lang: Idioma; distanciaKm?: number }) {
+/** Rodape com a fonte, a distancia ate a estacao e o aviso. Na pagina da
+ *  praia, mostra a distancia dela; no indice, a de cada praia. */
+export function RodapeFonte({
+  lang,
+  principal,
+  reserva,
+  praia,
+}: {
+  lang: Idioma
+  principal: CodigoEstacao
+  reserva: CodigoEstacao
+  praia?: PraiaMare
+}) {
   const t = textosMares(lang)
+  const nomePrincipal = ESTACOES[principal].nome
+  const nomeReserva = ESTACOES[reserva].nome
+  const km = praia ? distanciaKm(praia, ESTACOES[principal]) : undefined
+  const kmReserva = praia ? distanciaKm(praia, ESTACOES[reserva]) : undefined
   return (
     <footer className="mt-12 border-t border-border-1 pt-6 text-sm text-fg-2 leading-relaxed max-w-[65ch]">
       <p>
         <a
-          href={ESTACOES.COM3DN.fonteUrl}
+          href={ESTACOES[principal].fonteUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="font-semibold text-teal underline underline-offset-2 hover:text-teal-dark"
         >
-          {t.fonte}
+          {preencher(t.fonte, { estacao: nomePrincipal })}
         </a>
       </p>
-      {distanciaKm !== undefined && <p className="mt-2">{preencher(t.estacao, { km: distanciaKm })}</p>}
-      <p className="mt-2">{t.aviso}</p>
+      {praia && (
+        <p className="mt-2">
+          {km !== undefined && kmReserva !== undefined
+            ? preencher(t.estacao, { estacao: nomePrincipal, km: Math.round(km), reserva: nomeReserva, km_reserva: Math.round(kmReserva) })
+            : preencher(t.estacao_sem_distancia, { estacao: nomePrincipal, reserva: nomeReserva })}
+        </p>
+      )}
+      {!praia && (
+        <div className="mt-2">
+          <p>{t.distancias_titulo}</p>
+          <ul className="mt-1 list-disc pl-5">
+            {PRAIAS_MARES.map((p) => {
+              const d = distanciaKm(p, ESTACOES[p.estacaoPrincipal])
+              if (d === undefined) return null
+              return (
+                <li key={p.slug}>
+                  {preencher(t.distancia_item, { praia: p.nome, estacao: ESTACOES[p.estacaoPrincipal].nome, km: Math.round(d) })}
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      )}
+      <p className="mt-2">{preencher(t.aviso, { estacao: nomePrincipal, reserva: nomeReserva })}</p>
     </footer>
   )
 }

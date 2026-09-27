@@ -50,7 +50,7 @@
     },
     "mares": {
       "title": "São Miguel do Gostoso tide table",
-      "description": "Today's tide and the next 7 days on the beaches of Gostoso and Pedra Grande: times, heights, the day's curve, moon phase and what the tide changes at each."
+      "description": "Today's tide and the next 7 days on the beaches of Gostoso, Touros and Pedra Grande: times, heights, daily curve, moon phase and what the tide changes."
     }
   },
   "nav": {
@@ -1476,7 +1476,7 @@
   },
   "mares": {
     "titulo": "Tide table",
-    "intro": "Today's tide and the next 7 days on the beaches of São Miguel do Gostoso and Pedra Grande, with what it changes on each beach.",
+    "intro": "Today's tide and the next 7 days on the beaches of São Miguel do Gostoso, Touros and Pedra Grande, with what it changes on each beach.",
     "titulo_praia": "Tide table: {praia}",
     "desc_praia": "Today's tide and the next 7 days at {praia}, in {municipio}: times, heights, the day's curve and moon phase.",
     "praias": "Beaches",
@@ -1507,15 +1507,20 @@
     "col_dia": "Day",
     "col_mares": "Tides",
     "col_lua": "Moon",
-    "fonte": "Source: Brazilian Navy Tide Tables (CHM/DHN), Porto de Natal station",
-    "aviso": "Times are for the reference station at the Port of Natal. At the beach the tide may differ by a few minutes and a few centimetres. Do not use this page for navigation.",
-    "estacao": "Reference station: Port of Natal, {km} km in a straight line.",
+    "fonte": "Source: Brazilian Navy Tide Tables (CHM/DHN), {estacao} station",
+    "aviso": "Times are for the reference station ({estacao}). At the beach the tide may arrive a few minutes earlier or later and differ by a few centimetres. When that station has no forecast for a day, the page uses {reserva} and says so. Do not use this page for navigation.",
+    "estacao": "Reference station: {estacao}, {km} km in a straight line. Backup: {reserva}, {km_reserva} km.",
     "vazio_titulo": "The tide table has no data yet",
     "vazio_desc": "The Navy forecast for these days has not been loaded yet. Please check back later.",
     "dia_sem_dado": "No forecast loaded for this day.",
     "hoje_em": "Today on the beaches",
     "ver_praia": "See the tide at {praia}",
     "og_hoje": "Today's tide",
-    "admin_aviso": "Tide table: data missing for {n} of the next 30 days. Run the importer (scripts/mares/importar-tabua-marinha.ts) with the new Navy edition."
+    "admin_aviso": "Tide table, {estacao}: data missing for {n} of the next 30 days. Run the importer (scripts/mares/importar-tabua-marinha.ts) with the new Navy edition.",
+    "estacao_sem_distancia": "Reference station: {estacao}. Backup: {reserva}. No distance is shown because this beach's position has not been checked yet.",
+    "distancias_titulo": "Straight-line distance from each beach to its reference station:",
+    "distancia_item": "{praia}: {estacao}, {km} km",
+    "com_reserva": "{dia} with data from {estacao}",
+    "dados_do": "Data from {estacao}"
   }
 }
