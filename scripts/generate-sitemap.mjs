@@ -11,6 +11,7 @@ import { readFileSync, writeFileSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { paginasEstaticas } from './paginas-sitemap.mjs'
+import { entradaSitemapDoPost } from './blog-traducoes.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(__dirname, '..')
@@ -38,6 +39,11 @@ const LOCALES = [
 const CONTRATE_CATEGORIAS = Object.keys(
   JSON.parse(readFileSync(resolve(ROOT, 'src/locales/pt.json'), 'utf-8')).contrate.categorias
 ).filter(c => c !== 'outro')
+
+// Grupos de traducao do blog (mesmo post em pt/es/en com slugs diferentes).
+const BLOG_TRADUCOES = JSON.parse(
+  readFileSync(resolve(ROOT, 'src/data/blog-traducoes.json'), 'utf-8')
+)
 
 // ---------------------------------------------------------------------------
 // Supabase credentials — read from .env (VITE_ prefixed keys)
@@ -129,6 +135,20 @@ ${hreflangLinks(loc.replace(BASE_URL, '').replace(/^\/en|^\/es/, '') || '/')}${l
   </url>`
 }
 
+/** <url> unico de post traduzido: so a URL do idioma, hreflang do grupo. */
+function urlEntradaTraduzida({ loc, alternates }, freq, priority, lastmod = '') {
+  const lastmodTag = lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ''
+  const links = alternates
+    .map(({ hreflang, href }) => `    <xhtml:link rel="alternate" hreflang="${hreflang}" href="${href}"/>`)
+    .join('\n')
+  return `  <url>
+    <loc>${loc}</loc>
+${links}${lastmodTag}
+    <changefreq>${freq}</changefreq>
+    <priority>${priority}</priority>
+  </url>`
+}
+
 /**
  * Emit one <url> block per locale variant of `path`.
  * Google requires each localized URL to appear in the sitemap,
@@ -201,7 +221,12 @@ async function main() {
     for (const p of posts) {
       if (!p.slug) continue
       const date = p.published_at ? p.published_at.slice(0, 10) : ''
-      sections.push(urlGroup(`/blog/${p.slug}`, 'monthly', '0.6', date))
+      const traduzida = entradaSitemapDoPost(p.slug, BLOG_TRADUCOES, BASE_URL)
+      sections.push(
+        traduzida
+          ? urlEntradaTraduzida(traduzida, 'monthly', '0.6', date)
+          : urlGroup(`/blog/${p.slug}`, 'monthly', '0.6', date)
+      )
     }
   }
 
@@ -220,7 +245,9 @@ async function main() {
     STATIC_PAGES.length * 3 +
     CONTRATE_CATEGORIAS.length * 3 +
     businesses.filter(b => b.slug).length * 3 +
-    posts.filter(p => p.slug).length * 3 +
+    posts
+      .filter(p => p.slug)
+      .reduce((n, p) => n + (entradaSitemapDoPost(p.slug, BLOG_TRADUCOES, BASE_URL) ? 1 : 3), 0) +
     events.filter(e => e.id).length * 3
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

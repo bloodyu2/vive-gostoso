@@ -26,6 +26,18 @@ describe('vitrine de recursos da home', () => {
     for (const i of ITENS_VITRINE) expect(existsSync(resolve('app/[lang]', `.${i.caminho}`, 'page.tsx')), i.caminho).toBe(true)
   })
 
+  it('a frase dos cartoes pequenos cabe em duas linhas (ate 48 caracteres, com n de 3 digitos)', () => {
+    const cheio = { come: 148, fique: 148, passeie: 148, participe: 148 }
+    for (const lang of ['pt', 'en', 'es'] as const) {
+      for (const contagens of [{}, cheio]) {
+        const t = textosVitrine(lang, contagens)
+        for (const i of ITENS_VITRINE.filter((x) => !x.destaque)) {
+          expect(t.itens[i.id].linha.length, `${lang} ${i.id}: ${t.itens[i.id].linha}`).toBeLessThanOrEqual(48)
+        }
+      }
+    }
+  })
+
   it('titulo e linha em pt, en e es, sem travessao', () => {
     for (const lang of ['pt', 'en', 'es'] as const) {
       const t = textosVitrine(lang)
@@ -44,6 +56,52 @@ describe('vitrine de recursos da home', () => {
       const linha = textosVitrine(lang).itens.mares.linha
       expect(linha).toContain(String(PRAIAS_MARES.length))
       expect(linha).not.toContain('{n}')
+    }
+  })
+
+  it('todo item tem caminho e botao em pt, en e es', () => {
+    for (const lang of ['pt', 'en', 'es'] as const) {
+      const t = textosVitrine(lang)
+      for (const i of ITENS_VITRINE) {
+        expect(i.caminho.startsWith('/'), i.id).toBe(true)
+        expect(t.itens[i.id].botao.trim().length, `${lang} ${i.id}`).toBeGreaterThan(2)
+      }
+    }
+  })
+
+  it('nenhum texto da vitrine tem travessao', () => {
+    for (const lang of ['pt', 'en', 'es'] as const) {
+      const bruto = JSON.stringify(textosVitrine(lang, { come: 12, fique: 30, passeie: 9, participe: 4 }))
+      expect(bruto).not.toContain(String.fromCharCode(0x2014))
+      expect(bruto).not.toContain(String.fromCharCode(0x2013))
+    }
+  })
+
+  it('com contagem, a frase traz o numero; sem contagem, nao sobra {n}', () => {
+    for (const lang of ['pt', 'en', 'es'] as const) {
+      const com = textosVitrine(lang, { come: 12, fique: 30, passeie: 9, participe: 4 })
+      expect(com.itens.come.linha, lang).toContain('12')
+      expect(com.itens.fique.linha, lang).toContain('30')
+      expect(com.itens.passeie.linha, lang).toContain('9')
+      expect(com.itens.participe.linha, lang).toContain('4')
+      const sem = textosVitrine(lang, { come: null, fique: null, passeie: null, participe: null })
+      const semNada = textosVitrine(lang)
+      for (const t of [sem, semNada]) {
+        for (const i of ITENS_VITRINE) expect(t.itens[i.id].linha, `${lang} ${i.id}`).not.toContain('{n}')
+      }
+      expect(sem.itens.come.linha).toBe(semNada.itens.come.linha)
+    }
+  })
+
+  it('contagem 0 ou 1 usa a frase sem numero', () => {
+    const t = textosVitrine('pt', { come: 0, fique: 1 })
+    expect(t.itens.come.linha).toBe(textosVitrine('pt').itens.come.linha)
+    expect(t.itens.fique.linha).toBe(textosVitrine('pt').itens.fique.linha)
+  })
+
+  it('cada item tem imagem local que existe ou fica com o icone', () => {
+    for (const i of ITENS_VITRINE) {
+      if (i.imagem) expect(existsSync(resolve('public', `.${i.imagem}`)), i.imagem).toBe(true)
     }
   })
 })

@@ -82,8 +82,8 @@ Rodado em 27/09/2026 sobre o commit `1a72667`:
 - Conferido no navegador: no celular (375 px), a vitrine rola na horizontal e a página não. No desktop, os tiles do Mapbox carregam com a CSP nova e aparecem os filtros e os pontos.
 - Links nos posts: não verificado com post real. O código liga a praia quando o nome aparece no título ou no conteúdo.
 
-- Hash do merge: a preencher.
-- Deploy: a preencher.
+- Hash do merge: `10dda32`.
+- Deploy: `dpl_9XBxsyzfT29gWocU3xn5JgRa5mru`.
 
 ## 5. Pendências
 

@@ -9,6 +9,7 @@ import { safeJsonLd } from '@/lib/json-ld'
 import { melhorJanela } from '@/lib/mares/melhor-janela'
 import { formatarHora } from '@/lib/mares/tempo'
 import { CartaoDoDia, EstadoVazio, RodapeFonte, SeletorPraias, caminhoLocal } from '@/components/mares/partes'
+import { LinkGuiaMares } from '@/components/mares/link-guia'
 
 /* Tabua de mares, pagina indice. Renderizada no servidor; o navegador nao
    busca nada. `revalidate` fica declarado, mas hoje o HTML de todo o site e
@@ -45,6 +46,7 @@ export default async function MaresPage({ params }: { params: Promise<{ lang: st
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLdMares(lang)) }} />
       <h1 className="font-display font-bold text-4xl md:text-6xl leading-[1.05] text-fg-1 [text-wrap:balance]">{tituloDoIndice(lang)}</h1>
       <p className="mt-4 text-lg text-fg-2 leading-relaxed max-w-[60ch]">{t.intro}</p>
+      <LinkGuiaMares lang={lang} className="mt-3" />
 
       <div className="mt-8">
         <SeletorPraias lang={lang} />

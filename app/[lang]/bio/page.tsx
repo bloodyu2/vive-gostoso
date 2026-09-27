@@ -1,33 +1,48 @@
 // app/[lang]/bio/page.tsx
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowUpRight, AtSign, Mail, MessageCircle, Store, UserPlus } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+import {
+  ArrowRight,
+  BedDouble,
+  BookOpen,
+  CalendarDays,
+  Compass,
+  Map as MapaIcone,
+  MessageCircle,
+  Store,
+  UserPlus,
+  UtensilsCrossed,
+} from 'lucide-react'
 
-import { VIVE, linkWhatsAppBio, whatsappFormatado } from '@/lib/bio/contato'
-import { dicionario, prefixo } from '@/lib/bio/dicionario'
+import { VIVE, linkWhatsAppBio } from '@/lib/bio/contato'
+import { dicionario, ehIdioma, prefixo } from '@/lib/bio/dicionario'
+import { comUtm, linksDaBio, linksDoRodape, type IdBloco } from '@/lib/bio/links-bio'
+import { proximasMares, type ProximaMare } from '@/lib/bio/proximas-mares'
+import { SLUG_GUIA_MARES, postPublicado } from '@/lib/blog/post-publicado'
+import { slugNoIdioma } from '@/lib/blog/traducoes'
+import { carregarSemana } from '@/lib/mares/carregar'
+import { formatarAltura } from '@/lib/mares/formato'
 
-/* A PÁGINA DA TAG NFC.
+/* A PÁGINA DO LINK DA BIO DO INSTAGRAM (ordem do dono, 27/09/2026).
  *
- *  Ela não é mais o link da bio do Instagram. É uma etiqueta encostada no celular de
- *  um turista na feira, ou no de um dono de pousada no balcão dele. Três
- *  consequências, e todo o desenho sai delas:
+ *  Quem chega aqui já viu o perfil e quer uma coisa só: a maré, um lugar para
+ *  comer, um passeio. Por isso a maré de hoje vem primeiro, e o resto é uma lista
+ *  de destinos grandes, um por linha, para o polegar.
  *
- *  1. QUEM CHEGA NÃO SABE O QUE É ISTO. No Instagram a pessoa já viu o perfil antes
- *     de tocar no link. Aqui ela acabou de encostar um telefone no outro, então a
- *     primeira dobra diz o que o Vive Gostoso é e para que cidade ele serve, sem
- *     rolagem.
- *  2. A AÇÃO PRINCIPAL É GUARDAR O CONTATO, não escolher um link.
- *  3. O CONTEXTO É EM PÉ, NO SOL, COM UMA MÃO SÓ. Daí alvo de toque de 48 a 68px,
- *     contraste de 15,60:1 no corpo e nenhum JavaScript.
+ *  - Todo link interno leva utm_source=instagram&utm_medium=bio (src/lib/bio/links-bio.ts).
+ *  - A etiqueta NFC que já existe aponta para esta mesma URL, então o vCard e o
+ *    WhatsApp continuam aqui, numa linha discreta acima do rodapé.
+ *  - Sem JavaScript no cliente: dicionário lido no servidor, idioma de params.lang.
+ *  - Fora do layout do site (SEM_CROMO em chrome-do-site.tsx), noindex e fora do sitemap.
  *
- *  A PÁGINA É TRADUZIDA DE VERDADE, e sem JavaScript. O i18n do site roda no
- *  cliente, com o LocaleSync lendo o prefixo da URL depois da hidratação. Aqui o
- *  idioma vem de `params.lang` e o dicionário é lido no servidor, então o HTML já sai
- *  no idioma certo. Ver src/lib/bio/dicionario.ts.
- *
- *  SEM O LAYOUT DO SITE. Cabeçalho, rodapé, botão de compartilhar e banner de
- *  cookies saem pelo ChromeDoSite, por prefixo de rota, sem prefixo de idioma.
- */
+ *  CACHE: o root layout lê o nonce de CSP por headers(), então esta rota é dinâmica
+ *  (ƒ no build, conferido com dynamic = 'error' em 27/09/2026) e o revalidate fica
+ *  sem efeito, como nas outras páginas (decisoes.md). Quem guarda por 1 h é o cache
+ *  de dados de carregarSemana('cardeiro') e de postPublicado (fetchComCache). "Agora"
+ *  e "amanhã" saem a cada visita, no fuso de Gostoso. */
+
+export const revalidate = 3600
 
 type Props = { params: Promise<{ lang: string }> }
 
@@ -43,10 +58,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: { absolute: t.page_title },
     description: t.page_description,
-    /* Fora da busca de propósito: esta página existe para quem já está com o celular
-       na mão, e no índice ela só competiria com a home pelas mesmas palavras. O card
-       de compartilhamento continua completo, porque o link vai ser colado em
-       conversa. */
+    /* Fora da busca: a página existe para quem veio do Instagram, e no índice só
+       competiria com a home pelas mesmas palavras. */
     robots: { index: false, follow: false, nocache: true },
     alternates: { canonical: url },
     openGraph: {
@@ -64,173 +77,230 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-/* O anel de foco acompanha a superfície: carvão sobre a areia dá 15,60, e areia
-   sobre o teal da faixa dá 4,49. Um anel só, fixo, sumiria num dos dois. */
 const FOCO =
   'focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-[#1A1A1A]'
+const FOCO_CLARO =
+  'focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-[#F5F2EE]'
 
-const BLOCO = `flex w-full items-center gap-3 rounded-xl px-5 text-left transition-transform duration-150 ease-out active:translate-y-[2px] motion-reduce:transition-none ${FOCO}`
+type IdCartao = Exclude<IdBloco, 'mares'>
+
+const ICONES: Record<IdCartao, LucideIcon> = {
+  mapa: MapaIcone,
+  come: UtensilsCrossed,
+  fique: BedDouble,
+  passeie: Compass,
+  eventos: CalendarDays,
+  blog: BookOpen,
+  cadastre: Store,
+}
+
+/* Uma cor por destino, só no quadrado do ícone: fundo claro da família e traço no
+   tom escuro da mesma família, acima de 4,5:1. */
+const TOM: Record<IdCartao, string> = {
+  mapa: 'bg-[#0D7C7C]/12 text-[#0A5E5E]',
+  come: 'bg-[#E05A3A]/14 text-[#9E3A22]',
+  fique: 'bg-[#C97D2A]/16 text-[#7A4A14]',
+  passeie: 'bg-[#0D7C7C]/12 text-[#0A5E5E]',
+  eventos: 'bg-[#E05A3A]/14 text-[#9E3A22]',
+  blog: 'bg-[#C97D2A]/16 text-[#7A4A14]',
+  cadastre: 'bg-[#F5F2EE]/15 text-[#F5F2EE]',
+}
+
+async function lerMare(agora: Date) {
+  try {
+    const { semana, vazia } = await carregarSemana('cardeiro')
+    if (vazia) return null
+    const r = proximasMares(
+      semana.flatMap((d) => d.eventos),
+      agora,
+    )
+    return r.baixa || r.alta ? r : null
+  } catch {
+    return null
+  }
+}
 
 export default async function BioPage({ params }: Props) {
   const { lang } = await params
-  const dic = dicionario(lang)
+  const idioma = ehIdioma(lang) ? lang : 'pt'
+  const dic = dicionario(idioma)
   const t = dic.bio
-  const nav = dic.nav
-  const p = prefixo(lang)
 
-  /* O sistema verbal é a identidade da marca, e é ele que faz o índice. As palavras
-     vêm do mesmo `nav` que o cabeçalho do site usa, então já chegam traduzidas.
+  const slugDoPost = slugNoIdioma(SLUG_GUIA_MARES, idioma)
+  const [mare, temPost] = await Promise.all([lerMare(new Date()), postPublicado(slugDoPost)])
 
-     ELES NÃO SAEM COLORIDOS AQUI, E ISSO É DELIBERADO. As classes .verb-* do site
-     pintam cada verbo com a cor dele, e sobre a areia da página o ocre dá 2,92, o
-     coral 3,31 e o verde 3,73, todos abaixo do mínimo. Numa etiqueta lida no sol,
-     legibilidade ganha de cor: os verbos ficam em carvão (15,60) e a identidade vem
-     da Fraunces em caixa alta, que é o que faz o sistema ser reconhecível. */
-  const verbos = [
-    { href: `${p}/come`, palavra: nav.come, sub: t.come_sub },
-    { href: `${p}/fique`, palavra: nav.fique, sub: t.fique_sub },
-    { href: `${p}/passeie`, palavra: nav.passeie, sub: t.passeie_sub },
-    { href: `${p}/explore`, palavra: nav.explore, sub: t.explore_sub },
-    { href: `${p}/participe`, palavra: nav.participe, sub: t.participe_sub },
-    { href: `${p}/conheca`, palavra: nav.conheca, sub: t.conheca_sub },
-    { href: `${p}/contrate`, palavra: nav.contrate, sub: t.contrate_sub },
-    { href: `${p}/apoie`, palavra: nav.apoie, sub: t.apoie_sub },
-  ]
+  const blocos = linksDaBio(idioma, { postSlug: temPost ? slugDoPost : null })
+  const blocoMare = blocos[0]
+  const destinos = blocos.filter((b): b is { id: IdCartao; href: string } => b.id !== 'mares')
+  const rodape = linksDoRodape(idioma)
 
   return (
-    <div className="min-h-dvh bg-page pb-10 text-fg-1">
-      {/* A FAIXA DE IDENTIDADE.
-          Carvão nos dois esquemas de cor: a marca é a mesma de dia e de noite, e a
-          faixa escura é o que separa "quem é isto" de "o que fazer". */}
-      <header className="bg-[#1A1A1A] px-5 pt-9 pb-14 sm:px-6 sm:pt-12">
-        <div className="mx-auto w-full max-w-[26rem] sm:max-w-[28rem]">
-          {/* A marca e o h1, e a linha de papel e paragrafo. Era o contrario, e
-              o desenho ja dizia qual dos dois era o titulo: o nome ocupa 2,5rem
-              no topo e o papel vem em 1,06rem embaixo. So a marcacao discordava.
-              Trocar as tags nao muda um pixel e resolve os tres idiomas de uma
-              vez, porque o nome da marca nao e traduzido.
-
-              Quem chega por aproximacao de NFC nao sabe de quem e a etiqueta, e o
-              h1 e onde ele descobre. */}
-          <h1 className="font-display text-[2.25rem] leading-none font-bold tracking-[-0.02em] text-[#F5F2EE] sm:text-[2.5rem]">
+    <div className="min-h-dvh bg-page text-fg-1">
+      <header className="bg-[#1A1A1A] px-5 pt-9 pb-16">
+        <div className="mx-auto w-full max-w-[28rem]">
+          <h1 className="font-display text-[2.25rem] leading-none font-bold tracking-[-0.02em] text-[#F5F2EE]">
             Vive Gostoso<span className="text-[#E05A3A]">.</span>
           </h1>
-
-          <p className="mt-5 max-w-[30ch] text-[1.0625rem] leading-snug text-balance text-[#F5F2EE]">
-            {t.role}
-          </p>
-
-          <p className="mt-3 max-w-[36ch] text-pretty text-[0.9375rem] leading-relaxed text-[#C0BCB8]">
-            {t.caption}
-          </p>
-
-          {/* O fio coral separa quem somos do que fazer. Sobre o carvão ele dá 4,72,
-              e é o único elemento decorativo da página. */}
-          <div aria-hidden className="mt-8 h-[3px] w-14 rounded-full bg-[#E05A3A]" />
+          <p className="mt-4 max-w-[34ch] text-[1rem] leading-snug text-pretty text-[#D9D4CE]">{t.tagline}</p>
         </div>
       </header>
 
-      {/* relative: o bloco precisa pintar por cima da faixa, porque o botão principal
-          sobe por cima dela. */}
-      <div className="relative mx-auto w-full max-w-[26rem] px-5 sm:max-w-[28rem] sm:px-6">
-        <a
-          href={`${p}/bio/contato.vcf`}
-          download="vive-gostoso.vcf"
-          className={`${BLOCO} -mt-9 min-h-[4.25rem] bg-teal text-white shadow-[0_10px_28px_rgba(13,124,124,0.28)]`}
+      <main className="relative mx-auto w-full max-w-[28rem] px-5 pb-8">
+        {/* MARÉ DE HOJE: o bloco em destaque, subindo por cima da faixa. */}
+        <section
+          aria-labelledby="mare-titulo"
+          className="-mt-10 rounded-2xl bg-[#0D7C7C] p-5 text-white shadow-[0_6px_8px_-4px_rgba(13,124,124,0.4)]"
         >
-          <UserPlus className="size-6 shrink-0" aria-hidden />
-          <span className="flex flex-col py-3">
-            <span className="text-[1.0625rem] leading-tight font-semibold">{t.save}</span>
-            <span className="text-[0.6875rem] tracking-[0.14em] text-teal-50 uppercase">
-              {t.save_hint}
-            </span>
-          </span>
-        </a>
+          <div className="flex items-baseline justify-between gap-3">
+            <h2 id="mare-titulo" className="font-display text-[1.5rem] leading-tight font-bold">
+              {t.mare_titulo}
+            </h2>
+            <span className="text-[0.8125rem] text-[#E6F4F4]">{t.mare_local}</span>
+          </div>
 
-        <a
-          href={linkWhatsAppBio(t.whatsapp_msg)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`${BLOCO} mt-4 min-h-14 border-2 border-[#1A1A1A] bg-transparent text-fg-1`}
-        >
-          <MessageCircle className="size-5 shrink-0" aria-hidden />
-          <span className="py-3 text-[1.0625rem] leading-tight font-semibold">{t.whatsapp}</span>
-        </a>
+          {mare ? (
+            <dl className="mt-4 grid grid-cols-2 gap-3">
+              <LinhaMare rotulo={t.mare_baixa} mare={mare.baixa} amanha={t.mare_amanha} idioma={idioma} />
+              <LinhaMare rotulo={t.mare_alta} mare={mare.alta} amanha={t.mare_amanha} idioma={idioma} />
+            </dl>
+          ) : (
+            <p className="mt-3 text-[0.9375rem] leading-snug text-[#E6F4F4]">{t.mare_vazio}</p>
+          )}
 
-        {/* Sem WhatsApp instalado não pode ser beco sem saída: o mesmo número atende
-            ligação, e o link tel: abre o discador de qualquer aparelho. */}
-        <a
-          href={`tel:+${VIVE.whatsapp}`}
-          className={`${FOCO} mt-3 flex min-h-12 items-center justify-center text-sm font-semibold text-teal-700 underline decoration-2 underline-offset-4`}
-        >
-          {t.call} {whatsappFormatado()}
-        </a>
+          <Link
+            href={blocoMare.href}
+            className={`${FOCO_CLARO} mt-5 flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#F5F2EE] px-5 text-[1rem] font-semibold text-[#0A5E5E] transition-transform duration-150 ease-out active:translate-y-[1px] motion-reduce:transition-none`}
+          >
+            {t.mare_botao}
+            <ArrowRight className="size-5" aria-hidden />
+          </Link>
+        </section>
 
-        {/* O índice da cidade. Duas colunas com fio, que é o que faz oito palavras
-            lerem como um cardápio e não como oito pílulas empilhadas. */}
-        <nav aria-label={VIVE.nome} className="mt-8">
-          <ul className="grid grid-cols-2 border-t border-[#1A1A1A]/15">
-            {verbos.map(({ href, palavra, sub }) => (
-              <li key={href} className="border-b border-[#1A1A1A]/15 odd:border-r">
-                <Link
-                  href={href}
-                  className={`${FOCO} flex min-h-[3.75rem] flex-col justify-center py-2 pr-3 odd:pl-0 even:pl-3`}
-                >
-                  <span className="font-display text-[1.0625rem] leading-none font-bold tracking-[-0.01em]">
-                    {palavra}
-                    <span className="text-[#E05A3A]">.</span>
-                  </span>
-                  <span className="mt-1 text-[0.75rem] leading-snug text-fg-2">{sub}</span>
-                </Link>
-              </li>
-            ))}
+        <nav aria-label={VIVE.nome} className="mt-6">
+          <ul className="flex flex-col gap-3">
+            {destinos.map(({ id, href }) => {
+              const Icone = ICONES[id]
+              const c = t.cartoes[id]
+              const escuro = id === 'cadastre'
+              const destaquePost = id === 'blog' && temPost
+              return (
+                <li key={id}>
+                  <Link
+                    href={href}
+                    className={`${FOCO} group flex min-h-[4.5rem] items-center gap-4 rounded-2xl px-4 py-3 transition-colors duration-150 ease-out motion-reduce:transition-none ${
+                      escuro
+                        ? 'bg-[#1A1A1A] text-[#F5F2EE]'
+                        : 'border border-[#1A1A1A]/15 bg-white/70 hover:border-[#1A1A1A]/40 dark:bg-white/5'
+                    }`}
+                  >
+                    <span className={`grid size-11 shrink-0 place-items-center rounded-xl ${TOM[id]}`}>
+                      <Icone className="size-[1.375rem]" aria-hidden />
+                    </span>
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      {destaquePost && (
+                        <span className="mb-1 w-fit rounded-full bg-[#C94A2C] px-2 py-0.5 text-[0.6875rem] font-semibold text-white">
+                          {t.blog_novo}
+                        </span>
+                      )}
+                      <span className="font-display text-[1.1875rem] leading-tight font-bold text-balance">
+                        {destaquePost ? dic.guia_mares.titulo : c.titulo}
+                      </span>
+                      <span className={`mt-0.5 text-[0.8125rem] leading-snug ${escuro ? 'text-[#D9D4CE]' : 'text-fg-2'}`}>
+                        {destaquePost ? dic.guia_mares.linha : c.linha}
+                      </span>
+                    </span>
+                    <ArrowRight
+                      className="size-5 shrink-0 transition-transform duration-150 ease-out group-hover:translate-x-0.5 motion-reduce:transition-none"
+                      aria-hidden
+                    />
+                  </Link>
+                </li>
+              )
+            })}
           </ul>
         </nav>
 
-        {/* Quem encosta o celular aqui pode ser turista ou dono de negócio. Os dois
-            não competem: o turista já foi atendido pelo índice acima, e esta linha
-            existe para o segundo, sem roubar espaço do primeiro. */}
-        <Link
-          href={`${p}/parceiros`}
-          className={`${FOCO} mt-6 flex min-h-14 items-center gap-3 rounded-xl bg-teal-50 px-4 py-3`}
-        >
-          <Store className="size-5 shrink-0 text-teal-700" aria-hidden />
-          <span className="flex min-w-0 flex-1 flex-col">
-            <span className="text-sm leading-tight font-semibold text-teal-700">
-              {t.business_link}
-            </span>
-            <span className="text-[0.75rem] leading-snug text-fg-2">
-              {t.business_sub}
-            </span>
-          </span>
-          <ArrowUpRight className="size-4 shrink-0 text-teal-700" aria-hidden />
-        </Link>
-
-        <div className="mt-6 flex flex-col text-[0.8125rem]">
-          <a
-            href={`mailto:${VIVE.email}`}
-            className={`${FOCO} flex min-h-12 items-center gap-2 font-semibold break-all text-teal-700 underline decoration-1 underline-offset-4`}
-          >
-            <Mail className="size-4 shrink-0" aria-hidden />
-            {VIVE.email}
-          </a>
-          <a
-            href={VIVE.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`${FOCO} flex min-h-12 items-center gap-2 font-semibold text-teal-700 underline decoration-1 underline-offset-4`}
-          >
-            <AtSign className="size-4 shrink-0" aria-hidden />
-            {VIVE.instagramRotulo}
-          </a>
-          <Link
-            href={p === '' ? '/' : p}
-            className={`${FOCO} flex min-h-12 items-center gap-2 font-semibold text-teal-700 underline decoration-1 underline-offset-4`}
-          >
-            {VIVE.siteRotulo}
-          </Link>
+        {/* A etiqueta NFC aponta para esta URL: o contato continua aqui, discreto. */}
+        <div className="mt-8 border-t border-[#1A1A1A]/15 pt-4">
+          <p className="text-[0.8125rem] text-fg-2">{t.contato_linha}</p>
+          <div className="mt-1 flex flex-wrap gap-x-5">
+            <a
+              href={comUtm(`${prefixo(idioma)}/bio/contato.vcf`)}
+              download="vive-gostoso.vcf"
+              className={`${FOCO} flex min-h-12 items-center gap-2 text-[0.875rem] font-semibold text-teal-700 underline decoration-1 underline-offset-4`}
+            >
+              <UserPlus className="size-4 shrink-0" aria-hidden />
+              {t.save}
+            </a>
+            <a
+              href={linkWhatsAppBio(t.whatsapp_msg)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${FOCO} flex min-h-12 items-center gap-2 text-[0.875rem] font-semibold text-teal-700 underline decoration-1 underline-offset-4`}
+            >
+              <MessageCircle className="size-4 shrink-0" aria-hidden />
+              {t.whatsapp}
+            </a>
+          </div>
         </div>
-      </div>
+      </main>
+
+      <footer className="mx-auto flex w-full max-w-[28rem] flex-wrap items-center justify-between gap-x-4 px-5 pb-10 text-[0.8125rem]">
+        <nav aria-label={t.idioma} className="flex items-center">
+          {rodape.idiomas.map((i) => (
+            <a
+              key={i.lang}
+              href={i.href}
+              hrefLang={i.lang === 'pt' ? 'pt-BR' : i.lang}
+              lang={i.lang}
+              aria-label={i.nome}
+              aria-current={i.atual ? 'page' : undefined}
+              className={`${FOCO} grid min-h-12 min-w-12 place-items-center font-semibold ${
+                i.atual ? 'text-fg-1 underline decoration-2 underline-offset-4' : 'text-fg-2'
+              }`}
+            >
+              {i.rotulo}
+            </a>
+          ))}
+        </nav>
+        <Link
+          href={rodape.privacidade}
+          className={`${FOCO} flex min-h-12 items-center text-fg-2 underline decoration-1 underline-offset-4`}
+        >
+          {dic.footer.privacidade}
+        </Link>
+      </footer>
+    </div>
+  )
+}
+
+function LinhaMare({
+  rotulo,
+  mare,
+  amanha,
+  idioma,
+}: {
+  rotulo: string
+  mare: ProximaMare | null
+  amanha: string
+  idioma: 'pt' | 'en' | 'es'
+}) {
+  return (
+    <div className="rounded-xl bg-white/10 px-3 py-2.5">
+      <dt className="text-[0.75rem] text-[#E6F4F4]">{rotulo}</dt>
+      <dd className="mt-0.5">
+        {mare ? (
+          <>
+            <span className="font-display text-[1.625rem] leading-none font-bold tabular-nums">{mare.hora}</span>
+            <span className="mt-1 block text-[0.75rem] text-[#E6F4F4]">
+              {mare.amanha ? `${amanha}, ` : ''}
+              {formatarAltura(mare.altura, idioma)}
+            </span>
+          </>
+        ) : (
+          <span className="text-[1rem]">-</span>
+        )}
+      </dd>
     </div>
   )
 }

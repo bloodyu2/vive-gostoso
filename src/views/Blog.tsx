@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
 import { ErrorState } from '@/components/ui/error-state'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
+import { normalizarIdioma, visivelNoIdioma } from '@/lib/blog/traducoes'
 
 function useBlogPosts(options?: Pick<UseQueryOptions<BlogPost[]>, 'initialData'>) {
   return useQuery({
@@ -30,7 +31,9 @@ type BlogProps = {
 
 export default function Blog({ initialPosts = [] }: BlogProps) {
   const { t, i18n } = useTranslation()
-  const { data: posts = [], isLoading, isError, refetch } = useBlogPosts({ initialData: initialPosts })
+  const { data: todosPosts = [], isLoading, isError, refetch } = useBlogPosts({ initialData: initialPosts })
+  const idioma = normalizarIdioma(i18n.language)
+  const posts = todosPosts.filter(p => visivelNoIdioma(p.slug, idioma))
 
   return (
     <main className="max-w-6xl mx-auto px-5 md:px-8 py-12">

@@ -136,3 +136,15 @@ describe('organizationSchema contactPoint', () => {
     expect(s.contactPoint?.telephone).toBe('+5584936180839')
   })
 })
+
+describe('articleSchema inLanguage', () => {
+  const base = { title: 't', description: 'd', url: 'https://www.vivegostoso.com.br/blog/x' }
+  it('default pt-BR', () => {
+    expect(articleSchema(base).inLanguage).toBe('pt-BR')
+  })
+  it('aceita inLanguage e author', () => {
+    const s = articleSchema({ ...base, inLanguage: 'en', author: 'Fulano' })
+    expect(s.inLanguage).toBe('en')
+    expect((s.author as { name: string }).name).toBe('Fulano')
+  })
+})

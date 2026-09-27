@@ -1,18 +1,35 @@
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import { getBlogSlugsForBuild, getBlogPostForPage } from '@/lib/supabase/build-queries'
 import BlogPostPage from '@/views/BlogPost'
 import { articleSchema, breadcrumbSchema } from '@/lib/seo'
 import { safeJsonLd } from '@/lib/json-ld'
+import {
+  alternatesDoPost,
+  idiomaDoSlug,
+  inLanguageDoPost,
+  slugNoIdioma,
+  urlDoPost,
+  visivelNoIdioma,
+  type IdiomaBlog,
+} from '@/lib/blog/traducoes'
 
 export const revalidate = 86400
+
+const ROTULO_INICIO: Record<IdiomaBlog, string> = { pt: 'Início', en: 'Home', es: 'Inicio' }
+
+function normalizarLang(lang: string): IdiomaBlog {
+  return lang === 'en' || lang === 'es' ? lang : 'pt'
+}
 
 type Props = { params: Promise<{ lang: string; slug: string }> }
 
 export async function generateStaticParams() {
   const slugs = await getBlogSlugsForBuild()
-  const langs = ['pt', 'en', 'es']
-  return langs.flatMap((lang) => slugs.map((slug) => ({ lang, slug })))
+  const langs: IdiomaBlog[] = ['pt', 'en', 'es']
+  return langs.flatMap((lang) =>
+    slugs.filter((slug) => visivelNoIdioma(slug, lang)).map((slug) => ({ lang, slug })),
+  )
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -21,7 +38,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return { title: 'Post nao encontrado' }
 
   const baseUrl = 'https://www.vivegostoso.com.br'
-  const canonical = `${baseUrl}/${lang === 'pt' ? '' : lang + '/'}blog/${slug}`
+  const idioma = normalizarLang(lang)
+  const canonical = urlDoPost(slugNoIdioma(slug, idioma), idioma)
   const description = post.excerpt ?? `${post.title} no blog do Vive Gostoso.`
   const image = post.cover_url ?? `${baseUrl}/og-image.png`
 
@@ -35,12 +53,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates: {
       canonical,
-      languages: {
-        'pt-BR': `${baseUrl}/blog/${slug}`,
-        'en': `${baseUrl}/en/blog/${slug}`,
-        'es': `${baseUrl}/es/blog/${slug}`,
-        'x-default': `${baseUrl}/blog/${slug}`,
-      },
+      languages: alternatesDoPost(slug),
     },
     openGraph: {
       title: post.title,
@@ -62,12 +75,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostRoute({ params }: Props) {
   const { slug, lang } = await params
+  const idioma = normalizarLang(lang)
+  const idiomaDoPost = idiomaDoSlug(slug)
+  if (idiomaDoPost !== null && idiomaDoPost !== idioma) {
+    const destino = slugNoIdioma(slug, idioma)
+    permanentRedirect(`${idioma === 'pt' ? '' : '/' + idioma}/blog/${destino}`)
+  }
   const post = await getBlogPostForPage(slug)
   if (!post) notFound()
 
   const baseUrl = 'https://www.vivegostoso.com.br'
-  const langPrefix = lang === 'pt' ? '' : lang + '/'
-  const postUrl = `${baseUrl}/${langPrefix}blog/${slug}`
+  const langPrefix = idioma === 'pt' ? '' : idioma + '/'
+  const postUrl = urlDoPost(slug, idioma)
 
   const jsonLd = articleSchema({
     title: post.title,
@@ -77,10 +96,12 @@ export default async function BlogPostRoute({ params }: Props) {
     publishedTime: post.published_at ?? undefined,
     modifiedTime: post.created_at ?? undefined,
     tags: post.tags ?? undefined,
+    author: post.author ?? 'Vive Gostoso',
+    inLanguage: inLanguageDoPost(slug, idioma),
   })
 
   const breadcrumbJsonLd = breadcrumbSchema([
-    { name: 'Início', url: `${baseUrl}/${langPrefix}` },
+    { name: ROTULO_INICIO[idioma], url: `${baseUrl}/${langPrefix}` },
     { name: 'Blog', url: `${baseUrl}/${langPrefix}blog` },
     { name: post.title, url: postUrl },
   ])
