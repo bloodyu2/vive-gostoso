@@ -13,3 +13,7 @@
 **O que aconteceu:** a regra nasceu do commit `b0c961f` no balaio-digital em 23/09/2026: outro agente empurrou direto na `main` de lá, sem PR e sem preview, e foi a produção.
 **Regra:** Push direto na master é proibido, inclusive para agentes. Todo trabalho entra por PR com preview verde. Agente trabalha em worktree próprio, nunca no checkout principal.
 **Observação:** o GitHub agora bloqueia: branch protection na master exige PR, check Vercel verde, vale para admins, sem force push e sem apagar a branch (ativado em 23/09/2026).
+
+## 2026-09-27: e-mail do Victor no User-Agent de consulta ao Nominatim
+**O que aconteceu:** ao conferir praias no OpenStreetMap, uma consulta ao Nominatim saiu com o e-mail do Victor no cabeçalho User-Agent (a política do Nominatim pede contato). Foram 7 requisições. As seguintes saíram só com o nome do projeto.
+**Regra:** dado pessoal do Victor não vai em cabeçalho, URL ou corpo de serviço de terceiro sem ele pedir. Para o Nominatim, identificar o projeto (`vive-gostoso-mares/1.0`) basta.
