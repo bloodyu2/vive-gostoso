@@ -1,8 +1,8 @@
 {
   "meta": {
     "home": {
-      "title": "São Miguel do Gostoso: dónde comer, alojarse y pasear",
-      "description": "Guía de la ciudad con restaurantes, posadas, paseos, mapa, eventos y servicios, todo publicado directamente por quien trabaja aquí, sin comisiones."
+      "title": "São Miguel do Gostoso: qué hacer, dónde comer y dormir",
+      "description": "Guía de São Miguel do Gostoso hecha en la ciudad: restaurantes, posadas, paseos, marea de hoy en las playas, mapa, eventos y servicios, sin comisiones."
     },
     "come": {
       "title": "Restaurantes en São Miguel do Gostoso: dónde comer",
@@ -17,8 +17,8 @@
       "description": "Paseos en buggy, en barco, clases de kitesurf y caminatas por la región, con contacto directo del guía o instructor a cargo de cada paseo ofrecido."
     },
     "explore": {
-      "title": "Mapa de São Miguel do Gostoso",
-      "description": "Mapa interactivo con todos los negocios registrados en la ciudad, para ubicar restaurantes, posadas, paseos y servicios en el barrio correcto."
+      "title": "Qué hacer en São Miguel do Gostoso: playas y mareas",
+      "description": "Todo lo que se puede explorar en São Miguel do Gostoso: la tabla de mareas con la marea de hoy, las playas, el mapa de la región, los paseos y los eventos."
     },
     "participe": {
       "title": "Eventos en São Miguel do Gostoso: agenda 2026",
@@ -49,8 +49,12 @@
       "description": "Explica el sello de verificado, los criterios para que un negocio entre o salga de la lista, y quién paga las cuentas para mantener el sitio funcionando."
     },
     "mares": {
-      "title": "Tabla de mareas de São Miguel do Gostoso",
+      "title": "Tabla de mareas de São Miguel do Gostoso: marea hoy",
       "description": "Marea de hoy y de los próximos 7 días en las playas de Gostoso, Touros y Pedra Grande: horarios, alturas, curva del día, fase lunar y qué cambia en cada playa."
+    },
+    "mapa": {
+      "title": "Mapa de São Miguel do Gostoso, playas y región",
+      "description": "Mapa de São Miguel do Gostoso con las playas, los negocios de la ciudad y puntos de la región, de Pedra Grande a Touros, con ruta para llegar a cada uno."
     }
   },
   "nav": {
@@ -79,7 +83,9 @@
     "cadastre_negocio": "Registra tu negocio",
     "negocios": "Negocios",
     "mares": "MAREAS",
-    "mares_sub": "Tabla de mareas"
+    "mares_sub": "Tabla de mareas",
+    "explore_sub": "Playas, mareas y mapa",
+    "mapa": "MAPA"
   },
   "home": {
     "eyebrow": "São Miguel do Gostoso · RN",
@@ -1522,5 +1528,96 @@
     "distancia_item": "{praia}: {estacao}, {km} km",
     "com_reserva": "{dia} con datos del {estacao}",
     "dados_do": "Datos del {estacao}"
+  },
+  "vitrine": {
+    "titulo": "Lo que resuelves aquí",
+    "sub": "Cada parte del sitio, en una línea.",
+    "mares_hoje": "Hoy en Cardeiro",
+    "mares_ver": "Ver la tabla completa",
+    "abrir": "Abrir",
+    "itens": {
+      "mares": {
+        "titulo": "Tabla de mareas",
+        "linha": "Mira la marea de hoy en {n} playas"
+      },
+      "come": {
+        "titulo": "Dónde comer",
+        "linha": "Encuentra restaurantes, bares y cafeterías de la ciudad"
+      },
+      "fique": {
+        "titulo": "Dónde dormir",
+        "linha": "Compara posadas y casas cerca de cada playa"
+      },
+      "passeie": {
+        "titulo": "Paseos",
+        "linha": "Elige paseos en buggy, barco, kite y senderismo"
+      },
+      "explore": {
+        "titulo": "Explora",
+        "linha": "Playas, mareas y el mapa de la región en un solo lugar"
+      },
+      "participe": {
+        "titulo": "Eventos",
+        "linha": "Mira las fiestas, los festivales y la agenda de la ciudad"
+      },
+      "conheca": {
+        "titulo": "Descubre",
+        "linha": "Lee la historia de Gostoso y de sus playas"
+      },
+      "apoie": {
+        "titulo": "Apoya",
+        "linha": "Sigue el fondo de la ciudad y ayuda a mantenerlo"
+      },
+      "contrate": {
+        "titulo": "Contrata",
+        "linha": "Encuentra profesionales y ofertas de empleo en la ciudad"
+      },
+      "transfer": {
+        "titulo": "Transfer",
+        "linha": "Encuentra transfer para llegar y moverte por la región"
+      },
+      "blog": {
+        "titulo": "Blog",
+        "linha": "Lee consejos e historias de quien vive en Gostoso"
+      }
+    }
+  },
+  "explore_indice": {
+    "h1": "Qué hacer en São Miguel do Gostoso",
+    "intro": "Desde aquí llegas a todo lo que se puede explorar en la ciudad y la región: la marea de hoy, las playas, el mapa, los paseos y la agenda.",
+    "trilha_inicio": "Inicio",
+    "praias_titulo": "Playas de São Miguel do Gostoso y la región",
+    "praias_linha": "La marea de hoy en cada playa de la tabla, de Pedra Grande a Touros.",
+    "outros_titulo": "Más para explorar",
+    "mapa_titulo": "Mapa de la región",
+    "mapa_linha": "Playas, alojamientos y puntos históricos, con ruta para llegar a cada uno.",
+    "passeie_linha": "Buggy, barco, kite y senderismo con quien trabaja en la ciudad.",
+    "conheca_linha": "La historia de la ciudad y lo que tiene cada playa.",
+    "participe_linha": "Fiestas, festivales y lo que pasa esta semana.",
+    "transfer_linha": "Transfer del aeropuerto y entre las playas de la región.",
+    "trilha_explore": "Explora",
+    "trilha_mapa": "Mapa"
+  },
+  "mapa": {
+    "h1": "Mapa de São Miguel do Gostoso y la región",
+    "intro": "Las playas de la tabla de mareas, alojamientos y puntos históricos de Pedra Grande a Touros, junto con los negocios registrados en la ciudad. Toca un punto para ver la descripción y la ruta.",
+    "filtro_titulo": "Mostrar en el mapa",
+    "todos": "Todos",
+    "categorias": {
+      "praias": "Playas",
+      "hospedagem": "Alojamiento y emprendimientos",
+      "historicos": "Puntos históricos"
+    },
+    "como_chegar": "Cómo llegar",
+    "ver_mare": "Marea de hoy",
+    "site": "Sitio oficial",
+    "lista_titulo": "Puntos en el mapa",
+    "fonte": "Fuente de la ubicación",
+    "mapa_aria": "Mapa con los puntos de la región",
+    "fechar": "Cerrar"
+  },
+  "blog_mares": {
+    "titulo": "Mareas de las playas de este texto",
+    "item": "Marea de hoy: {{praia}}"
   }
 }

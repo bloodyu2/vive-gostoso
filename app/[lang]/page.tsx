@@ -5,6 +5,9 @@ import { createClient } from '@/lib/supabase/server'
 import Home from '@/views/Home'
 import { webSiteSchema, touristDestinationSchema } from '@/lib/seo'
 import { safeJsonLd } from '@/lib/json-ld'
+import { isLocale } from '@/lib/page-metadata'
+import { Vitrine } from '@/components/home/vitrine'
+import { lerMareDeHojeNoCardeiro } from '@/components/explore/mare-de-hoje'
 
 export const revalidate = 3600
 
@@ -66,8 +69,10 @@ async function getHomeData() {
   }
 }
 
-export default async function HomePage() {
-  const initialData = await getHomeData()
+export default async function HomePage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang: bruto } = await params
+  const lang = isLocale(bruto) ? bruto : 'pt'
+  const [initialData, mareHoje] = await Promise.all([getHomeData(), lerMareDeHojeNoCardeiro()])
   const jsonLdWeb = webSiteSchema()
   const jsonLdDestination = touristDestinationSchema()
   return (
@@ -80,7 +85,7 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLdDestination) }}
       />
-      <Home initialData={initialData} />
+      <Home initialData={initialData} vitrine={<Vitrine lang={lang} mareHoje={mareHoje} />} />
     </>
   )
 }

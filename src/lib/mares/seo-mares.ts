@@ -91,7 +91,7 @@ export function jsonLdMares(lang: Idioma, praia?: PraiaMare): Record<string, unk
     },
   }
   const trilha = [
-    { name: DICIONARIOS[lang].nav.explore, url: localizedUrl('/explore', lang) },
+    { name: DICIONARIOS[lang].explore_indice.trilha_explore, url: localizedUrl('/explore', lang) },
     { name: t.titulo, url: urlMares(lang) },
     ...(praia ? [{ name: praia.nome, url }] : []),
   ]
@@ -99,7 +99,28 @@ export function jsonLdMares(lang: Idioma, praia?: PraiaMare): Record<string, unk
     '@type': 'BreadcrumbList',
     itemListElement: trilha.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: c.url })),
   }
-  if (!praia) return { '@context': 'https://schema.org', '@graph': [pagina, breadcrumb] }
+  if (!praia) {
+    const marinha = { '@type': 'GovernmentOrganization', name: 'Marinha do Brasil, Centro de Hidrografia da Marinha (CHM/DHN)' }
+    const dataset = {
+      '@type': 'Dataset',
+      '@id': `${url}#dados`,
+      name: t.titulo,
+      description: DICIONARIOS[lang].meta.mares.description,
+      url,
+      inLanguage: IN_LANGUAGE[lang],
+      creator: marinha,
+      isBasedOn: (Object.values(ESTACOES) as Array<(typeof ESTACOES)[keyof typeof ESTACOES]>).map((e) => ({
+        '@type': 'CreativeWork',
+        name: `Tábuas de Maré da Marinha do Brasil, ${e.nome}`,
+        url: e.fonteUrl,
+        publisher: marinha,
+      })),
+      temporalCoverage: '2026',
+      spatialCoverage: { '@type': 'Place', name: 'São Miguel do Gostoso, Touros e Pedra Grande, RN' },
+    }
+    pagina.mainEntity = { '@id': `${url}#dados` }
+    return { '@context': 'https://schema.org', '@graph': [pagina, dataset, breadcrumb] }
+  }
 
   pagina.about = { '@id': `${url}#praia` }
   const beach = {

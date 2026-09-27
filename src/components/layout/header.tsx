@@ -74,7 +74,8 @@ export function Header() {
   ]
 
   const NAV_DISCOVER = [
-    { href: lp('/explore'),   label: t('nav.explore'),   sub: t('nav.mapa_interativo'),   color: 'text-coral',      bare: '/explore' },
+    { href: lp('/explore'),   label: t('nav.explore'),   sub: t('nav.explore_sub'),       color: 'text-coral',      bare: '/explore' },
+    { href: lp('/explore/mapa'), label: t('nav.mapa'),    sub: t('nav.mapa_interativo'),   color: 'text-coral',      bare: '/explore/mapa' },
     { href: lp('/explore/mares'), label: t('nav.mares'),   sub: t('nav.mares_sub'),         color: 'text-teal',       bare: '/explore/mares' },
     { href: lp('/participe'), label: t('nav.participe'),  sub: t('nav.eventos_festivais'), color: 'text-teal',       bare: '/participe' },
     { href: lp('/conheca'),   label: t('nav.conheca'),    sub: t('nav.cidade_praias'),     color: 'text-[#3D8B5A]', bare: '/conheca' },

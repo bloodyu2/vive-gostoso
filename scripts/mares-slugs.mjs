@@ -12,7 +12,8 @@ export function slugsDasPraias(raiz) {
 
 export function rotasMares(raiz) {
   return [
-    { path: '/explore/mares', freq: 'daily', priority: '0.7' },
+    // Prioridade acima de todas as paginas fixas, menos a home (ordem de 27/09/2026).
+    { path: '/explore/mares', freq: 'daily', priority: '0.95' },
     ...slugsDasPraias(raiz).map((slug) => ({ path: `/explore/mares/${slug}`, freq: 'daily', priority: '0.6' })),
   ]
 }

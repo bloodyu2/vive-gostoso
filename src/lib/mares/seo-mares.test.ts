@@ -17,7 +17,7 @@ describe('textos e urls da tabua', () => {
   })
 
   it('h1 do indice leva o nome da cidade', () => {
-    expect(tituloDoIndice('pt')).toBe('Tábua de marés de São Miguel do Gostoso')
+    expect(tituloDoIndice('pt')).toBe('Tábua de marés de São Miguel do Gostoso: maré hoje')
     expect(tituloDoIndice('en')).toContain('São Miguel do Gostoso')
   })
 
@@ -67,6 +67,6 @@ describe('JSON-LD', () => {
 
   it('pagina indice nao tem praia', () => {
     const indice = jsonLdMares('es') as { '@graph': Array<Record<string, unknown>> }
-    expect(indice['@graph'].map((n) => n['@type'])).toEqual(['WebPage', 'BreadcrumbList'])
+    expect(indice['@graph'].map((n) => n['@type'])).toEqual(['WebPage', 'Dataset', 'BreadcrumbList'])
   })
 })
