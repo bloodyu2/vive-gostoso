@@ -47,6 +47,10 @@
     "transparencia": {
       "title": "Transparência: como o Vive Gostoso funciona por dentro",
       "description": "Explica o selo de verificado, os critérios para um negócio entrar ou sair da lista, e quem paga as contas do site e como esse dinheiro é usado."
+    },
+    "mares": {
+      "title": "Tábua de marés de São Miguel do Gostoso",
+      "description": "Maré de hoje e dos próximos 7 dias nas praias de Gostoso e Pedra Grande: horários, alturas, curva do dia, fase da lua e o que a maré muda em cada praia."
     }
   },
   "nav": {
@@ -73,7 +77,9 @@
     "minha_conta": "Minha conta",
     "entrar": "Entrar",
     "cadastre_negocio": "Cadastre seu negócio",
-    "negocios": "Negócios"
+    "negocios": "Negócios",
+    "mares": "MARÉS",
+    "mares_sub": "Tábua de marés"
   },
   "home": {
     "eyebrow": "São Miguel do Gostoso · RN",
@@ -1467,5 +1473,49 @@
     "passeie": "passeios e kite em São Miguel do Gostoso",
     "explore": "o mapa de São Miguel do Gostoso",
     "conheca": "praias, história e como chegar em São Miguel do Gostoso"
+  },
+  "mares": {
+    "titulo": "Tábua de marés",
+    "intro": "Maré de hoje e dos próximos 7 dias nas praias de São Miguel do Gostoso e Pedra Grande, com o que ela muda em cada praia.",
+    "titulo_praia": "Tábua de marés: {praia}",
+    "desc_praia": "Maré de hoje e dos próximos 7 dias na {praia}, em {municipio}: horários, alturas, curva do dia e fase da lua.",
+    "praias": "Praias",
+    "dias": "Dias",
+    "hoje": "Hoje",
+    "amanha": "Amanhã",
+    "alta": "Maré alta",
+    "baixa": "Maré baixa",
+    "alta_curta": "Alta",
+    "baixa_curta": "Baixa",
+    "curva_aria": "Curva da maré de {dia}, de 0h a 24h. {mares}",
+    "agora": "agora",
+    "lua": "Lua",
+    "fases": {
+      "nova": "Lua nova",
+      "crescente": "Crescente",
+      "quarto_crescente": "Quarto crescente",
+      "gibosa_crescente": "Crescente gibosa",
+      "cheia": "Lua cheia",
+      "gibosa_minguante": "Minguante gibosa",
+      "quarto_minguante": "Quarto minguante",
+      "minguante": "Minguante"
+    },
+    "melhor_entre": "{rotulo}: melhor entre {inicio} e {fim}",
+    "sem_janela": "{rotulo}: sem horário com luz do dia neste dia",
+    "o_que_muda": "O que a maré muda aqui",
+    "semana": "Os próximos dias",
+    "col_dia": "Dia",
+    "col_mares": "Marés",
+    "col_lua": "Lua",
+    "fonte": "Fonte: Tábuas de Maré da Marinha do Brasil (CHM/DHN), estação Porto de Natal",
+    "aviso": "Os horários são da estação de referência, no Porto de Natal. Na praia, a maré pode variar alguns minutos e alguns centímetros. Não use esta página para navegação.",
+    "estacao": "Estação de referência: Porto de Natal, a {km} km em linha reta.",
+    "vazio_titulo": "A tábua ainda está sem dados",
+    "vazio_desc": "A previsão da Marinha para estes dias ainda não foi carregada. Volte mais tarde.",
+    "dia_sem_dado": "Sem previsão carregada para este dia.",
+    "hoje_em": "Hoje nas praias",
+    "ver_praia": "Ver a maré da {praia}",
+    "og_hoje": "Maré de hoje",
+    "admin_aviso": "Tábua de marés: faltam dados para {n} dos próximos 30 dias. Rode o importador (scripts/mares/importar-tabua-marinha.ts) com a edição nova da Marinha."
   }
 }

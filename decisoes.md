@@ -61,3 +61,29 @@ grant all on public.<tabela> to service_role;
 **Decisão:** tirar o contador e manter os selos. Os selos ficam como cortesia de pré-lançamento.
 **Por quê:** o número verdadeiro hoje é zero, e nenhum número inventado entra no lugar. O que sai, sai.
 **Consequência:** `fund.raised_month` e `fund.raised_month_plural` não existem mais em nenhum idioma, `FundHero` não recebe contagem e `useAssociadosCount` foi removido. Voltar a mostrar contagem de associados é decisão comercial nova, e se registra aqui com a data.
+
+## Tábua de marés: fonte, estação, praias e cache (27/09/2026)
+**Ordem do Victor de 27/09/2026.** Página `/explore/mares` e uma por praia.
+
+**Fonte: PDF da Marinha, plano A.** As Tábuas de Maré do CHM/DHN de 2026 baixam direto de `assets.marinha.mil.br` (a página `www.marinha.mil.br/chm/tabuas-de-mare-6` fica atrás de um desafio Cloudflare, e ninguém resolve desafio por robô). O PDF do Porto de Natal tem camada de texto limpa; a extração é por posição (x, y) e foi conferida em 17 dias espalhados pelo ano, contra uma renderização independente do mesmo PDF (poppler). Plano B (WorldTides, Stormglass) não foi preciso. A edição de 2027 não estava publicada em 27/09/2026.
+
+**Estação: Porto de Natal (COM3DN) para todas as praias, como a ordem pede.** Distâncias em linha reta, das coordenadas do OSM às do cabeçalho de cada PDF:
+
+| Praia | Porto de Natal | Porto de Guamaré |
+|---|---|---|
+| Cardeiro, Xêpa, Santo Cristo | 86 km | 76 a 77 km |
+| Maceió | 87 km | 75 km |
+| Tourinhos | 92 km | 68 km |
+| Marco (Pedra Grande) | 101 km | 58 km |
+
+Guamaré fica mais perto de todas. Natal ficou por três motivos: é a estação que a ordem define; a tábua de Natal usa 90 componentes harmônicas e a de Guamaré, 24; e Guamaré é um porto de estuário, com a maré deformada pela plataforma rasa. **Cuidado registrado:** em 01/01/2026 a mesma maré chega a Guamaré de 37 a 72 minutos depois de Natal. Gostoso fica entre as duas, então a diferença real na praia pode passar de "alguns minutos". O aviso da página continua o que a ordem pediu; medir a maré no Cardeiro em alguns dias e comparar é o jeito de saber o tamanho do erro.
+
+**Praias.** Entraram as seis que o OpenStreetMap confirma (ids de 27/09/2026): Xêpa (relation 2115892), Cardeiro (2115893), Maceió (2115894), Santo Cristo (2115895), Tourinhos (node 11643248075; o município confirmado por geocodificação reversa) e Praia do Marco (node 13535219738, Pedra Grande). As dicas são as da ordem do Victor, nos três idiomas. Ficaram de fora Praia do Amor, Zé Martins, Minhoto e Malhada: nenhuma existe no OSM, e a única fonte achada para o Minhoto o põe em Guamaré, não em Touros. O texto de `/conheca` põe o Minhoto e a Praia do Amor em Gostoso; isso não foi mexido e fica para conferir.
+
+**Melhor horário.** Cardeiro, Xêpa e Maceió pela maré baixa, Tourinhos pela alta. Santo Cristo e Marco ficam sem janela: a dica diz que a maré muda o spot e o acesso, mas não diz qual maré é a boa, e inventar isso seria pior que não dizer. Janela = faixa de 15% da variação em torno do extremo (cerca de 1h30 para cada lado), cortada em 6h-18h.
+
+**Cache.** O HTML do site inteiro é dinâmico (o nonce de CSP do `proxy.ts` é gerado por requisição), então o `revalidate = 3600` da página não tem efeito hoje. Quem guarda por 1 h é o cache de dados do Next na leitura do Supabase (`fetchComCache` em `src/lib/mares/consulta.ts`). "Hoje" e "agora" são calculados a cada visita em America/Fortaleza. Se um dia a página virar estática, os rótulos "Hoje/Amanhã" precisam passar a ser calculados no cliente.
+
+**Grants.** A migração segue o template obrigatório (inclusive escrita para `authenticated`), mas não há policy de insert, update ou delete: só a service role escreve. Teste em `src/lib/mares/rls-mares.test.ts`, com PGlite.
+
+**Imagem de compartilhamento.** Usa a fonte padrão do `next/og`. Os recortes de Fraunces e Jakarta do projeto não cobrem dígitos e letras do card, e baixar recortes novos do Google Fonts não estava autorizado nesta ordem. Pendência: gerar os recortes e trocar.

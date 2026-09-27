@@ -47,6 +47,10 @@
     "transparencia": {
       "title": "Transparency: how Vive Gostoso works behind the scenes",
       "description": "Explains the verified seal, the rules for a business to join or leave the list, and who pays the bills to keep this site online and running smoothly."
+    },
+    "mares": {
+      "title": "São Miguel do Gostoso tide table",
+      "description": "Today's tide and the next 7 days on the beaches of Gostoso and Pedra Grande: times, heights, the day's curve, moon phase and what the tide changes at each."
     }
   },
   "nav": {
@@ -73,7 +77,9 @@
     "minha_conta": "My account",
     "entrar": "Sign in",
     "cadastre_negocio": "List your business",
-    "negocios": "Business"
+    "negocios": "Business",
+    "mares": "TIDES",
+    "mares_sub": "Tide table"
   },
   "home": {
     "eyebrow": "São Miguel do Gostoso · RN",
@@ -1467,5 +1473,49 @@
     "passeie": "tours and kitesurfing in São Miguel do Gostoso",
     "explore": "the São Miguel do Gostoso map",
     "conheca": "beaches, history and how to get to São Miguel do Gostoso"
+  },
+  "mares": {
+    "titulo": "Tide table",
+    "intro": "Today's tide and the next 7 days on the beaches of São Miguel do Gostoso and Pedra Grande, with what it changes on each beach.",
+    "titulo_praia": "Tide table: {praia}",
+    "desc_praia": "Today's tide and the next 7 days at {praia}, in {municipio}: times, heights, the day's curve and moon phase.",
+    "praias": "Beaches",
+    "dias": "Days",
+    "hoje": "Today",
+    "amanha": "Tomorrow",
+    "alta": "High tide",
+    "baixa": "Low tide",
+    "alta_curta": "High",
+    "baixa_curta": "Low",
+    "curva_aria": "Tide curve for {dia}, from 0h to 24h. {mares}",
+    "agora": "now",
+    "lua": "Moon",
+    "fases": {
+      "nova": "New moon",
+      "crescente": "Waxing crescent",
+      "quarto_crescente": "First quarter",
+      "gibosa_crescente": "Waxing gibbous",
+      "cheia": "Full moon",
+      "gibosa_minguante": "Waning gibbous",
+      "quarto_minguante": "Last quarter",
+      "minguante": "Waning crescent"
+    },
+    "melhor_entre": "{rotulo}: best between {inicio} and {fim}",
+    "sem_janela": "{rotulo}: no daylight window on this day",
+    "o_que_muda": "What the tide changes here",
+    "semana": "The coming days",
+    "col_dia": "Day",
+    "col_mares": "Tides",
+    "col_lua": "Moon",
+    "fonte": "Source: Brazilian Navy Tide Tables (CHM/DHN), Porto de Natal station",
+    "aviso": "Times are for the reference station at the Port of Natal. At the beach the tide may differ by a few minutes and a few centimetres. Do not use this page for navigation.",
+    "estacao": "Reference station: Port of Natal, {km} km in a straight line.",
+    "vazio_titulo": "The tide table has no data yet",
+    "vazio_desc": "The Navy forecast for these days has not been loaded yet. Please check back later.",
+    "dia_sem_dado": "No forecast loaded for this day.",
+    "hoje_em": "Today on the beaches",
+    "ver_praia": "See the tide at {praia}",
+    "og_hoje": "Today's tide",
+    "admin_aviso": "Tide table: data missing for {n} of the next 30 days. Run the importer (scripts/mares/importar-tabua-marinha.ts) with the new Navy edition."
   }
 }
