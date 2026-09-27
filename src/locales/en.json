@@ -1538,49 +1538,68 @@
     "itens": {
       "mares": {
         "titulo": "Tide table",
-        "linha": "Check today's tide on {n} beaches"
+        "linha": "{n} beaches, today's tide and the next 7 days",
+        "botao": "See tides"
       },
       "come": {
         "titulo": "Where to eat",
-        "linha": "Find restaurants, bars and snack bars in town"
+        "linha": "Restaurants, bars and snack bars, with address and contact",
+        "linha_n": "{n} restaurants, bars and snack bars listed, with address and contact",
+        "botao": "Where to eat"
       },
       "fique": {
         "titulo": "Where to stay",
-        "linha": "Compare guesthouses and houses near each beach"
+        "linha": "Guesthouses and houses near each beach, to compare before booking",
+        "linha_n": "{n} guesthouses and houses listed, near each beach",
+        "botao": "Where to stay"
       },
       "passeie": {
         "titulo": "Tours",
-        "linha": "Pick buggy, boat, kite and hiking tours"
+        "linha": "Buggy, boat, kite and hiking, with who takes you",
+        "linha_n": "{n} tours and guides listed, from buggy to kite",
+        "botao": "See tours"
       },
       "explore": {
         "titulo": "Explore",
-        "linha": "Beaches, tides and the regional map in one place"
+        "linha": "Beaches, tides and the area map on one page",
+        "botao": "See beaches and map"
       },
       "participe": {
         "titulo": "Events",
-        "linha": "See the parties, festivals and the town's calendar"
+        "linha": "Parties, festivals and the town calendar",
+        "linha_n": "{n} events on the calendar, with date and place",
+        "botao": "See the calendar"
       },
       "conheca": {
         "titulo": "Discover",
-        "linha": "Read the story of Gostoso and its beaches"
+        "linha": "The story of Gostoso and its beaches",
+        "botao": "Get to know the town"
       },
       "apoie": {
         "titulo": "Support",
-        "linha": "Follow the town fund and help keep it going"
+        "linha": "Follow the town fund and help keep it going",
+        "botao": "How to support"
       },
       "contrate": {
         "titulo": "Hire",
-        "linha": "Find local professionals and job openings"
+        "linha": "Professionals and job openings in town",
+        "botao": "See jobs"
       },
       "transfer": {
         "titulo": "Transfer",
-        "linha": "Find a transfer to get here and around the region"
+        "linha": "Transfers to arrive and get around the area",
+        "botao": "See transfers"
       },
       "blog": {
         "titulo": "Blog",
-        "linha": "Read tips and stories from people who live in Gostoso"
+        "linha": "Tips and stories from people who live in Gostoso",
+        "botao": "Read the blog"
       }
-    }
+    },
+    "guia_mares": "Read the tide guide",
+    "anterior": "Previous card",
+    "proximo": "Next card",
+    "pagina": "Card {i} of {n}"
   },
   "explore_indice": {
     "h1": "Things to do in São Miguel do Gostoso",

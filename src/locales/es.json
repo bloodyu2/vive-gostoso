@@ -1538,49 +1538,68 @@
     "itens": {
       "mares": {
         "titulo": "Tabla de mareas",
-        "linha": "Mira la marea de hoy en {n} playas"
+        "linha": "{n} playas, marea de hoy y de los próximos 7 días",
+        "botao": "Ver mareas"
       },
       "come": {
         "titulo": "Dónde comer",
-        "linha": "Encuentra restaurantes, bares y cafeterías de la ciudad"
+        "linha": "Restaurantes, bares y cafeterías, con dirección y contacto",
+        "linha_n": "{n} restaurantes, bares y cafeterías registrados, con dirección y contacto",
+        "botao": "Dónde comer"
       },
       "fique": {
         "titulo": "Dónde dormir",
-        "linha": "Compara posadas y casas cerca de cada playa"
+        "linha": "Posadas y casas cerca de cada playa, para comparar antes de reservar",
+        "linha_n": "{n} posadas y casas registradas, cerca de cada playa",
+        "botao": "Dónde alojarse"
       },
       "passeie": {
         "titulo": "Paseos",
-        "linha": "Elige paseos en buggy, barco, kite y senderismo"
+        "linha": "Buggy, barco, kite y senderismo, con quien te lleva",
+        "linha_n": "{n} paseos y guías registrados, del buggy al kite",
+        "botao": "Ver paseos"
       },
       "explore": {
         "titulo": "Explora",
-        "linha": "Playas, mareas y el mapa de la región en un solo lugar"
+        "linha": "Playas, mareas y el mapa de la región en una sola página",
+        "botao": "Ver playas y mapa"
       },
       "participe": {
         "titulo": "Eventos",
-        "linha": "Mira las fiestas, los festivales y la agenda de la ciudad"
+        "linha": "Fiestas, festivales y la agenda de la ciudad",
+        "linha_n": "{n} eventos en la agenda, con fecha y lugar",
+        "botao": "Ver la agenda"
       },
       "conheca": {
         "titulo": "Descubre",
-        "linha": "Lee la historia de Gostoso y de sus playas"
+        "linha": "La historia de Gostoso y de sus playas",
+        "botao": "Conocer la ciudad"
       },
       "apoie": {
         "titulo": "Apoya",
-        "linha": "Sigue el fondo de la ciudad y ayuda a mantenerlo"
+        "linha": "Sigue el fondo de la ciudad y ayuda a mantenerlo",
+        "botao": "Cómo apoyar"
       },
       "contrate": {
         "titulo": "Contrata",
-        "linha": "Encuentra profesionales y ofertas de empleo en la ciudad"
+        "linha": "Profesionales y ofertas de trabajo en la ciudad",
+        "botao": "Ver ofertas"
       },
       "transfer": {
         "titulo": "Transfer",
-        "linha": "Encuentra transfer para llegar y moverte por la región"
+        "linha": "Transfer para llegar y moverse por la región",
+        "botao": "Ver transfers"
       },
       "blog": {
         "titulo": "Blog",
-        "linha": "Lee consejos e historias de quien vive en Gostoso"
+        "linha": "Consejos e historias de quien vive en Gostoso",
+        "botao": "Leer el blog"
       }
-    }
+    },
+    "guia_mares": "Lee la guía de mareas",
+    "anterior": "Tarjeta anterior",
+    "proximo": "Tarjeta siguiente",
+    "pagina": "Tarjeta {i} de {n}"
   },
   "explore_indice": {
     "h1": "Qué hacer en São Miguel do Gostoso",
