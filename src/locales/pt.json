@@ -50,7 +50,7 @@
     },
     "mares": {
       "title": "Tábua de marés de São Miguel do Gostoso",
-      "description": "Maré de hoje e dos próximos 7 dias nas praias de Gostoso e Pedra Grande: horários, alturas, curva do dia, fase da lua e o que a maré muda em cada praia."
+      "description": "Maré de hoje e dos próximos 7 dias nas praias de Gostoso, Touros e Pedra Grande: horários, alturas, curva do dia, fase da lua e o que a maré muda em cada praia."
     }
   },
   "nav": {
@@ -1476,7 +1476,7 @@
   },
   "mares": {
     "titulo": "Tábua de marés",
-    "intro": "Maré de hoje e dos próximos 7 dias nas praias de São Miguel do Gostoso e Pedra Grande, com o que ela muda em cada praia.",
+    "intro": "Maré de hoje e dos próximos 7 dias nas praias de São Miguel do Gostoso, Touros e Pedra Grande, com o que ela muda em cada praia.",
     "titulo_praia": "Tábua de marés: {praia}",
     "desc_praia": "Maré de hoje e dos próximos 7 dias na {praia}, em {municipio}: horários, alturas, curva do dia e fase da lua.",
     "praias": "Praias",
@@ -1507,15 +1507,20 @@
     "col_dia": "Dia",
     "col_mares": "Marés",
     "col_lua": "Lua",
-    "fonte": "Fonte: Tábuas de Maré da Marinha do Brasil (CHM/DHN), estação Porto de Natal",
-    "aviso": "Os horários são da estação de referência, no Porto de Natal. Na praia, a maré pode variar alguns minutos e alguns centímetros. Não use esta página para navegação.",
-    "estacao": "Estação de referência: Porto de Natal, a {km} km em linha reta.",
+    "fonte": "Fonte: Tábuas de Maré da Marinha do Brasil (CHM/DHN), estação {estacao}",
+    "aviso": "Os horários são da estação de referência ({estacao}). Na praia, a maré pode chegar alguns minutos antes ou depois e variar alguns centímetros. Quando falta a previsão dessa estação num dia, a página usa a do {reserva} e avisa. Não use esta página para navegação.",
+    "estacao": "Estação de referência: {estacao}, a {km} km em linha reta. Reserva: {reserva}, a {km_reserva} km.",
     "vazio_titulo": "A tábua ainda está sem dados",
     "vazio_desc": "A previsão da Marinha para estes dias ainda não foi carregada. Volte mais tarde.",
     "dia_sem_dado": "Sem previsão carregada para este dia.",
     "hoje_em": "Hoje nas praias",
     "ver_praia": "Ver a maré da {praia}",
     "og_hoje": "Maré de hoje",
-    "admin_aviso": "Tábua de marés: faltam dados para {n} dos próximos 30 dias. Rode o importador (scripts/mares/importar-tabua-marinha.ts) com a edição nova da Marinha."
+    "admin_aviso": "Tábua de marés, {estacao}: faltam dados para {n} dos próximos 30 dias. Rode o importador (scripts/mares/importar-tabua-marinha.ts) com a edição nova da Marinha.",
+    "estacao_sem_distancia": "Estação de referência: {estacao}. Reserva: {reserva}. A distância não aparece porque a posição desta praia ainda não foi conferida.",
+    "distancias_titulo": "Distância em linha reta de cada praia até a estação de referência:",
+    "distancia_item": "{praia}: {estacao}, {km} km",
+    "com_reserva": "{dia} com dados do {estacao}",
+    "dados_do": "Dados do {estacao}"
   }
 }

@@ -13,16 +13,18 @@ export default async function AdminPage() {
 
   /* Tabua de mares: a Marinha publica uma edicao por ano. Se faltar previsao
      em qualquer dia dos proximos 30, o admin ve o aviso para rodar o
-     importador (scripts/mares/importar-tabua-marinha.ts). */
-  const faltando = await diasSemPrevisao(30)
+     importador, uma linha por estacao (Guamare e Natal) (scripts/mares/importar-tabua-marinha.ts). */
+  const faltando = (await diasSemPrevisao(30)).filter((e) => e.dias.length > 0)
 
   return (
     <>
       {faltando.length > 0 && (
-        <div role="status" className="mx-auto max-w-5xl px-5 md:px-8 pt-6">
-          <p className="rounded-xl border border-ocre bg-ocre/10 p-4 text-sm font-medium text-fg-1">
-            {preencher(textosMares('pt').admin_aviso, { n: faltando.length })}
-          </p>
+        <div role="status" className="mx-auto max-w-5xl px-5 md:px-8 pt-6 space-y-2">
+          {faltando.map((e) => (
+            <p key={e.estacao} className="rounded-xl border border-ocre bg-ocre/10 p-4 text-sm font-medium text-fg-1">
+              {preencher(textosMares('pt').admin_aviso, { estacao: e.nome, n: e.dias.length })}
+            </p>
+          ))}
         </div>
       )}
       <Admin />

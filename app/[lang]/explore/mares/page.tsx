@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { buildPageMetadata, isLocale } from '@/lib/page-metadata'
 import { notFound } from 'next/navigation'
-import { PRAIAS_MARES } from '@/data/praias-mares'
+import { praiasPorMunicipio } from '@/data/praias-mares'
 import { carregarSemana, lerEventos } from '@/lib/mares/carregar'
 import { jsonLdMares, preencher, textosMares, tituloDoIndice } from '@/lib/mares/seo-mares'
 import { safeJsonLd } from '@/lib/json-ld'
@@ -25,8 +25,19 @@ export default async function MaresPage({ params }: { params: Promise<{ lang: st
   const { lang } = await params
   if (!isLocale(lang)) notFound()
   const t = textosMares(lang)
-  const { hoje, semana, vazia } = await carregarSemana()
-  const { eventos } = await lerEventos(hoje)
+  const { hoje, semana, vazia, principal, reserva } = await carregarSemana()
+  const grupos = await Promise.all(
+    praiasPorMunicipio().map(async (g) => ({
+      municipio: g.municipio,
+      praias: await Promise.all(
+        g.praias.map(async (p) => {
+          if (vazia || !p.melhorMare) return { p, janela: null }
+          const { eventos } = await lerEventos(hoje, p)
+          return { p, janela: melhorJanela(eventos, hoje, p.melhorMare) }
+        }),
+      ),
+    })),
+  )
   const diaDeHoje = semana[0]
 
   return (
@@ -40,45 +51,44 @@ export default async function MaresPage({ params }: { params: Promise<{ lang: st
       </div>
 
       <div className="mt-6">
-        {vazia ? <EstadoVazio lang={lang} /> : <CartaoDoDia dia={diaDeHoje} hoje={hoje} lang={lang} />}
+        {vazia ? <EstadoVazio lang={lang} /> : <CartaoDoDia dia={diaDeHoje} hoje={hoje} lang={lang} reserva={reserva} />}
       </div>
 
       <section className="mt-12">
         <h2 className="font-display text-2xl font-semibold text-fg-1">{t.hoje_em}</h2>
-        <ul className="mt-4 divide-y divide-border-1 border-y border-border-1">
-          {PRAIAS_MARES.map((p) => {
-            const janela = !vazia && p.melhorMare ? melhorJanela(eventos, hoje, p.melhorMare) : null
-            return (
-              <li key={p.slug}>
-                <Link
-                  href={caminhoLocal(lang, p.slug)}
-                  className="group block py-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
-                >
-                  <span className="flex items-baseline justify-between gap-3">
+        {grupos.map((g) => (
+          <div key={g.municipio} className="mt-6">
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-fg-3">{g.municipio}</h3>
+            <ul className="mt-2 divide-y divide-border-1 border-y border-border-1">
+              {g.praias.map(({ p, janela }) => (
+                <li key={p.slug}>
+                  <Link
+                    href={caminhoLocal(lang, p.slug)}
+                    className="group block py-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
+                  >
                     <span className="font-display text-xl font-semibold text-fg-1 group-hover:text-teal transition-colors motion-reduce:transition-none">
                       {p.nome}
                     </span>
-                    <span className="text-sm text-fg-3 whitespace-nowrap">{p.municipio}</span>
-                  </span>
-                  {p.dica && <span className="mt-1 block text-fg-2 leading-relaxed">{p.dica[lang]}</span>}
-                  {janela && p.rotuloJanela && (
-                    <span className="mt-1 block font-semibold text-fg-1">
-                      {preencher(t.melhor_entre, {
-                        rotulo: p.rotuloJanela[lang],
-                        inicio: formatarHora(janela.inicio),
-                        fim: formatarHora(janela.fim),
-                      })}
-                    </span>
-                  )}
-                  <span className="sr-only">{preencher(t.ver_praia, { praia: p.nome })}</span>
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
+                    {p.dica && <span className="mt-1 block text-fg-2 leading-relaxed">{p.dica[lang]}</span>}
+                    {janela && p.rotuloJanela && (
+                      <span className="mt-1 block font-semibold text-fg-1">
+                        {preencher(t.melhor_entre, {
+                          rotulo: p.rotuloJanela[lang],
+                          inicio: formatarHora(janela.inicio),
+                          fim: formatarHora(janela.fim),
+                        })}
+                      </span>
+                    )}
+                    <span className="sr-only">{preencher(t.ver_praia, { praia: p.nome })}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </section>
 
-      <RodapeFonte lang={lang} />
+      <RodapeFonte lang={lang} principal={principal} reserva={reserva} />
     </main>
   )
 }

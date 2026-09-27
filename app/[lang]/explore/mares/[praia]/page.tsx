@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { isLocale } from '@/lib/page-metadata'
-import { ESTACOES, PRAIAS_MARES, distanciaKm, praiaPorSlug } from '@/data/praias-mares'
+import { PRAIAS_MARES, praiaPorSlug } from '@/data/praias-mares'
 import { carregarSemana } from '@/lib/mares/carregar'
 import { jsonLdMares, metadadosDaPraia, textosMares } from '@/lib/mares/seo-mares'
 import { resumoDoDia, rotuloDoDia } from '@/lib/mares/formato'
@@ -33,8 +33,7 @@ export default async function PraiaMaresPage({ params }: Params) {
   const praia = praiaPorSlug(slug)
   if (!isLocale(lang) || !praia) notFound()
   const t = textosMares(lang)
-  const { hoje, semana, vazia } = await carregarSemana(slug)
-  const km = Math.round(distanciaKm(praia, ESTACOES[praia.estacao]))
+  const { hoje, semana, vazia, principal, reserva } = await carregarSemana(slug)
 
   return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-10 md:py-14">
@@ -72,15 +71,15 @@ export default async function PraiaMaresPage({ params }: Params) {
             })}
           >
             {semana.map((d) => (
-              <CartaoDoDia key={d.data} dia={d} hoje={hoje} lang={lang} praia={praia} />
+              <CartaoDoDia key={d.data} dia={d} hoje={hoje} lang={lang} praia={praia} reserva={reserva} />
             ))}
           </PainelDias>
         )}
       </div>
 
-      {!vazia && <TabelaSemana semana={semana} hoje={hoje} lang={lang} />}
+      {!vazia && <TabelaSemana semana={semana} hoje={hoje} lang={lang} reserva={reserva} />}
 
-      <RodapeFonte lang={lang} distanciaKm={km} />
+      <RodapeFonte lang={lang} principal={principal} reserva={reserva} praia={praia} />
     </main>
   )
 }

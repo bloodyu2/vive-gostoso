@@ -65,3 +65,62 @@ describe('extracao da tabua de Natal 2026', () => {
     expect(jan1).toEqual(['alta', 'baixa', 'alta', 'baixa'])
   })
 })
+
+/* Porto de Guamare 2026 (scripts/mares/fontes/guamare-2026.pdf). Valores lidos
+   a mao de `pdftotext -layout` do mesmo PDF (poppler), nao deste extrator.
+   Cobrem as tres paginas, as duas metades de cada mes, dias com tres mares,
+   uma altura negativa (18/04) e o ultimo dia do ano. */
+const CONFERIDOS_GUAMARE: Record<string, Array<[string, number]>> = {
+  '2026-01-01': [['0306', 2.33], ['0931', 0.43], ['1523', 2.5], ['2201', 0.26]],
+  '2026-01-17': [['0414', 2.12], ['1008', 0.48], ['1625', 2.22], ['2231', 0.31]],
+  '2026-02-03': [['0006', 0.21], ['0616', 2.8], ['1223', 0.25], ['1836', 2.79]],
+  '2026-03-19': [['0512', 2.69], ['1125', 0.16], ['1734', 2.7], ['2347', 0.19]],
+  '2026-03-31': [['0406', 2.54], ['1017', 0.24], ['1627', 2.63], ['2238', 0.24]],
+  '2026-04-07': [['0142', 0.73], ['0753', 2.17], ['1404', 0.64], ['2017', 1.98]],
+  '2026-04-18': [['0523', 2.62], ['1151', -0.02], ['1751', 2.56]],
+  '2026-05-17': [['0504', 2.61], ['1138', 0.04], ['1738', 2.58]],
+  '2026-06-15': [['0455', 2.68], ['1127', 0.17], ['1729', 2.69], ['2353', 0.35]],
+  '2026-07-31': [['0604', 2.45], ['1206', 0.4], ['1821', 2.43]],
+  '2026-08-17': [['0159', 0.38], ['0821', 2.44], ['1414', 0.55], ['2036', 2.37]],
+  '2026-09-01': [['0121', 0.25], ['0719', 2.23], ['1342', 0.35], ['1931', 2.17]],
+  '2026-10-17': [['0240', 0.73], ['0851', 1.78], ['1501', 0.83], ['2104', 1.74]],
+  '2026-11-15': [['0210', 0.6], ['0823', 1.82], ['1429', 0.7], ['2042', 1.8]],
+  '2026-12-31': [['0512', 0.66], ['1119', 2.05], ['1747', 0.62], ['2359', 2.02]],
+}
+
+describe('extracao da tabua de Guamare 2026', () => {
+  let guamare: EventoMare[] = []
+
+  beforeAll(async () => {
+    const paginas = await lerItensDoPdf(resolve(process.cwd(), 'scripts/mares/fontes/guamare-2026.pdf'))
+    guamare = extrairEventos(paginas, 2026)
+  }, 30_000)
+
+  for (const [data, esperado] of Object.entries(CONFERIDOS_GUAMARE)) {
+    it(`confere ${data} com o PDF`, () => {
+      const doDia = guamare.filter((e) => e.data === data).map((e) => [e.hora, e.altura_m])
+      expect(doDia).toEqual(esperado)
+    })
+  }
+
+  it('cobre os 365 dias de 2026, com 1411 mares', () => {
+    expect(new Set(guamare.map((e) => e.data)).size).toBe(365)
+    expect(guamare.length).toBe(1411)
+  })
+
+  it('esta em ordem cronologica e alterna alta e baixa', () => {
+    for (let i = 1; i < guamare.length; i++) {
+      expect(guamare[i].instante.getTime()).toBeGreaterThan(guamare[i - 1].instante.getTime())
+      expect(guamare[i].tipo).not.toBe(guamare[i - 1].tipo)
+    }
+  })
+
+  it('a mesma mare chega a Guamare depois de Natal (01/01: 37 a 72 min)', () => {
+    const minutos = (e: EventoMare) => e.instante.getTime() / 60_000
+    const g = guamare.filter((e) => e.data === '2026-01-01')
+    const n = eventos.filter((e) => e.data === '2026-01-01')
+    const atrasos = g.map((e, i) => minutos(e) - minutos(n[i]))
+    expect(Math.min(...atrasos)).toBe(37)
+    expect(Math.max(...atrasos)).toBe(72)
+  })
+})
