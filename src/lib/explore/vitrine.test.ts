@@ -34,7 +34,7 @@ describe('vitrine de recursos da home', () => {
         const item = t.itens[i.id]
         expect(item.titulo.length, `${lang} ${i.id}`).toBeGreaterThan(2)
         expect(item.linha.length, `${lang} ${i.id}`).toBeGreaterThan(10)
-        expect(item.linha).not.toContain('—')
+        expect(item.linha).not.toContain(String.fromCharCode(0x2014))
       }
     }
   })
