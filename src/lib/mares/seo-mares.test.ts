@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { preencher, textosMares, urlMares, metadadosDaPraia, jsonLdMares } from './seo-mares'
+import { preencher, textosMares, tituloDoIndice, urlMares, metadadosDaPraia, jsonLdMares } from './seo-mares'
 import { praiaPorSlug } from '@/data/praias-mares'
 
 const cardeiro = praiaPorSlug('cardeiro')!
@@ -14,6 +14,11 @@ describe('textos e urls da tabua', () => {
     expect(textosMares('pt').titulo).toBe('Tábua de marés')
     expect(textosMares('en').titulo).toBe('Tide table')
     expect(textosMares('es').titulo).toBe('Tabla de mareas')
+  })
+
+  it('h1 do indice leva o nome da cidade', () => {
+    expect(tituloDoIndice('pt')).toBe('Tábua de marés de São Miguel do Gostoso')
+    expect(tituloDoIndice('en')).toContain('São Miguel do Gostoso')
   })
 
   it('url sem prefixo no pt e com prefixo em en/es', () => {

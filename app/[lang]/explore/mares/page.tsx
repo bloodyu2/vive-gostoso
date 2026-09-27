@@ -4,7 +4,7 @@ import { buildPageMetadata, isLocale } from '@/lib/page-metadata'
 import { notFound } from 'next/navigation'
 import { PRAIAS_MARES } from '@/data/praias-mares'
 import { carregarSemana, lerEventos } from '@/lib/mares/carregar'
-import { jsonLdMares, preencher, textosMares } from '@/lib/mares/seo-mares'
+import { jsonLdMares, preencher, textosMares, tituloDoIndice } from '@/lib/mares/seo-mares'
 import { safeJsonLd } from '@/lib/json-ld'
 import { melhorJanela } from '@/lib/mares/melhor-janela'
 import { formatarHora } from '@/lib/mares/tempo'
@@ -30,7 +30,7 @@ export default async function MaresPage({ params }: { params: Promise<{ lang: st
   return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-10 md:py-14">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLdMares(lang)) }} />
-      <h1 className="font-display font-bold text-4xl md:text-6xl leading-[1.05] text-fg-1 [text-wrap:balance]">{t.titulo}</h1>
+      <h1 className="font-display font-bold text-4xl md:text-6xl leading-[1.05] text-fg-1 [text-wrap:balance]">{tituloDoIndice(lang)}</h1>
       <p className="mt-4 text-lg text-fg-2 leading-relaxed max-w-[60ch]">{t.intro}</p>
 
       <div className="mt-8">

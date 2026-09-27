@@ -15,6 +15,11 @@ export function textosMares(lang: Idioma): TextosMares {
   return DICIONARIOS[lang].mares
 }
 
+/** H1 da pagina indice: o mesmo texto do title, com o nome da cidade. */
+export function tituloDoIndice(lang: Idioma): string {
+  return DICIONARIOS[lang].meta.mares.title
+}
+
 export function textosNav(lang: Idioma) {
   return DICIONARIOS[lang].nav
 }
