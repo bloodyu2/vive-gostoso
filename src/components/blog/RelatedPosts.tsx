@@ -5,6 +5,8 @@ import { supabase } from '@/lib/supabase'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import type { BlogPost } from '@/types/database'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
+import { useTranslation } from 'react-i18next'
+import { normalizarIdioma, visivelNoIdioma } from '@/lib/blog/traducoes'
 
 interface RelatedPostsProps {
   /** Slug do post atual — para excluir da listagem */
@@ -21,8 +23,10 @@ interface RelatedPostsProps {
  */
 export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPostsProps) {
   const lp = useLocalePath()
-  const { data: posts = [] } = useQuery({
-    queryKey: ['related-posts', currentSlug, tags.join(',')],
+  const { i18n } = useTranslation()
+  const idioma = normalizarIdioma(i18n.language)
+  const { data: todosPosts = [] } = useQuery({
+    queryKey: ['related-posts', currentSlug, tags.join(','), idioma],
     queryFn: async () => {
       let query = supabase
         .from('gostoso_blog_posts')
@@ -37,7 +41,8 @@ export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPosts
       }
       const { data, error } = await query
       if (error) throw error
-      const list = (data ?? []) as BlogPost[]
+      // Filtra pelo idioma antes de cortar no limite, para nao sobrar menos que `limit`.
+      const list = ((data ?? []) as BlogPost[]).filter(p => visivelNoIdioma(p.slug, idioma))
 
       if (list.length >= limit) return list.slice(0, limit)
 
@@ -48,10 +53,10 @@ export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPosts
         .eq('is_published', true)
         .neq('slug', currentSlug)
         .order('published_at', { ascending: false })
-        .limit(limit + list.length)
+        .limit(limit + list.length + 5)
       const seen = new Set(list.map(p => p.slug))
       ;((recent ?? []) as BlogPost[]).forEach(p => {
-        if (list.length < limit && !seen.has(p.slug)) {
+        if (list.length < limit && !seen.has(p.slug) && visivelNoIdioma(p.slug, idioma)) {
           list.push(p)
           seen.add(p.slug)
         }
@@ -59,6 +64,8 @@ export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPosts
       return list.slice(0, limit)
     },
   })
+
+  const posts = todosPosts
 
   if (posts.length === 0) return null
 

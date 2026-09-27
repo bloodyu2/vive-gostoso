@@ -24,6 +24,8 @@ const OBRIGATORIAS: Record<string, string[]> = {
   Organization: ['name'],
   CreativeWork: ['name'],
   State: ['name'],
+  BlogPosting: ['headline', 'image', 'datePublished', 'author', 'publisher'],
+  ImageObject: ['url'],
   Country: ['name'],
 }
 
@@ -42,6 +44,13 @@ export function validarJsonLd(dado: unknown): string[] {
   return erros
 }
 
+/** No que so aponta para outro pelo @id (ex.: mainEntityOfPage) nao repete as
+ *  propriedades do no apontado; o @id tem que ser URL absoluta. */
+function eReferencia(o: Record<string, unknown>): boolean {
+  const chaves = Object.keys(o).filter((k) => k !== '@type')
+  return chaves.length === 1 && chaves[0] === '@id' && typeof o['@id'] === 'string' && /^https:\/\//.test(o['@id'])
+}
+
 function visitar(no: unknown, caminho: string, erros: string[]): void {
   if (Array.isArray(no)) {
     no.forEach((n, i) => visitar(n, `${caminho}[${i}]`, erros))
@@ -52,7 +61,7 @@ function visitar(no: unknown, caminho: string, erros: string[]): void {
   const tipo = o['@type']
   if (tipo !== undefined) {
     if (typeof tipo !== 'string' || !(tipo in OBRIGATORIAS)) erros.push(`${caminho}: @type desconhecido ${String(tipo)}`)
-    else for (const p of OBRIGATORIAS[tipo]) if (o[p] === undefined || o[p] === '') erros.push(`${caminho}: ${tipo} sem ${p}`)
+    else if (!eReferencia(o)) for (const p of OBRIGATORIAS[tipo]) if (o[p] === undefined || o[p] === '') erros.push(`${caminho}: ${tipo} sem ${p}`)
     if (tipo === 'ItemList' || tipo === 'BreadcrumbList') {
       const itens = o.itemListElement as Array<Record<string, unknown>>
       if (!Array.isArray(itens) || itens.length === 0) erros.push(`${caminho}: ${tipo} vazio`)

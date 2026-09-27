@@ -14,6 +14,8 @@ import { Trilha } from '@/components/explore/trilha'
 import { MaresDoDia, lerMareDeHojeNoCardeiro } from '@/components/explore/mare-de-hoje'
 import { IconeVitrineSvg } from '@/components/explore/icone-vitrine'
 import type { IconeVitrine } from '@/lib/explore/vitrine'
+import { guiaMaresPublicado, textosGuiaMares } from '@/components/mares/link-guia'
+import { caminhoDoGuiaMares } from '@/lib/blog/post-publicado'
 
 /* Indice de tudo o que da para explorar. Antes, /explore era so o mapa (que
    passou para /explore/mapa) e dali nao se chegava a tabua de mares.
@@ -43,6 +45,7 @@ export default async function ExplorePage({ params }: { params: Promise<{ lang: 
   const v = textosVitrine(lang)
   const mareHoje = await lerMareDeHojeNoCardeiro()
   const [mares, ...outros] = itensDoExplore(lang)
+  const guia = (await guiaMaresPublicado(lang)) ? textosGuiaMares(lang) : null
 
   return (
     <main className="max-w-6xl mx-auto px-5 md:px-8 pt-8 md:pt-12 pb-10">
@@ -117,6 +120,22 @@ export default async function ExplorePage({ params }: { params: Promise<{ lang: 
               </Link>
             </li>
           ))}
+          {guia && (
+            <li>
+              <Link
+                href={caminhoDoGuiaMares(lang)}
+                className="group flex h-full gap-4 rounded-2xl border border-border-1 bg-elev p-5 hover:border-teal/40 transition-colors motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
+              >
+                <IconeVitrineSvg nome="newspaper" className="w-5 h-5 shrink-0 mt-1 text-teal" />
+                <span>
+                  <span className="block font-display text-lg font-semibold text-fg-1 group-hover:text-teal transition-colors motion-reduce:transition-none">
+                    {guia.titulo}
+                  </span>
+                  <span className="mt-1 block text-sm text-fg-2 leading-snug">{guia.linha}</span>
+                </span>
+              </Link>
+            </li>
+          )}
         </ul>
       </section>
     </main>

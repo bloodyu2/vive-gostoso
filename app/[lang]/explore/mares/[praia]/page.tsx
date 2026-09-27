@@ -9,6 +9,10 @@ import { resumoDoDia, rotuloDoDia } from '@/lib/mares/formato'
 import { safeJsonLd } from '@/lib/json-ld'
 import { CartaoDoDia, EstadoVazio, RodapeFonte, SeletorPraias, TabelaSemana, caminhoLocal } from '@/components/mares/partes'
 import { PainelDias } from '@/components/mares/painel-dias'
+import { LinkGuiaMares } from '@/components/mares/link-guia'
+
+/* Praias em que o guia do blog fala da mare com detalhe. */
+const PRAIAS_COM_GUIA = new Set(['cardeiro', 'perobas'])
 
 // Ver o comentario de revalidate em ../page.tsx.
 export const revalidate = 3600
@@ -45,6 +49,7 @@ export default async function PraiaMaresPage({ params }: Params) {
       </p>
       <h1 className="mt-2 font-display font-bold text-4xl md:text-6xl leading-[1.05] text-fg-1 [text-wrap:balance]">{praia.nome}</h1>
       <p className="mt-2 text-fg-2">{praia.municipio}, RN</p>
+      {PRAIAS_COM_GUIA.has(praia.slug) && <LinkGuiaMares lang={lang} className="mt-3" />}
 
       <div className="mt-6">
         <SeletorPraias lang={lang} atual={praia.slug} />

@@ -30,6 +30,8 @@ export interface ArticleSchemaInput {
   publishedTime?: string | null
   modifiedTime?: string | null
   tags?: string[]
+  /** Idioma do post; default 'pt-BR'. */
+  inLanguage?: 'pt-BR' | 'en' | 'es'
 }
 
 /** schema.org Article / BlogPosting */
@@ -45,7 +47,7 @@ export function articleSchema(input: ArticleSchemaInput): Record<string, unknown
     datePublished: input.publishedTime ?? undefined,
     dateModified: input.modifiedTime ?? input.publishedTime ?? undefined,
     keywords: input.tags?.join(', '),
-    inLanguage: 'pt-BR',
+    inLanguage: input.inLanguage ?? 'pt-BR',
     author: {
       '@type': 'Organization',
       name: input.author ?? SITE_NAME,

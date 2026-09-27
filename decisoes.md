@@ -146,3 +146,24 @@ Guamaré fica mais perto de todas. Natal ficou por três motivos: é a estação
 **CSP.** `connect-src` ganhou `https://*.tiles.mapbox.com`, que o Mapbox GL usa para buscar tiles. Nenhuma outra origem nova.
 
 **Sitemap.** Páginas fixas saíram do gerador para `scripts/paginas-sitemap.mjs` (o teste importa sem gerar). Entra `/explore/mapa` (0.7); `/explore/mares` sobe para 0.95, acima de todas as fixas menos a home.
+
+## Post da tábua de marés, /bio do Instagram e vitrine (27/09/2026)
+**Ordem do Victor de 27/09/2026, Parte A.** Branch `feat/blog-bio-vitrine`. Push, PR, deploy e gravação no banco ficaram com o Victor.
+
+**Post em três idiomas sem migração.** `gostoso_blog_posts` não tem coluna de idioma (esquema lido pelo MCP em 27/09/2026). Cada idioma é uma linha com slug próprio: `tabua-de-mares-sao-miguel-do-gostoso` (pt), `tabla-de-mareas-sao-miguel-do-gostoso` (es), `tide-table-sao-miguel-do-gostoso` (en). O mapa `src/data/blog-traducoes.json` liga as três: `hreflang`, redirecionamento 308 quando o slug é aberto no idioma errado, `inLanguage` no BlogPosting, e lista, relacionados e sitemap mostrando cada versão só no idioma dela. Posts sem grupo continuam como antes (o mesmo texto em pt nas três URLs).
+
+**SQL em duas partes.** `scripts/blog/2026-09-27-tabua-de-mares.sql`: a parte 1 grava as três linhas com `is_published = false` (`where not exists`, idempotente, nenhum post existente tocado); a parte 2, comentada, publica só esses três slugs e deve rodar depois do deploy READY na master. Motivo: o código em produção antes do deploy não conhece o mapa e listaria as três versões no blog em pt.
+
+**Categoria.** A tabela não tem categoria, só `tags`. Tags do post: `marés`, `tábua de marés`, `dicas`, `são miguel do gostoso` (es e en traduzidas). Nenhuma delas cai no `MODULO_POR_TAG`, então o rodapé do post leva ao Explore, o destino mais próximo de "Explore ou Dicas".
+
+**Capa.** Rota `/api/og/blog-mares?lang=xx` (título, curva de maré, design system), sem upload no Storage. Fonte padrão do `next/og`, como as outras.
+
+**Links do texto.** `/explore/mapa` não mostra o Cajueiro Boulevard (ficou fora do mapa por falta de coordenada, decisão anterior): o link do Boulevard foi trocado por `https://www.cajuparadise.com.br/pt`, como a ordem manda. Nas versões es e en, `/es` e `/en` do Caju (as duas responderam 200 em HEAD em 27/09/2026). O link da Gostosense (`/passeios/perobas-de-buggy`) responde 308 para `/pt/turismo/perobas-de-buggy`, que dá 200: mantido como a ordem escreveu. O link da Marinha responde 403 ao HEAD (desafio Cloudflare, já registrado); mantido.
+
+**Links para o post só depois de publicado.** Vitrine, /bio, marés (índice, Cardeiro, Perobas) e Explore consultam `postPublicado` (cache de 1 h). Antes do SQL, nenhum desses links aparece e a URL do post dá 404.
+
+**/bio: Instagram em vez de etiqueta NFC.** A página tinha sido refeita em 06/09/2026 para a tag NFC. A ordem nova a trata como link da bio do Instagram e manda a estrutura. Segui a ordem; o vCard (`contato.vcf`) e o WhatsApp continuam numa linha pequena acima do rodapé, para a etiqueta que já existe não perder o uso. "Cadastre seu negócio" aponta para `/cadastre`, o destino do cabeçalho. O WhatsApp é o único link sem UTM (é externo). A rota continua dinâmica por causa do nonce de CSP; a maré e o post vêm do cache de 1 h. Título e descrição da página ("Contato") não mudaram: pendência para o Victor.
+
+**Vitrine.** Contagem 0 ou 1 usa a frase sem número. As bolinhas só indicam a posição (onze alvos de 44 px não cabem numa tela de 360 px); a navegação é pelas setas ou arrastando. Imagens: as de `public/images` que casam com o cartão; COME, CONTRATE e APOIE ficaram com ícone grande sobre cor suave. Frase limitada a 48 caracteres, com teste, em vez de corte com reticências.
+
+**remove-ai-marks.** O serviço local da skill (`127.0.0.1:8765`) estava fora do ar e a skill proíbe limpeza local. No lugar, o teste `src/lib/blog/post-mares.test.ts` reprova Unicode invisível e travessão no SQL. A reescrita estatística (camada B) não foi feita, porque a ordem pede o texto do post literal. A capa é PNG gerado pelo `next/og` a cada pedido, sem metadado de IA.

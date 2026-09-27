@@ -48,5 +48,7 @@ describe('cache da leitura', () => {
     await fetchComCache(falso)('https://exemplo.supabase.co/rest/v1/gostoso_mares', { method: 'GET' })
     expect(chamadas[0].next).toEqual({ revalidate: 3600, tags: ['gostoso_mares'] })
     expect(chamadas[0].method).toBe('GET')
+    await fetchComCache(falso, 'gostoso_blog_posts')('https://exemplo.supabase.co/rest/v1/gostoso_blog_posts')
+    expect(chamadas[1].next).toEqual({ revalidate: 3600, tags: ['gostoso_blog_posts'] })
   })
 })
