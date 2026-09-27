@@ -31,7 +31,7 @@ describe('semana de uma praia', () => {
 
   it('calcula a janela de piscinas do Cardeiro em torno da baixa das 10h23', () => {
     // 4h25 -> 10h23 (358 min) e 10h23 -> 16h46 (383 min); 15% da faixa = 25,3% da meia-onda.
-    expect(semana[0].janela).toEqual({ inicio: '8h52', fim: '11h59' })
+    expect(semana[0].janela).toEqual({ inicio: '8h52', fim: '11h59', inicioMin: 532, fimMin: 719 })
   })
 
   it('dia sem dado fica vazio, sem curva nem janela', () => {

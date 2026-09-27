@@ -18,6 +18,7 @@ export function Footer() {
     { to: lp('/fique'),    label: t('nav.fique') },
     { to: lp('/passeie'),  label: t('nav.passeie') },
     { to: lp('/explore'),  label: t('nav.explore') },
+    { to: lp('/explore/mares'), label: t('nav.mares_sub') },
   ]
   const CIDADE = [
     { to: lp('/sobre'),          label: t('footer.sobre_projeto') },

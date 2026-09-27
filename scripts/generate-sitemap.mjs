@@ -41,6 +41,12 @@ const STATIC_PAGES = [
   { path: '/blog', freq: 'weekly', priority: '0.6' },
   { path: '/transfer', freq: 'weekly', priority: '0.7' },
   { path: '/transparencia', freq: 'monthly', priority: '0.6' },
+  // Tabua de mares (2026-09-27): indice e uma pagina por praia, lista em
+  // src/data/praias-mares.ts. Praia nova la precisa entrar aqui tambem.
+  { path: '/explore/mares', freq: 'daily', priority: '0.7' },
+  ...['cardeiro', 'xepa', 'maceio', 'santo-cristo', 'tourinhos', 'marco'].map((slug) => ({
+    path: `/explore/mares/${slug}`, freq: 'daily', priority: '0.6',
+  })),
 ]
 
 // Locale config: [lang-code, hreflang-value, url-prefix]

@@ -6,7 +6,7 @@ import type { ItemTexto } from './extrair-tabua'
 export async function lerItensDoPdf(caminho: string): Promise<ItemTexto[][]> {
   const { getDocument } = await import('pdfjs-dist/legacy/build/pdf.mjs')
   const dados = new Uint8Array(await readFile(caminho))
-  const doc = await getDocument({ data: dados, useSystemFonts: true, isEvalSupported: false }).promise
+  const doc = await getDocument({ data: dados, useSystemFonts: true }).promise
   const paginas: ItemTexto[][] = []
   for (let n = 1; n <= doc.numPages; n++) {
     const pagina = await doc.getPage(n)
