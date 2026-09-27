@@ -98,8 +98,9 @@ Os testes da extração e da RLS foram vistos falhando de propósito (valor troc
 
 **Build com produção:** a tabela ainda não existe, e as páginas saem com o estado vazio nos três idiomas (conferido com `next start`).
 
-- Hash do merge e do deploy: a preencher.
-- Deploy: a preencher.
+- Merge: rodada 1 foi ao ar pelo merge `9aa37d4` (PR #26, dev para master). O PR #25 levou a feature para dev (merge `37cc660`).
+- Deploy: `dpl_9cRCzG4zziK82WwSLvs2mcgqbXsa`, READY em 27/09/2026.
+- Dados: a tabela foi preenchida em produção com 1411 marés de Natal (COM3DN), de 108 a 120 por mês, pelo MCP do Supabase, porque a service role não estava no `.env.local`.
 
 ## 6. URLs finais
 
@@ -109,3 +110,59 @@ Os testes da extração e da RLS foram vistos falhando de propósito (valor troc
 - Por praia: `/explore/mares/{cardeiro,xepa,maceio,santo-cristo,tourinhos,marco}`, com `/en` e `/es` na frente.
 
 Sugestão para o post do Instagram: https://www.vivegostoso.com.br/explore/mares/cardeiro. É a praia em que a maré aparece mais na foto (piscinas naturais na baixa), e a página mostra o horário das piscinas do dia.
+
+## Rodada 2 (27/09/2026)
+
+Branch `feat/mares-guamare-praias`, saída de `dev` (`37cc660`). Nada foi para produção: gravar Guamaré no Supabase, push, PR e deploy ficam com o Victor.
+
+### Estação
+
+- Porto de Guamaré passa a ser a principal das praias de São Miguel do Gostoso e Pedra Grande (58 a 77 km, contra 86 a 101 km de Natal). Natal fica de reserva.
+- Se faltar Guamaré num dia, a página usa Natal naquele dia e mostra "Hoje com dados do Porto de Natal" (ou o nome do dia), nos três idiomas.
+- As praias de Touros ficam com Natal de principal e Guamaré de reserva, porque ali Natal é a mais perto (61 a 76 km, contra 90 a 103 km). Motivo em `decisoes.md`.
+- Rodapé: "Fonte: Tábuas de Maré da Marinha do Brasil (CHM/DHN), estação Porto de Guamaré", com a distância de cada praia até a sua estação.
+- O aviso do admin sai uma linha por estação.
+
+### Guamaré na tabela
+
+- Código da estação: `GUAMARE`.
+- Fonte, como vai no campo `fonte`: `Tabuas de Mare da Marinha do Brasil (CHM/DHN) 2026, Porto de Guamare`.
+- Extração conferida em 15 dias contra `pdftotext -layout` do PDF.
+- Contagem por mês: jan 120, fev 108, mar 120, abr 116, mai 120, jun 116, jul 119, ago 120, set 116, out 120, nov 116, dez 120. Total: 1411.
+- Gerar o JSON: `npx tsx scripts/mares/importar-tabua-marinha.ts --estacao GUAMARE --json mares-guamare.json`.
+- Não precisou de migração.
+
+### Praias
+
+| Praia | Município | Estação principal | Distância | Dica |
+|---|---|---|---|---|
+| Minhoto | São Miguel do Gostoso | Guamaré | sem coordenada | sem fonte |
+| Praia do Amor | São Miguel do Gostoso | Guamaré | sem coordenada | sem fonte |
+| Zé Martins | São Miguel do Gostoso | Guamaré | sem coordenada | sem fonte |
+| Malhada | São Miguel do Gostoso | Guamaré | sem coordenada | sem fonte |
+| Perobas | Touros | Natal | 61 km | parrachos na maré baixa |
+| Carnaubinha | Touros | Natal | 67 km | sem fonte |
+| Farol do Calcanhar | Touros | Natal | 74 km | sem fonte |
+| Cajueiro | Touros | Natal | 76 km | sem fonte |
+
+**Ficaram de fora:**
+- Praia de Carnaúba: não há registro no OSM nem na Wikipédia.
+- Praia de Garças: aparece na Wikipédia, mas não tem coordenada em fonte aberta.
+
+As quatro praias de Gostoso entram sem coordenada porque nenhuma fonte aberta a dá. Fontes e ids em `decisoes.md`.
+
+### Verificação
+
+Rodado em 27/09/2026:
+
+| Verificação | Resultado |
+|---|---|
+| `npm run lint` | exit 0, sem saída |
+| `npx tsc --noEmit` | exit 0, sem saída |
+| `npm test` | 25 arquivos, 201 testes, todos passando |
+| `npm run build` | exit 0, 786 páginas geradas |
+
+Com `next start` e o Supabase de produção (que só tem Natal), as páginas do Cardeiro, do Minhoto (en), da Praia do Amor (es) e o índice caem em Natal e mostram o aviso. Perobas usa Natal como principal, sem aviso.
+
+- Hash do merge e do deploy: a preencher.
+- Deploy: a preencher.

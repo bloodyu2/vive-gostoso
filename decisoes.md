@@ -87,3 +87,29 @@ Guamaré fica mais perto de todas. Natal ficou por três motivos: é a estação
 **Grants.** A migração segue o template obrigatório (inclusive escrita para `authenticated`), mas não há policy de insert, update ou delete: só a service role escreve. Teste em `src/lib/mares/rls-mares.test.ts`, com PGlite.
 
 **Imagem de compartilhamento.** Usa a fonte padrão do `next/og`. Os recortes de Fraunces e Jakarta do projeto não cobrem dígitos e letras do card, e baixar recortes novos do Google Fonts não estava autorizado nesta ordem. Pendência: gerar os recortes e trocar.
+
+## Tábua de marés, rodada 2: Guamaré como principal, Natal como reserva (27/09/2026)
+**Ordem do Victor de 27/09/2026.** Reescreve a parte "Estação" da decisão anterior; o resto continua valendo.
+
+**Troca.** As praias de São Miguel do Gostoso e Pedra Grande passam a usar o Porto de Guamaré como estação principal e o Porto de Natal como reserva. **Motivo:** Guamaré fica mais perto de todas elas (58 a 77 km, contra 86 a 101 km de Natal), e a maré de lá chega de 37 a 72 minutos depois da de Natal (medido em 01/01/2026, conferido em teste). Com Natal, a hora na praia podia errar em mais de "alguns minutos".
+
+**Fallback por dia.** Se a principal não tem nenhuma maré num dia, aquele dia inteiro vem da reserva e a tela diz "Hoje com dados do Porto de Natal" (ou o nome do dia). Nunca se misturam as duas estações no mesmo dia. Código: `combinarEstacoes` em `src/lib/mares/semana.ts`. Enquanto Guamaré não estiver no banco, todas essas praias mostram Natal com o aviso.
+
+**Código da estação.** O PDF de Guamaré não traz código (o de Natal traz COM3DN). Gravado como `GUAMARE` em `gostoso_mares.estacao`. A tabela não precisou de migração. Não achei o link direto do PDF de Guamaré em `assets.marinha.mil.br` sem passar pela página da Marinha (que fica atrás de desafio Cloudflare); o importador usa a cópia em `scripts/mares/fontes/guamare-2026.pdf`, trazida na rodada 1, e aponta a página do CHM como URL.
+
+**Conferência.** 15 dias lidos à mão de `pdftotext -layout` do mesmo PDF, nas três páginas, nas duas metades de cada mês, com dias de três marés e uma altura negativa (18/04, -0,02 m). Visto falhando com um valor trocado antes de ser aceito.
+
+**Praias de Touros usam Natal como principal (desvio conservador da ordem).** A ordem pede Guamaré para todas, pelo motivo de ser a mais perto. Nas praias de Touros isso se inverte: Perobas 61 km de Natal e 103 km de Guamaré, Carnaubinha 67 e 98, Farol do Calcanhar 74 e 92, Cajueiro 76 e 90. Segui o motivo da ordem (estação mais perto): Natal principal, Guamaré reserva. Trocar é mudar dois campos por praia em `src/data/praias-mares.ts`; o teste "a principal é a estação mais perto" vai reclamar.
+
+**Aviso de 2027.** O aviso do admin agora sai uma linha por estação, para a edição de 2027 entrar para as duas.
+
+**Praias novas.**
+- Minhoto, Praia do Amor, Zé Martins e Malhada: ficam em São Miguel do Gostoso por decisão do Victor. Nem o conteúdo do site nem fonte aberta dão coordenada delas (o OSM não tem nenhuma das quatro na caixa -5,30 a -5,00 / -35,85 a -35,30), então entram sem lat/lon: sem distância na tela e sem `geo` no JSON-LD. Sem fonte, sem dica.
+- Touros, coordenadas anotadas à mão: Perobas (OSM node 7008783807, -5,25216 / -35,39490), Carnaubinha (OSM node 7008783806, -5,21472 / -35,43533), Praia do Cajueiro (OSM way 634307639, natural=beach, -5,15449 / -35,50297), Praia do Farol do Calcanhar (Wikipédia, "Farol do Calcanhar", 5°09′40″ S 35°29′11″ O, e OSM node 1181442129). O município de todas vem do verbete "Touros" da Wikipédia, que lista Perobas, Carnaubinha, Calcanhar e Cajueiro.
+- Dados do OSM (ODbL) lidos por uma consulta Overpass por caixa geográfica (natural=beach, place e nomes com "Praia", "Farol" ou "Parrachos"), sem busca por nome em geocodificador e sem dado pessoal em cabeçalho. Nominatim não foi usado.
+- **Dica de Perobas**, fonte: a ordem do Victor ("parrachos, passeio de barco que depende da maré baixa") e o guia Mala de Aventuras, https://www.maladeaventuras.com/parrachos-de-perobas/ (os parrachos "só aparecem de verdade durante a maré baixa"). Carnaubinha, Farol do Calcanhar e Cajueiro entram sem dica.
+- **Ficaram de fora:** Praia de Carnaúba (nenhum registro achado no OSM nem na Wikipédia) e Praia de Garças (a Wikipédia a lista em Touros, mas o OSM só tem ruas com esse nome; sem coordenada da praia).
+
+**Seletor por município.** Ordem: São Miguel do Gostoso, Touros, Pedra Grande. A lista "Hoje nas praias" segue os mesmos grupos.
+
+**Sitemap.** O gerador passa a ler os slugs de `src/data/praias-mares.ts` (`scripts/mares-slugs.mjs`), em vez da lista repetida à mão.
