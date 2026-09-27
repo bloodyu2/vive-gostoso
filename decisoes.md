@@ -113,3 +113,36 @@ Guamaré fica mais perto de todas. Natal ficou por três motivos: é a estação
 **Seletor por município.** Ordem: São Miguel do Gostoso, Touros, Pedra Grande. A lista "Hoje nas praias" segue os mesmos grupos.
 
 **Sitemap.** O gerador passa a ler os slugs de `src/data/praias-mares.ts` (`scripts/mares-slugs.mjs`), em vez da lista repetida à mão.
+
+## Vitrine na home, Explore como índice e pontos no mapa (27/09/2026)
+**Ordem do Victor de 27/09/2026.** Branch `feat/vitrine-explore-mapa`.
+
+**Vitrine no lugar da grade de verbos.** A home tinha, logo abaixo da dobra, uma grade com sete verbos (COME, FIQUE...). A vitrine nova cobre os mesmos links e mais (marés, transfer, blog, conheça), então ela ocupa o lugar da grade em vez de somar um segundo bloco com os mesmos destinos. As chaves `home.verbs_*` ficaram nos JSON sem uso. A vitrine é server component (`src/components/home/vitrine.tsx`), passada para a `Home` (client) como prop.
+
+**Abas.** A ordem cita VIVE, mas não existe rota `/vive`: a home faz esse papel e ficou sem cartão. "Eventos" é a aba PARTICIPE (não há lista de eventos fora de `/participe`), um cartão só. CONTRATE existe no menu e entrou. Guarda: `src/lib/explore/vitrine.test.ts` compara com as pastas de `app/[lang]`.
+
+**Número de praias.** O texto do cartão das marés lê `PRAIAS_MARES.length` (14 hoje). Não é número escrito à mão.
+
+**Maré de hoje fora da página de marés.** Home e Explore leem o Cardeiro por `carregarSemana('cardeiro')`, que passa pelo mesmo `fetchComCache` (1 h) da página de marés. O `revalidate` da página continua sem efeito por causa do nonce de CSP. Sem dado, o cartão aparece sem a linha da maré.
+
+**Explore virou índice; o mapa foi para `/explore/mapa`.** Antes `/explore` era só o mapa, com o H1 escondido (`sr-only`) porque o mapa não roda no servidor. Agora `/explore` é uma página de servidor com H1 visível, a tábua com a maré de hoje, as 14 praias (cada uma leva à maré dela) e links para mapa, passeios, conheça, eventos e transfer. `/explore/mapa` tem H1 e introdução visíveis, o mapa e a lista dos pontos em HTML. Menu: "Explore" (praias, marés e mapa), "Mapa" e "Marés" no grupo Descobrir; as Marés já estavam no menu e no rodapé.
+
+**Pontos do mapa, fontes (consultas de 27/09/2026, Overpass por caixa geográfica e nome, User-Agent `vive-gostoso-mapa/1.0`, sem e-mail; Nominatim não usado):**
+- Pitaya Exclusive Residence, São Miguel do Gostoso: -5.1348262, -35.5888442, do link do Google Maps publicado na página oficial https://pitayaexclusive.com.br/ (o OSM não tem o condomínio).
+- Vila Galé Touros, Touros: OSM way 565827692 (tourism=hotel), centro -5.2269785, -35.4152524.
+- Farol do Calcanhar, Touros: OSM node 1181442129 (man_made=lighthouse), -5.1611122, -35.4865404; município e descrição (62 m, visita aos domingos das 14h às 17h) na Wikipédia, "Farol do Calcanhar".
+- Praias da tábua com coordenada (10): as mesmas coordenadas e ids já registrados na decisão da tábua (OSM e Wikipédia).
+- **Ficaram fora:** Caju Paradise e Cajueiro Boulevard (a página oficial cajuparadise.com.br dá só o endereço, "Cajueiro Boulevard, BR-101 Km 3, Touros", e transformar endereço em coordenada seria geocodificar; o OSM não tem nenhum dos dois). Marco Colonial de Touros (a Wikipédia, verbete "Marco Colonial de Touros", diz que fica na divisa de São Miguel do Gostoso e Pedra Grande, na Praia do Marco, mas não dá coordenada, e o OSM não tem o marco; o "Marco Zero BR 101" do OSM, em Touros, é outra coisa, o marco da rodovia, e não foi usado). A Praia do Marco está no mapa, com a dica do marco histórico. As 4 praias da tábua sem coordenada (Minhoto, Praia do Amor, Zé Martins, Malhada) também ficam fora.
+- Farol do Calcanhar aparece duas vezes, como praia (da tábua) e como ponto histórico: as coordenadas ficam a cerca de 10 m uma da outra. Mantido, porque são duas coisas (a praia leva à maré, o farol é o ponto histórico).
+
+**"Como chegar"** abre `google.com/maps/dir/?api=1&destination=lat,lon`: rota pela coordenada, sem busca por nome.
+
+**JSON-LD.** WebSite sem SearchAction: a busca do site é um modal e não há URL de resultado (a SearchAction antiga apontava para `/explore?q=`, que nunca leu o `q`). Home: ItemList da vitrine. Explore: CollectionPage, BreadcrumbList, ItemList. Mapa: BreadcrumbList e ItemList com Beach (praias), TouristAttraction (farol) e Place (empreendimentos), com geo. Marés: Dataset com a Marinha como `creator` e as duas tábuas em `isBasedOn`. Validador local em `src/lib/explore/validar-json-ld.ts`, visto reprovando casos errados.
+
+**Imagem de compartilhamento** da home e do Explore em `app/api/og/[rota]` (rota de API, não `opengraph-image.tsx`, porque o arquivo de metadados vale para as rotas filhas e cobriria o card de cada praia). Fonte padrão do `next/og`, como no card das praias.
+
+**Blog.** Posts ficam no banco; o link para a maré sai na renderização (`praiasCitadas` em `src/lib/explore/praias-citadas.ts`), sem gravar nada. Nomes curtos que são palavra comum ou outro lugar (marco, amor, Maceió, malhada, cajueiro) só contam com o nome inteiro ("Praia do Marco").
+
+**CSP.** `connect-src` ganhou `https://*.tiles.mapbox.com`, que o Mapbox GL usa para buscar tiles. Nenhuma outra origem nova.
+
+**Sitemap.** Páginas fixas saíram do gerador para `scripts/paginas-sitemap.mjs` (o teste importa sem gerar). Entra `/explore/mapa` (0.7); `/explore/mares` sobe para 0.95, acima de todas as fixas menos a home.

@@ -6,6 +6,7 @@ import type { UseQueryOptions } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import sanitizeHtml from 'sanitize-html'
+import { praiasCitadas } from '@/lib/explore/praias-citadas'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
 import { useLocalePath } from '@/hooks/useLocalePath'
@@ -103,6 +104,9 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
   )
 
   const modulo = useMemo(() => moduloDoPost(post?.tags), [post])
+  /* Praias da tabua citadas no post ganham link para a mare delas. Feito na
+     renderizacao: o conteudo gravado no banco nao muda. */
+  const praiasDoPost = useMemo(() => praiasCitadas(`${post?.title ?? ''} ${post?.content ?? ''}`), [post])
 
   if (isLoading) {
     return (
@@ -191,6 +195,21 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
         className="blog-prose mt-2 max-w-none"
         dangerouslySetInnerHTML={{ __html: sanitizedContent }}
       />
+
+      {praiasDoPost.length > 0 && (
+        <nav aria-labelledby="blog-mares-titulo" className="mt-10 rounded-2xl bg-teal/10 p-5">
+          <h2 id="blog-mares-titulo" className="text-sm font-semibold text-fg-1">{t('blog_mares.titulo')}</h2>
+          <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1">
+            {praiasDoPost.map(p => (
+              <li key={p.slug}>
+                <Link href={lp(`/explore/mares/${p.slug}`)} className="text-teal hover:underline text-sm font-semibold">
+                  {t('blog_mares.item', { praia: p.nome })}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
 
       <nav className="mt-10 pt-8 border-t border-[#E8E4DF] dark:border-[#2D2D2D]">
         <Link href={lp(`/${modulo}`)} className="text-teal hover:underline text-sm font-semibold">
