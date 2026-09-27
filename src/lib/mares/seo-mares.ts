@@ -85,8 +85,8 @@ export function jsonLdMares(lang: Idioma, praia?: PraiaMare): Record<string, unk
     isPartOf: { '@type': 'WebSite', name: 'Vive Gostoso', url: localizedUrl('', lang) },
     isBasedOn: {
       '@type': 'CreativeWork',
-      name: 'Tábuas de Maré da Marinha do Brasil, Porto de Natal',
-      url: ESTACOES.COM3DN.fonteUrl,
+      name: `Tábuas de Maré da Marinha do Brasil, ${ESTACOES[praia?.estacaoPrincipal ?? 'GUAMARE'].nome}`,
+      url: ESTACOES[praia?.estacaoPrincipal ?? 'GUAMARE'].fonteUrl,
       publisher: { '@type': 'GovernmentOrganization', name: 'Marinha do Brasil, Centro de Hidrografia da Marinha (CHM/DHN)' },
     },
   }
@@ -106,7 +106,9 @@ export function jsonLdMares(lang: Idioma, praia?: PraiaMare): Record<string, unk
     '@type': 'Beach',
     '@id': `${url}#praia`,
     name: praia.nome,
-    geo: { '@type': 'GeoCoordinates', latitude: praia.lat, longitude: praia.lon },
+    ...(praia.lat !== undefined && praia.lon !== undefined
+      ? { geo: { '@type': 'GeoCoordinates', latitude: praia.lat, longitude: praia.lon } }
+      : {}),
     address: { '@type': 'PostalAddress', addressLocality: praia.municipio, addressRegion: 'RN', addressCountry: 'BR' },
     ...(praia.dica ? { description: praia.dica[lang] } : {}),
   }
