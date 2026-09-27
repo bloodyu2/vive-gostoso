@@ -164,5 +164,5 @@ Rodado em 27/09/2026:
 
 Com `next start` e o Supabase de produção (que só tem Natal), as páginas do Cardeiro, do Minhoto (en), da Praia do Amor (es) e o índice caem em Natal e mostram o aviso. Perobas usa Natal como principal, sem aviso.
 
-- Hash do merge e do deploy: a preencher.
-- Deploy: a preencher.
+- Hash do merge: rodada 1 `9aa37d4`, rodada 2 `a4ae11a`.
+- Deploy: rodada 1 `dpl_9cRCzG4zziK82WwSLvs2mcgqbXsa`, rodada 2 `dpl_EJLcN6LxoyEQHQP8yg8jgY2Z2QSV`.
