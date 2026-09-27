@@ -26,6 +26,18 @@ describe('vitrine de recursos da home', () => {
     for (const i of ITENS_VITRINE) expect(existsSync(resolve('app/[lang]', `.${i.caminho}`, 'page.tsx')), i.caminho).toBe(true)
   })
 
+  it('a frase dos cartoes pequenos cabe em duas linhas (ate 48 caracteres, com n de 3 digitos)', () => {
+    const cheio = { come: 148, fique: 148, passeie: 148, participe: 148 }
+    for (const lang of ['pt', 'en', 'es'] as const) {
+      for (const contagens of [{}, cheio]) {
+        const t = textosVitrine(lang, contagens)
+        for (const i of ITENS_VITRINE.filter((x) => !x.destaque)) {
+          expect(t.itens[i.id].linha.length, `${lang} ${i.id}: ${t.itens[i.id].linha}`).toBeLessThanOrEqual(48)
+        }
+      }
+    }
+  })
+
   it('titulo e linha em pt, en e es, sem travessao', () => {
     for (const lang of ['pt', 'en', 'es'] as const) {
       const t = textosVitrine(lang)

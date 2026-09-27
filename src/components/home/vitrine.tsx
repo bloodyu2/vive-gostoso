@@ -122,7 +122,7 @@ export async function Vitrine({ lang, mareHoje }: { lang: Idioma; mareHoje: DiaD
                       {texto.titulo}
                     </Link>
                   </h3>
-                  <p className="mt-1 min-h-[2lh] text-sm leading-snug text-fg-2 line-clamp-2">{texto.linha}</p>
+                  <p className="mt-1 min-h-[2lh] text-sm leading-snug text-fg-2 text-pretty">{texto.linha}</p>
                   <span
                     aria-hidden="true"
                     className="mt-auto inline-flex min-h-11 items-center gap-2 self-start pt-3 text-sm font-semibold text-teal transition-[gap] duration-200 ease-out group-hover:gap-3 motion-reduce:transition-none"

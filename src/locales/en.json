@@ -1584,20 +1584,20 @@
       },
       "come": {
         "titulo": "Where to eat",
-        "linha": "Restaurants, bars and snack bars, with address and contact",
-        "linha_n": "{n} restaurants, bars and snack bars listed, with address and contact",
+        "linha": "Restaurants and bars, with address and contact",
+        "linha_n": "{n} restaurants and bars, with contacts",
         "botao": "Where to eat"
       },
       "fique": {
         "titulo": "Where to stay",
-        "linha": "Guesthouses and houses near each beach, to compare before booking",
-        "linha_n": "{n} guesthouses and houses listed, near each beach",
+        "linha": "Guesthouses and houses near each beach",
+        "linha_n": "{n} places to stay near the beaches",
         "botao": "Where to stay"
       },
       "passeie": {
         "titulo": "Tours",
-        "linha": "Buggy, boat, kite and hiking, with who takes you",
-        "linha_n": "{n} tours and guides listed, from buggy to kite",
+        "linha": "Buggy, boat, kite and hikes with a guide",
+        "linha_n": "{n} tours and guides, buggy to kite",
         "botao": "See tours"
       },
       "explore": {
@@ -1608,7 +1608,7 @@
       "participe": {
         "titulo": "Events",
         "linha": "Parties, festivals and the town calendar",
-        "linha_n": "{n} events on the calendar, with date and place",
+        "linha_n": "{n} events, with date and place",
         "botao": "See the calendar"
       },
       "conheca": {
@@ -1633,7 +1633,7 @@
       },
       "blog": {
         "titulo": "Blog",
-        "linha": "Tips and stories from people who live in Gostoso",
+        "linha": "Tips and stories from Gostoso locals",
         "botao": "Read the blog"
       }
     },

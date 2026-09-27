@@ -1584,25 +1584,25 @@
       },
       "come": {
         "titulo": "Onde comer",
-        "linha": "Restaurantes, bares e lanchonetes, com endereço e contato",
-        "linha_n": "{n} restaurantes, bares e lanchonetes cadastrados, com endereço e contato",
+        "linha": "Restaurantes e bares, com endereço e contato",
+        "linha_n": "{n} restaurantes e bares, com contato",
         "botao": "Onde comer"
       },
       "fique": {
         "titulo": "Onde ficar",
-        "linha": "Pousadas e casas perto de cada praia, para comparar antes de reservar",
-        "linha_n": "{n} pousadas e casas cadastradas, perto de cada praia",
+        "linha": "Pousadas e casas perto de cada praia",
+        "linha_n": "{n} pousadas e casas perto das praias",
         "botao": "Onde ficar"
       },
       "passeie": {
         "titulo": "Passeios",
-        "linha": "Buggy, barco, kite e trilha, com quem leva você",
-        "linha_n": "{n} passeios e guias cadastrados, de buggy a kite",
+        "linha": "Buggy, barco, kite e trilha com guia",
+        "linha_n": "{n} passeios e guias, do buggy ao kite",
         "botao": "Ver passeios"
       },
       "explore": {
         "titulo": "Explore",
-        "linha": "Praias, marés e o mapa da região numa página só",
+        "linha": "Praias, marés e mapa numa página só",
         "botao": "Ver praias e mapa"
       },
       "participe": {
@@ -1618,7 +1618,7 @@
       },
       "apoie": {
         "titulo": "Apoie",
-        "linha": "Acompanhe o fundo da cidade e ajude a mantê-lo",
+        "linha": "Ajude a manter o fundo da cidade",
         "botao": "Como apoiar"
       },
       "contrate": {

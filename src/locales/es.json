@@ -1584,25 +1584,25 @@
       },
       "come": {
         "titulo": "Dónde comer",
-        "linha": "Restaurantes, bares y cafeterías, con dirección y contacto",
-        "linha_n": "{n} restaurantes, bares y cafeterías registrados, con dirección y contacto",
+        "linha": "Restaurantes y bares, con dirección y contacto",
+        "linha_n": "{n} restaurantes y bares, con contacto",
         "botao": "Dónde comer"
       },
       "fique": {
         "titulo": "Dónde dormir",
-        "linha": "Posadas y casas cerca de cada playa, para comparar antes de reservar",
-        "linha_n": "{n} posadas y casas registradas, cerca de cada playa",
+        "linha": "Posadas y casas cerca de cada playa",
+        "linha_n": "{n} posadas y casas cerca de las playas",
         "botao": "Dónde alojarse"
       },
       "passeie": {
         "titulo": "Paseos",
-        "linha": "Buggy, barco, kite y senderismo, con quien te lleva",
-        "linha_n": "{n} paseos y guías registrados, del buggy al kite",
+        "linha": "Buggy, barco, kite y senderos con guía",
+        "linha_n": "{n} paseos y guías, del buggy al kite",
         "botao": "Ver paseos"
       },
       "explore": {
         "titulo": "Explora",
-        "linha": "Playas, mareas y el mapa de la región en una sola página",
+        "linha": "Playas, mareas y mapa en una página",
         "botao": "Ver playas y mapa"
       },
       "participe": {
@@ -1618,12 +1618,12 @@
       },
       "apoie": {
         "titulo": "Apoya",
-        "linha": "Sigue el fondo de la ciudad y ayuda a mantenerlo",
+        "linha": "Ayuda a mantener el fondo de la ciudad",
         "botao": "Cómo apoyar"
       },
       "contrate": {
         "titulo": "Contrata",
-        "linha": "Profesionales y ofertas de trabajo en la ciudad",
+        "linha": "Profesionales y empleos en la ciudad",
         "botao": "Ver ofertas"
       },
       "transfer": {
