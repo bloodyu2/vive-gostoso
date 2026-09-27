@@ -10,7 +10,7 @@
 import { readFileSync, writeFileSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { rotasMares } from './mares-slugs.mjs'
+import { paginasEstaticas } from './paginas-sitemap.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(__dirname, '..')
@@ -20,32 +20,8 @@ const ROOT = resolve(__dirname, '..')
 // ---------------------------------------------------------------------------
 const BASE_URL = 'https://www.vivegostoso.com.br'
 
-// ATENÇÃO: esta lista é escrita à mão, e a mão erra nos dois sentidos. Rota
-// nova em app/[lang]/ NÃO entra no sitemap sozinha: precisa ser adicionada
-// aqui. E rota removida não sai sozinha: precisa ser tirada daqui.
-// A antiga /resolva passou pelos dois lados. Ficou listada por meses sem que a
-// rota existisse, servindo 404 para o Google em três idiomas; depois a rota
-// foi criada e passou a servir uma página vazia, porque os negócios que
-// pertenceriam a ela estavam todos sob o verbo `contrate`. Em 2026-09-07 o
-// verbo inteiro saiu do produto.
-const STATIC_PAGES = [
-  { path: '/',          freq: 'daily',   priority: '1.0' },
-  { path: '/come',      freq: 'weekly',  priority: '0.9' },
-  { path: '/fique',     freq: 'weekly',  priority: '0.9' },
-  { path: '/passeie',   freq: 'weekly',  priority: '0.8' },
-  { path: '/explore',   freq: 'weekly',  priority: '0.8' },
-  { path: '/participe', freq: 'daily',   priority: '0.8' },
-  { path: '/conheca',   freq: 'monthly', priority: '0.7' },
-  { path: '/apoie',     freq: 'monthly', priority: '0.6' },
-  { path: '/contrate',  freq: 'weekly',  priority: '0.7' },
-  { path: '/sobre', freq: 'monthly', priority: '0.6' },
-  { path: '/blog', freq: 'weekly', priority: '0.6' },
-  { path: '/transfer', freq: 'weekly', priority: '0.7' },
-  { path: '/transparencia', freq: 'monthly', priority: '0.6' },
-  // Tabua de mares: indice e uma pagina por praia, lidos da lista unica em
-  // src/data/praias-mares.ts (scripts/mares-slugs.mjs).
-  ...rotasMares(ROOT),
-]
+// Paginas fixas: scripts/paginas-sitemap.mjs.
+const STATIC_PAGES = paginasEstaticas(ROOT)
 
 // Locale config: [lang-code, hreflang-value, url-prefix]
 const LOCALES = [

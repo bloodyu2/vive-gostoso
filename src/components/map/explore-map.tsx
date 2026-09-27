@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { MapPin, X, Utensils, BedDouble, Compass } from 'lucide-react'
+import { MapPin, X, Utensils, BedDouble, Compass, Navigation, Waves, ExternalLink } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 // mapbox-gl is loaded dynamically on component mount to keep it out of the
 // initial bundle entry graph (prevents Vite from adding a modulepreload for it)
@@ -9,6 +9,18 @@ import { useLocalePath } from '@/hooks/useLocalePath'
 import type { Business } from '@/types/database'
 import { MAPBOX_TOKEN, MAP_STYLE, GOSTOSO_CENTER, GOSTOSO_ZOOM, PIN_COLORS } from '@/lib/mapbox'
 import { BusinessCover } from '@/components/business/business-cover'
+import { CATEGORIAS_PONTO, linkComoChegar, type CategoriaPonto, type PontoMapa } from '@/data/pontos-mapa'
+import type { Idioma } from '@/data/praias-mares'
+import type pt from '@/locales/pt.json'
+
+export type TextosMapa = typeof pt.mapa
+
+/** Cor de cada categoria de ponto, do design system. */
+const COR_CATEGORIA: Record<CategoriaPonto, string> = {
+  praias: '#0D7C7C',
+  hospedagem: '#C97D2A',
+  historicos: '#E05A3A',
+}
 
 // Lazy type reference only — no static import of mapbox-gl
 type MapboxGLModule = typeof import('mapbox-gl')
@@ -29,9 +41,15 @@ interface PopupBusiness {
   address: string | null
 }
 
-interface ExploreMapProps { businesses: Business[] }
+interface ExploreMapProps {
+  businesses: Business[]
+  /** Pontos de referencia da regiao (src/data/pontos-mapa.ts). */
+  pontos?: PontoMapa[]
+  textos?: TextosMapa
+  lang?: Idioma
+}
 
-export function ExploreMap({ businesses }: ExploreMapProps) {
+export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: ExploreMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null)
   // Store mapbox module and map instance separately to allow dynamic import
   const mapboxRef = useRef<MapboxGLModule | null>(null)
@@ -41,6 +59,9 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
   const sidebarRef = useRef<HTMLDivElement>(null)
   const sidebarHeaderRef = useRef<HTMLDivElement>(null)
   const [popup, setPopup] = useState<PopupBusiness | null>(null)
+  const [pontoAberto, setPontoAberto] = useState<PontoMapa | null>(null)
+  const [filtro, setFiltro] = useState<CategoriaPonto | 'todos'>('todos')
+  const marcadoresPontos = useRef<Array<{ categoria: CategoriaPonto; el: HTMLElement; marker: InstanceType<MapboxGLModule['Marker']> }>>([])
   const [mapReady, setMapReady] = useState(false)
   const lp = useLocalePath()
 
@@ -85,7 +106,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
       map.current.addControl(new mapboxgl.default.NavigationControl({ showCompass: false }), 'top-left')
 
       // Close popup on map click
-      map.current.on('click', () => setPopup(null))
+      map.current.on('click', () => { setPopup(null); setPontoAberto(null) })
 
       // Signal that map is ready for markers
       map.current.on('load', () => setMapReady(true))
@@ -141,6 +162,7 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
 
       el.addEventListener('click', (e) => {
         e.stopPropagation()
+        setPontoAberto(null)
         setPopup({ name: b.name, slug: b.slug, cover_url: b.cover_url, category: b.category, address: b.address })
         map.current?.flyTo({ center: [b.lng!, b.lat!], zoom: Math.max(map.current.getZoom(), 15), duration: 600 })
       })
@@ -149,6 +171,48 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps -- geo.length e proposital: recriar os marcadores do Mapbox a cada nova referencia do array (mesmo com o mesmo conteudo) e caro e causa flicker.
   }, [geo.length, mapReady])
+
+  // Pontos de referencia: losango com a cor da categoria, para nao confundir
+  // com o circulo dos negocios. Ao abrir, o mapa enquadra todos os pontos.
+  useEffect(() => {
+    if (!map.current || !mapboxRef.current || !mapReady || pontos.length === 0) return
+    const mapboxgl = mapboxRef.current
+    marcadoresPontos.current.forEach(m => m.marker.remove())
+    marcadoresPontos.current = []
+    const limites = new mapboxgl.LngLatBounds()
+    pontos.forEach(p => {
+      const el = document.createElement('button')
+      el.type = 'button'
+      el.setAttribute('aria-label', p.nome)
+      el.style.cssText = `
+        width: 16px; height: 16px; padding: 0;
+        border-radius: 3px;
+        rotate: 45deg;
+        background: ${COR_CATEGORIA[p.categoria]};
+        border: 2.5px solid white;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.30);
+        cursor: pointer;
+        box-sizing: border-box;
+      `
+      el.addEventListener('click', (e) => {
+        e.stopPropagation()
+        setPopup(null)
+        setPontoAberto(p)
+        map.current?.flyTo({ center: [p.lon, p.lat], zoom: Math.max(map.current.getZoom(), 12), duration: 600 })
+      })
+      const marker = new mapboxgl.Marker({ element: el, anchor: 'center' }).setLngLat([p.lon, p.lat]).addTo(map.current!)
+      marcadoresPontos.current.push({ categoria: p.categoria, el, marker })
+      limites.extend([p.lon, p.lat])
+    })
+    map.current.fitBounds(limites, { padding: 48, duration: 0, maxZoom: 13 })
+  }, [pontos, mapReady])
+
+  // Filtro por categoria: esconde os losangos das outras categorias.
+  useEffect(() => {
+    marcadoresPontos.current.forEach(m => {
+      m.el.style.display = filtro === 'todos' || filtro === m.categoria ? '' : 'none'
+    })
+  }, [filtro, mapReady])
 
   const VERB_LABEL: Record<string, string> = { come: 'Restaurantes', fique: 'Hospedagem', passeie: 'Passeios' }
   const VERB_TO: Record<string, string>    = { come: '/come', fique: '/fique', passeie: '/passeie' }
@@ -184,9 +248,72 @@ export function ExploreMap({ businesses }: ExploreMapProps) {
           {noGeo.length > 0 && <span className="text-[#737373] ml-1.5">· {noGeo.length} sem localização</span>}
         </div>
 
+        {/* Filtro dos pontos da regiao */}
+        {textos && pontos.length > 0 && (
+          <div role="group" aria-label={textos.filtro_titulo} className="absolute top-3 left-14 right-3 flex gap-2 overflow-x-auto pb-1">
+            {(['todos', ...CATEGORIAS_PONTO] as const).map(c => {
+              const ativo = filtro === c
+              return (
+                <button
+                  key={c}
+                  type="button"
+                  aria-pressed={ativo}
+                  onClick={() => { setFiltro(c); setPontoAberto(null) }}
+                  className={`flex-shrink-0 flex items-center gap-1.5 min-h-9 text-xs font-semibold px-3 py-1.5 rounded-full border shadow-sm transition-colors motion-reduce:transition-none ${ativo ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]' : 'bg-white/95 text-[#1A1A1A] border-[#E8E4DF] hover:border-teal'}`}
+                >
+                  {c !== 'todos' && <span aria-hidden="true" className="w-2.5 h-2.5 rotate-45 rounded-[2px]" style={{ background: COR_CATEGORIA[c] }} />}
+                  {c === 'todos' ? textos.todos : textos.categorias[c]}
+                </button>
+              )
+            })}
+          </div>
+        )}
+
+        {/* Cartao do ponto de referencia */}
+        {pontoAberto && textos && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-80 max-w-[calc(100%-2rem)] bg-white rounded-2xl shadow-xl border border-[#E8E4DF] p-4 z-10">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <div
+                  className="inline-block text-xs font-semibold px-2 py-0.5 rounded-full mb-1"
+                  style={{ background: COR_CATEGORIA[pontoAberto.categoria] + '18', color: COR_CATEGORIA[pontoAberto.categoria] }}
+                >
+                  {textos.categorias[pontoAberto.categoria]}
+                </div>
+                <div className="font-semibold text-[#1A1A1A] leading-tight">{pontoAberto.nome}</div>
+                <div className="text-xs text-[#737373] mt-0.5">{pontoAberto.municipio}</div>
+                <p className="text-sm text-[#3D3D3D] mt-2 leading-snug">{pontoAberto.descricao[lang]}</p>
+              </div>
+              <button type="button" onClick={() => setPontoAberto(null)} aria-label={textos.fechar} className="p-1.5 -m-1.5 text-[#737373] hover:text-[#1A1A1A] flex-shrink-0">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <a
+                href={linkComoChegar(pontoAberto)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold bg-teal text-white rounded-xl px-3 py-2 hover:bg-teal-dark transition-colors"
+              >
+                <Navigation aria-hidden="true" className="w-3.5 h-3.5" />{textos.como_chegar}
+              </a>
+              {pontoAberto.mareSlug && (
+                <Link href={lp(`/explore/mares/${pontoAberto.mareSlug}`)} className="inline-flex items-center gap-1.5 text-sm font-semibold border border-teal text-teal rounded-xl px-3 py-2 hover:bg-teal/10 transition-colors">
+                  <Waves aria-hidden="true" className="w-3.5 h-3.5" />{textos.ver_mare}
+                </Link>
+              )}
+              {pontoAberto.site && (
+                <a href={pontoAberto.site} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold border border-[#E8E4DF] text-[#1A1A1A] rounded-xl px-3 py-2 hover:border-teal transition-colors">
+                  <ExternalLink aria-hidden="true" className="w-3.5 h-3.5" />{textos.site}
+                </a>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Popup card */}
         {popup && (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 w-72 max-w-[calc(100%-2rem)] bg-white rounded-2xl shadow-xl border border-[#E8E4DF] overflow-hidden z-10">
+          <div className="absolute top-14 left-1/2 -translate-x-1/2 w-72 max-w-[calc(100%-2rem)] bg-white rounded-2xl shadow-xl border border-[#E8E4DF] overflow-hidden z-10">
             <div className="h-32 overflow-hidden">
               <BusinessCover
                 coverUrl={popup.cover_url}

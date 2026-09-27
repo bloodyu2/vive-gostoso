@@ -169,11 +169,8 @@ export function webSiteSchema(): Record<string, unknown> {
     '@type': 'WebSite',
     name: SITE_NAME,
     url: BASE_URL,
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: `${BASE_URL}/explore?q={search_term_string}`,
-      'query-input': 'required name=search_term_string',
-    },
+    /* Sem SearchAction: a busca do site e um modal, nao ha URL de resultado.
+       A SearchAction antiga apontava para /explore?q=, que nunca leu o q. */
   }
 }
 
@@ -213,7 +210,9 @@ export function touristDestinationSchema(): Record<string, unknown> {
     ['Onde comer em São Miguel do Gostoso', '/come'],
     ['Onde ficar em São Miguel do Gostoso', '/fique'],
     ['Passeios em São Miguel do Gostoso', '/passeie'],
-    ['Mapa de São Miguel do Gostoso', '/explore'],
+    ['O que fazer em São Miguel do Gostoso', '/explore'],
+    ['Mapa de São Miguel do Gostoso', '/explore/mapa'],
+    ['Tábua de marés de São Miguel do Gostoso', '/explore/mares'],
     ['Eventos em São Miguel do Gostoso', '/participe'],
   ]
   return {

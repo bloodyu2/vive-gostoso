@@ -1,8 +1,8 @@
 {
   "meta": {
     "home": {
-      "title": "São Miguel do Gostoso: where to eat, stay and explore",
-      "description": "City guide with restaurants, guesthouses, tours, a map, events and services, all listed directly by people who work here, no booking fees or commissions."
+      "title": "São Miguel do Gostoso: things to do, eat and stay",
+      "description": "São Miguel do Gostoso guide made in town: restaurants, guesthouses, tours, today's tide on the beaches, a map, events and services, with no booking fees."
     },
     "come": {
       "title": "Restaurants in São Miguel do Gostoso: where to eat",
@@ -17,8 +17,8 @@
       "description": "Buggy rides, boat trips, kitesurf lessons and hikes around the region, with direct contact for the local guide or instructor running each tour."
     },
     "explore": {
-      "title": "Map of São Miguel do Gostoso",
-      "description": "Interactive map with every business listed in town, so you can find restaurants, guesthouses, tours and services in the right neighborhood fast."
+      "title": "Things to do in São Miguel do Gostoso: beaches, tides",
+      "description": "Everything to explore in São Miguel do Gostoso: the tide table with today's tide, the beaches, the map of the region, tours, events and transfers."
     },
     "participe": {
       "title": "Events in São Miguel do Gostoso: 2026 calendar",
@@ -49,8 +49,12 @@
       "description": "Explains the verified seal, the rules for a business to join or leave the list, and who pays the bills to keep this site online and running smoothly."
     },
     "mares": {
-      "title": "São Miguel do Gostoso tide table",
+      "title": "São Miguel do Gostoso tide table: today's tide",
       "description": "Today's tide and the next 7 days on the beaches of Gostoso, Touros and Pedra Grande: times, heights, daily curve, moon phase and what the tide changes."
+    },
+    "mapa": {
+      "title": "Map of São Miguel do Gostoso, beaches and region",
+      "description": "Map of São Miguel do Gostoso with the beaches, local businesses and landmarks of the region, from Pedra Grande to Touros, with directions to each."
     }
   },
   "nav": {
@@ -79,7 +83,9 @@
     "cadastre_negocio": "List your business",
     "negocios": "Business",
     "mares": "TIDES",
-    "mares_sub": "Tide table"
+    "mares_sub": "Tide table",
+    "explore_sub": "Beaches, tides and map",
+    "mapa": "MAP"
   },
   "home": {
     "eyebrow": "São Miguel do Gostoso · RN",
@@ -1522,5 +1528,96 @@
     "distancia_item": "{praia}: {estacao}, {km} km",
     "com_reserva": "{dia} with data from {estacao}",
     "dados_do": "Data from {estacao}"
+  },
+  "vitrine": {
+    "titulo": "What you can do here",
+    "sub": "Each part of the site, in one line.",
+    "mares_hoje": "Today at Cardeiro",
+    "mares_ver": "See the full tide table",
+    "abrir": "Open",
+    "itens": {
+      "mares": {
+        "titulo": "Tide table",
+        "linha": "Check today's tide on {n} beaches"
+      },
+      "come": {
+        "titulo": "Where to eat",
+        "linha": "Find restaurants, bars and snack bars in town"
+      },
+      "fique": {
+        "titulo": "Where to stay",
+        "linha": "Compare guesthouses and houses near each beach"
+      },
+      "passeie": {
+        "titulo": "Tours",
+        "linha": "Pick buggy, boat, kite and hiking tours"
+      },
+      "explore": {
+        "titulo": "Explore",
+        "linha": "Beaches, tides and the regional map in one place"
+      },
+      "participe": {
+        "titulo": "Events",
+        "linha": "See the parties, festivals and the town's calendar"
+      },
+      "conheca": {
+        "titulo": "Discover",
+        "linha": "Read the story of Gostoso and its beaches"
+      },
+      "apoie": {
+        "titulo": "Support",
+        "linha": "Follow the town fund and help keep it going"
+      },
+      "contrate": {
+        "titulo": "Hire",
+        "linha": "Find local professionals and job openings"
+      },
+      "transfer": {
+        "titulo": "Transfer",
+        "linha": "Find a transfer to get here and around the region"
+      },
+      "blog": {
+        "titulo": "Blog",
+        "linha": "Read tips and stories from people who live in Gostoso"
+      }
+    }
+  },
+  "explore_indice": {
+    "h1": "Things to do in São Miguel do Gostoso",
+    "intro": "From here you reach everything to explore in town and around it: today's tide, the beaches, the map, tours and the calendar.",
+    "trilha_inicio": "Home",
+    "praias_titulo": "Beaches of São Miguel do Gostoso and the region",
+    "praias_linha": "Today's tide on each beach of the table, from Pedra Grande to Touros.",
+    "outros_titulo": "More to explore",
+    "mapa_titulo": "Regional map",
+    "mapa_linha": "Beaches, places to stay and landmarks, with directions to each one.",
+    "passeie_linha": "Buggy, boat, kite and hiking with people who work in town.",
+    "conheca_linha": "The town's story and what each beach has.",
+    "participe_linha": "Parties, festivals and what is on this week.",
+    "transfer_linha": "Airport transfers and rides between the beaches.",
+    "trilha_explore": "Explore",
+    "trilha_mapa": "Map"
+  },
+  "mapa": {
+    "h1": "Map of São Miguel do Gostoso and the region",
+    "intro": "The tide table beaches, places to stay and landmarks from Pedra Grande to Touros, along with the businesses listed in town. Tap a point to see its description and directions.",
+    "filtro_titulo": "Show on the map",
+    "todos": "All",
+    "categorias": {
+      "praias": "Beaches",
+      "hospedagem": "Places to stay and developments",
+      "historicos": "Landmarks"
+    },
+    "como_chegar": "Directions",
+    "ver_mare": "Today's tide",
+    "site": "Official site",
+    "lista_titulo": "Points on the map",
+    "fonte": "Location source",
+    "mapa_aria": "Map with the points of the region",
+    "fechar": "Close"
+  },
+  "blog_mares": {
+    "titulo": "Tides for the beaches in this post",
+    "item": "Today's tide: {{praia}}"
   }
 }

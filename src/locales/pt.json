@@ -1,8 +1,8 @@
 {
   "meta": {
     "home": {
-      "title": "São Miguel do Gostoso: onde comer, ficar e passear",
-      "description": "Guia da cidade com restaurantes, pousadas, passeios, mapa, eventos e serviços, tudo cadastrado direto por quem trabalha aqui, sem comissão de reserva."
+      "title": "São Miguel do Gostoso: o que fazer, onde comer e ficar",
+      "description": "Guia de São Miguel do Gostoso feito na cidade: restaurantes, pousadas, passeios, maré de hoje nas praias, mapa, eventos e serviços, sem comissão de reserva."
     },
     "come": {
       "title": "Restaurantes em São Miguel do Gostoso: onde comer",
@@ -17,8 +17,8 @@
       "description": "Passeios de buggy, barco, aulas de kitesurf e trilhas pela região, com contato direto do guia ou instrutor responsável por cada passeio oferecido."
     },
     "explore": {
-      "title": "Mapa de São Miguel do Gostoso",
-      "description": "Mapa interativo com todos os negócios cadastrados na cidade, para localizar restaurantes, pousadas, passeios e serviços de cada bairro antes de sair de casa."
+      "title": "O que fazer em São Miguel do Gostoso: praias e marés",
+      "description": "Tudo o que dá para explorar em São Miguel do Gostoso: a tábua de marés com a maré de hoje, as praias, o mapa da região, os passeios e os eventos."
     },
     "participe": {
       "title": "Eventos em São Miguel do Gostoso: agenda 2026",
@@ -49,8 +49,12 @@
       "description": "Explica o selo de verificado, os critérios para um negócio entrar ou sair da lista, e quem paga as contas do site e como esse dinheiro é usado."
     },
     "mares": {
-      "title": "Tábua de marés de São Miguel do Gostoso",
+      "title": "Tábua de marés de São Miguel do Gostoso: maré hoje",
       "description": "Maré de hoje e dos próximos 7 dias nas praias de Gostoso, Touros e Pedra Grande: horários, alturas, curva do dia, fase da lua e o que a maré muda em cada praia."
+    },
+    "mapa": {
+      "title": "Mapa de São Miguel do Gostoso, praias e região",
+      "description": "Mapa de São Miguel do Gostoso com as praias, os negócios da cidade e pontos da região, de Pedra Grande a Touros, com rota para chegar em cada um."
     }
   },
   "nav": {
@@ -79,7 +83,9 @@
     "cadastre_negocio": "Cadastre seu negócio",
     "negocios": "Negócios",
     "mares": "MARÉS",
-    "mares_sub": "Tábua de marés"
+    "mares_sub": "Tábua de marés",
+    "explore_sub": "Praias, marés e mapa",
+    "mapa": "MAPA"
   },
   "home": {
     "eyebrow": "São Miguel do Gostoso · RN",
@@ -1522,5 +1528,96 @@
     "distancia_item": "{praia}: {estacao}, {km} km",
     "com_reserva": "{dia} com dados do {estacao}",
     "dados_do": "Dados do {estacao}"
+  },
+  "vitrine": {
+    "titulo": "O que você resolve por aqui",
+    "sub": "Cada parte do site, em uma linha.",
+    "mares_hoje": "Hoje no Cardeiro",
+    "mares_ver": "Ver a tábua completa",
+    "abrir": "Abrir",
+    "itens": {
+      "mares": {
+        "titulo": "Tábua de marés",
+        "linha": "Veja a maré de hoje em {n} praias"
+      },
+      "come": {
+        "titulo": "Onde comer",
+        "linha": "Encontre restaurantes, bares e lanchonetes da cidade"
+      },
+      "fique": {
+        "titulo": "Onde ficar",
+        "linha": "Compare pousadas e casas perto de cada praia"
+      },
+      "passeie": {
+        "titulo": "Passeios",
+        "linha": "Escolha passeios de buggy, barco, kite e trilha"
+      },
+      "explore": {
+        "titulo": "Explore",
+        "linha": "Praias, marés e o mapa da região num lugar só"
+      },
+      "participe": {
+        "titulo": "Eventos",
+        "linha": "Veja as festas, os festivais e a agenda da cidade"
+      },
+      "conheca": {
+        "titulo": "Conheça",
+        "linha": "Leia a história de Gostoso e das suas praias"
+      },
+      "apoie": {
+        "titulo": "Apoie",
+        "linha": "Acompanhe o fundo da cidade e ajude a mantê-lo"
+      },
+      "contrate": {
+        "titulo": "Contrate",
+        "linha": "Ache profissionais e vagas de trabalho na cidade"
+      },
+      "transfer": {
+        "titulo": "Transfer",
+        "linha": "Encontre transfer para chegar e circular pela região"
+      },
+      "blog": {
+        "titulo": "Blog",
+        "linha": "Leia dicas e histórias de quem vive em Gostoso"
+      }
+    }
+  },
+  "explore_indice": {
+    "h1": "O que fazer em São Miguel do Gostoso",
+    "intro": "Daqui você chega a tudo o que dá para explorar na cidade e na região: a maré de hoje, as praias, o mapa, os passeios e a agenda.",
+    "trilha_inicio": "Início",
+    "praias_titulo": "Praias de São Miguel do Gostoso e região",
+    "praias_linha": "A maré de hoje em cada praia da tábua, de Pedra Grande a Touros.",
+    "outros_titulo": "Mais para explorar",
+    "mapa_titulo": "Mapa da região",
+    "mapa_linha": "Praias, hospedagens e pontos históricos, com rota para chegar em cada um.",
+    "passeie_linha": "Buggy, barco, kite e trilha com quem trabalha na cidade.",
+    "conheca_linha": "A história da cidade e o que tem em cada praia.",
+    "participe_linha": "Festas, festivais e o que acontece nesta semana.",
+    "transfer_linha": "Transfer do aeroporto e entre as praias da região.",
+    "trilha_explore": "Explore",
+    "trilha_mapa": "Mapa"
+  },
+  "mapa": {
+    "h1": "Mapa de São Miguel do Gostoso e região",
+    "intro": "As praias da tábua de marés, hospedagens e pontos históricos de Pedra Grande a Touros, junto com os negócios cadastrados na cidade. Toque num ponto para ver a descrição e a rota.",
+    "filtro_titulo": "Mostrar no mapa",
+    "todos": "Todos",
+    "categorias": {
+      "praias": "Praias",
+      "hospedagem": "Hospedagem e empreendimentos",
+      "historicos": "Pontos históricos"
+    },
+    "como_chegar": "Como chegar",
+    "ver_mare": "Maré de hoje",
+    "site": "Site oficial",
+    "lista_titulo": "Pontos no mapa",
+    "fonte": "Fonte da localização",
+    "mapa_aria": "Mapa com os pontos da região",
+    "fechar": "Fechar"
+  },
+  "blog_mares": {
+    "titulo": "Maré das praias deste texto",
+    "item": "Maré de hoje: {{praia}}"
   }
 }

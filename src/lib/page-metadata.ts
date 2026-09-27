@@ -29,10 +29,19 @@ const CAMINHOS: Record<RotaPublica, string> = {
   sobre: '/sobre',
   transparencia: '/transparencia',
   mares: '/explore/mares',
+  mapa: '/explore/mapa',
 }
 
 const PREFIXO: Record<Locale, string> = { pt: '', en: '/en', es: '/es' }
 const OG_LOCALE: Record<Locale, string> = { pt: 'pt_BR', en: 'en_US', es: 'es_ES' }
+
+/** Rotas com imagem de compartilhamento propria (app/api/og/[rota]). As
+ *  outras usam a imagem geral do site. */
+export const ROTAS_COM_OG = ['home', 'explore'] as const
+
+export function imagemOg(rota: RotaPublica, lang: Locale): string {
+  return (ROTAS_COM_OG as readonly string[]).includes(rota) ? `${BASE_URL}/api/og/${rota}?lang=${lang}` : OG_IMAGE
+}
 
 export function urlDaRota(rota: RotaPublica, lang: Locale): string {
   return `${BASE_URL}${PREFIXO[lang]}${CAMINHOS[rota]}`
@@ -49,6 +58,7 @@ export function buildPageMetadata(rota: RotaPublica, lang: string): Metadata {
   if (!isLocale(lang)) notFound()
   const textos = DICIONARIOS[lang].meta[rota]
   const url = urlDaRota(rota, lang)
+  const imagem = imagemOg(rota, lang)
 
   return {
     /* `absolute` e nao string simples: app/layout.tsx define
@@ -75,13 +85,13 @@ export function buildPageMetadata(rota: RotaPublica, lang: string): Metadata {
       siteName: SITE_NAME,
       locale: OG_LOCALE[lang],
       type: 'website',
-      images: [{ url: OG_IMAGE, width: 1200, height: 630 }],
+      images: [{ url: imagem, width: 1200, height: 630, alt: textos.title }],
     },
     twitter: {
       card: 'summary_large_image',
       title: textos.title,
       description: textos.description,
-      images: [OG_IMAGE],
+      images: [imagem],
     },
   }
 }
