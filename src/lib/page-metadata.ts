@@ -28,6 +28,7 @@ const CAMINHOS: Record<RotaPublica, string> = {
   blog: '/blog',
   sobre: '/sobre',
   transparencia: '/transparencia',
+  mares: '/explore/mares',
 }
 
 const PREFIXO: Record<Locale, string> = { pt: '', en: '/en', es: '/es' }
