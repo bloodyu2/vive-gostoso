@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { Fraunces, Plus_Jakarta_Sans } from 'next/font/google'
 import { Providers } from '@/components/providers'
 import { getLocale } from 'next-intl/server'
 
@@ -15,6 +16,24 @@ import '@/styles/globals.css'
  *  regiao e a que o leitor de tela usa para escolher a voz. `en` e `es` ficam
  *  sem regiao: o site nao se dirige a um pais especifico nessas duas. */
 const LANG_HTML: Record<string, string> = { pt: 'pt-BR', en: 'en', es: 'es' }
+
+/* KAN-463: as duas familias servidas pelo proprio site (next/font), com preload.
+   Antes vinham do Google Fonts: uma folha que bloqueava a pintura (0,96 s no
+   Lighthouse celular) e os arquivos so eram pedidos depois dela, num segundo
+   dominio. Mesmas familias, eixos e estilos de antes. `subsets` so decide o que
+   entra em preload: os outros recortes continuam declarados por unicode-range. */
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  axes: ['opsz'],
+  display: 'swap',
+  variable: '--font-fraunces',
+})
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jakarta',
+})
 
 export const viewport: Viewport = {
   themeColor: '#0D7C7C',
@@ -73,7 +92,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const nonce = await getNonce()
 
   return (
-    <html lang={LANG_HTML[lang] ?? lang} suppressHydrationWarning>
+    <html lang={LANG_HTML[lang] ?? lang} className={`${fraunces.variable} ${jakarta.variable}`} suppressHydrationWarning>
       <head>
         {/* Antes de qualquer outra coisa no <head>: aplica a classe do tema
             escuro antes do primeiro paint, para quem usa escuro nao ver um
@@ -82,12 +101,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             suppressHydrationWarning porque este script muta a classe dele de
             proposito antes da hidratacao. */}
         <script nonce={nonce} dangerouslySetInnerHTML={{ __html: SCRIPT_ANTI_FOUC }} />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
-        rel="stylesheet"
-      />
       <link rel="apple-touch-startup-image" href="/splash/splash-1170x2532.png" />
       <GTMScript nonce={nonce} />
     </head>

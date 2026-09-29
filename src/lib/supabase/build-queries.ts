@@ -5,11 +5,15 @@ import { createClient } from '@supabase/supabase-js'
 import type { Business, GostosoEvent, BlogPost } from '@/types/database'
 import type { Professional } from '@/types/professional'
 import { PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY } from './business-columns'
+import { fetchDaVitrine } from './publico'
 
+/* KAN-463: as mesmas leituras rodam a cada visita (o HTML e dinamico pelo nonce
+   de CSP), entao a resposta fica no cache de dados do Next, com a tag da vitrine. */
 function getBuildClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { auth: { persistSession: false, autoRefreshToken: false }, global: { fetch: fetchDaVitrine() } }
   )
 }
 

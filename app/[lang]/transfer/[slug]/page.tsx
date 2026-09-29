@@ -1,14 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { createClient } from '@supabase/supabase-js'
 import TransferDetailPage from '@/views/TransferDetailPage'
+import { clientePublico } from '@/lib/supabase/publico'
 
 export const revalidate = 3600
 
-const supabaseServer = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+const supabaseServer = clientePublico()
 
 async function getTransfer(slug: string) {
   const { data } = await supabaseServer

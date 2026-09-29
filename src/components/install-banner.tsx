@@ -86,7 +86,7 @@ export function InstallBanner() {
         <div style={{ flex: 1, minWidth: 0 }}>
           <p style={{
             margin: 0,
-            fontFamily: 'Fraunces, serif',
+            fontFamily: 'var(--font-display)',
             fontWeight: 700,
             fontSize: '15px',
             lineHeight: 1.2,
@@ -96,7 +96,7 @@ export function InstallBanner() {
           </p>
           <p style={{
             margin: '2px 0 0',
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontFamily: 'var(--font-sans)',
             fontSize: '12px',
             color: 'rgba(255,255,255,0.82)',
             lineHeight: 1.3,
@@ -114,7 +114,7 @@ export function InstallBanner() {
             border: 'none',
             borderRadius: '8px',
             padding: '8px 14px',
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontFamily: 'var(--font-sans)',
             fontWeight: 600,
             fontSize: '13px',
             cursor: 'pointer',

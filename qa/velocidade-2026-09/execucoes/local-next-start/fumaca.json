@@ -1,0 +1,1044 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\Victor Lima\\Desktop\\sites\\gostoso\\wt-kan-463\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "-c",
+      "C:\\Users\\Victor Lima\\Desktop\\sites\\gostoso\\wt-kan-463\\qa\\velocidade-2026-09\\playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\Victor Lima\\Desktop\\sites\\gostoso\\wt-kan-463\\qa\\velocidade-2026-09\\playwright.config.ts",
+    "rootDir": "C:/Users/Victor Lima/Desktop/sites/gostoso/wt-kan-463/qa/velocidade-2026-09",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/Victor Lima/Desktop/sites/gostoso/wt-kan-463/qa/velocidade-2026-09/execucoes/local-next-start/fumaca-artefatos",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/Victor Lima/Desktop/sites/gostoso/wt-kan-463/qa/velocidade-2026-09",
+        "testIgnore": [],
+        "testMatch": [
+          "fumaca.spec.ts"
+        ],
+        "timeout": 90000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\Victor Lima\\Desktop\\sites\\gostoso\\wt-kan-463\\qa\\velocidade-2026-09\\execucoes\\local-next-start\\fumaca.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 3,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "fumaca.spec.ts",
+      "file": "fumaca.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "rastreio",
+          "file": "fumaca.spec.ts",
+          "line": 72,
+          "column": 6,
+          "specs": [
+            {
+              "title": "home carrega o gtag, manda consent default e o page_view do GA4",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1193,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:28.323Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-8caa66daa03fb02e7666",
+              "file": "fumaca.spec.ts",
+              "line": 73,
+              "column": 3
+            },
+            {
+              "title": "aceitar cookies manda consent update",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1176,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:29.636Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-40ce79cc777328224964",
+              "file": "fumaca.spec.ts",
+              "line": 85,
+              "column": 3
+            },
+            {
+              "title": "navegacao no cliente manda outro page_view (PageViewTracker)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8127,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:30.822Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-b62485d70e335230d503",
+              "file": "fumaca.spec.ts",
+              "line": 92,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "cabecalho, menu e idioma",
+          "file": "fumaca.spec.ts",
+          "line": 104,
+          "column": 6,
+          "specs": [
+            {
+              "title": "menu do desktop leva aos modulos",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1103,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:38.962Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-25d864dc0ae66fbdbaaf",
+              "file": "fumaca.spec.ts",
+              "line": 105,
+              "column": 3
+            },
+            {
+              "title": "menu do celular abre a gaveta com os links",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1278,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:40.075Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-ff8e93f53fa5f6da8d83",
+              "file": "fumaca.spec.ts",
+              "line": 113,
+              "column": 3
+            },
+            {
+              "title": "troca de idioma: /en e /es servem o idioma certo no HTML",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 875,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:41.362Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-3f3142f439a468c6de1e",
+              "file": "fumaca.spec.ts",
+              "line": 120,
+              "column": 3
+            },
+            {
+              "title": "seletor de idioma leva a /en",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1137,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:42.246Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-328e035560a97203f3a3",
+              "file": "fumaca.spec.ts",
+              "line": 130,
+              "column": 3
+            },
+            {
+              "title": "busca abre e acha negocio",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1607,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:43.393Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-e1ccecaafa3a692e83f9",
+              "file": "fumaca.spec.ts",
+              "line": 141,
+              "column": 3
+            },
+            {
+              "title": "tema escuro alterna",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1168,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:45.011Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-b7ed81ed8f0c78549fcd",
+              "file": "fumaca.spec.ts",
+              "line": 151,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "WhatsApp",
+          "file": "fumaca.spec.ts",
+          "line": 159,
+          "column": 6,
+          "specs": [
+            {
+              "title": "botao oficial do cabecalho: numero certo, mensagem e evento whatsapp_click",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1296,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:46.194Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-fa46bb66c3cbb48d41ce",
+              "file": "fumaca.spec.ts",
+              "line": 160,
+              "column": 3
+            },
+            {
+              "title": "pagina de negocio: link de WhatsApp e evento contato_negocio_click",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1690,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:47.499Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-4ade3d8800ad0f953407",
+              "file": "fumaca.spec.ts",
+              "line": 173,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "listas, filtros e mapa",
+          "file": "fumaca.spec.ts",
+          "line": 200,
+          "column": 6,
+          "specs": [
+            {
+              "title": "/come lista negocios no HTML servido",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 40,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:49.198Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-83d4370f348a58de2af0",
+              "file": "fumaca.spec.ts",
+              "line": 202,
+              "column": 5
+            },
+            {
+              "title": "/fique lista negocios no HTML servido",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 50,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:49.246Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-aef6bd1d0d949799a10d",
+              "file": "fumaca.spec.ts",
+              "line": 202,
+              "column": 5
+            },
+            {
+              "title": "/passeie lista negocios no HTML servido",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 30,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:49.304Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-33f720574e6e9ced0331",
+              "file": "fumaca.spec.ts",
+              "line": 202,
+              "column": 5
+            },
+            {
+              "title": "filtro de /come muda a lista",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 575,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:49.340Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-953e88b22448c78983cf",
+              "file": "fumaca.spec.ts",
+              "line": 210,
+              "column": 3
+            },
+            {
+              "title": "mapa Mapbox desenha e a lista de pontos existe",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1243,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:49.922Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-2530e2c2512fe779c573",
+              "file": "fumaca.spec.ts",
+              "line": 228,
+              "column": 3
+            },
+            {
+              "title": "explore e mares mostram a tabua",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1573,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:51.177Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-ed1684f4bafdcbc26fdc",
+              "file": "fumaca.spec.ts",
+              "line": 235,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "home",
+          "file": "fumaca.spec.ts",
+          "line": 246,
+          "column": 6,
+          "specs": [
+            {
+              "title": "vitrine com numeros e setas no celular",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1136,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:52.761Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-8e651709aaffe57db993",
+              "file": "fumaca.spec.ts",
+              "line": 247,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "formularios (envio interceptado)",
+          "file": "fumaca.spec.ts",
+          "line": 259,
+          "column": 6,
+          "specs": [
+            {
+              "title": "transfer: validacao e payload do cadastro",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1258,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:53.906Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-ef20b20e0343122f4bd7",
+              "file": "fumaca.spec.ts",
+              "line": 260,
+              "column": 3
+            },
+            {
+              "title": "participe: formulario de evento envia payload certo (interceptado)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 982,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:55.172Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-cb3da9b09fc66826fdaf",
+              "file": "fumaca.spec.ts",
+              "line": 288,
+              "column": 3
+            },
+            {
+              "title": "contrate: formulario de servico valida campos obrigatorios",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 928,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:56.162Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-2e84ec02876da9a06e0a",
+              "file": "fumaca.spec.ts",
+              "line": 308,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "apoie e checkout",
+          "file": "fumaca.spec.ts",
+          "line": 322,
+          "column": 6,
+          "specs": [
+            {
+              "title": "doacao chega ate o Stripe com o valor certo (interceptado)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1049,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:57.100Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-4bf00a6fd948bb7fb1fe",
+              "file": "fumaca.spec.ts",
+              "line": 323,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "area restrita",
+          "file": "fumaca.spec.ts",
+          "line": 340,
+          "column": 6,
+          "specs": [
+            {
+              "title": "/cadastre mostra a tela de login, sem credencial",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 869,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:58.158Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-1132b5ab16cae8177fff",
+              "file": "fumaca.spec.ts",
+              "line": 341,
+              "column": 3
+            },
+            {
+              "title": "/cadastre/admin sem sessao nao mostra o painel",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3951,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:03:59.035Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-9d57bb329567b89f552f",
+              "file": "fumaca.spec.ts",
+              "line": 347,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "blog e bio",
+          "file": "fumaca.spec.ts",
+          "line": 356,
+          "column": 6,
+          "specs": [
+            {
+              "title": "blog lista posts e o post abre com JSON-LD",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 865,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:04:02.993Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-c9386a6f52de944a82e6",
+              "file": "fumaca.spec.ts",
+              "line": 357,
+              "column": 3
+            },
+            {
+              "title": "/bio: noindex e UTM em todo link interno",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 28,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-29T03:04:03.867Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "332ef0eeecc9c27b1355-39d1bf77f4b0ab205ddb",
+              "file": "fumaca.spec.ts",
+              "line": 367,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-29T03:03:27.692Z",
+    "duration": 36454.899999999994,
+    "expected": 26,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

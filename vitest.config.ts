@@ -8,6 +8,10 @@ export default defineConfig({
     include: ['src/**/*.test.ts'],
   },
   resolve: {
-    alias: { '@': path.resolve(import.meta.dirname, './src') },
+    alias: {
+      '@': path.resolve(import.meta.dirname, './src'),
+      // KAN-463: next/font so existe dentro do compilador do Next.
+      'next/font/google': path.resolve(import.meta.dirname, './src/test/next-font-google.ts'),
+    },
   },
 })

@@ -55,7 +55,7 @@ export function BusinessGrid({ businesses, loading, view = 'grid', onResetFilter
   if (view === 'list') {
     return (
       <div className="flex flex-col gap-4">
-        {businesses.map(b => <BusinessCard key={b.id} business={b} view="list" />)}
+        {businesses.map((b, i) => <BusinessCard key={b.id} business={b} view="list" acimaDaDobra={i < 2} />)}
       </div>
     )
   }
@@ -63,14 +63,14 @@ export function BusinessGrid({ businesses, loading, view = 'grid', onResetFilter
   if (view === 'gallery') {
     return (
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-        {businesses.map(b => <BusinessCard key={b.id} business={b} view="gallery" />)}
+        {businesses.map((b, i) => <BusinessCard key={b.id} business={b} view="gallery" acimaDaDobra={i < 4} />)}
       </div>
     )
   }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {businesses.map(b => <BusinessCard key={b.id} business={b} view="grid" />)}
+      {businesses.map((b, i) => <BusinessCard key={b.id} business={b} view="grid" acimaDaDobra={i < 3} />)}
     </div>
   )
 }

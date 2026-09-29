@@ -1,0 +1,254 @@
+[
+  {
+    "caminho": "/explore/mares/cardeiro",
+    "campo": "description",
+    "antes": "Maré de hoje: alta 5h47 (2,57 m), baixa 12h01 (0,23 m), alta 17h59 (2,53 m). Maré de hoje e dos próximos 7 dias na Praia do Cardeiro, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua.",
+    "depois": "Maré de hoje: baixa 0h21 (0,11 m), alta 6h23 (2,41 m), baixa 12h44 (0,24 m), alta 18h34 (2,37 m). Maré de hoje e dos próximos 7 dias na Praia do Cardeiro, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua."
+  },
+  {
+    "caminho": "/en/explore/mares/cardeiro",
+    "campo": "description",
+    "antes": "Today's tide: high 5h47 (2.57 m), low 12h01 (0.23 m), high 17h59 (2.53 m). Today's tide and the next 7 days at Praia do Cardeiro, in São Miguel do Gostoso: times, heights, the day's curve and moon phase.",
+    "depois": "Today's tide: low 0h21 (0.11 m), high 6h23 (2.41 m), low 12h44 (0.24 m), high 18h34 (2.37 m). Today's tide and the next 7 days at Praia do Cardeiro, in São Miguel do Gostoso: times, heights, the day's curve and moon phase."
+  },
+  {
+    "caminho": "/es/explore/mares/cardeiro",
+    "campo": "description",
+    "antes": "Marea de hoy: alta 5h47 (2,57 m), baja 12h01 (0,23 m), alta 17h59 (2,53 m). Marea de hoy y de los próximos 7 días en Praia do Cardeiro, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar.",
+    "depois": "Marea de hoy: baja 0h21 (0,11 m), alta 6h23 (2,41 m), baja 12h44 (0,24 m), alta 18h34 (2,37 m). Marea de hoy y de los próximos 7 días en Praia do Cardeiro, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar."
+  },
+  {
+    "caminho": "/explore/mares/xepa",
+    "campo": "description",
+    "antes": "Maré de hoje: alta 5h47 (2,57 m), baixa 12h01 (0,23 m), alta 17h59 (2,53 m). Maré de hoje e dos próximos 7 dias na Praia da Xêpa, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua.",
+    "depois": "Maré de hoje: baixa 0h21 (0,11 m), alta 6h23 (2,41 m), baixa 12h44 (0,24 m), alta 18h34 (2,37 m). Maré de hoje e dos próximos 7 dias na Praia da Xêpa, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua."
+  },
+  {
+    "caminho": "/en/explore/mares/xepa",
+    "campo": "description",
+    "antes": "Today's tide: high 5h47 (2.57 m), low 12h01 (0.23 m), high 17h59 (2.53 m). Today's tide and the next 7 days at Praia da Xêpa, in São Miguel do Gostoso: times, heights, the day's curve and moon phase.",
+    "depois": "Today's tide: low 0h21 (0.11 m), high 6h23 (2.41 m), low 12h44 (0.24 m), high 18h34 (2.37 m). Today's tide and the next 7 days at Praia da Xêpa, in São Miguel do Gostoso: times, heights, the day's curve and moon phase."
+  },
+  {
+    "caminho": "/es/explore/mares/xepa",
+    "campo": "description",
+    "antes": "Marea de hoy: alta 5h47 (2,57 m), baja 12h01 (0,23 m), alta 17h59 (2,53 m). Marea de hoy y de los próximos 7 días en Praia da Xêpa, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar.",
+    "depois": "Marea de hoy: baja 0h21 (0,11 m), alta 6h23 (2,41 m), baja 12h44 (0,24 m), alta 18h34 (2,37 m). Marea de hoy y de los próximos 7 días en Praia da Xêpa, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar."
+  },
+  {
+    "caminho": "/explore/mares/maceio",
+    "campo": "description",
+    "antes": "Maré de hoje: alta 5h47 (2,57 m), baixa 12h01 (0,23 m), alta 17h59 (2,53 m). Maré de hoje e dos próximos 7 dias na Praia do Maceió, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua.",
+    "depois": "Maré de hoje: baixa 0h21 (0,11 m), alta 6h23 (2,41 m), baixa 12h44 (0,24 m), alta 18h34 (2,37 m). Maré de hoje e dos próximos 7 dias na Praia do Maceió, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua."
+  },
+  {
+    "caminho": "/en/explore/mares/maceio",
+    "campo": "description",
+    "antes": "Today's tide: high 5h47 (2.57 m), low 12h01 (0.23 m), high 17h59 (2.53 m). Today's tide and the next 7 days at Praia do Maceió, in São Miguel do Gostoso: times, heights, the day's curve and moon phase.",
+    "depois": "Today's tide: low 0h21 (0.11 m), high 6h23 (2.41 m), low 12h44 (0.24 m), high 18h34 (2.37 m). Today's tide and the next 7 days at Praia do Maceió, in São Miguel do Gostoso: times, heights, the day's curve and moon phase."
+  },
+  {
+    "caminho": "/es/explore/mares/maceio",
+    "campo": "description",
+    "antes": "Marea de hoy: alta 5h47 (2,57 m), baja 12h01 (0,23 m), alta 17h59 (2,53 m). Marea de hoy y de los próximos 7 días en Praia do Maceió, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar.",
+    "depois": "Marea de hoy: baja 0h21 (0,11 m), alta 6h23 (2,41 m), baja 12h44 (0,24 m), alta 18h34 (2,37 m). Marea de hoy y de los próximos 7 días en Praia do Maceió, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar."
+  },
+  {
+    "caminho": "/explore/mares/santo-cristo",
+    "campo": "description",
+    "antes": "Maré de hoje: alta 5h47 (2,57 m), baixa 12h01 (0,23 m), alta 17h59 (2,53 m). Maré de hoje e dos próximos 7 dias na Praia do Santo Cristo, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua.",
+    "depois": "Maré de hoje: baixa 0h21 (0,11 m), alta 6h23 (2,41 m), baixa 12h44 (0,24 m), alta 18h34 (2,37 m). Maré de hoje e dos próximos 7 dias na Praia do Santo Cristo, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua."
+  },
+  {
+    "caminho": "/en/explore/mares/santo-cristo",
+    "campo": "description",
+    "antes": "Today's tide: high 5h47 (2.57 m), low 12h01 (0.23 m), high 17h59 (2.53 m). Today's tide and the next 7 days at Praia do Santo Cristo, in São Miguel do Gostoso: times, heights, the day's curve and moon phase.",
+    "depois": "Today's tide: low 0h21 (0.11 m), high 6h23 (2.41 m), low 12h44 (0.24 m), high 18h34 (2.37 m). Today's tide and the next 7 days at Praia do Santo Cristo, in São Miguel do Gostoso: times, heights, the day's curve and moon phase."
+  },
+  {
+    "caminho": "/es/explore/mares/santo-cristo",
+    "campo": "description",
+    "antes": "Marea de hoy: alta 5h47 (2,57 m), baja 12h01 (0,23 m), alta 17h59 (2,53 m). Marea de hoy y de los próximos 7 días en Praia do Santo Cristo, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar.",
+    "depois": "Marea de hoy: baja 0h21 (0,11 m), alta 6h23 (2,41 m), baja 12h44 (0,24 m), alta 18h34 (2,37 m). Marea de hoy y de los próximos 7 días en Praia do Santo Cristo, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar."
+  },
+  {
+    "caminho": "/explore/mares/tourinhos",
+    "campo": "description",
+    "antes": "Maré de hoje: alta 5h47 (2,57 m), baixa 12h01 (0,23 m), alta 17h59 (2,53 m). Maré de hoje e dos próximos 7 dias na Praia de Tourinhos, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua.",
+    "depois": "Maré de hoje: baixa 0h21 (0,11 m), alta 6h23 (2,41 m), baixa 12h44 (0,24 m), alta 18h34 (2,37 m). Maré de hoje e dos próximos 7 dias na Praia de Tourinhos, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua."
+  },
+  {
+    "caminho": "/en/explore/mares/tourinhos",
+    "campo": "description",
+    "antes": "Today's tide: high 5h47 (2.57 m), low 12h01 (0.23 m), high 17h59 (2.53 m). Today's tide and the next 7 days at Praia de Tourinhos, in São Miguel do Gostoso: times, heights, the day's curve and moon phase.",
+    "depois": "Today's tide: low 0h21 (0.11 m), high 6h23 (2.41 m), low 12h44 (0.24 m), high 18h34 (2.37 m). Today's tide and the next 7 days at Praia de Tourinhos, in São Miguel do Gostoso: times, heights, the day's curve and moon phase."
+  },
+  {
+    "caminho": "/es/explore/mares/tourinhos",
+    "campo": "description",
+    "antes": "Marea de hoy: alta 5h47 (2,57 m), baja 12h01 (0,23 m), alta 17h59 (2,53 m). Marea de hoy y de los próximos 7 días en Praia de Tourinhos, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar.",
+    "depois": "Marea de hoy: baja 0h21 (0,11 m), alta 6h23 (2,41 m), baja 12h44 (0,24 m), alta 18h34 (2,37 m). Marea de hoy y de los próximos 7 días en Praia de Tourinhos, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar."
+  },
+  {
+    "caminho": "/explore/mares/minhoto",
+    "campo": "description",
+    "antes": "Maré de hoje: alta 5h47 (2,57 m), baixa 12h01 (0,23 m), alta 17h59 (2,53 m). Maré de hoje e dos próximos 7 dias na Praia do Minhoto, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua.",
+    "depois": "Maré de hoje: baixa 0h21 (0,11 m), alta 6h23 (2,41 m), baixa 12h44 (0,24 m), alta 18h34 (2,37 m). Maré de hoje e dos próximos 7 dias na Praia do Minhoto, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua."
+  },
+  {
+    "caminho": "/en/explore/mares/minhoto",
+    "campo": "description",
+    "antes": "Today's tide: high 5h47 (2.57 m), low 12h01 (0.23 m), high 17h59 (2.53 m). Today's tide and the next 7 days at Praia do Minhoto, in São Miguel do Gostoso: times, heights, the day's curve and moon phase.",
+    "depois": "Today's tide: low 0h21 (0.11 m), high 6h23 (2.41 m), low 12h44 (0.24 m), high 18h34 (2.37 m). Today's tide and the next 7 days at Praia do Minhoto, in São Miguel do Gostoso: times, heights, the day's curve and moon phase."
+  },
+  {
+    "caminho": "/es/explore/mares/minhoto",
+    "campo": "description",
+    "antes": "Marea de hoy: alta 5h47 (2,57 m), baja 12h01 (0,23 m), alta 17h59 (2,53 m). Marea de hoy y de los próximos 7 días en Praia do Minhoto, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar.",
+    "depois": "Marea de hoy: baja 0h21 (0,11 m), alta 6h23 (2,41 m), baja 12h44 (0,24 m), alta 18h34 (2,37 m). Marea de hoy y de los próximos 7 días en Praia do Minhoto, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar."
+  },
+  {
+    "caminho": "/explore/mares/praia-do-amor",
+    "campo": "description",
+    "antes": "Maré de hoje: alta 5h47 (2,57 m), baixa 12h01 (0,23 m), alta 17h59 (2,53 m). Maré de hoje e dos próximos 7 dias na Praia do Amor, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua.",
+    "depois": "Maré de hoje: baixa 0h21 (0,11 m), alta 6h23 (2,41 m), baixa 12h44 (0,24 m), alta 18h34 (2,37 m). Maré de hoje e dos próximos 7 dias na Praia do Amor, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua."
+  },
+  {
+    "caminho": "/en/explore/mares/praia-do-amor",
+    "campo": "description",
+    "antes": "Today's tide: high 5h47 (2.57 m), low 12h01 (0.23 m), high 17h59 (2.53 m). Today's tide and the next 7 days at Praia do Amor, in São Miguel do Gostoso: times, heights, the day's curve and moon phase.",
+    "depois": "Today's tide: low 0h21 (0.11 m), high 6h23 (2.41 m), low 12h44 (0.24 m), high 18h34 (2.37 m). Today's tide and the next 7 days at Praia do Amor, in São Miguel do Gostoso: times, heights, the day's curve and moon phase."
+  },
+  {
+    "caminho": "/es/explore/mares/praia-do-amor",
+    "campo": "description",
+    "antes": "Marea de hoy: alta 5h47 (2,57 m), baja 12h01 (0,23 m), alta 17h59 (2,53 m). Marea de hoy y de los próximos 7 días en Praia do Amor, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar.",
+    "depois": "Marea de hoy: baja 0h21 (0,11 m), alta 6h23 (2,41 m), baja 12h44 (0,24 m), alta 18h34 (2,37 m). Marea de hoy y de los próximos 7 días en Praia do Amor, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar."
+  },
+  {
+    "caminho": "/explore/mares/ze-martins",
+    "campo": "description",
+    "antes": "Maré de hoje: alta 5h47 (2,57 m), baixa 12h01 (0,23 m), alta 17h59 (2,53 m). Maré de hoje e dos próximos 7 dias na Praia de Zé Martins, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua.",
+    "depois": "Maré de hoje: baixa 0h21 (0,11 m), alta 6h23 (2,41 m), baixa 12h44 (0,24 m), alta 18h34 (2,37 m). Maré de hoje e dos próximos 7 dias na Praia de Zé Martins, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua."
+  },
+  {
+    "caminho": "/en/explore/mares/ze-martins",
+    "campo": "description",
+    "antes": "Today's tide: high 5h47 (2.57 m), low 12h01 (0.23 m), high 17h59 (2.53 m). Today's tide and the next 7 days at Praia de Zé Martins, in São Miguel do Gostoso: times, heights, the day's curve and moon phase.",
+    "depois": "Today's tide: low 0h21 (0.11 m), high 6h23 (2.41 m), low 12h44 (0.24 m), high 18h34 (2.37 m). Today's tide and the next 7 days at Praia de Zé Martins, in São Miguel do Gostoso: times, heights, the day's curve and moon phase."
+  },
+  {
+    "caminho": "/es/explore/mares/ze-martins",
+    "campo": "description",
+    "antes": "Marea de hoy: alta 5h47 (2,57 m), baja 12h01 (0,23 m), alta 17h59 (2,53 m). Marea de hoy y de los próximos 7 días en Praia de Zé Martins, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar.",
+    "depois": "Marea de hoy: baja 0h21 (0,11 m), alta 6h23 (2,41 m), baja 12h44 (0,24 m), alta 18h34 (2,37 m). Marea de hoy y de los próximos 7 días en Praia de Zé Martins, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar."
+  },
+  {
+    "caminho": "/explore/mares/malhada",
+    "campo": "description",
+    "antes": "Maré de hoje: alta 5h47 (2,57 m), baixa 12h01 (0,23 m), alta 17h59 (2,53 m). Maré de hoje e dos próximos 7 dias na Praia da Malhada, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua.",
+    "depois": "Maré de hoje: baixa 0h21 (0,11 m), alta 6h23 (2,41 m), baixa 12h44 (0,24 m), alta 18h34 (2,37 m). Maré de hoje e dos próximos 7 dias na Praia da Malhada, em São Miguel do Gostoso: horários, alturas, curva do dia e fase da lua."
+  },
+  {
+    "caminho": "/en/explore/mares/malhada",
+    "campo": "description",
+    "antes": "Today's tide: high 5h47 (2.57 m), low 12h01 (0.23 m), high 17h59 (2.53 m). Today's tide and the next 7 days at Praia da Malhada, in São Miguel do Gostoso: times, heights, the day's curve and moon phase.",
+    "depois": "Today's tide: low 0h21 (0.11 m), high 6h23 (2.41 m), low 12h44 (0.24 m), high 18h34 (2.37 m). Today's tide and the next 7 days at Praia da Malhada, in São Miguel do Gostoso: times, heights, the day's curve and moon phase."
+  },
+  {
+    "caminho": "/es/explore/mares/malhada",
+    "campo": "description",
+    "antes": "Marea de hoy: alta 5h47 (2,57 m), baja 12h01 (0,23 m), alta 17h59 (2,53 m). Marea de hoy y de los próximos 7 días en Praia da Malhada, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar.",
+    "depois": "Marea de hoy: baja 0h21 (0,11 m), alta 6h23 (2,41 m), baja 12h44 (0,24 m), alta 18h34 (2,37 m). Marea de hoy y de los próximos 7 días en Praia da Malhada, en São Miguel do Gostoso: horarios, alturas, curva del día y fase lunar."
+  },
+  {
+    "caminho": "/explore/mares/perobas",
+    "campo": "description",
+    "antes": "Maré de hoje: alta 5h02 (2,51 m), baixa 10h59 (0,16 m), alta 17h19 (2,43 m), baixa 23h17 (0,18 m). Maré de hoje e dos próximos 7 dias na Praia de Perobas, em Touros: horários, alturas, curva do dia e fase da lua.",
+    "depois": "Maré de hoje: alta 5h44 (2,43 m), baixa 11h34 (0,24 m), alta 18h01 (2,36 m), baixa 23h59 (0,25 m). Maré de hoje e dos próximos 7 dias na Praia de Perobas, em Touros: horários, alturas, curva do dia e fase da lua."
+  },
+  {
+    "caminho": "/en/explore/mares/perobas",
+    "campo": "description",
+    "antes": "Today's tide: high 5h02 (2.51 m), low 10h59 (0.16 m), high 17h19 (2.43 m), low 23h17 (0.18 m). Today's tide and the next 7 days at Praia de Perobas, in Touros: times, heights, the day's curve and moon phase.",
+    "depois": "Today's tide: high 5h44 (2.43 m), low 11h34 (0.24 m), high 18h01 (2.36 m), low 23h59 (0.25 m). Today's tide and the next 7 days at Praia de Perobas, in Touros: times, heights, the day's curve and moon phase."
+  },
+  {
+    "caminho": "/es/explore/mares/perobas",
+    "campo": "description",
+    "antes": "Marea de hoy: alta 5h02 (2,51 m), baja 10h59 (0,16 m), alta 17h19 (2,43 m), baja 23h17 (0,18 m). Marea de hoy y de los próximos 7 días en Praia de Perobas, en Touros: horarios, alturas, curva del día y fase lunar.",
+    "depois": "Marea de hoy: alta 5h44 (2,43 m), baja 11h34 (0,24 m), alta 18h01 (2,36 m), baja 23h59 (0,25 m). Marea de hoy y de los próximos 7 días en Praia de Perobas, en Touros: horarios, alturas, curva del día y fase lunar."
+  },
+  {
+    "caminho": "/explore/mares/carnaubinha",
+    "campo": "description",
+    "antes": "Maré de hoje: alta 5h02 (2,51 m), baixa 10h59 (0,16 m), alta 17h19 (2,43 m), baixa 23h17 (0,18 m). Maré de hoje e dos próximos 7 dias na Praia de Carnaubinha, em Touros: horários, alturas, curva do dia e fase da lua.",
+    "depois": "Maré de hoje: alta 5h44 (2,43 m), baixa 11h34 (0,24 m), alta 18h01 (2,36 m), baixa 23h59 (0,25 m). Maré de hoje e dos próximos 7 dias na Praia de Carnaubinha, em Touros: horários, alturas, curva do dia e fase da lua."
+  },
+  {
+    "caminho": "/en/explore/mares/carnaubinha",
+    "campo": "description",
+    "antes": "Today's tide: high 5h02 (2.51 m), low 10h59 (0.16 m), high 17h19 (2.43 m), low 23h17 (0.18 m). Today's tide and the next 7 days at Praia de Carnaubinha, in Touros: times, heights, the day's curve and moon phase.",
+    "depois": "Today's tide: high 5h44 (2.43 m), low 11h34 (0.24 m), high 18h01 (2.36 m), low 23h59 (0.25 m). Today's tide and the next 7 days at Praia de Carnaubinha, in Touros: times, heights, the day's curve and moon phase."
+  },
+  {
+    "caminho": "/es/explore/mares/carnaubinha",
+    "campo": "description",
+    "antes": "Marea de hoy: alta 5h02 (2,51 m), baja 10h59 (0,16 m), alta 17h19 (2,43 m), baja 23h17 (0,18 m). Marea de hoy y de los próximos 7 días en Praia de Carnaubinha, en Touros: horarios, alturas, curva del día y fase lunar.",
+    "depois": "Marea de hoy: alta 5h44 (2,43 m), baja 11h34 (0,24 m), alta 18h01 (2,36 m), baja 23h59 (0,25 m). Marea de hoy y de los próximos 7 días en Praia de Carnaubinha, en Touros: horarios, alturas, curva del día y fase lunar."
+  },
+  {
+    "caminho": "/explore/mares/farol-do-calcanhar",
+    "campo": "description",
+    "antes": "Maré de hoje: alta 5h02 (2,51 m), baixa 10h59 (0,16 m), alta 17h19 (2,43 m), baixa 23h17 (0,18 m). Maré de hoje e dos próximos 7 dias na Praia do Farol do Calcanhar, em Touros: horários, alturas, curva do dia e fase da lua.",
+    "depois": "Maré de hoje: alta 5h44 (2,43 m), baixa 11h34 (0,24 m), alta 18h01 (2,36 m), baixa 23h59 (0,25 m). Maré de hoje e dos próximos 7 dias na Praia do Farol do Calcanhar, em Touros: horários, alturas, curva do dia e fase da lua."
+  },
+  {
+    "caminho": "/en/explore/mares/farol-do-calcanhar",
+    "campo": "description",
+    "antes": "Today's tide: high 5h02 (2.51 m), low 10h59 (0.16 m), high 17h19 (2.43 m), low 23h17 (0.18 m). Today's tide and the next 7 days at Praia do Farol do Calcanhar, in Touros: times, heights, the day's curve and moon phase.",
+    "depois": "Today's tide: high 5h44 (2.43 m), low 11h34 (0.24 m), high 18h01 (2.36 m), low 23h59 (0.25 m). Today's tide and the next 7 days at Praia do Farol do Calcanhar, in Touros: times, heights, the day's curve and moon phase."
+  },
+  {
+    "caminho": "/es/explore/mares/farol-do-calcanhar",
+    "campo": "description",
+    "antes": "Marea de hoy: alta 5h02 (2,51 m), baja 10h59 (0,16 m), alta 17h19 (2,43 m), baja 23h17 (0,18 m). Marea de hoy y de los próximos 7 días en Praia do Farol do Calcanhar, en Touros: horarios, alturas, curva del día y fase lunar.",
+    "depois": "Marea de hoy: alta 5h44 (2,43 m), baja 11h34 (0,24 m), alta 18h01 (2,36 m), baja 23h59 (0,25 m). Marea de hoy y de los próximos 7 días en Praia do Farol do Calcanhar, en Touros: horarios, alturas, curva del día y fase lunar."
+  },
+  {
+    "caminho": "/explore/mares/cajueiro",
+    "campo": "description",
+    "antes": "Maré de hoje: alta 5h02 (2,51 m), baixa 10h59 (0,16 m), alta 17h19 (2,43 m), baixa 23h17 (0,18 m). Maré de hoje e dos próximos 7 dias na Praia do Cajueiro, em Touros: horários, alturas, curva do dia e fase da lua.",
+    "depois": "Maré de hoje: alta 5h44 (2,43 m), baixa 11h34 (0,24 m), alta 18h01 (2,36 m), baixa 23h59 (0,25 m). Maré de hoje e dos próximos 7 dias na Praia do Cajueiro, em Touros: horários, alturas, curva do dia e fase da lua."
+  },
+  {
+    "caminho": "/en/explore/mares/cajueiro",
+    "campo": "description",
+    "antes": "Today's tide: high 5h02 (2.51 m), low 10h59 (0.16 m), high 17h19 (2.43 m), low 23h17 (0.18 m). Today's tide and the next 7 days at Praia do Cajueiro, in Touros: times, heights, the day's curve and moon phase.",
+    "depois": "Today's tide: high 5h44 (2.43 m), low 11h34 (0.24 m), high 18h01 (2.36 m), low 23h59 (0.25 m). Today's tide and the next 7 days at Praia do Cajueiro, in Touros: times, heights, the day's curve and moon phase."
+  },
+  {
+    "caminho": "/es/explore/mares/cajueiro",
+    "campo": "description",
+    "antes": "Marea de hoy: alta 5h02 (2,51 m), baja 10h59 (0,16 m), alta 17h19 (2,43 m), baja 23h17 (0,18 m). Marea de hoy y de los próximos 7 días en Praia do Cajueiro, en Touros: horarios, alturas, curva del día y fase lunar.",
+    "depois": "Marea de hoy: alta 5h44 (2,43 m), baja 11h34 (0,24 m), alta 18h01 (2,36 m), baja 23h59 (0,25 m). Marea de hoy y de los próximos 7 días en Praia do Cajueiro, en Touros: horarios, alturas, curva del día y fase lunar."
+  },
+  {
+    "caminho": "/explore/mares/marco",
+    "campo": "description",
+    "antes": "Maré de hoje: alta 5h47 (2,57 m), baixa 12h01 (0,23 m), alta 17h59 (2,53 m). Maré de hoje e dos próximos 7 dias na Praia do Marco, em Pedra Grande: horários, alturas, curva do dia e fase da lua.",
+    "depois": "Maré de hoje: baixa 0h21 (0,11 m), alta 6h23 (2,41 m), baixa 12h44 (0,24 m), alta 18h34 (2,37 m). Maré de hoje e dos próximos 7 dias na Praia do Marco, em Pedra Grande: horários, alturas, curva do dia e fase da lua."
+  },
+  {
+    "caminho": "/en/explore/mares/marco",
+    "campo": "description",
+    "antes": "Today's tide: high 5h47 (2.57 m), low 12h01 (0.23 m), high 17h59 (2.53 m). Today's tide and the next 7 days at Praia do Marco, in Pedra Grande: times, heights, the day's curve and moon phase.",
+    "depois": "Today's tide: low 0h21 (0.11 m), high 6h23 (2.41 m), low 12h44 (0.24 m), high 18h34 (2.37 m). Today's tide and the next 7 days at Praia do Marco, in Pedra Grande: times, heights, the day's curve and moon phase."
+  },
+  {
+    "caminho": "/es/explore/mares/marco",
+    "campo": "description",
+    "antes": "Marea de hoy: alta 5h47 (2,57 m), baja 12h01 (0,23 m), alta 17h59 (2,53 m). Marea de hoy y de los próximos 7 días en Praia do Marco, en Pedra Grande: horarios, alturas, curva del día y fase lunar.",
+    "depois": "Marea de hoy: baja 0h21 (0,11 m), alta 6h23 (2,41 m), baja 12h44 (0,24 m), alta 18h34 (2,37 m). Marea de hoy y de los próximos 7 días en Praia do Marco, en Pedra Grande: horarios, alturas, curva del día y fase lunar."
+  }
+]

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { buildPageMetadata, urlDaRota, type Locale } from '@/lib/page-metadata'
-import { createClient } from '@/lib/supabase/server'
+import { clientePublico } from '@/lib/supabase/publico'
 import { itemListSchema, localizedUrl } from '@/lib/seo'
 import Contrate from '@/views/Contrate'
 import { safeJsonLd } from '@/lib/json-ld'
@@ -15,7 +15,7 @@ export async function generateMetadata(
 }
 
 async function getPublishedProfessionals() {
-  const supabase = await createClient()
+  const supabase = clientePublico()
   const { data } = await supabase
     .from('gostoso_professionals')
     .select('display_name, slug')

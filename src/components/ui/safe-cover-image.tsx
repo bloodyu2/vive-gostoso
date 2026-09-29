@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useState, type ReactNode } from 'react'
+import { versaoOtimizada } from '@/lib/imagem-otimizada'
 
 interface Props {
   src: string
@@ -16,6 +17,9 @@ interface Props {
   /** O que desenhar no lugar quando a foto falha. Sem isto o componente some
    *  com a imagem e deixa um buraco: quem chama passa a capa tipográfica. */
   fallback?: ReactNode
+  /** Largura em que a foto aparece, para o navegador escolher no srcSet.
+   *  So vale para foto do Storage, que passa pelo otimizador. */
+  sizes?: string
 }
 
 /**
@@ -51,26 +55,36 @@ export function SafeCoverImage({
   height,
   loading = 'lazy',
   fallback = null,
+  sizes = '(max-width: 768px) 100vw, 50vw',
 }: Props) {
-  const [falhou, setFalhou] = useState(false)
+  /* KAN-463: foto do Storage vai primeiro pelo otimizador do Next. Se ele
+     falhar (limite de transformacoes, erro de rede), tenta a URL original antes
+     de desistir, para a otimizacao nunca ser o motivo de a foto sumir. */
+  const otimizada = versaoOtimizada(src)
+  const [fase, setFase] = useState<'otimizada' | 'original' | 'falhou'>(otimizada ? 'otimizada' : 'original')
+  const falhar = useCallback(() => setFase((f) => (f === 'otimizada' ? 'original' : 'falhou')), [])
 
   const conferirNaMontagem = useCallback((img: HTMLImageElement | null) => {
-    if (img && img.complete && img.naturalWidth === 0) setFalhou(true)
-  }, [])
+    if (img && img.complete && img.naturalWidth === 0) falhar()
+  }, [falhar])
 
-  if (falhou) return <>{fallback}</>
+  if (fase === 'falhou') return <>{fallback}</>
+  const usaOtimizada = fase === 'otimizada' && otimizada !== null
 
   return (
     <img
+      key={usaOtimizada ? 'otimizada' : 'original'}
       ref={conferirNaMontagem}
-      src={src}
+      src={usaOtimizada ? otimizada.src : src}
+      srcSet={usaOtimizada ? otimizada.srcSet : undefined}
+      sizes={usaOtimizada ? sizes : undefined}
       alt={alt}
       width={width}
       height={height}
       loading={loading}
       decoding="async"
       className={className}
-      onError={() => setFalhou(true)}
+      onError={falhar}
     />
   )
 }
