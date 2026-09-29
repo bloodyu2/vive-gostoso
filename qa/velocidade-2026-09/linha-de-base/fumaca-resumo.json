@@ -1,0 +1,113 @@
+{
+  "passou": 26,
+  "falhou": 0,
+  "instavel": 0,
+  "pulado": 0,
+  "testes": [
+    {
+      "titulo": "rastreio > home carrega o gtag, manda consent default e o page_view do GA4",
+      "status": "expected"
+    },
+    {
+      "titulo": "rastreio > aceitar cookies manda consent update",
+      "status": "expected"
+    },
+    {
+      "titulo": "rastreio > navegacao no cliente manda outro page_view (PageViewTracker)",
+      "status": "expected"
+    },
+    {
+      "titulo": "cabecalho, menu e idioma > menu do desktop leva aos modulos",
+      "status": "expected"
+    },
+    {
+      "titulo": "cabecalho, menu e idioma > menu do celular abre a gaveta com os links",
+      "status": "expected"
+    },
+    {
+      "titulo": "cabecalho, menu e idioma > troca de idioma: /en e /es servem o idioma certo no HTML",
+      "status": "expected"
+    },
+    {
+      "titulo": "cabecalho, menu e idioma > seletor de idioma leva a /en",
+      "status": "expected"
+    },
+    {
+      "titulo": "cabecalho, menu e idioma > busca abre e acha negocio",
+      "status": "expected"
+    },
+    {
+      "titulo": "cabecalho, menu e idioma > tema escuro alterna",
+      "status": "expected"
+    },
+    {
+      "titulo": "WhatsApp > botao oficial do cabecalho: numero certo, mensagem e evento whatsapp_click",
+      "status": "expected"
+    },
+    {
+      "titulo": "WhatsApp > pagina de negocio: link de WhatsApp e evento contato_negocio_click",
+      "status": "expected"
+    },
+    {
+      "titulo": "listas, filtros e mapa > /come lista negocios no HTML servido",
+      "status": "expected"
+    },
+    {
+      "titulo": "listas, filtros e mapa > /fique lista negocios no HTML servido",
+      "status": "expected"
+    },
+    {
+      "titulo": "listas, filtros e mapa > /passeie lista negocios no HTML servido",
+      "status": "expected"
+    },
+    {
+      "titulo": "listas, filtros e mapa > filtro de /come muda a lista",
+      "status": "expected"
+    },
+    {
+      "titulo": "listas, filtros e mapa > mapa Mapbox desenha e a lista de pontos existe",
+      "status": "expected"
+    },
+    {
+      "titulo": "listas, filtros e mapa > explore e mares mostram a tabua",
+      "status": "expected"
+    },
+    {
+      "titulo": "home > vitrine com numeros e setas no celular",
+      "status": "expected"
+    },
+    {
+      "titulo": "formularios (envio interceptado) > transfer: validacao e payload do cadastro",
+      "status": "expected"
+    },
+    {
+      "titulo": "formularios (envio interceptado) > participe: formulario de evento envia payload certo (interceptado)",
+      "status": "expected"
+    },
+    {
+      "titulo": "formularios (envio interceptado) > contrate: formulario de servico valida campos obrigatorios",
+      "status": "expected"
+    },
+    {
+      "titulo": "apoie e checkout > doacao chega ate o Stripe com o valor certo (interceptado)",
+      "status": "expected"
+    },
+    {
+      "titulo": "area restrita > /cadastre mostra a tela de login, sem credencial",
+      "status": "expected"
+    },
+    {
+      "titulo": "area restrita > /cadastre/admin sem sessao nao mostra o painel",
+      "status": "expected"
+    },
+    {
+      "titulo": "blog e bio > blog lista posts e o post abre com JSON-LD",
+      "status": "expected"
+    },
+    {
+      "titulo": "blog e bio > /bio: noindex e UTM em todo link interno",
+      "status": "expected"
+    }
+  ],
+  "codigoSaida": 0
+}

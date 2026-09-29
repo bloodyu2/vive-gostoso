@@ -5,15 +5,20 @@ import { usePathname } from 'next/navigation'
 import { Menu, X, Compass, User, Search, Sun, Moon } from 'lucide-react'
 import { Logo } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
-import { GlobalSearch } from '@/components/search/global-search'
 import { LanguageSelector } from '@/components/i18n/language-selector'
 import { WhatsAppButton } from '@/components/layout/whatsapp-button'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/hooks/useTheme'
-import { NotificationBell } from '@/components/layout/notification-bell'
+import dynamic from 'next/dynamic'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
+
+/* KAN-463: a busca so aparece depois do clique e o sino so para quem esta logado.
+   Nenhum dos dois sai no HTML do servidor, entao carregam em pedaco separado, fora
+   do pacote inicial de toda pagina. */
+const GlobalSearch = dynamic(() => import('@/components/search/global-search').then((m) => m.GlobalSearch), { ssr: false })
+const NotificationBell = dynamic(() => import('@/components/layout/notification-bell').then((m) => m.NotificationBell), { ssr: false })
 
 export function Header() {
   const pathname = usePathname()

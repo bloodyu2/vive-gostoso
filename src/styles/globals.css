@@ -1,12 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+/* KAN-463: as fontes sao servidas pelo proprio site (next/font em app/layout.tsx),
+   que declara --font-fraunces e --font-jakarta no <html>. Antes: @import do Google
+   Fonts aqui, descoberto em fila depois deste CSS. */
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   /* --- Typography --- */
-  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
-  --font-sans:    "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-sans:    var(--font-jakarta), system-ui, -apple-system, sans-serif;
 
   /* --- Type scale --- */
   --font-size-display: 4rem;    /* 64px */

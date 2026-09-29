@@ -1,0 +1,982 @@
+[
+  {
+    "caminho": "/",
+    "largura": "390",
+    "alturaAntes": 6960,
+    "alturaDepois": 6996,
+    "pctDiferente": 19.811
+  },
+  {
+    "caminho": "/en",
+    "largura": "390",
+    "alturaAntes": 6780,
+    "alturaDepois": 6816,
+    "pctDiferente": 20.243
+  },
+  {
+    "caminho": "/es",
+    "largura": "390",
+    "alturaAntes": 6986,
+    "alturaDepois": 7022,
+    "pctDiferente": 19.788
+  },
+  {
+    "caminho": "/come",
+    "largura": "390",
+    "alturaAntes": 27261,
+    "alturaDepois": 27261,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/en/come",
+    "largura": "390",
+    "alturaAntes": 27059,
+    "alturaDepois": 27059,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/es/come",
+    "largura": "390",
+    "alturaAntes": 27261,
+    "alturaDepois": 27261,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/fique",
+    "largura": "390",
+    "alturaAntes": 41827,
+    "alturaDepois": 41827,
+    "pctDiferente": 0.022
+  },
+  {
+    "caminho": "/en/fique",
+    "largura": "390",
+    "alturaAntes": 41625,
+    "alturaDepois": 41625,
+    "pctDiferente": 0.021
+  },
+  {
+    "caminho": "/es/fique",
+    "largura": "390",
+    "alturaAntes": 41856,
+    "alturaDepois": 41856,
+    "pctDiferente": 0.022
+  },
+  {
+    "caminho": "/passeie",
+    "largura": "390",
+    "alturaAntes": 20415,
+    "alturaDepois": 20415,
+    "pctDiferente": 0.01
+  },
+  {
+    "caminho": "/en/passeie",
+    "largura": "390",
+    "alturaAntes": 20213,
+    "alturaDepois": 20213,
+    "pctDiferente": 0.01
+  },
+  {
+    "caminho": "/es/passeie",
+    "largura": "390",
+    "alturaAntes": 20415,
+    "alturaDepois": 20415,
+    "pctDiferente": 0.01
+  },
+  {
+    "caminho": "/explore",
+    "largura": "390",
+    "alturaAntes": 3232,
+    "alturaDepois": 3268,
+    "pctDiferente": 6.299
+  },
+  {
+    "caminho": "/en/explore",
+    "largura": "390",
+    "alturaAntes": 3052,
+    "alturaDepois": 3088,
+    "pctDiferente": 6.466
+  },
+  {
+    "caminho": "/es/explore",
+    "largura": "390",
+    "alturaAntes": 3232,
+    "alturaDepois": 3268,
+    "pctDiferente": 6.369
+  },
+  {
+    "caminho": "/explore/mapa",
+    "largura": "390",
+    "alturaAntes": 4379,
+    "alturaDepois": 4379,
+    "pctDiferente": 0.02
+  },
+  {
+    "caminho": "/en/explore/mapa",
+    "largura": "390",
+    "alturaAntes": 3971,
+    "alturaDepois": 3971,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/es/explore/mapa",
+    "largura": "390",
+    "alturaAntes": 4447,
+    "alturaDepois": 4447,
+    "pctDiferente": 0.02
+  },
+  {
+    "caminho": "/participe",
+    "largura": "390",
+    "alturaAntes": 2449,
+    "alturaDepois": 2449,
+    "pctDiferente": 0.005
+  },
+  {
+    "caminho": "/en/participe",
+    "largura": "390",
+    "alturaAntes": 2289,
+    "alturaDepois": 2289,
+    "pctDiferente": 0.005
+  },
+  {
+    "caminho": "/es/participe",
+    "largura": "390",
+    "alturaAntes": 2449,
+    "alturaDepois": 2449,
+    "pctDiferente": 0.005
+  },
+  {
+    "caminho": "/conheca",
+    "largura": "390",
+    "alturaAntes": 4597,
+    "alturaDepois": 4597,
+    "pctDiferente": 0.008
+  },
+  {
+    "caminho": "/en/conheca",
+    "largura": "390",
+    "alturaAntes": 4416,
+    "alturaDepois": 4416,
+    "pctDiferente": 0.008
+  },
+  {
+    "caminho": "/es/conheca",
+    "largura": "390",
+    "alturaAntes": 4680,
+    "alturaDepois": 4680,
+    "pctDiferente": 0.007
+  },
+  {
+    "caminho": "/apoie",
+    "largura": "390",
+    "alturaAntes": 6154,
+    "alturaDepois": 6154,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/en/apoie",
+    "largura": "390",
+    "alturaAntes": 5921,
+    "alturaDepois": 5921,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/es/apoie",
+    "largura": "390",
+    "alturaAntes": 6239,
+    "alturaDepois": 6239,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/contrate",
+    "largura": "390",
+    "alturaAntes": 2726,
+    "alturaDepois": 2726,
+    "pctDiferente": 0.007
+  },
+  {
+    "caminho": "/en/contrate",
+    "largura": "390",
+    "alturaAntes": 2604,
+    "alturaDepois": 2604,
+    "pctDiferente": 0.002
+  },
+  {
+    "caminho": "/es/contrate",
+    "largura": "390",
+    "alturaAntes": 2746,
+    "alturaDepois": 2746,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/sobre",
+    "largura": "390",
+    "alturaAntes": 11304,
+    "alturaDepois": 11304,
+    "pctDiferente": 0.005
+  },
+  {
+    "caminho": "/en/sobre",
+    "largura": "390",
+    "alturaAntes": 10771,
+    "alturaDepois": 10771,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/es/sobre",
+    "largura": "390",
+    "alturaAntes": 11329,
+    "alturaDepois": 11329,
+    "pctDiferente": 0.007
+  },
+  {
+    "caminho": "/blog",
+    "largura": "390",
+    "alturaAntes": 9014,
+    "alturaDepois": 9014,
+    "pctDiferente": 2.393
+  },
+  {
+    "caminho": "/en/blog",
+    "largura": "390",
+    "alturaAntes": 8833,
+    "alturaDepois": 8833,
+    "pctDiferente": 2.444
+  },
+  {
+    "caminho": "/es/blog",
+    "largura": "390",
+    "alturaAntes": 9014,
+    "alturaDepois": 9014,
+    "pctDiferente": 2.391
+  },
+  {
+    "caminho": "/transfer",
+    "largura": "390",
+    "alturaAntes": 2008,
+    "alturaDepois": 2008,
+    "pctDiferente": 0.054
+  },
+  {
+    "caminho": "/en/transfer",
+    "largura": "390",
+    "alturaAntes": 1848,
+    "alturaDepois": 1848,
+    "pctDiferente": 0.051
+  },
+  {
+    "caminho": "/es/transfer",
+    "largura": "390",
+    "alturaAntes": 2008,
+    "alturaDepois": 2008,
+    "pctDiferente": 0.051
+  },
+  {
+    "caminho": "/transparencia",
+    "largura": "390",
+    "alturaAntes": 6494,
+    "alturaDepois": 6494,
+    "pctDiferente": 0.001
+  },
+  {
+    "caminho": "/en/transparencia",
+    "largura": "390",
+    "alturaAntes": 6232,
+    "alturaDepois": 6232,
+    "pctDiferente": 0.004
+  },
+  {
+    "caminho": "/es/transparencia",
+    "largura": "390",
+    "alturaAntes": 6552,
+    "alturaDepois": 6552,
+    "pctDiferente": 0.001
+  },
+  {
+    "caminho": "/explore/mares",
+    "largura": "390",
+    "alturaAntes": 4297,
+    "alturaDepois": 4297,
+    "pctDiferente": 0.479
+  },
+  {
+    "caminho": "/en/explore/mares",
+    "largura": "390",
+    "alturaAntes": 4137,
+    "alturaDepois": 4137,
+    "pctDiferente": 0.514
+  },
+  {
+    "caminho": "/es/explore/mares",
+    "largura": "390",
+    "alturaAntes": 4297,
+    "alturaDepois": 4297,
+    "pctDiferente": 0.484
+  },
+  {
+    "caminho": "/explore/mares/cardeiro",
+    "largura": "390",
+    "alturaAntes": 3137,
+    "alturaDepois": 3137,
+    "pctDiferente": 0.975
+  },
+  {
+    "caminho": "/explore/mares/xepa",
+    "largura": "390",
+    "alturaAntes": 3125,
+    "alturaDepois": 3125,
+    "pctDiferente": 0.8
+  },
+  {
+    "caminho": "/en/explore/mares/cardeiro",
+    "largura": "390",
+    "alturaAntes": 3219,
+    "alturaDepois": 3219,
+    "pctDiferente": 1
+  },
+  {
+    "caminho": "/es/explore/mares/cardeiro",
+    "largura": "390",
+    "alturaAntes": 3137,
+    "alturaDepois": 3137,
+    "pctDiferente": 0.985
+  },
+  {
+    "caminho": "/contrate/pedreiro-reforma",
+    "largura": "390",
+    "alturaAntes": 2471,
+    "alturaDepois": 2471,
+    "pctDiferente": 0.006
+  },
+  {
+    "caminho": "/contrate/eletrica",
+    "largura": "390",
+    "alturaAntes": 2451,
+    "alturaDepois": 2451,
+    "pctDiferente": 0.006
+  },
+  {
+    "caminho": "/en/contrate/pedreiro-reforma",
+    "largura": "390",
+    "alturaAntes": 2347,
+    "alturaDepois": 2347,
+    "pctDiferente": 0
+  },
+  {
+    "caminho": "/es/contrate/pedreiro-reforma",
+    "largura": "390",
+    "alturaAntes": 2489,
+    "alturaDepois": 2489,
+    "pctDiferente": 0.001
+  },
+  {
+    "caminho": "/negocio/dr-wind",
+    "largura": "390",
+    "alturaAntes": 3064,
+    "alturaDepois": 3064,
+    "pctDiferente": 0.002
+  },
+  {
+    "caminho": "/negocio/positano-restaurante",
+    "largura": "390",
+    "alturaAntes": 2814,
+    "alturaDepois": 2814,
+    "pctDiferente": 0.002
+  },
+  {
+    "caminho": "/en/negocio/dr-wind",
+    "largura": "390",
+    "alturaAntes": 2876,
+    "alturaDepois": 2876,
+    "pctDiferente": 0.001
+  },
+  {
+    "caminho": "/es/negocio/dr-wind",
+    "largura": "390",
+    "alturaAntes": 3036,
+    "alturaDepois": 3036,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/blog/kitesurf-sao-miguel-do-gostoso",
+    "largura": "390",
+    "alturaAntes": 5316,
+    "alturaDepois": 5316,
+    "pctDiferente": 0.063
+  },
+  {
+    "caminho": "/blog/transfer-aeroporto-natal-sao-miguel-gostoso",
+    "largura": "390",
+    "alturaAntes": 12703,
+    "alturaDepois": 12703,
+    "pctDiferente": 0.932
+  },
+  {
+    "caminho": "/en/blog/kitesurf-sao-miguel-do-gostoso",
+    "largura": "390",
+    "alturaAntes": 5156,
+    "alturaDepois": 5156,
+    "pctDiferente": 0.065
+  },
+  {
+    "caminho": "/es/blog/kitesurf-sao-miguel-do-gostoso",
+    "largura": "390",
+    "alturaAntes": 5316,
+    "alturaDepois": 5316,
+    "pctDiferente": 0.065
+  },
+  {
+    "caminho": "/evento/42726834-c81d-40c8-a424-07281fd38292",
+    "largura": "390",
+    "alturaAntes": 1725,
+    "alturaDepois": 1725,
+    "pctDiferente": 0
+  },
+  {
+    "caminho": "/evento/93332392-cdd7-4ad4-8913-beb21d9d3c35",
+    "largura": "390",
+    "alturaAntes": 1689,
+    "alturaDepois": 1689,
+    "pctDiferente": 0
+  },
+  {
+    "caminho": "/en/evento/42726834-c81d-40c8-a424-07281fd38292",
+    "largura": "390",
+    "alturaAntes": 1565,
+    "alturaDepois": 1565,
+    "pctDiferente": 0
+  },
+  {
+    "caminho": "/es/evento/42726834-c81d-40c8-a424-07281fd38292",
+    "largura": "390",
+    "alturaAntes": 1725,
+    "alturaDepois": 1725,
+    "pctDiferente": 0
+  },
+  {
+    "caminho": "/bio",
+    "largura": "390",
+    "alturaAntes": 1324,
+    "alturaDepois": 1324,
+    "pctDiferente": 0.096
+  },
+  {
+    "caminho": "/en/bio",
+    "largura": "390",
+    "alturaAntes": 1353,
+    "alturaDepois": 1353,
+    "pctDiferente": 0.092
+  },
+  {
+    "caminho": "/es/bio",
+    "largura": "390",
+    "alturaAntes": 1414,
+    "alturaDepois": 1414,
+    "pctDiferente": 0.09
+  },
+  {
+    "caminho": "/cadastre",
+    "largura": "390",
+    "alturaAntes": 891,
+    "alturaDepois": 891,
+    "pctDiferente": 0.012
+  },
+  {
+    "caminho": "/nao-existe-kan-463",
+    "largura": "390",
+    "alturaAntes": 844,
+    "alturaDepois": 844,
+    "pctDiferente": 0.14
+  },
+  {
+    "caminho": "/",
+    "largura": "1440",
+    "alturaAntes": 5222,
+    "alturaDepois": 5222,
+    "pctDiferente": 0.239
+  },
+  {
+    "caminho": "/en",
+    "largura": "1440",
+    "alturaAntes": 5198,
+    "alturaDepois": 5198,
+    "pctDiferente": 0.234
+  },
+  {
+    "caminho": "/es",
+    "largura": "1440",
+    "alturaAntes": 5222,
+    "alturaDepois": 5222,
+    "pctDiferente": 0.239
+  },
+  {
+    "caminho": "/come",
+    "largura": "1440",
+    "alturaAntes": 9901,
+    "alturaDepois": 9901,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/en/come",
+    "largura": "1440",
+    "alturaAntes": 9901,
+    "alturaDepois": 9901,
+    "pctDiferente": 0.004
+  },
+  {
+    "caminho": "/es/come",
+    "largura": "1440",
+    "alturaAntes": 9901,
+    "alturaDepois": 9901,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/fique",
+    "largura": "1440",
+    "alturaAntes": 15036,
+    "alturaDepois": 15036,
+    "pctDiferente": 0.011
+  },
+  {
+    "caminho": "/en/fique",
+    "largura": "1440",
+    "alturaAntes": 15036,
+    "alturaDepois": 15036,
+    "pctDiferente": 0.011
+  },
+  {
+    "caminho": "/es/fique",
+    "largura": "1440",
+    "alturaAntes": 15036,
+    "alturaDepois": 15036,
+    "pctDiferente": 0.011
+  },
+  {
+    "caminho": "/passeie",
+    "largura": "1440",
+    "alturaAntes": 7574,
+    "alturaDepois": 7574,
+    "pctDiferente": 0.017
+  },
+  {
+    "caminho": "/en/passeie",
+    "largura": "1440",
+    "alturaAntes": 7574,
+    "alturaDepois": 7574,
+    "pctDiferente": 0.017
+  },
+  {
+    "caminho": "/es/passeie",
+    "largura": "1440",
+    "alturaAntes": 7574,
+    "alturaDepois": 7574,
+    "pctDiferente": 0.017
+  },
+  {
+    "caminho": "/explore",
+    "largura": "1440",
+    "alturaAntes": 1827,
+    "alturaDepois": 1827,
+    "pctDiferente": 0.122
+  },
+  {
+    "caminho": "/en/explore",
+    "largura": "1440",
+    "alturaAntes": 1827,
+    "alturaDepois": 1827,
+    "pctDiferente": 0.132
+  },
+  {
+    "caminho": "/es/explore",
+    "largura": "1440",
+    "alturaAntes": 1827,
+    "alturaDepois": 1827,
+    "pctDiferente": 0.124
+  },
+  {
+    "caminho": "/explore/mapa",
+    "largura": "1440",
+    "alturaAntes": 3389,
+    "alturaDepois": 3389,
+    "pctDiferente": 0.011
+  },
+  {
+    "caminho": "/en/explore/mapa",
+    "largura": "1440",
+    "alturaAntes": 3287,
+    "alturaDepois": 3287,
+    "pctDiferente": 0.025
+  },
+  {
+    "caminho": "/es/explore/mapa",
+    "largura": "1440",
+    "alturaAntes": 3389,
+    "alturaDepois": 3389,
+    "pctDiferente": 0.011
+  },
+  {
+    "caminho": "/participe",
+    "largura": "1440",
+    "alturaAntes": 1234,
+    "alturaDepois": 1234,
+    "pctDiferente": 0.001
+  },
+  {
+    "caminho": "/en/participe",
+    "largura": "1440",
+    "alturaAntes": 1234,
+    "alturaDepois": 1234,
+    "pctDiferente": 0.001
+  },
+  {
+    "caminho": "/es/participe",
+    "largura": "1440",
+    "alturaAntes": 1234,
+    "alturaDepois": 1234,
+    "pctDiferente": 0.001
+  },
+  {
+    "caminho": "/conheca",
+    "largura": "1440",
+    "alturaAntes": 3211,
+    "alturaDepois": 3211,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/en/conheca",
+    "largura": "1440",
+    "alturaAntes": 3133,
+    "alturaDepois": 3133,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/es/conheca",
+    "largura": "1440",
+    "alturaAntes": 3237,
+    "alturaDepois": 3237,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/apoie",
+    "largura": "1440",
+    "alturaAntes": 4758,
+    "alturaDepois": 4758,
+    "pctDiferente": 0.001
+  },
+  {
+    "caminho": "/en/apoie",
+    "largura": "1440",
+    "alturaAntes": 4758,
+    "alturaDepois": 4758,
+    "pctDiferente": 0.001
+  },
+  {
+    "caminho": "/es/apoie",
+    "largura": "1440",
+    "alturaAntes": 4722,
+    "alturaDepois": 4722,
+    "pctDiferente": 0.001
+  },
+  {
+    "caminho": "/contrate",
+    "largura": "1440",
+    "alturaAntes": 1611,
+    "alturaDepois": 1611,
+    "pctDiferente": 0.002
+  },
+  {
+    "caminho": "/en/contrate",
+    "largura": "1440",
+    "alturaAntes": 1611,
+    "alturaDepois": 1611,
+    "pctDiferente": 0.002
+  },
+  {
+    "caminho": "/es/contrate",
+    "largura": "1440",
+    "alturaAntes": 1611,
+    "alturaDepois": 1611,
+    "pctDiferente": 0.002
+  },
+  {
+    "caminho": "/sobre",
+    "largura": "1440",
+    "alturaAntes": 7030,
+    "alturaDepois": 7030,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/en/sobre",
+    "largura": "1440",
+    "alturaAntes": 7075,
+    "alturaDepois": 7075,
+    "pctDiferente": 0.002
+  },
+  {
+    "caminho": "/es/sobre",
+    "largura": "1440",
+    "alturaAntes": 7075,
+    "alturaDepois": 7075,
+    "pctDiferente": 0.004
+  },
+  {
+    "caminho": "/blog",
+    "largura": "1440",
+    "alturaAntes": 3694,
+    "alturaDepois": 3694,
+    "pctDiferente": 1.563
+  },
+  {
+    "caminho": "/en/blog",
+    "largura": "1440",
+    "alturaAntes": 3694,
+    "alturaDepois": 3694,
+    "pctDiferente": 1.569
+  },
+  {
+    "caminho": "/es/blog",
+    "largura": "1440",
+    "alturaAntes": 3694,
+    "alturaDepois": 3694,
+    "pctDiferente": 1.563
+  },
+  {
+    "caminho": "/transfer",
+    "largura": "1440",
+    "alturaAntes": 1441,
+    "alturaDepois": 1441,
+    "pctDiferente": 0.022
+  },
+  {
+    "caminho": "/en/transfer",
+    "largura": "1440",
+    "alturaAntes": 1441,
+    "alturaDepois": 1441,
+    "pctDiferente": 0.019
+  },
+  {
+    "caminho": "/es/transfer",
+    "largura": "1440",
+    "alturaAntes": 1441,
+    "alturaDepois": 1441,
+    "pctDiferente": 0.021
+  },
+  {
+    "caminho": "/transparencia",
+    "largura": "1440",
+    "alturaAntes": 5054,
+    "alturaDepois": 5054,
+    "pctDiferente": 0
+  },
+  {
+    "caminho": "/en/transparencia",
+    "largura": "1440",
+    "alturaAntes": 5031,
+    "alturaDepois": 5031,
+    "pctDiferente": 0.001
+  },
+  {
+    "caminho": "/es/transparencia",
+    "largura": "1440",
+    "alturaAntes": 5054,
+    "alturaDepois": 5054,
+    "pctDiferente": 0
+  },
+  {
+    "caminho": "/explore/mares",
+    "largura": "1440",
+    "alturaAntes": 3764,
+    "alturaDepois": 3764,
+    "pctDiferente": 0.3
+  },
+  {
+    "caminho": "/en/explore/mares",
+    "largura": "1440",
+    "alturaAntes": 3695,
+    "alturaDepois": 3695,
+    "pctDiferente": 0.223
+  },
+  {
+    "caminho": "/es/explore/mares",
+    "largura": "1440",
+    "alturaAntes": 3764,
+    "alturaDepois": 3764,
+    "pctDiferente": 0.3
+  },
+  {
+    "caminho": "/explore/mares/cardeiro",
+    "largura": "1440",
+    "alturaAntes": 2758,
+    "alturaDepois": 2758,
+    "pctDiferente": 0.464
+  },
+  {
+    "caminho": "/explore/mares/xepa",
+    "largura": "1440",
+    "alturaAntes": 2719,
+    "alturaDepois": 2719,
+    "pctDiferente": 0.514
+  },
+  {
+    "caminho": "/en/explore/mares/cardeiro",
+    "largura": "1440",
+    "alturaAntes": 2758,
+    "alturaDepois": 2762,
+    "pctDiferente": 1.43
+  },
+  {
+    "caminho": "/es/explore/mares/cardeiro",
+    "largura": "1440",
+    "alturaAntes": 2758,
+    "alturaDepois": 2758,
+    "pctDiferente": 0.465
+  },
+  {
+    "caminho": "/contrate/pedreiro-reforma",
+    "largura": "1440",
+    "alturaAntes": 1692,
+    "alturaDepois": 1692,
+    "pctDiferente": 0.002
+  },
+  {
+    "caminho": "/contrate/eletrica",
+    "largura": "1440",
+    "alturaAntes": 1692,
+    "alturaDepois": 1692,
+    "pctDiferente": 0.002
+  },
+  {
+    "caminho": "/en/contrate/pedreiro-reforma",
+    "largura": "1440",
+    "alturaAntes": 1692,
+    "alturaDepois": 1692,
+    "pctDiferente": 0.002
+  },
+  {
+    "caminho": "/es/contrate/pedreiro-reforma",
+    "largura": "1440",
+    "alturaAntes": 1692,
+    "alturaDepois": 1692,
+    "pctDiferente": 0.002
+  },
+  {
+    "caminho": "/negocio/dr-wind",
+    "largura": "1440",
+    "alturaAntes": 2127,
+    "alturaDepois": 2127,
+    "pctDiferente": 0.001
+  },
+  {
+    "caminho": "/negocio/positano-restaurante",
+    "largura": "1440",
+    "alturaAntes": 1855,
+    "alturaDepois": 1855,
+    "pctDiferente": 0.001
+  },
+  {
+    "caminho": "/en/negocio/dr-wind",
+    "largura": "1440",
+    "alturaAntes": 2127,
+    "alturaDepois": 2127,
+    "pctDiferente": 0
+  },
+  {
+    "caminho": "/es/negocio/dr-wind",
+    "largura": "1440",
+    "alturaAntes": 2127,
+    "alturaDepois": 2127,
+    "pctDiferente": 0.001
+  },
+  {
+    "caminho": "/blog/kitesurf-sao-miguel-do-gostoso",
+    "largura": "1440",
+    "alturaAntes": 3962,
+    "alturaDepois": 3962,
+    "pctDiferente": 0.043
+  },
+  {
+    "caminho": "/blog/transfer-aeroporto-natal-sao-miguel-gostoso",
+    "largura": "1440",
+    "alturaAntes": 9566,
+    "alturaDepois": 9566,
+    "pctDiferente": 0.219
+  },
+  {
+    "caminho": "/en/blog/kitesurf-sao-miguel-do-gostoso",
+    "largura": "1440",
+    "alturaAntes": 3962,
+    "alturaDepois": 3962,
+    "pctDiferente": 0.043
+  },
+  {
+    "caminho": "/es/blog/kitesurf-sao-miguel-do-gostoso",
+    "largura": "1440",
+    "alturaAntes": 3962,
+    "alturaDepois": 3962,
+    "pctDiferente": 0.043
+  },
+  {
+    "caminho": "/evento/42726834-c81d-40c8-a424-07281fd38292",
+    "largura": "1440",
+    "alturaAntes": 1381,
+    "alturaDepois": 1381,
+    "pctDiferente": 0
+  },
+  {
+    "caminho": "/evento/93332392-cdd7-4ad4-8913-beb21d9d3c35",
+    "largura": "1440",
+    "alturaAntes": 1338,
+    "alturaDepois": 1338,
+    "pctDiferente": 0
+  },
+  {
+    "caminho": "/en/evento/42726834-c81d-40c8-a424-07281fd38292",
+    "largura": "1440",
+    "alturaAntes": 1381,
+    "alturaDepois": 1381,
+    "pctDiferente": 0
+  },
+  {
+    "caminho": "/es/evento/42726834-c81d-40c8-a424-07281fd38292",
+    "largura": "1440",
+    "alturaAntes": 1381,
+    "alturaDepois": 1381,
+    "pctDiferente": 0
+  },
+  {
+    "caminho": "/bio",
+    "largura": "1440",
+    "alturaAntes": 1308,
+    "alturaDepois": 1308,
+    "pctDiferente": 0.026
+  },
+  {
+    "caminho": "/en/bio",
+    "largura": "1440",
+    "alturaAntes": 1308,
+    "alturaDepois": 1308,
+    "pctDiferente": 0.026
+  },
+  {
+    "caminho": "/es/bio",
+    "largura": "1440",
+    "alturaAntes": 1308,
+    "alturaDepois": 1308,
+    "pctDiferente": 0.026
+  },
+  {
+    "caminho": "/cadastre",
+    "largura": "1440",
+    "alturaAntes": 900,
+    "alturaDepois": 900,
+    "pctDiferente": 0.003
+  },
+  {
+    "caminho": "/nao-existe-kan-463",
+    "largura": "1440",
+    "alturaAntes": 900,
+    "alturaDepois": 900,
+    "pctDiferente": 0.036
+  }
+]

@@ -118,9 +118,12 @@ function LocationActions({ business: b, size = 'md' }: { business: Business; siz
 interface Props {
   business: Business
   view?: 'grid' | 'list' | 'gallery'
+  /** KAN-463: os primeiros cartoes da lista aparecem na primeira tela e a foto
+   *  deles e o LCP de /come, /fique e /passeie. Carregar tarde atrasava o LCP. */
+  acimaDaDobra?: boolean
 }
 
-export function BusinessCard({ business: b, view = 'grid' }: Props) {
+export function BusinessCard({ business: b, view = 'grid', acimaDaDobra = false }: Props) {
   const { t } = useTranslation()
   const open = isBusinessOpen(b.opening_hours)
   const lp = useLocalePath()
@@ -137,6 +140,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
         <Link href={lp(`/negocio/${b.slug}`)} className="relative w-36 sm:w-48 flex-shrink-0">
           <div className="w-full h-full">
             <BusinessCover
+              loading={acimaDaDobra ? 'eager' : undefined}
               coverUrl={b.cover_url}
               alt={b.name}
               nome={b.name}
@@ -202,6 +206,7 @@ export function BusinessCard({ business: b, view = 'grid' }: Props) {
         isPasseie ? 'aspect-[1/1]' : 'aspect-[4/3]',
       )}>
         <BusinessCover
+          loading={acimaDaDobra ? 'eager' : undefined}
           coverUrl={b.cover_url}
           alt={b.name}
           nome={b.name}

@@ -58,7 +58,7 @@ export function Logo({ height = 28, dark = false, markOnly = false }: LogoProps)
       <span
         className={dark ? 'text-white' : 'text-[#1A1A1A] dark:text-white'}
         style={{
-          fontFamily: 'Fraunces, Georgia, serif',
+          fontFamily: 'var(--font-display)',
           fontWeight: 700,
           fontSize: height * 0.62,
           lineHeight: 1,
