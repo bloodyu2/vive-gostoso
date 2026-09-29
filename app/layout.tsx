@@ -84,8 +84,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script nonce={nonce} dangerouslySetInnerHTML={{ __html: SCRIPT_ANTI_FOUC }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      {/* KAN-463: uma folha so, com todos os pesos que o CSS usa. Antes eram duas:
+          esta, com parte dos pesos, e um @import no globals.css com todos, que o
+          navegador so achava depois de baixar o CSS do site. */}
       <link
-        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet"
       />
       <link rel="apple-touch-startup-image" href="/splash/splash-1170x2532.png" />
