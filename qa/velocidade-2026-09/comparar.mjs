@@ -118,6 +118,14 @@ function rodarFumaca(base, pasta) {
   return resumo
 }
 
+/** O og:image de opengraph-image.tsx leva um hash do build na query
+ *  (?1a24ecdf...). Muda a cada build sem mudar a imagem, entao sai da comparacao. */
+function normalizarSeo(seo) {
+  if (!seo) return seo
+  const og = seo.ogImage && /\/opengraph-image\?[0-9a-f]+$/.test(seo.ogImage) ? seo.ogImage.replace(/\?[0-9a-f]+$/, '?<hash-do-build>') : seo.ogImage
+  return { ...seo, ogImage: og }
+}
+
 function igual(a, b) {
   return JSON.stringify(a ?? null) === JSON.stringify(b ?? null)
 }
@@ -125,28 +133,33 @@ function igual(a, b) {
 function compararRotas(antes, depois) {
   const mapa = new Map(depois.map((r) => [r.caminho, r]))
   const diferencas = []
-  for (const a of antes) {
+  for (let a of antes) {
     const d = mapa.get(a.caminho)
     if (!d) { diferencas.push({ caminho: a.caminho, campo: 'rota', antes: 'coletada', depois: 'ausente' }); continue }
     if (a.status !== d.status) diferencas.push({ caminho: a.caminho, campo: 'status', antes: a.status, depois: d.status })
     if ((a.location || null) !== (d.location || null)) diferencas.push({ caminho: a.caminho, campo: 'redirect', antes: a.location, depois: d.location })
     if (a.seo && d.seo) {
-      for (const campo of ['title', 'description', 'robots', 'canonical', 'hreflang', 'jsonld', 'h1', 'links', 'ogTitle', 'ogImage']) {
-        if (!igual(a.seo[campo], d.seo[campo])) {
-          const detalhe = Array.isArray(a.seo[campo])
-            ? {
-                antes: `so antes: ${JSON.stringify(a.seo[campo].filter((x) => !(d.seo[campo] || []).includes(x))).slice(0, 400)}`,
-                depois: `so depois: ${JSON.stringify((d.seo[campo] || []).filter((x) => !a.seo[campo].includes(x))).slice(0, 400)}`,
-              }
-            : { antes: a.seo[campo], depois: d.seo[campo] }
-          diferencas.push({ caminho: a.caminho, campo, ...detalhe })
-        }
-      }
+      a = { ...a, seo: normalizarSeo(a.seo) }
+      const dn = { ...d, seo: normalizarSeo(d.seo) }
+      compararSeo(a, dn, diferencas)
     } else if (!!a.seo !== !!d.seo) {
       diferencas.push({ caminho: a.caminho, campo: 'html', antes: !!a.seo, depois: !!d.seo })
     }
   }
   return diferencas
+}
+
+function compararSeo(a, d, diferencas) {
+  for (const campo of ['title', 'description', 'robots', 'canonical', 'hreflang', 'jsonld', 'h1', 'links', 'ogTitle', 'ogImage']) {
+    if (igual(a.seo[campo], d.seo[campo])) continue
+    const detalhe = Array.isArray(a.seo[campo])
+      ? {
+          antes: `so antes: ${JSON.stringify(a.seo[campo].filter((x) => !(d.seo[campo] || []).includes(x))).slice(0, 400)}`,
+          depois: `so depois: ${JSON.stringify((d.seo[campo] || []).filter((x) => !a.seo[campo].includes(x))).slice(0, 400)}`,
+        }
+      : { antes: a.seo[campo], depois: d.seo[campo] }
+    diferencas.push({ caminho: a.caminho, campo, ...detalhe })
+  }
 }
 
 function tabelaCache(rotas) {
@@ -171,7 +184,7 @@ async function main() {
   console.log(`[${o.nome}] base ${o.base}`)
 
   let rotasLista, amostra
-  if (o.linhaDeBase) {
+  if (o.linhaDeBase && !(o.reusarRotas && existsSync(join(LINHA, 'lista-de-rotas.json')))) {
     const { doSitemap, todas } = await montarRotas(o.base)
     rotasLista = todas
     amostra = montarAmostra(doSitemap)

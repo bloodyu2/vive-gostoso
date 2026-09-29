@@ -167,3 +167,31 @@ Guamaré fica mais perto de todas. Natal ficou por três motivos: é a estação
 **Vitrine.** Contagem 0 ou 1 usa a frase sem número. As bolinhas só indicam a posição (onze alvos de 44 px não cabem numa tela de 360 px); a navegação é pelas setas ou arrastando. Imagens: as de `public/images` que casam com o cartão; COME, CONTRATE e APOIE ficaram com ícone grande sobre cor suave. Frase limitada a 48 caracteres, com teste, em vez de corte com reticências.
 
 **remove-ai-marks.** O serviço local da skill (`127.0.0.1:8765`) estava fora do ar e a skill proíbe limpeza local. No lugar, o teste `src/lib/blog/post-mares.test.ts` reprova Unicode invisível e travessão no SQL. A reescrita estatística (camada B) não foi feita, porque a ordem pede o texto do post literal. A capa é PNG gerado pelo `next/og` a cada pedido, sem metadado de IA.
+
+## Velocidade: cache de dados em vez de ISR, nonce de CSP mantido (KAN-463, 29/09/2026)
+**Ordem do Victor de 29/09/2026 (KAN-463), mesmo metodo da Acalanto (KAN-462).** Branch `perf/kan-463`, saida de `origin/dev` (1f80d4e, mesma arvore da `origin/master` 2fa7229). Push, PR, deploy e medicao no ar ficaram com o Victor.
+
+**O nonce de CSP fica, e o HTML continua dinamico.** O `proxy.ts` gera nonce por requisicao (KAN-347), e a documentacao do Next 16 (`content-security-policy.md`) e clara: com nonce, toda pagina e renderizada por requisicao e ISR fica desligado. As duas saidas para ter HTML em cache foram descartadas:
+- Voltar `'unsafe-inline'` ao `script-src` desfaz o achado VGO-09 da auditoria. E afrouxar seguranca, e a ordem nao autoriza.
+- CSP por hash com o SRI experimental do Next (`experimental.sri`): cobre os arquivos `.js`, mas nao os scripts inline `self.__next_f.push(...)` que o Next escreve em cada pagina, com conteudo diferente por pagina. Sem `'unsafe-inline'` nem nonce, eles seriam bloqueados e a hidratacao morreria. E experimental. Fica de fora.
+
+**O que entrou no lugar: cache da leitura do banco.** `src/lib/supabase/publico.ts`: cliente anonimo, sem cookie, com `fetch` em `next: { revalidate: 300, tags: ['vitrine'] }`. Todas as leituras de servidor das paginas publicas passam por ele (home, `queries.ts`, `build-queries.ts`, contrate, transfer). Resultado para o visitante anonimo e o mesmo de antes: mesma chave anon, mesma RLS. Quem esta logado passa a ver nas paginas publicas a mesma versao do anonimo (antes o cliente com cookie podia, em tese, trazer linha que so o dono ve; todas as consultas ja filtravam `active`/`is_published`). Guarda: `src/lib/supabase/cache-publico.test.ts` reprova `lib/supabase/server` ou `next/headers` em `app/[lang]` (visto falhando).
+
+**Revalidacao sob demanda.** O cliente do navegador (`src/lib/supabase.ts`) avisa `POST /api/revalidar` depois de gravacao bem-sucedida no REST de quem tem cookie de sessao; a rota confere a sessao no servidor (401 sem ela) e limpa as tags `vitrine` e `gostoso_businesses` com `expire: 0`. Ficou no fetch do cliente, e nao em cada tela, para pegar toda gravacao, inclusive as futuras. Gravacao por fora do site (SQL, painel do Supabase) aparece em ate 5 minutos; mares e post publicado continuam com 1 h, como ja eram.
+
+**Regiao:** `vercel.json` so com `"regions": ["gru1"]`. Sem rotas nem headers: o `vercel.json` com rota catch-all quebrou o build em 06/2026 (2ea047f).
+
+**Imagens.** `SafeCoverImage` manda foto do Storage publico por `/_next/image` (larguras 640 e 1080, poucas de proposito, porque cada combinacao conta como transformacao na Vercel). Se o otimizador falhar, a mesma tag tenta a URL original antes de cair na capa tipografica. Unsplash e `/images` nao mudaram.
+
+**Fonte.** O `@import` do Google Fonts no `globals.css` saiu; a folha com todos os pesos ficou so no `<link>` do layout. Mesmas familias e pesos, sem mudanca de fonte na tela.
+
+**JavaScript.** Busca global e sino de notificacao com `dynamic(..., { ssr: false })`: so aparecem apos clique ou login. O banner de cookies NAO foi adiado: o Lighthouse mostrou que ele e o LCP da home no celular (aparece depois da hidratacao), e carregar em pedaco separado atrasaria o LCP.
+
+**Rastreadores.** Um caminho so no codigo: `GTMScript` (gtag.js do GTM-KDGMDLHG, que carrega o G-Z915DS14EM), depois do consent default. Nada foi adiado nem removido: nao ha como provar daqui que as conversoes continuam chegando se o carregamento mudar.
+
+**Ficou de fora, com motivo:**
+- Carregar so o idioma da pagina (`src/i18n.ts` importa pt, en e es, cerca de 265 KB de JSON no pacote do cliente). O texto do servidor sai do mesmo i18next; carregar o idioma depois exigiria mudar como o `LocaleSync` troca de lingua, com risco de texto trocado na hidratacao.
+- A home busca todos os negocios no navegador (`useBusinesses`) so para filtrar os destaques, que o servidor ja manda. Trocar pelo dado do servidor muda o HTML servido (a secao passaria a sair preenchida), e a ordem pede zero mudanca de comportamento.
+- Paginas mais visitadas: a Vercel Web Analytics nao esta ligada no projeto (a API devolveu "Web Analytics not found"). O Lighthouse usou a home, `/explore/mares` (prioridade 0,95 no sitemap, destino da /bio) e `/come` (primeiro modulo do menu).
+
+**QA.** Linha de base de producao, fumaca e comparativo em `qa/velocidade-2026-09/`. Os screenshots (105 MB) ficam fora do git, so na worktree; o `comparar.mjs` precisa deles para o comparativo visual.

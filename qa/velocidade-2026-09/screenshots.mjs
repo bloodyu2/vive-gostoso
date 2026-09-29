@@ -38,7 +38,11 @@ export async function tirarScreenshots(base, caminhos, pasta, { concorrencia = 3
     for (const largura of LARGURAS) {
       const dir = join(pasta, largura.nome)
       mkdirSync(dir, { recursive: true })
-      const contexto = await navegador.newContext({
+      // Um contexto novo por pagina: sem localStorage nem cookie de uma pagina
+      // vazando para a outra. Medido em 29/09/2026: com contexto compartilhado, a
+      // lingua do i18n de uma pagina /en ou /es ficava na pagina pt seguinte e o
+      // screenshot mudava de uma rodada para outra sem nada ter mudado no site.
+      const novoContexto = () => navegador.newContext({
         viewport: largura.viewport,
         isMobile: largura.isMobile,
         hasTouch: largura.hasTouch,
@@ -50,24 +54,26 @@ export async function tirarScreenshots(base, caminhos, pasta, { concorrencia = 3
       })
       let proximo = 0
       async function trabalhador() {
-        const page = await contexto.newPage()
         while (proximo < caminhos.length) {
           const caminho = caminhos[proximo++]
+          const contexto = await novoContexto()
+          const page = await contexto.newPage()
           try {
             await page.goto(base.replace(/\/$/, '') + caminho, { waitUntil: 'load', timeout: 60000 })
             await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => null)
             await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important}' }).catch(() => null)
             await esperarImagens(page).catch(() => null)
+            await page.evaluate(() => document.fonts?.ready).catch(() => null)
             await page.waitForTimeout(500)
             await page.screenshot({ path: join(dir, arquivoDe(caminho)), fullPage: true, timeout: 60000 })
           } catch (e) {
             falhas.push({ caminho, largura: largura.nome, erro: String(e?.message || e).slice(0, 200) })
+          } finally {
+            await contexto.close()
           }
         }
-        await page.close()
       }
       await Promise.all(Array.from({ length: concorrencia }, trabalhador))
-      await contexto.close()
     }
   } finally {
     await navegador.close()
