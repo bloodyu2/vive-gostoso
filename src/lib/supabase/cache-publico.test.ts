@@ -9,9 +9,9 @@ import { revalidarSeLogado, TAGS_REVALIDADAS } from './revalidar'
 
 describe('fetchDaVitrine', () => {
   it('guarda a resposta por 5 min com a tag da vitrine e mantem o resto do init', async () => {
-    const base = vi.fn(async () => new Response('[]'))
+    const base = vi.fn<(url: RequestInfo | URL, init?: RequestInit) => Promise<Response>>(async () => new Response('[]'))
     await fetchDaVitrine(base as unknown as typeof fetch)('https://x.supabase.co/rest/v1/t', { headers: { a: '1' } })
-    const init = base.mock.calls[0][1] as RequestInit & { next: { revalidate: number; tags: string[] } }
+    const init = base.mock.calls[0][1] as unknown as RequestInit & { next: { revalidate: number; tags: string[] } }
     expect(init.next).toEqual({ revalidate: SEGUNDOS_VITRINE, tags: [TAG_VITRINE] })
     expect(SEGUNDOS_VITRINE).toBe(300)
     expect(init.headers).toEqual({ a: '1' })
