@@ -50,3 +50,12 @@ docs/superpowers/
 
 # Vercel (KAN-348 / VGO-07): projectId e orgId nao precisam estar versionados
 .vercel/
+
+# KAN-463: saidas grandes do QA de velocidade ficam so na maquina (screenshots,
+# JSON cru do Lighthouse, artefatos do Playwright). Os resumos vao para o git.
+test-results/
+qa/velocidade-2026-09/**/screenshots/
+qa/velocidade-2026-09/**/screenshots-diff/
+qa/velocidade-2026-09/**/fumaca-artefatos/
+qa/velocidade-2026-09/lighthouse/*/*-[0-9].json
+qa/velocidade-2026-09/resultado-fumaca.json
