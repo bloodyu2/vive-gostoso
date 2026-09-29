@@ -1,13 +1,14 @@
-/* KAN-463: a folha do Google Fonts saiu daqui para o <link> do app/layout.tsx.
-   Com @import ela so era descoberta depois de baixar este CSS, em fila. */
+/* KAN-463: as fontes sao servidas pelo proprio site (next/font em app/layout.tsx),
+   que declara --font-fraunces e --font-jakarta no <html>. Antes: @import do Google
+   Fonts aqui, descoberto em fila depois deste CSS. */
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   /* --- Typography --- */
-  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
-  --font-sans:    "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-sans:    var(--font-jakarta), system-ui, -apple-system, sans-serif;
 
   /* --- Type scale --- */
   --font-size-display: 4rem;    /* 64px */
