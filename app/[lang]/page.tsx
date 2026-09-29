@@ -1,7 +1,7 @@
 // app/[lang]/page.tsx
 import type { Metadata } from 'next'
 import { buildPageMetadata, type Locale } from '@/lib/page-metadata'
-import { createClient } from '@/lib/supabase/server'
+import { clientePublico } from '@/lib/supabase/publico'
 import Home from '@/views/Home'
 import { webSiteSchema, touristDestinationSchema } from '@/lib/seo'
 import { safeJsonLd } from '@/lib/json-ld'
@@ -19,7 +19,8 @@ export async function generateMetadata(
 }
 
 async function getHomeData() {
-  const supabase = await createClient()
+  // KAN-463: cliente anonimo com cache de dados (5 min, limpo ao salvar).
+  const supabase = clientePublico()
 
   const [businessesRes, eventsRes, statsRes, verifiedRes, catsRes, eventsCountRes] = await Promise.all([
     supabase

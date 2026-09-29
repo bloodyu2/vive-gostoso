@@ -1,6 +1,9 @@
 // src/lib/supabase/queries.ts
 // Server-side Supabase queries for Next.js SSG/ISR pages
-import { createClient } from '@/lib/supabase/server'
+// KAN-463: as leituras publicas usam o cliente anonimo com cache de dados
+// (clientePublico), e nao mais o cliente com cookies: o resultado e o mesmo que o
+// visitante anonimo ja via, e deixa de ir ao banco a cada visita.
+import { clientePublico } from '@/lib/supabase/publico'
 import { redirect } from 'next/navigation'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { indexarParametros, type Parametro } from '@/lib/parametros'
@@ -10,7 +13,7 @@ import { PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY } from '@/lib/supabase/business-c
 // ─── Businesses ──────────────────────────────────────────────────────────────
 
 export async function getBusinessesByVerb(verb: string): Promise<Business[]> {
-  const supabase = await createClient()
+  const supabase = clientePublico()
 
   const { data: cats, error: catError } = await supabase
     .from('gostoso_categories')
@@ -40,7 +43,7 @@ export async function getBusinessesByVerb(verb: string): Promise<Business[]> {
 }
 
 export async function getBusinessSlugs(limit = 50): Promise<string[]> {
-  const supabase = await createClient()
+  const supabase = clientePublico()
   const { data, error } = await supabase
     .from('gostoso_businesses')
     .select('slug')
@@ -53,7 +56,7 @@ export async function getBusinessSlugs(limit = 50): Promise<string[]> {
 }
 
 export async function getBusiness(slug: string): Promise<Business | null> {
-  const supabase = await createClient()
+  const supabase = clientePublico()
   const { data, error } = await supabase
     .from('gostoso_businesses')
     .select(PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY)
@@ -65,7 +68,7 @@ export async function getBusiness(slug: string): Promise<Business | null> {
 }
 
 export async function getBusinessesForMap(): Promise<Array<Pick<Business, 'id' | 'name' | 'slug' | 'lat' | 'lng' | 'cover_url' | 'category_id' | 'is_featured' | 'active' | 'is_published'> & { category: Business['category'] }>> {
-  const supabase = await createClient()
+  const supabase = clientePublico()
   const { data, error } = await supabase
     .from('gostoso_businesses')
     .select('id, name, slug, lat, lng, cover_url, category_id, is_featured, active, is_published, category:gostoso_categories(*)')
@@ -80,7 +83,7 @@ export async function getBusinessesForMap(): Promise<Array<Pick<Business, 'id' |
 // ─── Events ──────────────────────────────────────────────────────────────────
 
 export async function getEventIds(limit = 100): Promise<string[]> {
-  const supabase = await createClient()
+  const supabase = clientePublico()
   const { data, error } = await supabase
     .from('gostoso_events')
     .select('id')
@@ -91,7 +94,7 @@ export async function getEventIds(limit = 100): Promise<string[]> {
 }
 
 export async function getEvent(id: string): Promise<GostosoEvent | null> {
-  const supabase = await createClient()
+  const supabase = clientePublico()
   const { data, error } = await supabase
     .from('gostoso_events')
     .select('*')
@@ -104,7 +107,7 @@ export async function getEvent(id: string): Promise<GostosoEvent | null> {
 // ─── Blog ────────────────────────────────────────────────────────────────────
 
 export async function getBlogPosts(limit = 20): Promise<BlogPost[]> {
-  const supabase = await createClient()
+  const supabase = clientePublico()
   const { data, error } = await supabase
     .from('gostoso_blog_posts')
     .select('id, title, slug, excerpt, cover_url, published_at, tags, author, is_published, faq_jsonld, content, created_at')
@@ -116,7 +119,7 @@ export async function getBlogPosts(limit = 20): Promise<BlogPost[]> {
 }
 
 export async function getBlogPost(slug: string): Promise<BlogPost | null> {
-  const supabase = await createClient()
+  const supabase = clientePublico()
   const { data, error } = await supabase
     .from('gostoso_blog_posts')
     .select('*')
@@ -130,7 +133,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
 // ─── Fund entries ─────────────────────────────────────────────────────────────
 
 export async function getFundEntries(): Promise<FundEntry[]> {
-  const supabase = await createClient()
+  const supabase = clientePublico()
   const { data, error } = await supabase
     .from('gostoso_fund_entries')
     .select('*')
@@ -142,7 +145,7 @@ export async function getFundEntries(): Promise<FundEntry[]> {
 // ─── Services & Jobs ─────────────────────────────────────────────────────────
 
 export async function getServices(): Promise<ServiceListing[]> {
-  const supabase = await createClient()
+  const supabase = clientePublico()
   const { data, error } = await supabase
     .from('gostoso_service_listings')
     .select('*')
@@ -154,7 +157,7 @@ export async function getServices(): Promise<ServiceListing[]> {
 }
 
 export async function getJobs(): Promise<JobListing[]> {
-  const supabase = await createClient()
+  const supabase = clientePublico()
   const { data, error } = await supabase
     .from('gostoso_job_listings')
     .select('*')
@@ -184,7 +187,7 @@ export async function requireAdmin(supabase: SupabaseClient, userId: string): Pr
 /** Preco e percentual, para o servidor entregar ja no HTML. Sem isto a pagina
  *  institucional sai sem numero e ele so aparece depois da hidratacao. */
 export async function getParametrosProduto(): Promise<Record<string, number>> {
-  const supabase = await createClient()
+  const supabase = clientePublico()
   const { data, error } = await supabase
     .from('gostoso_parametros_produto')
     .select('chave, valor, unidade')

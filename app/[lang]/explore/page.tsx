@@ -43,9 +43,10 @@ export default async function ExplorePage({ params }: { params: Promise<{ lang: 
   const d = DICIONARIOS[lang]
   const e = d.explore_indice
   const v = textosVitrine(lang)
-  const mareHoje = await lerMareDeHojeNoCardeiro()
+  // KAN-463: as duas leituras sao independentes e vao juntas.
+  const [mareHoje, guiaPublicado] = await Promise.all([lerMareDeHojeNoCardeiro(), guiaMaresPublicado(lang)])
   const [mares, ...outros] = itensDoExplore(lang)
-  const guia = (await guiaMaresPublicado(lang)) ? textosGuiaMares(lang) : null
+  const guia = guiaPublicado ? textosGuiaMares(lang) : null
 
   return (
     <main className="max-w-6xl mx-auto px-5 md:px-8 pt-8 md:pt-12 pb-10">
