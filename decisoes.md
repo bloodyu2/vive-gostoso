@@ -183,13 +183,16 @@ Guamaré fica mais perto de todas. Natal ficou por três motivos: é a estação
 
 **Imagens.** `SafeCoverImage` manda foto do Storage publico por `/_next/image` (larguras 640 e 1080, poucas de proposito, porque cada combinacao conta como transformacao na Vercel). Se o otimizador falhar, a mesma tag tenta a URL original antes de cair na capa tipografica. Unsplash e `/images` nao mudaram.
 
-**Fonte.** O `@import` do Google Fonts no `globals.css` saiu; a folha com todos os pesos ficou so no `<link>` do layout. Mesmas familias e pesos, sem mudanca de fonte na tela.
+**Fonte.** Fraunces e Plus Jakarta Sans passaram a ser servidas pelo proprio site com `next/font/google` (baixadas no build), no lugar da folha do Google Fonts no `<link>` e do `@import` no `globals.css`, que bloqueavam a primeira pintura (0,96 s no Lighthouse de producao) e abriam dois dominios. Mesmas familias, com o eixo `opsz` e os estilos normal e italico; o nome da familia no CSS continua "Fraunces" e "Plus Jakarta Sans". Os tokens `--font-display` e `--font-sans` leem `--font-fraunces` e `--font-jakarta`. O `preload` do next/font nao saiu no HTML neste build com `--webpack` (o `next-font-manifest.json` vem vazio); ficou anotado, o ganho medido veio de tirar a folha externa. Nos testes, `next/font/google` e trocado por `src/test/next-font-google.ts` (alias no `vitest.config.ts`).
+
+**Primeiros cartoes das listas.** A foto do primeiro cartao era o LCP de `/come` no celular e saia com `loading="lazy"`. `BusinessGrid` passa `acimaDaDobra` aos primeiros cartoes (2 na lista, 3 na grade, 4 na galeria), que carregam na hora.
 
 **JavaScript.** Busca global e sino de notificacao com `dynamic(..., { ssr: false })`: so aparecem apos clique ou login. O banner de cookies NAO foi adiado: o Lighthouse mostrou que ele e o LCP da home no celular (aparece depois da hidratacao), e carregar em pedaco separado atrasaria o LCP.
 
 **Rastreadores.** Um caminho so no codigo: `GTMScript` (gtag.js do GTM-KDGMDLHG, que carrega o G-Z915DS14EM), depois do consent default. Nada foi adiado nem removido: nao ha como provar daqui que as conversoes continuam chegando se o carregamento mudar.
 
 **Ficou de fora, com motivo:**
+- Banner de cookies no HTML do servidor. Ele e o LCP da home no celular porque so aparece depois da hidratacao (9,5 s no Lighthouse local). Sair no HTML, escondido por um script inline para quem ja respondeu, anteciparia o LCP para perto da primeira pintura. Mexe no fluxo de consentimento (LGPD), entao fica para o Victor decidir.
 - Carregar so o idioma da pagina (`src/i18n.ts` importa pt, en e es, cerca de 265 KB de JSON no pacote do cliente). O texto do servidor sai do mesmo i18next; carregar o idioma depois exigiria mudar como o `LocaleSync` troca de lingua, com risco de texto trocado na hidratacao.
 - A home busca todos os negocios no navegador (`useBusinesses`) so para filtrar os destaques, que o servidor ja manda. Trocar pelo dado do servidor muda o HTML servido (a secao passaria a sair preenchida), e a ordem pede zero mudanca de comportamento.
 - Paginas mais visitadas: a Vercel Web Analytics nao esta ligada no projeto (a API devolveu "Web Analytics not found"). O Lighthouse usou a home, `/explore/mares` (prioridade 0,95 no sitemap, destino da /bio) e `/come` (primeiro modulo do menu).

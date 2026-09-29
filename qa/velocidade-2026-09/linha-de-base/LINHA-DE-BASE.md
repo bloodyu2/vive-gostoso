@@ -51,3 +51,7 @@ Passou: 26. Falhou: 0. Instavel (passou na segunda tentativa): 0. Pulado: 0.
 - ok: blog e bio > blog lista posts e o post abre com JSON-LD
 - ok: blog e bio > /bio: noindex e UTM em todo link interno
 
+
+## Screenshots
+
+140 screenshots (70 paginas em 390 e 1440 px), refeitos em producao em 29/09/2026 com contexto de navegador novo por pagina, antes de qualquer deploy. Ficam so na maquina (qa/velocidade-2026-09/linha-de-base/screenshots, fora do git).

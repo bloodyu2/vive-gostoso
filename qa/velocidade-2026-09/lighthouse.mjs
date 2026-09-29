@@ -38,8 +38,8 @@ async function ttfb(url) {
 
 function resumo(j) {
   const au = j.audits
-  const lcpEl = au['largest-contentful-paint-element']?.details?.items?.[0]?.items?.[0]?.node?.snippet
-    ?? au['largest-contentful-paint-element']?.details?.items?.[0]?.node?.snippet ?? null
+  const no = (au['lcp-breakdown-insight']?.details?.items || []).find((x) => x.type === 'node')
+  const lcpEl = no ? `${no.nodeLabel} ${no.snippet}`.slice(0, 160) : null
   return {
     nota: Math.round(j.categories.performance.score * 100),
     lcp_s: +(au['largest-contentful-paint'].numericValue / 1000).toFixed(2),
