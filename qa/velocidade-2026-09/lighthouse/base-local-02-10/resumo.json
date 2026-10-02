@@ -1,0 +1,63 @@
+{
+  "base": "http://localhost:3211",
+  "data": "2026-10-02T01:15:42.258Z",
+  "linhas": [
+    {
+      "pagina": "/",
+      "ttfbCurl_ms": 360,
+      "notas": [
+        54,
+        65,
+        66
+      ],
+      "nota": 65,
+      "lcp_s": 5.45,
+      "fcp_s": 1.09,
+      "tbt_s": 0.58,
+      "cls": 0,
+      "si_s": 2.38,
+      "execucaoJs_s": 1.31,
+      "servidor_s": 0.87,
+      "peso_mb": 1.09,
+      "lcpElemento": "We use cookies to understand how Gostoso is visited and improve the platform. Y… <p class=\"text-sm leading-relaxed\">"
+    },
+    {
+      "pagina": "/explore/mares",
+      "ttfbCurl_ms": 21,
+      "notas": [
+        73,
+        73,
+        81
+      ],
+      "nota": 73,
+      "lcp_s": 4.14,
+      "fcp_s": 1.13,
+      "tbt_s": 0.54,
+      "cls": 0,
+      "si_s": 1.2,
+      "execucaoJs_s": 0.97,
+      "servidor_s": 0.02,
+      "peso_mb": 0.59,
+      "lcpElemento": "Today's tide and the next 7 days on the beaches of São Miguel do Gostoso, Touro… <p class=\"mt-4 text-lg text-fg-2 leading-relaxed max-w-[60ch]\">"
+    },
+    {
+      "pagina": "/come",
+      "ttfbCurl_ms": 34,
+      "notas": [
+        55,
+        56,
+        57
+      ],
+      "nota": 56,
+      "lcp_s": 6.14,
+      "fcp_s": 1.48,
+      "tbt_s": 0.9,
+      "cls": 0.001,
+      "si_s": 2.76,
+      "execucaoJs_s": 1.27,
+      "servidor_s": 0.05,
+      "peso_mb": 0.87,
+      "lcpElemento": "Bar do Tico <img src=\"https://images.unsplash.com/photo-1590301157890-4810ed352733?w=800&amp;auto=fo…\" alt=\"Bar do Tico\" loading=\"eager\" decoding=\"async\" class="
+    }
+  ]
+}
