@@ -143,6 +143,7 @@ export function BusinessCard({ business: b, view = 'grid', acimaDaDobra = false 
               loading={acimaDaDobra ? 'eager' : undefined}
               coverUrl={b.cover_url}
               alt={b.name}
+              sizes="(max-width: 640px) 144px, 192px"
               nome={b.name}
               slug={b.slug}
               categoria={b.category?.name}
@@ -209,6 +210,7 @@ export function BusinessCard({ business: b, view = 'grid', acimaDaDobra = false 
           loading={acimaDaDobra ? 'eager' : undefined}
           coverUrl={b.cover_url}
           alt={b.name}
+          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
           nome={b.name}
           slug={b.slug}
           categoria={b.category?.name}

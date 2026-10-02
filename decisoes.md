@@ -198,3 +198,10 @@ Guamaré fica mais perto de todas. Natal ficou por três motivos: é a estação
 - Paginas mais visitadas: a Vercel Web Analytics nao esta ligada no projeto (a API devolveu "Web Analytics not found"). O Lighthouse usou a home, `/explore/mares` (prioridade 0,95 no sitemap, destino da /bio) e `/come` (primeiro modulo do menu).
 
 **QA.** Linha de base de producao, fumaca e comparativo em `qa/velocidade-2026-09/`. Os screenshots (105 MB) ficam fora do git, so na worktree; o `comparar.mjs` precisa deles para o comparativo visual.
+
+## Velocidade: `sizes` das fotos de capa (KAN-463, rodada 2, 02/10/2026)
+**Mesma linha do vive-paraty (KAN-462/KAN-463).** O Lighthouse celular de 02/10/2026 manteve a home como a pior pagina (54, LCP 6,3 s, 1,53 MB). O LCP da home no celular continua sendo o banner de cookies (decisao de consentimento, ja registrada acima, fica com o Victor), e o LCP do host de medicao segue inflado por falta de fonte de sistema, entao a correcao foi atras das causas reais, nao do LCP.
+
+**O que a rodada 1 deixou passar.** As fotos do Storage viraram `/_next/image` com srcSet em 640 e 1080 (rodada 1), mas quem nao declarava `sizes` herdava o padrao `100vw` do `SafeCoverImage`. MEDIDO no build local: o cartao \"Chale Gostoso SMG\" da home, exibido a 178 px, pedia a variante de 1080 px e baixava 218 KB; a mesma foto em 640 sai em 85 KB. `BusinessCover` ganhou a prop `sizes` e a home, o cartao de negocio e o bloco \"Agora em Gostoso\" passam a largura real. As larguras 640 e 1080 da rodada 1 nao mudaram: a correcao foi so no `sizes`, sem nova transformacao na Vercel.
+
+**O que ficou de fora, com motivo:** cache do HTML (segue `private, no-store` por causa do nonce de CSP, igual a rodada 1); preload de fonte (o `next/font` com `--webpack` nao emite no HTML, e mexer em preload de fonte derrubou a /explore do vive-paraty em 29/09); o `useBusinesses` da home (247 KB de JSON no navegador para filtrar destaques que o servidor ja manda) muda o HTML servido, entao e decisao de comportamento, nao de velocidade.

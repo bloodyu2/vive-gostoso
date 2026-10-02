@@ -152,7 +152,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
               >
                 <div className="aspect-square bg-gradient-to-br from-teal to-teal-dark overflow-hidden">
                   {b.cover_url
-                    ? <SafeCoverImage src={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
+                    ? <SafeCoverImage src={b.cover_url} alt={b.name} sizes="(max-width: 639px) 50vw, 25vw" className="w-full h-full object-cover" />
                     : <div className="w-full h-full flex items-center justify-center text-white/30 text-3xl font-bold">{b.name[0]}</div>
                   }
                 </div>

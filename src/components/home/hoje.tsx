@@ -66,6 +66,7 @@ export function Hoje() {
                       <BusinessCover
                         coverUrl={b.cover_url}
                         alt=""
+                        sizes="36px"
                         nome={b.name}
                         slug={b.slug}
                         categoria={b.category?.name}

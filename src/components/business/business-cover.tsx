@@ -45,6 +45,13 @@ type Props = CapaProps & {
   alt: string
   className?: string
   loading?: 'lazy' | 'eager'
+  /** KAN-463: largura em que a foto e exibida, para o navegador escolher a
+   *  variante certa do srcSet. Sem isto, a foto do Storage herda o padrao
+   *  `100vw` e o navegador baixa a variante de 1080 px mesmo num cartao de
+   *  178 px: MEDIDO em 02/10/2026, o cartao "Chale Gostoso SMG" da home baixou
+   *  218 KB (w=1080) para exibir 178 px. Com `sizes` correto, a mesma foto sai
+   *  em w=640 (85 KB). Nao muda o layout, so qual arquivo o navegador pede. */
+  sizes?: string
 }
 
 /**
@@ -68,6 +75,7 @@ export function BusinessCover({
   alt,
   className = 'w-full h-full object-cover',
   loading,
+  sizes,
   ...capa
 }: Props) {
   if (!coverUrl || ehCapaGenerica(coverUrl)) return <CapaTipografica {...capa} />
@@ -78,6 +86,7 @@ export function BusinessCover({
       alt={alt}
       className={className}
       loading={loading}
+      sizes={sizes}
       fallback={<CapaTipografica {...capa} />}
     />
   )
