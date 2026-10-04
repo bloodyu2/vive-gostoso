@@ -1,0 +1,18 @@
+import { chromium } from '@playwright/test'
+const base='http://localhost:3000'
+const b=await chromium.launch()
+const ctx=await b.newContext({viewport:{width:390,height:844}})
+await ctx.addInitScript(()=>{try{localStorage.setItem('vg_cookie_consent','accepted')}catch(e){}})
+const p=await ctx.newPage()
+await p.goto(base+'/negocio/positano-restaurante',{waitUntil:'networkidle',timeout:60000})
+await p.waitForTimeout(800)
+await p.evaluate(()=>window.scrollTo(0,900))
+await p.waitForTimeout(900)
+await p.screenshot({path:'qa/rodada-magicui/negocio-390-barra.png'})
+console.log('bar shot')
+await p.goto(base+'/blog/kitesurf-sao-miguel-do-gostoso',{waitUntil:'networkidle',timeout:60000})
+await p.evaluate(()=>window.scrollTo(0,1200))
+await p.waitForTimeout(900)
+await p.screenshot({path:'qa/rodada-magicui/blogpost-390-progresso.png'})
+console.log('progress shot')
+await b.close()
