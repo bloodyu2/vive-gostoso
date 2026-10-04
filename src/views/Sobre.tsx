@@ -119,7 +119,7 @@ export default function Sobre({ initialParametros }: SobreProps) {
       {/* Como funciona */}
       <section className="bg-areia dark:bg-[#161616] px-5 md:px-8 py-16 md:py-20">
         <div className="max-w-4xl mx-auto">
-          <p className="text-xs font-bold tracking-widest uppercase text-[#737373] mb-3">{t('sobre.modelo_eyebrow')}</p>
+          <p className="text-xs font-bold tracking-widest uppercase text-fg-3-texto mb-3">{t('sobre.modelo_eyebrow')}</p>
           <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-10">
             {t('sobre.modelo_h2')}
           </h2>
@@ -132,11 +132,11 @@ export default function Sobre({ initialParametros }: SobreProps) {
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${s.color}`}>
                       <Icon className="w-5 h-5" />
                     </div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#737373] bg-[#F5F2EE] dark:bg-[#2D2D2D] px-2.5 py-1 rounded-full">{s.tag}</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-fg-3-texto bg-[#F5F2EE] dark:bg-[#2D2D2D] px-2.5 py-1 rounded-full">{s.tag}</span>
                   </div>
                   <div>
                     <h3 className="font-semibold text-[#1A1A1A] dark:text-white text-base mb-1.5">{s.title}</h3>
-                    <p className="text-sm text-[#737373] leading-relaxed">{s.body}</p>
+                    <p className="text-sm text-fg-3-texto leading-relaxed">{s.body}</p>
                   </div>
                 </div>
               )
@@ -147,11 +147,11 @@ export default function Sobre({ initialParametros }: SobreProps) {
 
       {/* Efeito rede */}
       <section className="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-20">
-        <p className="text-xs font-bold tracking-widest uppercase text-[#737373] mb-3">{t('sobre.rede_eyebrow')}</p>
+        <p className="text-xs font-bold tracking-widest uppercase text-fg-3-texto mb-3">{t('sobre.rede_eyebrow')}</p>
         <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-4">
           {t('sobre.rede_h2')}
         </h2>
-        <p className="text-[#737373] text-lg mb-12 max-w-2xl">
+        <p className="text-fg-3-texto text-lg mb-12 max-w-2xl">
           {t('sobre.rede_desc')}
         </p>
         <div className="relative">
@@ -187,11 +187,11 @@ export default function Sobre({ initialParametros }: SobreProps) {
       {/* Sistema de verbos */}
       <section className="bg-areia dark:bg-[#161616] px-5 md:px-8 py-16">
         <div className="max-w-4xl mx-auto">
-          <p className="text-xs font-bold tracking-widest uppercase text-[#737373] mb-3">{t('sobre.verbos_eyebrow')}</p>
+          <p className="text-xs font-bold tracking-widest uppercase text-fg-3-texto mb-3">{t('sobre.verbos_eyebrow')}</p>
           <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-2">
             {t('sobre.verbos_h2')}
           </h2>
-          <p className="text-[#737373] text-lg mb-10">
+          <p className="text-fg-3-texto text-lg mb-10">
             {t('sobre.verbos_desc')}
           </p>
           <div className="grid sm:grid-cols-2 gap-3">
@@ -202,7 +202,7 @@ export default function Sobre({ initialParametros }: SobreProps) {
                 className="group flex items-center gap-4 bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl px-5 py-4 hover:border-teal hover:shadow-md transition-all"
               >
                 <span className={`font-display font-bold text-xl w-28 flex-shrink-0 ${color}`}>{v}</span>
-                <span className="text-sm text-[#737373] leading-snug flex-1">{desc}</span>
+                <span className="text-sm text-fg-3-texto leading-snug flex-1">{desc}</span>
                 <ArrowRight className="w-4 h-4 text-teal opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
               </Link>
             ))}
@@ -212,11 +212,11 @@ export default function Sobre({ initialParametros }: SobreProps) {
 
       {/* Planos */}
       <section className="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-20">
-        <p className="text-xs font-bold tracking-widest uppercase text-[#737373] mb-3">{t('sobre.planos_eyebrow')}</p>
+        <p className="text-xs font-bold tracking-widest uppercase text-fg-3-texto mb-3">{t('sobre.planos_eyebrow')}</p>
         <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-4">
           {t('sobre.planos_h2')}
         </h2>
-        <p className="text-[#737373] text-lg mb-10 max-w-2xl">
+        <p className="text-fg-3-texto text-lg mb-10 max-w-2xl">
           {t('sobre.planos_desc')}
         </p>
         <div className="grid sm:grid-cols-3 gap-5">
@@ -225,7 +225,7 @@ export default function Sobre({ initialParametros }: SobreProps) {
             <div className="flex items-baseline gap-1 mb-1">
               <span className="font-display font-bold text-4xl text-[#1A1A1A] dark:text-white">{preco(CHAVES.planoGratuito)}</span>
             </div>
-            <div className="text-xs font-bold uppercase tracking-widest text-[#737373] mb-5">{t('sobre.planos_free_label')}</div>
+            <div className="text-xs font-bold uppercase tracking-widest text-fg-3-texto mb-5">{t('sobre.planos_free_label')}</div>
             <ul className="space-y-2.5 text-sm text-[#3D3D3D] dark:text-[#C0BCB8] flex-1">
               {[0, 1, 2, 3].map(i => (
                 <li key={i} className="flex items-start gap-2"><span className="text-teal mt-0.5">✓</span> {t(`sobre.planos_free_item_${i}`)}</li>
@@ -240,7 +240,7 @@ export default function Sobre({ initialParametros }: SobreProps) {
           <div className="bg-white dark:bg-[#1C1C1C] border border-teal/30 rounded-2xl p-6 flex flex-col">
             <div className="flex items-baseline gap-1 mb-1">
               <span className="font-display font-bold text-4xl text-teal">{preco(CHAVES.planoAssociado)}</span>
-              <span className="text-sm text-[#737373]">/mês</span>
+              <span className="text-sm text-fg-3-texto">/mês</span>
             </div>
             <div className="text-xs font-bold uppercase tracking-widest text-teal mb-5">{t('sobre.planos_assoc_label')}</div>
             <ul className="space-y-2.5 text-sm text-[#3D3D3D] dark:text-[#C0BCB8] flex-1">
@@ -264,7 +264,7 @@ export default function Sobre({ initialParametros }: SobreProps) {
             </div>
             <div className="flex items-baseline gap-1 mb-1">
               <span className="font-display font-bold text-4xl text-ocre">{preco(CHAVES.planoDestaque)}</span>
-              <span className="text-sm text-[#737373]">/mês</span>
+              <span className="text-sm text-fg-3-texto">/mês</span>
             </div>
             <div className="text-xs font-bold uppercase tracking-widest text-ocre mb-5">{t('sobre.planos_plus_label')}</div>
             <ul className="space-y-2.5 text-sm text-[#3D3D3D] dark:text-[#C0BCB8] flex-1">
@@ -280,7 +280,7 @@ export default function Sobre({ initialParametros }: SobreProps) {
             </Link>
           </div>
         </div>
-        <p className="text-xs text-[#737373] mt-6 text-center">{t('sobre.planos_disclaimer')}</p>
+        <p className="text-xs text-fg-3-texto mt-6 text-center">{t('sobre.planos_disclaimer')}</p>
       </section>
 
       {/* Transparência */}
@@ -310,11 +310,11 @@ export default function Sobre({ initialParametros }: SobreProps) {
 
       {/* Futuro */}
       <section className="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-20">
-        <p className="text-xs font-bold tracking-widest uppercase text-[#737373] mb-3">{t('sobre.futuro_eyebrow')}</p>
+        <p className="text-xs font-bold tracking-widest uppercase text-fg-3-texto mb-3">{t('sobre.futuro_eyebrow')}</p>
         <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-4">
           {t('sobre.futuro_h2')}
         </h2>
-        <p className="text-[#737373] text-lg mb-10 max-w-2xl leading-relaxed">
+        <p className="text-fg-3-texto text-lg mb-10 max-w-2xl leading-relaxed">
           {t('sobre.futuro_desc')}
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
@@ -329,14 +329,14 @@ export default function Sobre({ initialParametros }: SobreProps) {
         </div>
         <div className="p-5 bg-areia dark:bg-[#161616] rounded-2xl border border-[#E8E4DF] dark:border-[#2D2D2D] flex items-start gap-4">
           <Lightbulb className="w-5 h-5 text-ocre flex-shrink-0 mt-0.5" />
-          <p className="text-sm text-[#737373] leading-relaxed">{t('sobre.futuro_box')}</p>
+          <p className="text-sm text-fg-3-texto leading-relaxed">{t('sobre.futuro_box')}</p>
         </div>
       </section>
 
       {/* Quem faz */}
       <section className="bg-areia dark:bg-[#161616] px-5 md:px-8 py-16 md:py-20">
         <div className="max-w-4xl mx-auto">
-          <p className="text-xs font-bold tracking-widest uppercase text-[#737373] mb-3">{t('sobre.quem_eyebrow')}</p>
+          <p className="text-xs font-bold tracking-widest uppercase text-fg-3-texto mb-3">{t('sobre.quem_eyebrow')}</p>
           <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-8">
             {t('sobre.quem_h2')}
           </h2>
@@ -351,12 +351,12 @@ export default function Sobre({ initialParametros }: SobreProps) {
                 </div>
                 <div>
                   <div className="font-semibold">Instituto Balaio</div>
-                  <div className="text-xs text-[#737373]">
+                  <div className="text-xs text-fg-3-texto">
                     {t('sobre.quem_balaio_sub')} · <a href="https://balaio.net" target="_blank" rel="noopener noreferrer" className="text-teal hover:underline inline-flex items-center gap-0.5">balaio.net <ExternalLink className="w-3 h-3" /></a>
                   </div>
                 </div>
               </div>
-              <p className="text-sm text-[#737373] leading-relaxed">{t('sobre.quem_balaio_desc')}</p>
+              <p className="text-sm text-fg-3-texto leading-relaxed">{t('sobre.quem_balaio_desc')}</p>
               <a href="mailto:contato@vivegostoso.com.br" className="mt-3 inline-block text-xs text-teal hover:underline">
                 contato@vivegostoso.com.br
               </a>
@@ -395,7 +395,7 @@ export default function Sobre({ initialParametros }: SobreProps) {
 
       {/* Participar */}
       <section className="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-20">
-        <p className="text-xs font-bold tracking-widest uppercase text-[#737373] mb-3">{t('sobre.participar_eyebrow')}</p>
+        <p className="text-xs font-bold tracking-widest uppercase text-fg-3-texto mb-3">{t('sobre.participar_eyebrow')}</p>
         <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-10">
           {t('sobre.participar_h2')}
         </h2>
@@ -405,7 +405,7 @@ export default function Sobre({ initialParametros }: SobreProps) {
               <Globe className="w-5 h-5 text-teal" />
             </div>
             <h3 className="font-semibold mb-2">{t('sobre.participar_negocio_h3')}</h3>
-            <p className="text-sm text-[#737373] leading-relaxed mb-4">{t('sobre.participar_negocio_desc')}</p>
+            <p className="text-sm text-fg-3-texto leading-relaxed mb-4">{t('sobre.participar_negocio_desc')}</p>
             <Link href="/cadastre" className="text-teal text-sm font-semibold hover:underline flex items-center gap-1">
               {t('sobre.participar_negocio_btn')} <ArrowRight className="w-3.5 h-3.5" />
             </Link>
@@ -415,7 +415,7 @@ export default function Sobre({ initialParametros }: SobreProps) {
               <Heart className="w-5 h-5 text-ocre" />
             </div>
             <h3 className="font-semibold mb-2">{t('sobre.participar_alcance_h3')}</h3>
-            <p className="text-sm text-[#737373] leading-relaxed mb-4">{t('sobre.participar_alcance_desc', { pct: parametro(param, CHAVES.rateioCidade) ?? '' })}</p>
+            <p className="text-sm text-fg-3-texto leading-relaxed mb-4">{t('sobre.participar_alcance_desc', { pct: parametro(param, CHAVES.rateioCidade) ?? '' })}</p>
             <Link href={lp('/apoie')} className="text-ocre text-sm font-semibold hover:underline flex items-center gap-1">
               {t('sobre.participar_alcance_btn')} <ArrowRight className="w-3.5 h-3.5" />
             </Link>
@@ -425,7 +425,7 @@ export default function Sobre({ initialParametros }: SobreProps) {
               <Users className="w-5 h-5 text-[#3D3D3D]" />
             </div>
             <h3 className="font-semibold mb-2">{t('sobre.participar_morador_h3')}</h3>
-            <p className="text-sm text-[#737373] leading-relaxed mb-4">{t('sobre.participar_morador_desc')}</p>
+            <p className="text-sm text-fg-3-texto leading-relaxed mb-4">{t('sobre.participar_morador_desc')}</p>
             <Link href={lp('/contrate')} className="text-[#3D3D3D] dark:text-[#C0BCB8] text-sm font-semibold hover:underline flex items-center gap-1">
               {t('sobre.participar_morador_btn')} <ArrowRight className="w-3.5 h-3.5" />
             </Link>

@@ -74,7 +74,7 @@ export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPosts
       <h2 className="font-display text-2xl font-bold text-[#1A1A1A] dark:text-white mb-6">
         Continue lendo
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className={`grid grid-cols-1 gap-4 ${posts.length === 1 ? 'max-w-sm' : posts.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-3'}`}>
         {posts.map(post => (
           <Link
             key={post.id}
@@ -86,7 +86,7 @@ export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPosts
                 <SafeCoverImage
                   src={post.cover_url}
                   alt={post.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-cover"
                 />
               </div>
             ) : (
@@ -100,7 +100,7 @@ export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPosts
                 {post.title}
               </h3>
               {post.excerpt && (
-                <p className="mt-1.5 text-xs text-[#737373] line-clamp-2 leading-relaxed">
+                <p className="mt-1.5 text-xs text-fg-3-texto line-clamp-2 leading-relaxed">
                   {post.excerpt}
                 </p>
               )}

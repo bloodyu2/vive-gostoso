@@ -26,12 +26,12 @@ function AdminReviewsInner() {
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
-      <Link href={lp('/cadastre/admin')} className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
+      <Link href={lp('/cadastre/admin')} className="inline-flex items-center gap-1.5 text-sm text-fg-3-texto hover:text-teal transition-colors mb-6">
         <ArrowLeft className="w-4 h-4" /> {t('back')}
       </Link>
 
       <h1 className="font-display text-3xl font-semibold mb-2">{t('title')}</h1>
-      <p className="text-sm text-[#737373] mb-8">{t('desc')}</p>
+      <p className="text-sm text-fg-3-texto mb-8">{t('desc')}</p>
 
       {isLoading && (
         <div className="space-y-3">
@@ -42,7 +42,7 @@ function AdminReviewsInner() {
       {isError && <ErrorState onRetry={() => refetch()} />}
 
       {!isLoading && !isError && !reviews.length && (
-        <div className="text-center py-16 text-[#B0A99F]">
+        <div className="text-center py-16 text-placeholder">
           <CheckCircle2 className="w-10 h-10 mx-auto mb-3 text-teal" />
           <p className="font-semibold">{t('empty')}</p>
         </div>
@@ -54,7 +54,7 @@ function AdminReviewsInner() {
             <div className="flex items-start justify-between gap-3 mb-1">
               <div>
                 <p className="font-semibold text-sm text-[#1A1A1A]">{r.author_name ?? t('anonymous')}</p>
-                <p className="text-xs text-[#B0A99F]">
+                <p className="text-xs text-placeholder">
                   {r.target_name}
                   <span className="mx-1">·</span>
                   {r.target_type === 'business' ? t('type_business') :
@@ -78,7 +78,7 @@ function AdminReviewsInner() {
               <button
                 onClick={() => moderate({ id: r.id, approve: false })}
                 disabled={isPending}
-                className="flex-1 bg-[#F5F2EE] text-[#737373] rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#E8E4DF] transition-colors disabled:opacity-50"
+                className="flex-1 bg-[#F5F2EE] text-fg-3-texto rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-[#E8E4DF] transition-colors disabled:opacity-50"
               >
                 {t('reject')}
               </button>

@@ -44,7 +44,7 @@ export function NotificationBell() {
       >
         <Bell className="w-4 h-4" />
         {unread > 0 && (
-          <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-coral rounded-full flex items-center justify-center text-[9px] font-bold text-white leading-none">
+          <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-coral-texto rounded-full flex items-center justify-center text-[9px] font-bold text-white leading-none">
             {unread > 9 ? '9+' : unread}
           </span>
         )}
@@ -63,7 +63,7 @@ export function NotificationBell() {
 
           <div className="max-h-80 overflow-y-auto divide-y divide-[#F5F2EE] dark:divide-[#2D2D2D]">
             {notifications.length === 0 ? (
-              <div className="flex flex-col items-center gap-2 py-10 text-[#737373]">
+              <div className="flex flex-col items-center gap-2 py-10 text-fg-3-texto">
                 <Bell className="w-7 h-7 opacity-25" />
                 <p className="text-sm">Nenhuma notificação ainda.</p>
               </div>
@@ -78,8 +78,8 @@ export function NotificationBell() {
                   <div className={cn('w-2 h-2 rounded-full mt-1.5 flex-shrink-0 transition-colors', !n.read ? 'bg-teal' : 'bg-transparent')} />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-[#1A1A1A] dark:text-white leading-snug">{n.title}</p>
-                    {n.body && <p className="text-xs text-[#737373] mt-0.5 leading-snug">{n.body}</p>}
-                    <p className="text-[10px] text-[#737373] mt-1">{relativeTime(n.created_at)}</p>
+                    {n.body && <p className="text-xs text-fg-3-texto mt-0.5 leading-snug">{n.body}</p>}
+                    <p className="text-[10px] text-fg-3-texto mt-1">{relativeTime(n.created_at)}</p>
                   </div>
                 </>
               )

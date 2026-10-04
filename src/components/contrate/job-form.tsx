@@ -44,7 +44,7 @@ export function JobForm({ onClose }: Props) {
         <div className="flex items-center justify-between px-6 py-5 border-b border-[#E8E4DF] sticky top-0 bg-white z-10">
           <div>
             <h2 className="font-display font-bold text-xl text-[#1A1A1A]">{t('title')}</h2>
-            <p className="text-xs text-[#737373] mt-0.5">{t('subtitle')}</p>
+            <p className="text-xs text-fg-3-texto mt-0.5">{t('subtitle')}</p>
           </div>
           <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-[#F5F2EE] transition-colors">
             <X className="w-5 h-5" />
@@ -55,7 +55,7 @@ export function JobForm({ onClose }: Props) {
           <div className="px-6 py-10 text-center">
             <div className="text-4xl mb-4">✅</div>
             <h3 className="font-display font-bold text-xl mb-2">{t('success_title')}</h3>
-            <p className="text-[#737373] text-sm leading-relaxed">
+            <p className="text-fg-3-texto text-sm leading-relaxed">
               {t('success_desc')}
             </p>
             <button onClick={onClose} className="mt-6 bg-ocre text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity">
@@ -126,7 +126,7 @@ export function JobForm({ onClose }: Props) {
               />
             </div>
 
-            <p className="text-xs text-[#737373] leading-relaxed">
+            <p className="text-xs text-fg-3-texto leading-relaxed">
               {t('privacy_text')}
             </p>
 

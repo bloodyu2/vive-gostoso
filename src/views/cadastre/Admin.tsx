@@ -19,7 +19,7 @@ export default function Admin() {
 function PendingBadge({ count }: { count: number }) {
   if (!count) return null
   return (
-    <span className="ml-auto flex-shrink-0 bg-coral text-white text-[10px] font-bold px-2 py-0.5 rounded-full tabular-nums">
+    <span className="ml-auto flex-shrink-0 bg-coral-texto text-white text-[10px] font-bold px-2 py-0.5 rounded-full tabular-nums">
       {count}
     </span>
   )
@@ -115,24 +115,24 @@ function AdminInner() {
       <header className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-5 md:px-8 h-14 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <LayoutDashboard className="w-4 h-4 text-[#737373]" />
+            <LayoutDashboard className="w-4 h-4 text-fg-3-texto" />
             <span className="text-sm font-semibold text-[#1A1A1A]">{t('admin.title')}</span>
             {totalPending > 0 && (
-              <span className="bg-coral text-white text-[10px] font-bold px-2 py-0.5 rounded-full tabular-nums">
+              <span className="bg-coral-texto text-white text-[10px] font-bold px-2 py-0.5 rounded-full tabular-nums">
                 {t('admin.pending_count', { count: totalPending })}
               </span>
             )}
           </div>
           <div className="flex items-center gap-3">
             {user?.email && (
-              <span className="hidden sm:block text-xs text-[#737373] truncate max-w-[180px]">
+              <span className="hidden sm:block text-xs text-fg-3-texto truncate max-w-[180px]">
                 {user.email}
               </span>
             )}
             <button
               onClick={() => supabase.auth.signOut()}
               title={t('admin.logout')}
-              className="flex items-center gap-1.5 text-xs text-[#737373] hover:text-[#1A1A1A] border border-[#E8E4DF] hover:border-[#C4BFBA] rounded-xl px-3 py-1.5 transition-colors"
+              className="flex items-center gap-1.5 text-xs text-fg-3-texto hover:text-[#1A1A1A] border border-[#E8E4DF] hover:border-[#C4BFBA] rounded-xl px-3 py-1.5 transition-colors"
             >
               <LogOut className="w-3.5 h-3.5" />
               {t('admin.logout')}
@@ -145,7 +145,7 @@ function AdminInner() {
         {/* ── Back link ── */}
         <Link
           href={lp('/cadastre/painel')}
-          className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6"
+          className="inline-flex items-center gap-1.5 text-sm text-fg-3-texto hover:text-teal transition-colors mb-6"
         >
           {t('admin.back_to_painel')}
         </Link>
@@ -153,7 +153,7 @@ function AdminInner() {
         {/* ── Heading ── */}
         <div className="mb-6">
           <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">{t('admin.heading')}</h1>
-          <p className="text-sm text-[#737373] mt-1">{t('admin.subtitle')}</p>
+          <p className="text-sm text-fg-3-texto mt-1">{t('admin.subtitle')}</p>
         </div>
 
         {/* ── Stats bar ── */}
@@ -177,7 +177,7 @@ function AdminInner() {
                 <p className={`text-xl font-bold tabular-nums leading-none ${urgent ? 'text-coral' : 'text-[#1A1A1A]'}`}>
                   {value}
                 </p>
-                <p className="text-[10px] text-[#737373] mt-1 leading-tight">{label}</p>
+                <p className="text-[10px] text-fg-3-texto mt-1 leading-tight">{label}</p>
               </div>
             ))}
           </div>
@@ -194,11 +194,11 @@ function AdminInner() {
               <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
                 badge > 0 ? 'bg-coral/10' : 'bg-[#F5F2EE]'
               }`}>
-                <Icon className={`w-4 h-4 ${badge > 0 ? 'text-coral' : 'text-[#737373]'}`} />
+                <Icon className={`w-4 h-4 ${badge > 0 ? 'text-coral' : 'text-fg-3-texto'}`} />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-sm text-[#1A1A1A] group-hover:text-teal transition-colors">{title}</p>
-                <p className="text-xs text-[#737373] mt-0.5 truncate">{desc}</p>
+                <p className="text-xs text-fg-3-texto mt-0.5 truncate">{desc}</p>
               </div>
               <PendingBadge count={badge} />
             </Link>

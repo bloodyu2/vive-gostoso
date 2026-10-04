@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { BusinessCard } from '@/components/business/business-card'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { Hoje } from '@/components/home/hoje'
+import { BlurFade } from '@/components/magicui/blur-fade'
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useStats, type SiteStats } from '@/hooks/useStats'
 import { useRecentBusinesses } from '@/hooks/useRecentBusinesses'
@@ -69,18 +70,13 @@ export default function Home({ initialData, vitrine }: HomeProps) {
     <div>
       {/* ── Hero ── */}
       <section className="relative bg-[#1A1A1A] text-white overflow-hidden">
-        {/* Background texture */}
-        <div className="absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '32px 32px' }}
-        />
-
         {/* Content */}
         <div className="relative max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-28">
           <div className="flex flex-col gap-6 max-w-2xl">
             {/* Display headline */}
             <h1 className="font-display font-bold leading-none tracking-tight">
               <span className="flex items-center gap-3 text-xs font-semibold tracking-widest uppercase text-white/60 mb-6">
-                <span className="inline-block w-2 h-2 rounded-full bg-teal animate-pulse" />
+                <span className="inline-block w-2 h-2 rounded-full bg-teal" />
                 {t('home.hero_h1_cidade')}
               </span>
               <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">{t('home.hero_h1_1')}</span>
@@ -124,10 +120,10 @@ export default function Home({ initialData, vitrine }: HomeProps) {
         <button
           onClick={scrollToVerbs}
           aria-label={t('home.scroll_label')}
-          className={`absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/40 hover:text-white/80 transition-all duration-500 ${scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          className={`absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/70 hover:text-white/80 transition-all duration-500 ${scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
           <span className="text-[10px] uppercase tracking-widest font-semibold">{t('home.scroll_label')}</span>
-          <ChevronDown className="w-5 h-5 animate-bounce" />
+          <ChevronDown className="w-5 h-5" />
         </button>
       </section>
 
@@ -138,6 +134,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
 
       {/* ── Recém chegados ── */}
       {recentBusinesses.length > 0 && (
+        <BlurFade>
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10 md:pb-14">
           <div className="flex justify-between items-center mb-5">
             <h2 className="font-display text-h3 font-semibold">{t('home.novos_titulo')}</h2>
@@ -148,7 +145,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
               <Link
                 key={b.id}
                 href={lp(`/negocio/${b.slug}`)}
-                className="group bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all"
+                className="group bg-white dark:bg-card rounded-2xl border border-[#E8E4DF] dark:border-border-1 overflow-hidden hover:shadow-md transition-all"
               >
                 <div className="aspect-square bg-gradient-to-br from-teal to-teal-dark overflow-hidden">
                   {b.cover_url
@@ -157,14 +154,15 @@ export default function Home({ initialData, vitrine }: HomeProps) {
                   }
                 </div>
                 <div className="p-3">
-                  <p className="text-xs font-semibold text-[#1A1A1A] truncate leading-snug">{b.name}</p>
-                  {b.category && <p className="text-[10px] text-[#737373] mt-0.5 truncate">{b.category.name}</p>}
+                  <p className="text-xs font-semibold text-[#1A1A1A] dark:text-white truncate leading-snug">{b.name}</p>
+                  {b.category && <p className="text-[10px] text-fg-3-texto mt-0.5 truncate">{b.category.name}</p>}
                   {b.is_verified && <span className="inline-block mt-1.5 text-[9px] font-bold tracking-wide uppercase text-teal bg-teal-light px-1.5 py-0.5 rounded-full">{t('filters.verificado')}</span>}
                 </div>
               </Link>
             ))}
           </div>
         </section>
+        </BlurFade>
       )}
 
       {/* ── Agora em Gostoso ── */}
@@ -210,6 +208,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
 
       {/* ── Últimos do blog ── */}
       {latestPosts.length > 0 && (
+        <BlurFade delay={80}>
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10 md:pb-14">
           <div className="flex justify-between items-end mb-5">
             <h2 className="font-display text-h3 font-semibold">{t('home.blog_titulo')}</h2>
@@ -222,7 +221,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
               <Link
                 key={post.id}
                 href={lp(`/blog/${post.slug}`)}
-                className="group rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] bg-white dark:bg-[#222] hover:shadow-md hover:-translate-y-0.5 transition-all"
+                className="group rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] bg-white dark:bg-[#222] hover:shadow-md transition-all"
               >
                 {post.cover_url ? (
                   <div className="aspect-[16/10] overflow-hidden bg-[#E8E4DF] dark:bg-[#2D2D2D]">
@@ -230,7 +229,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
                       src={post.cover_url}
                       alt={post.title}
                       loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 ) : (
@@ -250,7 +249,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
                     {post.title}
                   </h3>
                   {post.excerpt && (
-                    <p className="mt-2 text-sm text-[#737373] leading-relaxed line-clamp-2">
+                    <p className="mt-2 text-sm text-fg-3-texto leading-relaxed line-clamp-2">
                       {post.excerpt}
                     </p>
                   )}
@@ -265,6 +264,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
             ))}
           </div>
         </section>
+        </BlurFade>
       )}
 
       {/* ── Banner: Quer saber como funciona? ── */}

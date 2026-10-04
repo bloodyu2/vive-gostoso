@@ -55,7 +55,7 @@ function PreviewInner() {
           <div className="flex items-center gap-3 min-w-0">
             <Link
               href={lp('/cadastre/painel')}
-              className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors flex-shrink-0"
+              className="inline-flex items-center gap-1.5 text-sm text-fg-3-texto hover:text-teal transition-colors flex-shrink-0"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               {t('preview:back')}
@@ -78,12 +78,12 @@ function PreviewInner() {
       <main className="max-w-3xl mx-auto px-5 md:px-8 py-8">
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-1">
-            <Eye className="w-4 h-4 text-[#737373]" />
+            <Eye className="w-4 h-4 text-fg-3-texto" />
             <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">
               {t('preview:heading')}
             </h1>
           </div>
-          <p className="text-sm text-[#737373]">
+          <p className="text-sm text-fg-3-texto">
             {t('preview:desc')}
           </p>
         </div>
@@ -98,7 +98,7 @@ function PreviewInner() {
           <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-8 items-start">
             {/* Card preview */}
             <div>
-              <p className="text-xs text-[#737373] font-medium uppercase tracking-wide mb-3">
+              <p className="text-xs text-fg-3-texto font-medium uppercase tracking-wide mb-3">
                 {t('preview:card_label')}
               </p>
               <div className="max-w-sm">
@@ -112,7 +112,7 @@ function PreviewInner() {
               <div className={`inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full ${
                 business.is_published
                   ? 'bg-teal/10 text-teal'
-                  : 'bg-[#F5F2EE] text-[#737373]'
+                  : 'bg-[#F5F2EE] text-fg-3-texto'
               }`}>
                 <span className={`w-2 h-2 rounded-full ${business.is_published ? 'bg-teal' : 'bg-[#737373]'}`} />
                 {business.is_published ? t('preview:status_published') : t('preview:status_draft')}
@@ -124,10 +124,10 @@ function PreviewInner() {
                   href={lp(`/cadastre/perfil?bizId=${business.id}`)}
                   className="flex items-center gap-3 bg-white border border-[#E8E4DF] rounded-2xl px-5 py-4 hover:border-teal transition-colors group"
                 >
-                  <Pencil className="w-4 h-4 text-[#737373] group-hover:text-teal transition-colors" />
+                  <Pencil className="w-4 h-4 text-fg-3-texto group-hover:text-teal transition-colors" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-[#1A1A1A]">{t('preview:action_edit_title')}</p>
-                    <p className="text-xs text-[#737373]">{t('preview:action_edit_desc')}</p>
+                    <p className="text-xs text-fg-3-texto">{t('preview:action_edit_desc')}</p>
                   </div>
                 </Link>
                 <a
@@ -136,10 +136,10 @@ function PreviewInner() {
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 bg-white border border-[#E8E4DF] rounded-2xl px-5 py-4 hover:border-teal transition-colors group"
                 >
-                  <ExternalLink className="w-4 h-4 text-[#737373] group-hover:text-teal transition-colors" />
+                  <ExternalLink className="w-4 h-4 text-fg-3-texto group-hover:text-teal transition-colors" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-[#1A1A1A]">{t('preview:action_public_title')}</p>
-                    <p className="text-xs text-[#737373] font-mono truncate">
+                    <p className="text-xs text-fg-3-texto font-mono truncate">
                       {t('preview:action_public_url', { slug: business.slug })}
                     </p>
                   </div>
@@ -154,7 +154,7 @@ function PreviewInner() {
             <h2 className="font-display text-base font-semibold text-[#1A1A1A] mb-2">
               {t('preview:empty_title')}
             </h2>
-            <p className="text-sm text-[#737373] mb-5 max-w-xs mx-auto">
+            <p className="text-sm text-fg-3-texto mb-5 max-w-xs mx-auto">
               {t('preview:empty_desc')}
             </p>
             <Link

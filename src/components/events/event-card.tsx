@@ -25,10 +25,10 @@ function CardContent({ event: e, t }: { event: GostosoEvent; t: (key: string) =>
       <div className="p-5">
         <div className="flex gap-1.5 mb-2 flex-wrap items-center">
           {type && <Badge kind={type}>{t('type_' + e.event_type)}</Badge>}
-          <span className="text-xs text-[#737373] font-medium">{dateStr}</span>
+          <span className="text-xs text-fg-3-texto font-medium">{dateStr}</span>
         </div>
         <h3 className="font-display font-semibold text-xl">{e.name}</h3>
-        {e.location && <p className="text-xs text-[#737373] mt-1">{e.location}</p>}
+        {e.location && <p className="text-xs text-fg-3-texto mt-1">{e.location}</p>}
         {e.description && <p className="text-sm text-[#3D3D3D] mt-2 line-clamp-2">{e.description}</p>}
       </div>
     </>
@@ -38,7 +38,7 @@ function CardContent({ event: e, t }: { event: GostosoEvent; t: (key: string) =>
 export function EventCard({ event: e }: { event: GostosoEvent }) {
   const { t } = useTranslation('event_card')
   const lp = useLocalePath()
-  const baseClass = "bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 block"
+  const baseClass = "bg-white dark:bg-card rounded-2xl border border-[#E8E4DF] dark:border-border-1 overflow-hidden transition-all duration-200 hover:shadow-md block"
 
   // O <div> externo carrega o visual do card; o <Link> cobre so o conteudo e o
   // "Fonte" fica como IRMAO dele, nunca dentro. <a> dentro de <a> e HTML
@@ -57,7 +57,7 @@ export function EventCard({ event: e }: { event: GostosoEvent }) {
             href={e.source_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block text-xs text-[#737373] underline underline-offset-2 hover:text-teal transition-colors"
+            className="inline-block text-xs text-fg-3-texto underline underline-offset-2 hover:text-teal transition-colors"
           >
             {t('fonte')} ↗
           </a>

@@ -25,7 +25,7 @@ function EventRow({ sub }: { sub: EventSubmission }) {
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-[#1A1A1A]">{sub.name}</h3>
-          <p className="text-xs text-[#737373] mt-0.5">
+          <p className="text-xs text-fg-3-texto mt-0.5">
             {dateStr}{sub.location ? ` · ${sub.location}` : ''}
           </p>
         </div>
@@ -54,8 +54,8 @@ function EventRow({ sub }: { sub: EventSubmission }) {
           {sub.source_url}
         </a>
       )}
-      <div className="text-xs text-[#737373] border-t border-[#F0EDE8] pt-3">
-        {t('submitted_by')} <span className="text-[#737373]">{sub.submitter_name}</span>
+      <div className="text-xs text-fg-3-texto border-t border-[#F0EDE8] pt-3">
+        {t('submitted_by')} <span className="text-fg-3-texto">{sub.submitter_name}</span>
         {sub.submitter_email ? ` · ${sub.submitter_email}` : ''}
         {sub.submitter_phone ? ` · ${sub.submitter_phone}` : ''}
       </div>
@@ -70,11 +70,11 @@ function AdminEventsInner() {
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
-      <Link href={lp('/cadastre/admin')} className="text-sm text-[#737373] hover:text-teal transition-colors inline-block mb-6">
+      <Link href={lp('/cadastre/admin')} className="text-sm text-fg-3-texto hover:text-teal transition-colors inline-block mb-6">
         {t('back')}
       </Link>
       <h1 className="font-display text-3xl font-semibold mb-2">{t('title')}</h1>
-      <p className="text-sm text-[#737373] mb-8">{t('desc')}</p>
+      <p className="text-sm text-fg-3-texto mb-8">{t('desc')}</p>
 
       {isLoading ? (
         <div className="space-y-4">
@@ -83,7 +83,7 @@ function AdminEventsInner() {
       ) : submissions.length === 0 ? (
         <div className="text-center py-16 border-2 border-dashed border-[#E8E4DF] rounded-2xl">
           <CalendarCheck className="w-10 h-10 mb-3 text-teal mx-auto" />
-          <p className="text-[#737373] text-sm">{t('empty')}</p>
+          <p className="text-fg-3-texto text-sm">{t('empty')}</p>
         </div>
       ) : (
         <div className="space-y-4">

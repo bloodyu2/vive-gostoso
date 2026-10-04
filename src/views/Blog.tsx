@@ -59,14 +59,14 @@ export default function Blog({ initialPosts = [] }: BlogProps) {
       )}
 
       {!isLoading && !isError && posts.length === 0 && (
-        <div className="text-center py-20 text-[#737373]">
+        <div className="text-center py-20 text-fg-3-texto">
           <p className="text-lg">{t('blog.sem_artigos')}</p>
           <p className="text-sm mt-2">{t('blog.sem_artigos_sub')}</p>
         </div>
       )}
 
       {!isLoading && !isError && posts.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className={`grid grid-cols-1 gap-6 ${posts.length === 1 ? 'max-w-md' : posts.length === 2 ? 'sm:grid-cols-2' : 'md:grid-cols-2 lg:grid-cols-3'}`}>
           {posts.map(post => (
             <Link
               key={post.id}
@@ -78,7 +78,7 @@ export default function Blog({ initialPosts = [] }: BlogProps) {
                   <SafeCoverImage
                     src={post.cover_url}
                     alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover"
                   />
                 </div>
               ) : (
@@ -102,11 +102,11 @@ export default function Blog({ initialPosts = [] }: BlogProps) {
                   {post.title}
                 </h2>
                 {post.excerpt && (
-                  <p className="mt-2 text-sm text-[#737373] leading-relaxed line-clamp-2">
+                  <p className="mt-2 text-sm text-fg-3-texto leading-relaxed line-clamp-2">
                     {post.excerpt}
                   </p>
                 )}
-                <div className="mt-3 flex items-center gap-2 text-xs text-[#737373]">
+                <div className="mt-3 flex items-center gap-2 text-xs text-fg-3-texto">
                   <span>{post.author}</span>
                   {post.published_at && (
                     <>

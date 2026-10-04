@@ -1,15 +1,16 @@
 'use client'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle, Share2, Check, BookOpen, Wifi, Car, UserCheck, CalendarCheck } from 'lucide-react'
+import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle, Share2, Check, BookOpen, Wifi, Car, UserCheck, CalendarCheck, Navigation } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useBusiness } from '@/hooks/useBusinesses'
-import { isBusinessOpen, safeExternalUrl } from '@/lib/utils'
+import { isBusinessOpen, safeExternalUrl, cn } from '@/lib/utils'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { pushDataLayer } from '@/lib/analytics'
 import { ManagedBadge } from '@/components/business/managed-badge'
 import { ClaimCta } from '@/components/business/claim-cta'
 import { Lightbox } from '@/components/ui/lightbox'
+import { Lens } from '@/components/magicui/lens'
 import { ReviewList } from '@/components/reviews/review-list'
 import { ReviewForm } from '@/components/reviews/review-form'
 import { useBusinessRatings } from '@/hooks/useReviews'
@@ -35,9 +36,36 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
   const { data: b, isLoading } = useBusiness(slug ?? '', initialBusiness !== undefined ? { initialData: initialBusiness } : undefined)
   const [copied, setCopied] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const [barraVisivel, setBarraVisivel] = useState(false)
+  const [pertoDoFim, setPertoDoFim] = useState(false)
+  const asideRef = useRef<HTMLElement>(null)
   const { data: ratingsMap } = useBusinessRatings()
   const { t } = useTranslation()
   const lp = useLocalePath()
+
+  /* Barra fixa de contato no celular: some quando a sidebar (que ja tem o CTA)
+     entra na tela, para nao dizer a mesma coisa duas vezes. */
+  useEffect(() => {
+    const el = asideRef.current
+    if (!el) return
+    const io = new IntersectionObserver(
+      ([entrada]) => setBarraVisivel(!entrada.isIntersecting),
+      { threshold: 0 }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [b?.id])
+
+  /* Esconde perto do fim da pagina, para a barra nao cobrir o rodape. */
+  useEffect(() => {
+    const aoRolar = () => {
+      const restante = document.documentElement.scrollHeight - window.innerHeight - window.scrollY
+      setPertoDoFim(restante < 260)
+    }
+    aoRolar()
+    window.addEventListener('scroll', aoRolar, { passive: true })
+    return () => window.removeEventListener('scroll', aoRolar)
+  }, [])
 
   const days: Record<string, string> = {
     seg: t('negocio.dia_seg'),
@@ -67,7 +95,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-16 text-center">
       <div className="text-6xl mb-4">🤔</div>
       <h2 className="font-display text-2xl font-semibold mb-2">{t('negocio.nao_encontrado')}</h2>
-      <p className="text-[#737373] mb-6">{t('negocio.nao_encontrado_desc')}</p>
+      <p className="text-fg-3-texto mb-6">{t('negocio.nao_encontrado_desc')}</p>
       <Link href={lp('/')} className="text-teal font-semibold">{t('not_found.voltar_inicio')}</Link>
     </main>
   )
@@ -85,6 +113,9 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
      topo virar clicavel. Abrir uma lupa em cima de um pousada.jpg generico
      seria mostrar em tamanho grande uma foto que nem e daqui. */
   const capaReal = b.cover_url && !ehCapaGenerica(b.cover_url) ? b.cover_url : null
+  const mapsUrlContato = b.lat && b.lng
+    ? `https://www.google.com/maps/dir/?api=1&destination=${b.lat},${b.lng}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.name + ' São Miguel do Gostoso RN')}`
   const shareUrl = `https://www.vivegostoso.com.br/negocio/${business.slug}`
   const shareText = `${business.name}: ${shareUrl}`
 
@@ -102,7 +133,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-10">
-      <Link href={lp(backTo)} className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
+      <Link href={lp(backTo)} className="inline-flex items-center gap-1.5 text-sm text-fg-3-texto hover:text-teal transition-colors mb-6">
         <ArrowLeft className="w-4 h-4" />
         {t('negocio.voltar_a')} {backLabel}
       </Link>
@@ -152,20 +183,20 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
           <h1 className="font-display font-bold text-3xl sm:text-4xl tracking-tight mb-1 break-words">{b.name}</h1>
           {avgRating !== null && (
             <div className="flex items-center gap-2 mb-4">
-              <StarRating value={Math.round(avgRating)} readonly size="sm" />
+              <StarRating value={Math.round(avgRating)} readonly size="md" />
               <span className="text-sm font-semibold text-[#1A1A1A]">{avgRating.toFixed(1)}</span>
-              <span className="text-sm text-[#737373]">
+              <span className="text-sm text-fg-3-texto">
                 ({reviewCount} {reviewCount === 1 ? t('negocio.avaliacao_singular') : t('negocio.avaliacao_plural')})
               </span>
             </div>
           )}
           {b.price_range && (
-            <span className="inline-block text-sm font-semibold text-[#737373] bg-[#F0EDEA] px-2 py-0.5 rounded-lg mb-4">
+            <span className="inline-block text-sm font-semibold text-fg-3-texto bg-[#F0EDEA] dark:bg-white/10 px-2 py-0.5 rounded-lg mb-4">
               {b.price_range}
             </span>
           )}
           {b.address && (
-            <p className="flex items-center gap-1.5 text-sm text-[#737373] mb-6">
+            <p className="flex items-center gap-1.5 text-sm text-fg-3-texto mb-6">
               <MapPin className="w-4 h-4 flex-shrink-0" /> {b.address}
             </p>
           )}
@@ -180,10 +211,12 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
               {b.photos.map((url, i) => (
                 <div
                   key={i}
-                  className="relative aspect-square rounded-xl overflow-hidden bg-[#E8E4DF] cursor-pointer hover:opacity-90 transition-opacity"
+                  className="relative aspect-square rounded-xl overflow-hidden bg-[#E8E4DF] dark:bg-[#2D2D2D] cursor-pointer hover:opacity-90 transition-opacity"
                   onClick={() => setLightboxIndex(capaReal ? i + 1 : i)}
                 >
-                  <SafeCoverImage src={url} alt={`${b.name} foto ${i + 1}`} className="w-full h-full object-cover" />
+                  <Lens className="w-full h-full">
+                    <SafeCoverImage src={url} alt={`${b.name} foto ${i + 1}`} className="w-full h-full object-cover" />
+                  </Lens>
                   {temLicenca(b.imagens_licenciadas, url) && (
                     <FotoPropriaBadge className="absolute bottom-2 left-2 scale-90 origin-bottom-left" />
                   )}
@@ -205,7 +238,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
         </div>
 
         {/* Sidebar */}
-        <aside className="space-y-5">
+        <aside ref={asideRef} className="space-y-5">
           {/* WhatsApp CTA */}
           {b.whatsapp && (
             <a
@@ -213,7 +246,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => pushDataLayer('contato_negocio_click', { business_name: b.name })}
-              className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1EBE57] text-white rounded-2xl px-5 py-4 text-sm font-semibold transition-colors"
+              className="w-full flex items-center justify-center gap-2 bg-whatsapp hover:bg-[#0E7440] text-white rounded-2xl px-5 py-4 text-sm font-semibold transition-colors"
             >
               <Phone className="w-4 h-4" />
               {t('negocio.falar_whatsapp')}
@@ -246,10 +279,10 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
 
           {/* Contatos / Amenidades / Horários / Fundo — one surface, divide-y sections
               instead of four stacked cards (was card-in-card-in-card). */}
-          <div className="bg-white border border-[#E8E4DF] rounded-2xl divide-y divide-[#E8E4DF] overflow-hidden">
+          <div className="bg-white dark:bg-card border border-[#E8E4DF] dark:border-border-1 rounded-2xl divide-y divide-[#E8E4DF] dark:divide-border-1 overflow-hidden">
             {/* Contatos */}
             <div className="p-5 space-y-3">
-              <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide">{t('negocio.contato')}</h3>
+              <h3 className="font-semibold text-sm text-[#1A1A1A] dark:text-white uppercase tracking-wide">{t('negocio.contato')}</h3>
 
               {b.whatsapp && (
                 <a href={buildWhatsAppLink(b.whatsapp)} target="_blank" rel="noopener noreferrer"
@@ -287,7 +320,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
             {/* Amenidades */}
             {b.amenities && Object.values(b.amenities).some(Boolean) && (
               <div className="p-5">
-                <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide mb-3">{t('negocio.comodidades')}</h3>
+                <h3 className="font-semibold text-sm text-[#1A1A1A] dark:text-white uppercase tracking-wide mb-3">{t('negocio.comodidades')}</h3>
                 <div className="grid grid-cols-2 gap-2">
                   {b.amenities.wifi && (
                     <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
@@ -316,7 +349,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
             {/* Horários */}
             {b.opening_hours && Object.keys(b.opening_hours).length > 0 && (
               <div className="p-5">
-                <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide mb-3 flex items-center gap-2">
+                <h3 className="font-semibold text-sm text-[#1A1A1A] dark:text-white uppercase tracking-wide mb-3 flex items-center gap-2">
                   <Clock className="w-4 h-4 text-teal" /> {t('negocio.horarios')}
                 </h3>
                 <div className="space-y-1.5">
@@ -325,8 +358,8 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
                     if (!h) return null
                     return (
                       <div key={day} className="flex justify-between text-sm">
-                        <span className="text-[#737373]">{days[day]}</span>
-                        <span className={h.closed ? 'text-coral' : 'text-[#1A1A1A] font-medium'}>
+                        <span className="text-fg-3-texto">{days[day]}</span>
+                        <span className={h.closed ? 'text-coral' : 'text-[#1A1A1A] dark:text-white font-medium'}>
                           {h.closed ? t('negocio.fechado_dia') : `${h.open} – ${h.close}`}
                         </span>
                       </div>
@@ -346,6 +379,37 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
           </div>
         </aside>
       </div>
+      {/* Barra fixa de contato (celular) — WhatsApp e rota sempre a um toque. */}
+      {b.whatsapp && (
+        <div
+          className={cn(
+            'md:hidden fixed inset-x-0 bottom-0 z-40',
+            barraVisivel && !pertoDoFim ? '' : 'hidden',
+          )}
+          style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        >
+          <div className="bg-elev border-t border-border-1 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] px-4 py-2.5 flex items-center gap-2">
+            <a
+              href={buildWhatsAppLink(b.whatsapp)}
+              target="_blank" rel="noopener noreferrer"
+              onClick={() => pushDataLayer('contato_negocio_click', { business_name: b.name })}
+              className="flex-1 flex items-center justify-center gap-2 bg-whatsapp hover:bg-[#0E7440] text-white rounded-xl px-4 min-h-11 text-sm font-semibold transition-colors"
+            >
+              <Phone className="w-4 h-4" />
+              {t('negocio.falar_whatsapp')}
+            </a>
+            <a
+              href={mapsUrlContato}
+              target="_blank" rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 border border-border-1 text-fg-1 rounded-xl px-4 min-h-11 text-sm font-semibold hover:bg-areia dark:hover:bg-white/10 transition-colors"
+            >
+              <Navigation className="w-4 h-4" />
+              {t('negocio.como_chegar')}
+            </a>
+          </div>
+        </div>
+      )}
+
       {/* Lightbox */}
       {lightboxIndex !== null && (
         <Lightbox

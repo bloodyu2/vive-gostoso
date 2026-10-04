@@ -69,7 +69,7 @@ export default function Transparencia({ initialParametros }: TransparenciaProps)
       {/* 2. O que significa verificado */}
       <section className="bg-areia dark:bg-[#161616] px-5 md:px-8 py-16 md:py-20">
         <div className="max-w-4xl mx-auto">
-          <p className="text-xs font-bold tracking-widest uppercase text-[#737373] mb-3">{t('transparencia.selo_eyebrow')}</p>
+          <p className="text-xs font-bold tracking-widest uppercase text-fg-3-texto mb-3">{t('transparencia.selo_eyebrow')}</p>
           <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-8">
             {t('transparencia.selo_h2')}
           </h2>
@@ -90,7 +90,7 @@ export default function Transparencia({ initialParametros }: TransparenciaProps)
             </ul>
           </div>
 
-          <p className="text-[#737373] text-base leading-relaxed mb-8 max-w-2xl">
+          <p className="text-fg-3-texto text-base leading-relaxed mb-8 max-w-2xl">
             {t('transparencia.selo_aprovacao')}
           </p>
 
@@ -104,7 +104,7 @@ export default function Transparencia({ initialParametros }: TransparenciaProps)
               <li className="flex items-start gap-2"><span className="text-ocre mt-0.5">•</span> {t('transparencia.selo_retirada_item_2')}</li>
               <li className="flex items-start gap-2"><span className="text-ocre mt-0.5">•</span> {t('transparencia.selo_retirada_item_3')}</li>
             </ul>
-            <p className="text-sm text-[#737373] leading-relaxed">
+            <p className="text-sm text-fg-3-texto leading-relaxed">
               {t('transparencia.selo_retirada_processo')}
             </p>
           </div>
@@ -113,13 +113,13 @@ export default function Transparencia({ initialParametros }: TransparenciaProps)
 
       {/* 3. Sobre as fotos */}
       <section className="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-20">
-        <p className="text-xs font-bold tracking-widest uppercase text-[#737373] mb-3">{t('transparencia.fotos_eyebrow')}</p>
+        <p className="text-xs font-bold tracking-widest uppercase text-fg-3-texto mb-3">{t('transparencia.fotos_eyebrow')}</p>
         <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-8">
           {t('transparencia.fotos_h2')}
         </h2>
         <div className="p-5 bg-areia dark:bg-[#161616] rounded-2xl border border-[#E8E4DF] dark:border-[#2D2D2D] flex items-start gap-4">
           <ImageOff className="w-5 h-5 text-ocre flex-shrink-0 mt-0.5" />
-          <div className="text-sm text-[#737373] leading-relaxed space-y-2">
+          <div className="text-sm text-fg-3-texto leading-relaxed space-y-2">
             <p>{t('transparencia.fotos_p1')}</p>
             <p>{t('transparencia.fotos_p2')}</p>
           </div>
@@ -129,7 +129,7 @@ export default function Transparencia({ initialParametros }: TransparenciaProps)
             mesma conversa, quem e dono da foto que voce esta vendo. */}
         <div className="mt-4 p-5 bg-areia dark:bg-[#161616] rounded-2xl border border-[#E8E4DF] dark:border-[#2D2D2D] flex items-start gap-4">
           <Camera className="w-5 h-5 text-teal flex-shrink-0 mt-0.5" />
-          <div className="text-sm text-[#737373] leading-relaxed space-y-2">
+          <div className="text-sm text-fg-3-texto leading-relaxed space-y-2">
             <p>{t('transparencia.fotos_p3')}</p>
             <p>{t('transparencia.fotos_p4')}</p>
           </div>
@@ -139,7 +139,7 @@ export default function Transparencia({ initialParametros }: TransparenciaProps)
       {/* 4. Como um negócio entra e como sai */}
       <section className="bg-areia dark:bg-[#161616] px-5 md:px-8 py-16 md:py-20">
         <div className="max-w-4xl mx-auto">
-          <p className="text-xs font-bold tracking-widest uppercase text-[#737373] mb-3">{t('transparencia.entrada_eyebrow')}</p>
+          <p className="text-xs font-bold tracking-widest uppercase text-fg-3-texto mb-3">{t('transparencia.entrada_eyebrow')}</p>
           <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-8">
             {t('transparencia.entrada_h2')}
           </h2>
@@ -152,7 +152,7 @@ export default function Transparencia({ initialParametros }: TransparenciaProps)
                 {t('transparencia.entrada_p1')}
               </p>
             </div>
-            <p className="text-[#737373] text-sm leading-relaxed pl-14">
+            <p className="text-fg-3-texto text-sm leading-relaxed pl-14">
               {t('transparencia.entrada_p2')}
             </p>
           </div>
@@ -193,7 +193,7 @@ export default function Transparencia({ initialParametros }: TransparenciaProps)
 
       {/* 6. Quem faz */}
       <section className="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-20">
-        <p className="text-xs font-bold tracking-widest uppercase text-[#737373] mb-3">{t('transparencia.quem_eyebrow')}</p>
+        <p className="text-xs font-bold tracking-widest uppercase text-fg-3-texto mb-3">{t('transparencia.quem_eyebrow')}</p>
         <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-8">
           {t('transparencia.quem_h2')}
         </h2>
@@ -205,11 +205,11 @@ export default function Transparencia({ initialParametros }: TransparenciaProps)
               </div>
               <div>
                 <div className="font-semibold">Balaio</div>
-                <div className="text-xs text-[#737373]">{t('transparencia.quem_cnpj')}</div>
+                <div className="text-xs text-fg-3-texto">{t('transparencia.quem_cnpj')}</div>
               </div>
             </div>
-            <p className="text-sm text-[#737373] leading-relaxed mb-4">{t('transparencia.quem_desc')}</p>
-            <p className="text-xs text-[#737373] mb-4">{t('transparencia.quem_horario')}</p>
+            <p className="text-sm text-fg-3-texto leading-relaxed mb-4">{t('transparencia.quem_desc')}</p>
+            <p className="text-xs text-fg-3-texto mb-4">{t('transparencia.quem_horario')}</p>
             <div className="flex flex-col gap-2.5">
               <a
                 href={buildWhatsAppLink(OFFICIAL_WHATSAPP, undefined, t)}

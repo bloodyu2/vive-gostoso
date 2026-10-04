@@ -52,7 +52,7 @@ export default function TransferDetailPage({ transfer }: { transfer: Transfer })
         <div className="max-w-2xl mx-auto px-5 md:px-8 h-14 flex items-center justify-between gap-3">
           <Link
             href={lp('/transfer')}
-            className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm text-fg-3-texto hover:text-teal transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Transfer
@@ -61,7 +61,7 @@ export default function TransferDetailPage({ transfer }: { transfer: Transfer })
             onClick={handleShare}
             title={t('transfer.modal_compartilhar')}
             aria-label={t('transfer.modal_compartilhar')}
-            className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-[#F5F2EE] transition-colors text-[#737373] hover:text-teal"
+            className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-[#F5F2EE] transition-colors text-fg-3-texto hover:text-teal"
           >
             {shareCopied ? <CheckCircle className="w-5 h-5 text-teal" /> : <Share2 className="w-5 h-5" />}
           </button>
@@ -82,7 +82,7 @@ export default function TransferDetailPage({ transfer }: { transfer: Transfer })
         <div>
           <h1 className="font-display font-bold text-2xl text-[#1A1A1A]">{transfer.provider_name}</h1>
           {transfer.vehicle_type && (
-            <p className="text-sm text-[#737373] mt-1 flex items-center gap-1.5">
+            <p className="text-sm text-fg-3-texto mt-1 flex items-center gap-1.5">
               <Car className="w-4 h-4 flex-shrink-0" />
               {transfer.vehicle_type} · {transfer.max_passengers} {t('transfer.detail_passageiros')}
             </p>
@@ -92,7 +92,7 @@ export default function TransferDetailPage({ transfer }: { transfer: Transfer })
         {/* Rotas e valores */}
         {transfer.routes && transfer.routes.length > 0 && (
           <section>
-            <h2 className="text-xs font-bold uppercase tracking-widest text-[#737373] mb-3">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-fg-3-texto mb-3">
               {t('transfer.detail_rotas')}
             </h2>
             <div className="space-y-2">
@@ -125,7 +125,7 @@ export default function TransferDetailPage({ transfer }: { transfer: Transfer })
 
         {/* Detalhes */}
         <section>
-          <h2 className="text-xs font-bold uppercase tracking-widest text-[#737373] mb-3">
+          <h2 className="text-xs font-bold uppercase tracking-widest text-fg-3-texto mb-3">
             {t('transfer.detail_detalhes')}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -133,7 +133,7 @@ export default function TransferDetailPage({ transfer }: { transfer: Transfer })
               <div className="flex items-start gap-2.5">
                 <Clock className="w-4 h-4 text-teal flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-[10px] text-[#737373] uppercase tracking-wide font-semibold">{t('transfer.detail_horario')}</p>
+                  <p className="text-[10px] text-fg-3-texto uppercase tracking-wide font-semibold">{t('transfer.detail_horario')}</p>
                   <p className="text-sm text-[#1A1A1A] mt-0.5">{transfer.available_hours}</p>
                 </div>
               </div>
@@ -141,7 +141,7 @@ export default function TransferDetailPage({ transfer }: { transfer: Transfer })
             <div className="flex items-start gap-2.5">
               <Users className="w-4 h-4 text-teal flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-[10px] text-[#737373] uppercase tracking-wide font-semibold">{t('transfer.detail_capacidade')}</p>
+                <p className="text-[10px] text-fg-3-texto uppercase tracking-wide font-semibold">{t('transfer.detail_capacidade')}</p>
                 <p className="text-sm text-[#1A1A1A] mt-0.5">{transfer.max_passengers} {t('transfer.detail_passageiros')}</p>
               </div>
             </div>
@@ -149,10 +149,10 @@ export default function TransferDetailPage({ transfer }: { transfer: Transfer })
               <div className="flex items-start gap-2.5 col-span-2">
                 <Languages className="w-4 h-4 text-teal flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-[10px] text-[#737373] uppercase tracking-wide font-semibold">{t('transfer.detail_idiomas')}</p>
+                  <p className="text-[10px] text-fg-3-texto uppercase tracking-wide font-semibold">{t('transfer.detail_idiomas')}</p>
                   <div className="flex flex-wrap gap-1 mt-1">
                     {transfer.languages.map(l => (
-                      <span key={l} className="bg-[#F5F2EE] text-[#737373] text-xs px-2 py-0.5 rounded-full">{l}</span>
+                      <span key={l} className="bg-[#F5F2EE] text-fg-3-texto text-xs px-2 py-0.5 rounded-full">{l}</span>
                     ))}
                   </div>
                 </div>
@@ -164,7 +164,7 @@ export default function TransferDetailPage({ transfer }: { transfer: Transfer })
         {/* Logística */}
         {(transfer.advance_notice || (transfer.payment_methods && transfer.payment_methods.length > 0) || transfer.meeting_point) && (
           <section>
-            <h2 className="text-xs font-bold uppercase tracking-widest text-[#737373] mb-3">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-fg-3-texto mb-3">
               {t('transfer.detail_logistica')}
             </h2>
             <div className="space-y-3">
@@ -172,7 +172,7 @@ export default function TransferDetailPage({ transfer }: { transfer: Transfer })
                 <div className="flex items-start gap-2.5">
                   <Clock className="w-4 h-4 text-ocre flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-[10px] text-[#737373] uppercase tracking-wide font-semibold">{t('transfer.detail_antecedencia')}</p>
+                    <p className="text-[10px] text-fg-3-texto uppercase tracking-wide font-semibold">{t('transfer.detail_antecedencia')}</p>
                     <p className="text-sm text-[#1A1A1A] mt-0.5">{transfer.advance_notice}</p>
                   </div>
                 </div>
@@ -181,7 +181,7 @@ export default function TransferDetailPage({ transfer }: { transfer: Transfer })
                 <div className="flex items-start gap-2.5">
                   <CreditCard className="w-4 h-4 text-ocre flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-[10px] text-[#737373] uppercase tracking-wide font-semibold">{t('transfer.detail_pagamentos')}</p>
+                    <p className="text-[10px] text-fg-3-texto uppercase tracking-wide font-semibold">{t('transfer.detail_pagamentos')}</p>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {transfer.payment_methods.map(m => (
                         <span key={m} className="bg-ocre/10 text-ocre text-xs px-2 py-0.5 rounded-full font-medium">{m}</span>
@@ -194,7 +194,7 @@ export default function TransferDetailPage({ transfer }: { transfer: Transfer })
                 <div className="flex items-start gap-2.5">
                   <MapPin className="w-4 h-4 text-ocre flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-[10px] text-[#737373] uppercase tracking-wide font-semibold">{t('transfer.detail_encontro')}</p>
+                    <p className="text-[10px] text-fg-3-texto uppercase tracking-wide font-semibold">{t('transfer.detail_encontro')}</p>
                     <p className="text-sm text-[#1A1A1A] mt-0.5">{transfer.meeting_point}</p>
                   </div>
                 </div>
@@ -205,7 +205,7 @@ export default function TransferDetailPage({ transfer }: { transfer: Transfer })
 
         {transfer.description && (
           <section>
-            <h2 className="text-xs font-bold uppercase tracking-widest text-[#737373] mb-2">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-fg-3-texto mb-2">
               {t('transfer.detail_descricao')}
             </h2>
             <p className="text-sm text-[#3D3D3D] leading-relaxed">{transfer.description}</p>

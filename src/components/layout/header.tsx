@@ -2,14 +2,14 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Compass, User, Search, Sun, Moon } from 'lucide-react'
+import { Menu, X, Compass, User, Search } from 'lucide-react'
 import { Logo } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
 import { LanguageSelector } from '@/components/i18n/language-selector'
 import { WhatsAppButton } from '@/components/layout/whatsapp-button'
+import { ThemeToggler } from '@/components/magicui/theme-toggler'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/useAuth'
-import { useTheme } from '@/hooks/useTheme'
 import dynamic from 'next/dynamic'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
@@ -28,8 +28,23 @@ export function Header() {
   const [discoverOpen, setDiscoverOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const discoverRef = useRef<HTMLDivElement>(null)
+  const headerRef = useRef<HTMLElement>(null)
   const { user } = useAuth()
-  const { theme, toggle: alternarTema } = useTheme()
+
+  /* A altura do header deixa de ser o número mágico 69px: mede o elemento de
+     verdade e publica em --header-h, que o overlay do drawer usa. Se a fonte,
+     o idioma ou o zoom mudarem a altura, o menu continua encostando embaixo. */
+  useEffect(() => {
+    const el = headerRef.current
+    if (!el) return
+    const medir = () => {
+      document.documentElement.style.setProperty('--header-h', `${el.offsetHeight}px`)
+    }
+    medir()
+    const ro = new ResizeObserver(medir)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
 
   // Cmd/Ctrl+K opens search
   useEffect(() => {
@@ -90,29 +105,13 @@ export function Header() {
 
   const NAV_ALL = [...NAV_MAIN, ...NAV_DISCOVER]
 
-  /* O useTheme usa useSyncExternalStore com getServerSnapshot, entao `theme` ja
-     e seguro para hidratacao: na primeira renderizacao ele vale o mesmo no
-     servidor e no cliente. Ver o comentario no hook. */
-  const escuro = theme === 'dark'
-  const rotuloTema = escuro ? t('footer.modo_claro') : t('footer.modo_escuro')
-
-  const botaoTema = (comRotulo: boolean) => (
-    <button
-      onClick={alternarTema}
-      className={comRotulo
-        ? 'flex items-center gap-2 w-full min-h-11 text-sm font-medium text-fg-2 hover:text-teal transition-colors motion-reduce:transition-none'
-        : 'w-9 h-9 flex items-center justify-center rounded-full text-fg-3 hover:text-teal transition-colors motion-reduce:transition-none'}
-      aria-label={rotuloTema}
-    >
-      {escuro ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-      {comRotulo && <span>{rotuloTema}</span>}
-    </button>
-  )
+  /* O toggle de tema virou o componente ThemeToggler (magicui): a troca
+     revela o novo tema a partir do botao via View Transitions. */
 
   return (
     <>
       {searchOpen && <GlobalSearch onClose={() => setSearchOpen(false)} />}
-      <header className="sticky top-0 z-40 bg-elev border-b border-border-1">
+      <header ref={headerRef} className="sticky top-0 z-40 bg-elev border-b border-border-1">
         {/* Desktop */}
         <div className="hidden md:flex items-center justify-between gap-4 px-8 py-2">
           <Link href={lp('/')} className="flex-shrink-0">
@@ -191,7 +190,7 @@ export function Header() {
               <kbd className="hidden lg:inline bg-[#F5F2EE] dark:bg-[#2D2D2D] px-1.5 py-0.5 rounded font-mono text-[10px] text-fg-2">⌘K</kbd>
             </button>
             <WhatsAppButton variante="header" />
-            {botaoTema(false)}
+            <ThemeToggler />
             {/* Language selector */}
             <LanguageSelector />
             {user && <NotificationBell />}
@@ -243,8 +242,8 @@ export function Header() {
 
       {/* Mobile drawer */}
       {drawerOpen && (
-        <div className="md:hidden fixed inset-0 top-[69px] z-30" onClick={() => setDrawerOpen(false)}>
-          <div className="bg-elev border-b border-border-1 shadow-xl overflow-y-auto max-h-[calc(100dvh-69px)]" onClick={e => e.stopPropagation()}>
+        <div className="md:hidden fixed inset-0 top-[var(--header-h)] z-30" onClick={() => setDrawerOpen(false)}>
+          <div className="bg-elev border-b border-border-1 shadow-xl overflow-y-auto max-h-[calc(100dvh-var(--header-h))]" onClick={e => e.stopPropagation()}>
             <nav className="px-5 py-4 space-y-1">
               {NAV_ALL.map(v => (
                 <Link
@@ -266,7 +265,7 @@ export function Header() {
             <div className="px-5 border-t border-border-1">
               <LanguageSelector variant="inline" />
               <div className="py-3 border-t border-border-1">
-                {botaoTema(true)}
+                <ThemeToggler comRotulo />
               </div>
             </div>
             <div className="px-5 pb-5 pt-3 space-y-2">

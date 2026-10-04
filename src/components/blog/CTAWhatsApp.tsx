@@ -34,7 +34,7 @@ export function CTAWhatsApp({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#25D366] hover:bg-[#1ebd5b] text-white font-bold text-base transition-colors shadow-sm"
+        className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-whatsapp hover:bg-[#0E7440] text-white font-bold text-base transition-colors shadow-sm"
       >
         <MessageCircle className="w-5 h-5" />
         {label}

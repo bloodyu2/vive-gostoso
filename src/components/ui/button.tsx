@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils'
 import { forwardRef } from 'react'
 
 const variants = {
-  primary:   'bg-coral text-white hover:bg-[#C44A2C] shadow-sm hover:shadow-md',
+  primary:   'bg-coral-texto text-white hover:bg-coral-darker shadow-sm hover:shadow-md',
   secondary: 'bg-transparent text-teal border-2 border-teal hover:bg-teal-light',
   ghost:     'bg-transparent text-teal hover:bg-teal-light',
   dark:      'bg-[#1A1A1A] text-white hover:bg-[#3D3D3D]',

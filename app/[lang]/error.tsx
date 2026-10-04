@@ -24,7 +24,7 @@ export default function Error({
       <h1 className="font-display font-bold text-2xl text-[#1A1A1A] mb-3">
         Algo deu errado
       </h1>
-      <p className="text-[#737373] text-base leading-relaxed mb-8">
+      <p className="text-fg-3-texto text-base leading-relaxed mb-8">
         Nao foi possivel carregar esta pagina. Tente novamente ou volte ao inicio.
       </p>
       <div className="flex items-center justify-center gap-4">

@@ -56,6 +56,16 @@
   --color-fg-3:     #737373;
   --color-border-1: #E8E4DF;
 
+  /* --- Text tokens (contraste AA) ---
+     Separados dos tokens de preenchimento de propósito: a cor viva que pinta
+     um fundo não é a mesma que sustenta texto por cima dela. Os valores são
+     variações dos tons já existentes na paleta, nada novo entrou. */
+  --color-fg-3-texto:  #5C5C5C; /* ~6,4:1 sobre areia; substitui text-[#737373] */
+  --color-coral-texto: #C44A2C; /* 4,81:1 com branco; base do botão primário */
+  --color-ocre-texto:  #A05E1A; /* passa sobre branco; chips de ocre */
+  --color-whatsapp:    #128C4A; /* branco sobre ele passa; fundo do CTA WhatsApp */
+  --color-placeholder: #6B655E; /* ~5:1 sobre branco; placeholder e vazio */
+
   /* --- Accent --- */
   --color-green-coqueiro: #3D8B5A;
   --color-sky:            #87CEEB;
@@ -104,6 +114,9 @@
 /* --- Base --- */
 html {
   overflow-x: hidden;
+  /* Altura do header, medida em runtime pelo ResizeObserver (header.tsx).
+     O valor aqui é só o fallback no primeiro paint. */
+  --header-h: 69px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -151,6 +164,16 @@ h4, h5, h6 {
   scrollbar-color: #C4C4C4 transparent;
 }
 
+/* Esconde a scrollbar de carrossel horizontal. A classe era usada em vários
+   lugares desde antes, mas nunca foi definida: o scrollbar continuava
+   aparecendo onde o código achava que tinha escondido. */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* --- Verb identity classes --- */
 .verb {
   font-family: var(--font-display);
@@ -173,6 +196,52 @@ h4, h5, h6 {
   color: #085E5E;
 }
 
+/* --- Revelacao do tema (View Transitions) ---------------------------------
+   O novo tema se abre em circulo a partir do botao que foi clicado. As
+   coordenadas e o raio chegam em CSS vars escritas pelo ThemeToggler. Com
+   prefers-reduced-motion a troca e instantanea (o componente nem chama
+   startViewTransition). */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: none;
+  }
+  ::view-transition-new(root) {
+    animation: vg-tema-revelar 460ms ease-out;
+  }
+}
+
+@keyframes vg-tema-revelar {
+  from {
+    clip-path: circle(0px at var(--vg-tema-x, 50%) var(--vg-tema-y, 50%));
+  }
+  to {
+    clip-path: circle(var(--vg-tema-raio, 150vmax) at var(--vg-tema-x, 50%) var(--vg-tema-y, 50%));
+  }
+}
+
+/* --- Lente (zoom no hover da galeria) -------------------------------------
+   Segue o cursor por transform-origin. So em ponteiro fino (desktop): no toque
+   nada acontece, e o toque continua abrindo o lightbox. Com reduced-motion nao
+   ha zoom. */
+@media (hover: hover) and (pointer: fine) {
+  .lens-zoom img {
+    transition: transform 200ms ease-out;
+    transform-origin: var(--lens-x, 50%) var(--lens-y, 50%);
+  }
+  .lens-zoom:hover img {
+    transform: scale(var(--lens-scale, 2));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lens-zoom img {
+    transition: none !important;
+  }
+  .lens-zoom:hover img {
+    transform: none !important;
+  }
+}
+
 /* --- Dark mode --- */
 .dark {
   --color-teal-light: rgba(13,124,124,0.20);
@@ -184,6 +253,8 @@ h4, h5, h6 {
   --color-fg-2:     #C0BCB8;
   --color-fg-3:     #8A8682;
   --color-border-1: #2D2D2D;
+  --color-fg-3-texto:  #B0ACA8;
+  --color-placeholder: #9A958F;
 }
 
 .dark body {
@@ -392,11 +463,11 @@ h4, h5, h6 {
 /* CTA WhatsApp inline (verde) */
 .blog-prose .inline-cta--whatsapp {
   background: linear-gradient(135deg, #E6F5EE 0%, #D2F0DD 100%);
-  border-color: #25D366;
+  border-color: var(--color-whatsapp);
 }
 .dark .blog-prose .inline-cta--whatsapp {
   background: linear-gradient(135deg, #163021 0%, #1e3d2a 100%);
-  border-color: #25D366;
+  border-color: var(--color-whatsapp);
 }
 .blog-prose .inline-cta--whatsapp .inline-cta__action {
   display: inline-flex;
@@ -404,13 +475,13 @@ h4, h5, h6 {
   gap: 0.4em;
   margin-top: 0.85em;
   padding: 0.55em 1.1em;
-  background: #25D366;
+  background: var(--color-whatsapp);
   color: #ffffff;
   border-radius: 999px;
   font-weight: 700;
   font-size: 0.9rem;
 }
-.blog-prose .inline-cta--whatsapp .inline-cta__action:hover { background: #1ebd5b; }
+.blog-prose .inline-cta--whatsapp .inline-cta__action:hover { background: #0E7440; }
 
 /* Imagens e legendas dentro do corpo */
 .blog-prose figure {

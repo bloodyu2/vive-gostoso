@@ -43,7 +43,7 @@ function TransferRow({ transfer }: { transfer: Transfer }) {
               </span>
             )}
           </div>
-          <p className="text-xs text-[#737373] mt-0.5">
+          <p className="text-xs text-fg-3-texto mt-0.5">
             {t('row_info', { vehicle: transfer.vehicle_type ?? '-', passengers: transfer.max_passengers, date: formatDate(transfer.created_at) })}
           </p>
         </div>
@@ -70,7 +70,7 @@ function TransferRow({ transfer }: { transfer: Transfer }) {
             <button
               onClick={() => moderate({ id: transfer.id, action: 'deactivate' })}
               disabled={isPending}
-              className="bg-[#F5F2EE] text-[#737373] text-xs font-semibold px-4 py-2 rounded-xl border border-[#E8E4DF] hover:bg-[#E8E4DF] transition-colors disabled:opacity-50"
+              className="bg-[#F5F2EE] text-fg-3-texto text-xs font-semibold px-4 py-2 rounded-xl border border-[#E8E4DF] hover:bg-[#E8E4DF] transition-colors disabled:opacity-50"
             >
               {t('deactivate')}
             </button>
@@ -79,10 +79,10 @@ function TransferRow({ transfer }: { transfer: Transfer }) {
       </div>
 
       {transfer.description && (
-        <p className="text-sm text-[#737373] leading-relaxed">{transfer.description}</p>
+        <p className="text-sm text-fg-3-texto leading-relaxed">{transfer.description}</p>
       )}
 
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1 border-t border-[#F0EDE8] text-xs text-[#737373]">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1 border-t border-[#F0EDE8] text-xs text-fg-3-texto">
         <span>
           {t('whatsapp_label')}{' '}
           <a
@@ -117,12 +117,12 @@ function AdminTransfersInner() {
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
       <Link
         href={lp('/cadastre/admin')}
-        className="text-sm text-[#737373] hover:text-teal transition-colors inline-block mb-6"
+        className="text-sm text-fg-3-texto hover:text-teal transition-colors inline-block mb-6"
       >
         {t('back')}
       </Link>
       <h1 className="font-display text-3xl font-semibold mb-2">{t('title')}</h1>
-      <p className="text-sm text-[#737373] mb-8">
+      <p className="text-sm text-fg-3-texto mb-8">
         {t('desc')}
       </p>
 
@@ -140,9 +140,9 @@ function AdminTransfersInner() {
             </div>
             {pending.length === 0 ? (
               <div className="text-center py-10 border-2 border-dashed border-[#E8E4DF] rounded-2xl">
-                <Car className="w-8 h-8 mb-2 text-[#737373] mx-auto" />
-                <p className="text-[#737373] text-sm font-semibold">{t('empty_pending')}</p>
-                <p className="text-xs text-[#B0A99F] mt-1">{t('empty_sub')}</p>
+                <Car className="w-8 h-8 mb-2 text-fg-3-texto mx-auto" />
+                <p className="text-fg-3-texto text-sm font-semibold">{t('empty_pending')}</p>
+                <p className="text-xs text-placeholder mt-1">{t('empty_sub')}</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -158,7 +158,7 @@ function AdminTransfersInner() {
               </span>
             </div>
             {active.length === 0 ? (
-              <p className="text-sm text-[#737373]">{t('empty_active')}</p>
+              <p className="text-sm text-fg-3-texto">{t('empty_active')}</p>
             ) : (
               <div className="space-y-4">
                 {active.map(t => <TransferRow key={t.id} transfer={t} />)}

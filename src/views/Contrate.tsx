@@ -13,6 +13,7 @@ import { useServices } from '@/hooks/useServices'
 import { useJobs } from '@/hooks/useJobs'
 import { ServiceCard } from '@/components/contrate/service-card'
 import { JobCard } from '@/components/contrate/job-card'
+import { StarRating } from '@/components/reviews/star-rating'
 import { ServiceForm } from '@/components/contrate/service-form'
 import { JobForm } from '@/components/contrate/job-form'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
@@ -69,15 +70,6 @@ function avatarColor(id: string): string {
   return AVATAR_COLORS[sum % AVATAR_COLORS.length]
 }
 
-function Stars({ rating }: { rating: number }) {
-  const full = Math.floor(rating)
-  return (
-    <span className="text-[#C2760C] text-xs">
-      {'★'.repeat(full)}{'☆'.repeat(5 - full)}
-    </span>
-  )
-}
-
 // ── Professional card ──────────────────────────────────────────────────────
 function ProfessionalCard({ pro }: { pro: Professional }) {
   const { t } = useTranslation()
@@ -87,30 +79,30 @@ function ProfessionalCard({ pro }: { pro: Professional }) {
     : null
 
   return (
-    <div className="bg-white rounded-2xl border border-[#E8E4DF] p-5 hover:shadow-md transition-shadow">
+    <div className="bg-white dark:bg-card rounded-2xl border border-[#E8E4DF] dark:border-border-1 p-5 hover:shadow-md transition-shadow">
       <div className="flex items-start gap-3 mb-3">
         <div className={`w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center font-bold text-white text-sm ${avatarColor(pro.id)}`}>
           {initials(pro.display_name)}
         </div>
         <div className="flex-1 min-w-0">
-          <Link href={lp(`/contrate/profissional/${pro.slug}`)} className="font-semibold text-[#1A1A1A] text-sm hover:text-teal transition-colors">
+          <Link href={lp(`/contrate/profissional/${pro.slug}`)} className="font-semibold text-[#1A1A1A] dark:text-white text-sm hover:text-teal transition-colors">
             {pro.display_name}
           </Link>
-          <p className="text-xs text-[#737373] leading-snug">{pro.headline}</p>
+          <p className="text-xs text-fg-3-texto leading-snug">{pro.headline}</p>
         </div>
       </div>
       {pro.specialties.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-3">
           {pro.specialties.slice(0, 3).map(s => (
-            <span key={s} className="bg-[#F5F2EE] text-[#555] text-[10px] font-medium px-2 py-0.5 rounded-md">
+            <span key={s} className="bg-[#F5F2EE] dark:bg-white/10 text-[#555] dark:text-[#C0BCB8] text-[10px] font-medium px-2 py-0.5 rounded-md">
               {s}
             </span>
           ))}
         </div>
       )}
       {pro.review_count > 0 && (
-        <div className="flex items-center gap-1.5 mb-3 text-xs text-[#737373]">
-          <Stars rating={pro.rating_avg} />
+        <div className="flex items-center gap-1.5 mb-3 text-xs text-fg-3-texto">
+          <StarRating value={Math.round(pro.rating_avg)} readonly size="sm" />
           {pro.rating_avg.toFixed(1)} · {pro.review_count} {t('negocio.avaliacao_plural')}
         </div>
       )}
@@ -127,7 +119,7 @@ function ProfessionalCard({ pro }: { pro: Professional }) {
       ) : (
         <Link
           href={lp(`/contrate/profissional/${pro.slug}`)}
-          className="flex items-center justify-center w-full border border-[#E8E4DF] text-[#737373] rounded-xl py-2 text-xs font-semibold hover:bg-[#F5F2EE] transition-colors"
+          className="flex items-center justify-center w-full border border-[#E8E4DF] dark:border-border-1 text-fg-3-texto rounded-xl py-2 text-xs font-semibold hover:bg-[#F5F2EE] dark:hover:bg-white/10 transition-colors"
         >
           {t('common.ver_perfil')}
         </Link>
@@ -145,13 +137,13 @@ function ServiceCompanyCard({ company }: { company: ServiceCompany }) {
     : null
 
   return (
-    <div className="bg-white rounded-2xl border border-[#E8E4DF] p-5 hover:shadow-md transition-shadow">
+    <div className="bg-white dark:bg-card rounded-2xl border border-[#E8E4DF] dark:border-border-1 p-5 hover:shadow-md transition-shadow">
       <div className="flex items-center gap-3 mb-3">
         <div className="w-11 h-11 rounded-xl bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
           <Building2 className="w-5 h-5 text-white" />
         </div>
         <div className="flex-1 min-w-0">
-          <Link href={lp(`/negocio/${company.slug}`)} className="font-semibold text-[#1A1A1A] text-sm hover:text-teal transition-colors">
+          <Link href={lp(`/negocio/${company.slug}`)} className="font-semibold text-[#1A1A1A] dark:text-white text-sm hover:text-teal transition-colors">
             {company.name}
           </Link>
           {company.category?.name && (
@@ -162,11 +154,11 @@ function ServiceCompanyCard({ company }: { company: ServiceCompany }) {
         </div>
       </div>
       {company.description && (
-        <p className="text-xs text-[#737373] leading-relaxed mb-3 line-clamp-2">
+        <p className="text-xs text-fg-3-texto leading-relaxed mb-3 line-clamp-2">
           {company.description}
         </p>
       )}
-      <span className="text-[10px] font-semibold text-[#737373] bg-[#F5F2EE] px-2 py-0.5 rounded-full">
+      <span className="text-[10px] font-semibold text-fg-3-texto bg-[#F5F2EE] dark:bg-white/10 px-2 py-0.5 rounded-full">
         {t('contrate.service_company_badge')}
       </span>
       {waLink && (
@@ -270,7 +262,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
                   className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${
                     categoryFilter === 'all'
                       ? 'bg-teal text-white'
-                      : 'bg-white border border-[#E8E4DF] text-[#555] hover:bg-[#F5F2EE]'
+                      : 'bg-white dark:bg-card border border-[#E8E4DF] dark:border-border-1 text-[#555] dark:text-[#C0BCB8] hover:bg-[#F5F2EE] dark:hover:bg-white/10'
                   }`}
                 >
                   {t('professional.all_categories')}
@@ -288,7 +280,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
                         className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${
                           categoryFilter === cat
                             ? 'bg-teal text-white'
-                            : 'bg-white border border-[#E8E4DF] text-[#555] hover:bg-[#F5F2EE]'
+                            : 'bg-white dark:bg-card border border-[#E8E4DF] dark:border-border-1 text-[#555] dark:text-[#C0BCB8] hover:bg-[#F5F2EE] dark:hover:bg-white/10'
                         }`}
                       >
                         {t(`contrate.categorias.${cat}`)}
@@ -302,7 +294,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
                   className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${
                     categoryFilter === 'outro'
                       ? 'bg-teal text-white'
-                      : 'bg-white border border-[#E8E4DF] text-[#555] hover:bg-[#F5F2EE]'
+                      : 'bg-white dark:bg-card border border-[#E8E4DF] dark:border-border-1 text-[#555] dark:text-[#C0BCB8] hover:bg-[#F5F2EE] dark:hover:bg-white/10'
                   }`}
                 >
                   {t('contrate.categorias.outro')}
@@ -323,10 +315,10 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
               categoryFilter !== 'all' ? (
                 <div className="text-center py-16">
                   <User className="w-10 h-10 text-[#E8E4DF] mx-auto mb-3" />
-                  <p className="text-sm font-semibold text-[#1A1A1A] mb-1">
+                  <p className="text-sm font-semibold text-[#1A1A1A] dark:text-white mb-1">
                     {t('contrate.convite_primeiro', { categoria: t(`contrate.categorias.${categoryFilter}`) })}
                   </p>
-                  <p className="text-sm text-[#737373] max-w-sm mx-auto mb-4">
+                  <p className="text-sm text-fg-3-texto max-w-sm mx-auto mb-4">
                     {t('contrate.convite_sub')}
                   </p>
                   <Link
@@ -339,7 +331,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
               ) : (
                 <div className="text-center py-16">
                   <User className="w-10 h-10 text-[#E8E4DF] mx-auto mb-3" />
-                  <p className="text-sm text-[#737373]">{t('professional.no_professionals')}</p>
+                  <p className="text-sm text-fg-3-texto">{t('professional.no_professionals')}</p>
                 </div>
               )
             ) : (
@@ -359,7 +351,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
           companiesLoading ? <Spinner /> : companies.length === 0 ? (
             <div className="text-center py-16">
               <Building2 className="w-10 h-10 text-[#E8E4DF] mx-auto mb-3" />
-              <p className="text-sm text-[#737373]">{t('contrate.sem_empresas')}</p>
+              <p className="text-sm text-fg-3-texto">{t('contrate.sem_empresas')}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -383,7 +375,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
             {jobsLoading ? <Spinner /> : jobs.length === 0 ? (
               <div className="text-center py-16">
                 <Briefcase className="w-10 h-10 text-[#E8E4DF] mx-auto mb-3" />
-                <p className="text-sm text-[#737373]">{t('contrate.sem_vagas')}</p>
+                <p className="text-sm text-fg-3-texto">{t('contrate.sem_vagas')}</p>
               </div>
             ) : (
               <div className="space-y-2">

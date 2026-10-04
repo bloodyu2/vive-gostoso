@@ -31,7 +31,7 @@ function JobRow({ job }: { job: JobListing }) {
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-[#1A1A1A]">{job.title}</h3>
-          <p className="text-xs text-[#737373] mt-0.5">
+          <p className="text-xs text-fg-3-texto mt-0.5">
             {job.business_name} · {CONTRACT_TYPE_LABELS[job.contract_type]} · {t('submitted_at', { date: formatDate(job.created_at) })}
           </p>
         </div>
@@ -57,7 +57,7 @@ function JobRow({ job }: { job: JobListing }) {
         <p className="text-sm text-[#3D3D3D] leading-relaxed">{job.description}</p>
       )}
 
-      <div className="pt-1 border-t border-[#F0EDE8] text-xs text-[#737373]">
+      <div className="pt-1 border-t border-[#F0EDE8] text-xs text-fg-3-texto">
         {t('whatsapp')}{' '}
         <a
           href={buildWhatsAppLink(job.whatsapp)}
@@ -81,12 +81,12 @@ function AdminJobsInner() {
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
       <Link
         href={lp('/cadastre/admin')}
-        className="text-sm text-[#737373] hover:text-teal transition-colors inline-block mb-6"
+        className="text-sm text-fg-3-texto hover:text-teal transition-colors inline-block mb-6"
       >
         ← {t('back')}
       </Link>
       <h1 className="font-display text-3xl font-semibold mb-2">{t('title')}</h1>
-      <p className="text-sm text-[#737373] mb-8">
+      <p className="text-sm text-fg-3-texto mb-8">
         {t('desc')}
       </p>
 
@@ -97,8 +97,8 @@ function AdminJobsInner() {
       ) : jobs.length === 0 ? (
         <div className="text-center py-16 border-2 border-dashed border-[#E8E4DF] rounded-2xl">
           <div className="text-4xl mb-3">📋</div>
-          <p className="text-[#737373] text-sm font-semibold">{t('empty')}</p>
-          <p className="text-xs text-[#B0A99F] mt-1">{t('empty_sub')}</p>
+          <p className="text-fg-3-texto text-sm font-semibold">{t('empty')}</p>
+          <p className="text-xs text-placeholder mt-1">{t('empty_sub')}</p>
         </div>
       ) : (
         <div className="space-y-4">

@@ -12,7 +12,7 @@ export function ManagedBadge({ profileId, isVerified, size = 'sm' }: ManagedBadg
 
   if (!profileId) {
     return (
-      <span className={`${base} bg-[#F0EDEA] text-[#737373]`}>
+      <span className={`${base} bg-[#F0EDEA] text-fg-3-texto`}>
         <span className="w-1.5 h-1.5 rounded-full bg-[#BDBDBD] flex-shrink-0" />
         Perfil da plataforma
       </span>

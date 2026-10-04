@@ -62,17 +62,11 @@ export function ToastContainer() {
       {toasts.map(toast => (
         <div
           key={toast.id}
-          className={`flex items-start gap-3 p-4 rounded-xl shadow-lg border backdrop-blur ${
-            toast.type === 'success'
-              ? 'bg-green-50/95 border-green-200 text-green-900'
-              : toast.type === 'error'
-              ? 'bg-red-50/95 border-red-200 text-red-900'
-              : 'bg-white/95 border-gray-200 text-gray-900'
-          }`}
+          className="flex items-start gap-3 p-4 rounded-xl shadow-lg border border-border-1 bg-elev text-fg-1"
         >
-          {toast.type === 'success' && <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />}
-          {toast.type === 'error' && <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />}
-          {toast.type === 'info' && <Info className="w-5 h-5 flex-shrink-0 mt-0.5" />}
+          {toast.type === 'success' && <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-[#3D8B5A]" />}
+          {toast.type === 'error' && <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-coral-texto" />}
+          {toast.type === 'info' && <Info className="w-5 h-5 flex-shrink-0 mt-0.5 text-teal" />}
           
           <p className="flex-1 text-sm font-medium">{toast.message}</p>
           

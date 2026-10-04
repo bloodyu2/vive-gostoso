@@ -76,25 +76,25 @@ export default function Reivindicar() {
             <span className="text-teal">Vive Gostoso</span>
           </h1>
 
-          <p className="text-[#737373] text-base leading-relaxed max-w-lg mb-8">
+          <p className="text-fg-3-texto text-base leading-relaxed max-w-lg mb-8">
             {t('reivindicar:hero_desc')}
           </p>
 
           {/* ── Search box ── */}
           <div className="relative max-w-lg">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#737373]" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-fg-3-texto" />
             <input
               ref={inputRef}
               type="text"
               placeholder={t('reivindicar:search_placeholder')}
               value={query}
               onChange={e => handleQueryChange(e.target.value)}
-              className="w-full bg-white text-[#1A1A1A] rounded-2xl pl-11 pr-10 py-4 text-sm font-medium placeholder:text-[#737373] focus:outline-none focus:ring-2 focus:ring-teal"
+              className="w-full bg-white text-[#1A1A1A] rounded-2xl pl-11 pr-10 py-4 text-sm font-medium placeholder:text-fg-3-texto focus:outline-none focus:ring-2 focus:ring-teal"
             />
             {query && (
               <button
                 onClick={() => { setQuery(''); setResults([]); setSearched(false) }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#737373] hover:text-[#737373] transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-fg-3-texto hover:text-fg-3-texto transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -105,7 +105,7 @@ export default function Reivindicar() {
           {(results.length > 0 || searched) && (
             <div className="mt-3 bg-white rounded-2xl shadow-lg overflow-hidden max-w-lg">
               {loading && (
-                <div className="px-5 py-4 text-sm text-[#737373]">{t('reivindicar:search_loading')}</div>
+                <div className="px-5 py-4 text-sm text-fg-3-texto">{t('reivindicar:search_loading')}</div>
               )}
 
               {!loading && results.length === 0 && searched && (
@@ -113,7 +113,7 @@ export default function Reivindicar() {
                   <p className="text-sm font-semibold text-[#1A1A1A] mb-1">
                     {t('reivindicar:not_found_titulo')}
                   </p>
-                  <p className="text-xs text-[#737373] mb-3">
+                  <p className="text-xs text-fg-3-texto mb-3">
                     {t('reivindicar:not_found_desc')}
                   </p>
                   <Link
@@ -137,12 +137,12 @@ export default function Reivindicar() {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-[#1A1A1A] truncate">{biz.name}</p>
                     {biz.category && (
-                      <p className="text-xs text-[#737373]">{biz.category.name}</p>
+                      <p className="text-xs text-fg-3-texto">{biz.category.name}</p>
                     )}
                   </div>
                   <div className="flex-shrink-0">
                     {biz.profile_id ? (
-                      <span className="text-xs text-[#737373] bg-[#F5F2EE] px-2.5 py-1 rounded-full">
+                      <span className="text-xs text-fg-3-texto bg-[#F5F2EE] px-2.5 py-1 rounded-full">
                         {t('reivindicar:claimed_badge')}
                       </span>
                     ) : (
@@ -167,7 +167,7 @@ export default function Reivindicar() {
           <h2 className="font-display text-2xl font-bold text-[#1A1A1A] mb-2">
             {t('reivindicar:how_titulo')}
           </h2>
-          <p className="text-[#737373] text-sm">
+          <p className="text-fg-3-texto text-sm">
             {t('reivindicar:how_desc')}
           </p>
         </div>
@@ -195,7 +195,7 @@ export default function Reivindicar() {
                 {step}
               </div>
               <h3 className="font-semibold text-[#1A1A1A] mb-1">{title}</h3>
-              <p className="text-sm text-[#737373] leading-relaxed">{desc}</p>
+              <p className="text-sm text-fg-3-texto leading-relaxed">{desc}</p>
             </div>
           ))}
         </div>
@@ -227,7 +227,7 @@ export default function Reivindicar() {
           <h2 className="font-display text-2xl font-bold mb-3">
             {t('reivindicar:not_found_cta_titulo')}
           </h2>
-          <p className="text-[#737373] text-sm mb-8 max-w-sm mx-auto">
+          <p className="text-fg-3-texto text-sm mb-8 max-w-sm mx-auto">
             {t('reivindicar:not_found_cta_desc')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -247,7 +247,7 @@ export default function Reivindicar() {
               {t('reivindicar:not_found_cta_alt')}
             </Link>
           </div>
-          <p className="text-xs text-[#737373] mt-5">{t('reivindicar:not_found_fineprint')}</p>
+          <p className="text-xs text-fg-3-texto mt-5">{t('reivindicar:not_found_fineprint')}</p>
         </div>
       </section>
 

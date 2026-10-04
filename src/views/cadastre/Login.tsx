@@ -148,7 +148,7 @@ export default function Login() {
         {/* White body */}
         <div className="bg-white p-8">
           {/* Tourist notice */}
-          <div className="flex items-start gap-2.5 bg-areia rounded-xl px-4 py-3 mb-6 text-sm text-[#737373]">
+          <div className="flex items-start gap-2.5 bg-areia rounded-xl px-4 py-3 mb-6 text-sm text-fg-3-texto">
             <MapPin className="w-4 h-4 text-teal flex-shrink-0 mt-0.5" />
             <span>{t('cadastro.tourist_notice')} <Link href={lp('/')} className="text-teal font-medium hover:underline">{t('cadastro.tourist_link')}</Link>.</span>
           </div>
@@ -159,7 +159,7 @@ export default function Login() {
               <h1 className="font-display text-xl font-semibold mb-1 text-[#1A1A1A]">
                 {mode === 'login' ? t('cadastro.title_login') : t('cadastro.title_register')}
               </h1>
-              <p className="text-[#737373] text-sm mb-6">
+              <p className="text-fg-3-texto text-sm mb-6">
                 {mode === 'login'
                   ? t('cadastro.sub_login')
                   : t('cadastro.sub_register')}
@@ -188,7 +188,7 @@ export default function Login() {
               <h1 className="font-display text-xl font-semibold mb-1 text-[#1A1A1A]">
                 {t('cadastro.forgot_title')}
               </h1>
-              <p className="text-[#737373] text-sm mb-6">
+              <p className="text-fg-3-texto text-sm mb-6">
                 {t('cadastro.forgot_sub')}
               </p>
             </>
@@ -232,7 +232,7 @@ export default function Login() {
                     <button
                       type="button"
                       onClick={() => switchMode('forgot')}
-                      className="text-[#737373] hover:text-teal transition-colors"
+                      className="text-fg-3-texto hover:text-teal transition-colors"
                     >
                       {t('cadastro.forgot_link')}
                     </button>
@@ -281,7 +281,7 @@ export default function Login() {
                     {loading ? t('cadastro.register_btn_loading') : t('cadastro.register_btn')}
                   </Button>
                   <div className="text-center text-sm mt-1">
-                    <span className="text-[#737373]">{t('cadastro.has_account')} </span>
+                    <span className="text-fg-3-texto">{t('cadastro.has_account')} </span>
                     <button
                       type="button"
                       onClick={() => switchMode('login')}
@@ -312,7 +312,7 @@ export default function Login() {
                     <button
                       type="button"
                       onClick={() => switchMode('login')}
-                      className="text-[#737373] hover:text-teal transition-colors"
+                      className="text-fg-3-texto hover:text-teal transition-colors"
                     >
                       {t('cadastro.back_login')}
                     </button>

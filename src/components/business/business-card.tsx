@@ -23,7 +23,7 @@ function RatingChip({ businessId }: { businessId: string }) {
     <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#1A1A1A] dark:text-white">
       <Star className="w-3.5 h-3.5 fill-ocre text-ocre" aria-hidden="true" />
       {rating.avg.toFixed(1)}
-      <span className="text-fg-3 font-normal">({rating.count})</span>
+      <span className="text-fg-3-texto font-normal">({rating.count})</span>
     </span>
   )
 }
@@ -58,7 +58,7 @@ function PriceChip({ priceRange, prominent }: { priceRange: NonNullable<Business
     )
   }
   return (
-    <span className="inline-flex items-center text-xs font-semibold text-fg-3 bg-[#F0EDEA] dark:bg-white/10 px-2 py-0.5 rounded-full">
+    <span className="inline-flex items-center text-xs font-semibold text-fg-3-texto bg-[#F0EDEA] dark:bg-white/10 px-2 py-0.5 rounded-full">
       {priceRange}
     </span>
   )
@@ -86,7 +86,7 @@ function LocationActions({ business: b, size = 'md' }: { business: Business; siz
         <a
           href={buildWhatsAppLink(b.whatsapp)}
           target="_blank" rel="noopener noreferrer"
-          className={`flex items-center gap-1.5 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C4A] text-xs font-semibold px-3 ${py} rounded-full transition-colors`}
+          className={`flex items-center gap-1.5 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-whatsapp text-xs font-semibold px-3 ${py} rounded-full transition-colors`}
         >
           <Phone className="w-3 h-3" />WhatsApp
         </a>
@@ -167,9 +167,9 @@ export function BusinessCard({ business: b, view = 'grid', acimaDaDobra = false 
               <h3 className="font-display font-semibold text-lg tracking-tight hover:text-teal transition-colors">{b.name}</h3>
             </Link>
             <div className="mt-1.5 flex flex-wrap gap-1.5 items-center">
+              {b.price_range && <PriceChip priceRange={b.price_range} prominent={isFique} />}
               <RatingChip businessId={b.id} />
               <ManagedBadge profileId={b.profile_id} isVerified={b.is_verified} size="sm" />
-              {b.price_range && <PriceChip priceRange={b.price_range} prominent={isFique} />}
               {b.menu_url && (
                 <span className="inline-flex items-center text-xs font-semibold text-ocre bg-ocre/10 px-2 py-0.5 rounded-full">
                   {t('filters.cardapio')}
@@ -178,12 +178,12 @@ export function BusinessCard({ business: b, view = 'grid', acimaDaDobra = false 
             </div>
             {isFique && <AmenityIcons amenities={b.amenities} />}
             {b.address && (
-              <p className="flex items-center gap-1 text-xs text-fg-3 mt-0.5">
+              <p className="flex items-center gap-1 text-xs text-fg-3-texto mt-0.5">
                 <MapPin className="w-3 h-3 flex-shrink-0" />{b.address}
               </p>
             )}
             {b.description && (
-              <p className="text-sm text-fg-3 mt-1.5 line-clamp-2">{b.description}</p>
+              <p className="text-sm text-fg-3-texto mt-1.5 line-clamp-2">{b.description}</p>
             )}
           </div>
 
@@ -199,7 +199,7 @@ export function BusinessCard({ business: b, view = 'grid', acimaDaDobra = false 
   // grid / gallery
   return (
     <div className={cn(
-      'group bg-white dark:bg-card rounded-2xl overflow-hidden border border-border-1 hover:border-teal hover:shadow-[0_8px_24px_rgba(13,124,124,0.12)] transition-all duration-200 hover:-translate-y-0.5 flex flex-col',
+      'group bg-white dark:bg-card rounded-2xl overflow-hidden border border-border-1 hover:border-teal hover:shadow-[0_8px_24px_rgba(13,124,124,0.12)] transition-all duration-200 flex flex-col',
     )}>
       {/* Cover — PASSEIE gets a taller, more immersive image since tours sell on imagery over copy */}
       <Link href={lp(`/negocio/${b.slug}`)} className={cn(
@@ -251,9 +251,9 @@ export function BusinessCard({ business: b, view = 'grid', acimaDaDobra = false 
           <h3 className="font-display font-semibold text-xl tracking-tight hover:text-teal transition-colors">{b.name}</h3>
         </Link>
         <div className="mt-1.5 flex flex-wrap gap-1.5 items-center">
+          {b.price_range && <PriceChip priceRange={b.price_range} prominent={isFique} />}
           <RatingChip businessId={b.id} />
           <ManagedBadge profileId={b.profile_id} isVerified={b.is_verified} size="sm" />
-          {b.price_range && <PriceChip priceRange={b.price_range} prominent={isFique} />}
           {b.menu_url && (
             <span className="inline-flex items-center text-xs font-semibold text-ocre bg-ocre/10 px-2 py-0.5 rounded-full">
               {t('filters.cardapio')}
@@ -263,14 +263,14 @@ export function BusinessCard({ business: b, view = 'grid', acimaDaDobra = false 
         {isFique && <AmenityIcons amenities={b.amenities} />}
 
         {b.address && (
-          <p className="flex items-center gap-1 text-xs text-fg-3 mt-0.5">
+          <p className="flex items-center gap-1 text-xs text-fg-3-texto mt-0.5">
             <MapPin className="w-3 h-3 flex-shrink-0" />
             <span className="truncate">{b.address}</span>
           </p>
         )}
 
         {b.description && !isPasseie ? (
-          <p className="text-sm text-fg-3 mt-2 line-clamp-2 flex-1">{b.description}</p>
+          <p className="text-sm text-fg-3-texto mt-2 line-clamp-2 flex-1">{b.description}</p>
         ) : (
           <div className="flex-1" />
         )}

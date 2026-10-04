@@ -31,7 +31,7 @@ function CompletionBar({ score }: { score: number }) {
   return (
     <div className="mt-2">
       <div className="flex items-center justify-between mb-1">
-        <span className="text-[10px] text-[#737373]">{t('completion_label')}</span>
+        <span className="text-[10px] text-fg-3-texto">{t('completion_label')}</span>
         <span className={`text-[10px] font-semibold ${score >= 80 ? 'text-teal' : score >= 40 ? 'text-ocre' : 'text-coral'}`}>
           {score}%
         </span>
@@ -72,7 +72,7 @@ function CopyLinkButton({ slug }: { slug: string }) {
     <button
       onClick={copy}
       title={copied ? t('copy_success_title') : t('copy_title')}
-      className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-medium border border-[#E8E4DF] text-[#737373] hover:border-teal hover:text-teal transition-colors"
+      className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-medium border border-[#E8E4DF] text-fg-3-texto hover:border-teal hover:text-teal transition-colors"
     >
       {copied ? <Check className="w-3.5 h-3.5 text-teal" /> : <Copy className="w-3.5 h-3.5" />}
       {copied ? t('copy_success') : t('copy_label')}
@@ -105,7 +105,7 @@ function PublishToggle({ biz, onDone }: { biz: BusinessSummary; onDone: () => vo
       title={biz.is_published ? t('btn_unpublish') : t('btn_publish_now')}
       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-colors disabled:opacity-50 ${
         biz.is_published
-          ? 'border-[#E8E4DF] text-[#737373] hover:border-coral hover:text-coral'
+          ? 'border-[#E8E4DF] text-fg-3-texto hover:border-coral hover:text-coral'
           : 'bg-teal text-white border-teal hover:bg-teal/90'
       }`}
     >
@@ -153,7 +153,7 @@ function MeusNegociosInner() {
       <main className="max-w-3xl mx-auto px-5 md:px-8 py-8">
         <Link
           href={lp('/cadastre/painel')}
-          className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6"
+          className="inline-flex items-center gap-1.5 text-sm text-fg-3-texto hover:text-teal transition-colors mb-6"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           {t('back_to_painel')}
@@ -164,11 +164,11 @@ function MeusNegociosInner() {
             <PartyPopper className="w-5 h-5 text-teal flex-shrink-0 mt-0.5" />
             <div className="flex-1">
               <p className="font-semibold text-sm text-[#1A1A1A]">{t('created_title')}</p>
-              <p className="text-sm text-[#737373] mt-0.5">
+              <p className="text-sm text-fg-3-texto mt-0.5">
                 <Trans t={t} i18nKey="created_desc" components={[<strong />, <strong />]} />
               </p>
             </div>
-            <button onClick={dismissNew} className="text-[#B0A99F] hover:text-[#737373] transition-colors flex-shrink-0">
+            <button onClick={dismissNew} className="text-placeholder hover:text-fg-3-texto transition-colors flex-shrink-0">
               <X className="w-4 h-4" />
             </button>
           </div>
@@ -177,7 +177,7 @@ function MeusNegociosInner() {
         <div className="flex items-start justify-between gap-4 mb-6">
           <div>
             <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">{t('page_title')}</h1>
-            <p className="text-sm text-[#737373] mt-1">
+            <p className="text-sm text-fg-3-texto mt-1">
               {businesses.length === 0
                 ? t('empty_count')
                 : t('business_count', { count: businesses.length })}
@@ -197,7 +197,7 @@ function MeusNegociosInner() {
             <h2 className="font-display text-base font-semibold text-[#1A1A1A] mb-2">
               {t('empty_title')}
             </h2>
-            <p className="text-sm text-[#737373] mb-5 max-w-xs mx-auto">
+            <p className="text-sm text-fg-3-texto mb-5 max-w-xs mx-auto">
               {t('empty_desc')}
             </p>
             <Link href={lp('/cadastre/perfil')}>
@@ -233,7 +233,7 @@ function MeusNegociosInner() {
                             className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full flex-shrink-0 ${
                               b.is_published
                                 ? 'bg-teal/10 text-teal'
-                                : 'bg-[#F5F2EE] text-[#737373]'
+                                : 'bg-[#F5F2EE] text-fg-3-texto'
                             }`}
                           >
                             <span className={`w-1.5 h-1.5 rounded-full ${b.is_published ? 'bg-teal' : 'bg-[#737373]'}`} />
@@ -241,7 +241,7 @@ function MeusNegociosInner() {
                           </span>
                         </div>
                         {b.category && (
-                          <p className="text-xs text-[#737373] mt-0.5">{b.category.name}</p>
+                          <p className="text-xs text-fg-3-texto mt-0.5">{b.category.name}</p>
                         )}
                         <p className="text-[10px] text-[#C4BFBA] font-mono mt-0.5 truncate">
                           vivegostoso.com.br/negocio/{b.slug}
@@ -259,7 +259,7 @@ function MeusNegociosInner() {
                         target="_blank"
                         rel="noopener noreferrer"
                         title={t('view_public_title')}
-                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-medium border border-[#E8E4DF] text-[#737373] hover:border-teal hover:text-teal transition-colors"
+                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-medium border border-[#E8E4DF] text-fg-3-texto hover:border-teal hover:text-teal transition-colors"
                       >
                         <ExternalLink className="w-3.5 h-3.5" />
                         {t('view_label')}

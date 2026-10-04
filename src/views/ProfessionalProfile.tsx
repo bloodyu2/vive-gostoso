@@ -115,7 +115,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
         {/* Sobre */}
         {pro.bio && (
           <div>
-            <h2 className="text-xs font-bold text-[#737373] uppercase tracking-wide mb-3">{t('professional.sobre')}</h2>
+            <h2 className="text-xs font-bold text-fg-3-texto uppercase tracking-wide mb-3">{t('professional.sobre')}</h2>
             <p className="text-sm text-[#3D3D3D] leading-relaxed">{pro.bio}</p>
           </div>
         )}
@@ -128,7 +128,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
                 href={`https://instagram.com/${pro.instagram.replace('@', '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-[#1A1A1A] transition-colors"
+                className="inline-flex items-center gap-1.5 text-sm text-fg-3-texto hover:text-[#1A1A1A] transition-colors"
               >
                 <AtSign className="w-4 h-4" />
                 {pro.instagram}
@@ -139,7 +139,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
                 href={websiteHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-[#1A1A1A] transition-colors"
+                className="inline-flex items-center gap-1.5 text-sm text-fg-3-texto hover:text-[#1A1A1A] transition-colors"
               >
                 <Globe className="w-4 h-4" />
                 {t('professional.website')}
@@ -152,7 +152,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
         {/* Portfólio */}
         {pro.portfolio_items.length > 0 && (
           <div>
-            <h2 className="text-xs font-bold text-[#737373] uppercase tracking-wide mb-3">{t('professional.portfolio_label')}</h2>
+            <h2 className="text-xs font-bold text-fg-3-texto uppercase tracking-wide mb-3">{t('professional.portfolio_label')}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {pro.portfolio_items.map((item: PortfolioItem) => {
                 const safeUrl = safeExternalUrl(item.url)
@@ -168,7 +168,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
                   <div className="p-4">
                     <p className="font-semibold text-[#1A1A1A] text-sm mb-1">{item.title}</p>
                     {item.description && (
-                      <p className="text-xs text-[#737373] leading-relaxed">{item.description}</p>
+                      <p className="text-xs text-fg-3-texto leading-relaxed">{item.description}</p>
                     )}
                     {safeUrl && (
                       <a
@@ -191,7 +191,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
         {/* Valor por hora */}
         {pro.hourly_rate && (
           <div className="bg-white rounded-2xl border border-[#E8E4DF] p-5">
-            <p className="text-xs font-bold text-[#737373] uppercase tracking-wide mb-1">
+            <p className="text-xs font-bold text-fg-3-texto uppercase tracking-wide mb-1">
               {t('professional.hourly_rate_label')}
             </p>
             <p className="text-2xl font-bold text-[#1A1A1A]">

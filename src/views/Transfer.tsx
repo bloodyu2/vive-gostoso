@@ -76,12 +76,12 @@ function TransferCard({ transfer, selectedRoute, ratings }: TransferCardProps) {
             <div className="flex items-center gap-1 mt-1">
               <Star className="w-3.5 h-3.5 fill-ocre text-ocre" />
               <span className="text-xs font-semibold text-[#1A1A1A]">{rating.avg.toFixed(1)}</span>
-              <span className="text-xs text-[#737373]">({rating.count})</span>
+              <span className="text-xs text-fg-3-texto">({rating.count})</span>
             </div>
           )}
         </div>
 
-        <div className="flex flex-col gap-1.5 text-sm text-[#737373]">
+        <div className="flex flex-col gap-1.5 text-sm text-fg-3-texto">
           <div className="flex items-center gap-2">
             <Users className="w-3.5 h-3.5 flex-shrink-0" />
             <span>{transfer.max_passengers} {t('transfer.detail_passageiros')}</span>
@@ -97,7 +97,7 @@ function TransferCard({ transfer, selectedRoute, ratings }: TransferCardProps) {
               <Languages className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
               <div className="flex flex-wrap gap-1">
                 {transfer.languages.map(lang => (
-                  <span key={lang} className="bg-[#F5F2EE] text-[#737373] text-xs px-2 py-0.5 rounded-full">
+                  <span key={lang} className="bg-[#F5F2EE] text-fg-3-texto text-xs px-2 py-0.5 rounded-full">
                     {lang}
                   </span>
                 ))}
@@ -109,14 +109,14 @@ function TransferCard({ transfer, selectedRoute, ratings }: TransferCardProps) {
         <div className="mt-auto pt-1">
           {matchedRoute ? (
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs text-[#737373]">{matchedRoute.from} → {matchedRoute.to}</span>
+              <span className="text-xs text-fg-3-texto">{matchedRoute.from} → {matchedRoute.to}</span>
               <span className="font-display font-bold text-[#1E7A9E] text-base">
                 R${matchedRoute.price_brl.toLocaleString('pt-BR')}
               </span>
             </div>
           ) : (
             <div className="mb-3">
-              <span className="text-xs text-[#737373]">
+              <span className="text-xs text-fg-3-texto">
                 {t('transfer.rotas_disponiveis', { n: routeCount, s: routeCount !== 1 ? 's' : '' })}
               </span>
             </div>
@@ -205,7 +205,7 @@ function RegistrationModal({ onClose }: RegistrationModalProps) {
 
   const chipBtn = (active: boolean) =>
     `px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
-      active ? 'bg-teal text-white border-teal' : 'bg-white text-[#737373] border-[#E8E4DF] hover:border-teal/40'
+      active ? 'bg-teal text-white border-teal' : 'bg-white text-fg-3-texto border-[#E8E4DF] hover:border-teal/40'
     }`
 
   return (
@@ -215,7 +215,7 @@ function RegistrationModal({ onClose }: RegistrationModalProps) {
         <div className="flex items-center justify-between px-6 py-5 border-b border-[#E8E4DF] sticky top-0 bg-white z-10">
           <div>
             <h2 className="font-display font-bold text-xl text-[#1A1A1A]">{t('transfer.modal_titulo')}</h2>
-            <p className="text-xs text-[#737373] mt-0.5">{t('transfer.modal_sub')}</p>
+            <p className="text-xs text-fg-3-texto mt-0.5">{t('transfer.modal_sub')}</p>
           </div>
           <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-[#F5F2EE] transition-colors">
             <X className="w-5 h-5" />
@@ -226,7 +226,7 @@ function RegistrationModal({ onClose }: RegistrationModalProps) {
           <div className="px-6 py-10 text-center">
             <CheckCircle className="w-10 h-10 mb-4 text-teal mx-auto" />
             <h3 className="font-display font-bold text-xl mb-2">{t('transfer.modal_sucesso_titulo')}</h3>
-            <p className="text-[#737373] text-sm leading-relaxed">{t('transfer.modal_sucesso_desc')}</p>
+            <p className="text-fg-3-texto text-sm leading-relaxed">{t('transfer.modal_sucesso_desc')}</p>
             <button onClick={onClose} className="mt-6 bg-teal text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-teal-dark transition-colors">
               {t('transfer.modal_fechar')}
             </button>
@@ -321,7 +321,7 @@ function RegistrationModal({ onClose }: RegistrationModalProps) {
             {/* Routes section */}
             <div className="space-y-3">
               <p className="text-sm font-medium text-[#1A1A1A]">{t('transfer.routes_title')}</p>
-              <p className="text-xs text-[#737373]">{t('transfer.routes_desc')}</p>
+              <p className="text-xs text-fg-3-texto">{t('transfer.routes_desc')}</p>
               {form.routes.map((route, i) => (
                 <div key={i} className="flex gap-2 items-start bg-[#F5F2EE] rounded-xl p-3">
                   <div className="flex-1 space-y-2">
@@ -444,7 +444,7 @@ export default function Transfer() {
           <div className="text-center py-16">
             <div className="text-4xl mb-3">🚗</div>
             <h3 className="font-display font-bold text-xl mb-2">{t('transfer.sem_providers')}</h3>
-            <p className="text-[#737373] text-sm max-w-xs mx-auto leading-relaxed mb-5">{t('transfer.sem_providers_sub')}</p>
+            <p className="text-fg-3-texto text-sm max-w-xs mx-auto leading-relaxed mb-5">{t('transfer.sem_providers_sub')}</p>
             <button onClick={() => setShowRegistration(true)}
               className="bg-teal text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-teal-dark transition-colors">
               {t('transfer.cadastre_btn')}

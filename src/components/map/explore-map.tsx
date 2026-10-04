@@ -245,7 +245,7 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
         {/* Stats chip */}
         <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur border border-[#E8E4DF] rounded-xl px-3 py-2 text-xs text-[#3D3D3D] shadow-sm pointer-events-none">
           <span className="font-semibold text-teal">{geo.length}</span> no mapa
-          {noGeo.length > 0 && <span className="text-[#737373] ml-1.5">· {noGeo.length} sem localização</span>}
+          {noGeo.length > 0 && <span className="text-fg-3-texto ml-1.5">· {noGeo.length} sem localização</span>}
         </div>
 
         {/* Filtro dos pontos da regiao */}
@@ -281,10 +281,10 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
                   {textos.categorias[pontoAberto.categoria]}
                 </div>
                 <div className="font-semibold text-[#1A1A1A] leading-tight">{pontoAberto.nome}</div>
-                <div className="text-xs text-[#737373] mt-0.5">{pontoAberto.municipio}</div>
+                <div className="text-xs text-fg-3-texto mt-0.5">{pontoAberto.municipio}</div>
                 <p className="text-sm text-[#3D3D3D] mt-2 leading-snug">{pontoAberto.descricao[lang]}</p>
               </div>
-              <button type="button" onClick={() => setPontoAberto(null)} aria-label={textos.fechar} className="p-1.5 -m-1.5 text-[#737373] hover:text-[#1A1A1A] flex-shrink-0">
+              <button type="button" onClick={() => setPontoAberto(null)} aria-label={textos.fechar} className="p-1.5 -m-1.5 text-fg-3-texto hover:text-[#1A1A1A] flex-shrink-0">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -336,12 +336,12 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
                   )}
                   <div className="font-semibold text-[#1A1A1A] leading-tight">{popup.name}</div>
                   {popup.address && (
-                    <div className="text-xs text-[#737373] flex items-center gap-1 mt-1">
+                    <div className="text-xs text-fg-3-texto flex items-center gap-1 mt-1">
                       <MapPin className="w-3 h-3 flex-shrink-0" />{popup.address}
                     </div>
                   )}
                 </div>
-                <button onClick={() => setPopup(null)} className="p-1.5 -m-1.5 text-[#737373] hover:text-[#1A1A1A] flex-shrink-0">
+                <button onClick={() => setPopup(null)} className="p-1.5 -m-1.5 text-fg-3-texto hover:text-[#1A1A1A] flex-shrink-0">
                   <X className="w-4 h-4" />
                 </button>
               </div>
@@ -362,7 +362,7 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
         <div ref={sidebarHeaderRef} className="sticky top-0 bg-white z-10 border-b border-[#E8E4DF]">
           <div className="px-5 pt-4 pb-2">
             <div className="font-semibold text-sm text-[#1A1A1A]">{businesses.length} negócios cadastrados</div>
-            <div className="text-xs text-[#737373] mt-0.5">São Miguel do Gostoso, RN</div>
+            <div className="text-xs text-fg-3-texto mt-0.5">São Miguel do Gostoso, RN</div>
           </div>
           {/* Jump pills — only shown when 2+ categories have businesses */}
           {activeVerbs.length > 1 && (
@@ -429,7 +429,7 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
                     <div className="min-w-0 flex-1">
                       <div className="text-sm font-medium text-[#1A1A1A] truncate group-hover:text-teal transition-colors">{b.name}</div>
                       {b.address && (
-                        <div className="text-xs text-[#737373] truncate flex items-center gap-1 mt-0.5">
+                        <div className="text-xs text-fg-3-texto truncate flex items-center gap-1 mt-0.5">
                           <MapPin className="w-3 h-3 flex-shrink-0" />{b.address}
                         </div>
                       )}
@@ -451,7 +451,7 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
         })}
 
         {businesses.length === 0 && (
-          <div className="px-5 py-8 text-center text-sm text-[#737373]">
+          <div className="px-5 py-8 text-center text-sm text-fg-3-texto">
             Nenhum negócio cadastrado ainda.
           </div>
         )}

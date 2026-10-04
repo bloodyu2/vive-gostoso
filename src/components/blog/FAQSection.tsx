@@ -45,7 +45,7 @@ export function FAQSection({ items, heading = 'Perguntas frequentes' }: FAQSecti
                 </span>
                 <ChevronDown
                   className={cn(
-                    'w-5 h-5 text-[#737373] flex-shrink-0 transition-transform',
+                    'w-5 h-5 text-fg-3-texto flex-shrink-0 transition-transform',
                     isOpen && 'rotate-180',
                   )}
                 />

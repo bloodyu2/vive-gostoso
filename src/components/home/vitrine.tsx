@@ -12,6 +12,7 @@ import { slugNoIdioma } from '@/lib/blog/traducoes'
 import { IconeVitrineSvg } from '@/components/explore/icone-vitrine'
 import { MaresDoDia } from '@/components/explore/mare-de-hoje'
 import { VitrineControles } from './vitrine-controles'
+import { ProgressiveBlur } from '@/components/magicui/progressive-blur'
 
 const LISTA_ID = 'vitrine-lista'
 
@@ -51,10 +52,11 @@ export async function Vitrine({ lang, mareHoje }: { lang: Idioma; mareHoje: DiaD
         <p className="mt-1 text-sm text-fg-2">{t.sub}</p>
       </div>
 
-      <ul
-        id={LISTA_ID}
-        className="mt-6 flex gap-3 overflow-x-auto snap-x snap-mandatory px-5 pt-1 pb-3 scroll-px-5 md:px-8 md:scroll-px-8 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 md:gap-4"
-      >
+      <div className="relative">
+        <ul
+          id={LISTA_ID}
+          className="mt-6 flex gap-3 overflow-x-auto snap-x snap-mandatory px-5 pt-1 pb-3 scroll-px-5 md:px-8 md:scroll-px-8 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 md:gap-4"
+        >
         <li className="snap-start shrink-0 w-[85%] sm:w-auto sm:col-span-2 lg:row-span-2">
           <div className={`${CARTAO} bg-teal-dark p-6 md:p-8 text-white`}>
             <svg aria-hidden="true" viewBox="0 0 400 120" preserveAspectRatio="none" className="pointer-events-none absolute inset-x-0 bottom-0 h-24 w-full text-white/10">
@@ -136,6 +138,8 @@ export async function Vitrine({ lang, mareHoje }: { lang: Idioma; mareHoje: DiaD
           )
         })}
       </ul>
+        <ProgressiveBlur side="right" className="sm:hidden" />
+      </div>
 
       <VitrineControles
         listaId={LISTA_ID}

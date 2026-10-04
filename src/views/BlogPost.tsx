@@ -11,6 +11,7 @@ import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { RelatedPosts, TableOfContents } from '@/components/blog'
+import { ScrollProgress } from '@/components/magicui/scroll-progress'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import type { RotaModulo } from '@/components/layout/links-modulos'
 
@@ -123,7 +124,7 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
   if (!post) {
     return (
       <main className="max-w-3xl mx-auto px-5 md:px-8 py-20 text-center">
-        <p className="text-[#737373] text-lg">{t('blog.nao_encontrado')}</p>
+        <p className="text-fg-3-texto text-lg">{t('blog.nao_encontrado')}</p>
         <Link href={lp('/blog')} className="mt-4 inline-flex items-center gap-2 text-teal font-semibold hover:underline">
           <ArrowLeft className="w-4 h-4" />
           {t('blog.voltar_blog')}
@@ -134,9 +135,10 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
 
   return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-12">
+      <ScrollProgress />
       <Link
         href={lp('/blog')}
-        className="inline-flex items-center gap-2 text-sm text-[#737373] hover:text-teal transition-colors mb-8"
+        className="inline-flex items-center gap-2 text-sm text-fg-3-texto hover:text-teal transition-colors mb-8"
       >
         <ArrowLeft className="w-4 h-4" />
         {t('blog.breadcrumb_blog')}
@@ -157,12 +159,12 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
       </h1>
 
       {post.excerpt && (
-        <p className="mt-3 text-lg text-[#737373] leading-relaxed">
+        <p className="mt-3 text-lg text-fg-3-texto leading-relaxed">
           {post.excerpt}
         </p>
       )}
 
-      <div className="mt-4 flex items-center gap-2 text-sm text-[#737373]">
+      <div className="mt-4 flex items-center gap-2 text-sm text-fg-3-texto">
         <span className="font-medium">{post.author}</span>
         {post.published_at && (
           <>
