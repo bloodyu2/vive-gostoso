@@ -11,6 +11,7 @@ import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { RelatedPosts, TableOfContents } from '@/components/blog'
+import { ScrollProgress } from '@/components/magicui/scroll-progress'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import type { RotaModulo } from '@/components/layout/links-modulos'
 
@@ -134,6 +135,7 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
 
   return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-12">
+      <ScrollProgress />
       <Link
         href={lp('/blog')}
         className="inline-flex items-center gap-2 text-sm text-fg-3-texto hover:text-teal transition-colors mb-8"

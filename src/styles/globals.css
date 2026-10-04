@@ -196,6 +196,52 @@ h4, h5, h6 {
   color: #085E5E;
 }
 
+/* --- Revelacao do tema (View Transitions) ---------------------------------
+   O novo tema se abre em circulo a partir do botao que foi clicado. As
+   coordenadas e o raio chegam em CSS vars escritas pelo ThemeToggler. Com
+   prefers-reduced-motion a troca e instantanea (o componente nem chama
+   startViewTransition). */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: none;
+  }
+  ::view-transition-new(root) {
+    animation: vg-tema-revelar 460ms ease-out;
+  }
+}
+
+@keyframes vg-tema-revelar {
+  from {
+    clip-path: circle(0px at var(--vg-tema-x, 50%) var(--vg-tema-y, 50%));
+  }
+  to {
+    clip-path: circle(var(--vg-tema-raio, 150vmax) at var(--vg-tema-x, 50%) var(--vg-tema-y, 50%));
+  }
+}
+
+/* --- Lente (zoom no hover da galeria) -------------------------------------
+   Segue o cursor por transform-origin. So em ponteiro fino (desktop): no toque
+   nada acontece, e o toque continua abrindo o lightbox. Com reduced-motion nao
+   ha zoom. */
+@media (hover: hover) and (pointer: fine) {
+  .lens-zoom img {
+    transition: transform 200ms ease-out;
+    transform-origin: var(--lens-x, 50%) var(--lens-y, 50%);
+  }
+  .lens-zoom:hover img {
+    transform: scale(var(--lens-scale, 2));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lens-zoom img {
+    transition: none !important;
+  }
+  .lens-zoom:hover img {
+    transform: none !important;
+  }
+}
+
 /* --- Dark mode --- */
 .dark {
   --color-teal-light: rgba(13,124,124,0.20);

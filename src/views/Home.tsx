@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { BusinessCard } from '@/components/business/business-card'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { Hoje } from '@/components/home/hoje'
+import { BlurFade } from '@/components/magicui/blur-fade'
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useStats, type SiteStats } from '@/hooks/useStats'
 import { useRecentBusinesses } from '@/hooks/useRecentBusinesses'
@@ -133,6 +134,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
 
       {/* ── Recém chegados ── */}
       {recentBusinesses.length > 0 && (
+        <BlurFade>
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10 md:pb-14">
           <div className="flex justify-between items-center mb-5">
             <h2 className="font-display text-h3 font-semibold">{t('home.novos_titulo')}</h2>
@@ -160,6 +162,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
             ))}
           </div>
         </section>
+        </BlurFade>
       )}
 
       {/* ── Agora em Gostoso ── */}
@@ -205,6 +208,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
 
       {/* ── Últimos do blog ── */}
       {latestPosts.length > 0 && (
+        <BlurFade delay={80}>
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10 md:pb-14">
           <div className="flex justify-between items-end mb-5">
             <h2 className="font-display text-h3 font-semibold">{t('home.blog_titulo')}</h2>
@@ -260,6 +264,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
             ))}
           </div>
         </section>
+        </BlurFade>
       )}
 
       {/* ── Banner: Quer saber como funciona? ── */}

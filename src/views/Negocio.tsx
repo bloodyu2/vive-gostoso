@@ -10,6 +10,7 @@ import { pushDataLayer } from '@/lib/analytics'
 import { ManagedBadge } from '@/components/business/managed-badge'
 import { ClaimCta } from '@/components/business/claim-cta'
 import { Lightbox } from '@/components/ui/lightbox'
+import { Lens } from '@/components/magicui/lens'
 import { ReviewList } from '@/components/reviews/review-list'
 import { ReviewForm } from '@/components/reviews/review-form'
 import { useBusinessRatings } from '@/hooks/useReviews'
@@ -210,10 +211,12 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
               {b.photos.map((url, i) => (
                 <div
                   key={i}
-                  className="relative aspect-square rounded-xl overflow-hidden bg-[#E8E4DF] cursor-pointer hover:opacity-90 transition-opacity"
+                  className="relative aspect-square rounded-xl overflow-hidden bg-[#E8E4DF] dark:bg-[#2D2D2D] cursor-pointer hover:opacity-90 transition-opacity"
                   onClick={() => setLightboxIndex(capaReal ? i + 1 : i)}
                 >
-                  <SafeCoverImage src={url} alt={`${b.name} foto ${i + 1}`} className="w-full h-full object-cover" />
+                  <Lens className="w-full h-full">
+                    <SafeCoverImage src={url} alt={`${b.name} foto ${i + 1}`} className="w-full h-full object-cover" />
+                  </Lens>
                   {temLicenca(b.imagens_licenciadas, url) && (
                     <FotoPropriaBadge className="absolute bottom-2 left-2 scale-90 origin-bottom-left" />
                   )}

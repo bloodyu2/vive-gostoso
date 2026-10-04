@@ -1,6 +1,7 @@
 import { LayoutGrid, List, Images, Search, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
+import { ProgressiveBlur } from '@/components/magicui/progressive-blur'
 import type { Category } from '@/types/database'
 import type { ViewMode } from './business-grid'
 
@@ -55,7 +56,8 @@ export function BusinessFilters({
       </div>
 
       {/* Row 1: category pills */}
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+      <div className="relative">
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
         <button
           onClick={() => onSelect(null)}
           className={cn(
@@ -78,6 +80,8 @@ export function BusinessFilters({
             )}
           >{cat.name}</button>
         ))}
+        </div>
+        <ProgressiveBlur side="right" />
       </div>
 
       {/* Row 2: result count + aberto agora + view toggle */}
