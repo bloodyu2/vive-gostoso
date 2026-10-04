@@ -50,9 +50,9 @@ function SlugEditor({ biz, onDone }: { biz: BusinessRow; onDone: () => void }) {
 
   if (!editing) {
     return (
-      <span className="inline-flex items-center gap-1 font-mono text-xs text-[#737373]">
+      <span className="inline-flex items-center gap-1 font-mono text-xs text-fg-3-texto">
         {biz.slug}
-        <button onClick={() => setEditing(true)} title={t('edit_slug')} className="ml-1 text-[#B0A99F] hover:text-teal transition-colors">
+        <button onClick={() => setEditing(true)} title={t('edit_slug')} className="ml-1 text-placeholder hover:text-teal transition-colors">
           <Pencil className="w-3 h-3" />
         </button>
       </span>
@@ -71,7 +71,7 @@ function SlugEditor({ biz, onDone }: { biz: BusinessRow; onDone: () => void }) {
       <button onClick={save} disabled={saving} className="text-teal hover:text-teal-dark disabled:opacity-50">
         <Check className="w-3.5 h-3.5" />
       </button>
-      <button onClick={() => { setValue(biz.slug); setEditing(false) }} className="text-[#B0A99F] hover:text-coral">
+      <button onClick={() => { setValue(biz.slug); setEditing(false) }} className="text-placeholder hover:text-coral">
         <X className="w-3.5 h-3.5" />
       </button>
     </span>
@@ -97,7 +97,7 @@ function PublishToggle({ biz, onDone }: { biz: BusinessRow; onDone: () => void }
       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-colors disabled:opacity-50 ${
         biz.is_published
           ? 'border-teal/30 text-teal hover:bg-teal/5'
-          : 'border-[#E8E4DF] text-[#737373] hover:border-teal hover:text-teal'
+          : 'border-[#E8E4DF] text-fg-3-texto hover:border-teal hover:text-teal'
       }`}
     >
       {biz.is_published
@@ -126,14 +126,14 @@ function AdminBusinessesInner() {
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
-      <Link href={lp('/cadastre/admin')} className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
+      <Link href={lp('/cadastre/admin')} className="inline-flex items-center gap-1.5 text-sm text-fg-3-texto hover:text-teal transition-colors mb-6">
         <ArrowLeft className="w-4 h-4" /> {t('back')}
       </Link>
 
       <div className="flex flex-wrap items-center gap-3 mb-6">
         <div>
           <h1 className="font-display text-3xl font-semibold">{t('title')}</h1>
-          <p className="text-sm text-[#737373] mt-0.5">
+          <p className="text-sm text-fg-3-texto mt-0.5">
             {t('count', { total: businesses.length, draft: draftCount, count: draftCount })}
           </p>
         </div>
@@ -143,7 +143,7 @@ function AdminBusinessesInner() {
               key={f}
               onClick={() => setFilter(f)}
               className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
-                filter === f ? 'bg-white text-[#1A1A1A] shadow-sm' : 'text-[#737373] hover:text-[#1A1A1A]'
+                filter === f ? 'bg-white text-[#1A1A1A] shadow-sm' : 'text-fg-3-texto hover:text-[#1A1A1A]'
               }`}
             >
               {f === 'all' ? t('filter_all') : f === 'draft' ? t('filter_draft') : t('filter_published')}
@@ -161,7 +161,7 @@ function AdminBusinessesInner() {
       {isError && <ErrorState onRetry={() => refetch()} />}
 
       {!isLoading && !isError && !filtered.length && (
-        <div className="text-center py-16 text-[#B0A99F]">
+        <div className="text-center py-16 text-placeholder">
           <div className="text-4xl mb-3">✅</div>
           <p className="font-semibold">{t('empty')}</p>
         </div>
@@ -175,13 +175,13 @@ function AdminBusinessesInner() {
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-semibold text-sm text-[#1A1A1A]">{b.name}</span>
                   <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full flex-shrink-0 ${
-                    b.is_published ? 'bg-teal/10 text-teal' : 'bg-[#E8E4DF] text-[#737373]'
+                    b.is_published ? 'bg-teal/10 text-teal' : 'bg-[#E8E4DF] text-fg-3-texto'
                   }`}>
                     <span className={`w-1.5 h-1.5 rounded-full ${b.is_published ? 'bg-teal' : 'bg-[#737373]'}`} />
                     {b.is_published ? t('status_published') : t('status_draft')}
                   </span>
                   {b.category && (
-                    <span className="text-xs text-[#737373] bg-[#F5F2EE] px-2 py-0.5 rounded-full">{b.category.name}</span>
+                    <span className="text-xs text-fg-3-texto bg-[#F5F2EE] px-2 py-0.5 rounded-full">{b.category.name}</span>
                   )}
                   {b.plan !== 'free' && (
                     <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
@@ -200,7 +200,7 @@ function AdminBusinessesInner() {
                 target="_blank"
                 rel="noopener noreferrer"
                 title={t('view_page')}
-                className="flex-shrink-0 text-[#B0A99F] hover:text-teal transition-colors mt-0.5"
+                className="flex-shrink-0 text-placeholder hover:text-teal transition-colors mt-0.5"
               >
                 <ExternalLink className="w-4 h-4" />
               </a>

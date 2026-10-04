@@ -61,7 +61,7 @@ export function TableOfContents({
       aria-label={heading}
       className="not-prose my-8 rounded-2xl border border-[#E8E4DF] dark:border-[#2D2D2D] bg-[#F5F2EE] dark:bg-[#222] p-5"
     >
-      <div className="text-[10px] font-bold uppercase tracking-widest text-[#737373] mb-3">
+      <div className="text-[10px] font-bold uppercase tracking-widest text-fg-3-texto mb-3">
         {heading}
       </div>
       <ol className="space-y-1.5 text-sm">

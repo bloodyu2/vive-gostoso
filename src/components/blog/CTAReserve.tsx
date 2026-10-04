@@ -29,7 +29,7 @@ export function CTAReserve({ to, title, description, cta = 'Ver detalhes' }: CTA
             {title}
           </div>
           {description && (
-            <p className="mt-1 text-sm text-[#737373] leading-relaxed">{description}</p>
+            <p className="mt-1 text-sm text-fg-3-texto leading-relaxed">{description}</p>
           )}
         </div>
         <span className="inline-flex items-center gap-1 text-sm font-semibold text-teal flex-shrink-0">

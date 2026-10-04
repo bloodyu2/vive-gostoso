@@ -35,18 +35,18 @@ export function BusinessFilters({
     <div className="mb-8 space-y-3">
       {/* Search bar */}
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#B0A99F] pointer-events-none" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-placeholder pointer-events-none" />
         <input
           type="text"
           value={search}
           onChange={e => onSearch(e.target.value)}
           placeholder={t('filters.buscar_placeholder')}
-          className="w-full bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl pl-11 pr-10 py-3 text-sm text-[#1A1A1A] dark:text-white placeholder-[#B0A99F] focus:outline-none focus:border-teal focus:ring-1 focus:ring-teal transition-colors"
+          className="w-full bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl pl-11 pr-10 py-3 text-sm text-[#1A1A1A] dark:text-white placeholder:text-placeholder focus:outline-none focus:border-teal focus:ring-1 focus:ring-teal transition-colors"
         />
         {search && (
           <button
             onClick={() => onSearch('')}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#B0A99F] hover:text-[#737373] transition-colors"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-placeholder hover:text-fg-3-texto transition-colors"
             aria-label={t('filters.limpar_busca')}
           >
             <X className="w-4 h-4" />
@@ -59,7 +59,7 @@ export function BusinessFilters({
         <button
           onClick={() => onSelect(null)}
           className={cn(
-            'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border transition-all duration-150 flex-shrink-0',
+            'px-4 min-h-11 flex items-center rounded-full text-sm font-medium whitespace-nowrap border transition-all duration-150 flex-shrink-0',
             active === null
               ? 'bg-teal text-white border-teal'
               : 'bg-white dark:bg-[#1C1C1C] text-[#3D3D3D] dark:text-[#C0BCB8] border-[#E8E4DF] dark:border-[#2D2D2D] hover:bg-areia dark:hover:bg-[#2D2D2D]'
@@ -71,7 +71,7 @@ export function BusinessFilters({
             key={cat.slug}
             onClick={() => onSelect(cat.slug)}
             className={cn(
-              'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border transition-all duration-150 flex-shrink-0',
+              'px-4 min-h-11 flex items-center rounded-full text-sm font-medium whitespace-nowrap border transition-all duration-150 flex-shrink-0',
               active === cat.slug
                 ? 'bg-teal text-white border-teal'
                 : 'bg-white dark:bg-[#1C1C1C] text-[#3D3D3D] dark:text-[#C0BCB8] border-[#E8E4DF] dark:border-[#2D2D2D] hover:bg-areia dark:hover:bg-[#2D2D2D]'
@@ -83,7 +83,7 @@ export function BusinessFilters({
       {/* Row 2: result count + aberto agora + view toggle */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
-          <span className="text-sm text-[#737373]">
+          <span className="text-sm text-fg-3-texto">
             {total} {t(total === 1 ? 'filters.resultado_um' : 'filters.resultado_outros')}
             {search && <span className="ml-1 text-teal font-medium">{t('filters.para_busca', { search })}</span>}
           </span>
@@ -91,10 +91,10 @@ export function BusinessFilters({
           <button
             onClick={() => onOpenOnly(!openOnly)}
             className={cn(
-              'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all',
+              'flex items-center gap-1.5 px-3 min-h-11 rounded-full text-xs font-semibold border transition-all',
               openOnly
                 ? 'bg-[#3D8B5A] text-white border-[#3D8B5A]'
-                : 'bg-white dark:bg-[#1C1C1C] text-[#737373] border-[#E8E4DF] dark:border-[#2D2D2D] hover:bg-areia dark:hover:bg-[#2D2D2D]'
+                : 'bg-white dark:bg-[#1C1C1C] text-fg-3-texto border-[#E8E4DF] dark:border-[#2D2D2D] hover:bg-areia dark:hover:bg-[#2D2D2D]'
             )}
           >
             <span className={cn(
@@ -115,10 +115,10 @@ export function BusinessFilters({
               aria-label={t(labelKey)}
               aria-pressed={view === v}
               className={cn(
-                'w-9 h-9 flex items-center justify-center rounded-lg transition-all',
+                'w-11 h-11 flex items-center justify-center rounded-lg transition-all',
                 view === v
                   ? 'bg-teal text-white'
-                  : 'text-[#737373] hover:bg-areia dark:hover:bg-[#2D2D2D]'
+                  : 'text-fg-3-texto hover:bg-areia dark:hover:bg-[#2D2D2D]'
               )}
             >
               <Icon className="w-4 h-4" />

@@ -53,7 +53,7 @@ export function Hoje() {
               <div className="flex items-center gap-2 mb-4">
                 <Clock className="w-4 h-4 text-[#3D8B5A]" />
                 <span className="text-sm font-semibold text-white/80">{t('abertos_label')}</span>
-                <span className="ml-auto text-xs text-white/40">{t('negocio_count', { count: openNow.length })}</span>
+                <span className="ml-auto text-xs text-white/70">{t('negocio_count', { count: openNow.length })}</span>
               </div>
               <div className="space-y-2">
                 {openNow.slice(0, 5).map(b => (
@@ -76,13 +76,13 @@ export function Hoje() {
                       <div className="text-white text-sm font-medium group-hover:text-teal-light transition-colors truncate">{b.name}</div>
                       <div className="flex items-center gap-1.5 mt-0.5">
                         <Badge kind="open" dot className="flex-shrink-0">{t('aberto_badge')}</Badge>
-                        {b.category && <span className="text-white/40 text-xs truncate">{b.category.name}</span>}
+                        {b.category && <span className="text-white/70 text-xs truncate">{b.category.name}</span>}
                       </div>
                     </div>
                   </Link>
                 ))}
                 {openNow.length > 5 && (
-                  <Link href={lp('/come')} className="block text-xs text-white/40 hover:text-teal-light pt-1 transition-colors">
+                  <Link href={lp('/come')} className="block text-xs text-white/70 hover:text-teal-light pt-1 transition-colors">
                     {t('mais_abertos', { count: openNow.length - 5 })} →
                   </Link>
                 )}
@@ -95,7 +95,7 @@ export function Hoje() {
               <div className="flex items-center gap-2 mb-4">
                 <CalendarDays className="w-4 h-4 text-coral" />
                 <span className="text-sm font-semibold text-white/80">{t('acontecendo_label')}</span>
-                <span className="ml-auto text-xs text-white/40">{t('evento_count', { count: todayEvents.length })}</span>
+                <span className="ml-auto text-xs text-white/70">{t('evento_count', { count: todayEvents.length })}</span>
               </div>
               <div className="space-y-3">
                 {todayEvents.slice(0, 4).map(e => (
@@ -105,12 +105,12 @@ export function Hoje() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="text-white text-sm font-medium leading-snug line-clamp-2">{e.name}</div>
-                      {e.location && <div className="text-white/40 text-xs mt-0.5 truncate">{e.location}</div>}
+                      {e.location && <div className="text-white/70 text-xs mt-0.5 truncate">{e.location}</div>}
                     </div>
                   </div>
                 ))}
                 {todayEvents.length > 4 && (
-                  <Link href={lp('/participe')} className="block text-xs text-white/40 hover:text-coral pt-1 transition-colors">
+                  <Link href={lp('/participe')} className="block text-xs text-white/70 hover:text-coral pt-1 transition-colors">
                     {t('ver_todos_eventos')} →
                   </Link>
                 )}

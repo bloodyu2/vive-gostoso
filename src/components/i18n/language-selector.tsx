@@ -54,7 +54,7 @@ export function LanguageSelector({ variant = 'dropdown' }: LanguageSelectorProps
   if (variant === 'inline') {
     return (
       <div className="flex items-center gap-1.5 px-4 py-3">
-        <Globe className="w-4 h-4 text-[#737373] flex-shrink-0" />
+        <Globe className="w-4 h-4 text-fg-3-texto flex-shrink-0" />
         <div className="flex gap-1">
           {LANGUAGES.map(l => (
             <button
@@ -64,7 +64,7 @@ export function LanguageSelector({ variant = 'dropdown' }: LanguageSelectorProps
                 'px-2.5 py-1 rounded-full text-xs font-semibold transition-colors',
                 current.code === l.code
                   ? 'bg-teal text-white'
-                  : 'text-[#737373] dark:text-[#C0BCB8] hover:bg-areia dark:hover:bg-[#2D2D2D]',
+                  : 'text-fg-3-texto dark:text-[#C0BCB8] hover:bg-areia dark:hover:bg-[#2D2D2D]',
               )}
             >
               {l.label}
@@ -80,7 +80,7 @@ export function LanguageSelector({ variant = 'dropdown' }: LanguageSelectorProps
       <button
         onClick={() => setOpen(o => !o)}
         className={cn(
-          'flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold transition-colors',
+          'flex items-center gap-1.5 px-3 min-h-11 rounded-full border text-xs font-semibold transition-colors',
           open
             ? 'border-teal text-teal bg-teal/5 dark:bg-teal/10'
             : 'border-[#E8E4DF] dark:border-[#2D2D2D] text-[#3D3D3D] dark:text-[#C0BCB8] hover:border-teal/40 hover:text-teal',

@@ -116,11 +116,11 @@ function SaveResultModal({
         <p className="text-center font-semibold text-[#1A1A1A] mb-2">
           {type === 'success' ? 'Negócio salvo!' : 'Não foi possível salvar'}
         </p>
-        <p className="text-center text-sm text-[#737373] mb-5">{message}</p>
+        <p className="text-center text-sm text-fg-3-texto mb-5">{message}</p>
         <button
           type="button"
           onClick={onClose}
-          className={`w-full py-2.5 rounded-xl text-sm font-semibold transition-colors ${type === 'success' ? 'bg-teal text-white hover:bg-teal/90' : 'border border-[#E8E4DF] text-[#737373] hover:border-[#737373]'}`}
+          className={`w-full py-2.5 rounded-xl text-sm font-semibold transition-colors ${type === 'success' ? 'bg-teal text-white hover:bg-teal/90' : 'border border-[#E8E4DF] text-fg-3-texto hover:border-[#737373]'}`}
         >
           {type === 'success' ? 'Continuar editando' : 'Fechar'}
         </button>
@@ -229,7 +229,7 @@ function StatusBanner({
           className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
             isPublished
               ? 'bg-teal text-white'
-              : 'bg-[#E8E4DF] text-[#737373]'
+              : 'bg-[#E8E4DF] text-fg-3-texto'
           }`}
         >
           <span
@@ -237,7 +237,7 @@ function StatusBanner({
           />
           {isPublished ? t('perfil:status_published') : t('perfil:status_draft')}
         </span>
-        <span className="text-sm text-[#737373]">
+        <span className="text-sm text-fg-3-texto">
           {isPublished
             ? t('perfil:status_published_desc')
             : t('perfil:status_draft_desc')}
@@ -250,7 +250,7 @@ function StatusBanner({
           onClick={toggle}
           className={`text-sm font-semibold px-4 py-2 rounded-xl transition-colors ${
             isPublished
-              ? 'border border-[#E8E4DF] text-[#737373] hover:border-[#737373]'
+              ? 'border border-[#E8E4DF] text-fg-3-texto hover:border-[#737373]'
               : 'bg-teal text-white hover:bg-teal/90'
           }`}
         >
@@ -444,7 +444,7 @@ function PhotoSection({
             <SafeCoverImage src={coverUrl} alt={t('perfil:photos_cover_label')} className="w-full h-full object-cover" />
           </div>
         ) : (
-          <div className="w-full h-40 rounded-2xl border-2 border-dashed border-[#E8E4DF] flex flex-col items-center justify-center gap-2 text-sm text-[#737373] mb-2 bg-[#FAFAF9]">
+          <div className="w-full h-40 rounded-2xl border-2 border-dashed border-[#E8E4DF] flex flex-col items-center justify-center gap-2 text-sm text-fg-3-texto mb-2 bg-[#FAFAF9]">
             <Camera className="w-7 h-7 text-[#C4BFBA]" />
             <span>{t('perfil:photos_no_cover')}</span>
           </div>
@@ -466,9 +466,9 @@ function PhotoSection({
           {uploadingCover ? t('perfil:photos_uploading') : coverUrl ? t('perfil:photos_change_cover') : t('perfil:photos_add_cover')}
         </button>
         {!bizId ? (
-          <p className="text-xs text-[#737373] mt-1">{t('perfil:photos_save_first')}</p>
+          <p className="text-xs text-fg-3-texto mt-1">{t('perfil:photos_save_first')}</p>
         ) : !aceite ? (
-          <p className="text-xs text-[#737373] mt-1">{t('perfil:licenca_pendente')}</p>
+          <p className="text-xs text-fg-3-texto mt-1">{t('perfil:licenca_pendente')}</p>
         ) : null}
       </div>
 
@@ -476,7 +476,7 @@ function PhotoSection({
       <div>
         <label className="block text-sm font-medium mb-2">
           {t('perfil:photos_gallery')}
-          <span className="text-[#737373] font-normal ml-1">({currentPhotos.length}/10)</span>
+          <span className="text-fg-3-texto font-normal ml-1">({currentPhotos.length}/10)</span>
         </label>
         {currentPhotos.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mb-3">
@@ -555,7 +555,7 @@ function OpeningHoursSection({
   return (
     <section className={SECTION_CLS}>
       <h2 className="font-display text-lg font-semibold mb-1">{t('perfil:hours_title')}</h2>
-      <p className="text-sm text-[#737373] mb-4">
+      <p className="text-sm text-fg-3-texto mb-4">
         {t('perfil:hours_desc')}
       </p>
       <div className="space-y-2">
@@ -580,7 +580,7 @@ function OpeningHoursSection({
                     onChange={e => update(key, 'open', e.target.value)}
                     className="border border-[#E8E4DF] rounded-lg px-3 py-1.5 text-sm w-28 focus:border-teal focus:outline-none"
                   />
-                  <span className="text-xs text-[#737373]">{t('perfil:hours_until')}</span>
+                  <span className="text-xs text-fg-3-texto">{t('perfil:hours_until')}</span>
                   <input
                     type="time"
                     value={day.close}
@@ -589,7 +589,7 @@ function OpeningHoursSection({
                   />
                 </div>
               ) : (
-                <span className="text-sm text-[#737373] flex-1">{t('perfil:hours_closed')}</span>
+                <span className="text-sm text-fg-3-texto flex-1">{t('perfil:hours_closed')}</span>
               )}
 
               <label className="flex items-center gap-1.5 cursor-pointer ml-auto flex-shrink-0">
@@ -599,7 +599,7 @@ function OpeningHoursSection({
                   onChange={e => update(key, 'closed', e.target.checked)}
                   className="w-4 h-4 rounded border-[#E8E4DF] accent-teal"
                 />
-                <span className="text-xs text-[#737373]">{t('perfil:hours_closed')}</span>
+                <span className="text-xs text-fg-3-texto">{t('perfil:hours_closed')}</span>
               </label>
             </div>
           )
@@ -688,7 +688,7 @@ function ServicePhotoUploader({
 
   return (
     <div>
-      <label className="block text-xs font-medium mb-1 text-[#737373]">
+      <label className="block text-xs font-medium mb-1 text-fg-3-texto">
         Fotos <span className="font-normal">({photos.length}/3)</span>
       </label>
       {photos.length > 0 && (
@@ -709,7 +709,7 @@ function ServicePhotoUploader({
       )}
       {error && <p className="text-xs text-red-500 mb-1">{error}</p>}
       {!aceite && (
-        <p className="text-xs text-[#737373] mb-1">{t('perfil:licenca_pendente')}</p>
+        <p className="text-xs text-fg-3-texto mb-1">{t('perfil:licenca_pendente')}</p>
       )}
       {photos.length < 3 && (
         <>
@@ -770,7 +770,7 @@ function ServicesSection({
       <div className="flex items-start justify-between mb-1 gap-3">
         <div>
           <h2 className="font-display text-lg font-semibold">{t('perfil:services_title')}</h2>
-          <p className="text-sm text-[#737373] mt-0.5">
+          <p className="text-sm text-fg-3-texto mt-0.5">
             {t('perfil:services_desc')}{' '}
             <Link
               href={lp('/contrate')}
@@ -794,7 +794,7 @@ function ServicesSection({
       </div>
 
       {services.length === 0 && (
-        <p className="text-sm text-[#737373] mt-3">
+        <p className="text-sm text-fg-3-texto mt-3">
           {t('perfil:services_empty')}
         </p>
       )}
@@ -804,7 +804,7 @@ function ServicesSection({
           <div key={i} className="rounded-2xl border border-[#E8E4DF] p-4 space-y-3">
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1">
-                <label className="block text-xs font-medium mb-1 text-[#737373]">{t('perfil:services_name_label')}</label>
+                <label className="block text-xs font-medium mb-1 text-fg-3-texto">{t('perfil:services_name_label')}</label>
                 <input
                   type="text"
                   required
@@ -817,14 +817,14 @@ function ServicesSection({
               <button
                 type="button"
                 onClick={() => removeService(i)}
-                className="mt-5 text-sm text-[#737373] hover:text-red-500 transition-colors shrink-0"
+                className="mt-5 text-sm text-fg-3-texto hover:text-red-500 transition-colors shrink-0"
                 title={t('perfil:services_remove')}
               >
                 {t('perfil:services_remove')}
               </button>
             </div>
             <div>
-              <label className="block text-xs font-medium mb-1 text-[#737373]">
+              <label className="block text-xs font-medium mb-1 text-fg-3-texto">
                 {t('perfil:services_desc_label')} <span className="font-normal">{t('perfil:services_desc_optional')}</span>
               </label>
               <input
@@ -836,7 +836,7 @@ function ServicesSection({
               />
             </div>
             <div>
-              <label className="block text-xs font-medium mb-1 text-[#737373]">
+              <label className="block text-xs font-medium mb-1 text-fg-3-texto">
                 {t('perfil:services_price_label')} <span className="font-normal">{t('perfil:services_price_optional')}</span>
               </label>
               <input
@@ -1091,7 +1091,7 @@ function PerfilInner() {
           <div className="max-w-2xl mx-auto px-5 md:px-8 h-14 flex items-center gap-3">
             <Link
               href={lp('/cadastre/negocios')}
-              className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm text-fg-3-texto hover:text-teal transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               {t('perfil:my_businesses')}
@@ -1108,7 +1108,7 @@ function PerfilInner() {
             <h2 className="font-display text-xl font-semibold text-[#1A1A1A] mb-2">
               Negócio ainda não vinculado
             </h2>
-            <p className="text-sm text-[#737373] mb-6">
+            <p className="text-sm text-fg-3-texto mb-6">
               Você ainda não é o dono confirmado deste negócio. Reivindique-o para poder editar as informações.
             </p>
             <Link
@@ -1139,7 +1139,7 @@ function PerfilInner() {
         <div className="max-w-2xl mx-auto px-5 md:px-8 h-14 flex items-center gap-3">
           <Link
             href={lp('/cadastre/negocios')}
-            className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors flex-shrink-0"
+            className="inline-flex items-center gap-1.5 text-sm text-fg-3-texto hover:text-teal transition-colors flex-shrink-0"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             {t('perfil:my_businesses')}
@@ -1158,7 +1158,7 @@ function PerfilInner() {
           <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">
             {bizId ? t('perfil:edit_business') : t('perfil:new_business')}
           </h1>
-          <p className="text-sm text-[#737373] mt-1">
+          <p className="text-sm text-fg-3-texto mt-1">
             {bizId
               ? t('perfil:edit_desc')
               : t('perfil:new_desc')}
@@ -1171,7 +1171,7 @@ function PerfilInner() {
           <p className="text-sm font-semibold text-ocre mb-2">
             {t('perfil:dup_title')}
           </p>
-          <p className="text-xs text-[#737373] mb-3">
+          <p className="text-xs text-fg-3-texto mb-3">
             {t('perfil:dup_desc')}
           </p>
           <div className="space-y-2">
@@ -1179,7 +1179,7 @@ function PerfilInner() {
               <div key={m.id} className="flex items-center justify-between gap-3 bg-white rounded-xl border border-[#E8E4DF] px-4 py-2.5">
                 <div className="min-w-0">
                   <p className="text-sm font-semibold truncate">{m.name}</p>
-                  <p className="text-xs text-[#737373]">
+                  <p className="text-xs text-fg-3-texto">
                     {m.profile_id ? t('perfil:dup_has_owner') : t('perfil:dup_no_owner')}
                   </p>
                 </div>
@@ -1208,7 +1208,7 @@ function PerfilInner() {
         {/* Basic info */}
         <section className={SECTION_CLS}>
           <h2 className="font-display text-lg font-semibold mb-1">{t('perfil:basic_title')}</h2>
-          <p className="text-sm text-[#737373] mb-4">{t('perfil:basic_desc')}</p>
+          <p className="text-sm text-fg-3-texto mb-4">{t('perfil:basic_desc')}</p>
           <div className="space-y-4">
             {textFields.map(({ key, required }) => {
               const helpers: Record<string, string> = {
@@ -1231,7 +1231,7 @@ function PerfilInner() {
                     className={INPUT_CLS}
                   />
                   {helpers[key] && (
-                    <p className="text-xs text-[#737373] mt-1">{helpers[key]}</p>
+                    <p className="text-xs text-fg-3-texto mt-1">{helpers[key]}</p>
                   )}
                 </div>
               )
@@ -1286,7 +1286,7 @@ function PerfilInner() {
                     className={`px-4 py-2 rounded-xl border text-sm font-semibold transition-colors ${
                       (biz.price_range ?? '') === v
                         ? 'bg-teal text-white border-teal'
-                        : 'bg-white text-[#737373] border-[#E8E4DF] hover:border-teal'
+                        : 'bg-white text-fg-3-texto border-[#E8E4DF] hover:border-teal'
                     }`}
                   >
                     {v || t('perfil:price_none')}
@@ -1299,7 +1299,7 @@ function PerfilInner() {
             <div>
               <label className="block text-sm font-medium mb-1.5">
                 {t('perfil:menu_label')}{' '}
-                <span className="text-[#737373] font-normal">{t('perfil:menu_optional')}</span>
+                <span className="text-fg-3-texto font-normal">{t('perfil:menu_optional')}</span>
               </label>
               <input
                 type="url"
@@ -1365,7 +1365,7 @@ function PerfilInner() {
         <div className="max-w-2xl mx-auto px-5 py-3 flex items-center gap-3">
           <Link
             href={lp('/cadastre/negocios')}
-            className="flex-shrink-0 px-4 py-2.5 rounded-xl border border-[#E8E4DF] text-sm font-medium text-[#737373] hover:border-[#737373] transition-colors"
+            className="flex-shrink-0 px-4 py-2.5 rounded-xl border border-[#E8E4DF] text-sm font-medium text-fg-3-texto hover:border-[#737373] transition-colors"
           >
             {t('perfil:cancel')}
           </Link>

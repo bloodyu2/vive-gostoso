@@ -36,7 +36,7 @@ export function JobCard({ job }: Props) {
             {CONTRACT_TYPE_LABELS[job.contract_type]}
           </span>
         </div>
-        <p className="text-xs text-[#737373] truncate">
+        <p className="text-xs text-fg-3-texto truncate">
           {job.business_name}
           {job.description ? ` · ${job.description}` : ''}
         </p>

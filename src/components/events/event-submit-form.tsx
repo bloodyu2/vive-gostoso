@@ -75,7 +75,7 @@ export function EventSubmitForm({ open, onClose }: Props) {
       >
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#E8E4DF]">
           <h2 className="font-display font-semibold text-xl">{t('title')}</h2>
-          <button onClick={onClose} className="p-2 -m-2 text-[#737373] hover:text-[#1A1A1A] transition-colors">
+          <button onClick={onClose} className="p-2 -m-2 text-fg-3-texto hover:text-[#1A1A1A] transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -84,7 +84,7 @@ export function EventSubmitForm({ open, onClose }: Props) {
           <div className="px-6 py-12 text-center">
             <CheckCircle className="w-12 h-12 mb-4 text-teal mx-auto" />
             <h3 className="font-display font-semibold text-xl mb-2">{t('success_title')}</h3>
-            <p className="text-sm text-[#737373] mb-6">
+            <p className="text-sm text-fg-3-texto mb-6">
               {t('success_desc')}
             </p>
             <Button variant="secondary" onClick={onClose}>{t('close_btn')}</Button>
@@ -92,44 +92,44 @@ export function EventSubmitForm({ open, onClose }: Props) {
         ) : (
           <form onSubmit={handleSubmit} className="px-6 py-6 space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wider mb-1.5">{t('field_name_label')}</label>
+              <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wider mb-1.5">{t('field_name_label')}</label>
               <input required value={form.name} onChange={e => set('name', e.target.value)} placeholder={t('field_name_placeholder')} className={INPUT_CLS} />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wider mb-1.5">{t('field_desc_label')}</label>
+              <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wider mb-1.5">{t('field_desc_label')}</label>
               <textarea value={form.description} onChange={e => set('description', e.target.value)} rows={3} placeholder={t('field_desc_placeholder')} className={INPUT_CLS} />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wider mb-1.5">{t('field_start_label')}</label>
+                <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wider mb-1.5">{t('field_start_label')}</label>
                 <input required type="datetime-local" value={form.starts_at} onChange={e => set('starts_at', e.target.value)} className={INPUT_CLS} />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wider mb-1.5">{t('field_end_label')}</label>
+                <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wider mb-1.5">{t('field_end_label')}</label>
                 <input type="datetime-local" value={form.ends_at} onChange={e => set('ends_at', e.target.value)} className={INPUT_CLS} />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wider mb-1.5">{t('field_location_label')}</label>
+              <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wider mb-1.5">{t('field_location_label')}</label>
               <input value={form.location} onChange={e => set('location', e.target.value)} placeholder={t('field_location_placeholder')} className={INPUT_CLS} />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wider mb-1.5">{t('field_type_label')}</label>
+              <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wider mb-1.5">{t('field_type_label')}</label>
               <select value={form.event_type ?? ''} onChange={e => set('event_type', e.target.value)} className={INPUT_CLS}>
                 <option value="">{t('select_placeholder')}</option>
                 {EVENT_TYPES.map(ev => <option key={ev.value} value={ev.value ?? ''}>{ev.label}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wider mb-1.5">{t('field_source_url_label')}</label>
+              <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wider mb-1.5">{t('field_source_url_label')}</label>
               <input type="url" value={form.source_url} onChange={e => set('source_url', e.target.value)} placeholder="https://..." className={INPUT_CLS} />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wider mb-1.5">{t('field_cover_url_label')}</label>
+              <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wider mb-1.5">{t('field_cover_url_label')}</label>
               <input type="url" value={form.cover_url} onChange={e => set('cover_url', e.target.value)} placeholder="https://..." className={INPUT_CLS} />
             </div>
             <div className="border-t border-[#E8E4DF] pt-4">
-              <p className="text-xs text-[#737373] mb-3">{t('submitter_section')}</p>
+              <p className="text-xs text-fg-3-texto mb-3">{t('submitter_section')}</p>
               <div className="space-y-3">
                 <input required value={form.submitter_name} onChange={e => set('submitter_name', e.target.value)} placeholder={t('submitter_name_placeholder')} className={INPUT_CLS} />
                 <input required type="email" value={form.submitter_email} onChange={e => set('submitter_email', e.target.value)} placeholder={t('submitter_email_placeholder')} className={INPUT_CLS} />

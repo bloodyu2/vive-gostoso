@@ -15,7 +15,7 @@ export function StarRating({ value, onChange, size = 'md', readonly = false }: S
   const active = readonly ? value : (hovered || value)
 
   return (
-    <div className="flex gap-0.5">
+    <div className="flex gap-1">
       {[1, 2, 3, 4, 5].map(n => (
         <button
           key={n}
@@ -24,7 +24,7 @@ export function StarRating({ value, onChange, size = 'md', readonly = false }: S
           onClick={() => onChange?.(n as 1 | 2 | 3 | 4 | 5)}
           onMouseEnter={() => !readonly && setHovered(n)}
           onMouseLeave={() => !readonly && setHovered(0)}
-          className={`${sz} flex-shrink-0 transition-transform ${!readonly ? 'cursor-pointer hover:scale-110' : 'cursor-default'}`}
+          className={`${sz} ${readonly ? '' : 'p-1.5 min-w-9 min-h-9'} flex-shrink-0 flex items-center justify-center transition-transform ${!readonly ? 'cursor-pointer hover:scale-110' : 'cursor-default'}`}
           aria-label={readonly ? `${n} estrelas` : `Avaliar ${n} estrelas`}
         >
           <svg viewBox="0 0 20 20" fill={n <= active ? '#C97D2A' : 'none'} stroke={n <= active ? '#C97D2A' : '#D1C9BF'} strokeWidth="1.5" className="w-full h-full">

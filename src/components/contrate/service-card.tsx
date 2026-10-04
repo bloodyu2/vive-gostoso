@@ -58,7 +58,7 @@ export function ServiceCard({ service }: Props) {
       </span>
 
       {service.description && (
-        <p className="text-[#737373] text-xs leading-relaxed line-clamp-2 mb-3">{service.description}</p>
+        <p className="text-fg-3-texto text-xs leading-relaxed line-clamp-2 mb-3">{service.description}</p>
       )}
 
       <a

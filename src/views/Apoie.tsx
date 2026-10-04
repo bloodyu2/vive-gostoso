@@ -51,13 +51,13 @@ const GOAL_COLORS: Record<Goal['category'], { bg: string; text: string; bar: str
   comunidade:    { bg: 'bg-teal/10',    text: 'text-teal',  bar: 'bg-teal' },
   operacao:      { bg: 'bg-ocre/10',    text: 'text-ocre',  bar: 'bg-ocre' },
   marketing:     { bg: 'bg-coral/10',   text: 'text-coral', bar: 'bg-coral' },
-  infraestrutura:{ bg: 'bg-[#E8E4DF]',  text: 'text-[#737373]', bar: 'bg-[#737373]' },
+  infraestrutura:{ bg: 'bg-[#E8E4DF]',  text: 'text-fg-3-texto', bar: 'bg-[#737373]' },
 }
 
 // label vem de apoie.status_<status> — ver src/locales/*.json
 const STATUS_CLS: Record<Goal['status'], string> = {
-  aguardando_arrecadacao: 'bg-[#E8E4DF] text-[#737373]',
-  pendente:     'bg-[#E8E4DF] text-[#737373]',
+  aguardando_arrecadacao: 'bg-[#E8E4DF] text-fg-3-texto',
+  pendente:     'bg-[#E8E4DF] text-fg-3-texto',
   em_andamento: 'bg-ocre/10 text-ocre',
   concluido:    'bg-teal/10 text-teal',
 }
@@ -149,7 +149,7 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
               <Heart className="w-4 h-4 text-coral" />
               <h2 className="font-display font-semibold text-xl">{t('apoie.doe_titulo')}</h2>
             </div>
-            <p className="text-sm text-[#737373]">{t('apoie.doe_desc')}</p>
+            <p className="text-sm text-fg-3-texto">{t('apoie.doe_desc')}</p>
           </div>
 
           <div className="px-6 py-5">
@@ -161,7 +161,7 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
                   onClick={() => { setSelectedPreset(val); setCustomAmount('') }}
                   className={`py-2.5 rounded-xl text-sm font-semibold border transition-all ${
                     selectedPreset === val
-                      ? 'bg-coral text-white border-coral'
+                      ? 'bg-coral-texto text-white border-coral-texto'
                       : 'text-[#3D3D3D] dark:text-white border-[#E8E4DF] dark:border-[#333] hover:border-coral hover:text-coral'
                   }`}
                 >
@@ -172,7 +172,7 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
                 onClick={() => setSelectedPreset(null)}
                 className={`py-2.5 rounded-xl text-sm font-semibold border transition-all col-span-4 sm:col-span-1 ${
                   selectedPreset === null && customAmount
-                    ? 'bg-coral text-white border-coral'
+                    ? 'bg-coral-texto text-white border-coral-texto'
                     : 'text-[#3D3D3D] dark:text-white border-[#E8E4DF] dark:border-[#333] hover:border-coral hover:text-coral'
                 }`}
               >
@@ -183,7 +183,7 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
             {/* Custom amount */}
             {selectedPreset === null && (
               <div className="flex items-center gap-2 mb-4 bg-[#F5F2EE] dark:bg-[#252525] rounded-xl px-4 py-2.5">
-                <span className="text-sm font-semibold text-[#737373]">R$</span>
+                <span className="text-sm font-semibold text-fg-3-texto">R$</span>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -193,7 +193,7 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
                     setCustomAmount(v)
                   }}
                   placeholder={t('apoie.valor_placeholder')}
-                  className="flex-1 bg-transparent text-sm outline-none text-[#1A1A1A] dark:text-white placeholder:text-[#737373]"
+                  className="flex-1 bg-transparent text-sm outline-none text-[#1A1A1A] dark:text-white placeholder:text-fg-3-texto"
                 />
               </div>
             )}
@@ -214,7 +214,7 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
                 ? `${t('apoie.doe_btn')} R$${amountBRL.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}`
                 : t('apoie.escolha_valor')}
             </button>
-            <p className="text-xs text-[#737373] mt-3 text-center">
+            <p className="text-xs text-fg-3-texto mt-3 text-center">
               {t('apoie.pagamento_seguro')}
             </p>
           </div>
@@ -224,13 +224,13 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
         <section>
           <div className="mb-6">
             <h2 className="font-display font-semibold text-2xl mb-1">{t('apoie.custos_titulo')}</h2>
-            <p className="text-sm text-[#737373]">{t('apoie.custos_desc')}</p>
+            <p className="text-sm text-fg-3-texto">{t('apoie.custos_desc')}</p>
           </div>
 
           {/* Em operação */}
           <div className="flex items-center gap-2 mb-3">
             <CheckCircle className="w-3.5 h-3.5 text-teal" />
-            <span className="text-xs font-semibold uppercase tracking-widest text-[#737373]">{t('apoie.em_operacao')}</span>
+            <span className="text-xs font-semibold uppercase tracking-widest text-fg-3-texto">{t('apoie.em_operacao')}</span>
           </div>
 
           <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl overflow-hidden mb-4">
@@ -252,7 +252,7 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
                     <div className="font-semibold text-sm text-[#1A1A1A] dark:text-white leading-snug">
                       {t(`apoie.custo_${c.key}_label`)}
                     </div>
-                    <div className="text-xs text-[#737373] mt-0.5 truncate">{t(`apoie.custo_${c.key}_detalhe`)}</div>
+                    <div className="text-xs text-fg-3-texto mt-0.5 truncate">{t(`apoie.custo_${c.key}_detalhe`)}</div>
                   </div>
 
                   {/* Price */}
@@ -260,7 +260,7 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
                     <div className="font-display font-bold text-base text-teal tabular-nums">
                       {t(`apoie.custo_${c.key}_valor_display`)}
                     </div>
-                    <div className="text-xs text-[#737373] mt-0.5 whitespace-nowrap">{t(`apoie.custo_${c.key}_valor_sub`)}</div>
+                    <div className="text-xs text-fg-3-texto mt-0.5 whitespace-nowrap">{t(`apoie.custo_${c.key}_valor_sub`)}</div>
                   </div>
                 </div>
               )
@@ -276,14 +276,14 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
               </div>
               {/* Sem esta linha o total parece a conta inteira, e nao e: falta a
                   infraestrutura, que nao tem valor atribuivel a este site. */}
-              <p className="text-xs text-[#737373] mt-1">{t('apoie.total_mes_nota')}</p>
+              <p className="text-xs text-fg-3-texto mt-1">{t('apoie.total_mes_nota')}</p>
             </div>
           </div>
 
           {/* Planejado */}
           <div className="flex items-center gap-2 mb-3 mt-8">
             <Clock className="w-3.5 h-3.5 text-ocre" />
-            <span className="text-xs font-semibold uppercase tracking-widest text-[#737373]">{t('apoie.planejado_label')}</span>
+            <span className="text-xs font-semibold uppercase tracking-widest text-fg-3-texto">{t('apoie.planejado_label')}</span>
           </div>
 
           <div className="bg-white dark:bg-[#1C1C1C] border border-dashed border-[#D4CFCA] dark:border-[#333] rounded-2xl overflow-hidden opacity-75">
@@ -302,7 +302,7 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
                     <div className="font-semibold text-sm text-[#1A1A1A] dark:text-white leading-snug">
                       {t(`apoie.custo_${c.key}_label`)}
                     </div>
-                    <div className="text-xs text-[#737373] mt-0.5 leading-relaxed">{t(`apoie.custo_${c.key}_detalhe`)}</div>
+                    <div className="text-xs text-fg-3-texto mt-0.5 leading-relaxed">{t(`apoie.custo_${c.key}_detalhe`)}</div>
                   </div>
                   <div className="flex-shrink-0">
                     <span className="text-xs font-medium text-ocre bg-ocre/10 px-3 py-1 rounded-full whitespace-nowrap">
@@ -322,7 +322,7 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
               <Target className="w-4 h-4 text-teal" />
               <h2 className="font-display font-semibold text-2xl">{t('apoie.metas_titulo')}</h2>
             </div>
-            <p className="text-sm text-[#737373] mb-6">
+            <p className="text-sm text-fg-3-texto mb-6">
               {t('apoie.metas_desc')}
             </p>
 
@@ -353,13 +353,13 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
                             {t(`apoie.status_${goal.status}`)}
                           </span>
                           {goal.target_date && (
-                            <span className="text-xs text-[#737373]">
+                            <span className="text-xs text-fg-3-texto">
                               {t('apoie.meta_data_prefix')} {new Date(goal.target_date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR', { month: 'long', year: 'numeric' })}
                             </span>
                           )}
                         </div>
                         {goal.description && (
-                          <p className="text-xs text-[#737373] mb-3 leading-relaxed">{goal.description}</p>
+                          <p className="text-xs text-fg-3-texto mb-3 leading-relaxed">{goal.description}</p>
                         )}
                         <div className="flex items-center gap-3">
                           <div className="flex-1 h-1.5 bg-[#E8E4DF] dark:bg-[#333] rounded-full overflow-hidden">
@@ -368,7 +368,7 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
                               style={{ width: `${pct}%` }}
                             />
                           </div>
-                          <span className="text-xs text-[#737373] flex-shrink-0 tabular-nums">
+                          <span className="text-xs text-fg-3-texto flex-shrink-0 tabular-nums">
                             {fmt(goal.raised_cents)} / {fmt(goal.target_cents)}
                           </span>
                         </div>
@@ -384,7 +384,7 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
         {/* ── Movimentações ── */}
         <section>
           <h2 className="font-display font-semibold text-2xl mb-1">{t('apoie.movimentacoes_titulo')}</h2>
-          <p className="text-sm text-[#737373] mb-5">{t('apoie.movimentacoes_desc')}</p>
+          <p className="text-sm text-fg-3-texto mb-5">{t('apoie.movimentacoes_desc')}</p>
 
           {entriesList.length > 0 ? (
             <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl overflow-hidden">
@@ -397,7 +397,7 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
               <p className="text-sm font-medium text-[#1A1A1A] dark:text-white">
                 {t('apoie.movimentacoes_vazio_titulo')}
               </p>
-              <p className="text-xs text-[#737373] mt-1">
+              <p className="text-xs text-fg-3-texto mt-1">
                 {t('apoie.movimentacoes_vazio_desc')}
               </p>
             </div>

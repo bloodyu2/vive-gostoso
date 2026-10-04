@@ -38,12 +38,12 @@ function AdminClaimsInner() {
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-12">
       <div className="flex items-center gap-4 mb-8">
-        <Link href={lp('/cadastre/admin')} className="text-sm text-[#737373] hover:text-teal transition-colors">
+        <Link href={lp('/cadastre/admin')} className="text-sm text-fg-3-texto hover:text-teal transition-colors">
           {t('back')}
         </Link>
         <h1 className="font-display text-3xl font-semibold">{t('title')}</h1>
         {claims.length > 0 && (
-          <span className="ml-auto bg-coral text-white text-xs font-bold px-2.5 py-1 rounded-full">
+          <span className="ml-auto bg-coral-texto text-white text-xs font-bold px-2.5 py-1 rounded-full">
             {t('count', { count: claims.length })}
           </span>
         )}
@@ -52,7 +52,7 @@ function AdminClaimsInner() {
       {claims.length === 0 ? (
         <div className="text-center py-20">
           <div className="text-5xl mb-4">✅</div>
-          <p className="text-[#737373]">{t('empty')}</p>
+          <p className="text-fg-3-texto">{t('empty')}</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -61,18 +61,18 @@ function AdminClaimsInner() {
               <div className="flex flex-col sm:flex-row sm:items-start gap-4">
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-[#1A1A1A] truncate">
-                    {claim.business?.name ?? <span className="text-[#B0A99F] italic">{t('business_removed')}</span>}
+                    {claim.business?.name ?? <span className="text-placeholder italic">{t('business_removed')}</span>}
                   </p>
                   <p className="text-sm text-teal font-medium">
                     {claim.profile?.email ?? '—'}{' '}
                     {claim.profile?.full_name && (
-                      <span className="text-[#737373]">({claim.profile.full_name})</span>
+                      <span className="text-fg-3-texto">({claim.profile.full_name})</span>
                     )}
                   </p>
                   {claim.message && (
                     <p className="text-sm text-[#3D3D3D] mt-2 italic">"{claim.message}"</p>
                   )}
-                  <p className="text-xs text-[#737373] mt-2">
+                  <p className="text-xs text-fg-3-texto mt-2">
                     {t('requested_at')}{' '}
                     {new Date(claim.created_at).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR', {
                       day: '2-digit', month: 'short', year: 'numeric',
@@ -84,7 +84,7 @@ function AdminClaimsInner() {
                     <Link
                       href={lp(`/negocio/${claim.business.slug}`)}
                       target="_blank"
-                      className="text-xs text-[#737373] underline hover:text-teal transition-colors"
+                      className="text-xs text-fg-3-texto underline hover:text-teal transition-colors"
                     >
                       {t('view_business')}
                     </Link>

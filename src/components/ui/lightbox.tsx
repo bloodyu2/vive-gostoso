@@ -48,7 +48,7 @@ export function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
       {/* Fechar */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
+        className="absolute top-4 right-4 w-11 h-11 flex items-center justify-center text-white/70 hover:text-white transition-colors"
         aria-label={t('close_aria')}
       >
         <X className="w-6 h-6" />
@@ -58,7 +58,7 @@ export function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
       {photos.length > 1 && (
         <button
           onClick={e => { e.stopPropagation(); prev() }}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors bg-black/30 rounded-full p-2"
+          className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-white/70 hover:text-white transition-colors bg-black/30 rounded-full"
           aria-label={t('prev_aria')}
         >
           <ChevronLeft className="w-6 h-6" />
@@ -77,7 +77,7 @@ export function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
       {photos.length > 1 && (
         <button
           onClick={e => { e.stopPropagation(); next() }}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors bg-black/30 rounded-full p-2"
+          className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-white/70 hover:text-white transition-colors bg-black/30 rounded-full"
           aria-label={t('next_aria')}
         >
           <ChevronRight className="w-6 h-6" />

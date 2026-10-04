@@ -96,7 +96,7 @@ function ProfessionalCard({ pro }: { pro: Professional }) {
           <Link href={lp(`/contrate/profissional/${pro.slug}`)} className="font-semibold text-[#1A1A1A] text-sm hover:text-teal transition-colors">
             {pro.display_name}
           </Link>
-          <p className="text-xs text-[#737373] leading-snug">{pro.headline}</p>
+          <p className="text-xs text-fg-3-texto leading-snug">{pro.headline}</p>
         </div>
       </div>
       {pro.specialties.length > 0 && (
@@ -109,7 +109,7 @@ function ProfessionalCard({ pro }: { pro: Professional }) {
         </div>
       )}
       {pro.review_count > 0 && (
-        <div className="flex items-center gap-1.5 mb-3 text-xs text-[#737373]">
+        <div className="flex items-center gap-1.5 mb-3 text-xs text-fg-3-texto">
           <Stars rating={pro.rating_avg} />
           {pro.rating_avg.toFixed(1)} · {pro.review_count} {t('negocio.avaliacao_plural')}
         </div>
@@ -127,7 +127,7 @@ function ProfessionalCard({ pro }: { pro: Professional }) {
       ) : (
         <Link
           href={lp(`/contrate/profissional/${pro.slug}`)}
-          className="flex items-center justify-center w-full border border-[#E8E4DF] text-[#737373] rounded-xl py-2 text-xs font-semibold hover:bg-[#F5F2EE] transition-colors"
+          className="flex items-center justify-center w-full border border-[#E8E4DF] text-fg-3-texto rounded-xl py-2 text-xs font-semibold hover:bg-[#F5F2EE] transition-colors"
         >
           {t('common.ver_perfil')}
         </Link>
@@ -162,11 +162,11 @@ function ServiceCompanyCard({ company }: { company: ServiceCompany }) {
         </div>
       </div>
       {company.description && (
-        <p className="text-xs text-[#737373] leading-relaxed mb-3 line-clamp-2">
+        <p className="text-xs text-fg-3-texto leading-relaxed mb-3 line-clamp-2">
           {company.description}
         </p>
       )}
-      <span className="text-[10px] font-semibold text-[#737373] bg-[#F5F2EE] px-2 py-0.5 rounded-full">
+      <span className="text-[10px] font-semibold text-fg-3-texto bg-[#F5F2EE] px-2 py-0.5 rounded-full">
         {t('contrate.service_company_badge')}
       </span>
       {waLink && (
@@ -326,7 +326,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
                   <p className="text-sm font-semibold text-[#1A1A1A] mb-1">
                     {t('contrate.convite_primeiro', { categoria: t(`contrate.categorias.${categoryFilter}`) })}
                   </p>
-                  <p className="text-sm text-[#737373] max-w-sm mx-auto mb-4">
+                  <p className="text-sm text-fg-3-texto max-w-sm mx-auto mb-4">
                     {t('contrate.convite_sub')}
                   </p>
                   <Link
@@ -339,7 +339,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
               ) : (
                 <div className="text-center py-16">
                   <User className="w-10 h-10 text-[#E8E4DF] mx-auto mb-3" />
-                  <p className="text-sm text-[#737373]">{t('professional.no_professionals')}</p>
+                  <p className="text-sm text-fg-3-texto">{t('professional.no_professionals')}</p>
                 </div>
               )
             ) : (
@@ -359,7 +359,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
           companiesLoading ? <Spinner /> : companies.length === 0 ? (
             <div className="text-center py-16">
               <Building2 className="w-10 h-10 text-[#E8E4DF] mx-auto mb-3" />
-              <p className="text-sm text-[#737373]">{t('contrate.sem_empresas')}</p>
+              <p className="text-sm text-fg-3-texto">{t('contrate.sem_empresas')}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -383,7 +383,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
             {jobsLoading ? <Spinner /> : jobs.length === 0 ? (
               <div className="text-center py-16">
                 <Briefcase className="w-10 h-10 text-[#E8E4DF] mx-auto mb-3" />
-                <p className="text-sm text-[#737373]">{t('contrate.sem_vagas')}</p>
+                <p className="text-sm text-fg-3-texto">{t('contrate.sem_vagas')}</p>
               </div>
             ) : (
               <div className="space-y-2">

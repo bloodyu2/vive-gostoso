@@ -48,7 +48,7 @@ export default function Evento({ initialEvent, id: idProp }: EventoProps) {
 
   return (
     <main className="max-w-3xl mx-auto px-5 md:px-8 py-10">
-      <Link href={lp('/participe')} className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
+      <Link href={lp('/participe')} className="inline-flex items-center gap-1.5 text-sm text-fg-3-texto hover:text-teal transition-colors mb-6">
         <ArrowLeft className="w-4 h-4" /> {t('evento.todos_eventos')}
       </Link>
 
@@ -78,7 +78,7 @@ export default function Evento({ initialEvent, id: idProp }: EventoProps) {
         <div className="flex items-center gap-2">
           <CalendarDays className="w-4 h-4 text-teal flex-shrink-0" />
           <span className="capitalize">{dateStr}{timeStr !== '00:00' ? ` ${t('evento.as')} ${timeStr}` : ''}</span>
-          {endStr && <span className="text-[#737373]">{t('evento.ate')} {endStr}</span>}
+          {endStr && <span className="text-fg-3-texto">{t('evento.ate')} {endStr}</span>}
         </div>
         {event.location && (
           <div className="flex items-center gap-2">

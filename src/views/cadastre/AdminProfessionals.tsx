@@ -47,11 +47,11 @@ function AdminProfessionalsInner() {
         </div>
 
         {professionals.length === 0 ? (
-          <p className="text-sm text-[#737373]">{t('empty')}</p>
+          <p className="text-sm text-fg-3-texto">{t('empty')}</p>
         ) : (
           <div className="bg-white rounded-2xl border border-[#E8E4DF] overflow-x-auto">
             <table className="w-full text-sm min-w-[640px]">
-              <thead className="bg-[#F5F2EE] text-xs font-semibold text-[#737373] uppercase tracking-wide">
+              <thead className="bg-[#F5F2EE] text-xs font-semibold text-fg-3-texto uppercase tracking-wide">
                 <tr>
                   <th className="text-left px-5 py-3">{t('th_name')}</th>
                   <th className="text-left px-5 py-3">{t('th_category')}</th>
@@ -66,7 +66,7 @@ function AdminProfessionalsInner() {
                   <tr key={pro.id} className="hover:bg-[#FAFAF9] transition-colors">
                     <td className="px-5 py-3.5">
                       <p className="font-semibold text-[#1A1A1A]">{pro.display_name}</p>
-                      <p className="text-xs text-[#737373] truncate max-w-xs">{pro.headline}</p>
+                      <p className="text-xs text-fg-3-texto truncate max-w-xs">{pro.headline}</p>
                     </td>
                     <td className="px-5 py-3.5 text-[#555]">
                       {t(`contrate.categorias.${pro.category}`, { ns: 'translation' })}
@@ -78,12 +78,12 @@ function AdminProfessionalsInner() {
                       <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
                         pro.is_published
                           ? 'bg-green-100 text-green-700'
-                          : 'bg-[#F5F2EE] text-[#737373]'
+                          : 'bg-[#F5F2EE] text-fg-3-texto'
                       }`}>
                         {pro.is_published ? t('status_published') : t('status_draft')}
                       </span>
                     </td>
-                    <td className="px-5 py-3.5 text-[#737373] text-xs">
+                    <td className="px-5 py-3.5 text-fg-3-texto text-xs">
                       {new Date(pro.created_at).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es' : 'pt-BR')}
                     </td>
                     <td className="px-5 py-3.5">
@@ -91,7 +91,7 @@ function AdminProfessionalsInner() {
                         <button
                           type="button"
                           onClick={() => handleToggle(pro.id, pro.is_published)}
-                          className="p-1.5 rounded-lg text-[#737373] hover:text-[#1A1A1A] hover:bg-[#F5F2EE] transition-colors"
+                          className="p-1.5 rounded-lg text-fg-3-texto hover:text-[#1A1A1A] hover:bg-[#F5F2EE] transition-colors"
                           title={pro.is_published ? t('unpublish') : t('publish')}
                         >
                           {pro.is_published
@@ -102,7 +102,7 @@ function AdminProfessionalsInner() {
                         <button
                           type="button"
                           onClick={() => handleDelete(pro.id, pro.display_name)}
-                          className="p-1.5 rounded-lg text-[#737373] hover:text-red-500 hover:bg-red-50 transition-colors"
+                          className="p-1.5 rounded-lg text-fg-3-texto hover:text-red-500 hover:bg-red-50 transition-colors"
                           title={t('delete')}
                         >
                           <Trash2 className="w-4 h-4" />

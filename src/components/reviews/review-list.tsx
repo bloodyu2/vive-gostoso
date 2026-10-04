@@ -34,21 +34,21 @@ function PaginationBar({ page, totalPages, onChange }: { page: number; totalPage
       <button
         onClick={() => onChange(page - 1)}
         disabled={page === 1}
-        className="px-3 py-1.5 rounded-lg text-sm text-[#737373] hover:bg-[#F5F2EE] disabled:opacity-30 transition-colors"
+        className="min-h-11 min-w-11 px-3 py-1.5 rounded-lg text-sm text-fg-3-texto hover:bg-[#F5F2EE] disabled:opacity-30 transition-colors"
       >
         ‹
       </button>
       {pages.map((p, i) =>
         p === '...' ? (
-          <span key={`dots-${i}`} className="px-2 py-1.5 text-sm text-[#B0A99F]">…</span>
+          <span key={`dots-${i}`} className="px-2 py-1.5 text-sm text-placeholder">…</span>
         ) : (
           <button
             key={p}
             onClick={() => onChange(p as number)}
-            className={`min-w-[32px] px-2 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+            className={`min-w-11 min-h-11 px-2 py-1.5 rounded-lg text-sm font-medium transition-colors ${
               p === page
                 ? 'bg-teal text-white'
-                : 'text-[#737373] hover:bg-[#F5F2EE]'
+                : 'text-fg-3-texto hover:bg-[#F5F2EE]'
             }`}
           >
             {p}
@@ -58,7 +58,7 @@ function PaginationBar({ page, totalPages, onChange }: { page: number; totalPage
       <button
         onClick={() => onChange(page + 1)}
         disabled={page === totalPages}
-        className="px-3 py-1.5 rounded-lg text-sm text-[#737373] hover:bg-[#F5F2EE] disabled:opacity-30 transition-colors"
+        className="min-h-11 min-w-11 px-3 py-1.5 rounded-lg text-sm text-fg-3-texto hover:bg-[#F5F2EE] disabled:opacity-30 transition-colors"
       >
         ›
       </button>
@@ -84,7 +84,7 @@ export function ReviewList({ targetType, targetId }: ReviewListProps) {
   )
 
   if (!reviews.length && page === 1) return (
-    <p className="text-sm text-[#B0A99F] text-center py-4">
+    <p className="text-sm text-placeholder text-center py-4">
       {t('empty')}
     </p>
   )
@@ -98,7 +98,7 @@ export function ReviewList({ targetType, targetId }: ReviewListProps) {
           <span className="font-display font-bold text-3xl text-[#1A1A1A]">{avg.toFixed(1)}</span>
           <div>
             <StarRating value={Math.round(avg)} readonly size="sm" />
-            <p className="text-xs text-[#737373] mt-0.5">{total} {t('count', { count: total })}</p>
+            <p className="text-xs text-fg-3-texto mt-0.5">{total} {t('count', { count: total })}</p>
           </div>
         </div>
       )}
@@ -108,7 +108,7 @@ export function ReviewList({ targetType, targetId }: ReviewListProps) {
           <div className="flex items-start justify-between gap-3 mb-2">
             <div>
               <p className="font-semibold text-sm text-[#1A1A1A]">{r.author_name ?? t('anonymous')}</p>
-              <p className="text-xs text-[#B0A99F]">{formatDate(r.created_at)}</p>
+              <p className="text-xs text-placeholder">{formatDate(r.created_at)}</p>
             </div>
             <StarRating value={r.rating} readonly size="sm" />
           </div>

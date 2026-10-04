@@ -59,7 +59,7 @@ export default function Blog({ initialPosts = [] }: BlogProps) {
       )}
 
       {!isLoading && !isError && posts.length === 0 && (
-        <div className="text-center py-20 text-[#737373]">
+        <div className="text-center py-20 text-fg-3-texto">
           <p className="text-lg">{t('blog.sem_artigos')}</p>
           <p className="text-sm mt-2">{t('blog.sem_artigos_sub')}</p>
         </div>
@@ -78,7 +78,7 @@ export default function Blog({ initialPosts = [] }: BlogProps) {
                   <SafeCoverImage
                     src={post.cover_url}
                     alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover"
                   />
                 </div>
               ) : (
@@ -102,11 +102,11 @@ export default function Blog({ initialPosts = [] }: BlogProps) {
                   {post.title}
                 </h2>
                 {post.excerpt && (
-                  <p className="mt-2 text-sm text-[#737373] leading-relaxed line-clamp-2">
+                  <p className="mt-2 text-sm text-fg-3-texto leading-relaxed line-clamp-2">
                     {post.excerpt}
                   </p>
                 )}
-                <div className="mt-3 flex items-center gap-2 text-xs text-[#737373]">
+                <div className="mt-3 flex items-center gap-2 text-xs text-fg-3-texto">
                   <span>{post.author}</span>
                   {post.published_at && (
                     <>

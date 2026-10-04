@@ -134,7 +134,7 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
               <span className="text-teal">Vive Gostoso</span>
             </h1>
 
-            <p className="text-[#737373] text-lg leading-relaxed max-w-xl mb-8">
+            <p className="text-fg-3-texto text-lg leading-relaxed max-w-xl mb-8">
               {t('parceiros:hero_desc')}
             </p>
 
@@ -166,15 +166,15 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
                     mudava. O bloco inteiro so aparece com dado. */}
                 <div>
                   <p className="text-2xl font-bold text-white tabular-nums">{stats.businesses}</p>
-                  <p className="text-xs text-[#737373] mt-0.5">{t('parceiros:stats_negocios')}</p>
+                  <p className="text-xs text-fg-3-texto mt-0.5">{t('parceiros:stats_negocios')}</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white tabular-nums">{stats.verified}</p>
-                  <p className="text-xs text-[#737373] mt-0.5">{t('parceiros:stats_verificados')}</p>
+                  <p className="text-xs text-fg-3-texto mt-0.5">{t('parceiros:stats_verificados')}</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white tabular-nums">{stats.categories}</p>
-                  <p className="text-xs text-[#737373] mt-0.5">{t('parceiros:stats_categorias')}</p>
+                  <p className="text-xs text-fg-3-texto mt-0.5">{t('parceiros:stats_categorias')}</p>
                 </div>
               </div>
             )}
@@ -188,7 +188,7 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
           <h2 className="font-display text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
             {t('parceiros:benefits_titulo')}
           </h2>
-          <p className="text-[#737373] text-base">
+          <p className="text-fg-3-texto text-base">
             {t('parceiros:benefits_desc')}
           </p>
         </div>
@@ -201,7 +201,7 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
               </div>
               <div>
                 <h3 className="font-semibold text-[#1A1A1A] mb-1">{title}</h3>
-                <p className="text-sm text-[#737373] leading-relaxed">{desc}</p>
+                <p className="text-sm text-fg-3-texto leading-relaxed">{desc}</p>
               </div>
             </div>
           ))}
@@ -215,7 +215,7 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
             <h2 className="font-display text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
               {t('parceiros:how_titulo')}
             </h2>
-            <p className="text-[#737373]">{t('parceiros:how_desc')}</p>
+            <p className="text-fg-3-texto">{t('parceiros:how_desc')}</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
@@ -241,7 +241,7 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
                   {step}
                 </div>
                 <h3 className="font-semibold text-[#1A1A1A] mb-1">{title}</h3>
-                <p className="text-sm text-[#737373] leading-relaxed">{desc}</p>
+                <p className="text-sm text-fg-3-texto leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
@@ -264,7 +264,7 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
           <h2 className="font-display text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
             {t('parceiros:plans_titulo')}
           </h2>
-          <p className="text-[#737373]">{t('parceiros:plans_desc')}</p>
+          <p className="text-fg-3-texto">{t('parceiros:plans_desc')}</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -282,7 +282,7 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
                 <p className="font-display text-lg font-bold text-[#1A1A1A]">{plan.name}</p>
                 <p className="mt-1">
                   <span className="text-3xl font-bold text-[#1A1A1A] tabular-nums">{preco(plan.precoChave)}</span>
-                  <span className="text-sm text-[#737373] ml-1">{plan.period}</span>
+                  <span className="text-sm text-fg-3-texto ml-1">{plan.period}</span>
                 </p>
               </div>
               <ul className="space-y-2 flex-1 mb-6">
@@ -303,7 +303,7 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
           ))}
         </div>
 
-        <p className="text-center text-xs text-[#737373] mt-6">
+        <p className="text-center text-xs text-fg-3-texto mt-6">
           {t('parceiros:plan_disclaimer', { pct: parametro(param, CHAVES.rateioCidade) ?? '' })}
         </p>
       </section>
@@ -327,7 +327,7 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
                 <p className="text-sm text-[#3D3D3D] leading-relaxed mb-4">&ldquo;{quote}&rdquo;</p>
                 <div>
                   <p className="text-sm font-semibold text-[#1A1A1A]">{name}</p>
-                  <p className="text-xs text-[#737373]">{category}</p>
+                  <p className="text-xs text-fg-3-texto">{category}</p>
                 </div>
               </div>
             ))}
@@ -342,7 +342,7 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
           <h2 className="font-display text-2xl md:text-3xl font-bold mb-3">
             {t('parceiros:final_titulo')}
           </h2>
-          <p className="text-[#737373] text-base mb-8 max-w-md mx-auto">
+          <p className="text-fg-3-texto text-base mb-8 max-w-md mx-auto">
             {t('parceiros:final_desc')}
           </p>
           <Link
@@ -352,7 +352,7 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
             {t('parceiros:final_cta')}
             <ArrowRight className="w-5 h-5" />
           </Link>
-          <p className="text-xs text-[#737373] mt-4">{t('parceiros:final_fineprint')}</p>
+          <p className="text-xs text-fg-3-texto mt-4">{t('parceiros:final_fineprint')}</p>
         </div>
       </section>
 

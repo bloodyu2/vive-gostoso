@@ -6,7 +6,7 @@ const kinds = {
   pass:   'bg-[#EAF5EF] text-[#2D7A4A]',
   fest:   'bg-[rgba(224,90,58,0.12)] text-[#C44A2C]',
   open:   'bg-[#EAF5EF] text-[#2D7A4A]',
-  closed: 'bg-areia text-[#737373]',
+  closed: 'bg-areia text-fg-3-texto',
   /* O unico selo que fica POR CIMA da capa, e nao no corpo do card. Cor
      literal em vez de `bg-ocre-light` porque esse token vira transparente no
      tema escuro (rgba(201,125,42,0.20)): sobre a capa tipografica coral, o selo

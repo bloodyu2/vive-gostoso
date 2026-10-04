@@ -115,7 +115,7 @@ export default function Claim({ slug: slugProp }: Props) {
 
   if (!business) return (
     <div className="min-h-screen bg-areia flex items-center justify-center px-4">
-      <p className="text-[#737373] text-sm">{t('claim:loading')}</p>
+      <p className="text-fg-3-texto text-sm">{t('claim:loading')}</p>
     </div>
   )
 
@@ -126,7 +126,7 @@ export default function Claim({ slug: slugProp }: Props) {
         <div className="flex justify-center mb-8"><Logo height={32} /></div>
         <div className="text-4xl mb-4">🔒</div>
         <h2 className="font-display text-2xl font-semibold mb-2">{t('claim:owned_title')}</h2>
-        <p className="text-[#737373] text-sm mb-6">
+        <p className="text-fg-3-texto text-sm mb-6">
           {t('claim:owned_desc', { name: business.name })}
         </p>
         <Link
@@ -146,7 +146,7 @@ export default function Claim({ slug: slugProp }: Props) {
         <div className="flex justify-center mb-8"><Logo height={32} /></div>
         <CheckCircle className="w-10 h-10 mb-4 text-teal mx-auto" />
         <h2 className="font-display text-2xl font-semibold mb-2">{t('claim:success_title')}</h2>
-        <p className="text-[#737373] text-sm mb-6">
+        <p className="text-fg-3-texto text-sm mb-6">
           {t('claim:success_desc', { name: business.name })}
         </p>
         <Link href={lp(`/negocio/${business.slug}`)} className="text-teal text-sm font-semibold">
@@ -162,7 +162,7 @@ export default function Claim({ slug: slugProp }: Props) {
         <div className="flex justify-center mb-8"><Logo height={32} /></div>
         <div className="text-4xl mb-4">&#x2705;</div>
         <h2 className="font-display text-2xl font-semibold mb-2">{t('claim:approved_title')}</h2>
-        <p className="text-[#737373] text-sm mb-6">
+        <p className="text-fg-3-texto text-sm mb-6">
           {t('claim:approved_desc', { name: business.name })}
         </p>
         <Link href={lp('/cadastre/painel')} className="text-teal text-sm font-semibold">
@@ -191,7 +191,7 @@ export default function Claim({ slug: slugProp }: Props) {
             </Button>
           </>
         ) : (
-          <p className="text-[#737373] text-sm">{t('claim:submitting')}</p>
+          <p className="text-fg-3-texto text-sm">{t('claim:submitting')}</p>
         )}
       </div>
     </div>
@@ -205,14 +205,14 @@ export default function Claim({ slug: slugProp }: Props) {
 
         <div className="text-center mb-6">
           <h1 className="font-display text-2xl font-semibold mb-1">{t('claim:main_title')}</h1>
-          <p className="text-[#737373] text-sm">{t('claim:main_sub')}</p>
+          <p className="text-fg-3-texto text-sm">{t('claim:main_sub')}</p>
           <p className="font-semibold text-[#1A1A1A] mt-1">{business.name}</p>
         </div>
 
         {/* Message to admin */}
         <div className="mb-5">
           <label className="block text-sm font-medium mb-1.5">
-            {t('claim:message_label')} <span className="text-[#737373] font-normal">{t('claim:message_optional')}</span>
+            {t('claim:message_label')} <span className="text-fg-3-texto font-normal">{t('claim:message_optional')}</span>
           </label>
           <textarea
             rows={2}
@@ -224,7 +224,7 @@ export default function Claim({ slug: slugProp }: Props) {
         </div>
 
         <div className="border-t border-[#F5F2EE] pt-5">
-          <p className="text-xs text-[#737373] mb-4 text-center">
+          <p className="text-xs text-fg-3-texto mb-4 text-center">
             {mode === 'login' ? t('claim:form_login_hint') : t('claim:form_register_hint')}
           </p>
 
@@ -233,14 +233,14 @@ export default function Claim({ slug: slugProp }: Props) {
             <button
               type="button"
               onClick={() => setMode('login')}
-              className={`flex-1 py-2 transition-colors ${mode === 'login' ? 'bg-teal text-white' : 'text-[#737373] hover:bg-areia'}`}
+              className={`flex-1 py-2 transition-colors ${mode === 'login' ? 'bg-teal text-white' : 'text-fg-3-texto hover:bg-areia'}`}
             >
               {t('claim:tab_login')}
             </button>
             <button
               type="button"
               onClick={() => setMode('register')}
-              className={`flex-1 py-2 transition-colors ${mode === 'register' ? 'bg-teal text-white' : 'text-[#737373] hover:bg-areia'}`}
+              className={`flex-1 py-2 transition-colors ${mode === 'register' ? 'bg-teal text-white' : 'text-fg-3-texto hover:bg-areia'}`}
             >
               {t('claim:tab_register')}
             </button>
@@ -273,7 +273,7 @@ export default function Claim({ slug: slugProp }: Props) {
           </form>
         </div>
 
-        <p className="text-xs text-[#737373] text-center mt-5 leading-relaxed">
+        <p className="text-xs text-fg-3-texto text-center mt-5 leading-relaxed">
           {t('claim:footer')}
         </p>
       </div>

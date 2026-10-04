@@ -20,7 +20,7 @@ export function ErrorState({ onRetry, message }: ErrorStateProps) {
       <p className="font-semibold text-[#1A1A1A] dark:text-white mb-1">
         {t('common.erro_titulo', 'Algo deu errado')}
       </p>
-      <p className="text-sm text-[#737373] mb-5 max-w-xs mx-auto leading-relaxed">
+      <p className="text-sm text-fg-3-texto mb-5 max-w-xs mx-auto leading-relaxed">
         {message ?? t('common.erro_desc', 'Nao conseguimos carregar os dados. Verifique sua conexao e tente de novo.')}
       </p>
       {onRetry && (

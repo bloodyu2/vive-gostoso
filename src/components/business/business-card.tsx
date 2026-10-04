@@ -86,7 +86,7 @@ function LocationActions({ business: b, size = 'md' }: { business: Business; siz
         <a
           href={buildWhatsAppLink(b.whatsapp)}
           target="_blank" rel="noopener noreferrer"
-          className={`flex items-center gap-1.5 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C4A] text-xs font-semibold px-3 ${py} rounded-full transition-colors`}
+          className={`flex items-center gap-1.5 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-whatsapp text-xs font-semibold px-3 ${py} rounded-full transition-colors`}
         >
           <Phone className="w-3 h-3" />WhatsApp
         </a>

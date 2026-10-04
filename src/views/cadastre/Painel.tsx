@@ -34,7 +34,7 @@ function StatCard({ label, value, sub }: { label: string; value: string | number
   return (
     <div className="bg-white border border-[#E8E4DF] rounded-2xl px-5 py-4 min-w-0">
       <p className="text-2xl font-bold text-[#1A1A1A] tabular-nums">{value}</p>
-      <p className="text-xs text-[#737373] mt-0.5 font-medium">{label}</p>
+      <p className="text-xs text-fg-3-texto mt-0.5 font-medium">{label}</p>
       {sub && <p className="text-[11px] text-teal mt-1 font-medium">{sub}</p>}
     </div>
   )
@@ -59,7 +59,7 @@ function TypeFork() {
             </p>
           </div>
           <div className="p-6">
-            <p className="text-xs font-semibold text-[#737373] uppercase tracking-wide mb-4">
+            <p className="text-xs font-semibold text-fg-3-texto uppercase tracking-wide mb-4">
               {t('typefork.select_prompt')}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -72,7 +72,7 @@ function TypeFork() {
                 <p className="font-semibold text-[#1A1A1A] text-sm mb-1">
                   {t('typefork.business_title')}
                 </p>
-                <p className="text-xs text-[#737373] leading-relaxed">
+                <p className="text-xs text-fg-3-texto leading-relaxed">
                   {t('typefork.business_desc')}
                 </p>
                 <div className="flex flex-wrap gap-1 mt-3">
@@ -92,7 +92,7 @@ function TypeFork() {
                 <p className="font-semibold text-[#1A1A1A] text-sm mb-1">
                   {t('typefork.professional_title')}
                 </p>
-                <p className="text-xs text-[#737373] leading-relaxed">
+                <p className="text-xs text-fg-3-texto leading-relaxed">
                   {t('typefork.professional_desc')}
                 </p>
                 <div className="flex flex-wrap gap-1 mt-3">
@@ -172,20 +172,20 @@ function PainelInner() {
       <header className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-5 md:px-8 h-14 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <LayoutDashboard className="w-4 h-4 text-[#737373]" />
+            <LayoutDashboard className="w-4 h-4 text-fg-3-texto" />
             <span className="text-sm font-semibold text-[#1A1A1A]">{t('header_title')}</span>
           </div>
           <div className="flex items-center gap-3">
             {user?.email && (
               <div className="hidden sm:flex items-center gap-2">
                 <UserAvatar email={user.email} />
-                <span className="text-xs text-[#737373] truncate max-w-[180px]">{user.email}</span>
+                <span className="text-xs text-fg-3-texto truncate max-w-[180px]">{user.email}</span>
               </div>
             )}
             <button
               onClick={() => supabase.auth.signOut()}
               title={t('sair')}
-              className="flex items-center gap-1.5 text-xs text-[#737373] hover:text-[#1A1A1A] border border-[#E8E4DF] hover:border-[#C4BFBA] rounded-xl px-3 py-1.5 transition-colors"
+              className="flex items-center gap-1.5 text-xs text-fg-3-texto hover:text-[#1A1A1A] border border-[#E8E4DF] hover:border-[#C4BFBA] rounded-xl px-3 py-1.5 transition-colors"
             >
               <LogOut className="w-3.5 h-3.5" />
               {t('sair')}
@@ -208,7 +208,7 @@ function PainelInner() {
 
         <div className="mb-6">
           <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">{t('greeting')}</h1>
-          <p className="text-sm text-[#737373] mt-1">{t('greeting_sub')}</p>
+          <p className="text-sm text-fg-3-texto mt-1">{t('greeting_sub')}</p>
         </div>
 
         {businesses.length > 0 && (
@@ -237,7 +237,7 @@ function PainelInner() {
               <p className="text-sm font-semibold text-ocre">
                 {t('draft_alert_title', { count: draftCount })}
               </p>
-              <p className="text-xs text-[#737373] mt-0.5">
+              <p className="text-xs text-fg-3-texto mt-0.5">
                 {t('draft_alert_desc')}
               </p>
             </div>
@@ -259,7 +259,7 @@ function PainelInner() {
             <h2 className="font-semibold text-[15px] text-[#1A1A1A] group-hover:text-teal transition-colors">
               {t('module_manage')}
             </h2>
-            <p className="text-xs text-[#737373] mt-1 leading-relaxed">
+            <p className="text-xs text-fg-3-texto mt-1 leading-relaxed">
               {t('module_manage_desc')}
             </p>
             {businesses.length > 0 && (
@@ -277,7 +277,7 @@ function PainelInner() {
             <h2 className="font-semibold text-[15px] text-[#1A1A1A] group-hover:text-teal transition-colors">
               {t('module_add')}
             </h2>
-            <p className="text-xs text-[#737373] mt-1 leading-relaxed">
+            <p className="text-xs text-fg-3-texto mt-1 leading-relaxed">
               {t('module_add_desc')}
             </p>
           </Link>
@@ -290,7 +290,7 @@ function PainelInner() {
             <h2 className="font-semibold text-[15px] text-[#1A1A1A] group-hover:text-teal transition-colors">
               {t('module_preview')}
             </h2>
-            <p className="text-xs text-[#737373] mt-1 leading-relaxed">
+            <p className="text-xs text-fg-3-texto mt-1 leading-relaxed">
               {t('module_preview_desc')}
             </p>
           </Link>
@@ -303,7 +303,7 @@ function PainelInner() {
                 </div>
                 <div>
                   <p className="font-semibold text-[#1A1A1A] text-sm">{myProfessional.display_name}</p>
-                  <p className="text-xs text-[#737373]">{myProfessional.headline}</p>
+                  <p className="text-xs text-fg-3-texto">{myProfessional.headline}</p>
                 </div>
               </div>
               <p className="text-xs text-[#0D7C7C] font-semibold">{t('module_edit_professional')}</p>
@@ -317,7 +317,7 @@ function PainelInner() {
               <Sparkles className="w-4 h-4 text-ocre" />
               <h2 className="font-display text-lg font-semibold">{t('plans_title')}</h2>
             </div>
-            <p className="text-sm text-[#737373] mb-5">
+            <p className="text-sm text-fg-3-texto mb-5">
               {t('plans_desc')}
             </p>
 
@@ -348,19 +348,19 @@ function PainelInner() {
                     <div className="flex items-start justify-between gap-3 mb-4">
                       <div className="min-w-0">
                         <p className="font-semibold text-sm text-[#1A1A1A] truncate">{b.name}</p>
-                        <p className="text-xs text-[#737373] mt-0.5">
+                        <p className="text-xs text-fg-3-texto mt-0.5">
                           {t('plan_label')}{' '}
                           <span className={
                             b.plan === 'destaque'
                               ? 'font-semibold text-ocre'
                               : b.plan === 'associado'
                               ? 'font-semibold text-teal'
-                              : 'text-[#737373]'
+                              : 'text-fg-3-texto'
                           }>
                             {b.plan === 'destaque' ? t('plan_destaque') : b.plan === 'associado' ? t('plan_associado') : t('plan_free')}
                           </span>
                           {b.plan_expires_at && (
-                            <span className="ml-1 text-[#737373]">
+                            <span className="ml-1 text-fg-3-texto">
                               {t('plan_expires', { date: new Date(b.plan_expires_at).toLocaleDateString(painelI18n.language === 'en' ? 'en-US' : painelI18n.language === 'es' ? 'es' : 'pt-BR', { day: 'numeric', month: 'short', year: 'numeric' }) })}
                             </span>
                           )}
@@ -373,7 +373,7 @@ function PainelInner() {
                             className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
                               billing === 'monthly'
                                 ? 'bg-white text-[#1A1A1A] shadow-sm'
-                                : 'text-[#737373] hover:text-[#1A1A1A]'
+                                : 'text-fg-3-texto hover:text-[#1A1A1A]'
                             }`}
                           >
                             {t('billing_monthly')}
@@ -383,7 +383,7 @@ function PainelInner() {
                             className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all flex items-center gap-1.5 ${
                               billing === 'annual'
                                 ? 'bg-white text-[#1A1A1A] shadow-sm'
-                                : 'text-[#737373] hover:text-[#1A1A1A]'
+                                : 'text-fg-3-texto hover:text-[#1A1A1A]'
                             }`}
                           >
                             {t('billing_annual')}
@@ -446,7 +446,7 @@ function PainelInner() {
             {businesses.some(b => b.plan === 'free') && (
               <div className="mt-5 rounded-2xl border border-[#E8E4DF] overflow-x-auto">
                 <div className="grid grid-cols-3 text-xs min-w-[420px] sm:min-w-0">
-                  <div className="px-4 py-3 font-semibold text-[#737373] border-b border-[#E8E4DF]">{t('feature_header_benefit')}</div>
+                  <div className="px-4 py-3 font-semibold text-fg-3-texto border-b border-[#E8E4DF]">{t('feature_header_benefit')}</div>
                   <div className="px-4 py-3 font-semibold text-teal text-center border-b border-[#E8E4DF]">{t('feature_header_associado')}</div>
                   <div className="px-4 py-3 font-semibold text-ocre text-center border-b border-[#E8E4DF]">{t('feature_header_destaque')}</div>
                   {[
@@ -457,7 +457,7 @@ function PainelInner() {
                     [t('feature_support'), '—', '✓'],
                   ].map(([feat, a, d]) => (
                     <>
-                      <div key={`f-${feat}`} className="px-4 py-2.5 text-[#737373] border-b border-[#F5F2EE] last:border-0">{feat}</div>
+                      <div key={`f-${feat}`} className="px-4 py-2.5 text-fg-3-texto border-b border-[#F5F2EE] last:border-0">{feat}</div>
                       <div key={`a-${feat}`} className={`px-4 py-2.5 text-center border-b border-[#F5F2EE] last:border-0 ${a === '✓' ? 'text-teal font-semibold' : 'text-[#C4BFBA]'}`}>{a}</div>
                       <div key={`d-${feat}`} className={`px-4 py-2.5 text-center border-b border-[#F5F2EE] last:border-0 ${d === '✓' ? 'text-ocre font-semibold' : 'text-[#C4BFBA]'}`}>{d}</div>
                     </>

@@ -86,7 +86,7 @@ export default function ResetarSenha() {
           {stage === 'waiting' && (
             <div className="text-center py-4">
               <div className="text-4xl mb-4 animate-pulse">🔑</div>
-              <p className="text-[#737373] text-sm">{t('auth.waiting')}</p>
+              <p className="text-fg-3-texto text-sm">{t('auth.waiting')}</p>
             </div>
           )}
 
@@ -95,7 +95,7 @@ export default function ResetarSenha() {
             <div className="text-center">
               <div className="text-5xl mb-4">⏱️</div>
               <h2 className="font-display text-xl font-semibold mb-2 text-[#1A1A1A]">{t('auth.invalid_title')}</h2>
-              <p className="text-[#737373] text-sm mb-6">
+              <p className="text-fg-3-texto text-sm mb-6">
                 {t('auth.invalid_desc')}
               </p>
               <Button variant="primary" className="w-full" onClick={() => router.push(lp('/cadastre'))}>
@@ -110,7 +110,7 @@ export default function ResetarSenha() {
               <h1 className="font-display text-xl font-semibold mb-1 text-[#1A1A1A]">
                 {t('auth.form_title')}
               </h1>
-              <p className="text-[#737373] text-sm mb-6">
+              <p className="text-fg-3-texto text-sm mb-6">
                 {t('auth.form_desc')}
               </p>
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -146,7 +146,7 @@ export default function ResetarSenha() {
             <div className="text-center">
               <div className="text-5xl mb-4">✅</div>
               <h2 className="font-display text-xl font-semibold mb-2 text-[#1A1A1A]">{t('auth.success_title')}</h2>
-              <p className="text-[#737373] text-sm mb-6">
+              <p className="text-fg-3-texto text-sm mb-6">
                 {t('auth.success_desc')}
               </p>
               <Button variant="primary" className="w-full" onClick={() => router.push(lp('/cadastre/painel'))}>

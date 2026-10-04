@@ -37,7 +37,7 @@ export function ImageWithCaption({
         />
       </div>
       {(caption || credit) && (
-        <figcaption className="mt-2 text-xs text-[#737373] text-center leading-relaxed">
+        <figcaption className="mt-2 text-xs text-fg-3-texto text-center leading-relaxed">
           {caption}
           {caption && credit && ' · '}
           {credit && <span className="opacity-80">{credit}</span>}

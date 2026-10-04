@@ -67,7 +67,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-16 text-center">
       <div className="text-6xl mb-4">🤔</div>
       <h2 className="font-display text-2xl font-semibold mb-2">{t('negocio.nao_encontrado')}</h2>
-      <p className="text-[#737373] mb-6">{t('negocio.nao_encontrado_desc')}</p>
+      <p className="text-fg-3-texto mb-6">{t('negocio.nao_encontrado_desc')}</p>
       <Link href={lp('/')} className="text-teal font-semibold">{t('not_found.voltar_inicio')}</Link>
     </main>
   )
@@ -102,7 +102,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
 
   return (
     <main className="max-w-4xl mx-auto px-5 md:px-8 py-10">
-      <Link href={lp(backTo)} className="inline-flex items-center gap-1.5 text-sm text-[#737373] hover:text-teal transition-colors mb-6">
+      <Link href={lp(backTo)} className="inline-flex items-center gap-1.5 text-sm text-fg-3-texto hover:text-teal transition-colors mb-6">
         <ArrowLeft className="w-4 h-4" />
         {t('negocio.voltar_a')} {backLabel}
       </Link>
@@ -154,18 +154,18 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
             <div className="flex items-center gap-2 mb-4">
               <StarRating value={Math.round(avgRating)} readonly size="sm" />
               <span className="text-sm font-semibold text-[#1A1A1A]">{avgRating.toFixed(1)}</span>
-              <span className="text-sm text-[#737373]">
+              <span className="text-sm text-fg-3-texto">
                 ({reviewCount} {reviewCount === 1 ? t('negocio.avaliacao_singular') : t('negocio.avaliacao_plural')})
               </span>
             </div>
           )}
           {b.price_range && (
-            <span className="inline-block text-sm font-semibold text-[#737373] bg-[#F0EDEA] px-2 py-0.5 rounded-lg mb-4">
+            <span className="inline-block text-sm font-semibold text-fg-3-texto bg-[#F0EDEA] px-2 py-0.5 rounded-lg mb-4">
               {b.price_range}
             </span>
           )}
           {b.address && (
-            <p className="flex items-center gap-1.5 text-sm text-[#737373] mb-6">
+            <p className="flex items-center gap-1.5 text-sm text-fg-3-texto mb-6">
               <MapPin className="w-4 h-4 flex-shrink-0" /> {b.address}
             </p>
           )}
@@ -213,7 +213,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => pushDataLayer('contato_negocio_click', { business_name: b.name })}
-              className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1EBE57] text-white rounded-2xl px-5 py-4 text-sm font-semibold transition-colors"
+              className="w-full flex items-center justify-center gap-2 bg-whatsapp hover:bg-[#0E7440] text-white rounded-2xl px-5 py-4 text-sm font-semibold transition-colors"
             >
               <Phone className="w-4 h-4" />
               {t('negocio.falar_whatsapp')}
@@ -325,7 +325,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
                     if (!h) return null
                     return (
                       <div key={day} className="flex justify-between text-sm">
-                        <span className="text-[#737373]">{days[day]}</span>
+                        <span className="text-fg-3-texto">{days[day]}</span>
                         <span className={h.closed ? 'text-coral' : 'text-[#1A1A1A] font-medium'}>
                           {h.closed ? t('negocio.fechado_dia') : `${h.open} – ${h.close}`}
                         </span>

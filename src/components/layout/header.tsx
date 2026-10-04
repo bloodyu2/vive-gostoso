@@ -28,8 +28,24 @@ export function Header() {
   const [discoverOpen, setDiscoverOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const discoverRef = useRef<HTMLDivElement>(null)
+  const headerRef = useRef<HTMLElement>(null)
   const { user } = useAuth()
   const { theme, toggle: alternarTema } = useTheme()
+
+  /* A altura do header deixa de ser o número mágico 69px: mede o elemento de
+     verdade e publica em --header-h, que o overlay do drawer usa. Se a fonte,
+     o idioma ou o zoom mudarem a altura, o menu continua encostando embaixo. */
+  useEffect(() => {
+    const el = headerRef.current
+    if (!el) return
+    const medir = () => {
+      document.documentElement.style.setProperty('--header-h', `${el.offsetHeight}px`)
+    }
+    medir()
+    const ro = new ResizeObserver(medir)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
 
   // Cmd/Ctrl+K opens search
   useEffect(() => {
@@ -101,7 +117,7 @@ export function Header() {
       onClick={alternarTema}
       className={comRotulo
         ? 'flex items-center gap-2 w-full min-h-11 text-sm font-medium text-fg-2 hover:text-teal transition-colors motion-reduce:transition-none'
-        : 'w-9 h-9 flex items-center justify-center rounded-full text-fg-3 hover:text-teal transition-colors motion-reduce:transition-none'}
+        : 'w-11 h-11 flex items-center justify-center rounded-full text-fg-3 hover:text-teal transition-colors motion-reduce:transition-none'}
       aria-label={rotuloTema}
     >
       {escuro ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -112,7 +128,7 @@ export function Header() {
   return (
     <>
       {searchOpen && <GlobalSearch onClose={() => setSearchOpen(false)} />}
-      <header className="sticky top-0 z-40 bg-elev border-b border-border-1">
+      <header ref={headerRef} className="sticky top-0 z-40 bg-elev border-b border-border-1">
         {/* Desktop */}
         <div className="hidden md:flex items-center justify-between gap-4 px-8 py-2">
           <Link href={lp('/')} className="flex-shrink-0">
@@ -243,8 +259,8 @@ export function Header() {
 
       {/* Mobile drawer */}
       {drawerOpen && (
-        <div className="md:hidden fixed inset-0 top-[69px] z-30" onClick={() => setDrawerOpen(false)}>
-          <div className="bg-elev border-b border-border-1 shadow-xl overflow-y-auto max-h-[calc(100dvh-69px)]" onClick={e => e.stopPropagation()}>
+        <div className="md:hidden fixed inset-0 top-[var(--header-h)] z-30" onClick={() => setDrawerOpen(false)}>
+          <div className="bg-elev border-b border-border-1 shadow-xl overflow-y-auto max-h-[calc(100dvh-var(--header-h))]" onClick={e => e.stopPropagation()}>
             <nav className="px-5 py-4 space-y-1">
               {NAV_ALL.map(v => (
                 <Link

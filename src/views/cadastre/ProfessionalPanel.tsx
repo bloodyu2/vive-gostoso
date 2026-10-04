@@ -174,7 +174,7 @@ function ProfessionalPanelInner() {
       {/* Top bar */}
       <header className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-5 md:px-8 h-14 flex items-center gap-4">
-          <button type="button" onClick={() => router.push(lp('/cadastre/painel'))} className="text-sm text-[#737373] hover:text-[#1A1A1A]">
+          <button type="button" onClick={() => router.push(lp('/cadastre/painel'))} className="text-sm text-fg-3-texto hover:text-[#1A1A1A]">
             {t('professional_panel.back_to_painel')}
           </button>
           <span className="text-sm font-semibold text-[#1A1A1A]">{t('professional_panel.title')}</span>
@@ -202,7 +202,7 @@ function ProfessionalPanelInner() {
               className={`px-4 py-2.5 text-sm font-semibold border-b-2 -mb-px transition-colors ${
                 tab === t.id
                   ? 'border-teal text-teal'
-                  : 'border-transparent text-[#737373] hover:text-[#1A1A1A]'
+                  : 'border-transparent text-fg-3-texto hover:text-[#1A1A1A]'
               }`}
             >
               {t.label}
@@ -226,7 +226,7 @@ function ProfessionalPanelInner() {
         {tab === 'perfil' && (
           <div className="space-y-5">
             <div>
-              <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wide mb-1.5">
                 {t('professional_panel.display_name_label')}
               </label>
               <input
@@ -237,7 +237,7 @@ function ProfessionalPanelInner() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wide mb-1.5">
                 {t('professional_panel.headline_label')}
               </label>
               <input
@@ -248,7 +248,7 @@ function ProfessionalPanelInner() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wide mb-1.5">
                 {t('professional_panel.category_label')}
               </label>
               <select
@@ -262,7 +262,7 @@ function ProfessionalPanelInner() {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wide mb-1.5">
                 {t('professional_panel.specialties_label')}
               </label>
               <div className="flex flex-wrap gap-2">
@@ -283,7 +283,7 @@ function ProfessionalPanelInner() {
               </div>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wide mb-1.5">
                 {t('professional_panel.bio_label')}
               </label>
               <textarea
@@ -296,7 +296,7 @@ function ProfessionalPanelInner() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1.5">
+                <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wide mb-1.5">
                   {t('professional_panel.whatsapp_label')}
                 </label>
                 <input
@@ -308,7 +308,7 @@ function ProfessionalPanelInner() {
                 <p className="text-[10px] text-[#aaa] mt-1">{t('professional_panel.whatsapp_hint')}</p>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1.5">
+                <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wide mb-1.5">
                   {t('professional_panel.instagram_label')}
                 </label>
                 <input
@@ -319,7 +319,7 @@ function ProfessionalPanelInner() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1.5">
+                <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wide mb-1.5">
                   {t('professional_panel.website_label')}
                 </label>
                 <input
@@ -337,18 +337,18 @@ function ProfessionalPanelInner() {
         {tab === 'portfolio' && (
           <div className="space-y-4">
             {portfolioItems.length === 0 && (
-              <p className="text-sm text-[#737373]">{t('professional_panel.no_portfolio_items')}</p>
+              <p className="text-sm text-fg-3-texto">{t('professional_panel.no_portfolio_items')}</p>
             )}
             {portfolioItems.map((item, idx) => (
               <div key={item.id} className="bg-white border border-[#E8E4DF] rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-semibold text-[#737373] uppercase tracking-wide">
+                  <span className="text-xs font-semibold text-fg-3-texto uppercase tracking-wide">
                     {t('professional_panel.portfolio_item_label', { n: idx + 1 })}
                   </span>
                   <button
                     type="button"
                     onClick={() => removePortfolioItem(item.id)}
-                    className="text-[#737373] hover:text-red-500 transition-colors"
+                    className="text-fg-3-texto hover:text-red-500 transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -399,7 +399,7 @@ function ProfessionalPanelInner() {
                   <p className="font-semibold text-[#1A1A1A] text-sm mb-1">
                     {t('professional_panel.profile_status')}
                   </p>
-                  <p className="text-xs text-[#737373]">
+                  <p className="text-xs text-fg-3-texto">
                     {pro?.is_published
                       ? t('professional_panel.profile_visible')
                       : t('professional_panel.profile_draft')}
@@ -408,7 +408,7 @@ function ProfessionalPanelInner() {
                 <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
                   pro?.is_published
                     ? 'bg-green-100 text-green-700'
-                    : 'bg-[#F5F2EE] text-[#737373]'
+                    : 'bg-[#F5F2EE] text-fg-3-texto'
                 }`}>
                   {pro?.is_published ? t('professional_panel.published') : t('professional_panel.draft')}
                 </span>
@@ -419,7 +419,7 @@ function ProfessionalPanelInner() {
             </div>
             {pro?.slug && (
               <div className="bg-white border border-[#E8E4DF] rounded-xl p-5">
-                <p className="text-xs font-semibold text-[#737373] uppercase tracking-wide mb-1">
+                <p className="text-xs font-semibold text-fg-3-texto uppercase tracking-wide mb-1">
                   {t('professional_panel.public_url')}
                 </p>
                 <p className="text-sm text-[#1A1A1A] font-mono">
@@ -445,7 +445,7 @@ function ProfessionalPanelInner() {
             type="button"
             onClick={togglePublish}
             disabled={saving}
-            className="flex items-center gap-2 border border-[#E8E4DF] text-[#737373] px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#F5F2EE] transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 border border-[#E8E4DF] text-fg-3-texto px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#F5F2EE] transition-colors disabled:opacity-50"
           >
             {pro?.is_published
               ? <><EyeOff className="w-4 h-4" /> {t('professional_panel.unpublish')}</>

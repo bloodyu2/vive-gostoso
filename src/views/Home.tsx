@@ -124,7 +124,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
         <button
           onClick={scrollToVerbs}
           aria-label={t('home.scroll_label')}
-          className={`absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/40 hover:text-white/80 transition-all duration-500 ${scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          className={`absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/70 hover:text-white/80 transition-all duration-500 ${scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
           <span className="text-[10px] uppercase tracking-widest font-semibold">{t('home.scroll_label')}</span>
           <ChevronDown className="w-5 h-5 animate-bounce" />
@@ -158,7 +158,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
                 </div>
                 <div className="p-3">
                   <p className="text-xs font-semibold text-[#1A1A1A] truncate leading-snug">{b.name}</p>
-                  {b.category && <p className="text-[10px] text-[#737373] mt-0.5 truncate">{b.category.name}</p>}
+                  {b.category && <p className="text-[10px] text-fg-3-texto mt-0.5 truncate">{b.category.name}</p>}
                   {b.is_verified && <span className="inline-block mt-1.5 text-[9px] font-bold tracking-wide uppercase text-teal bg-teal-light px-1.5 py-0.5 rounded-full">{t('filters.verificado')}</span>}
                 </div>
               </Link>
@@ -230,7 +230,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
                       src={post.cover_url}
                       alt={post.title}
                       loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 ) : (
@@ -250,7 +250,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
                     {post.title}
                   </h3>
                   {post.excerpt && (
-                    <p className="mt-2 text-sm text-[#737373] leading-relaxed line-clamp-2">
+                    <p className="mt-2 text-sm text-fg-3-texto leading-relaxed line-clamp-2">
                       {post.excerpt}
                     </p>
                   )}
