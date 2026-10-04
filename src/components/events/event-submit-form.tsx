@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { X, CheckCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
@@ -6,7 +6,7 @@ import { useSubmitEvent } from '@/hooks/useEventSubmissions'
 import { showToast } from '@/components/ui/toast'
 import type { EventSubmission } from '@/types/database'
 
-const INPUT_CLS = 'w-full rounded-xl border border-[#E8E4DF] px-4 py-3 text-sm focus:border-teal focus:ring-2 focus:ring-teal/20 focus:outline-none'
+const INPUT_CLS = 'w-full rounded-xl border border-[#E8E4DF] dark:border-[#2D2D2D] bg-white dark:bg-[#1C1C1C] dark:text-white px-4 py-3 text-sm focus:border-teal focus:ring-2 focus:ring-teal/20 focus:outline-none'
 
 interface Props {
   open: boolean
@@ -37,6 +37,40 @@ export function EventSubmitForm({ open, onClose }: Props) {
     { value: 'cultural',    label: t('type_cultural') },
     { value: 'gastronomia', label: t('type_gastronomia') },
   ]
+
+  const panelRef = useRef<HTMLDivElement>(null)
+  const closeRef = useRef<HTMLButtonElement>(null)
+  const anteriorRef = useRef<HTMLElement | null>(null)
+
+  /* Dialogo com foco preso: foco inicial no fechar, Tab circula so dentro do
+     painel, Esc fecha e o foco volta para quem abriu. Mesmo padrao do lightbox. */
+  useEffect(() => {
+    if (!open) return
+    anteriorRef.current = document.activeElement as HTMLElement | null
+    closeRef.current?.focus()
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') { onClose(); return }
+      if (e.key === 'Tab') {
+        const nodes = panelRef.current?.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input, textarea, select, [tabindex]:not([tabindex="-1"])'
+        )
+        const list = nodes ? Array.from(nodes) : []
+        if (list.length === 0) return
+        const first = list[0]
+        const last = list[list.length - 1]
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault(); last.focus()
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault(); first.focus()
+        }
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      anteriorRef.current?.focus?.()
+    }
+  }, [open, onClose])
 
   if (!open) return null
 
@@ -70,12 +104,16 @@ export function EventSubmitForm({ open, onClose }: Props) {
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center" onClick={onClose}>
       <div className="absolute inset-0 bg-black/40" />
       <div
-        className="relative w-full max-w-lg bg-white rounded-t-2xl sm:rounded-2xl max-h-[90vh] overflow-y-auto"
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={t('title')}
+        className="relative w-full max-w-lg bg-white dark:bg-card rounded-t-2xl sm:rounded-2xl max-h-[90vh] overflow-y-auto"
         onClick={e => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#E8E4DF]">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#E8E4DF] dark:border-border-1">
           <h2 className="font-display font-semibold text-xl">{t('title')}</h2>
-          <button onClick={onClose} className="p-2 -m-2 text-fg-3-texto hover:text-[#1A1A1A] transition-colors">
+          <button ref={closeRef} onClick={onClose} aria-label={t('close_btn')} className="w-11 h-11 flex items-center justify-center text-fg-3-texto hover:text-[#1A1A1A] dark:hover:text-white transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>

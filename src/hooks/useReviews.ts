@@ -2,12 +2,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { Review, ReviewInsert, ReviewTarget } from '@/types/reviews'
 import { useModerateListing } from '@/hooks/useModeration'
+import { mediaAvaliacoes } from '@/lib/media-avaliacoes'
 
 const PAGE_SIZE = 10
 
 export interface ReviewPage {
   reviews: Review[]
   total: number
+  /** Media do agregado REAL (soma/quantidade de todas as avaliacoes), nunca so da pagina. */
+  average: number
   page: number
   pageSize: number
   totalPages: number
@@ -22,18 +25,30 @@ export function useReviews(targetType: ReviewTarget, targetId: string, page = 1)
   return useQuery({
     queryKey: ['reviews', targetType, targetId, page],
     queryFn: async (): Promise<ReviewPage> => {
-      const { data, error, count } = await supabase
-        .from('gostoso_reviews')
-        .select('*', { count: 'exact' })
-        .eq(idField, targetId)
-        .eq('approved', true)
-        .order('created_at', { ascending: false })
-        .range(from, to)
-      if (error) throw error
-      const total = count ?? 0
+      const [pageRes, aggRes] = await Promise.all([
+        supabase
+          .from('gostoso_reviews')
+          .select('*', { count: 'exact' })
+          .eq(idField, targetId)
+          .eq('approved', true)
+          .order('created_at', { ascending: false })
+          .range(from, to),
+        // Agregado real: soma e quantidade de TODAS as avaliacoes aprovadas,
+        // nao apenas as da pagina (a media antiga estava errada).
+        supabase
+          .from('gostoso_reviews')
+          .select('rating.sum(),rating.count()')
+          .eq(idField, targetId)
+          .eq('approved', true),
+      ])
+      if (pageRes.error) throw pageRes.error
+      const total = pageRes.count ?? 0
+      const agg = (aggRes.data as unknown as { sum: number | null; count: number | null }[] | null)?.[0]
+      const average = mediaAvaliacoes(Number(agg?.sum ?? 0), Number(agg?.count ?? 0))
       return {
-        reviews: (data ?? []) as Review[],
+        reviews: (pageRes.data ?? []) as Review[],
         total,
+        average,
         page,
         pageSize: PAGE_SIZE,
         totalPages: Math.max(1, Math.ceil(total / PAGE_SIZE)),

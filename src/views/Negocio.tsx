@@ -1,10 +1,10 @@
 'use client'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle, Share2, Check, BookOpen, Wifi, Car, UserCheck, CalendarCheck } from 'lucide-react'
+import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle, Share2, Check, BookOpen, Wifi, Car, UserCheck, CalendarCheck, Navigation } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useBusiness } from '@/hooks/useBusinesses'
-import { isBusinessOpen, safeExternalUrl } from '@/lib/utils'
+import { isBusinessOpen, safeExternalUrl, cn } from '@/lib/utils'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { pushDataLayer } from '@/lib/analytics'
 import { ManagedBadge } from '@/components/business/managed-badge'
@@ -35,9 +35,36 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
   const { data: b, isLoading } = useBusiness(slug ?? '', initialBusiness !== undefined ? { initialData: initialBusiness } : undefined)
   const [copied, setCopied] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const [barraVisivel, setBarraVisivel] = useState(false)
+  const [pertoDoFim, setPertoDoFim] = useState(false)
+  const asideRef = useRef<HTMLElement>(null)
   const { data: ratingsMap } = useBusinessRatings()
   const { t } = useTranslation()
   const lp = useLocalePath()
+
+  /* Barra fixa de contato no celular: some quando a sidebar (que ja tem o CTA)
+     entra na tela, para nao dizer a mesma coisa duas vezes. */
+  useEffect(() => {
+    const el = asideRef.current
+    if (!el) return
+    const io = new IntersectionObserver(
+      ([entrada]) => setBarraVisivel(!entrada.isIntersecting),
+      { threshold: 0 }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [b?.id])
+
+  /* Esconde perto do fim da pagina, para a barra nao cobrir o rodape. */
+  useEffect(() => {
+    const aoRolar = () => {
+      const restante = document.documentElement.scrollHeight - window.innerHeight - window.scrollY
+      setPertoDoFim(restante < 260)
+    }
+    aoRolar()
+    window.addEventListener('scroll', aoRolar, { passive: true })
+    return () => window.removeEventListener('scroll', aoRolar)
+  }, [])
 
   const days: Record<string, string> = {
     seg: t('negocio.dia_seg'),
@@ -85,6 +112,9 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
      topo virar clicavel. Abrir uma lupa em cima de um pousada.jpg generico
      seria mostrar em tamanho grande uma foto que nem e daqui. */
   const capaReal = b.cover_url && !ehCapaGenerica(b.cover_url) ? b.cover_url : null
+  const mapsUrlContato = b.lat && b.lng
+    ? `https://www.google.com/maps/dir/?api=1&destination=${b.lat},${b.lng}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.name + ' São Miguel do Gostoso RN')}`
   const shareUrl = `https://www.vivegostoso.com.br/negocio/${business.slug}`
   const shareText = `${business.name}: ${shareUrl}`
 
@@ -152,7 +182,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
           <h1 className="font-display font-bold text-3xl sm:text-4xl tracking-tight mb-1 break-words">{b.name}</h1>
           {avgRating !== null && (
             <div className="flex items-center gap-2 mb-4">
-              <StarRating value={Math.round(avgRating)} readonly size="sm" />
+              <StarRating value={Math.round(avgRating)} readonly size="md" />
               <span className="text-sm font-semibold text-[#1A1A1A]">{avgRating.toFixed(1)}</span>
               <span className="text-sm text-fg-3-texto">
                 ({reviewCount} {reviewCount === 1 ? t('negocio.avaliacao_singular') : t('negocio.avaliacao_plural')})
@@ -205,7 +235,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
         </div>
 
         {/* Sidebar */}
-        <aside className="space-y-5">
+        <aside ref={asideRef} className="space-y-5">
           {/* WhatsApp CTA */}
           {b.whatsapp && (
             <a
@@ -346,6 +376,37 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
           </div>
         </aside>
       </div>
+      {/* Barra fixa de contato (celular) — WhatsApp e rota sempre a um toque. */}
+      {b.whatsapp && (
+        <div
+          className={cn(
+            'md:hidden fixed inset-x-0 bottom-0 z-40',
+            barraVisivel && !pertoDoFim ? '' : 'hidden',
+          )}
+          style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        >
+          <div className="bg-elev border-t border-border-1 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] px-4 py-2.5 flex items-center gap-2">
+            <a
+              href={buildWhatsAppLink(b.whatsapp)}
+              target="_blank" rel="noopener noreferrer"
+              onClick={() => pushDataLayer('contato_negocio_click', { business_name: b.name })}
+              className="flex-1 flex items-center justify-center gap-2 bg-whatsapp hover:bg-[#0E7440] text-white rounded-xl px-4 min-h-11 text-sm font-semibold transition-colors"
+            >
+              <Phone className="w-4 h-4" />
+              {t('negocio.falar_whatsapp')}
+            </a>
+            <a
+              href={mapsUrlContato}
+              target="_blank" rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 border border-border-1 text-fg-1 rounded-xl px-4 min-h-11 text-sm font-semibold hover:bg-areia dark:hover:bg-white/10 transition-colors"
+            >
+              <Navigation className="w-4 h-4" />
+              {t('negocio.como_chegar')}
+            </a>
+          </div>
+        </div>
+      )}
+
       {/* Lightbox */}
       {lightboxIndex !== null && (
         <Lightbox

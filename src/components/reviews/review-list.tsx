@@ -1,6 +1,6 @@
 'use client'
 // src/components/reviews/review-list.tsx
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { StarRating } from './star-rating'
 import { useReviews } from '@/hooks/useReviews'
 import { useTranslation } from 'react-i18next'
@@ -69,11 +69,13 @@ function PaginationBar({ page, totalPages, onChange }: { page: number; totalPage
 export function ReviewList({ targetType, targetId }: ReviewListProps) {
   const { t } = useTranslation('review_list')
   const [page, setPage] = useState(1)
+  const listRef = useRef<HTMLDivElement>(null)
   const { data, isLoading } = useReviews(targetType, targetId, page)
 
   const reviews = data?.reviews ?? []
   const totalPages = data?.totalPages ?? 1
   const total = data?.total ?? 0
+  const avg = data?.average ?? 0
 
   if (isLoading) return (
     <div className="space-y-3">
@@ -89,15 +91,13 @@ export function ReviewList({ targetType, targetId }: ReviewListProps) {
     </p>
   )
 
-  const avg = reviews.length > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length : 0
-
   return (
-    <div className="space-y-4">
+    <div ref={listRef} className="space-y-4 scroll-mt-24">
       {page === 1 && reviews.length > 0 && (
         <div className="flex items-center gap-3">
           <span className="font-display font-bold text-3xl text-[#1A1A1A] dark:text-white">{avg.toFixed(1)}</span>
           <div>
-            <StarRating value={Math.round(avg)} readonly size="sm" />
+            <StarRating value={Math.round(avg)} readonly size="md" />
             <p className="text-xs text-fg-3-texto mt-0.5">{total} {t('count', { count: total })}</p>
           </div>
         </div>
@@ -110,7 +110,7 @@ export function ReviewList({ targetType, targetId }: ReviewListProps) {
               <p className="font-semibold text-sm text-[#1A1A1A] dark:text-white">{r.author_name ?? t('anonymous')}</p>
               <p className="text-xs text-placeholder">{formatDate(r.created_at)}</p>
             </div>
-            <StarRating value={r.rating} readonly size="sm" />
+            <StarRating value={r.rating} readonly size="md" />
           </div>
           {r.comment && <p className="text-sm text-[#3D3D3D] dark:text-[#C0BCB8] leading-relaxed">{r.comment}</p>}
         </div>
@@ -119,7 +119,7 @@ export function ReviewList({ targetType, targetId }: ReviewListProps) {
       <PaginationBar
         page={page}
         totalPages={totalPages}
-        onChange={p => { setPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+        onChange={p => { setPage(p); listRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }}
       />
     </div>
   )
