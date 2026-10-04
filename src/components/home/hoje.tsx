@@ -9,7 +9,7 @@ import { useEvents } from '@/hooks/useEvents'
 import { isBusinessOpen } from '@/lib/utils'
 
 function TodayDot() {
-  return <span className="inline-block w-2 h-2 rounded-full bg-[#3D8B5A] mr-2 animate-pulse" />
+  return <span className="inline-block w-2 h-2 rounded-full bg-[#3D8B5A] mr-2" />
 }
 
 export function Hoje() {

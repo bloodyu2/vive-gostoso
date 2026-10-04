@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { Search, X, MapPin } from 'lucide-react'
@@ -77,9 +78,20 @@ interface Props {
 export function GlobalSearch({ onClose }: Props) {
   const { t } = useTranslation('global_search')
   const lp = useLocalePath()
+  const router = useRouter()
   const [query, setQuery] = useState('')
   const { results, loading } = useSearch(query)
   const inputRef = useRef<HTMLInputElement>(null)
+  const [activeIndex, setActiveIndex] = useState(-1)
+
+  // Zera a opcao ativa quando a busca muda (os ids deixam de existir).
+  // Ajuste durante a renderizacao, nao em efeito: a regra do repo proibe
+  // setState sincrono dentro de useEffect (set-state-in-effect).
+  const [prevQuery, setPrevQuery] = useState(query)
+  if (prevQuery !== query) {
+    setPrevQuery(query)
+    setActiveIndex(-1)
+  }
 
   useEffect(() => {
     inputRef.current?.focus()
@@ -94,6 +106,24 @@ export function GlobalSearch({ onClose }: Props) {
     document.body.style.overflow = 'hidden'
     return () => { document.body.style.overflow = '' }
   }, [])
+
+  /* Navegacao por teclado nos resultados: ↑/↓ move a opcao ativa, Enter abre.
+     O foco continua no input (padrao combobox + aria-activedescendant), entao
+     quem usa teclado nao tira a mao para escolher. */
+  function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (results.length === 0) return
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setActiveIndex(i => (i + 1) % results.length)
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setActiveIndex(i => (i <= 0 ? results.length - 1 : i - 1))
+    } else if (e.key === 'Enter' && activeIndex >= 0) {
+      e.preventDefault()
+      router.push(lp(`/negocio/${results[activeIndex].slug}`))
+      onClose()
+    }
+  }
 
   return (
     <div
@@ -111,7 +141,13 @@ export function GlobalSearch({ onClose }: Props) {
             type="text"
             value={query}
             onChange={e => setQuery(e.target.value)}
+            onKeyDown={onKeyDown}
             placeholder={t('placeholder')}
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded={results.length > 0}
+            aria-controls="search-results"
+            aria-activedescendant={activeIndex >= 0 ? `search-option-${activeIndex}` : undefined}
             className="flex-1 text-sm bg-transparent outline-none text-[#1A1A1A] dark:text-white placeholder:text-fg-3-texto"
           />
           {query ? (
@@ -156,9 +192,16 @@ export function GlobalSearch({ onClose }: Props) {
           )}
 
           {results.length > 0 && (
-            <ul className="py-2">
-              {results.map(r => (
-                <li key={r.id}>
+            <ul id="search-results" role="listbox" aria-label={t('placeholder')} className="py-2">
+              {results.map((r, i) => (
+                <li
+                  key={r.id}
+                  id={`search-option-${i}`}
+                  role="option"
+                  aria-selected={i === activeIndex}
+                  onMouseEnter={() => setActiveIndex(i)}
+                  className={i === activeIndex ? 'bg-areia dark:bg-[#2D2D2D]' : ''}
+                >
                   <Link
                     href={lp(`/negocio/${r.slug}`)}
                     onClick={onClose}

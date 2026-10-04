@@ -69,18 +69,13 @@ export default function Home({ initialData, vitrine }: HomeProps) {
     <div>
       {/* ── Hero ── */}
       <section className="relative bg-[#1A1A1A] text-white overflow-hidden">
-        {/* Background texture */}
-        <div className="absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '32px 32px' }}
-        />
-
         {/* Content */}
         <div className="relative max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-28">
           <div className="flex flex-col gap-6 max-w-2xl">
             {/* Display headline */}
             <h1 className="font-display font-bold leading-none tracking-tight">
               <span className="flex items-center gap-3 text-xs font-semibold tracking-widest uppercase text-white/60 mb-6">
-                <span className="inline-block w-2 h-2 rounded-full bg-teal animate-pulse" />
+                <span className="inline-block w-2 h-2 rounded-full bg-teal" />
                 {t('home.hero_h1_cidade')}
               </span>
               <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">{t('home.hero_h1_1')}</span>
@@ -127,7 +122,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
           className={`absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/70 hover:text-white/80 transition-all duration-500 ${scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
           <span className="text-[10px] uppercase tracking-widest font-semibold">{t('home.scroll_label')}</span>
-          <ChevronDown className="w-5 h-5 animate-bounce" />
+          <ChevronDown className="w-5 h-5" />
         </button>
       </section>
 
