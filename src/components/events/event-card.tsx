@@ -38,7 +38,7 @@ function CardContent({ event: e, t }: { event: GostosoEvent; t: (key: string) =>
 export function EventCard({ event: e }: { event: GostosoEvent }) {
   const { t } = useTranslation('event_card')
   const lp = useLocalePath()
-  const baseClass = "bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 block"
+  const baseClass = "bg-white dark:bg-card rounded-2xl border border-[#E8E4DF] dark:border-border-1 overflow-hidden transition-all duration-200 hover:shadow-md block"
 
   // O <div> externo carrega o visual do card; o <Link> cobre so o conteudo e o
   // "Fonte" fica como IRMAO dele, nunca dentro. <a> dentro de <a> e HTML

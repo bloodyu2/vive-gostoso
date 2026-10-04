@@ -148,7 +148,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
               <Link
                 key={b.id}
                 href={lp(`/negocio/${b.slug}`)}
-                className="group bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all"
+                className="group bg-white dark:bg-card rounded-2xl border border-[#E8E4DF] dark:border-border-1 overflow-hidden hover:shadow-md transition-all"
               >
                 <div className="aspect-square bg-gradient-to-br from-teal to-teal-dark overflow-hidden">
                   {b.cover_url
@@ -157,7 +157,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
                   }
                 </div>
                 <div className="p-3">
-                  <p className="text-xs font-semibold text-[#1A1A1A] truncate leading-snug">{b.name}</p>
+                  <p className="text-xs font-semibold text-[#1A1A1A] dark:text-white truncate leading-snug">{b.name}</p>
                   {b.category && <p className="text-[10px] text-fg-3-texto mt-0.5 truncate">{b.category.name}</p>}
                   {b.is_verified && <span className="inline-block mt-1.5 text-[9px] font-bold tracking-wide uppercase text-teal bg-teal-light px-1.5 py-0.5 rounded-full">{t('filters.verificado')}</span>}
                 </div>
@@ -222,7 +222,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
               <Link
                 key={post.id}
                 href={lp(`/blog/${post.slug}`)}
-                className="group rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] bg-white dark:bg-[#222] hover:shadow-md hover:-translate-y-0.5 transition-all"
+                className="group rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] bg-white dark:bg-[#222] hover:shadow-md transition-all"
               >
                 {post.cover_url ? (
                   <div className="aspect-[16/10] overflow-hidden bg-[#E8E4DF] dark:bg-[#2D2D2D]">

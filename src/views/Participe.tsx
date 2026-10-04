@@ -35,7 +35,7 @@ export default function Participe() {
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white rounded-2xl border border-[#E8E4DF] animate-pulse overflow-hidden">
+            <div key={i} className="bg-white dark:bg-card rounded-2xl border border-[#E8E4DF] dark:border-border-1 animate-pulse overflow-hidden">
               <div className="aspect-[16/7] bg-[#E8E4DF]" />
               <div className="p-5 space-y-2">
                 <div className="h-4 bg-[#E8E4DF] rounded w-1/3" />
@@ -45,7 +45,7 @@ export default function Participe() {
           ))}
         </div>
       ) : events.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-[#E8E4DF] px-6 py-12 text-center">
+        <div className="bg-white dark:bg-card rounded-2xl border border-[#E8E4DF] dark:border-border-1 px-6 py-12 text-center">
           <h2 className="font-display font-semibold text-xl text-[#1A1A1A]">
             {t('participe.sem_eventos')}
           </h2>

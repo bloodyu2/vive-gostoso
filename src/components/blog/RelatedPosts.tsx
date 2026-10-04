@@ -74,7 +74,7 @@ export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPosts
       <h2 className="font-display text-2xl font-bold text-[#1A1A1A] dark:text-white mb-6">
         Continue lendo
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className={`grid grid-cols-1 gap-4 ${posts.length === 1 ? 'max-w-sm' : posts.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-3'}`}>
         {posts.map(post => (
           <Link
             key={post.id}

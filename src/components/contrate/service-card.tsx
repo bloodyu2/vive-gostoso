@@ -20,7 +20,7 @@ export function ServiceCard({ service }: Props) {
   )
 
   return (
-    <div className="bg-white rounded-2xl border border-[#E8E4DF] p-5 hover:shadow-md transition-shadow">
+    <div className="bg-white dark:bg-card rounded-2xl border border-[#E8E4DF] dark:border-border-1 p-5 hover:shadow-md transition-shadow">
       <div className="flex items-start gap-3 mb-3">
         <div className="relative flex-shrink-0">
           {service.photo_url ? (
@@ -48,12 +48,12 @@ export function ServiceCard({ service }: Props) {
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-[#1A1A1A] text-sm leading-snug truncate">{service.name}</h3>
+          <h3 className="font-semibold text-[#1A1A1A] dark:text-white text-sm leading-snug truncate">{service.name}</h3>
           <p className="text-teal text-xs font-medium mt-0.5 truncate">{service.headline}</p>
         </div>
       </div>
 
-      <span className="inline-block text-[10px] font-semibold text-[#555] bg-[#F5F2EE] px-2 py-0.5 rounded-full mb-2.5">
+      <span className="inline-block text-[10px] font-semibold text-[#555] dark:text-[#C0BCB8] bg-[#F5F2EE] dark:bg-white/10 px-2 py-0.5 rounded-full mb-2.5">
         {SERVICE_CATEGORY_LABELS[service.service_category]}
       </span>
 

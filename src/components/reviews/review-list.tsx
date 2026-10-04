@@ -78,7 +78,7 @@ export function ReviewList({ targetType, targetId }: ReviewListProps) {
   if (isLoading) return (
     <div className="space-y-3">
       {[1, 2].map(i => (
-        <div key={i} className="animate-pulse bg-[#E8E4DF] rounded-2xl h-20" />
+        <div key={i} className="animate-pulse bg-[#E8E4DF] dark:bg-[#2D2D2D] rounded-2xl h-20" />
       ))}
     </div>
   )
@@ -95,7 +95,7 @@ export function ReviewList({ targetType, targetId }: ReviewListProps) {
     <div className="space-y-4">
       {page === 1 && reviews.length > 0 && (
         <div className="flex items-center gap-3">
-          <span className="font-display font-bold text-3xl text-[#1A1A1A]">{avg.toFixed(1)}</span>
+          <span className="font-display font-bold text-3xl text-[#1A1A1A] dark:text-white">{avg.toFixed(1)}</span>
           <div>
             <StarRating value={Math.round(avg)} readonly size="sm" />
             <p className="text-xs text-fg-3-texto mt-0.5">{total} {t('count', { count: total })}</p>
@@ -104,15 +104,15 @@ export function ReviewList({ targetType, targetId }: ReviewListProps) {
       )}
 
       {reviews.map(r => (
-        <div key={r.id} className="bg-white border border-[#E8E4DF] rounded-2xl p-5">
+        <div key={r.id} className="bg-white dark:bg-card border border-[#E8E4DF] dark:border-border-1 rounded-2xl p-5">
           <div className="flex items-start justify-between gap-3 mb-2">
             <div>
-              <p className="font-semibold text-sm text-[#1A1A1A]">{r.author_name ?? t('anonymous')}</p>
+              <p className="font-semibold text-sm text-[#1A1A1A] dark:text-white">{r.author_name ?? t('anonymous')}</p>
               <p className="text-xs text-placeholder">{formatDate(r.created_at)}</p>
             </div>
             <StarRating value={r.rating} readonly size="sm" />
           </div>
-          {r.comment && <p className="text-sm text-[#3D3D3D] leading-relaxed">{r.comment}</p>}
+          {r.comment && <p className="text-sm text-[#3D3D3D] dark:text-[#C0BCB8] leading-relaxed">{r.comment}</p>}
         </div>
       ))}
 

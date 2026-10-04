@@ -19,12 +19,12 @@ export function BusinessGrid({ businesses, loading, view = 'grid', onResetFilter
   if (loading) return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="bg-white rounded-2xl overflow-hidden border border-[#E8E4DF] animate-pulse">
-          <div className="aspect-[4/3] bg-[#E8E4DF]" />
+        <div key={i} className="bg-white dark:bg-card rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-border-1 animate-pulse">
+          <div className="aspect-[4/3] bg-[#E8E4DF] dark:bg-[#2D2D2D]" />
           <div className="p-4 space-y-2">
-            <div className="h-4 bg-[#E8E4DF] rounded w-1/2" />
-            <div className="h-5 bg-[#E8E4DF] rounded w-3/4" />
-            <div className="h-3 bg-[#E8E4DF] rounded w-full" />
+            <div className="h-4 bg-[#E8E4DF] dark:bg-[#2D2D2D] rounded w-1/2" />
+            <div className="h-5 bg-[#E8E4DF] dark:bg-[#2D2D2D] rounded w-3/4" />
+            <div className="h-3 bg-[#E8E4DF] dark:bg-[#2D2D2D] rounded w-full" />
           </div>
         </div>
       ))}
@@ -37,7 +37,7 @@ export function BusinessGrid({ businesses, loading, view = 'grid', onResetFilter
         <SearchX className="w-6 h-6 text-teal" aria-hidden="true" />
       </div>
       <h3 className="font-display font-semibold text-lg text-fg-1 mb-1.5">{t('filters.nenhum_negocio')}</h3>
-      <p className="text-sm text-fg-3 max-w-xs mx-auto leading-relaxed">
+      <p className="text-sm text-fg-3-texto max-w-xs mx-auto leading-relaxed">
         Tente remover algum filtro ou buscar por outro termo.
       </p>
       {onResetFilters && (

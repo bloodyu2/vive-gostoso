@@ -23,7 +23,7 @@ export function JobCard({ job }: Props) {
       href={wa}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center gap-3 bg-white border border-[#E8E4DF] rounded-xl px-4 py-3 hover:border-ocre hover:shadow-sm transition-all"
+      className="group flex items-center gap-3 bg-white dark:bg-card border border-[#E8E4DF] dark:border-border-1 rounded-xl px-4 py-3 hover:border-ocre hover:shadow-sm transition-all"
     >
       <div className="w-9 h-9 rounded-lg bg-ocre/10 flex items-center justify-center flex-shrink-0">
         <Briefcase className="w-4 h-4 text-ocre" />
@@ -31,7 +31,7 @@ export function JobCard({ job }: Props) {
 
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <h3 className="font-semibold text-[#1A1A1A] text-sm truncate">{job.title}</h3>
+          <h3 className="font-semibold text-[#1A1A1A] dark:text-white text-sm truncate">{job.title}</h3>
           <span className="flex-shrink-0 bg-ocre/10 text-ocre text-[10px] font-semibold px-2 py-0.5 rounded-full">
             {CONTRACT_TYPE_LABELS[job.contract_type]}
           </span>

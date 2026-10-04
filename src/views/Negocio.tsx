@@ -160,7 +160,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
             </div>
           )}
           {b.price_range && (
-            <span className="inline-block text-sm font-semibold text-fg-3-texto bg-[#F0EDEA] px-2 py-0.5 rounded-lg mb-4">
+            <span className="inline-block text-sm font-semibold text-fg-3-texto bg-[#F0EDEA] dark:bg-white/10 px-2 py-0.5 rounded-lg mb-4">
               {b.price_range}
             </span>
           )}
@@ -246,10 +246,10 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
 
           {/* Contatos / Amenidades / Horários / Fundo — one surface, divide-y sections
               instead of four stacked cards (was card-in-card-in-card). */}
-          <div className="bg-white border border-[#E8E4DF] rounded-2xl divide-y divide-[#E8E4DF] overflow-hidden">
+          <div className="bg-white dark:bg-card border border-[#E8E4DF] dark:border-border-1 rounded-2xl divide-y divide-[#E8E4DF] dark:divide-border-1 overflow-hidden">
             {/* Contatos */}
             <div className="p-5 space-y-3">
-              <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide">{t('negocio.contato')}</h3>
+              <h3 className="font-semibold text-sm text-[#1A1A1A] dark:text-white uppercase tracking-wide">{t('negocio.contato')}</h3>
 
               {b.whatsapp && (
                 <a href={buildWhatsAppLink(b.whatsapp)} target="_blank" rel="noopener noreferrer"
@@ -287,7 +287,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
             {/* Amenidades */}
             {b.amenities && Object.values(b.amenities).some(Boolean) && (
               <div className="p-5">
-                <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide mb-3">{t('negocio.comodidades')}</h3>
+                <h3 className="font-semibold text-sm text-[#1A1A1A] dark:text-white uppercase tracking-wide mb-3">{t('negocio.comodidades')}</h3>
                 <div className="grid grid-cols-2 gap-2">
                   {b.amenities.wifi && (
                     <div className="flex items-center gap-2 text-sm text-[#3D3D3D]">
@@ -316,7 +316,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
             {/* Horários */}
             {b.opening_hours && Object.keys(b.opening_hours).length > 0 && (
               <div className="p-5">
-                <h3 className="font-semibold text-sm text-[#1A1A1A] uppercase tracking-wide mb-3 flex items-center gap-2">
+                <h3 className="font-semibold text-sm text-[#1A1A1A] dark:text-white uppercase tracking-wide mb-3 flex items-center gap-2">
                   <Clock className="w-4 h-4 text-teal" /> {t('negocio.horarios')}
                 </h3>
                 <div className="space-y-1.5">
@@ -326,7 +326,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
                     return (
                       <div key={day} className="flex justify-between text-sm">
                         <span className="text-fg-3-texto">{days[day]}</span>
-                        <span className={h.closed ? 'text-coral' : 'text-[#1A1A1A] font-medium'}>
+                        <span className={h.closed ? 'text-coral' : 'text-[#1A1A1A] dark:text-white font-medium'}>
                           {h.closed ? t('negocio.fechado_dia') : `${h.open} – ${h.close}`}
                         </span>
                       </div>
