@@ -1486,7 +1486,7 @@
     "city_label": "São Miguel do Gostoso"
   },
   "cookie": {
-    "text": "Usamos cookies para entender como Gostoso é visitado e melhorar a plataforma. Seus dados ficam aqui: nunca vendemos para terceiros.",
+    "text": "Usamos cookies de análise (Google Analytics e Microsoft Clarity) para entender como Gostoso é visitado e melhorar a plataforma. O Clarity faz mapas de calor e grava a sessão de forma anônima. Nunca vendemos seus dados.",
     "accept": "Aceitar",
     "decline": "Recusar"
   },
@@ -1499,7 +1499,7 @@
     "sec3_title": "3. Como usamos seus dados",
     "sec3_text": "Seus dados são usados para: exibir seu perfil/negócio na plataforma; permitir contato direto (WhatsApp); análise de uso anônima para melhorar o site; e processamento de pagamentos (Stripe).",
     "sec4_title": "4. Cookies",
-    "sec4_text": "Usamos cookies essenciais (funcionamento do site) e cookies analíticos (Google Analytics) apenas com seu consentimento. Você pode recusar ou gerenciar a qualquer momento clicando em \"Gerenciar cookies\" no rodapé.",
+    "sec4_text": "Usamos cookies essenciais, que fazem o site funcionar, e cookies de análise, só com o seu consentimento. Os de análise são do Google Analytics, que conta as visitas, e do Microsoft Clarity, que faz mapas de calor e grava a sessão de forma anônima (cliques, rolagem e movimento na página). Você pode recusar ou mudar a escolha quando quiser, em \"Gerenciar cookies\", no rodapé.",
     "sec5_title": "5. Seus direitos (LGPD)",
     "sec5_text": "Você tem direito a: acessar, corrigir, excluir, portar e revogar consentimento. Para exercer, envie e-mail para: privacidade@vivegostoso.com.br",
     "sec6_title": "6. Retenção",

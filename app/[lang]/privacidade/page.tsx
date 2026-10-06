@@ -36,7 +36,7 @@ export default async function PrivacidadePage({ params }: { params: Promise<{ la
         </section>
         <section>
           <h2 className="text-xl font-semibold text-[#1A1A1A] mb-2">{t.sec4_title ?? '4. Cookies'}</h2>
-          <p>{t.sec4_text ?? 'Usamos cookies essenciais (funcionamento do site) e cookies analiticos (Google Analytics) apenas com seu consentimento. Voce pode recusar ou gerenciar a qualquer momento clicando em "Gerenciar cookies" no rodape.'}</p>
+          <p>{t.sec4_text ?? 'Usamos cookies essenciais, que fazem o site funcionar, e cookies de análise, só com o seu consentimento. Os de análise são do Google Analytics, que conta as visitas, e do Microsoft Clarity, que faz mapas de calor e grava a sessão de forma anônima (cliques, rolagem e movimento na página). Você pode recusar ou mudar a escolha quando quiser, em "Gerenciar cookies", no rodapé.'}</p>
         </section>
         <section>
           <h2 className="text-xl font-semibold text-[#1A1A1A] mb-2">{t.sec5_title ?? '5. Seus direitos (LGPD)'}</h2>
