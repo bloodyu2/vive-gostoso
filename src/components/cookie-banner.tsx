@@ -2,8 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import {
+  aplicarConsentimento,
+  aplicarEscolhaSalva,
+  CHAVE_CONSENTIMENTO,
+  type JanelaDeMedicao,
+} from '@/lib/consentimento'
 
-declare function gtag(...args: unknown[]): void
+const janela = () => window as unknown as JanelaDeMedicao
 
 interface CookieBannerProps {
   forceOpen?: boolean
@@ -20,25 +26,40 @@ export function CookieBanner({ forceOpen }: CookieBannerProps = {}) {
       queueMicrotask(() => setVisible(true))
       return
     }
-    const stored = localStorage.getItem('vg_cookie_consent')
+    let stored: string | null = null
+    try {
+      stored = localStorage.getItem(CHAVE_CONSENTIMENTO)
+    } catch {
+      // Armazenamento bloqueado: vale como sem resposta, e o banner aparece.
+    }
     if (!stored) queueMicrotask(() => setVisible(true))
   }, [forceOpen])
 
-  function accept() {
-    localStorage.setItem('vg_cookie_consent', 'accepted')
-    if (typeof gtag !== 'undefined') {
-      gtag('consent', 'update', {
-        ad_storage: 'granted',
-        analytics_storage: 'granted',
-        ad_user_data: 'granted',
-        ad_personalization: 'granted',
-      })
+  // Reaplica a escolha ja gravada (Google e Clarity) a cada carregamento de
+  // pagina. Sem resposta gravada, o Clarity recebe denied e o Google fica no
+  // consent default negado do gtm-script.
+  useEffect(() => {
+    if (forceOpen) return
+    aplicarEscolhaSalva(janela())
+  }, [forceOpen])
+
+  function gravar(escolha: 'accepted' | 'declined') {
+    try {
+      localStorage.setItem(CHAVE_CONSENTIMENTO, escolha)
+    } catch {
+      // Sem armazenamento a escolha vale so para esta pagina.
     }
+  }
+
+  function accept() {
+    gravar('accepted')
+    aplicarConsentimento(true, janela())
     setVisible(false)
   }
 
   function decline() {
-    localStorage.setItem('vg_cookie_consent', 'declined')
+    gravar('declined')
+    aplicarConsentimento(false, janela())
     setVisible(false)
   }
 

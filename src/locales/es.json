@@ -1010,7 +1010,7 @@
     "sec3_title": "3. Cómo usamos sus datos",
     "sec3_text": "Sus datos se usan para: mostrar su perfil/negocio en la plataforma; permitir contacto directo (WhatsApp); análisis de uso anónimo para mejorar el sitio; y procesamiento de pagos (Stripe).",
     "sec4_title": "4. Cookies",
-    "sec4_text": "Usamos cookies esenciales (funcionamiento del sitio) y cookies analíticas (Google Analytics) solo con su consentimiento. Puede rechazar o gestionarlas en cualquier momento haciendo clic en \"Gestionar cookies\" en el pie de página.",
+    "sec4_text": "Usamos cookies esenciales, que hacen funcionar el sitio, y cookies de análisis, solo con su consentimiento. Las de análisis son de Google Analytics, que cuenta las visitas, y de Microsoft Clarity, que genera mapas de calor y graba la sesión de forma anónima (clics, desplazamiento y movimiento en la página). Puede rechazar o cambiar su elección en cualquier momento en \"Gestionar cookies\", en el pie de página.",
     "sec5_title": "5. Sus derechos (LGPD)",
     "sec5_text": "Tiene derecho a: acceder, corregir, eliminar, portar y revocar consentimiento. Para ejercerlos, envíe un correo a: privacidade@vivegostoso.com.br",
     "sec6_title": "6. Retención",
@@ -1501,7 +1501,7 @@
     "alt": "Foto {{n}}"
   },
   "cookie": {
-    "text": "Usamos cookies para entender cómo se visita Gostoso y mejorar la plataforma. Tus datos se quedan aquí: nunca vendemos a terceros.",
+    "text": "Usamos cookies de análisis (Google Analytics y Microsoft Clarity) para entender cómo se visita Gostoso y mejorar la plataforma. Clarity genera mapas de calor y graba la sesión de forma anónima. Nunca vendemos tus datos.",
     "accept": "Aceptar",
     "decline": "Rechazar"
   },

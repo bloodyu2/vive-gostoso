@@ -1404,7 +1404,7 @@
     "city_label": "São Miguel do Gostoso"
   },
   "cookie": {
-    "text": "We use cookies to understand how Gostoso is visited and improve the platform. Your data stays here: we never sell to third parties.",
+    "text": "We use analytics cookies (Google Analytics and Microsoft Clarity) to understand how Gostoso is visited and improve the platform. Clarity builds heatmaps and records sessions anonymously. We never sell your data.",
     "accept": "Accept",
     "decline": "Decline"
   },
@@ -1417,7 +1417,7 @@
     "sec3_title": "3. How we use your data",
     "sec3_text": "Your data is used to: display your profile/business on the platform; enable direct contact (WhatsApp); anonymous usage analysis to improve the site; and payment processing (Stripe).",
     "sec4_title": "4. Cookies",
-    "sec4_text": "We use essential cookies (site functionality) and analytics cookies (Google Analytics) only with your consent. You can refuse or manage them at any time by clicking \"Manage cookies\" in the footer.",
+    "sec4_text": "We use essential cookies, which keep the site working, and analytics cookies, only with your consent. The analytics cookies come from Google Analytics, which counts visits, and Microsoft Clarity, which builds heatmaps and records sessions anonymously (clicks, scrolling and movement on the page). You can refuse or change your choice at any time under \"Manage cookies\" in the footer.",
     "sec5_title": "5. Your rights (LGPD)",
     "sec5_text": "You have the right to: access, correct, delete, port and revoke consent. To exercise them, email: privacidade@vivegostoso.com.br",
     "sec6_title": "6. Retention",
