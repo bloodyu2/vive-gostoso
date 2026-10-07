@@ -661,6 +661,7 @@
     "voltar_inicio": "Volver al inicio"
   },
   "filters": {
+    "carregando": "Cargando...",
     "buscar_placeholder": "Buscar por nombre, descripción o dirección...",
     "limpar_busca": "Limpiar búsqueda",
     "todos": "Todos",
@@ -1286,6 +1287,9 @@
     "btn_unpublish": "Despublicar",
     "btn_publish_now": "Publicar ahora",
     "btn_publish": "Publicar",
+    "status_deactivated": "Desactivado por el equipo",
+    "deactivated_note": "El equipo de Vive Gostoso retiró este negocio del aire. Escríbenos para saber el motivo y reactivarlo.",
+    "deactivated_cta": "Hablar con el equipo",
     "back_to_painel": "← Panel",
     "created_title": "¡Negocio creado con éxito!",
     "created_desc": "Empieza <1>editando tu perfil</1> con fotos, horarios y contacto. Luego <2>publícalo</2> para que quede visible.",

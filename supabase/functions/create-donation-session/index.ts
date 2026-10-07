@@ -1,7 +1,10 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import Stripe from 'https://esm.sh/stripe@14.21.0?target=deno'
 
-const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {
+// Segredo lido uma vez. Vazio nunca vira "chave em branco": a funcao recusa (503).
+const STRIPE_SECRET_KEY = Deno.env.get('STRIPE_SECRET_KEY') ?? ''
+
+const stripe = new Stripe(STRIPE_SECRET_KEY, {
   apiVersion: '2023-10-16',
   httpClient: Stripe.createFetchHttpClient(),
 })
@@ -43,6 +46,14 @@ serve(async (req) => {
 
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: cors })
+  }
+
+  if (!STRIPE_SECRET_KEY) {
+    console.error('create-donation-session: STRIPE_SECRET_KEY nao configurada')
+    return new Response(JSON.stringify({ error: 'Servico indisponivel' }), {
+      status: 503,
+      headers: { ...cors, 'Content-Type': 'application/json' },
+    })
   }
 
   try {
@@ -95,7 +106,8 @@ serve(async (req) => {
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
     console.error('create-donation-session error:', message)
-    return new Response(JSON.stringify({ error: message }), {
+    // O texto do erro (Stripe) fica no log; o navegador recebe so uma frase.
+    return new Response(JSON.stringify({ error: 'Não foi possível iniciar a doação agora. Tente de novo em instantes.' }), {
       status: 500,
       headers: { ...cors, 'Content-Type': 'application/json' },
     })

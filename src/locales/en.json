@@ -661,6 +661,7 @@
     "voltar_inicio": "Back to home"
   },
   "filters": {
+    "carregando": "Loading...",
     "buscar_placeholder": "Search by name, description or address...",
     "limpar_busca": "Clear search",
     "todos": "All",
@@ -1088,6 +1089,9 @@
     "btn_unpublish": "Unpublish",
     "btn_publish_now": "Publish now",
     "btn_publish": "Publish",
+    "status_deactivated": "Deactivated by the team",
+    "deactivated_note": "The Vive Gostoso team took this business offline. Message us to find out why and to reactivate it.",
+    "deactivated_cta": "Talk to the team",
     "back_to_painel": "← Dashboard",
     "created_title": "Business created successfully!",
     "created_desc": "Start <1>editing your profile</1> with photos, hours and contact. Then <2>publish</2> to become visible.",

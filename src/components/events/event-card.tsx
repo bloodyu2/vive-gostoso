@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { Badge } from '@/components/ui/badge'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
+import { safeExternalUrl } from '@/lib/utils'
 import type { GostosoEvent } from '@/types/database'
 
 const typeKindMap: Record<string, 'cat' | 'pous' | 'pass' | 'fest'> = {
@@ -51,10 +52,10 @@ export function EventCard({ event: e }: { event: GostosoEvent }) {
       <Link href={lp(`/evento/${e.id}`)} className="block">
         <CardContent event={e} t={t} />
       </Link>
-      {e.source_url && (
+      {safeExternalUrl(e.source_url) && (
         <div className="px-5 pb-5">
           <a
-            href={e.source_url}
+            href={safeExternalUrl(e.source_url)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block text-xs text-fg-3-texto underline underline-offset-2 hover:text-teal transition-colors"

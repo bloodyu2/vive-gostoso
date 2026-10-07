@@ -4,22 +4,48 @@
 // sem auth (o navegador manda isso sem credenciais por padrao).
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function POST(request: NextRequest) {
-  // Teto de bytes (KAN-348 / VGO-06): o corpo vem do navegador de qualquer
-  // visitante e era lido/logado inteiro, sem limite. 8 KB cobre um relatorio
-  // legitimo de violacao com folga.
-  const TETO_BYTES = 8192
+// Teto de bytes (KAN-348 / VGO-06): o corpo vem do navegador de qualquer
+// visitante. 8 KB cobre um relatorio legitimo de violacao com folga.
+const TETO_BYTES = 8192
 
+/** Le o corpo ate o teto. Passou dele, para de ler e devolve `null`: o corpo
+ *  nunca e carregado inteiro em memoria so para ser descartado depois. */
+async function lerAteOTeto(request: NextRequest): Promise<string | null> {
+  const leitor = request.body?.getReader()
+  if (!leitor) return ''
+  const partes: Uint8Array[] = []
+  let total = 0
+  for (;;) {
+    const { done, value } = await leitor.read()
+    if (done) break
+    total += value.byteLength
+    if (total > TETO_BYTES) {
+      await leitor.cancel().catch(() => undefined)
+      return null
+    }
+    partes.push(value)
+  }
+  return Buffer.concat(partes).toString('utf8')
+}
+
+export async function POST(request: NextRequest) {
   try {
     const tipo = request.headers.get('content-type') ?? ''
     if (!tipo.includes('application/json') && !tipo.includes('application/csp-report')) {
       return new NextResponse(null, { status: 204 })
     }
 
-    const texto = await request.text()
-    if (texto.length > TETO_BYTES) {
+    // Quem declara um corpo grande nao tem o corpo lido.
+    const declarado = Number(request.headers.get('content-length') ?? '0')
+    if (Number.isFinite(declarado) && declarado > TETO_BYTES) {
+      console.warn('[csp-report] corpo acima do teto, ignorado:', declarado, 'bytes declarados')
+      return new NextResponse(null, { status: 204 })
+    }
+
+    const texto = await lerAteOTeto(request)
+    if (texto === null) {
       // Nao ecoa o corpo; so registra que veio grande demais.
-      console.warn('[csp-report] corpo acima do teto, ignorado:', texto.length, 'bytes')
+      console.warn('[csp-report] corpo acima do teto, ignorado')
       return new NextResponse(null, { status: 204 })
     }
 
