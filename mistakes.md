@@ -5,6 +5,10 @@
 
 ---
 
+## 2026-10-07: o código da Edge Function no repositório não é o que está no ar
+**O que aconteceu:** `supabase/functions/*` é implantado pelo Supabase, não pela Vercel. Um push na `master` não publica função nenhuma. A versão de `create-checkout-session` implantada tinha ficado cinco meses atrás da do repositório (sem a checagem de dono do negócio), e a do webhook também.
+**Regra:** depois de alterar qualquer arquivo em `supabase/functions/`, reimplantar a função e conferir o conteúdo implantado contra o arquivo (a API do Supabase devolve o código). Pagamento é onde essa diferença custa mais.
+
 ## 2026-09-24: node_modules ligado entre worktree e checkout principal
 **O que aconteceu:** no PR #23, o `node_modules` da worktree foi ligado (link) ao `node_modules` do checkout principal para rodar os testes. Ao remover a worktree com `git worktree remove --force`, o git seguiu o link e apagou parte do `node_modules` principal. Foi reinstalado com `npm ci` e nada foi perdido no repositório.
 **Regra:** em worktree, rodar `npm ci` próprio, nunca ligar ao `node_modules` de outro checkout. Remover a worktree sem `--force`; se não sair limpo, investigar o motivo antes de forçar.
