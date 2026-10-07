@@ -8,12 +8,22 @@ const PRICE_TO_PLAN: Record<string, 'associado' | 'destaque'> = {
   'price_1TRYN7CK3p35JtqmURKw4Z6a': 'destaque',
 }
 
-const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {
+// Segredos lidos uma vez. Vazio nunca vira "chave em branco": com segredo vazio a
+// assinatura de qualquer pessoa passaria, entao a funcao recusa (503).
+const STRIPE_SECRET_KEY = Deno.env.get('STRIPE_SECRET_KEY') ?? ''
+const STRIPE_WEBHOOK_SECRET = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? ''
+
+const stripe = new Stripe(STRIPE_SECRET_KEY, {
   apiVersion: '2023-10-16',
   httpClient: Stripe.createFetchHttpClient(),
 })
 
 serve(async (req) => {
+  if (!STRIPE_SECRET_KEY || !STRIPE_WEBHOOK_SECRET) {
+    console.error('stripe-webhook: segredo do Stripe nao configurado, evento recusado')
+    return new Response('Service Unavailable', { status: 503 })
+  }
+
   const signature = req.headers.get('stripe-signature')
   const body = await req.text()
 
@@ -22,7 +32,7 @@ serve(async (req) => {
     event = await stripe.webhooks.constructEventAsync(
       body,
       signature ?? '',
-      Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? '',
+      STRIPE_WEBHOOK_SECRET,
     )
   } catch (err) {
     console.error('Webhook signature verification failed:', err)
