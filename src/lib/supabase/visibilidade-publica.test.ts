@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 /* Toda leitura publica de negocio por slug ou por busca pede negocio ativo E
-   publicado. O banco ja exige os dois (migracao 20261007100100); o filtro no
+   publicado. O banco ja exige os dois (migracao 20261007033349); o filtro no
    codigo mantem a regra legivel onde a consulta e escrita. */
 const ARQUIVOS = [
   'src/lib/supabase/queries.ts',

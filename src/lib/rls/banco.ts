@@ -4,9 +4,9 @@ import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { PGlite } from '@electric-sql/pglite'
 
-export const MIGRACAO_COLUNAS_STRIPE = '20261007100000_vg_colunas_de_cobranca_so_para_servico.sql'
-export const MIGRACAO_VISIBILIDADE = '20261007100100_vg_visibilidade_do_negocio.sql'
-export const MIGRACAO_INSERT_ANONIMO = '20261007100200_vg_insert_anonimo_com_teto.sql'
+export const MIGRACAO_COLUNAS_STRIPE = '20261007032301_vg_colunas_de_cobranca_so_para_servico.sql'
+export const MIGRACAO_VISIBILIDADE = '20261007033349_vg_visibilidade_do_negocio.sql'
+export const MIGRACAO_INSERT_ANONIMO = '20261007034448_vg_insert_anonimo_com_teto.sql'
 
 export type Papel = 'anon' | 'authenticated' | 'service_role'
 
