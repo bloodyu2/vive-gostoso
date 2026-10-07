@@ -6,6 +6,7 @@ import { useEvent } from '@/hooks/useEvents'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { Badge } from '@/components/ui/badge'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
+import { safeExternalUrl } from '@/lib/utils'
 import type { GostosoEvent } from '@/types/database'
 
 const typeMap: Record<string, string> = {
@@ -94,8 +95,8 @@ export default function Evento({ initialEvent, id: idProp }: EventoProps) {
       )}
 
       {/* CTA */}
-      {event.source_url && (
-        <a href={event.source_url} target="_blank" rel="noopener noreferrer"
+      {safeExternalUrl(event.source_url) && (
+        <a href={safeExternalUrl(event.source_url)} target="_blank" rel="noopener noreferrer"
            className="inline-flex items-center gap-2 bg-teal text-white font-semibold px-6 py-3 rounded-full hover:bg-teal-dark transition-colors">
           {t('evento.saiba_mais')} <ExternalLink className="w-4 h-4" />
         </a>

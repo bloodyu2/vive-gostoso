@@ -7,6 +7,7 @@ import { useLocalePath } from '@/hooks/useLocalePath'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { usePendingEventSubmissions, useApproveEventSubmission, useRejectEventSubmission } from '@/hooks/useEventSubmissions'
 import { Button } from '@/components/ui/button'
+import { safeExternalUrl } from '@/lib/utils'
 import type { EventSubmission } from '@/types/database'
 
 export default function AdminEvents() {
@@ -50,9 +51,13 @@ function EventRow({ sub }: { sub: EventSubmission }) {
       </div>
       {sub.description && <p className="text-sm text-[#3D3D3D]">{sub.description}</p>}
       {sub.source_url && (
-        <a href={sub.source_url} target="_blank" rel="noopener noreferrer" className="text-xs text-teal hover:underline">
-          {sub.source_url}
-        </a>
+        safeExternalUrl(sub.source_url) ? (
+          <a href={safeExternalUrl(sub.source_url)} target="_blank" rel="noopener noreferrer" className="text-xs text-teal hover:underline">
+            {sub.source_url}
+          </a>
+        ) : (
+          <span className="text-xs text-fg-3-texto break-all">{sub.source_url}</span>
+        )
       )}
       <div className="text-xs text-fg-3-texto border-t border-[#F0EDE8] pt-3">
         {t('submitted_by')} <span className="text-fg-3-texto">{sub.submitter_name}</span>

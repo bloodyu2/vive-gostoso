@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { AMBIENTE_PADRAO, carregarFuncao } from '@/test/deno/carregar'
-import type { EstadoStripe } from '@/test/deno/stripe'
+import { estadoStripe } from '@/test/deno/stripe'
 
 function pedido(corpo: Record<string, unknown>): Request {
   return new Request('https://exemplo.supabase.test/functions/v1/create-donation-session', {
@@ -27,6 +27,6 @@ describe('create-donation-session', () => {
     const h = await carregarFuncao('create-donation-session', { ...AMBIENTE_PADRAO, STRIPE_SECRET_KEY: undefined })
     const r = await h(pedido({ amountCents: 2500 }))
     expect(r.status).toBe(503)
-    expect((globalThis as { __stripeEstado: EstadoStripe }).__stripeEstado.chamadas).toEqual([])
+    expect(estadoStripe().chamadas).toEqual([])
   })
 })

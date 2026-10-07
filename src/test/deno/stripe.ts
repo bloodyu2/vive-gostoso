@@ -9,7 +9,7 @@ export type EstadoStripe = {
   falhaAoCriarCliente?: Error
 }
 
-function estado(): EstadoStripe {
+export function estadoStripe(): EstadoStripe {
   const g = globalThis as { __stripeEstado?: EstadoStripe }
   if (!g.__stripeEstado) g.__stripeEstado = { chamadas: [] }
   return g.__stripeEstado
@@ -39,8 +39,8 @@ export default class Stripe {
 
   customers = {
     create: async () => {
-      estado().chamadas.push('customers.create')
-      const falha = estado().falhaAoCriarCliente
+      estadoStripe().chamadas.push('customers.create')
+      const falha = estadoStripe().falhaAoCriarCliente
       if (falha) throw falha
       return { id: 'cus_teste' }
     },
@@ -49,7 +49,7 @@ export default class Stripe {
   checkout = {
     sessions: {
       create: async () => {
-        estado().chamadas.push('checkout.sessions.create')
+        estadoStripe().chamadas.push('checkout.sessions.create')
         return { url: 'https://checkout.stripe.test/sessao' }
       },
     },

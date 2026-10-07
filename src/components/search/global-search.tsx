@@ -52,6 +52,7 @@ function useSearch(query: string) {
         .from('gostoso_businesses')
         .select('id, name, slug, cover_url, address, category:gostoso_categories(name)')
         .eq('active', true)
+        .eq('is_published', true)
         .or(`name.ilike.%${q}%,description.ilike.%${q}%,address.ilike.%${q}%`)
         .limit(8)
 

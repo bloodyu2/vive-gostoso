@@ -62,6 +62,7 @@ export async function getBusiness(slug: string): Promise<Business | null> {
     .select(PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY)
     .eq('slug', slug)
     .eq('active', true)
+    .eq('is_published', true)
     .maybeSingle()
   if (error) { console.error('[getBusiness]', error.message); return null }
   return data as Business | null

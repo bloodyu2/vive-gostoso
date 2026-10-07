@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { supabase } from '@/lib/supabase'
 import { useMyBusinesses, useInvalidateMyBusinesses, type BusinessSummary } from '@/hooks/useMyBusinesses'
+import { OFFICIAL_WHATSAPP, buildWhatsAppLink } from '@/lib/whatsapp'
 
 // Returns 0–100 completion score for a business card
 function completionScore(b: BusinessSummary): number {
@@ -229,16 +230,23 @@ function MeusNegociosInner() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="font-semibold text-sm text-[#1A1A1A] truncate">{b.name}</span>
-                          <span
-                            className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full flex-shrink-0 ${
-                              b.is_published
-                                ? 'bg-teal/10 text-teal'
-                                : 'bg-[#F5F2EE] text-fg-3-texto'
-                            }`}
-                          >
-                            <span className={`w-1.5 h-1.5 rounded-full ${b.is_published ? 'bg-teal' : 'bg-[#737373]'}`} />
-                            {b.is_published ? t('status_published') : t('status_draft')}
-                          </span>
+                          {b.active ? (
+                            <span
+                              className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full flex-shrink-0 ${
+                                b.is_published
+                                  ? 'bg-teal/10 text-teal'
+                                  : 'bg-[#F5F2EE] text-fg-3-texto'
+                              }`}
+                            >
+                              <span className={`w-1.5 h-1.5 rounded-full ${b.is_published ? 'bg-teal' : 'bg-[#737373]'}`} />
+                              {b.is_published ? t('status_published') : t('status_draft')}
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full flex-shrink-0 bg-coral/10 text-coral">
+                              <span className="w-1.5 h-1.5 rounded-full bg-coral" />
+                              {t('status_deactivated')}
+                            </span>
+                          )}
                         </div>
                         {b.category && (
                           <p className="text-xs text-fg-3-texto mt-0.5">{b.category.name}</p>
@@ -246,6 +254,20 @@ function MeusNegociosInner() {
                         <p className="text-[10px] text-[#C4BFBA] font-mono mt-0.5 truncate">
                           vivegostoso.com.br/negocio/{b.slug}
                         </p>
+
+                        {!b.active && (
+                          <p role="status" className="mt-2 text-xs text-fg-3-texto leading-relaxed">
+                            {t('deactivated_note')}{' '}
+                            <a
+                              href={buildWhatsAppLink(OFFICIAL_WHATSAPP)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-semibold text-teal hover:underline"
+                            >
+                              {t('deactivated_cta')}
+                            </a>
+                          </p>
+                        )}
 
                         {/* Completion bar */}
                         {score < 100 && <CompletionBar score={score} />}

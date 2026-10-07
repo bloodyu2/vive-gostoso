@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { AMBIENTE_PADRAO, carregarFuncao } from '@/test/deno/carregar'
 import { estadoBanco } from '@/test/deno/supabase-js'
-import type { EstadoStripe } from '@/test/deno/stripe'
+import { estadoStripe } from '@/test/deno/stripe'
 
 /* A Edge Function de checkout roda no Supabase, nao na Vercel. Aqui o arquivo do
    repositorio roda com Stripe e banco de mentira, para provar quem pode abrir
@@ -18,10 +18,6 @@ function pedido(token: string | null, corpo: Record<string, unknown>): Request {
     },
     body: JSON.stringify(corpo),
   })
-}
-
-function estadoStripe(): EstadoStripe {
-  return (globalThis as { __stripeEstado: EstadoStripe }).__stripeEstado
 }
 
 function prepararBanco() {

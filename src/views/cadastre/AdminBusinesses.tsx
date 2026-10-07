@@ -10,6 +10,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Business } from '@/types/database'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import { estadoDePublicacaoDoAdmin } from '@/lib/negocio-visibilidade'
 
 export default function AdminBusinesses() {
   return <AdminGuard><AdminBusinessesInner /></AdminGuard>
@@ -84,7 +85,7 @@ function PublishToggle({ biz, onDone }: { biz: BusinessRow; onDone: () => void }
 
   async function toggle() {
     setLoading(true)
-    await supabase.from('gostoso_businesses').update({ is_published: !biz.is_published }).eq('id', biz.id)
+    await supabase.from('gostoso_businesses').update(estadoDePublicacaoDoAdmin(!biz.is_published)).eq('id', biz.id)
     setLoading(false)
     onDone()
   }
