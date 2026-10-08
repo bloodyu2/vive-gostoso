@@ -56,12 +56,13 @@ export type PraiaMare = {
 
 /* Rodada 1 (27/09/2026): nome, lugar e coordenadas conferidos no OpenStreetMap
    (ids em decisoes.md); dicas da ordem do Victor.
-   Rodada 2 (27/09/2026): Minhoto, Praia do Amor, Ze Martins e Malhada ficam em
+   Rodada 2 (27/09/2026): Minhoto, Ze Martins e Malhada ficam em
    Sao Miguel do Gostoso por decisao do Victor. Nenhuma fonte aberta da a
    coordenada delas (nem o OSM nem o conteudo do site), entao entram sem lat/lon
    e sem dica. Touros: coordenadas anotadas a mao do OpenStreetMap (ODbL, ids
    em decisoes.md) e da Wikipedia (Farol do Calcanhar). Carnauba e Garcas
    ficaram de fora (sem coordenada em fonte aberta).
+   Praia do Amor saiu em 08/10/2026: e de Pipa (Tibau do Sul), nao de Gostoso.
    Estacao: Guamare e a principal onde ela e a mais perto (Gostoso e Pedra
    Grande, 58 a 77 km). Nas praias de Touros, Natal fica mais perto (61 a
    76 km, contra 90 a 103 km de Guamare) e passa a ser a principal; ver
@@ -148,13 +149,6 @@ export const PRAIAS_MARES: PraiaMare[] = [
   {
     slug: 'minhoto',
     nome: 'Praia do Minhoto',
-    municipio: 'São Miguel do Gostoso',
-    estacaoPrincipal: 'GUAMARE',
-    estacaoReserva: 'COM3DN',
-  },
-  {
-    slug: 'praia-do-amor',
-    nome: 'Praia do Amor',
     municipio: 'São Miguel do Gostoso',
     estacaoPrincipal: 'GUAMARE',
     estacaoReserva: 'COM3DN',

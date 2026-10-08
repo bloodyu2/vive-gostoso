@@ -19,7 +19,6 @@ const PRAIAS = [
   { chave: 'marco', slug: null },
   { chave: 'cardeiro', slug: 'cardeiro' },
   { chave: 'ze_martins', slug: 'ze-martins' },
-  { chave: 'amor', slug: 'praia-do-amor' },
 ] as const
 
 const semDoisPontos = (s: string) => s.replace(/:\s*$/, '')

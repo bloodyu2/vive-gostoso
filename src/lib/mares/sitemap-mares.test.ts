@@ -6,7 +6,7 @@ import pt from '@/locales/pt.json'
 import en from '@/locales/en.json'
 import es from '@/locales/es.json'
 
-const NOVAS = ['minhoto', 'praia-do-amor', 'ze-martins', 'malhada', 'perobas', 'carnaubinha', 'farol-do-calcanhar', 'cajueiro']
+const NOVAS = ['minhoto', 'ze-martins', 'malhada', 'perobas', 'carnaubinha', 'farol-do-calcanhar', 'cajueiro']
 
 describe('praias novas no sitemap e nos tres idiomas', () => {
   it('o sitemap le a mesma lista de praias da pagina', () => {

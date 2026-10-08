@@ -29,14 +29,19 @@ describe('praias da tabua de mares', () => {
     }
   })
 
-  it('Minhoto, Praia do Amor, Ze Martins e Malhada ficam em Gostoso, sem coordenada inventada', () => {
-    for (const slug of ['minhoto', 'praia-do-amor', 'ze-martins', 'malhada']) {
+  it('Minhoto, Ze Martins e Malhada ficam em Gostoso, sem coordenada inventada', () => {
+    for (const slug of ['minhoto', 'ze-martins', 'malhada']) {
       const p = praiaPorSlug(slug)!
       expect(p.municipio).toBe('São Miguel do Gostoso')
       expect(p.lat).toBeUndefined()
       expect(p.dica).toBeUndefined()
       expect(distanciaKm(p, ESTACOES.GUAMARE)).toBeUndefined()
     }
+  })
+
+  it('Praia do Amor nao esta na tabua: e de Pipa, nao de Gostoso', () => {
+    expect(praiaPorSlug('praia-do-amor')).toBeUndefined()
+    expect(PRAIAS_MARES.some((p) => /amor/i.test(p.nome))).toBe(false)
   })
 
   it('agrupa o seletor por municipio, na ordem Gostoso, Touros, Pedra Grande', () => {
