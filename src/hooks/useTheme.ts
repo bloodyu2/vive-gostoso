@@ -2,7 +2,6 @@ import { useCallback, useEffect, useSyncExternalStore } from 'react'
 
 import {
   CHAVE_TEMA,
-  CONSULTA_ESCURO,
   TEMA_DO_SERVIDOR,
   aplicarTema,
   lerPreferencia,
@@ -29,22 +28,8 @@ function getServerSnapshot(): Theme {
 }
 
 function subscribe(aoMudar: () => void): () => void {
-  const consulta = window.matchMedia(CONSULTA_ESCURO)
-
-  /* Preferência do sistema só manda enquanto a pessoa não escolheu nada no
-     site. Depois de uma escolha explícita, ela vence. */
-  const aoMudarSistema = () => {
-    if (localStorage.getItem(CHAVE_TEMA)) return
-    temaAtual = lerPreferencia()
-    aoMudar()
-  }
-
-  consulta.addEventListener('change', aoMudarSistema)
   window.addEventListener(EVENTO, aoMudar)
-  return () => {
-    consulta.removeEventListener('change', aoMudarSistema)
-    window.removeEventListener(EVENTO, aoMudar)
-  }
+  return () => window.removeEventListener(EVENTO, aoMudar)
 }
 
 /** Tema claro/escuro.
@@ -52,11 +37,12 @@ function subscribe(aoMudar: () => void): () => void {
  *  A chave, a regra de decisão e o script que roda antes do primeiro paint
  *  moram todos em `src/lib/tema.ts`, de propósito: se o script inline e este
  *  hook lessem a preferência de formas diferentes, a página pintaria um tema e
- *  o React desenharia o outro. Há teste comparando os dois nos quatro cenários.
+ *  o React desenharia o outro. Há teste comparando os dois nos cenários possíveis.
+ *  O padrão é o claro; o sistema operacional não decide.
  *
  *  POR QUE `useSyncExternalStore` E NÃO `useState(lerPreferencia)`:
  *
- *  A preferência mora fora do React, no localStorage e no matchMedia. Lendo-a no
+ *  A preferência mora fora do React, no localStorage. Lendo-a no
  *  inicializador do useState, a primeira renderização do cliente já saía com o
  *  tema real enquanto o HTML do servidor viera com o padrão. Para quem usa tema
  *  escuro, o ícone e o aria-label do botão divergiam, e o React derrubava a
