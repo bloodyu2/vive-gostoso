@@ -56,7 +56,11 @@ const config: NextConfig = {
        link. O conteudo que ela prometia (mercado, farmacia, lavanderia,
        barbearia) nunca esteve la: sempre esteve em /contrate, que e o sucessor
        de verdade. Por isso 301 em vez de deixar dar 404. */
-    const rotasRemovidas: Array<[string, string]> = [['/resolva', '/contrate']]
+    const rotasRemovidas: Array<[string, string]> = [
+      ['/resolva', '/contrate'],
+      // A Praia do Amor e de Pipa, nao de Gostoso: a pagina de mares saiu em 08/10/2026.
+      ['/explore/mares/praia-do-amor', '/explore/mares'],
+    ]
 
     return [
       ...duplicatas.flatMap(([de, para]) => [
