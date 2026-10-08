@@ -89,3 +89,9 @@ export function statusDeAbertura(horarios: Horarios | null | undefined, agora: D
   }
   return { estado: 'fechado', proxima: null, hoje: dia }
 }
+
+/** Aberto neste instante? Mesma regra e mesmo fuso do selo, para o filtro
+ *  "Aberto agora" e o cartao nunca discordarem. */
+export function estaAbertoAgora(horarios: Horarios | null | undefined, agora: Date = new Date()): boolean {
+  return statusDeAbertura(horarios, agora).estado === 'aberto'
+}
