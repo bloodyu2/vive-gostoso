@@ -11,9 +11,17 @@ import { statusDeAbertura, type Horarios, type StatusAbertura } from '@/lib/stat
  * do selo, e o estado real entra depois da hidratacao e se atualiza a cada
  * minuto.
  */
+/* Uma lista tem ate 80 cartoes. Um relogio so, compartilhado: o intervalo nasce
+   com o primeiro cartao montado e morre com o ultimo. */
+const ouvintes = new Set<() => void>()
+let intervalo: number | undefined
 const inscreve = (aviso: () => void) => {
-  const id = window.setInterval(aviso, 60_000)
-  return () => window.clearInterval(id)
+  ouvintes.add(aviso)
+  if (ouvintes.size === 1) intervalo = window.setInterval(() => ouvintes.forEach((f) => f()), 60_000)
+  return () => {
+    ouvintes.delete(aviso)
+    if (ouvintes.size === 0) window.clearInterval(intervalo)
+  }
 }
 // Minuto corrente: muda a cada 60 s e re-renderiza quem usa o hook.
 const minutoAtual = () => Math.floor(Date.now() / 60_000)

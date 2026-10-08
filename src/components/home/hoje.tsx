@@ -1,3 +1,6 @@
+'use client'
+
+import { useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
@@ -6,7 +9,25 @@ import { Badge } from '@/components/ui/badge'
 import { BusinessCover } from '@/components/business/business-cover'
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useEvents } from '@/hooks/useEvents'
-import { isBusinessOpen } from '@/lib/utils'
+import { estaAbertoAgora, FUSO_GOSTOSO } from '@/lib/status-abertura'
+import { BlurFade } from '@/components/magicui/blur-fade'
+
+/* Relogio de minuto, so no navegador (mesma ideia de useStatusAbertura). No
+   servidor devolve null: o HTML do ISR nao pode dizer "aberto agora". */
+const ouvintes = new Set<() => void>()
+let intervalo: number | undefined
+const inscreve = (aviso: () => void) => {
+  ouvintes.add(aviso)
+  if (ouvintes.size === 1) intervalo = window.setInterval(() => ouvintes.forEach((f) => f()), 60_000)
+  return () => {
+    ouvintes.delete(aviso)
+    if (ouvintes.size === 0) window.clearInterval(intervalo)
+  }
+}
+const minutoAtual = () => Math.floor(Date.now() / 60_000)
+const semRelogio = () => null
+
+const diaEmGostoso = (d: Date) => d.toLocaleDateString('en-CA', { timeZone: FUSO_GOSTOSO })
 
 function TodayDot() {
   return <span className="inline-block w-2 h-2 rounded-full bg-[#3D8B5A] mr-2" />
@@ -18,23 +39,27 @@ export function Hoje() {
   const { data: allBusinesses = [] } = useBusinesses()
   const { data: events = [] } = useEvents()
 
-  const now = new Date()
-  const todayStr = now.toISOString().slice(0, 10)
+  const minuto = useSyncExternalStore<number | null>(inscreve, minutoAtual, semRelogio)
+  if (minuto === null) return null
 
-  const openNow = allBusinesses.filter(b => isBusinessOpen(b.opening_hours))
+  const now = new Date(minuto * 60_000)
+  const todayStr = diaEmGostoso(now)
+
+  const openNow = allBusinesses.filter(b => estaAbertoAgora(b.opening_hours, now))
 
   const todayEvents = events.filter(e => {
     const start = new Date(e.starts_at)
     const end = e.ends_at ? new Date(e.ends_at) : start
-    return start.toISOString().slice(0, 10) <= todayStr && end.toISOString().slice(0, 10) >= todayStr
+    return diaEmGostoso(start) <= todayStr && diaEmGostoso(end) >= todayStr
   })
 
   if (openNow.length === 0 && todayEvents.length === 0) return null
 
   const colCount = (openNow.length > 0 ? 1 : 0) + (todayEvents.length > 0 ? 1 : 0)
-  const dayLabel = now.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })
+  const dayLabel = now.toLocaleDateString('pt-BR', { timeZone: FUSO_GOSTOSO, weekday: 'long', day: 'numeric', month: 'long' })
 
   return (
+    <BlurFade>
     <section className="max-w-6xl mx-auto px-5 md:px-8 pb-12 md:pb-16">
       <div className="bg-[#1A1A1A] rounded-2xl overflow-hidden">
         <div className="flex items-center justify-between px-5 md:px-7 pt-5 md:pt-7 pb-4 md:pb-5 border-b border-white/10">
@@ -120,5 +145,6 @@ export function Hoje() {
         </div>
       </div>
     </section>
+    </BlurFade>
   )
 }

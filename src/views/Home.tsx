@@ -2,21 +2,27 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { ChevronDown } from 'lucide-react'
+import { BadgeCheck, ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { BusinessCard } from '@/components/business/business-card'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { Hoje } from '@/components/home/hoje'
+import { PostCard } from '@/components/blog/PostCard'
 import { BlurFade } from '@/components/magicui/blur-fade'
+import { Marquee } from '@/components/magicui/marquee'
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useStats, type SiteStats } from '@/hooks/useStats'
 import { useRecentBusinesses } from '@/hooks/useRecentBusinesses'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { supabase } from '@/lib/supabase'
+import { normalizarIdioma, visivelNoIdioma } from '@/lib/blog/traducoes'
 import type { BlogPost } from '@/types/database'
 
-function useLatestBlogPosts(limit = 3) {
+/** Busca uma folga (12) porque os posts de outros idiomas saem do resultado
+ *  depois: so assim sobram 3 posts do idioma atual. */
+function useLatestBlogPosts() {
+  const limit = 12
   return useQuery({
     queryKey: ['blog-posts-latest', limit],
     queryFn: async () => {
@@ -45,14 +51,16 @@ type HomeProps = {
 }
 
 export default function Home({ initialData, vitrine }: HomeProps) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const lp = useLocalePath()
 
   const { data: allBusinesses = [] } = useBusinesses()
   const featured = allBusinesses.filter(b => b.is_featured)
   const { data: stats } = useStats(initialData ? { initialData: initialData.stats } : undefined)
   const { data: recentBusinesses = [] } = useRecentBusinesses()
-  const { data: latestPosts = [] } = useLatestBlogPosts(3)
+  const { data: todosPosts = [] } = useLatestBlogPosts()
+  const idioma = normalizarIdioma(i18n.language)
+  const latestPosts = todosPosts.filter(p => visivelNoIdioma(p.slug, idioma)).slice(0, 3)
 
   const verbsRef = useRef<HTMLDivElement>(null)
   const [scrolled, setScrolled] = useState(false)
@@ -140,27 +148,53 @@ export default function Home({ initialData, vitrine }: HomeProps) {
             <h2 className="font-display text-h3 font-semibold">{t('home.novos_titulo')}</h2>
             <Link href={lp('/come')} className="text-teal text-sm font-semibold">{t('home.ver_todos')}</Link>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {recentBusinesses.map(b => (
-              <Link
-                key={b.id}
-                href={lp(`/negocio/${b.slug}`)}
-                className="group bg-white dark:bg-card rounded-2xl border border-[#E8E4DF] dark:border-border-1 overflow-hidden hover:shadow-md transition-all"
-              >
-                <div className="aspect-square bg-gradient-to-br from-teal to-teal-dark overflow-hidden">
-                  {b.cover_url
-                    ? <SafeCoverImage src={b.cover_url} alt={b.name} sizes="(max-width: 639px) 50vw, 25vw" className="w-full h-full object-cover" />
-                    : <div className="w-full h-full flex items-center justify-center text-white/30 text-3xl font-bold">{b.name[0]}</div>
-                  }
+          {(() => {
+            const [destaque, ...outros] = recentBusinesses
+            return (
+              <div className="grid gap-3 md:gap-4 sm:grid-cols-5">
+                <Link
+                  href={lp(`/negocio/${destaque.slug}`)}
+                  className="group sm:col-span-3 bg-white dark:bg-card rounded-2xl border border-border-1 overflow-hidden hover:shadow-md transition-shadow flex flex-col"
+                >
+                  <div className="aspect-[4/3] sm:aspect-auto sm:flex-1 sm:min-h-64 bg-gradient-to-br from-teal to-teal-dark overflow-hidden">
+                    {destaque.cover_url
+                      ? <SafeCoverImage src={destaque.cover_url} alt="" sizes="(max-width: 639px) 100vw, 55vw" className="w-full h-full object-cover" />
+                      : <div className="w-full h-full min-h-40 flex items-center justify-center text-white/30 text-6xl font-display font-bold">{destaque.name[0]}</div>
+                    }
+                  </div>
+                  <div className="p-4 md:p-5">
+                    <p className="font-display font-bold text-xl md:text-2xl text-fg-1 leading-tight">{destaque.name}</p>
+                    <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                      {destaque.category && <span className="text-sm text-fg-3-texto">{destaque.category.name}</span>}
+                      {destaque.is_verified && <span className="inline-block text-[10px] font-bold tracking-wide uppercase text-teal-dark bg-teal-light px-2 py-0.5 rounded-full">{t('filters.verificado')}</span>}
+                    </div>
+                  </div>
+                </Link>
+                <div className="sm:col-span-2 flex flex-col gap-3 md:gap-4">
+                  {outros.map((b, i) => (
+                    <BlurFade key={b.id} delay={(i % 4) * 70} className="flex-1">
+                      <Link
+                        href={lp(`/negocio/${b.slug}`)}
+                        className="group h-full min-h-16 flex items-center gap-3 bg-white dark:bg-card rounded-2xl border border-border-1 p-2.5 hover:shadow-md transition-shadow"
+                      >
+                        <div className="w-16 h-16 shrink-0 rounded-xl bg-gradient-to-br from-teal to-teal-dark overflow-hidden">
+                          {b.cover_url
+                            ? <SafeCoverImage src={b.cover_url} alt="" sizes="64px" className="w-full h-full object-cover" />
+                            : <div className="w-full h-full flex items-center justify-center text-white/30 text-2xl font-bold">{b.name[0]}</div>
+                          }
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-fg-1 truncate leading-snug">{b.name}</p>
+                          {b.category && <p className="text-xs text-fg-3-texto mt-0.5 truncate">{b.category.name}</p>}
+                          {b.is_verified && <span className="inline-block mt-1 text-[10px] font-bold tracking-wide uppercase text-teal-dark bg-teal-light px-1.5 py-0.5 rounded-full">{t('filters.verificado')}</span>}
+                        </div>
+                      </Link>
+                    </BlurFade>
+                  ))}
                 </div>
-                <div className="p-3">
-                  <p className="text-xs font-semibold text-[#1A1A1A] dark:text-white truncate leading-snug">{b.name}</p>
-                  {b.category && <p className="text-[10px] text-fg-3-texto mt-0.5 truncate">{b.category.name}</p>}
-                  {b.is_verified && <span className="inline-block mt-1.5 text-[9px] font-bold tracking-wide uppercase text-teal bg-teal-light px-1.5 py-0.5 rounded-full">{t('filters.verificado')}</span>}
-                </div>
-              </Link>
-            ))}
-          </div>
+              </div>
+            )
+          })()}
         </section>
         </BlurFade>
       )}
@@ -170,20 +204,18 @@ export default function Home({ initialData, vitrine }: HomeProps) {
 
       {/* ── Instagram ── */}
       <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10">
+        <BlurFade>
         <a
           href="https://instagram.com/vivegostoso"
           target="_blank"
           rel="noopener noreferrer"
-          className="group relative flex flex-col sm:flex-row items-center justify-between gap-5 overflow-hidden rounded-2xl px-7 py-6 transition-all hover:scale-[1.01] active:scale-[0.99]"
-          style={{ background: 'linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%)' }}
+          className="group relative flex flex-col sm:flex-row items-center justify-between gap-5 overflow-hidden rounded-2xl bg-teal-dark px-7 py-6 transition-colors hover:bg-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
         >
-          {/* subtle shine */}
-          <div className="pointer-events-none absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors rounded-2xl" />
 
           <div className="flex items-center gap-4 relative">
             {/* Instagram icon */}
             <div className="w-11 h-11 rounded-2xl bg-white/15 flex items-center justify-center flex-shrink-0">
-              <svg viewBox="0 0 24 24" className="w-5 h-5 text-white fill-current">
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="w-5 h-5 text-white fill-current">
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
               </svg>
             </div>
@@ -197,13 +229,14 @@ export default function Home({ initialData, vitrine }: HomeProps) {
             </div>
           </div>
 
-          <span className="relative flex items-center gap-2 bg-white text-[#833ab4] font-semibold text-sm px-5 py-2.5 rounded-full group-hover:gap-3 transition-all flex-shrink-0">
+          <span className="relative flex items-center gap-2 bg-white text-teal-dark font-semibold text-sm px-5 min-h-11 rounded-full group-hover:gap-3 transition-[gap] motion-reduce:transition-none flex-shrink-0">
             {t('home.instagram_titulo')}
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </span>
         </a>
+        </BlurFade>
       </section>
 
       {/* ── Últimos do blog ── */}
@@ -217,50 +250,10 @@ export default function Home({ initialData, vitrine }: HomeProps) {
             </Link>
           </div>
           <div className={`grid gap-4 md:gap-6 ${latestPosts.length === 1 ? 'grid-cols-1 max-w-md' : latestPosts.length === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'}`}>
-            {latestPosts.map(post => (
-              <Link
-                key={post.id}
-                href={lp(`/blog/${post.slug}`)}
-                className="group rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] bg-white dark:bg-[#222] hover:shadow-md transition-all"
-              >
-                {post.cover_url ? (
-                  <div className="aspect-[16/10] overflow-hidden bg-[#E8E4DF] dark:bg-[#2D2D2D]">
-                    <img
-                      src={post.cover_url}
-                      alt={post.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div className="aspect-[16/10] bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center">
-                    <span className="text-5xl font-display font-bold text-white/30">{post.title.charAt(0)}</span>
-                  </div>
-                )}
-                <div className="p-4 md:p-5">
-                  {post.tags && post.tags.length > 0 && (
-                    <div className="flex gap-2 mb-2 flex-wrap">
-                      {post.tags.slice(0, 2).map(tag => (
-                        <span key={tag} className="text-[10px] font-bold uppercase tracking-wider text-teal">{tag}</span>
-                      ))}
-                    </div>
-                  )}
-                  <h3 className="font-display font-bold text-base md:text-lg text-[#1A1A1A] dark:text-white group-hover:text-teal transition-colors leading-snug line-clamp-3">
-                    {post.title}
-                  </h3>
-                  {post.excerpt && (
-                    <p className="mt-2 text-sm text-fg-3-texto leading-relaxed line-clamp-2">
-                      {post.excerpt}
-                    </p>
-                  )}
-                  <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-teal group-hover:gap-2.5 transition-all">
-                    {t('home.blog_ler')}
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </span>
-                </div>
-              </Link>
+            {latestPosts.map((post, i) => (
+              <BlurFade key={post.id} delay={(i % 4) * 70} className="h-full">
+              <PostCard post={post} />
+              </BlurFade>
             ))}
           </div>
         </section>
@@ -269,6 +262,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
 
       {/* ── Banner: Quer saber como funciona? ── */}
       <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10">
+        <BlurFade>
         <Link
           href={lp('/sobre')}
           className="group flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#1A1A1A] dark:bg-white/5 text-white rounded-2xl px-6 py-5 hover:bg-[#2A2A2A] dark:hover:bg-white/10 transition-colors"
@@ -289,19 +283,36 @@ export default function Home({ initialData, vitrine }: HomeProps) {
             </svg>
           </span>
         </Link>
+        </BlurFade>
       </section>
 
       {/* ── Verificados pela cidade ── */}
       {featured.length > 0 && (
+        <BlurFade>
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-16 md:pb-20">
           <div className="flex justify-between items-center mb-6">
             <h2 className="font-display text-h3 font-semibold">{t('home.verificados_titulo')}</h2>
             <Link href={lp('/come')} className="text-teal text-sm font-semibold">{t('home.verificados_cta')} →</Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {featured.slice(0, 3).map(b => <BusinessCard key={b.id} business={b} />)}
+            {featured.slice(0, 3).map((b, i) => (
+              <BlurFade key={b.id} delay={(i % 4) * 70} className="h-full">
+                <BusinessCard business={b} />
+              </BlurFade>
+            ))}
           </div>
+          {featured.length > 3 && (
+            <Marquee duracao={45} className="mt-6 md:mt-8">
+              {featured.slice(3).map(b => (
+                <span key={b.id} className="mx-2 inline-flex items-center gap-1.5 rounded-full border border-border-1 bg-white dark:bg-card px-4 min-h-11 text-sm font-medium text-fg-1 whitespace-nowrap">
+                  <BadgeCheck aria-hidden="true" className="w-4 h-4 text-teal" />
+                  {b.name}
+                </span>
+              ))}
+            </Marquee>
+          )}
         </section>
+        </BlurFade>
       )}
     </div>
   )

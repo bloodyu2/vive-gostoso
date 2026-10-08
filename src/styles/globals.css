@@ -744,3 +744,14 @@ h4, h5, h6 {
   .vg-beam { animation: none; background: var(--color-teal); opacity: 0.35; }
   .vg-ping::after { animation: none; opacity: 0; }
 }
+
+/* Marquee: faixa que rola. Dois grupos iguais lado a lado; a trilha anda 50%. */
+.vg-marquee__trilho { display: flex; width: max-content; animation: vg-marquee var(--vg-marquee-s, 40s) linear infinite; }
+.vg-marquee__grupo { display: flex; flex-shrink: 0; align-items: center; gap: 1rem; padding-right: 1rem; }
+.vg-marquee:hover .vg-marquee__trilho, .vg-marquee:focus-within .vg-marquee__trilho { animation-play-state: paused; }
+@keyframes vg-marquee { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .vg-marquee__trilho { animation: none; width: auto; flex-wrap: wrap; }
+  .vg-marquee__grupo[aria-hidden="true"] { display: none; }
+  .vg-marquee__grupo { flex-wrap: wrap; }
+}

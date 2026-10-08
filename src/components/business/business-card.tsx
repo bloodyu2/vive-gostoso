@@ -7,7 +7,7 @@ import { BusinessCover } from '@/components/business/business-cover'
 import { usaCapaTipografica } from '@/lib/capa-negocio'
 import { temLicenca } from '@/lib/licenca-imagem'
 import { FotoPropriaBadge } from '@/components/business/foto-propria-badge'
-import { isBusinessOpen } from '@/lib/utils'
+import { StatusAberturaSelo, useStatusAbertura } from '@/components/business/status-abertura'
 import { cn } from '@/lib/utils'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { useLocalePath } from '@/hooks/useLocalePath'
@@ -125,7 +125,8 @@ interface Props {
 
 export function BusinessCard({ business: b, view = 'grid', acimaDaDobra = false }: Props) {
   const { t } = useTranslation()
-  const open = isBusinessOpen(b.opening_hours)
+  const status = useStatusAbertura(b.opening_hours)
+  const temHorarios = !!b.opening_hours && Object.keys(b.opening_hours).length > 0
   const lp = useLocalePath()
   const verb = b.category?.verb ?? 'come'
   const isFique = verb === 'fique'
@@ -161,7 +162,7 @@ export function BusinessCard({ business: b, view = 'grid', acimaDaDobra = false 
           <div>
             <div className="flex gap-1.5 mb-1.5 flex-wrap">
               {b.category && <Badge kind="cat">{b.category.name}</Badge>}
-              {open ? <Badge kind="open" dot>{t('common.aberto')}</Badge> : <Badge kind="closed" dot>{t('common.fechado')}</Badge>}
+              <StatusAberturaSelo status={status} temHorarios={temHorarios} />
             </div>
             <Link href={lp(`/negocio/${b.slug}`)}>
               <h3 className="font-display font-semibold text-lg tracking-tight hover:text-teal transition-colors">{b.name}</h3>
@@ -199,7 +200,7 @@ export function BusinessCard({ business: b, view = 'grid', acimaDaDobra = false 
   // grid / gallery
   return (
     <div className={cn(
-      'group bg-white dark:bg-card rounded-2xl overflow-hidden border border-border-1 hover:border-teal hover:shadow-[0_8px_24px_rgba(13,124,124,0.12)] transition-all duration-200 flex flex-col',
+      'group h-full bg-white dark:bg-card rounded-2xl overflow-hidden border border-border-1 hover:border-teal hover:shadow-[0_8px_24px_rgba(13,124,124,0.12)] transition-all duration-200 flex flex-col',
     )}>
       {/* Cover — PASSEIE gets a taller, more immersive image since tours sell on imagery over copy */}
       <Link href={lp(`/negocio/${b.slug}`)} className={cn(
@@ -234,7 +235,7 @@ export function BusinessCard({ business: b, view = 'grid', acimaDaDobra = false 
       <div className="p-4 flex flex-col flex-1">
         <div className="flex gap-1.5 mb-2 flex-wrap">
           {b.category && <Badge kind="cat">{b.category.name}</Badge>}
-          {open ? <Badge kind="open" dot>{t('common.aberto')}</Badge> : <Badge kind="closed" dot>{t('common.fechado')}</Badge>}
+          <StatusAberturaSelo status={status} temHorarios={temHorarios} />
           {b.plan === 'associado' && (
             <span className="inline-flex items-center gap-1 text-xs font-semibold text-teal bg-teal/10 px-2 py-0.5 rounded-full">
               ✓ {t('filters.associado')}

@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowRight } from 'lucide-react'
 import pt from '@/locales/pt.json'
 import en from '@/locales/en.json'
 import es from '@/locales/es.json'
@@ -13,7 +12,8 @@ import { safeJsonLd } from '@/lib/json-ld'
 import { Trilha } from '@/components/explore/trilha'
 import { MaresDoDia, lerMareDeHojeNoCardeiro } from '@/components/explore/mare-de-hoje'
 import { IconeVitrineSvg } from '@/components/explore/icone-vitrine'
-import type { IconeVitrine } from '@/lib/explore/vitrine'
+import type { IconeVitrine, IdVitrine } from '@/lib/explore/vitrine'
+import { BentoCard, BentoGrid } from '@/components/magicui/bento-grid'
 import { guiaMaresPublicado, textosGuiaMares } from '@/components/mares/link-guia'
 import { caminhoDoGuiaMares } from '@/lib/blog/post-publicado'
 
@@ -30,6 +30,20 @@ const ICONE: Record<string, IconeVitrine> = {
   conheca: 'landmark',
   participe: 'calendar',
   transfer: 'car',
+}
+
+const TOM: Record<string, 'papel' | 'teal' | 'ocre' | 'coral'> = {
+  mapa: 'ocre',
+  participe: 'ocre',
+}
+
+/* Texto do convite no rodape do cartao: reaproveita o botao da vitrine. */
+const ACAO: Record<string, IdVitrine> = {
+  mapa: 'explore',
+  passeie: 'passeie',
+  conheca: 'conheca',
+  participe: 'participe',
+  transfer: 'transfer',
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
@@ -55,42 +69,44 @@ export default async function ExplorePage({ params }: { params: Promise<{ lang: 
       <h1 className="mt-3 font-display font-bold text-4xl md:text-6xl leading-[1.05] text-fg-1 [text-wrap:balance] max-w-4xl">{e.h1}</h1>
       <p className="mt-4 text-lg text-fg-2 leading-relaxed max-w-[60ch]">{e.intro}</p>
 
-      <div className="mt-10 grid gap-4 lg:grid-cols-5">
+      <h2 className="sr-only">{e.outros_titulo}</h2>
+      <BentoGrid className="mt-10 lg:auto-rows-[minmax(10rem,auto)]">
         {/* Tabua de mares, com a mare de hoje */}
-        <Link
+        <BentoCard
+          titulo={mares.titulo}
+          descricao={mares.linha}
           href={caminhoNoIdioma(lang, mares.caminho)}
-          className="group relative overflow-hidden rounded-2xl bg-teal-dark p-6 md:p-8 text-white lg:col-span-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
+          acao={v.mares_ver}
+          tom="teal"
+          icone={<IconeVitrineSvg nome="waves" className="w-5 h-5 text-teal-light" />}
+          className="sm:col-span-2 lg:col-span-2 lg:row-span-2"
         >
-          <IconeVitrineSvg nome="waves" className="w-7 h-7 text-teal-light" />
-          <h2 className="mt-4 font-display text-3xl md:text-4xl font-bold">{mares.titulo}</h2>
-          <p className="mt-2 text-white/80">{mares.linha}</p>
           {mareHoje && (
-            <div className="mt-8">
-              <p className="text-xs font-semibold uppercase tracking-widest text-white/60">{v.mares_hoje}</p>
+            <div className="mt-4">
+              <p className="text-sm font-semibold text-white/70">{v.mares_hoje}</p>
               <div className="mt-2">
                 <MaresDoDia dia={mareHoje} lang={lang} claro />
               </div>
             </div>
           )}
-          <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold group-hover:gap-2.5 transition-all motion-reduce:transition-none">
-            {v.mares_ver}
-            <ArrowRight aria-hidden="true" className="w-4 h-4" />
-          </span>
-        </Link>
+        </BentoCard>
 
         {/* Praias: cada uma leva para a mare dela */}
-        <section aria-labelledby="praias-titulo" className="rounded-2xl border border-border-1 bg-elev p-6 lg:col-span-2">
-          <h2 id="praias-titulo" className="font-display text-xl font-semibold text-fg-1">{e.praias_titulo}</h2>
-          <p className="mt-1 text-sm text-fg-2">{e.praias_linha}</p>
+        <BentoCard
+          titulo={e.praias_titulo}
+          descricao={e.praias_linha}
+          atraso={70}
+          className="sm:col-span-2 lg:col-span-1 lg:row-span-2"
+        >
           {praiasPorMunicipio().map((g) => (
-            <div key={g.municipio} className="mt-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wide text-fg-3">{g.municipio}</h3>
+            <div key={g.municipio} className="mt-2 first:mt-0">
+              <h4 className="text-sm font-semibold text-fg-2">{g.municipio}</h4>
               <ul className="mt-1.5 flex flex-wrap gap-2">
                 {g.praias.map((p) => (
                   <li key={p.slug}>
                     <Link
                       href={caminhoNoIdioma(lang, `/explore/mares/${p.slug}`)}
-                      className="inline-flex min-h-9 items-center rounded-full border border-border-1 px-3 text-sm text-fg-1 hover:border-teal hover:text-teal transition-colors motion-reduce:transition-none"
+                      className="inline-flex min-h-11 items-center rounded-full border border-border-1 bg-white dark:bg-card px-4 text-sm font-medium text-fg-1 hover:border-teal hover:text-teal transition-colors motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
                     >
                       {p.nome}
                     </Link>
@@ -99,46 +115,31 @@ export default async function ExplorePage({ params }: { params: Promise<{ lang: 
               </ul>
             </div>
           ))}
-        </section>
-      </div>
+        </BentoCard>
 
-      <section aria-labelledby="outros-titulo" className="mt-12">
-        <h2 id="outros-titulo" className="font-display text-2xl font-semibold text-fg-1">{e.outros_titulo}</h2>
-        <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {outros.map((i) => (
-            <li key={i.id}>
-              <Link
-                href={caminhoNoIdioma(lang, i.caminho)}
-                className="group flex h-full gap-4 rounded-2xl border border-border-1 bg-elev p-5 hover:border-teal/40 transition-colors motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
-              >
-                <IconeVitrineSvg nome={ICONE[i.id]} className="w-5 h-5 shrink-0 mt-1 text-teal" />
-                <span>
-                  <span className="block font-display text-lg font-semibold text-fg-1 group-hover:text-teal transition-colors motion-reduce:transition-none">
-                    {i.titulo}
-                  </span>
-                  <span className="mt-1 block text-sm text-fg-2 leading-snug">{i.linha}</span>
-                </span>
-              </Link>
-            </li>
-          ))}
-          {guia && (
-            <li>
-              <Link
-                href={caminhoDoGuiaMares(lang)}
-                className="group flex h-full gap-4 rounded-2xl border border-border-1 bg-elev p-5 hover:border-teal/40 transition-colors motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
-              >
-                <IconeVitrineSvg nome="newspaper" className="w-5 h-5 shrink-0 mt-1 text-teal" />
-                <span>
-                  <span className="block font-display text-lg font-semibold text-fg-1 group-hover:text-teal transition-colors motion-reduce:transition-none">
-                    {guia.titulo}
-                  </span>
-                  <span className="mt-1 block text-sm text-fg-2 leading-snug">{guia.linha}</span>
-                </span>
-              </Link>
-            </li>
-          )}
-        </ul>
-      </section>
+        {outros.map((i, n) => (
+          <BentoCard
+            key={i.id}
+            titulo={i.titulo}
+            descricao={i.linha}
+            href={caminhoNoIdioma(lang, i.caminho)}
+            acao={ACAO[i.id] ? v.itens[ACAO[i.id]].botao : undefined}
+            tom={TOM[i.id] ?? 'papel'}
+            icone={<IconeVitrineSvg nome={ICONE[i.id]} className="w-5 h-5" />}
+            atraso={(n % 4) * 70}
+            className={i.id === 'mapa' ? 'sm:col-span-2 lg:col-span-2' : undefined}
+          />
+        ))}
+        {guia && (
+          <BentoCard
+            titulo={guia.titulo}
+            descricao={guia.linha}
+            href={caminhoDoGuiaMares(lang)}
+            icone={<IconeVitrineSvg nome="newspaper" className="w-5 h-5" />}
+            className="sm:col-span-2 lg:col-span-3"
+          />
+        )}
+      </BentoGrid>
     </main>
   )
 }

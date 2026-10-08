@@ -1,6 +1,6 @@
 'use client'
 
-import { useSyncExternalStore } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 import type { PontoCurva } from '@/lib/mares/curva'
 import type { MareDoDia } from '@/lib/mares/semana'
 
@@ -46,6 +46,14 @@ type Props = {
 
 export function CurvaMare({ data, pontos, eventos, janela, rotuloAgora, descricao }: Props) {
   const agoraMin = useSyncExternalStore(assinar, minutoAtual, semRelogio)
+  // O marcador de "agora" so existe no navegador; entra com um fade curto.
+  const [marcadorVisivel, setMarcadorVisivel] = useState(false)
+  const temAgora = agoraMin !== null
+  useEffect(() => {
+    if (!temAgora) return
+    const quadro = requestAnimationFrame(() => setMarcadorVisivel(true))
+    return () => cancelAnimationFrame(quadro)
+  }, [temAgora])
   const inicioDoDiaMs = new Date(`${data}T00:00:00-03:00`).getTime()
 
   const validos = pontos.filter((p): p is { minuto: number; altura: number } => p.altura !== null)
@@ -115,7 +123,10 @@ export function CurvaMare({ data, pontos, eventos, janela, rotuloAgora, descrica
         </text>
       ))}
       {marcador && (
-        <g>
+        <g
+          className="transition-opacity duration-700 ease-out motion-reduce:transition-none"
+          style={{ opacity: marcadorVisivel ? 1 : 0 }}
+        >
           <line x1={marcador.mx} x2={marcador.mx} y1={MARGEM_TOPO - 8} y2={A - MARGEM_BASE} className="stroke-coral" strokeWidth={1.5} strokeDasharray="3 3" />
           <circle cx={marcador.mx} cy={marcador.my} r={5} className="fill-coral stroke-elev" strokeWidth={2} />
           <text

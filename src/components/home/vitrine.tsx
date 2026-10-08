@@ -13,6 +13,10 @@ import { IconeVitrineSvg } from '@/components/explore/icone-vitrine'
 import { MaresDoDia } from '@/components/explore/mare-de-hoje'
 import { VitrineControles } from './vitrine-controles'
 import { ProgressiveBlur } from '@/components/magicui/progressive-blur'
+import { BlurFade } from '@/components/magicui/blur-fade'
+
+/** Cartoes largos: quebram a fileira de cartoes iguais e dao ritmo a grade. */
+const LARGOS: IdVitrine[] = ['come', 'apoie']
 
 const LISTA_ID = 'vitrine-lista'
 
@@ -100,10 +104,12 @@ export async function Vitrine({ lang, mareHoje }: { lang: Idioma; mareHoje: DiaD
           </div>
         </li>
 
-        {resto.map((item) => {
+        {resto.map((item, i) => {
           const texto = t.itens[item.id]
+          const largo = LARGOS.includes(item.id)
           return (
-            <li key={item.id} className="snap-start shrink-0 w-[72%] sm:w-auto">
+            <li key={item.id} className={`snap-start shrink-0 w-[72%] sm:w-auto ${largo ? 'sm:col-span-2' : ''}`}>
+              <BlurFade delay={(i % 4) * 70} className="h-full">
               <div className={`${CARTAO} border border-border-1 bg-elev hover:border-teal/50 hover:shadow-md`}>
                 <div className={`relative min-h-32 flex-1 sm:h-32 sm:flex-none ${item.imagem ? 'bg-teal-light' : (PAINEL_SEM_FOTO[item.id] ?? 'bg-teal-light text-teal-dark')}`}>
                   {item.imagem ? (
@@ -134,6 +140,7 @@ export async function Vitrine({ lang, mareHoje }: { lang: Idioma; mareHoje: DiaD
                   </span>
                 </div>
               </div>
+              </BlurFade>
             </li>
           )
         })}

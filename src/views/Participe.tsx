@@ -1,17 +1,37 @@
 'use client'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { VerbPill } from '@/components/brand/verb-pill'
-import { EventCard } from '@/components/events/event-card'
+import { EventCard, EventoDestaque } from '@/components/events/event-card'
+import { BlurFade } from '@/components/magicui/blur-fade'
 import { EventSubmitForm } from '@/components/events/event-submit-form'
 import { useEvents } from '@/hooks/useEvents'
 import { Button } from '@/components/ui/button'
 
 export default function Participe() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { data: events = [], isLoading } = useEvents()
   const [showForm, setShowForm] = useState(false)
+
+  // O primeiro (lista ja vem ordenada por data) vira o tile grande; o resto
+  // agrupa por mes.
+  const { destaque, meses } = useMemo(() => {
+    const [primeiro, ...resto] = events
+    const locale = i18n.language?.startsWith('en') ? 'en-US' : i18n.language?.startsWith('es') ? 'es' : 'pt-BR'
+    const grupos: { chave: string; titulo: string; itens: typeof events }[] = []
+    for (const e of resto) {
+      const d = new Date(e.starts_at)
+      const chave = `${d.getFullYear()}-${d.getMonth()}`
+      let g = grupos.find(x => x.chave === chave)
+      if (!g) {
+        g = { chave, titulo: d.toLocaleDateString(locale, { month: 'long', year: 'numeric' }), itens: [] }
+        grupos.push(g)
+      }
+      g.itens.push(e)
+    }
+    return { destaque: primeiro, meses: grupos }
+  }, [events, i18n.language])
 
   return (
     <main className="max-w-6xl mx-auto px-5 md:px-8 py-12">
@@ -62,8 +82,20 @@ export default function Participe() {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {events.map(e => <EventCard key={e.id} event={e} />)}
+        <div className="space-y-10">
+          {destaque && <EventoDestaque event={destaque} />}
+          {meses.map(g => (
+            <BlurFade key={g.chave}>
+              <section aria-labelledby={`mes-${g.chave}`}>
+                <h2 id={`mes-${g.chave}`} className="font-display font-semibold text-xl text-fg-1 capitalize mb-3">
+                  {g.titulo}
+                </h2>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                  {g.itens.map(e => <EventCard key={e.id} event={e} />)}
+                </div>
+              </section>
+            </BlurFade>
+          ))}
         </div>
       )}
 

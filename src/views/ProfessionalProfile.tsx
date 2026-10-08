@@ -8,6 +8,8 @@ import { useProfessional } from '@/hooks/useProfessionals'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { safeExternalUrl } from '@/lib/utils'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import { ShimmerButton } from '@/components/magicui/shimmer-button'
+import { StarRating } from '@/components/reviews/star-rating'
 import { ReviewList } from '@/components/reviews/review-list'
 import { ReviewForm } from '@/components/reviews/review-form'
 import type { PortfolioItem } from '@/types/professional'
@@ -96,7 +98,13 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
                   {t(`contrate.categorias.${pro.category}`)}
                 </span>
               </div>
-              <p className="text-[#888] text-sm mb-3">{pro.headline}</p>
+              <p className="text-[#B8B8B8] text-sm mb-2">{pro.headline}</p>
+              {pro.review_count > 0 && (
+                <div className="flex items-center gap-1.5 mb-3 text-sm text-[#B8B8B8]">
+                  <StarRating value={Math.round(pro.rating_avg)} readonly size="sm" />
+                  <span>{pro.rating_avg.toFixed(1)} · {pro.review_count} {t('negocio.avaliacao_plural')}</span>
+                </div>
+              )}
               <div className="flex flex-wrap gap-1.5">
                 {pro.specialties.map(s => (
                   <span key={s} className="bg-teal/10 text-teal text-xs font-medium px-2.5 py-1 rounded-lg">
@@ -115,7 +123,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
         {/* Sobre */}
         {pro.bio && (
           <div>
-            <h2 className="text-xs font-bold text-fg-3-texto uppercase tracking-wide mb-3">{t('professional.sobre')}</h2>
+            <h2 className="text-sm font-semibold text-fg-1 mb-3">{t('professional.sobre')}</h2>
             <p className="text-sm text-[#3D3D3D] leading-relaxed">{pro.bio}</p>
           </div>
         )}
@@ -152,7 +160,7 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
         {/* Portfólio */}
         {pro.portfolio_items.length > 0 && (
           <div>
-            <h2 className="text-xs font-bold text-fg-3-texto uppercase tracking-wide mb-3">{t('professional.portfolio_label')}</h2>
+            <h2 className="text-sm font-semibold text-fg-1 mb-3">{t('professional.portfolio_label')}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {pro.portfolio_items.map((item: PortfolioItem) => {
                 const safeUrl = safeExternalUrl(item.url)
@@ -215,16 +223,16 @@ export default function ProfessionalProfile({ slug }: { slug: string }) {
       {waLink && (
         <div className="sticky bottom-0 bg-white border-t border-[#E8E4DF] px-5 py-4">
           <div className="max-w-3xl mx-auto">
-            <a
+            <ShimmerButton
               href={waLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full bg-teal text-white rounded-2xl py-3.5 font-semibold text-sm hover:bg-teal/90 transition-colors"
+              className="w-full min-h-12 bg-teal hover:bg-teal-dark rounded-2xl text-sm"
             >
-              <MessageCircle className="w-4 h-4" />
+              <MessageCircle className="w-4 h-4" aria-hidden="true" />
               {t('professional.cta_whatsapp')}
-              <span className="text-xs font-normal opacity-75">{t('professional.cta_whatsapp_hint')}</span>
-            </a>
+              <span className="text-xs font-normal">{t('professional.cta_whatsapp_hint')}</span>
+            </ShimmerButton>
           </div>
         </div>
       )}

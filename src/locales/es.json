@@ -165,7 +165,8 @@
     "voltar_blog": "Volver al blog",
     "blog_h1": "Blog",
     "breadcrumb_inicio": "Inicio",
-    "breadcrumb_blog": "Blog"
+    "breadcrumb_blog": "Blog",
+    "continue_lendo": "Sigue leyendo"
   },
   "evento": {
     "nao_encontrado": "Evento no encontrado",
@@ -380,7 +381,8 @@
     "participar_alcance_btn": "Ver los planes",
     "participar_morador_h3": "¿Eres residente?",
     "participar_morador_desc": "Ofrece tus servicios o publica ofertas de empleo en el módulo Contrata. Gratuito y sin intermediarios.",
-    "participar_morador_btn": "Ver Contrata"
+    "participar_morador_btn": "Ver Contrata",
+    "toc_oque": "Qué es"
   },
   "transparencia": {
     "badge": "TRANSPARENCIA",
@@ -450,7 +452,8 @@
     ],
     "fotos_p3": "Cuando la foto es del propio negocio, aparece marcada como tal. La marca solo entra después de que el dueño envía la imagen por el panel y acepta la cláusula de derechos de imagen, con fecha y usuario registrados. Una foto que ya estaba en el registro antes de eso no recibe la marca, aunque haya venido del dueño: preferimos pocas marcas verdaderas a muchas dudosas.",
     "fotos_p4": "La cláusula dice que la imagen sigue siendo de quien la envió, que el permiso de exhibición vale mientras el registro esté activo, y que se puede pedir la retirada en cualquier momento, por el panel o por contato@vivegostoso.com.br.",
-    "conta_desc_sem_preco": "Quien quiera contribuir más allá del registro gratuito puede suscribir uno de los planes de apoyo. Los valores están en la página de registro."
+    "conta_desc_sem_preco": "Quien quiera contribuir más allá del registro gratuito puede suscribir uno de los planes de apoyo. Los valores están en la página de registro.",
+    "toc_vendemos": "Sin comisión"
   },
   "apoie": {
     "h1": "Fondo público de São Miguel do Gostoso",
@@ -576,7 +579,16 @@
     "praias_xepa_nome": "Praia da Xepa",
     "praias_xepa_desc": "El corazon de Gostoso. Ahí es donde la ciudad se reúne cada atardecer. Puestos de bebidas, musica en vivo, gente de todo Brasil y del mundo. El punto obligatorio de toda visita.",
     "historia_titulo": "Historia",
-    "historia_desc": "Sao Miguel do Gostoso nacio como aldea de pescadores. El nombre Gostoso viene de una antigua hacienda de la region que producia caña de azucar y maranon. La playa de Minhoto era el puerto natural donde atracaban las balsas. En las decadas de 1980 y 1990, los primeros kitesurfistas descubrieron el viento constante y el agua plana. Desde entonces, Gostoso se ha convertido en referencia mundial del deporte sin perder el alma de aldea."
+    "historia_desc": "Sao Miguel do Gostoso nacio como aldea de pescadores. El nombre Gostoso viene de una antigua hacienda de la region que producia caña de azucar y maranon. La playa de Minhoto era el puerto natural donde atracaban las balsas. En las decadas de 1980 y 1990, los primeros kitesurfistas descubrieron el viento constante y el agua plana. Desde entonces, Gostoso se ha convertido en referencia mundial del deporte sin perder el alma de aldea.",
+    "fazer_titulo": "Qué hacer",
+    "ver_mares": "Ver tabla de mareas",
+    "historia_destaque": "Gostoso se volvió referencia mundial del deporte sin perder el alma de aldea de pescadores.",
+    "reveillon_destaque": "Reserva la posada con anticipación: se llena desde octubre.",
+    "fato_distancia_valor": "~100 km",
+    "fato_onibus_valor": "~2h30",
+    "fato_vento_valor": "ago a ene",
+    "fato_chuvas_valor": "feb a jul",
+    "fato_reveillon_valor": "~2.500"
   },
   "negocio": {
     "abrir_mapa": "Ver en el mapa",
@@ -710,7 +722,7 @@
     "modal_sucesso_titulo": "¡Recibido!",
     "modal_sucesso_desc": "Revisaremos y publicaremos en 24 horas.",
     "modal_fechar": "Cerrar",
-    "ver_detalhes": "Ver detalles →",
+    "ver_detalhes": "Ver detalles",
     "detail_rotas": "Rutas y valores",
     "detail_detalhes": "Detalles",
     "detail_logistica": "Logística",
@@ -724,7 +736,7 @@
     "detail_descricao": "Sobre el prestador",
     "detail_observacoes": "Notas importantes",
     "detail_entrar_contato": "Contactar por WhatsApp",
-    "detail_rota_selecionada": "Ruta seleccionada, mensaje pre-rellenado ✓",
+    "detail_rota_selecionada": "Toca una ruta para ver el precio. El mensaje de WhatsApp ya lleva la ruta elegida.",
     "modal_pagamentos": "Formas de pago",
     "modal_antecedencia": "Antelación mínima",
     "modal_encontro": "Punto de encuentro en el aeropuerto",
@@ -739,7 +751,9 @@
     "modal_share_text": "Transfer con {{name}} en São Miguel do Gostoso",
     "modal_compartilhar": "Compartir",
     "erro_idiomas": "Seleccione al menos un idioma.",
-    "erro_rotas": "Añada al menos una ruta con origen, destino y precio."
+    "erro_rotas": "Añada al menos una ruta con origen, destino y precio.",
+    "para": "a",
+    "mais_rotas": "+{{n}} rutas más"
   },
   "cadastro": {
     "subtitle": "Para que tu negocio crezca",
@@ -965,7 +979,11 @@
     "type_cultural": "Cultural",
     "type_gastronomia": "Gastronomía",
     "saiba_mais": "Más información",
-    "fonte": "Fuente"
+    "fonte": "Fuente",
+    "ao_vivo": "Ocurriendo ahora",
+    "hoje": "Hoy",
+    "proximo": "Próximo evento",
+    "ver_evento": "Ver evento"
   },
   "hoje": {
     "section_label": "Ahora en Gostoso",
@@ -1163,7 +1181,12 @@
     "not_found_cta_desc": "Regístralo ahora y aparece ante miles de turistas que visitan Gostoso cada año.",
     "not_found_cta_btn": "Registrar mi negocio",
     "not_found_cta_alt": "Saber más sobre el proyecto",
-    "not_found_fineprint": "Gratuito. Sin compromiso. Puedes editar en cualquier momento."
+    "not_found_fineprint": "Gratuito. Sin compromiso. Puedes editar en cualquier momento.",
+    "passo_reivindicar_titulo": "Reclama el perfil",
+    "passo_reivindicar_desc": "Busca tu negocio abajo y pide asumir el perfil. Tras la aprobación, es tuyo.",
+    "passo_fotos_titulo": "Sube las fotos en Perfil",
+    "passo_fotos_desc": "Con el perfil aprobado, abre Perfil en el panel y sube las fotos de tu negocio.",
+    "limpar_busca": "Borrar búsqueda"
   },
   "bio": {
     "caption": "La plataforma que muestra São Miguel do Gostoso a quien quiere conocer la ciudad de verdad.",
@@ -1698,5 +1721,8 @@
     "leia": "Lee la guía",
     "titulo": "Guía de la tabla de mareas",
     "linha": "Cómo leer la marea y el mejor horario en cada playa"
+  },
+  "institucional": {
+    "nesta_pagina": "En esta página"
   }
 }

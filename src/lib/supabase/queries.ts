@@ -68,17 +68,17 @@ export async function getBusiness(slug: string): Promise<Business | null> {
   return data as Business | null
 }
 
-export async function getBusinessesForMap(): Promise<Array<Pick<Business, 'id' | 'name' | 'slug' | 'lat' | 'lng' | 'cover_url' | 'category_id' | 'is_featured' | 'active' | 'is_published'> & { category: Business['category'] }>> {
+export async function getBusinessesForMap(): Promise<Array<Pick<Business, 'id' | 'name' | 'slug' | 'lat' | 'lng' | 'cover_url' | 'category_id' | 'is_featured' | 'active' | 'is_published' | 'opening_hours'> & { category: Business['category'] }>> {
   const supabase = clientePublico()
   const { data, error } = await supabase
     .from('gostoso_businesses')
-    .select('id, name, slug, lat, lng, cover_url, category_id, is_featured, active, is_published, category:gostoso_categories(*)')
+    .select('id, name, slug, lat, lng, cover_url, category_id, is_featured, active, is_published, opening_hours, category:gostoso_categories(*)')
     .eq('active', true)
     .eq('is_published', true)
     .not('lat', 'is', null)
     .not('lng', 'is', null)
   if (error) { console.error('[getBusinessesForMap]', error.message); return [] }
-  return (data ?? []) as unknown as Array<Pick<Business, 'id' | 'name' | 'slug' | 'lat' | 'lng' | 'cover_url' | 'category_id' | 'is_featured' | 'active' | 'is_published'> & { category: Business['category'] }>
+  return (data ?? []) as unknown as Array<Pick<Business, 'id' | 'name' | 'slug' | 'lat' | 'lng' | 'cover_url' | 'category_id' | 'is_featured' | 'active' | 'is_published' | 'opening_hours'> & { category: Business['category'] }>
 }
 
 // ─── Events ──────────────────────────────────────────────────────────────────

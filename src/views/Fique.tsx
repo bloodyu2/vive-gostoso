@@ -6,7 +6,7 @@ import { BusinessFilters } from '@/components/business/business-filters'
 import { BusinessGrid, type ViewMode } from '@/components/business/business-grid'
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useCategories } from '@/hooks/useCategories'
-import { isBusinessOpen } from '@/lib/utils'
+import { estaAbertoAgora } from '@/lib/status-abertura'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { ErrorState } from '@/components/ui/error-state'
@@ -31,7 +31,7 @@ export default function Fique({ initialBusinesses = [] }: FiqueProps) {
     const q = search.trim().toLowerCase()
     return (businesses ?? [])
       .filter(b => !activeCat || b.category?.slug === activeCat)
-      .filter(b => !openOnly || isBusinessOpen(b.opening_hours))
+      .filter(b => !openOnly || estaAbertoAgora(b.opening_hours))
       .filter(b => !q || [b.name, b.description ?? '', b.address ?? ''].join(' ').toLowerCase().includes(q))
   }, [businesses, activeCat, openOnly, search])
 
