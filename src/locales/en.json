@@ -165,7 +165,8 @@
     "voltar_blog": "Back to blog",
     "blog_h1": "Blog",
     "breadcrumb_inicio": "Home",
-    "breadcrumb_blog": "Blog"
+    "breadcrumb_blog": "Blog",
+    "continue_lendo": "Keep reading"
   },
   "evento": {
     "nao_encontrado": "Event not found",
@@ -380,7 +381,8 @@
     "participar_alcance_btn": "See the plans",
     "participar_morador_h3": "Are you a local?",
     "participar_morador_desc": "Offer your services or post job listings in the Hire module. Free and without middlemen.",
-    "participar_morador_btn": "See Hire"
+    "participar_morador_btn": "See Hire",
+    "toc_oque": "What it is"
   },
   "transparencia": {
     "badge": "TRANSPARENCY",
@@ -450,7 +452,8 @@
     ],
     "fotos_p3": "When a photo comes from the business itself, it is marked as such. The mark only appears after the owner uploads the image from the panel and agrees to the image rights terms, with the date and the user recorded. A photo that was already in the listing before that does not get the mark, even if it came from the owner: we would rather have few true marks than many doubtful ones.",
     "fotos_p4": "The terms say the image still belongs to whoever uploaded it, that permission to display it lasts while the listing is active, and that removal can be requested at any time, from the panel or at contato@vivegostoso.com.br.",
-    "conta_desc_sem_preco": "Anyone who wants to contribute beyond the free listing can subscribe to one of the support plans. The prices are on the signup page."
+    "conta_desc_sem_preco": "Anyone who wants to contribute beyond the free listing can subscribe to one of the support plans. The prices are on the signup page.",
+    "toc_vendemos": "No commission"
   },
   "apoie": {
     "h1": "Public fund of São Miguel do Gostoso",
@@ -576,7 +579,16 @@
     "praias_xepa_nome": "Praia da Xepa",
     "praias_xepa_desc": "The heart of Gostoso. This is where the city gathers every late afternoon for sunset. Drink stalls, live music, people from all over Brazil and the world. The must-visit spot.",
     "historia_titulo": "History",
-    "historia_desc": "Sao Miguel do Gostoso was born as a fishing village. The name Gostoso comes from an old sugarcane and cashew plantation in the region called Fazenda Gostoso. Minhoto beach was the natural port where the fishing boats docked. In the 1980s and 1990s, the first kitesurfers discovered the constant wind and flat water. Since then, Gostoso has become a world reference for the sport without losing its village soul."
+    "historia_desc": "Sao Miguel do Gostoso was born as a fishing village. The name Gostoso comes from an old sugarcane and cashew plantation in the region called Fazenda Gostoso. Minhoto beach was the natural port where the fishing boats docked. In the 1980s and 1990s, the first kitesurfers discovered the constant wind and flat water. Since then, Gostoso has become a world reference for the sport without losing its village soul.",
+    "fazer_titulo": "Things to do",
+    "ver_mares": "See tide table",
+    "historia_destaque": "Gostoso became a world reference for the sport without losing its fishing-village soul.",
+    "reveillon_destaque": "Book your pousada early: it fills up from October.",
+    "fato_distancia_valor": "~100 km",
+    "fato_onibus_valor": "~2h30",
+    "fato_vento_valor": "Aug to Jan",
+    "fato_chuvas_valor": "Feb to Jul",
+    "fato_reveillon_valor": "~2,500"
   },
   "negocio": {
     "abrir_mapa": "View on map",
@@ -710,7 +722,7 @@
     "modal_sucesso_titulo": "Received!",
     "modal_sucesso_desc": "We'll review and publish within 24 hours.",
     "modal_fechar": "Close",
-    "ver_detalhes": "See details →",
+    "ver_detalhes": "See details",
     "detail_rotas": "Routes & prices",
     "detail_detalhes": "Details",
     "detail_logistica": "Logistics",
@@ -724,7 +736,7 @@
     "detail_descricao": "About the provider",
     "detail_observacoes": "Important notes",
     "detail_entrar_contato": "Contact on WhatsApp",
-    "detail_rota_selecionada": "Route selected, message pre-filled ✓",
+    "detail_rota_selecionada": "Tap a route to see its price. The WhatsApp message already carries the chosen route.",
     "modal_pagamentos": "Payment methods",
     "modal_antecedencia": "Minimum advance notice",
     "modal_encontro": "Meeting point at the airport",
@@ -739,7 +751,9 @@
     "modal_share_text": "Transfer with {{name}} in São Miguel do Gostoso",
     "modal_compartilhar": "Share",
     "erro_idiomas": "Select at least one language.",
-    "erro_rotas": "Add at least one route with origin, destination and price."
+    "erro_rotas": "Add at least one route with origin, destination and price.",
+    "para": "to",
+    "mais_rotas": "+{{n}} more routes"
   },
   "cadastro": {
     "subtitle": "For your business to grow",
@@ -962,7 +976,12 @@
     "not_found_cta_desc": "Register now and get seen by thousands of tourists visiting Gostoso every year.",
     "not_found_cta_btn": "Register my business",
     "not_found_cta_alt": "Learn more about the project",
-    "not_found_fineprint": "Free. No commitment. You can edit at any time."
+    "not_found_fineprint": "Free. No commitment. You can edit at any time.",
+    "passo_reivindicar_titulo": "Claim the profile",
+    "passo_reivindicar_desc": "Search for your business below and ask to take over the profile. Once approved, it is yours.",
+    "passo_fotos_titulo": "Upload photos in Profile",
+    "passo_fotos_desc": "With the profile approved, open Profile in the dashboard and upload photos of your business.",
+    "limpar_busca": "Clear search"
   },
   "bio": {
     "caption": "The platform that shows São Miguel do Gostoso to those who want to know the city for real.",
@@ -1391,7 +1410,11 @@
     "type_cultural": "Cultural",
     "type_gastronomia": "Gastronomy",
     "saiba_mais": "Learn more",
-    "fonte": "Source"
+    "fonte": "Source",
+    "ao_vivo": "Happening now",
+    "hoje": "Today",
+    "proximo": "Next event",
+    "ver_evento": "See event"
   },
   "hoje": {
     "section_label": "Now in Gostoso",
@@ -1698,5 +1721,8 @@
     "leia": "Read the guide",
     "titulo": "Tide table guide",
     "linha": "How to read the tide and the best time at each beach"
+  },
+  "institucional": {
+    "nesta_pagina": "On this page"
   }
 }

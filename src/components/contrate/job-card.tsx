@@ -23,7 +23,7 @@ export function JobCard({ job }: Props) {
       href={wa}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center gap-3 bg-white dark:bg-card border border-[#E8E4DF] dark:border-border-1 rounded-xl px-4 py-3 hover:border-ocre hover:shadow-sm transition-all"
+      className="group flex items-center gap-3 min-h-11 bg-white dark:bg-card border border-[#E8E4DF] dark:border-border-1 rounded-2xl px-4 py-3 hover:border-ocre transition-colors"
     >
       <div className="w-9 h-9 rounded-lg bg-ocre/10 flex items-center justify-center flex-shrink-0">
         <Briefcase className="w-4 h-4 text-ocre" />
@@ -42,8 +42,8 @@ export function JobCard({ job }: Props) {
         </p>
       </div>
 
-      <span className="flex-shrink-0 hidden sm:flex items-center gap-1.5 text-xs font-semibold text-teal group-hover:text-teal-dark">
-        <Phone className="w-3.5 h-3.5" />
+      <span className="flex-shrink-0 flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-teal group-hover:text-teal-dark">
+        <Phone className="w-4 h-4" aria-hidden="true" />
         {t('contrate.tenho_interesse')}
       </span>
     </a>

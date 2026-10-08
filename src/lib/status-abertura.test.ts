@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { statusDeAbertura, relogioNoFuso, type Horarios } from './status-abertura'
+import { statusDeAbertura, relogioNoFuso, estaAbertoAgora, type Horarios } from './status-abertura'
 
 // Gostoso e UTC-3 o ano todo (America/Fortaleza, sem horario de verao).
 // 2026-10-07 e uma quarta-feira.
@@ -74,5 +74,17 @@ describe('statusDeAbertura', () => {
   it('horario mal formado nao quebra: trata como fechado', () => {
     const ruim: Horarios = { qua: { open: 'x', close: 'y', closed: false } }
     expect(statusDeAbertura(ruim, em('2026-10-07T22:00:00Z'))).toMatchObject({ estado: 'fechado', proxima: null })
+  })
+})
+
+describe('estaAbertoAgora (filtro "Aberto agora" das listas)', () => {
+  it('concorda com o selo: aberto so dentro do expediente, no fuso de Gostoso', () => {
+    expect(estaAbertoAgora(jantar, em('2026-10-07T22:00:00Z'))).toBe(true) // 19:00 qua
+    expect(estaAbertoAgora(jantar, em('2026-10-07T17:00:00Z'))).toBe(false) // 14:00 qua
+    expect(estaAbertoAgora(jantar, em('2026-10-06T22:00:00Z'))).toBe(true) // 19:00 ter
+  })
+
+  it('sem horario nao conta como aberto', () => {
+    expect(estaAbertoAgora(null, em('2026-10-07T22:00:00Z'))).toBe(false)
   })
 })

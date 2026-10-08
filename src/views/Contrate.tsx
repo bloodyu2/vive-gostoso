@@ -17,6 +17,8 @@ import { StarRating } from '@/components/reviews/star-rating'
 import { ServiceForm } from '@/components/contrate/service-form'
 import { JobForm } from '@/components/contrate/job-form'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
+import { BlurFade } from '@/components/magicui/blur-fade'
+import { MagicCard } from '@/components/magicui/magic-card'
 import {
   GRUPOS_DE_CATEGORIA,
   type ProfessionalCategory,
@@ -79,16 +81,17 @@ function ProfessionalCard({ pro }: { pro: Professional }) {
     : null
 
   return (
-    <div className="bg-white dark:bg-card rounded-2xl border border-[#E8E4DF] dark:border-border-1 p-5 hover:shadow-md transition-shadow">
+    <MagicCard className="h-full bg-white dark:bg-card rounded-2xl border border-[#E8E4DF] dark:border-border-1 p-5 flex flex-col">
       <div className="flex items-start gap-3 mb-3">
         <div className={`w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center font-bold text-white text-sm ${avatarColor(pro.id)}`}>
           {initials(pro.display_name)}
         </div>
         <div className="flex-1 min-w-0">
-          <Link href={lp(`/contrate/profissional/${pro.slug}`)} className="font-semibold text-[#1A1A1A] dark:text-white text-sm hover:text-teal transition-colors">
+          <Link href={lp(`/contrate/profissional/${pro.slug}`)} className="font-semibold text-[#1A1A1A] dark:text-white text-base hover:text-teal transition-colors">
             {pro.display_name}
           </Link>
-          <p className="text-xs text-fg-3-texto leading-snug">{pro.headline}</p>
+          <p className="text-xs font-semibold text-teal leading-snug mt-0.5">{t(`contrate.categorias.${pro.category}`)}</p>
+          <p className="text-xs text-fg-3-texto leading-snug mt-0.5">{pro.headline}</p>
         </div>
       </div>
       {pro.specialties.length > 0 && (
@@ -111,20 +114,20 @@ function ProfessionalCard({ pro }: { pro: Professional }) {
           href={waLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-1.5 w-full bg-teal text-white rounded-xl py-2 text-xs font-semibold hover:bg-teal/90 transition-colors"
+          className="mt-auto flex items-center justify-center gap-1.5 w-full min-h-11 bg-teal text-white rounded-xl text-sm font-semibold hover:bg-teal-dark transition-colors"
         >
-          <MessageCircle className="w-3.5 h-3.5" />
+          <MessageCircle className="w-4 h-4" aria-hidden="true" />
           {t('professional.cta_whatsapp')}
         </a>
       ) : (
         <Link
           href={lp(`/contrate/profissional/${pro.slug}`)}
-          className="flex items-center justify-center w-full border border-[#E8E4DF] dark:border-border-1 text-fg-3-texto rounded-xl py-2 text-xs font-semibold hover:bg-[#F5F2EE] dark:hover:bg-white/10 transition-colors"
+          className="mt-auto flex items-center justify-center w-full min-h-11 border border-[#E8E4DF] dark:border-border-1 text-fg-3-texto rounded-xl text-sm font-semibold hover:bg-[#F5F2EE] dark:hover:bg-white/10 transition-colors"
         >
           {t('common.ver_perfil')}
         </Link>
       )}
-    </div>
+    </MagicCard>
   )
 }
 
@@ -137,7 +140,7 @@ function ServiceCompanyCard({ company }: { company: ServiceCompany }) {
     : null
 
   return (
-    <div className="bg-white dark:bg-card rounded-2xl border border-[#E8E4DF] dark:border-border-1 p-5 hover:shadow-md transition-shadow">
+    <MagicCard className="h-full bg-white dark:bg-card rounded-2xl border border-[#E8E4DF] dark:border-border-1 p-5 flex flex-col">
       <div className="flex items-center gap-3 mb-3">
         <div className="w-11 h-11 rounded-xl bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
           <Building2 className="w-5 h-5 text-white" />
@@ -158,7 +161,7 @@ function ServiceCompanyCard({ company }: { company: ServiceCompany }) {
           {company.description}
         </p>
       )}
-      <span className="text-[10px] font-semibold text-fg-3-texto bg-[#F5F2EE] dark:bg-white/10 px-2 py-0.5 rounded-full">
+      <span className="self-start mb-3 text-[10px] font-semibold text-fg-3-texto bg-[#F5F2EE] dark:bg-white/10 px-2 py-0.5 rounded-full">
         {t('contrate.service_company_badge')}
       </span>
       {waLink && (
@@ -166,13 +169,13 @@ function ServiceCompanyCard({ company }: { company: ServiceCompany }) {
           href={waLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-1.5 w-full bg-[#1A1A1A] text-white rounded-xl py-2 text-xs font-semibold hover:bg-[#333] transition-colors mt-3"
+          className="mt-auto flex items-center justify-center gap-1.5 w-full min-h-11 bg-teal text-white rounded-xl text-sm font-semibold hover:bg-teal-dark transition-colors"
         >
-          <MessageCircle className="w-3.5 h-3.5" />
+          <MessageCircle className="w-4 h-4" aria-hidden="true" />
           {t('contrate.pedir_orcamento')}
         </a>
       )}
-    </div>
+    </MagicCard>
   )
 }
 
@@ -227,7 +230,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-1.5 px-5 py-3 text-sm font-semibold border-b-2 -mb-px transition-colors ${
+                className={`flex items-center gap-1.5 px-5 min-h-11 text-sm font-semibold border-b-2 -mb-px transition-colors ${
                   activeTab === tab.id
                     ? 'border-teal text-teal'
                     : 'border-transparent text-[#888] hover:text-white'
@@ -259,7 +262,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
                 <button
                   type="button"
                   onClick={() => setCategoryFilter('all')}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                  className={`inline-flex items-center min-h-11 px-4 rounded-full text-sm font-semibold transition-colors ${
                     categoryFilter === 'all'
                       ? 'bg-teal text-white'
                       : 'bg-white dark:bg-card border border-[#E8E4DF] dark:border-border-1 text-[#555] dark:text-[#C0BCB8] hover:bg-[#F5F2EE] dark:hover:bg-white/10'
@@ -269,7 +272,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
                 </button>
                 {(['casa', 'servicos'] as const).map(grupo => (
                   <div key={grupo} className="flex flex-wrap items-center gap-2">
-                    <span className="text-[10px] font-semibold text-[#aaa] uppercase tracking-wide pl-1">
+                    <span className="text-xs font-semibold text-fg-3-texto pl-1">
                       {t(`contrate.grupos.${grupo}`)}
                     </span>
                     {GRUPOS_DE_CATEGORIA[grupo].map(cat => (
@@ -277,7 +280,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
                         key={cat}
                         type="button"
                         onClick={() => setCategoryFilter(cat)}
-                        className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                        className={`inline-flex items-center min-h-11 px-4 rounded-full text-sm font-semibold transition-colors ${
                           categoryFilter === cat
                             ? 'bg-teal text-white'
                             : 'bg-white dark:bg-card border border-[#E8E4DF] dark:border-border-1 text-[#555] dark:text-[#C0BCB8] hover:bg-[#F5F2EE] dark:hover:bg-white/10'
@@ -291,7 +294,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
                 <button
                   type="button"
                   onClick={() => setCategoryFilter('outro')}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                  className={`inline-flex items-center min-h-11 px-4 rounded-full text-sm font-semibold transition-colors ${
                     categoryFilter === 'outro'
                       ? 'bg-teal text-white'
                       : 'bg-white dark:bg-card border border-[#E8E4DF] dark:border-border-1 text-[#555] dark:text-[#C0BCB8] hover:bg-[#F5F2EE] dark:hover:bg-white/10'
@@ -303,7 +306,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
               <button
                 type="button"
                 onClick={() => setShowServiceForm(true)}
-                className="flex-shrink-0 text-xs font-semibold text-teal border border-teal/30 bg-teal/5 hover:bg-teal/10 px-3.5 py-1.5 rounded-full transition-colors"
+                className="flex-shrink-0 inline-flex items-center min-h-11 text-sm font-semibold text-teal border border-teal/30 bg-teal/5 hover:bg-teal/10 px-4 rounded-full transition-colors"
               >
                 {t('contrate.oferecer_servico')}
               </button>
@@ -336,11 +339,11 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
               )
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {professionals.map(pro => <ProfessionalCard key={pro.id} pro={pro} />)}
+                {professionals.map((pro, i) => <BlurFade key={pro.id} delay={(i % 4) * 70} className="h-full"><ProfessionalCard pro={pro} /></BlurFade>)}
                 {/* Legacy freelancer listings (gostoso_service_listings) — approved by admin but had
                     no public rendering anywhere before this fix. Own taxonomy (ServiceCategory), so
                     only shown alongside the unfiltered "todas" view to avoid mixing category systems. */}
-                {categoryFilter === 'all' && services.map(svc => <ServiceCard key={svc.id} service={svc} />)}
+                {categoryFilter === 'all' && services.map((svc, i) => <BlurFade key={svc.id} delay={(i % 4) * 70} className="h-full"><ServiceCard service={svc} /></BlurFade>)}
               </div>
             )}
           </>
@@ -355,7 +358,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {companies.map(c => <ServiceCompanyCard key={c.id} company={c} />)}
+              {companies.map((c, i) => <BlurFade key={c.id} delay={(i % 4) * 70} className="h-full"><ServiceCompanyCard company={c} /></BlurFade>)}
             </div>
           )
         )}
@@ -367,7 +370,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
               <button
                 type="button"
                 onClick={() => setShowJobForm(true)}
-                className="flex-shrink-0 text-xs font-semibold text-ocre border border-ocre/30 bg-ocre/5 hover:bg-ocre/10 px-3.5 py-1.5 rounded-full transition-colors"
+                className="flex-shrink-0 inline-flex items-center min-h-11 text-sm font-semibold text-ocre border border-ocre/30 bg-ocre/5 hover:bg-ocre/10 px-4 rounded-full transition-colors"
               >
                 {t('contrate.publicar_vaga')}
               </button>
@@ -379,14 +382,14 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
               </div>
             ) : (
               <div className="space-y-2">
-                {jobs.map(job => <JobCard key={job.id} job={job} />)}
+                {jobs.map((job, i) => <BlurFade key={job.id} delay={(i % 4) * 70}><JobCard job={job} /></BlurFade>)}
               </div>
             )}
           </>
         )}
 
         {/* CTA */}
-        <div className="mt-12 bg-[#1A1A1A] rounded-3xl px-8 py-10 text-center">
+        <div className="mt-12 bg-[#1A1A1A] rounded-2xl px-5 md:px-8 py-10 text-center">
           <p className="text-white font-display text-xl font-bold mb-2">
             {t('contrate.cta_titulo')}
           </p>
@@ -395,7 +398,7 @@ export default function Contrate({ categoriaInicial }: { categoriaInicial?: Prof
           </p>
           <Link
             href={lp('/cadastre')}
-            className="inline-flex items-center gap-2 bg-teal text-white px-7 py-3.5 rounded-2xl font-semibold text-sm hover:bg-teal/90 transition-colors"
+            className="inline-flex items-center gap-2 bg-teal text-white px-7 py-3.5 rounded-2xl min-h-11 font-semibold text-sm hover:bg-teal/90 transition-colors"
           >
             {t('contrate.cta_btn')}
           </Link>

@@ -57,6 +57,9 @@ const REGRAS: Regra[] = [
  * o caso seguinte.
  */
 const EXCECOES: Array<{ arquivo: string; marcador: string; motivo: string }> = [
+  // Margem do IntersectionObserver do sumario das paginas longas: geometria da tela.
+  { arquivo: 'components/institucional/sumario-pagina.tsx', marcador: 'rootMargin', motivo: 'margem do IntersectionObserver, nao e numero de produto' },
+
   // Placeholder de formulário: exemplo do que digitar, não preço praticado.
   { arquivo: 'locales/pt.json', marcador: 'services_price_placeholder', motivo: 'exemplo de preenchimento no formulário de serviço' },
   { arquivo: 'locales/en.json', marcador: 'services_price_placeholder', motivo: 'exemplo de preenchimento' },

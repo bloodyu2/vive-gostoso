@@ -1,15 +1,24 @@
 'use client'
 
 import Link from 'next/link'
-import { Building2, Camera, Coins, ImageOff, LogIn, Mail, MapPin, MessageCircle, ShieldCheck } from 'lucide-react'
+import { ArrowRight, Mail, MessageCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useParametros } from '@/hooks/useParametros'
 import { CHAVES, parametro, precoEmReais, type Parametros } from '@/lib/parametros'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { FAQSection } from '@/components/blog'
 import { buildWhatsAppLink, OFFICIAL_WHATSAPP } from '@/lib/whatsapp'
+import { BlurFade } from '@/components/magicui/blur-fade'
+import { MagicCard } from '@/components/magicui/magic-card'
+import { NumberTicker } from '@/components/magicui/number-ticker'
+import { ShimmerButton } from '@/components/magicui/shimmer-button'
+import { Citacao } from '@/components/institucional/citacao'
+import { SumarioPagina } from '@/components/institucional/sumario-pagina'
 
 type TransparenciaProps = { initialParametros?: Parametros }
+
+const H2 = 'font-display font-semibold text-3xl md:text-4xl tracking-tight text-fg-1'
+const CARTAO = 'rounded-2xl bg-white dark:bg-card border border-border-1'
 
 export default function Transparencia({ initialParametros }: TransparenciaProps) {
   const { t, i18n } = useTranslation()
@@ -18,10 +27,6 @@ export default function Transparencia({ initialParametros }: TransparenciaProps)
   const { data: param } = useParametros(
     initialParametros ? { initialData: initialParametros } : undefined
   )
-  const pct = (chave: string) => {
-    const v = parametro(param, chave)
-    return v === undefined ? null : `${v}%`
-  }
   const preco = (chave: string) => {
     const c = parametro(param, chave)
     return c === undefined ? null : precoEmReais(c)
@@ -32,212 +37,174 @@ export default function Transparencia({ initialParametros }: TransparenciaProps)
     i18n.getResource('pt', 'translation', 'transparencia.faq') ??
     []) as { question: string; answer: string }[]
 
-  const CONTA_STATS = [0, 1, 2, 3] as const
+  const CONTA = [CHAVES.gratuito, CHAVES.rateioCidade, CHAVES.rateioOperacao, CHAVES.lucro] as const
+
+  const sumario = [
+    { id: 'vendemos', rotulo: t('transparencia.toc_vendemos') },
+    { id: 'selo', rotulo: t('transparencia.selo_eyebrow') },
+    { id: 'fotos', rotulo: t('transparencia.fotos_eyebrow') },
+    { id: 'cadastro', rotulo: t('transparencia.entrada_eyebrow') },
+    { id: 'conta', rotulo: t('transparencia.conta_eyebrow') },
+    { id: 'contato', rotulo: t('transparencia.quem_eyebrow') },
+    { id: 'faq', rotulo: t('transparencia.faq_titulo') },
+  ]
 
   return (
-    <main>
-      {/* Hero */}
-      <section className="relative bg-[#1A1A1A] text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '32px 32px' }}
-        />
-        <div className="relative max-w-4xl mx-auto px-5 md:px-8 py-20 md:py-28">
-          <div className="inline-flex items-center gap-2 bg-teal/20 text-teal-light text-xs font-semibold tracking-widest uppercase px-4 py-2 rounded-full mb-6">
-            <MapPin className="w-3.5 h-3.5" />
-            {t('transparencia.badge')}
-          </div>
-          <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl leading-[1.1] tracking-tight mb-6">
-            {t('transparencia.titulo')}
-          </h1>
-          <p className="text-white/70 text-lg md:text-xl max-w-2xl leading-relaxed">
-            {t('transparencia.desc')}
-          </p>
-        </div>
-      </section>
+    <main className="max-w-6xl mx-auto px-5 md:px-8 pt-12 md:pt-16 pb-20">
+      <header className="mb-12 md:mb-16">
+        <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-7xl leading-[1.05] tracking-tight text-fg-1 max-w-4xl mb-6">
+          {t('transparencia.titulo')}
+        </h1>
+        <p className="text-xl md:text-2xl leading-relaxed text-fg-3-texto max-w-3xl">{t('transparencia.desc')}</p>
+      </header>
 
-      {/* 1. Não vendemos nada do que recomendamos */}
-      <section className="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-20">
-        <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-6">
-          {t('transparencia.vendemos_h2')}
-        </h2>
-        <div className="grid md:grid-cols-2 gap-6 text-[#3D3D3D] dark:text-[#C0BCB8] text-base leading-relaxed">
-          <p>{t('transparencia.vendemos_p1')}</p>
-          <p>{t('transparencia.vendemos_p2')}</p>
-        </div>
-      </section>
+      <div className="lg:grid lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-14">
+        <SumarioPagina itens={sumario} titulo={t('institucional.nesta_pagina')} className="mb-10 lg:mb-0" />
 
-      {/* 2. O que significa verificado */}
-      <section className="bg-areia dark:bg-[#161616] px-5 md:px-8 py-16 md:py-20">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-xs font-bold tracking-widest uppercase text-fg-3-texto mb-3">{t('transparencia.selo_eyebrow')}</p>
-          <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-8">
-            {t('transparencia.selo_h2')}
-          </h2>
+        <div className="min-w-0 space-y-16 md:space-y-24">
+          {/* 1. Nao vendemos nada do que recomendamos */}
+          <section id="vendemos" className="scroll-mt-24">
+            <h2 className={`${H2} mb-6`}>{t('transparencia.vendemos_h2')}</h2>
+            <Citacao className="mb-5">{t('transparencia.vendemos_p1')}</Citacao>
+            <p className="text-lg leading-relaxed text-fg-3-texto max-w-2xl">{t('transparencia.vendemos_p2')}</p>
+          </section>
 
-          <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl p-6 md:p-8 mb-6">
-            <div className="flex items-start gap-4 mb-5">
-              <div className="w-10 h-10 rounded-xl bg-teal-light text-teal flex items-center justify-center flex-shrink-0">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <p className="text-[#3D3D3D] dark:text-[#C0BCB8] text-base leading-relaxed pt-2">
-                {t('transparencia.selo_intro')}
-              </p>
+          {/* 2. O que significa verificado */}
+          <section id="selo" className="scroll-mt-24">
+            <h2 className={`${H2} mb-6`}>{t('transparencia.selo_h2')}</h2>
+            <div className="grid lg:grid-cols-2 gap-4 md:gap-5 mb-8">
+              <BlurFade className="h-full">
+                <MagicCard className={`${CARTAO} h-full p-6 md:p-8`}>
+                  <p className="font-display font-semibold text-xl text-fg-1 leading-snug mb-5">{t('transparencia.selo_intro')}</p>
+                  <ul className="space-y-3 text-base text-fg-3-texto">
+                    {(['a', 'b', 'c'] as const).map(l => (
+                      <li key={l} className="flex items-start gap-3">
+                        <span className="font-semibold text-teal-dark dark:text-teal w-5 shrink-0">{l})</span>
+                        {t(`transparencia.selo_item_${l}`)}
+                      </li>
+                    ))}
+                  </ul>
+                </MagicCard>
+              </BlurFade>
+              <BlurFade delay={70} className="h-full">
+                <MagicCard className={`${CARTAO} h-full p-6 md:p-8`}>
+                  <p className="font-display font-semibold text-xl text-fg-1 leading-snug mb-5">{t('transparencia.selo_retirada_intro')}</p>
+                  <ul className="space-y-3 text-base text-fg-3-texto mb-5">
+                    {[0, 1, 2, 3].map(i => (
+                      <li key={i} className="flex items-start gap-3">
+                        <span className="text-ocre-dark dark:text-ocre shrink-0" aria-hidden="true">•</span>
+                        {t(`transparencia.selo_retirada_item_${i}`)}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="text-sm text-fg-3-texto leading-relaxed">{t('transparencia.selo_retirada_processo')}</p>
+                </MagicCard>
+              </BlurFade>
             </div>
-            <ul className="space-y-2.5 text-sm text-[#3D3D3D] dark:text-[#C0BCB8] pl-14">
-              <li className="flex items-start gap-2"><span className="text-teal mt-0.5">a)</span> {t('transparencia.selo_item_a')}</li>
-              <li className="flex items-start gap-2"><span className="text-teal mt-0.5">b)</span> {t('transparencia.selo_item_b')}</li>
-              <li className="flex items-start gap-2"><span className="text-teal mt-0.5">c)</span> {t('transparencia.selo_item_c')}</li>
-            </ul>
-          </div>
+            <BlurFade>
+              <Citacao className="text-xl md:text-2xl">{t('transparencia.selo_aprovacao')}</Citacao>
+            </BlurFade>
+          </section>
 
-          <p className="text-fg-3-texto text-base leading-relaxed mb-8 max-w-2xl">
-            {t('transparencia.selo_aprovacao')}
-          </p>
-
-          <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl p-6 md:p-8">
-            <p className="font-semibold text-[#1A1A1A] dark:text-white text-base mb-4">
-              {t('transparencia.selo_retirada_intro')}
-            </p>
-            <ul className="space-y-2.5 text-sm text-[#3D3D3D] dark:text-[#C0BCB8] mb-5">
-              <li className="flex items-start gap-2"><span className="text-ocre mt-0.5">•</span> {t('transparencia.selo_retirada_item_0')}</li>
-              <li className="flex items-start gap-2"><span className="text-ocre mt-0.5">•</span> {t('transparencia.selo_retirada_item_1')}</li>
-              <li className="flex items-start gap-2"><span className="text-ocre mt-0.5">•</span> {t('transparencia.selo_retirada_item_2')}</li>
-              <li className="flex items-start gap-2"><span className="text-ocre mt-0.5">•</span> {t('transparencia.selo_retirada_item_3')}</li>
-            </ul>
-            <p className="text-sm text-fg-3-texto leading-relaxed">
-              {t('transparencia.selo_retirada_processo')}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Sobre as fotos */}
-      <section className="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-20">
-        <p className="text-xs font-bold tracking-widest uppercase text-fg-3-texto mb-3">{t('transparencia.fotos_eyebrow')}</p>
-        <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-8">
-          {t('transparencia.fotos_h2')}
-        </h2>
-        <div className="p-5 bg-areia dark:bg-[#161616] rounded-2xl border border-[#E8E4DF] dark:border-[#2D2D2D] flex items-start gap-4">
-          <ImageOff className="w-5 h-5 text-ocre flex-shrink-0 mt-0.5" />
-          <div className="text-sm text-fg-3-texto leading-relaxed space-y-2">
-            <p>{t('transparencia.fotos_p1')}</p>
-            <p>{t('transparencia.fotos_p2')}</p>
-          </div>
-        </div>
-
-        {/* Direitos de imagem. Fica junto de "sobre as fotos" de proposito: e a
-            mesma conversa, quem e dono da foto que voce esta vendo. */}
-        <div className="mt-4 p-5 bg-areia dark:bg-[#161616] rounded-2xl border border-[#E8E4DF] dark:border-[#2D2D2D] flex items-start gap-4">
-          <Camera className="w-5 h-5 text-teal flex-shrink-0 mt-0.5" />
-          <div className="text-sm text-fg-3-texto leading-relaxed space-y-2">
-            <p>{t('transparencia.fotos_p3')}</p>
-            <p>{t('transparencia.fotos_p4')}</p>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. Como um negócio entra e como sai */}
-      <section className="bg-areia dark:bg-[#161616] px-5 md:px-8 py-16 md:py-20">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-xs font-bold tracking-widest uppercase text-fg-3-texto mb-3">{t('transparencia.entrada_eyebrow')}</p>
-          <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-8">
-            {t('transparencia.entrada_h2')}
-          </h2>
-          <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl p-6 md:p-8 flex flex-col gap-4">
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-teal-light text-teal flex items-center justify-center flex-shrink-0">
-                <LogIn className="w-5 h-5" />
-              </div>
-              <p className="text-[#3D3D3D] dark:text-[#C0BCB8] text-base leading-relaxed pt-2">
-                {t('transparencia.entrada_p1')}
-              </p>
+          {/* 3. Sobre as fotos. Direitos de imagem ficam junto de proposito:
+              e a mesma conversa, quem e dono da foto que voce esta vendo. */}
+          <section id="fotos" className="scroll-mt-24">
+            <h2 className={`${H2} mb-6`}>{t('transparencia.fotos_h2')}</h2>
+            <div className="grid md:grid-cols-2 gap-4 md:gap-5">
+              <BlurFade className="h-full">
+                <MagicCard className={`${CARTAO} h-full p-6 text-base text-fg-3-texto leading-relaxed space-y-3`}>
+                  <p className="text-fg-1">{t('transparencia.fotos_p1')}</p>
+                  <p>{t('transparencia.fotos_p2')}</p>
+                </MagicCard>
+              </BlurFade>
+              <BlurFade delay={70} className="h-full">
+                <MagicCard className={`${CARTAO} h-full p-6 text-base text-fg-3-texto leading-relaxed space-y-3`}>
+                  <p className="text-fg-1">{t('transparencia.fotos_p3')}</p>
+                  <p>{t('transparencia.fotos_p4')}</p>
+                </MagicCard>
+              </BlurFade>
             </div>
-            <p className="text-fg-3-texto text-sm leading-relaxed pl-14">
-              {t('transparencia.entrada_p2')}
-            </p>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      {/* 5. Quem paga a conta */}
-      <section className="bg-teal text-white px-5 md:px-8 py-16">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-xs font-bold tracking-widest uppercase text-teal-light/70 mb-3">{t('transparencia.conta_eyebrow')}</p>
-          <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-10 text-white">
-            {t('transparencia.conta_h2')}
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-            {CONTA_STATS.map(i => (
-              <div key={i} className="bg-white/10 rounded-2xl p-6 text-center">
-                <div className="text-4xl font-display font-bold mb-2">{pct([CHAVES.gratuito, CHAVES.rateioCidade, CHAVES.rateioOperacao, CHAVES.lucro][i])}</div>
-                <div className="text-teal-light text-sm font-medium leading-snug">{t(`transparencia.conta_stat_${i}_label`)}</div>
-              </div>
-            ))}
-          </div>
-          <div className="bg-white/10 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-white/80 text-sm leading-relaxed max-w-md">
-              {preco(CHAVES.planoAssociado) && preco(CHAVES.planoDestaque)
-                ? t('transparencia.conta_desc', {
-                    precoAssociado: preco(CHAVES.planoAssociado),
-                    precoDestaque: preco(CHAVES.planoDestaque),
-                  })
-                : t('transparencia.conta_desc_sem_preco')}
-            </p>
-            <Link href={lp('/apoie')} className="flex-shrink-0 inline-flex items-center gap-2 bg-white text-teal font-semibold px-5 py-2.5 rounded-full hover:bg-teal-light transition-colors text-sm text-center">
-              <Coins className="w-4 h-4" />
-              {t('transparencia.conta_link_texto')}
-            </Link>
-          </div>
-        </div>
-      </section>
+          {/* 4. Como um negocio entra e como sai */}
+          <section id="cadastro" className="scroll-mt-24">
+            <h2 className={`${H2} mb-6`}>{t('transparencia.entrada_h2')}</h2>
+            <Citacao className="mb-5">{t('transparencia.entrada_p1')}</Citacao>
+            <p className="text-lg leading-relaxed text-fg-3-texto max-w-2xl">{t('transparencia.entrada_p2')}</p>
+          </section>
 
-      {/* 6. Quem faz */}
-      <section className="max-w-4xl mx-auto px-5 md:px-8 py-16 md:py-20">
-        <p className="text-xs font-bold tracking-widest uppercase text-fg-3-texto mb-3">{t('transparencia.quem_eyebrow')}</p>
-        <h2 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-8">
-          {t('transparencia.quem_h2')}
-        </h2>
-        <div className="max-w-md">
-          <div className="bg-white dark:bg-[#1C1C1C] border border-[#E8E4DF] dark:border-[#2D2D2D] rounded-2xl p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-[#0D0D0D] flex items-center justify-center flex-shrink-0">
-                <Building2 className="w-5 h-5 text-white" />
+          {/* 5. Quem paga a conta */}
+          <section id="conta" className="scroll-mt-24">
+            <BlurFade>
+              <div className="rounded-2xl bg-teal-dark text-white p-6 md:p-10">
+                <h2 className="font-display font-semibold text-3xl md:text-4xl tracking-tight mb-8">{t('transparencia.conta_h2')}</h2>
+                <dl className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+                  {CONTA.map((chave, i) => {
+                    const v = parametro(param, chave)
+                    return (
+                      <div key={chave} className="flex flex-col-reverse justify-end">
+                        <dt className="text-white/80 text-sm leading-snug mt-3">{t(`transparencia.conta_stat_${i}_label`)}</dt>
+                        <dd className="font-display font-bold text-5xl leading-none tabular-nums">
+                          {v === undefined ? null : <>{v > 0 ? <NumberTicker value={v} decimais={0} /> : '0'}%</>}
+                        </dd>
+                      </div>
+                    )
+                  })}
+                </dl>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-6 border-t border-white/20">
+                  <p className="text-white/85 text-sm leading-relaxed max-w-md">
+                    {preco(CHAVES.planoAssociado) && preco(CHAVES.planoDestaque)
+                      ? t('transparencia.conta_desc', {
+                          precoAssociado: preco(CHAVES.planoAssociado),
+                          precoDestaque: preco(CHAVES.planoDestaque),
+                        })
+                      : t('transparencia.conta_desc_sem_preco')}
+                  </p>
+                  <Link href={lp('/apoie')} className="shrink-0 inline-flex items-center justify-center gap-2 min-h-11 bg-white text-teal-dark font-semibold px-5 rounded-full hover:bg-areia transition-colors text-sm text-center">
+                    {t('transparencia.conta_link_texto')} <ArrowRight className="w-4 h-4 shrink-0" aria-hidden="true" />
+                  </Link>
+                </div>
               </div>
-              <div>
-                <div className="font-semibold">Balaio</div>
-                <div className="text-xs text-fg-3-texto">{t('transparencia.quem_cnpj')}</div>
-              </div>
-            </div>
-            <p className="text-sm text-fg-3-texto leading-relaxed mb-4">{t('transparencia.quem_desc')}</p>
-            <p className="text-xs text-fg-3-texto mb-4">{t('transparencia.quem_horario')}</p>
-            <div className="flex flex-col gap-2.5">
-              <a
-                href={buildWhatsAppLink(OFFICIAL_WHATSAPP, undefined, t)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-teal text-white font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-teal-dark transition-colors justify-center"
-              >
-                <MessageCircle className="w-4 h-4" />
-                {t('transparencia.quem_whatsapp_btn')}
-              </a>
-              <a
-                href={`mailto:${t('transparencia.quem_email')}`}
-                className="inline-flex items-center gap-2 text-teal text-sm hover:underline justify-center"
-              >
-                <Mail className="w-3.5 h-3.5" />
-                {t('transparencia.quem_email')}
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+            </BlurFade>
+          </section>
 
-      {/* FAQ */}
-      <section className="bg-areia dark:bg-[#161616] px-5 md:px-8 py-16 md:py-20">
-        <div className="max-w-4xl mx-auto">
-          <FAQSection items={faqItems} heading={t('transparencia.faq_titulo')} />
+          {/* 6. Quem faz */}
+          <section id="contato" className="scroll-mt-24">
+            <h2 className={`${H2} mb-6`}>{t('transparencia.quem_h2')}</h2>
+            <BlurFade>
+              <MagicCard className={`${CARTAO} p-6 md:p-8 max-w-xl`}>
+                <p className="font-display font-semibold text-2xl text-fg-1">Balaio</p>
+                <p className="text-sm text-fg-3-texto mb-4">{t('transparencia.quem_cnpj')}</p>
+                <p className="text-base text-fg-3-texto leading-relaxed mb-2">{t('transparencia.quem_desc')}</p>
+                <p className="text-sm text-fg-3-texto mb-6">{t('transparencia.quem_horario')}</p>
+                <div className="flex flex-col gap-2">
+                  <ShimmerButton
+                    href={buildWhatsAppLink(OFFICIAL_WHATSAPP, undefined, t)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-teal-dark hover:bg-teal-dark/90 min-h-12 px-6 rounded-xl text-sm"
+                  >
+                    <MessageCircle className="w-4 h-4" aria-hidden="true" />
+                    {t('transparencia.quem_whatsapp_btn')}
+                  </ShimmerButton>
+                  <a
+                    href={`mailto:${t('transparencia.quem_email')}`}
+                    className="inline-flex items-center justify-center gap-2 min-h-11 text-teal-dark dark:text-teal text-sm hover:underline"
+                  >
+                    <Mail className="w-3.5 h-3.5" aria-hidden="true" />
+                    {t('transparencia.quem_email')}
+                  </a>
+                </div>
+              </MagicCard>
+            </BlurFade>
+          </section>
+
+          {/* FAQ */}
+          <section id="faq" className="scroll-mt-24">
+            <FAQSection items={faqItems} heading={t('transparencia.faq_titulo')} />
+          </section>
         </div>
-      </section>
+      </div>
     </main>
   )
 }

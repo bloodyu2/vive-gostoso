@@ -3,8 +3,13 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import {
-  X, Car, Users, Clock, Languages, Plus, CheckCircle, Star,
+  X, Car, Plus, CheckCircle, Star, MessageCircle,
 } from 'lucide-react'
+import { buildWhatsAppLink } from '@/lib/whatsapp'
+import { cn } from '@/lib/utils'
+import { BlurFade } from '@/components/magicui/blur-fade'
+import { MagicCard } from '@/components/magicui/magic-card'
+import { ShimmerButton } from '@/components/magicui/shimmer-button'
 import { useTransfers, useSubmitTransfer } from '@/hooks/useTransfers'
 import type { TransferFormData } from '@/hooks/useTransfers'
 import type { Transfer, TransferRoute } from '@/types/database'
@@ -32,109 +37,134 @@ function routeKey(r: TransferRoute) { return `${r.from}|||${r.to}` }
 
 // ─── TransferCard ─────────────────────────────────────────────────────────────
 
+const AIRPORT_RE = /aeroporto|natal|\bnat\b/i
+
+function airportRoute(t: Transfer): TransferRoute | null {
+  return t.routes?.find(r => AIRPORT_RE.test(r.from) || AIRPORT_RE.test(r.to)) ?? null
+}
+
+function formatBrl(n: number) {
+  return `R$ ${n.toLocaleString('pt-BR')}`
+}
+
+function buildCardMessage(transfer: Transfer, route: TransferRoute | null): string {
+  const base = `Olá! Vi o serviço da *${transfer.provider_name}* no Vive Gostoso.\n\n`
+  if (route) {
+    return `${base}Rota: ${route.from} → ${route.to}\nValor: ${formatBrl(route.price_brl)}\n\nPode confirmar disponibilidade?`
+  }
+  return `${base}Pode confirmar disponibilidade?`
+}
+
 interface TransferCardProps {
   transfer: Transfer
   selectedRoute: string
   ratings: Map<string, { avg: number; count: number }>
+  destaque?: boolean
+  atraso?: number
 }
 
-function TransferCard({ transfer, selectedRoute, ratings }: TransferCardProps) {
+function TransferCard({ transfer, selectedRoute, ratings, destaque = false, atraso = 0 }: TransferCardProps) {
   const { t } = useTranslation()
   const lp = useLocalePath()
 
-  const matchedRoute =
-    selectedRoute && transfer.routes
-      ? transfer.routes.find(r => routeKey(r) === selectedRoute) ?? null
-      : null
-
-  const routeCount = transfer.routes ? transfer.routes.length : 0
+  const routes = transfer.routes ?? []
+  const matchedRoute = selectedRoute ? routes.find(r => routeKey(r) === selectedRoute) ?? null : null
+  const route = matchedRoute ?? airportRoute(transfer) ?? routes[0] ?? null
+  const outras = route ? routes.length - 1 : 0
   const rating = ratings.get(transfer.id)
-
   const href = transfer.slug ? lp(`/transfer/${transfer.slug}`) : undefined
+  const waUrl = buildWhatsAppLink(transfer.whatsapp, buildCardMessage(transfer, route))
 
-  const inner = (
-    <>
-      <div className="relative h-36 bg-gradient-to-br from-[#1E7A9E]/20 to-[#1E7A9E]/5 flex items-center justify-center flex-shrink-0">
-        {transfer.photo_url ? (
-          <img src={transfer.photo_url} alt={transfer.provider_name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
-        ) : (
-          <Car className="w-12 h-12 text-[#1E7A9E]/40" />
-        )}
-        {transfer.vehicle_type && (
-          <span className="absolute top-3 left-3 bg-white/90 text-[#1E7A9E] text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
-            {transfer.vehicle_type}
-          </span>
-        )}
-      </div>
+  const escuro = destaque
+  const muted = escuro ? 'text-white/80' : 'text-fg-3-texto'
 
-      <div className="p-4 flex flex-col flex-1 gap-3">
-        <div>
-          <h3 className="font-display font-bold text-[#1A1A1A] text-base leading-snug">
-            {transfer.provider_name}
-          </h3>
-          {rating && rating.count > 0 && (
-            <div className="flex items-center gap-1 mt-1">
-              <Star className="w-3.5 h-3.5 fill-ocre text-ocre" />
-              <span className="text-xs font-semibold text-[#1A1A1A]">{rating.avg.toFixed(1)}</span>
-              <span className="text-xs text-fg-3-texto">({rating.count})</span>
-            </div>
-          )}
-        </div>
-
-        <div className="flex flex-col gap-1.5 text-sm text-fg-3-texto">
-          <div className="flex items-center gap-2">
-            <Users className="w-3.5 h-3.5 flex-shrink-0" />
-            <span>{transfer.max_passengers} {t('transfer.detail_passageiros')}</span>
-          </div>
-          {transfer.available_hours && (
-            <div className="flex items-center gap-2">
-              <Clock className="w-3.5 h-3.5 flex-shrink-0" />
-              <span>{transfer.available_hours}</span>
-            </div>
-          )}
-          {transfer.languages && transfer.languages.length > 0 && (
-            <div className="flex items-start gap-2">
-              <Languages className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
-              <div className="flex flex-wrap gap-1">
-                {transfer.languages.map(lang => (
-                  <span key={lang} className="bg-[#F5F2EE] text-fg-3-texto text-xs px-2 py-0.5 rounded-full">
-                    {lang}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="mt-auto pt-1">
-          {matchedRoute ? (
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs text-fg-3-texto">{matchedRoute.from} → {matchedRoute.to}</span>
-              <span className="font-display font-bold text-[#1E7A9E] text-base">
-                R${matchedRoute.price_brl.toLocaleString('pt-BR')}
-              </span>
-            </div>
-          ) : (
-            <div className="mb-3">
-              <span className="text-xs text-fg-3-texto">
-                {t('transfer.rotas_disponiveis', { n: routeCount, s: routeCount !== 1 ? 's' : '' })}
-              </span>
-            </div>
-          )}
-          <div className="flex items-center justify-center gap-2 w-full bg-[#1E7A9E]/10 text-[#1E7A9E] px-4 py-2.5 rounded-xl text-sm font-semibold group-hover:bg-[#1E7A9E] group-hover:text-white transition-colors">
-            {t('transfer.ver_detalhes')}
-          </div>
-        </div>
-      </div>
-    </>
+  const titulo = route ? (
+    <span className={cn('block font-display font-bold leading-[1.1] tracking-tight', destaque ? 'text-3xl md:text-4xl' : 'text-2xl')}>
+      {route.from}
+      <span className="block text-base font-medium opacity-80 my-0.5" aria-hidden="true">↓</span>
+      <span className="sr-only"> {t('transfer.para')} </span>
+      {route.to}
+    </span>
+  ) : (
+    <span className="block font-display font-bold text-2xl leading-tight">{transfer.provider_name}</span>
   )
 
-  const cls = "bg-white border border-[#E8E4DF] rounded-2xl overflow-hidden flex flex-col text-left w-full hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer group"
+  return (
+    <BlurFade delay={atraso} className={cn('h-full', destaque && 'md:col-span-2')}>
+      <MagicCard
+        className={cn(
+          'h-full rounded-2xl overflow-hidden flex flex-col border transition-shadow hover:shadow-card-hover',
+          escuro ? 'bg-teal-dark text-white border-teal-dark' : 'bg-white dark:bg-card text-fg-1 border-border-1',
+          destaque && transfer.photo_url && 'md:flex-row',
+        )}
+      >
+        {transfer.photo_url && (
+          <div className={cn('relative shrink-0', destaque ? 'h-44 md:h-auto md:w-2/5' : 'h-32')}>
+            <img src={transfer.photo_url} alt={transfer.provider_name} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
+          </div>
+        )}
 
-  if (href) {
-    return <Link href={href} className={cls}>{inner}</Link>
-  }
-  return <div className={cls}>{inner}</div>
+        <div className="relative flex flex-col flex-1 gap-4 p-5 md:p-6">
+          <div className="flex flex-wrap items-center gap-2">
+            {transfer.vehicle_type && (
+              <span className={cn('text-xs font-semibold px-2.5 py-1 rounded-full', escuro ? 'bg-white/15 text-white' : 'bg-teal/10 text-teal-dark dark:text-teal-100')}>
+                {transfer.vehicle_type}
+              </span>
+            )}
+            {rating && rating.count > 0 && (
+              <span className={cn('inline-flex items-center gap-1 text-xs font-semibold', muted)}>
+                <Star className={cn('w-3.5 h-3.5', escuro ? 'fill-white text-white' : 'fill-ocre text-ocre')} />
+                {rating.avg.toFixed(1)} ({rating.count})
+              </span>
+            )}
+          </div>
+
+          {href ? (
+            <Link href={href} className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current rounded-md">
+              {titulo}
+            </Link>
+          ) : titulo}
+
+          {route ? (
+            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <span className={cn('font-display font-bold tracking-tight', destaque ? 'text-5xl' : 'text-4xl', escuro ? 'text-white' : 'text-teal-dark dark:text-teal-100')}>
+                {formatBrl(route.price_brl)}
+              </span>
+              {outras > 0 && <span className={cn('text-sm', muted)}>{t('transfer.mais_rotas', { n: outras })}</span>}
+            </div>
+          ) : null}
+
+          <p className={cn('text-sm', muted)}>
+            {transfer.provider_name}
+            <span aria-hidden="true"> · </span>
+            {transfer.max_passengers} {t('transfer.detail_passageiros')}
+            {transfer.available_hours && (<><span aria-hidden="true"> · </span>{transfer.available_hours}</>)}
+          </p>
+
+          {transfer.languages && transfer.languages.length > 0 && (
+            <p className={cn('text-xs', muted)}>{transfer.languages.join(', ')}</p>
+          )}
+
+          <div className="mt-auto pt-1 flex flex-wrap items-center gap-3 relative z-10">
+            <ShimmerButton
+              href={waUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="min-h-11 px-5 rounded-xl text-sm bg-ocre-dark hover:bg-ocre-700"
+            >
+              <MessageCircle className="w-4 h-4" aria-hidden="true" />
+              {t('transfer.chamar_whatsapp')}
+            </ShimmerButton>
+            {href && (
+              <Link href={href} className={cn('relative z-10 inline-flex items-center min-h-11 text-sm font-semibold', escuro ? 'text-white' : 'text-teal')}>
+                {t('transfer.ver_detalhes')} <span aria-hidden="true">&nbsp;→</span>
+              </Link>
+            )}
+          </div>
+        </div>
+      </MagicCard>
+    </BlurFade>
+  )
 }
 
 // ─── RegistrationModal ────────────────────────────────────────────────────────
@@ -365,7 +395,7 @@ function LoadingSkeleton() {
   return (
     <>
       {[1, 2, 3].map(i => (
-        <div key={i} className="bg-white border border-[#E8E4DF] rounded-2xl overflow-hidden animate-pulse">
+        <div key={i} className="bg-white dark:bg-card border border-border-1 rounded-2xl overflow-hidden animate-pulse motion-reduce:animate-none">
           <div className="h-36 bg-[#E8E4DF]" />
           <div className="p-4 space-y-3">
             <div className="h-4 bg-[#E8E4DF] rounded w-2/3" />
@@ -395,21 +425,26 @@ export default function Transfer() {
     ? transfers.filter(t => t.routes?.some(r => routeKey(r) === selectedRoute))
     : transfers
 
+  // A rota do aeroporto de Natal, quando existe nos dados, vira o bloco grande.
+  const featured = filteredTransfers.find(tr => airportRoute(tr)) ?? null
+  const featuredId = featured?.id ?? null
+  const ordered = featured ? [featured, ...filteredTransfers.filter(tr => tr.id !== featured.id)] : filteredTransfers
+
   return (
     <>
       {/* Sky (#87CEEB) is reserved for Transfer so it reads as its own product, not a teal-tinted
           clone of FIQUE. Pale wash background + the same deepened #1E7A9E used in the header nav
           (raw #87CEEB fails text contrast, ~1.9:1). */}
-      <section className="bg-sky/10 text-[#1E7A9E] px-5 md:px-8 py-12 md:py-16">
+      <section className="bg-sky/10 text-[#1E7A9E] dark:text-sky px-5 md:px-8 py-12 md:py-16">
         <div className="max-w-6xl mx-auto">
-          <div className="text-xs font-medium tracking-widest uppercase opacity-80 mb-3">{t('transfer.badge')}</div>
-          <h1 className="font-display font-bold text-5xl sm:text-6xl leading-none tracking-tight mb-4 text-[#1E7A9E]">
+          <div className="text-sm font-semibold opacity-80 mb-3">{t('transfer.badge')}</div>
+          <h1 className="font-display font-bold text-5xl sm:text-6xl leading-none tracking-tight mb-4 text-[#1E7A9E] dark:text-sky">
             {t('transfer.titulo')}
           </h1>
-          <p className="text-[#1E7A9E]/80 text-base md:text-lg max-w-xl leading-relaxed">{t('transfer.desc')}</p>
+          <p className="text-[#1E7A9E]/80 dark:text-sky/80 text-base md:text-lg max-w-xl leading-relaxed">{t('transfer.desc')}</p>
           <div className="flex flex-wrap gap-3 mt-6">
             {[{ label: '110 km' }, { label: '~1h50' }, { label: 'Aeroporto de Natal (NAT)' }].map(c => (
-              <div key={c.label} className="bg-white text-[#1E7A9E] border border-[#1E7A9E]/15 rounded-xl px-4 py-2 text-sm font-semibold">{c.label}</div>
+              <div key={c.label} className="bg-white dark:bg-card text-[#1E7A9E] dark:text-sky border border-[#1E7A9E]/15 rounded-xl px-4 py-2 text-sm font-semibold">{c.label}</div>
             ))}
           </div>
         </div>
@@ -421,7 +456,7 @@ export default function Transfer() {
             value={selectedRoute}
             onChange={e => setSelectedRoute(e.target.value)}
             aria-label={t('transfer.filtro_rota')}
-            className="border border-[#E8E4DF] rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-colors"
+            className="border border-border-1 rounded-xl px-4 min-h-11 text-sm bg-white dark:bg-card focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-colors"
           >
             <option value="">{t('transfer.filtro_todas')}</option>
             {routes.map(r => (
@@ -431,7 +466,7 @@ export default function Transfer() {
 
           <button
             onClick={() => setShowRegistration(true)}
-            className="flex items-center gap-2 bg-[#1E7A9E] text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#175E7B] transition-colors flex-shrink-0"
+            className="flex items-center gap-2 bg-[#1E7A9E] text-white px-4 min-h-11 rounded-xl text-sm font-semibold hover:bg-[#175E7B] transition-colors flex-shrink-0"
           >
             <Plus className="w-4 h-4" />
             {t('transfer.cadastre_btn')}
@@ -442,7 +477,7 @@ export default function Transfer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"><LoadingSkeleton /></div>
         ) : filteredTransfers.length === 0 ? (
           <div className="text-center py-16">
-            <div className="text-4xl mb-3">🚗</div>
+            <Car className="w-8 h-8 mx-auto mb-3 text-fg-3-texto" aria-hidden="true" />
             <h3 className="font-display font-bold text-xl mb-2">{t('transfer.sem_providers')}</h3>
             <p className="text-fg-3-texto text-sm max-w-xs mx-auto leading-relaxed mb-5">{t('transfer.sem_providers_sub')}</p>
             <button onClick={() => setShowRegistration(true)}
@@ -451,13 +486,15 @@ export default function Transfer() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredTransfers.map(transfer => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+            {ordered.map((transfer, i) => (
               <TransferCard
                 key={transfer.id}
                 transfer={transfer}
                 selectedRoute={selectedRoute}
                 ratings={ratingsMap}
+                destaque={transfer.id === featuredId}
+                atraso={(i % 4) * 70}
               />
             ))}
           </div>

@@ -165,7 +165,8 @@
     "voltar_blog": "Voltar ao blog",
     "blog_h1": "Blog",
     "breadcrumb_inicio": "Início",
-    "breadcrumb_blog": "Blog"
+    "breadcrumb_blog": "Blog",
+    "continue_lendo": "Continue lendo"
   },
   "evento": {
     "nao_encontrado": "Evento não encontrado",
@@ -380,7 +381,8 @@
     "participar_alcance_btn": "Ver os planos",
     "participar_morador_h3": "É morador?",
     "participar_morador_desc": "Ofereça seus serviços ou divulgue vagas de emprego no módulo Contrate. Gratuito e sem intermediários.",
-    "participar_morador_btn": "Ver o Contrate"
+    "participar_morador_btn": "Ver o Contrate",
+    "toc_oque": "O que é"
   },
   "transparencia": {
     "badge": "TRANSPARÊNCIA",
@@ -450,7 +452,8 @@
     ],
     "fotos_p3": "Quando a foto é do próprio negócio, ela aparece marcada como tal. A marca só entra depois que o dono envia a imagem pelo painel e aceita a cláusula de direitos de imagem, com data e usuário registrados. Foto que já estava no cadastro antes disso não recebe a marca, mesmo que tenha vindo do dono: preferimos poucas marcas verdadeiras a muitas duvidosas.",
     "fotos_p4": "A cláusula diz que a imagem continua sendo de quem a enviou, que a permissão de exibição vale enquanto o cadastro estiver ativo, e que a remoção pode ser pedida a qualquer momento, pelo painel ou por contato@vivegostoso.com.br.",
-    "conta_desc_sem_preco": "Quem quiser contribuir além do cadastro gratuito pode assinar um dos planos de apoio. Os valores estão na página de cadastro."
+    "conta_desc_sem_preco": "Quem quiser contribuir além do cadastro gratuito pode assinar um dos planos de apoio. Os valores estão na página de cadastro.",
+    "toc_vendemos": "Sem comissão"
   },
   "apoie": {
     "h1": "Fundo público de São Miguel do Gostoso",
@@ -639,7 +642,7 @@
     "cadastre_btn": "Cadastrar meu Transfer",
     "chamar_whatsapp": "Chamar no WhatsApp",
     "rotas_disponiveis": "{{n}} rota{{s}} disponível",
-    "ver_detalhes": "Ver detalhes →",
+    "ver_detalhes": "Ver detalhes",
     "sem_providers": "Nenhum prestador cadastrado ainda.",
     "sem_providers_sub": "Seja o primeiro a oferecer transfer na plataforma.",
     "detail_rotas": "Rotas e valores",
@@ -655,7 +658,7 @@
     "detail_descricao": "Sobre o prestador",
     "detail_observacoes": "Observações importantes",
     "detail_entrar_contato": "Entrar em contato pelo WhatsApp",
-    "detail_rota_selecionada": "Rota selecionada, mensagem já vem pré-preenchida ✓",
+    "detail_rota_selecionada": "Toque numa rota para ver o valor. A mensagem do WhatsApp já vai com a rota escolhida.",
     "modal_titulo": "Cadastrar meu Transfer",
     "modal_sub": "Seu cadastro fica ativo após revisão, normalmente 24h",
     "modal_nome": "Nome do prestador / serviço",
@@ -684,12 +687,14 @@
     "modal_share_text": "Transfer com {{name}} em São Miguel do Gostoso",
     "modal_compartilhar": "Compartilhar",
     "erro_idiomas": "Selecione ao menos um idioma.",
-    "erro_rotas": "Adicione ao menos uma rota com origem, destino e preço."
+    "erro_rotas": "Adicione ao menos uma rota com origem, destino e preço.",
+    "para": "para",
+    "mais_rotas": "+{{n}} rotas"
   },
   "conheca": {
     "badge": "CONHEÇA.",
     "titulo": "São Miguel do Gostoso",
-    "desc": "Uma vila de pescadores no litoral norte do Rio Grande do Norte. De agosto a janeiro, o vento nao para: temporada de kite e windsurf. O por do sol na Praia da Xepa vira foto toda noite.",
+    "desc": "Uma vila de pescadores no litoral norte do Rio Grande do Norte. De agosto a janeiro, o vento não para: temporada de kite e windsurf. O pôr do sol na Praia da Xepa vira foto toda noite.",
     "praias_titulo": "Praias",
     "praias_minhoto_nome": "Praia do Minhoto",
     "praias_minhoto_desc": "a principal, com restaurantes, bares e kite na beira d'água.",
@@ -704,7 +709,7 @@
     "praias_cardeiro_nome": "Praia do Cardeiro",
     "praias_cardeiro_desc": "praia calma e pouco movimentada, ideal para banho e relaxamento. Barracas simples e atendimento local.",
     "praias_ze_martins_nome": "Praia de Zé Martins",
-    "praias_ze_martins_desc": "praia quase deserta, acessível por buggy ou barco. Areia branca e águas cristalinas -- para quem busca isolamento.",
+    "praias_ze_martins_desc": "praia quase deserta, acessível por buggy ou barco. Areia branca e águas cristalinas, para quem busca isolamento.",
     "praias_amor_nome": "Praia do Amor",
     "praias_amor_desc": "famosa pelo pôr do sol espetacular. Um dos cenários mais fotografados de Gostoso, com falésias coloridas.",
     "gastronomia_titulo": "Gastronomia",
@@ -714,7 +719,7 @@
     "vida_noturna_titulo": "Vida Noturna e Eventos",
     "vida_noturna_desc": "Forró ao vivo, bares na praia e festivais como o Gostoso Sunset Festival e o Réveillon movimentam a noite. A cidade não tem clubes, mas compensa com ambientação autêntica. Veja a agenda no módulo PARTICIPE.",
     "infra_titulo": "Infraestrutura",
-    "infra_desc": "Importante: iFood, Uber e similares não funcionam em Gostoso. O mercado é 100% local -- farmácias, mercados e postos de combustível atendem as necessidades básicas. Planeje-se com antecedência.",
+    "infra_desc": "Importante: iFood, Uber e similares não funcionam em Gostoso. O mercado é 100% local: farmácias, mercados e postos de combustível atendem as necessidades básicas. Planeje-se com antecedência.",
     "cta_come": "Ver restaurantes no COME",
     "cta_passeie": "Ver passeios e escolas no PASSEIE",
     "cta_participe": "Ver eventos no PARTICIPE",
@@ -737,9 +742,18 @@
     "reveillon_titulo": "O Réveillon do Gostoso",
     "reveillon_desc": "Todo ano, entre 28 de dezembro e 2 de janeiro, Gostoso recebe turistas de todo o Brasil. Música ao vivo na beira da praia, fogos sobre o mar, gastronomia local em plena forma. Reserve pousada com antecedência: lota desde outubro.",
     "praias_xepa_nome": "Praia da Xepa",
-    "praias_xepa_desc": "O coracao de Gostoso. E ali que a cidade se encontra todo fim de tarde para o por do sol. Barraquinhas de drinks, musica ao vivo, gente de todo lugar do Brasil e do mundo. O point obrigatorio de toda visita.",
-    "historia_titulo": "Historia",
-    "historia_desc": "Sao Miguel do Gostoso nasceu como vila de pescadores. O nome Gostoso vem de uma antiga fazenda da regiao que produzia cana-de-acucar e caju. A praia do Minhoto era o porto natural onde as jangadas atracavam. Nas decadas de 1980 e 1990, os primeiros kitesurfistas descobriram o vento constante e a agua plana. De la pra ca, Gostoso virou referencia mundial do esporte sem perder a alma de vila."
+    "praias_xepa_desc": "O coração de Gostoso. É ali que a cidade se encontra todo fim de tarde para o pôr do sol. Barraquinhas de drinks, música ao vivo, gente de todo lugar do Brasil e do mundo. O ponto obrigatório de toda visita.",
+    "historia_titulo": "História",
+    "historia_desc": "São Miguel do Gostoso nasceu como vila de pescadores. O nome Gostoso vem de uma antiga fazenda da região que produzia cana-de-açúcar e caju. A praia do Minhoto era o porto natural onde as jangadas atracavam. Nas décadas de 1980 e 1990, os primeiros kitesurfistas descobriram o vento constante e a água plana. De lá pra cá, Gostoso virou referência mundial do esporte sem perder a alma de vila.",
+    "historia_destaque": "Gostoso virou referência mundial do esporte sem perder a alma de vila.",
+    "fazer_titulo": "O que fazer",
+    "ver_mares": "Ver tábua de marés",
+    "reveillon_destaque": "Reserve pousada com antecedência: lota desde outubro.",
+    "fato_distancia_valor": "~100 km",
+    "fato_onibus_valor": "~2h30",
+    "fato_vento_valor": "ago a jan",
+    "fato_chuvas_valor": "fev a jul",
+    "fato_reveillon_valor": "~2.500"
   },
   "cadastro": {
     "subtitle": "Para seu negócio crescer",
@@ -1044,7 +1058,12 @@
     "not_found_cta_desc": "Cadastre agora e apareça para milhares de turistas que visitam Gostoso todo ano.",
     "not_found_cta_btn": "Cadastrar meu negócio",
     "not_found_cta_alt": "Saber mais sobre o projeto",
-    "not_found_fineprint": "Gratuito. Sem compromisso. Você pode editar a qualquer momento."
+    "not_found_fineprint": "Gratuito. Sem compromisso. Você pode editar a qualquer momento.",
+    "passo_reivindicar_titulo": "Reivindique o perfil",
+    "passo_reivindicar_desc": "Busque seu negócio abaixo e peça para assumir o perfil. Após a aprovação, ele é seu.",
+    "passo_fotos_titulo": "Envie as fotos em Perfil",
+    "passo_fotos_desc": "Com o perfil aprovado, abra Perfil no painel e envie as fotos do seu negócio.",
+    "limpar_busca": "Limpar busca"
   },
   "bio": {
     "caption": "A plataforma que mostra São Miguel do Gostoso pra quem quer conhecer a cidade de verdade.",
@@ -1473,7 +1492,11 @@
     "type_cultural": "Cultural",
     "type_gastronomia": "Gastronomia",
     "saiba_mais": "Saiba mais",
-    "fonte": "Fonte"
+    "fonte": "Fonte",
+    "ao_vivo": "Acontecendo agora",
+    "hoje": "Hoje",
+    "proximo": "Próximo evento",
+    "ver_evento": "Ver evento"
   },
   "hoje": {
     "section_label": "Agora em Gostoso",
@@ -1698,5 +1721,8 @@
     "leia": "Leia o guia",
     "titulo": "Guia da tábua de marés",
     "linha": "Como ler a maré e o melhor horário em cada praia"
+  },
+  "institucional": {
+    "nesta_pagina": "Nesta página"
   }
 }
