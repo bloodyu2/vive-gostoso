@@ -1,37 +1,598 @@
--- Traducoes (en e es) dos posts do blog que existiam so em portugues (08/10/2026).
+-- Traducoes (en e es) dos posts do blog que existiam so em portugues e correcao de
+-- fatos nos posts em portugues (08/10/2026).
 --
 -- Mesmo modelo do post das mares: a tabela gostoso_blog_posts nao tem coluna de
 -- idioma, cada idioma e uma linha com slug proprio, e o site liga as versoes por
 -- src/data/blog-traducoes.json (hreflang, redirecionamento e lista por idioma).
--- Capa e data de publicacao sao copiadas do post em portugues.
+-- Capa e data de publicacao sao copiadas do post em portugues. faq_jsonld e
+-- coluna de texto: grava-se o JSON como texto.
 --
--- NAO APLICADO. Para aplicar, em duas partes:
---   Parte 1 pode rodar a qualquer momento: grava as linhas NAO publicadas.
---   Parte 2 so depois do deploy da branch com o novo src/data/blog-traducoes.json
---   estar READY na master; antes disso o site em producao nao conhece o mapa e
---   mostraria as versoes em en e es na lista em pt.
+-- NAO APLICADO. Ordem para aplicar:
+--   PARTE 0 (corrige o texto dos posts em portugues, ja no ar): faz copia de
+--     seguranca em tabela com RLS ligado e sem acesso para anon e authenticated,
+--     depois atualiza 5 posts. Reversao no fim do arquivo.
+--   PARTE 1 grava as versoes en e es NAO publicadas (pode rodar a qualquer momento).
+--   PARTE 2 so depois do deploy da branch com o novo src/data/blog-traducoes.json
+--     estar READY na master; antes disso o site em producao nao conhece o mapa e
+--     mostraria as versoes en e es na lista em pt.
 -- Idempotente: a parte 1 usa NOT EXISTS; a parte 2 so toca os slugs abaixo.
--- Reversao: DELETE FROM public.gostoso_blog_posts WHERE slug IN (<slugs da parte 2>);
 
--- ===================== PARTE 1: gravar (nao publicado) =====================
+-- ===================== PARTE 0: corrigir os posts em portugues =====================
+
+CREATE TABLE IF NOT EXISTS public.gostoso_blog_posts_bkp_20261008 AS
+  SELECT * FROM public.gostoso_blog_posts WHERE slug IN ('transfer-aeroporto-natal-sao-miguel-gostoso', 'sao-miguel-do-gostoso-ou-pipa-qual-escolher', 'como-chegar-sao-miguel-do-gostoso', 'por-que-gostoso-e-melhor-que-pipa', 'mostra-de-cinema-de-gostoso-2026');
+ALTER TABLE public.gostoso_blog_posts_bkp_20261008 ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON public.gostoso_blog_posts_bkp_20261008 FROM anon, authenticated;
+
+UPDATE public.gostoso_blog_posts SET content = $POST$
+<p><strong>Resposta rápida:</strong> são <strong>110 km</strong> entre o Aeroporto de Natal (NAT) e São Miguel do Gostoso, cerca de <strong>1h50</strong> de viagem. O <strong>transfer particular de van ou carro</strong> tem o preço combinado direto com cada prestador pelo WhatsApp, e os prestadores e seus valores estão listados na <a href="/transfer">página de transfer</a>. Reserve com pelo menos 24 horas de antecedência, não há linha de ônibus regular consistente até Gostoso, e Uber/99 raramente aceita corridas tão longas.</p>
+
+<p>110 km parece curto no papel. Na prática, são rodovias do litoral norte e um trecho de asfalto questionável perto de Touros com pouco sinal de GPS quando você mais precisa. Dá pra fazer de carro alugado, mas se for a primeira vez, você vai passar uns 20 minutos tentando entender uma bifurcação que o Maps marca errado. Este guia foi escrito por quem mora em Gostoso e recebe gente quase toda semana, sem maquiar nada.</p>
+
+<h2 id="distancia-tempo">1. Distância e tempo real de viagem</h2>
+
+<p>São Miguel do Gostoso fica a <strong>~110 km</strong> do Aeroporto Internacional de Natal (NAT, oficialmente Aeroporto de São Gonçalo do Amarante). A viagem demora cerca de <strong>1h50</strong>, a variável é quanto tempo você leva saindo do trânsito de Natal. Depois de Touros, a estrada é tranquila e a paisagem começa a ficar bonita: salinas, eólicas, coqueirais.</p>
+
+<p>O trajeto segue pelo litoral norte do Rio Grande do Norte, passando por Touros no caminho até Gostoso.</p>
+
+<div class="callout callout--info">
+  <p><strong>ℹ️ Observação:</strong> o aeroporto de Natal não fica em Natal, fica em São Gonçalo do Amarante, a ~30 km a oeste. Isso já adianta um pouco do caminho pra quem vai pra Gostoso (litoral norte). Pra quem vai pra Pipa (litoral sul), atrasa.</p>
+</div>
+
+<h2 id="comparativo-opcoes">2. Comparativo: qual opção escolher?</h2>
+
+<p>Existem 4 formas de chegar do aeroporto até Gostoso. A tabela abaixo resume preço, tempo, conforto e quando cada uma faz sentido.</p>
+
+<table class="comparison-table">
+  <thead>
+    <tr>
+      <th>Opção</th>
+      <th>Preço</th>
+      <th>Tempo</th>
+      <th>Conforto</th>
+      <th>Quando usar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Transfer particular (van/carro)</td>
+      <td>Combinado com o prestador</td>
+      <td>~1h50 direto</td>
+      <td>Alto, bagagem segura, motorista local</td>
+      <td>Primeira viagem, com família, voo noturno, bagagem grande</td>
+    </tr>
+    <tr>
+      <td>Transfer compartilhado</td>
+      <td>Combinado com o prestador</td>
+      <td>~1h50 mais as paradas</td>
+      <td>Médio, divide a van com outros</td>
+      <td>Solo ou casal sem pressa, querendo economizar</td>
+    </tr>
+    <tr>
+      <td>Carro alugado</td>
+      <td>R$ 150 a 250/dia + combustível (~R$ 80 ida)</td>
+      <td>~1h50</td>
+      <td>Alto, mas você dirige</td>
+      <td>Vai ficar 5+ dias e quer rodar pra Tourinhos, Pitangui, Galos</td>
+    </tr>
+    <tr>
+      <td>Uber/99 + complemento</td>
+      <td>Raramente aceita, preço variável</td>
+      <td>~1h50</td>
+      <td>Variável</td>
+      <td>Quase nunca, motoristas recusam corridas longas</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout callout--tip">
+  <p><strong>💡 Dica:</strong> se você é casal ou família, o transfer particular é mais rápido e mais privado. Se viaja sozinho, o compartilhado pode sair mais barato por pessoa quando a van sai com outros passageiros. Aluguel de carro só compensa pra quem fica vários dias e quer explorar a região.</p>
+</div>
+
+<h2 id="quanto-custa">3. Quanto custa o transfer</h2>
+
+<p>O preço do transfer não é tabelado: cada prestador define o valor e você combina direto com ele pelo WhatsApp. Os prestadores e seus valores estão listados na <a href="/transfer">página de transfer</a> do Vive Gostoso.</p>
+
+<p>Se você vai sozinho ou em casal e não quer pagar pela van toda, alguns prestadores completam a viagem com outros passageiros, e aí o custo é dividido entre eles. Vale perguntar na hora do contato no WhatsApp se a van está saindo cheia ou se vão dividir.</p>
+
+<p><strong>Formas de pagamento:</strong> a maioria dos prestadores locais aceita Pix e dinheiro. Cartão é raro, e quando aceitam, geralmente cobram 5 a 10% a mais. Leve algum dinheiro vivo pra eventualidade (como uma parada estratégica em Touros pra um lanche).</p>
+
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Ol%C3%A1!%20Vi%20o%20artigo%20sobre%20transfer%20do%20aeroporto%20de%20Natal%20para%20Gostoso%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es.">
+  <span class="inline-cta__title">Quer cotar o transfer agora?</span>
+  <span class="inline-cta__desc">A gente te indica prestador local verificado, com preço e disponibilidade pra sua data. Sem custo de intermediação.</span>
+  <span class="inline-cta__action">💬 Falar no WhatsApp</span>
+</a>
+
+<h2 id="como-agendar">4. Como agendar (e quando)</h2>
+
+<p>Quanto mais cedo melhor. Prestadores no aeroporto precisam de <strong>pelo menos 24 horas de antecedência</strong> para se posicionar no desembarque. Às 23h no desembarque do voo atrasado de São Paulo, as opções diminuem bastante, alguns motoristas não operam de madrugada.</p>
+
+<p>O fluxo padrão funciona assim:</p>
+
+<ol>
+  <li>Escolha o prestador 2 a 7 dias antes da viagem</li>
+  <li>Mande mensagem no WhatsApp com data, horário do voo, número de passageiros e bagagens</li>
+  <li>Confirme o ponto de encontro exato no terminal</li>
+  <li>Mande o número do voo na véspera, o motorista monitora atrasos</li>
+  <li>No desembarque, ligue ou mande mensagem assim que pousar</li>
+</ol>
+
+<p>No <a href="/transfer">Vive Gostoso você encontra prestadores de transfer</a> com contato direto no WhatsApp, a mensagem já abre com a rota que você escolheu, então não precisa ficar explicando do zero.</p>
+
+<div class="callout callout--warn">
+  <p><strong>⚠️ Atenção pra voos de madrugada:</strong> se você chega entre 1h e 5h da manhã, confirme com o prestador <strong>antes do voo</strong> se ele opera naquele horário. Nem todos operam 24h. Se ninguém aceitar, a saída é dormir uma noite em Natal e seguir pra Gostoso pela manhã.</p>
+</div>
+
+<h2 id="ponto-de-encontro">5. O ponto de encontro no aeroporto</h2>
+
+<p>Cada prestador tem um ponto diferente. O mais comum é a <strong>saída do terminal de desembarque</strong>, alguns ficam do lado de fora com placa com seu nome, outros ficam no hall interno perto da esteira de bagagem. Confirma isso no WhatsApp <strong>antes de embarcar em Natal</strong>, não depois de pousar.</p>
+
+<p>Pontos típicos:</p>
+
+<ul>
+  <li><strong>Hall de desembarque (interno):</strong> motorista com placa, geralmente perto do café ou da porta principal de saída</li>
+  <li><strong>Calçada externa:</strong> próximo ao ponto de táxi oficial, do lado direito de quem sai</li>
+  <li><strong>Estacionamento P1:</strong> raro, mas alguns motoristas pedem que você caminhe até o estacionamento (5 min a pé)</li>
+</ul>
+
+<p>O aeroporto de Natal é pequeno e bem sinalizado, você não vai se perder. Mas alinhe o ponto exato pra evitar 20 minutos andando em círculo procurando o motorista certo.</p>
+
+<h2 id="o-que-confirmar">6. O que confirmar antes de embarcar</h2>
+
+<p>Cinco perguntas que evitam 90% dos problemas:</p>
+
+<ol>
+  <li><strong>Confirmação do horário</strong> com base no número do voo (não só "voo das 22h")</li>
+  <li><strong>Ponto de encontro exato</strong>, fora ou dentro do terminal, perto de qual referência</li>
+  <li><strong>Forma de pagamento</strong> aceita (Pix, dinheiro, cartão) e se o valor é à vista ou pode ser parcelado</li>
+  <li><strong>Capacidade de bagagem</strong> se você viaja com pranchas de kite, surf ou bagagem grande de família</li>
+  <li><strong>Cadeira/booster pra criança</strong> se viaja com filhos pequenos, alguns prestadores oferecem, outros não</li>
+</ol>
+
+<h2 id="alternativas">7. Carro alugado ou ônibus: vale a pena?</h2>
+
+<h3>Carro alugado</h3>
+<p>Faz sentido se você vai ficar <strong>5 ou mais dias</strong> e quer explorar a região: Tourinhos, Cardeiro, Lagoa de Pitangui, Galinhos. Custa R$ 150 a 250/diária num modelo básico (1.0) e mais ~R$ 80 de combustível só pra ida. Estacionamento em Gostoso é tranquilo (rua ou pousada). O risco: o trecho final perto de Gostoso tem buracos e pouca iluminação à noite.</p>
+
+<h3>Ônibus</h3>
+<p>Não há linha regular direta entre o aeroporto de Natal e São Miguel do Gostoso. A opção mais próxima é pegar um ônibus do Terminal Rodoviário de Natal (no centro, longe do aeroporto) até João Câmara ou Touros, e de lá uma topic ou táxi até Gostoso. <strong>Não recomendamos:</strong> consome o dia inteiro, sai mais caro do que parece somando todas as conexões e você chega exausto.</p>
+
+<a class="inline-cta" href="/passeie">
+  <span class="inline-cta__title">Já em Gostoso? Veja o que fazer</span>
+  <span class="inline-cta__desc">Buggy, kitesurf, catamarã, quadriciclo, operadores locais verificados, com preço transparente.</span>
+  <span class="inline-cta__action">Explorar passeios →</span>
+</a>
+
+<h2 id="dicas-finais">8. Dicas finais de quem mora aqui</h2>
+
+<ul>
+  <li><strong>Hidrate antes:</strong> tem trecho longo sem posto de gasolina depois de Touros. Compre água no aeroporto.</li>
+  <li><strong>Sinal de celular cai:</strong> entre Touros e Gostoso o 4G fica intermitente. Baixe o roteiro offline no Maps antes.</li>
+  <li><strong>Voltando pro aeroporto:</strong> agende o retorno com 24h de antecedência e saia com 4h de folga do voo. A estrada em direção a Natal pode ter trânsito pesado em fim de tarde.</li>
+  <li><strong>Pesquise no Google quando chegar em Touros:</strong> tem padaria boa pra um café com tapioca antes de seguir pros últimos 30 km.</li>
+  <li><strong>Bagagem de kitesurf:</strong> avise o motorista com antecedência. Pranchas e velas precisam de van maior ou rack adequado.</li>
+</ul>
+
+<a class="inline-cta" href="/fique">
+  <span class="inline-cta__title">Onde ficar em São Miguel do Gostoso</span>
+  <span class="inline-cta__desc">Pousadas pé na areia, casas de temporada e suítes pra famílias, a lista atualizada da galera local.</span>
+  <span class="inline-cta__action">Ver hospedagens →</span>
+</a>
+
+<h2 id="conclusao">9. Resumindo</h2>
+
+<p>O transfer aeroporto Natal → São Miguel do Gostoso é simples se você reservar com antecedência. O <strong>transfer particular de van</strong> tem o preço combinado direto com o prestador, leva cerca de 1h50, paga em Pix ou dinheiro, e você fala direto com o motorista no WhatsApp. Carro alugado só vale se você ficar muitos dias. Uber e ônibus você pode esquecer.</p>
+
+<p>Reserve seu transfer com pelo menos 24 horas de antecedência (preferência 3 a 7 dias se for alta temporada), confirme o ponto de encontro exato e mande o número do voo na véspera. Pronto, você desembarca, encontra o motorista, dorme na viagem e acorda em Gostoso com o vento batendo no rosto.</p>
+
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Ol%C3%A1!%20Vi%20o%20artigo%20sobre%20transfer%20do%20aeroporto%20de%20Natal%20para%20Gostoso%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es.">
+  <span class="inline-cta__title">Pronto pra reservar?</span>
+  <span class="inline-cta__desc">A gente te conecta com o prestador certo pra sua data e horário. Manda no WhatsApp.</span>
+  <span class="inline-cta__action">💬 Falar no WhatsApp</span>
+</a>
+
+<h2 class="faq-section-title" id="perguntas-frequentes">Perguntas frequentes</h2>
+
+<details class="faq">
+  <summary>Quanto custa o transfer do aeroporto de Natal para São Miguel do Gostoso?</summary>
+  <p>O preço não é tabelado: cada prestador define o valor e você combina direto com ele pelo WhatsApp. Os prestadores e seus valores estão listados na <a href="/transfer">página de transfer</a> do Vive Gostoso. O pagamento costuma ser em Pix ou dinheiro.</p>
+</details>
+
+<details class="faq">
+  <summary>Quanto tempo leva a viagem do aeroporto até Gostoso?</summary>
+  <p>Cerca de 1h50, com aproximadamente 110 km no total. O trajeto segue pelo litoral norte do Rio Grande do Norte, passando por Touros. O tempo pode variar um pouco conforme o trânsito de Natal na saída do aeroporto.</p>
+</details>
+
+<details class="faq">
+  <summary>Tem Uber ou 99 do aeroporto até São Miguel do Gostoso?</summary>
+  <p>Tecnicamente sim, mas raramente algum motorista aceita. A corrida é longa (110 km) e a maioria dos motoristas de Uber/99 não quer voltar vazio. Quando alguém aceita, o preço é variável. Não é a opção mais confiável. Transfer combinado antes pelo WhatsApp é muito mais seguro.</p>
+</details>
+
+<details class="faq">
+  <summary>Posso pagar o transfer no cartão?</summary>
+  <p>A maioria dos prestadores locais aceita só Pix e dinheiro. Alguns aceitam cartão, mas geralmente cobram 5 a 10% a mais e podem ter limite. Leve Pix carregado e algum dinheiro vivo pra evitar surpresa. Confirme a forma de pagamento no WhatsApp antes de embarcar.</p>
+</details>
+
+<details class="faq">
+  <summary>Tem ônibus regular do aeroporto até Gostoso?</summary>
+  <p>Não. Não existe linha de ônibus direta consistente entre o aeroporto de Natal e São Miguel do Gostoso. A única alternativa via ônibus é pegar um do Terminal Rodoviário de Natal até João Câmara ou Touros e completar o trajeto de topic ou táxi local, uma jornada de 4 a 6 horas no total. Não vale a pena.</p>
+</details>
+
+<details class="faq">
+  <summary>Com quanta antecedência preciso reservar o transfer?</summary>
+  <p>Pelo menos 24 horas de antecedência para garantir disponibilidade. Em alta temporada (dezembro a fevereiro, julho), reserve com 3 a 7 dias de antecedência, especialmente para voos noturnos. Voos de madrugada (1h a 5h) precisam de confirmação prévia, porque nem todos operam 24h.</p>
+</details>
+
+<details class="faq">
+  <summary>Onde encontro o motorista no aeroporto de Natal?</summary>
+  <p>Geralmente na área de desembarque, alguns motoristas ficam no hall interno (perto da esteira de bagagem) com placa com seu nome, outros esperam na calçada externa próximo ao ponto de táxi oficial. Combine o ponto exato pelo WhatsApp antes de embarcar em Natal e mande mensagem assim que pousar para alinhar a localização.</p>
+</details>$POST$, faq_jsonld = $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Quanto custa o transfer do aeroporto de Natal para São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"O preço não é tabelado: cada prestador define o valor e você combina direto com ele pelo WhatsApp. Os prestadores e seus valores estão listados na página de transfer do Vive Gostoso. O pagamento costuma ser em Pix ou dinheiro."}},{"@type":"Question","name":"Quanto tempo leva a viagem do aeroporto até Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Cerca de 1h50, com aproximadamente 110 km no total. O trajeto segue pelo litoral norte do Rio Grande do Norte, passando por Touros. O tempo pode variar um pouco conforme o trânsito de Natal na saída do aeroporto."}},{"@type":"Question","name":"Tem Uber ou 99 do aeroporto até São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Tecnicamente sim, mas raramente algum motorista aceita. A corrida é longa (110 km) e a maioria dos motoristas de Uber/99 não quer voltar vazio. Quando alguém aceita, o preço é variável. Não é a opção mais confiável. Transfer combinado antes pelo WhatsApp é muito mais seguro."}},{"@type":"Question","name":"Posso pagar o transfer no cartão?","acceptedAnswer":{"@type":"Answer","text":"A maioria dos prestadores locais aceita só Pix e dinheiro. Alguns aceitam cartão, mas geralmente cobram 5 a 10% a mais e podem ter limite. Leve Pix carregado e algum dinheiro vivo pra evitar surpresa. Confirme a forma de pagamento no WhatsApp antes de embarcar."}},{"@type":"Question","name":"Tem ônibus regular do aeroporto até Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Não. Não existe linha de ônibus direta consistente entre o aeroporto de Natal e São Miguel do Gostoso. A única alternativa via ônibus é pegar um do Terminal Rodoviário de Natal até João Câmara ou Touros e completar o trajeto de topic ou táxi local, uma jornada de 4 a 6 horas no total. Não vale a pena."}},{"@type":"Question","name":"Com quanta antecedência preciso reservar o transfer?","acceptedAnswer":{"@type":"Answer","text":"Pelo menos 24 horas de antecedência para garantir disponibilidade. Em alta temporada (dezembro a fevereiro, julho), reserve com 3 a 7 dias de antecedência, especialmente para voos noturnos. Voos de madrugada (1h a 5h) precisam de confirmação prévia, porque nem todos operam 24h."}},{"@type":"Question","name":"Onde encontro o motorista no aeroporto de Natal?","acceptedAnswer":{"@type":"Answer","text":"Geralmente na área de desembarque, alguns motoristas ficam no hall interno (perto da esteira de bagagem) com placa com seu nome, outros esperam na calçada externa próximo ao ponto de táxi oficial. Combine o ponto exato pelo WhatsApp antes de embarcar em Natal e mande mensagem assim que pousar para alinhar a localização."}}]}$FAQ$, title = 'Transfer do aeroporto de Natal para Gostoso: o que ninguém te conta', excerpt = '110 km entre o Aeroporto de Natal e São Miguel do Gostoso. Como funciona o transfer de van, como agendar, ponto de encontro e o que confirmar antes de embarcar.' WHERE slug = 'transfer-aeroporto-natal-sao-miguel-gostoso';
+
+UPDATE public.gostoso_blog_posts SET content = $POST$
+<p><strong>Resposta rápida:</strong> escolha <strong>Pipa</strong> se quer falésias dramáticas, vida noturna intensa, gastronomia internacional e mar com ondas. Escolha <strong>São Miguel do Gostoso</strong> se quer tranquilidade, vento o ano inteiro pra kitesurf e windsurf, pôr do sol na orla e preços mais simpáticos. Os dois ficam no Rio Grande do Norte, a cerca de 200 km um do outro, e dá perfeitamente pra fazer os dois na mesma viagem.</p>
+
+<p>A pergunta <em>"São Miguel do Gostoso ou Pipa?"</em> é uma das mais comuns de quem está montando o roteiro pelo litoral potiguar pela primeira vez. Os dois destinos são paradisíacos, mas têm personalidades opostas. Este guia foi escrito por quem mora em Gostoso e visita Pipa com frequência, sem maquiar nada.</p>
+
+<h2>Comparativo rápido: Pipa vs. São Miguel do Gostoso</h2>
+
+<table class="comparison-table">
+  <thead>
+    <tr>
+      <th>Critério</th>
+      <th>Pipa</th>
+      <th>São Miguel do Gostoso</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Vibe</td><td>Movimentada, festiva, internacional</td><td>Tranquila, vila de pescadores, vento</td></tr>
+    <tr><td>Paisagem</td><td>Falésias coloridas, golfinhos, mar com ondas</td><td>Praias rasas, dunas, coqueiros, mar calmo</td></tr>
+    <tr><td>Vida noturna</td><td>Bares, baladas, restaurantes até tarde</td><td>Música ao vivo discreta, jantares cedo</td></tr>
+    <tr><td>Esportes</td><td>Surf, stand-up, mergulho, golfinhos</td><td>Kitesurf, windsurf, SUP, passeios de buggy</td></tr>
+    <tr><td>Gastronomia</td><td>Internacional, sushi, italiana, alta concentração</td><td>Frutos do mar regionais, comida de praia, autoral</td></tr>
+    <tr><td>Preço médio (alta)</td><td>R$ 350 a 900/diária pousada</td><td>R$ 200 a 600/diária pousada</td></tr>
+    <tr><td>Distância de Natal</td><td>~85 km (1h45)</td><td>110 km (cerca de 1h50)</td></tr>
+    <tr><td>Melhor pra…</td><td>Casais, grupos de amigos, festa</td><td>Famílias, kitesurfistas, descanso real</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout--tip">
+  <p><strong>Dica:</strong> se você tem 7+ dias, faça os dois. 3 noites em Pipa para o agito, 4 em Gostoso pra desacelerar. Saindo direto de Natal, o transfer entre as duas leva cerca de 3h30 (os valores ficam na página <a href="/transfer">/transfer</a>).</p>
+</div>
+
+<h2>1. Praias e paisagem</h2>
+
+<h3>Praias de Pipa</h3>
+
+<p>Pipa é cinematográfica. As <strong>falésias coloridas</strong> de Cacimbinhas, Praia do Amor e Madeiro entram em qualquer top 10 do Brasil. A <strong>Baía dos Golfinhos</strong> tem encontros diários com botos no mar (acessível só na maré baixa, vale o passeio). O mar é mais aberto, com <strong>ondas boas pra surfar</strong> a maior parte do ano.</p>
+
+<figure>
+  <img src="/blog/sao-miguel-gostoso-ou-pipa/pipa-falesias.jpg" alt="Falésias coloridas e mar de Pipa, Rio Grande do Norte" loading="lazy" width="1600" height="900" />
+  <figcaption>Falésias de Pipa, paisagem icônica do litoral sul potiguar. Foto: Unsplash</figcaption>
+</figure>
+
+<p>O ponto fraco: na alta temporada (dezembro a fevereiro, julho), as praias mais famosas ficam <strong>cheias</strong>, principalmente Praia do Amor e Centro. Pra escapar, vale alugar buggy e ir pra Sibaúma ou Tibau do Sul.</p>
+
+<h3>Praias de São Miguel do Gostoso</h3>
+
+<p>Gostoso é o oposto: praias <strong>extensas, rasas e quase sempre vazias</strong>. A <strong>Praia da Xepa</strong>, no centro, é palco do pôr do sol mais bonito do Nordeste e ponto de encontro da galera todo fim de tarde. <strong>Tourinhos</strong> tem dunas vermelhas que invadem o mar. <strong>Marco</strong> é onde o vento bate forte e os kites tomam conta do horizonte.</p>
+
+<figure>
+  <img src="/blog/sao-miguel-gostoso-ou-pipa/gostoso-kitesurf.jpg" alt="Kitesurf em São Miguel do Gostoso, com vento constante o ano inteiro" loading="lazy" width="1600" height="900" />
+  <figcaption>Kitesurf na praia do Maceió, Gostoso é destino mundial do esporte entre agosto e março. Foto: Unsplash</figcaption>
+</figure>
+
+<p>Não tem falésias dramáticas tipo Pipa, mas tem algo que Pipa perdeu: <strong>silêncio</strong>. Mesmo no réveillon dá pra achar uma praia vazia 10 minutos depois do centro.</p>
+
+<h2>2. O que fazer</h2>
+
+<h3>Atividades em Pipa</h3>
+<ul>
+  <li><strong>Surfar</strong> em Praia do Amor ou Cacimbinhas (escolas a partir de R$ 120/aula)</li>
+  <li><strong>Passeio de barco</strong> com mergulho na Baía dos Golfinhos (R$ 80 a 150/pessoa)</li>
+  <li><strong>Trilha das Falésias</strong> entre Centro e Praia do Amor (de graça)</li>
+  <li><strong>Quadriciclo</strong> ou buggy até o Chapadão (R$ 200 a 400)</li>
+  <li><strong>Vida noturna</strong> na Rua Baía dos Golfinhos, bares, sushi, eletrônica, reggae</li>
+</ul>
+
+<h3>Atividades em São Miguel do Gostoso</h3>
+<ul>
+  <li><strong>Kitesurf e windsurf</strong>, destino top mundial, vento de 25 a 35 nós</li>
+  <li><strong>Stand-up paddle</strong> em mar parado, ideal pra iniciantes</li>
+  <li><strong>Buggy</strong> até Tourinhos, Cardeiro e Lagoa de Pitangui</li>
+  <li><strong>Pôr do sol</strong> diário na Praia da Xepa com música</li>
+  <li><strong>Passeios de catamarã</strong> ao entardecer (R$ 80 a 120/pessoa)</li>
+</ul>
+
+<a class="inline-cta" href="/passeie">
+  <span class="inline-cta__title">Ver passeios em São Miguel do Gostoso</span>
+  <span class="inline-cta__desc">Buggy, kitesurf, catamarã e quadriciclo, operadores locais verificados.</span>
+  <span class="inline-cta__action">Explorar passeios →</span>
+</a>
+
+<h2>3. Vida noturna e gastronomia</h2>
+
+<h3>Pipa: o lado internacional</h3>
+<p>Pipa virou cosmopolita. Tem <strong>sushi de qualidade</strong> (Tapas, Cruzeiro do Pescador), italiana (Tartaruga), francesa, mexicana, hambúrguer gourmet. À noite, a Rua Baía dos Golfinhos vira corredor de bares, Calangos, Camarões e Mr. Tucan dominam.</p>
+<p>Se sua viagem inclui <strong>noitadas longas</strong>, baladas até 4h e jantares depois das 22h, Pipa é praticamente imbatível no Nordeste.</p>
+
+<h3>Gostoso: gastronomia simples e autoral</h3>
+<p>Gostoso tem uma cena gastronômica menor, mas que cresceu muito. Frutos do mar fresquíssimos, cozinha autoral, padarias artesanais, açaí de roça. Não espere fila pra entrar em restaurante, espere reserva no Tatu Bola, Beach Lobsters ou Casa do Camarão.</p>
+
+<figure>
+  <img src="/blog/sao-miguel-gostoso-ou-pipa/pousada-orla.jpg" alt="Pousada à beira-mar em São Miguel do Gostoso ao entardecer" loading="lazy" width="1600" height="900" />
+  <figcaption>Pousadas pé na areia em Gostoso, diárias 30 a 40% mais baratas que Pipa. Foto: Unsplash</figcaption>
+</figure>
+
+<p>Vida noturna é discreta: música ao vivo até 23h, alguns bares no centro, e fim de noite na areia com cerveja. Se você vem pra <strong>desacelerar</strong>, isso é uma feature, não bug.</p>
+
+<a class="inline-cta" href="/come">
+  <span class="inline-cta__title">Onde comer em São Miguel do Gostoso</span>
+  <span class="inline-cta__desc">Restaurantes, padarias, bares e açaí, a lista atualizada da galera local.</span>
+  <span class="inline-cta__action">Ver restaurantes →</span>
+</a>
+
+<h2>4. Hospedagem e preços</h2>
+
+<p>Em <strong>Pipa</strong>, alta temporada (dez a fev, julho) tem diária de pousada simples a partir de R$ 350. Pousadas charmosas pé na areia entre R$ 600 a 1.500. Aluguel de casa pra grupos: R$ 800 a 2.500/noite.</p>
+
+<p>Em <strong>São Miguel do Gostoso</strong>, na mesma alta temporada, pousadas simples saem de R$ 200 a 350. Pousadas charme pé na areia: R$ 400 a 800. Casa pra grupo: R$ 500 a 1.500/noite. Em média, <strong>30 a 40% mais barato</strong> que Pipa.</p>
+
+<div class="callout callout--warn">
+  <p><strong>Atenção:</strong> ambos lotam no Réveillon, Carnaval e julho. Reserve com 3+ meses de antecedência ou aceite pagar 50% a mais. Em baixa temporada (março a junho, setembro a novembro), os preços despencam.</p>
+</div>
+
+<h2>5. Quando ir</h2>
+
+<h3>Melhor época pra Pipa</h3>
+<p>Pipa é destino o ano inteiro, mas a <strong>baixa temporada (março a junho)</strong> é o segredo: dias de sol, mar morno, preços baixos, sem multidão. A alta (jul, dez a fev) tem o melhor agito mas o pior bolso e maior fila.</p>
+
+<h3>Melhor época pra Gostoso</h3>
+<p>Quem vai surfar/passear de buggy: qualquer época. Quem vai <strong>velejar</strong> (kite/wind): <strong>agosto a março</strong>, quando o vento vira leste e fica constante. Maio a julho tem vento mais fraco e dia menor, bom pra família e descanso, ruim pra esporte.</p>
+
+<h2>6. Como chegar</h2>
+
+<p>Os dois saem do mesmo aeroporto: <strong>Aeroporto de Natal (NAT)</strong>.</p>
+<ul>
+  <li><strong>Natal → Pipa:</strong> ~85 km, 1h45 de carro. Há transfer compartilhado e particular.</li>
+  <li><strong>Natal → Gostoso:</strong> 110 km, cerca de 1h50 de carro. Transfer particular (não há linha regular consistente; vale combinar antes).</li>
+  <li><strong>Pipa → Gostoso:</strong> ~200 km, 3h30 de carro. Transfer particular.</li>
+</ul>
+
+<p>Os valores de transfer ficam na página <a href="/transfer">/transfer</a> do site. O preço real é combinado com cada prestador.</p>
+
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Ol%C3%A1!%20Quero%20ajuda%20pra%20montar%20meu%20roteiro%20em%20S%C3%A3o%20Miguel%20do%20Gostoso.">
+  <span class="inline-cta__title">Quer ajuda pra montar seu roteiro?</span>
+  <span class="inline-cta__desc">A gente conhece pousada, transfer, escola de kite, restaurante. Manda no WhatsApp que te ajudamos sem custo.</span>
+  <span class="inline-cta__action">Falar no WhatsApp</span>
+</a>
+
+<h2>7. Pra quem é cada destino</h2>
+
+<h3>Vá pra Pipa se você…</h3>
+<ul>
+  <li>Quer paisagem cinematográfica de falésias</li>
+  <li>Curte vida noturna até 4h da manhã</li>
+  <li>Quer surfar ou ver golfinhos</li>
+  <li>Tem orçamento mais folgado</li>
+  <li>Vai com grupo de amigos pra agitar</li>
+</ul>
+
+<h3>Vá pra Gostoso se você…</h3>
+<ul>
+  <li>Quer descansar de verdade, sem fila e sem multidão</li>
+  <li>Vai pra praticar kite ou windsurf</li>
+  <li>Viaja em família com criança pequena (mar raso e calmo)</li>
+  <li>Tem orçamento mais apertado</li>
+  <li>Quer pôr do sol na praia, jantar leve, dormir cedo</li>
+</ul>
+
+<h2>8. Faça os dois (roteiro de 7 dias)</h2>
+
+<p>Se a viagem permite uma semana ou mais, este é o roteiro mais usado:</p>
+
+<ul>
+  <li><strong>Dia 1:</strong> chegada em Natal, transfer pra Pipa</li>
+  <li><strong>Dias 2 a 4:</strong> Pipa, falésias, golfinhos, vida noturna</li>
+  <li><strong>Dia 5:</strong> transfer Pipa → Gostoso (passa por Natal)</li>
+  <li><strong>Dia 6:</strong> Gostoso, desacelerar, pôr do sol, kite/buggy</li>
+  <li><strong>Dia 7:</strong> retorno Gostoso → Natal → casa</li>
+</ul>
+
+<p>Esse formato funciona porque <strong>termina com descanso</strong>. Se inverter (Gostoso primeiro, Pipa depois), você volta pra casa cansado da agitação.</p>
+
+<h2>9. Veredito</h2>
+
+<p>Não tem destino "melhor". Tem destino <strong>certo pra você</strong>.</p>
+<p>Se você só pode escolher um e a viagem é curta (3 a 4 dias), faça uma pergunta sincera: o que vai te deixar mais satisfeito, voltar com fotos icônicas e história de noite na vila, ou voltar realmente <strong>descansado</strong>, com cabeça limpa e plano de voltar mais vezes?</p>
+<p>A primeira é Pipa. A segunda é Gostoso.</p>
+
+<h2 class="faq-section-title" id="perguntas-frequentes">Perguntas frequentes</h2>
+
+<details class="faq">
+  <summary>São Miguel do Gostoso ou Pipa: qual é mais barato?</summary>
+  <p>São Miguel do Gostoso é, em média, 30 a 40% mais barato que Pipa em diária de pousada, comida e passeios. Em alta temporada a diferença é ainda maior: pousada simples em Gostoso a partir de R$ 200/diária vs. R$ 350/diária em Pipa.</p>
+</details>
+
+<details class="faq">
+  <summary>É possível ir de Pipa pra São Miguel do Gostoso de carro?</summary>
+  <p>Sim. São cerca de 200 km e 3h30 de viagem, geralmente passando por Natal. Não existe linha de ônibus direta consistente, o jeito é transfer particular ou alugar carro próprio. Os valores de transfer ficam na página <a href="/transfer">/transfer</a> do site. Combine o transfer com pelo menos 24h de antecedência.</p>
+</details>
+
+<details class="faq">
+  <summary>Qual é melhor pra ir em família com criança?</summary>
+  <p>São Miguel do Gostoso, sem dúvida. O mar é raso e calmo na maior parte das praias (Maceió, Xepa, Tourinhos), há piscinas naturais na maré baixa, vida noturna discreta e pousadas pé na areia. Pipa tem mar mais aberto e ondas, e a vida noturna na vila pode atrapalhar o sono das crianças.</p>
+</details>
+
+<details class="faq">
+  <summary>Quando é a melhor época pra fazer kitesurf em São Miguel do Gostoso?</summary>
+  <p>De agosto a março, com pico entre setembro e janeiro. Nesse período o vento vira leste e fica constante (25 a 35 nós) quase todos os dias da semana. Maio a julho tem vento mais fraco, ainda dá pra velejar, mas com janelas menores.</p>
+</details>
+
+<details class="faq">
+  <summary>Pipa e São Miguel do Gostoso ficam no mesmo estado?</summary>
+  <p>Sim, os dois ficam no Rio Grande do Norte (RN). Pipa fica no litoral sul (município de Tibau do Sul), 85 km de Natal. São Miguel do Gostoso fica no litoral norte, 110 km de Natal. Ambos compartilham o mesmo aeroporto: Aeroporto Internacional de Natal (NAT).</p>
+</details>
+
+<details class="faq">
+  <summary>Vale a pena fazer só um dia de bate-volta entre os dois?</summary>
+  <p>Não recomendamos. A distância (200 km, 3h30 só de ida) consome o dia inteiro e você não aproveita nada. Se só tem um fim de semana, escolha um dos dois e fique. Se tem 5+ dias, divida em duas estadias.</p>
+</details>$POST$, faq_jsonld = $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"São Miguel do Gostoso ou Pipa: qual é mais barato?","acceptedAnswer":{"@type":"Answer","text":"São Miguel do Gostoso é, em média, 30 a 40% mais barato que Pipa em diária de pousada, comida e passeios. Em alta temporada a diferença é ainda maior: pousada simples em Gostoso a partir de R$ 200/diária vs. R$ 350/diária em Pipa."}},{"@type":"Question","name":"É possível ir de Pipa pra São Miguel do Gostoso de carro?","acceptedAnswer":{"@type":"Answer","text":"Sim. São cerca de 200 km e 3h30 de viagem, geralmente passando por Natal. Não existe linha de ônibus direta consistente, o jeito é transfer particular ou alugar carro próprio. Os valores de transfer ficam na página /transfer do site. Combine o transfer com pelo menos 24h de antecedência."}},{"@type":"Question","name":"Qual é melhor pra ir em família com criança?","acceptedAnswer":{"@type":"Answer","text":"São Miguel do Gostoso, sem dúvida. O mar é raso e calmo na maior parte das praias (Maceió, Xepa, Tourinhos), há piscinas naturais na maré baixa, vida noturna discreta e pousadas pé na areia. Pipa tem mar mais aberto e ondas, e a vida noturna na vila pode atrapalhar o sono das crianças."}},{"@type":"Question","name":"Quando é a melhor época pra fazer kitesurf em São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"De agosto a março, com pico entre setembro e janeiro. Nesse período o vento vira leste e fica constante (25 a 35 nós) quase todos os dias da semana. Maio a julho tem vento mais fraco, ainda dá pra velejar, mas com janelas menores."}},{"@type":"Question","name":"Pipa e São Miguel do Gostoso ficam no mesmo estado?","acceptedAnswer":{"@type":"Answer","text":"Sim, os dois ficam no Rio Grande do Norte (RN). Pipa fica no litoral sul (município de Tibau do Sul), 85 km de Natal. São Miguel do Gostoso fica no litoral norte, 110 km de Natal. Ambos compartilham o mesmo aeroporto: Aeroporto Internacional de Natal (NAT)."}},{"@type":"Question","name":"Vale a pena fazer só um dia de bate-volta entre os dois?","acceptedAnswer":{"@type":"Answer","text":"Não recomendamos. A distância (200 km, 3h30 só de ida) consome o dia inteiro e você não aproveita nada. Se só tem um fim de semana, escolha um dos dois e fique. Se tem 5+ dias, divida em duas estadias."}}]}$FAQ$, title = 'São Miguel do Gostoso ou Pipa: qual destino combina com você (comparativo 2026)', excerpt = 'Pipa tem falésias, vida noturna e ondas. São Miguel do Gostoso tem vento o ano inteiro, pôr do sol na orla e tranquilidade. Tabela comparativa, FAQ e dicas pra escolher (ou fazer os dois) sem se arrepender.' WHERE slug = 'sao-miguel-do-gostoso-ou-pipa-qual-escolher';
+
+UPDATE public.gostoso_blog_posts SET content = $POST$<p>São Miguel do Gostoso não tem aeroporto próprio. Mas não precisa: o aeroporto mais perto fica a 70 km, a estrada é boa e o caminho já é parte da experiência. Este guia traz tudo que você precisa saber pra chegar em Gostoso, seja de avião, carro ou ônibus, com dicas de quem faz esse trajeto toda semana e conhece cada curva do caminho.</p><h2>De avião: o aeroporto mais próximo</h2><p>O aeroporto mais próximo de São Miguel do Gostoso é o <strong>Aeroporto Gov. Aluízio Alves</strong>, em Mossoró (OYK), a cerca de 70 km. O segundo mais usado é o <strong>Aeroporto Internacional de Natal</strong> (NAT), a 110 km. A escolha depende de onde você está saindo e qual companhia tem voo direto para a região.</p><h3>Aeroporto de Mossoró (OYK): 70 km de Gostoso</h3><p>Inaugurado em 2014, o aeroporto de Mossoró recebe voos da Azul e da Gol a partir de Recife, Fortaleza, São Paulo e Belo Horizonte. A vantagem é a distância curta: em 1h15 de carro você já está na praia. O aeroporto é moderno, pequeno e sem confusão: em 20 minutos você já está no carro a caminho de Gostoso.</p><ul><li><strong>Distância até Gostoso:</strong> 70 km</li><li><strong>Tempo de carro:</strong> 1h15 a 1h30</li><li><strong>Transfer:</strong> preço combinado com o prestador</li></ul><h3>Aeroporto de Natal (NAT): 110 km de Gostoso</h3><p>O aeroporto de Natal tem mais voos, mais companhias e mais frequência que o de Mossoró. Latam, Gol e Azul operam rotas diretas a partir de Brasília, São Paulo (Guarulhos e Congonhas), Rio de Janeiro, Recife, Salvador e Belo Horizonte. Se o seu voo direto sai de Mossoró, ótimo. Se não, Natal é a opção mais prática.</p><ul><li><strong>Distância até Gostoso:</strong> 110 km</li><li><strong>Tempo de carro:</strong> cerca de 1h50</li><li><strong>Transfer:</strong> preço combinado com o prestador</li></ul><p>A rota de Natal a Gostoso é pavimentada e bem sinalizada. Segue pelo litoral norte do Rio Grande do Norte e passa por Touros, com paisagem de coqueiral que já coloca o visitante no clima nordestino.</p><h2>De carro: rotas e distâncias</h2><h3>Vindo de Natal (110 km, cerca de 1h50)</h3><p>Saia de Natal pelo litoral norte do Rio Grande do Norte, passando por Touros, em direção a São Miguel do Gostoso. A estrada é pavimentada do início ao fim. Não há pedágio nesse trecho.</p><h3>Vindo de Mossoró (70 km, 1h15)</h3><p>Saia de Mossoró em direção ao litoral e a Gostoso. Estrada pavimentada, pouco movimento, paisagem de caatinga que muda pra coqueiral conforme se aproxima do mar.</p><h3>Vindo de Fortaleza (480 km, 5h30 a 6h)</h3><p>Vá até Mossoró e de lá siga até Gostoso. Dica: abasteça em Fortaleza antes de sair. Os postos entre Mossoró e Gostoso são poucos e com horário limitado.</p><h3>Vindo de João Pessoa (220 km, 3h a 3h30)</h3><p>Siga em direção ao litoral norte do Rio Grande do Norte e depois até Gostoso. Rota simples e bem pavimentada.</p><h3>Vindo de Recife (400 km, 5h a 5h30)</h3><p>Entre no Rio Grande do Norte e siga até Gostoso. Rota longa mas direta, toda asfaltada.</p><h2>De ônibus</h2><p>A Empresa Nordeste opera a linha entre Natal e São Miguel do Gostoso. O ônibus sai do Terminal Rodoviário de Natal e a viagem dura cerca de 2h45, custando em torno de R$ 25 a R$ 35. Horários variam conforme o dia da semana: consulte a empresa diretamente.</p><h2>Transfer: a opção mais prática</h2><p>O preço do transfer é combinado direto com o prestador pelo WhatsApp; os prestadores e seus valores estão listados na <a href="/transfer">página de transfer</a>. De Mossoró são cerca de 1h15 e de Natal cerca de 1h50. Combine com pelo menos 24 horas de antecedência.</p><h2>Aluguel de carro</h2><p>Locadoras como Hertz, Localiza, Movida e Unidas têm balcão nos aeroportos de Natal e Mossoró. Preços: econômico R$ 120 a R$ 180/dia, SUV R$ 200 a R$ 350/dia na alta temporada.</p><p><strong>Dicas de direção:</strong> a estrada é pavimentada mas sem acostamento em trechos. Cuidado com animais na pista depois das 18h. Abasteça em Ceará-Mirim ou Mossoró. Não há pedágio.</p><h2>Dicas finais de quem mora aqui</h2><ul><li>Voo que chega à noite? Mossoró é melhor que Natal (trajeto mais curto e estrada mais tranquila)</li><li>Alta temporada: reserve transfer com 3+ dias de antecedência</li><li>Combine tudo por WhatsApp, motoristas respondem rápido</li><li>Na dúvida entre Natal e Mossoró: veja o preço da passagem aérea</li></ul>$POST$, faq_jsonld = $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Tem aeroporto em São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Não. O aeroporto mais próximo fica em Mossoró (OYK), a 70 km, ou em Natal (NAT), a 110 km."}},{"@type":"Question","name":"Qual o aeroporto mais perto de São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"O Aeroporto Gov. Aluízio Alves, em Mossoró (OYK), a 70 km. O de Natal (NAT) fica a 110 km mas tem mais voos."}},{"@type":"Question","name":"Tem ônibus direto de Natal para São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Sim, a Empresa Nordeste opera a linha. A viagem dura cerca de 2h45 e custa R$ 25 a R$ 35. Frequência limitada."}},{"@type":"Question","name":"Quanto custa transfer de Mossoró para Gostoso?","acceptedAnswer":{"@type":"Answer","text":"O preço é combinado direto com o prestador pelo WhatsApp. Os prestadores e seus valores estão listados na página de transfer do Vive Gostoso."}},{"@type":"Question","name":"A estrada para São Miguel do Gostoso é pavimentada?","acceptedAnswer":{"@type":"Answer","text":"Sim. A estrada é pavimentada do início ao fim. Cuidado com animais na pista depois das 18h."}}]}$FAQ$, title = 'Como Chegar em São Miguel do Gostoso: Guia Completo 2026', excerpt = 'Tudo sobre como chegar em São Miguel do Gostoso: de avião, carro e ônibus. Dicas de transfer, estradas e o aeroporto mais próximo.' WHERE slug = 'como-chegar-sao-miguel-do-gostoso';
+
+UPDATE public.gostoso_blog_posts SET content = $POST$
+<p><strong>Resposta direta:</strong> se o critério for custo, lotação e sossego, São Miguel do Gostoso ganha na maioria dos casos. As diárias custam menos, as praias enchem menos e o ritmo geral é mais lento. Pipa ainda vence em paisagem de falésias, vida noturna e variedade gastronômica, mas quem busca economizar e evitar multidão tende a sair mais satisfeito escolhendo Gostoso.</p>
+
+<p>Isso não significa que Pipa seja pior de forma geral, apenas que ela resolve outro tipo de viagem. Este texto foca nos três pontos que mais pesam na decisão de quem está comparando os dois: quanto custa, quão cheio fica e quão tranquilo é o dia a dia.</p>
+
+<h2>1. Custo: quanto rende sua viagem em cada destino</h2>
+
+<p>Em alta temporada, hospedagem em Pipa parte de R$ 350 a diária em pousada simples, chegando a R$ 900 em pousadas charmosas na área central. Em Gostoso, o mesmo padrão de pousada sai de R$ 200 a R$ 350 na baixa e média temporada, e R$ 400 a R$ 600 em pousadas mais charmosas na alta.</p>
+
+<p>Para visualizar, veja uma estimativa de orçamento para um casal, 7 noites, em alta temporada, sem contar o transfer:</p>
+
+<table class="comparison-table">
+  <thead>
+    <tr><th>Item (7 noites, casal)</th><th>Pipa</th><th>Gostoso</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Hospedagem</td><td>R$ 2.450 a R$ 4.200</td><td>R$ 1.400 a R$ 2.800</td></tr>
+    <tr><td>Alimentação</td><td>R$ 1.400 a R$ 2.100</td><td>R$ 900 a R$ 1.500</td></tr>
+    <tr><td>Passeios e esportes</td><td>R$ 400 a R$ 800</td><td>R$ 400 a R$ 900 (kite custa mais)</td></tr>
+    <tr><td>Total aproximado (sem transfer)</td><td>R$ 4.250 a R$ 7.100</td><td>R$ 2.700 a R$ 5.200</td></tr>
+  </tbody>
+</table>
+
+<p>Duas ressalvas honestas: o transfer não entra na conta acima, porque o valor é combinado com cada prestador pelo WhatsApp (os prestadores estão na página <a href="/transfer">transfer</a>), e Gostoso não tem aeroporto próprio: de Natal são 110 km, cerca de 1h50. E se o plano incluir aulas de kitesurf, o pacote de equipamento e instrutor pode empatar ou até superar o gasto extra de Pipa em outras categorias. Ainda assim, somando tudo, Gostoso costuma sair de 25 a 35% mais barato numa semana comum, principalmente por causa da hospedagem e da comida.</p>
+
+<div class="callout callout--tip">
+  <p><strong>Dica prática:</strong> os preços de Gostoso sobem bastante em dezembro, fevereiro, carnaval e réveillon. Fora desses picos, a diferença de custo para Pipa fica ainda maior, porque Gostoso baixa mais o preço na baixa temporada do que Pipa.</p>
+</div>
+
+<h2>2. Lotação e sossego: o motivo real por trás da escolha</h2>
+
+<p>Pipa cresceu muito nos últimos anos e hoje tem uma vila com trânsito, filas em restaurante concorrido e praias centrais (Praia do Amor, Centro) disputadas por espaço na areia em qualquer feriado prolongado. Isso não é defeito, é o preço de ser um destino consolidado e bem estruturado.</p>
+
+<p>Gostoso ainda não chegou nesse ponto. O centro é pequeno, o trânsito praticamente não existe e mesmo nas praias mais procuradas (Xepa, Maceió) dá para caminhar alguns minutos e achar um trecho vazio. Réveillon e alta temporada lotam, sim, mas numa escala bem menor que a de Pipa, porque tem menos hotéis e menos leitos disponíveis na cidade toda.</p>
+
+<p>Na prática, isso se traduz em coisas simples: fila menor pra comer, mais fácil achar vaga pra estacionar, praia sem disputa de guarda-sol e uma sensação geral de vila de pescadores que ainda não virou ponto turístico de massa.</p>
+
+<h2>3. Vibe e perfil de turista</h2>
+
+<p>Pipa atrai um público mais jovem, com foco em vida noturna, surf e agito. A rua principal vira point de bares e baladas todas as noites, e a gastronomia é mais variada e internacional (sushi, italiana, hambúrguer gourmet).</p>
+
+<p>Gostoso atrai famílias, casais em busca de descanso e o público do kitesurf e windsurf, que costuma ser mais velho e menos interessado em balada. A noite aqui termina cedo: música ao vivo até por volta das 23h, jantar tranquilo, cerveja na areia. Reparo isso toda semana: quem vem pra farrear até de madrugada sai frustrado, e quem vem de Pipa achando que vai ter o mesmo agito também estranha o silêncio nos primeiros dias. Depois se acostuma e não quer mais sair.</p>
+
+<h2>4. Infraestrutura turística: onde Pipa ainda ganha</h2>
+
+<p>Vale ser honesto aqui: Pipa tem infraestrutura turística mais madura. Mais opções de restaurante, mais agências de passeio, mais variedade de hospedagem, caixa eletrônico e farmácia em cada esquina, e estrutura pronta pra grupos grandes. Gostoso melhorou muito nos últimos anos, mas ainda tem menos opções de tudo: menos restaurantes abertos fora de temporada, menos variedade de hospedagem de luxo, e alguns serviços (como transfer) precisam ser combinados com pelo menos 24 horas de antecedência porque não existe linha regular.</p>
+
+<p>Se o critério for praticidade e variedade de serviços prontos, Pipa vence sem dúvida. Se o critério for custo, sossego e menos gente, Gostoso vence.</p>
+
+<a class="inline-cta" href="/fique">
+  <span class="inline-cta__title">Ver pousadas em São Miguel do Gostoso</span>
+  <span class="inline-cta__desc">Opções para todos os orçamentos, da vila ao pé na areia. FIQUE. no lugar certo pra sua viagem.</span>
+  <span class="inline-cta__action">Ver hospedagens →</span>
+</a>
+
+<h2>5. Quando Pipa ainda faz mais sentido</h2>
+
+<p>Vale escolher Pipa se a prioridade for vida noturna, paisagem de falésias, surf com ondas boas, ou se a viagem é em grupo grande e a praticidade de ter tudo pronto pesa mais que economizar. Vale escolher Gostoso se a prioridade for gastar menos, descansar de verdade, praticar kite ou windsurf, ou viajar em família com criança pequena, já que o mar em Gostoso é mais raso e calmo na maioria das praias.</p>
+
+<a class="inline-cta" href="/passeie">
+  <span class="inline-cta__title">Ver passeios em São Miguel do Gostoso</span>
+  <span class="inline-cta__desc">Buggy, kitesurf, catamarã e SUP com operadores locais. PASSEIE. sem pagar preço de destino lotado.</span>
+  <span class="inline-cta__action">Explorar passeios →</span>
+</a>
+
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Ol%C3%A1!%20Quero%20ajuda%20pra%20montar%20meu%20roteiro%20em%20S%C3%A3o%20Miguel%20do%20Gostoso.">
+  <span class="inline-cta__title">Quer ajuda pra decidir seu roteiro?</span>
+  <span class="inline-cta__desc">A gente mora aqui e te ajuda a montar o plano certo pro seu perfil de viagem.</span>
+  <span class="inline-cta__action">💬 Falar no WhatsApp</span>
+</a>
+
+<h2 class="faq-section-title" id="perguntas-frequentes">Perguntas frequentes</h2>
+
+<details class="faq">
+  <summary>Pipa é mais caro que Gostoso?</summary>
+  <p>Sim, na maioria dos casos. Hospedagem e alimentação em Pipa costumam custar de 25 a 35% mais que em Gostoso numa semana comum, principalmente por causa da diária de pousada e do custo médio dos restaurantes.</p>
+</details>
+
+<details class="faq">
+  <summary>Gostoso tem vida noturna?</summary>
+  <p>Tem, mas é discreta: música ao vivo até por volta das 23h e alguns bares no centro. Não existe cena de balada como em Pipa. Quem busca noites longas costuma se frustrar em Gostoso.</p>
+</details>
+
+<details class="faq">
+  <summary>Gostoso fica mais vazio que Pipa mesmo na alta temporada?</summary>
+  <p>Sim. Mesmo lotando na alta temporada e no réveillon, Gostoso recebe uma fração da quantidade de turistas que Pipa recebe, porque tem menos leitos e uma vila menor. É comum achar praia vazia a poucos minutos do centro mesmo em dezembro.</p>
+</details>
+
+<details class="faq">
+  <summary>Vale mais a pena ir pra Gostoso se eu não pratico kitesurf?</summary>
+  <p>Vale, sim. O kitesurf é só um dos atrativos. Quem não pratica ainda aproveita as praias tranquilas, o pôr do sol na Xepa, passeios de buggy e catamarã, e o custo mais baixo em relação a Pipa.</p>
+</details>$POST$, faq_jsonld = $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Pipa é mais caro que Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Sim, na maioria dos casos. Hospedagem e alimentação em Pipa costumam custar de 25 a 35% mais que em Gostoso numa semana comum, principalmente por causa da diária de pousada e do custo médio dos restaurantes."}},{"@type":"Question","name":"Gostoso tem vida noturna?","acceptedAnswer":{"@type":"Answer","text":"Tem, mas é discreta: música ao vivo até por volta das 23h e alguns bares no centro. Não existe cena de balada como em Pipa. Quem busca noites longas costuma se frustrar em Gostoso."}},{"@type":"Question","name":"Gostoso fica mais vazio que Pipa mesmo na alta temporada?","acceptedAnswer":{"@type":"Answer","text":"Sim. Mesmo lotando na alta temporada e no réveillon, Gostoso recebe uma fração da quantidade de turistas que Pipa recebe, porque tem menos leitos e uma vila menor. É comum achar praia vazia a poucos minutos do centro mesmo em dezembro."}},{"@type":"Question","name":"Vale mais a pena ir pra Gostoso se eu não pratico kitesurf?","acceptedAnswer":{"@type":"Answer","text":"Vale, sim. O kitesurf é só um dos atrativos. Quem não pratica ainda aproveita as praias tranquilas, o pôr do sol na Xepa, passeios de buggy e catamarã, e o custo mais baixo em relação a Pipa."}}]}$FAQ$, title = 'Por Que São Miguel do Gostoso é Melhor que Pipa: Custo, Lotação e Sossego em 2026', excerpt = 'Comparamos custo, lotação e sossego entre Pipa e Gostoso com números aproximados. Veja por que São Miguel do Gostoso costuma sair mais barato e mais tranquilo.' WHERE slug = 'por-que-gostoso-e-melhor-que-pipa';
+
+UPDATE public.gostoso_blog_posts SET content = $POST$<p><strong>Resposta direta:</strong> a 13ª Mostra de Cinema de Gostoso acontece de 20 a 24 de novembro de 2026, na Praia do Maceió, em São Miguel do Gostoso (RN). A programação é gratuita, dedicada exclusivamente ao cinema brasileiro, e roda em duas estruturas: uma sala de cinema ao ar livre para 700 pessoas na areia e uma segunda sala climatizada, a Sala Petrobras, para sessões durante o dia. Se novembro já estava nos seus planos para vir a Gostoso, essa é a semana para fechar a viagem.</p>
+
+<h2>O que é a Mostra de Cinema de Gostoso</h2>
+<p>A Mostra começou pequena e hoje é reconhecida como patrimônio cultural e turístico do Rio Grande do Norte, título recebido em 2025. A realização reúne o Ministério da Cultura, a Petrobras e o Governo do Estado do Rio Grande do Norte, e o recorte da seleção é objetivo: só entra filme brasileiro, longa, curta ou média-metragem, de ficção, documentário ou animação.</p>
+<p>2026 marca a 13ª edição. As inscrições de filmes fecharam em agosto, então a grade completa de sessões por dia e horário deve sair nas semanas que antecedem o festival, vale acompanhar o <a href="https://www.mostradecinemadegostoso.com.br/" target="_blank" rel="noopener noreferrer">site oficial da Mostra</a> para a programação final.</p>
+
+<h2>Datas e estrutura</h2>
+<p>O festival ocupa a Praia do Maceió de 20 a 24 de novembro de 2026, com duas salas funcionando em paralelo:</p>
+<ul>
+<li><strong>Sala ao ar livre:</strong> tela de 12m x 6,5m, projeção 4K e som 7.1, com 700 cadeiras espreguiçadeiras na areia. As sessões principais acontecem à noite, com a praia como cenário.</li>
+<li><strong>Sala Petrobras:</strong> tenda geodésica climatizada, também com projeção 4K e som 7.1, funcionando durante o dia. É a estrutura que sustenta a programação da Mostra Panorama e sessões especiais sem depender do sol ou da chuva.</li>
+</ul>
+
+<h2>Programação: competição, panorama e prêmios</h2>
+<p>A seleção se divide em blocos:</p>
+<ul>
+<li><strong>Mostra Competitiva:</strong> longas e curtas concorrendo ao Troféu do Júri Popular e ao Troféu da Imprensa, este último votado por jornalistas e críticos convidados.</li>
+<li><strong>Mostra Panorama:</strong> filmes fora da competição, com espaço para formatos e narrativas menos convencionais do cinema brasileiro recente.</li>
+<li><strong>Sessões especiais e debates:</strong> encontros com diretores, masterclasses e reexibição de clássicos restaurados, a Sala Petrobras já recebeu, por exemplo, uma sessão comemorativa de "Cinema, Aspirinas e Urubus", de Marcelo Gomes.</li>
+</ul>
+<p>Na edição de 2025, os vencedores foram o documentário <em>Aqui Não Entra Luz</em>, de Karol Maia, na categoria longa, e o curta <em>Pupá</em>, de Osani. Dá pra ter uma régua do nível da seleção assistindo a esses dois antes de viajar.</p>
+
+<h2>Por que a Petrobras está no meio disso</h2>
+<p>A Sala Petrobras é o patrocínio mais visível do festival, presente desde 2023. Além de bancar a estrutura de projeção, o investimento sustenta um programa de formação técnica em audiovisual para jovens da região: desde 2013, já foram 52 oficinas e 28 curtas-metragens produzidos por participantes locais. É um dos poucos festivais de praia no Brasil em que o patrocínio vira, na prática, formação de mão de obra na própria cidade, não só uma sala com o nome estampado.</p>
+
+<h2>Como encaixar o festival na sua viagem</h2>
+<p>Novembro já é temporada de vento forte em São Miguel do Gostoso, então dá pra fechar o dia com aula de kitesurf de manhã e sessão de cinema à noite. Algumas coisas para organizar antes:</p>
+<ul>
+<li>A programação é gratuita, mas a cidade enche na semana do festival, <a href="/blog/pousadas-sao-miguel-do-gostoso">reserve hospedagem</a> com antecedência.</li>
+<li>A Praia do Maceió fica a poucos minutos do centro; aproveite os dias sem sessão para conhecer o resto do <a href="/blog/praias-sao-miguel-do-gostoso">litoral de Gostoso</a>.</li>
+<li>Do aeroporto de Natal até Gostoso são 110 km, cerca de 1h50, veja as opções em <a href="/blog/como-chegar-sao-miguel-do-gostoso">como chegar a São Miguel do Gostoso</a>.</li>
+</ul>
+
+<h2>Informações práticas</h2>
+<ul>
+<li><strong>Quando:</strong> 20 a 24 de novembro de 2026</li>
+<li><strong>Onde:</strong> Praia do Maceió, São Miguel do Gostoso (RN)</li>
+<li><strong>Ingresso:</strong> gratuito, sujeito à lotação das salas</li>
+<li><strong>Programação completa e inscrições:</strong> <a href="https://www.mostradecinemadegostoso.com.br/" target="_blank" rel="noopener noreferrer">mostradecinemadegostoso.com.br</a></li>
+</ul>
+
+<h2>Perguntas frequentes</h2>
+<p><strong>A Mostra de Cinema de Gostoso é paga?</strong><br>Não. Toda a programação é gratuita, sujeita à lotação das salas.</p>
+<p><strong>Quantos dias dura o festival em 2026?</strong><br>Cinco dias, de 20 a 24 de novembro.</p>
+<p><strong>Preciso comprar ingresso com antecedência?</strong><br>Não há venda de ingressos. Como os assentos são limitados, 700 na sala ao ar livre e cerca de 130 na Sala Petrobras, é comum que as sessões mais concorridas lotem primeiro, então chegar com antecedência ajuda a garantir lugar.</p>
+<p><strong>A Sala Petrobras funciona durante o dia?</strong><br>Sim. Diferente da sala ao ar livre, que funciona à noite, a Sala Petrobras é uma tenda climatizada projetada para sessões durante o dia, mantendo boa qualidade de imagem e som mesmo sob sol forte.</p>$POST$, faq_jsonld = $FAQ${"@type": "FAQPage", "@context": "https://schema.org", "mainEntity": [{"name": "A Mostra de Cinema de Gostoso é paga?", "@type": "Question", "acceptedAnswer": {"text": "Não. Toda a programação é gratuita, sujeita à lotação das salas.", "@type": "Answer"}}, {"name": "Quantos dias dura o festival em 2026?", "@type": "Question", "acceptedAnswer": {"text": "Cinco dias, de 20 a 24 de novembro de 2026.", "@type": "Answer"}}, {"name": "Preciso comprar ingresso com antecedência?", "@type": "Question", "acceptedAnswer": {"text": "Não há venda de ingressos. Como os assentos são limitados, 700 na sala ao ar livre e cerca de 130 na Sala Petrobras, é comum que as sessões mais concorridas lotem primeiro, então chegar com antecedência ajuda a garantir lugar.", "@type": "Answer"}}, {"name": "A Sala Petrobras funciona durante o dia?", "@type": "Question", "acceptedAnswer": {"text": "Sim. Diferente da sala ao ar livre, que funciona à noite, a Sala Petrobras é uma tenda climatizada projetada para sessões durante o dia, mantendo boa qualidade de imagem e som mesmo sob sol forte.", "@type": "Answer"}}]}$FAQ$, title = 'Mostra de Cinema de Gostoso 2026: Datas, Programação e Onde Ficar no Festival', excerpt = 'A 13ª Mostra de Cinema de Gostoso acontece de 20 a 24 de novembro de 2026, na Praia do Maceió, com programação gratuita e patrocínio da Petrobras. Veja datas, estrutura e como organizar a viagem.' WHERE slug = 'mostra-de-cinema-de-gostoso-2026';
+
+-- ===================== PARTE 1: gravar en e es (nao publicado) =====================
 
 INSERT INTO public.gostoso_blog_posts (slug, title, excerpt, content, cover_url, author, tags, is_published, published_at, faq_jsonld)
 SELECT 'airport-transfer-natal-sao-miguel-do-gostoso', 'Natal Airport to Gostoso Transfer: What Nobody Tells You', '110 km between Natal Airport and São Miguel do Gostoso. What a van transfer costs, how to book it, where to meet the driver and what to confirm before you board.', $POST$
-<p><strong>Quick answer:</strong> it is <strong>110 km</strong> from Natal Airport (NAT) to São Miguel do Gostoso, about <strong>1h40 to 2h</strong> on the road. A <strong>private van or car transfer</strong> costs <strong>R$ 200 to 280</strong> per vehicle (up to 4 passengers), paid by Pix or cash. Book at least 2 hours ahead on WhatsApp. There is no reliable regular bus line to Gostoso, and Uber/99 drivers rarely accept rides this long.</p>
+<p><strong>Quick answer:</strong> it is <strong>110 km</strong> from Natal Airport (NAT) to São Miguel do Gostoso, about <strong>1h50</strong> on the road. The <strong>private van or car transfer</strong> is priced directly by each provider: you agree the price with them on WhatsApp, and the providers and their prices are listed on the <a href="/transfer">transfer page</a>. Book at least 24 hours ahead. There is no reliable regular bus line to Gostoso, and Uber/99 drivers rarely accept rides this long.</p>
 
-<p>110 km looks short on paper. In practice it means BR-101, state highways and a stretch of questionable asphalt near Touros, with weak GPS signal right when you need it. You can do it in a rental car, but on a first trip you will spend about 20 minutes working out a fork that Maps marks wrong. This guide was written by someone who lives in Gostoso and receives visitors almost every week, with nothing sugarcoated.</p>
+<p>110 km looks short on paper. In practice it means highways along the north coast and a stretch of questionable asphalt near Touros, with weak GPS signal right when you need it. You can do it in a rental car, but on a first trip you will spend about 20 minutes working out a fork that Maps marks wrong. This guide was written by someone who lives in Gostoso and receives visitors almost every week, with nothing sugarcoated.</p>
 
 <h2 id="distancia-tempo">1. Distance and real travel time</h2>
 
-<p>São Miguel do Gostoso is <strong>~110 km</strong> from Natal International Airport (NAT, officially São Gonçalo do Amarante Airport). The trip takes between <strong>1h40 and 2h</strong>, and the variable is how long it takes you to get out of Natal traffic on BR-101. After Touros, the RN-221 is quiet and the scenery gets good: salt flats, wind turbines, coconut groves.</p>
+<p>São Miguel do Gostoso is <strong>~110 km</strong> from Natal International Airport (NAT, officially São Gonçalo do Amarante Airport). The trip takes about <strong>1h50</strong>, and the variable is how long it takes you to get out of Natal traffic. After Touros, the road is quiet and the scenery gets good: salt flats, wind turbines, coconut groves.</p>
 
-<p>The usual route goes through:</p>
-
-<ul>
-  <li><strong>BR-101 north</strong> from São Gonçalo do Amarante (the airport)</li>
-  <li><strong>BR-406</strong> toward Touros</li>
-  <li><strong>RN-221</strong> for the last 30 km to Gostoso</li>
-</ul>
+<p>The route follows the north coast of Rio Grande do Norte, going through Touros on the way to Gostoso.</p>
 
 <div class="callout callout--info">
   <p><strong>Note:</strong> the Natal airport is not in Natal. It is in São Gonçalo do Amarante, about 30 km west. That already saves some distance if you are going to Gostoso (north coast). If you are going to Pipa (south coast), it adds distance.</p>
@@ -54,29 +615,29 @@ SELECT 'airport-transfer-natal-sao-miguel-do-gostoso', 'Natal Airport to Gostoso
   <tbody>
     <tr>
       <td>Private transfer (van/car)</td>
-      <td>R$ 200 to 280 per vehicle</td>
-      <td>~2h direct</td>
+      <td>Agreed with the provider</td>
+      <td>~1h50 direct</td>
       <td>High, luggage is safe, local driver</td>
       <td>First trip, with family, night flight, large luggage</td>
     </tr>
     <tr>
       <td>Shared transfer</td>
-      <td>R$ 100 to 140 per person</td>
-      <td>~2h30 (stops)</td>
+      <td>Agreed with the provider</td>
+      <td>~1h50 plus stops</td>
       <td>Medium, you share the van with others</td>
       <td>Solo or couple, no rush, wanting to save money</td>
     </tr>
     <tr>
       <td>Rental car</td>
       <td>R$ 150 to 250/day + fuel (~R$ 80 one way)</td>
-      <td>~2h</td>
+      <td>~1h50</td>
       <td>High, but you drive</td>
       <td>Staying 5+ days and wanting to drive to Tourinhos, Pitangui, Galinhos</td>
     </tr>
     <tr>
       <td>Uber/99 + a connection</td>
-      <td>R$ 350 to 500 (rarely accepted)</td>
-      <td>2h+</td>
+      <td>Rarely accepted, variable price</td>
+      <td>~1h50</td>
       <td>Varies</td>
       <td>Almost never, drivers turn down long rides</td>
     </tr>
@@ -84,18 +645,18 @@ SELECT 'airport-transfer-natal-sao-miguel-do-gostoso', 'Natal Airport to Gostoso
 </table>
 
 <div class="callout callout--tip">
-  <p><strong>Tip:</strong> if you are a couple or a family, a private transfer costs almost the same per person as a shared one, but it is faster and more private. If you travel alone, the shared option saves you half. A rental car only pays off if you stay several days and want to explore the region.</p>
+  <p><strong>Tip:</strong> if you are a couple or a family, a private transfer is faster and more private. If you travel alone, a shared transfer can be cheaper per person when the van leaves with other passengers. A rental car only pays off if you stay several days and want to explore the region.</p>
 </div>
 
-<h2 id="quanto-custa">3. What the transfer costs (the real price range)</h2>
+<h2 id="quanto-custa">3. What the transfer costs</h2>
 
-<p>Per <strong>whole vehicle</strong>, the most common range is <strong>R$ 200 to 280</strong> between the airport and Gostoso, for a car or van seating up to 4 passengers. The return costs the same. Larger vans (7+ passengers) run between R$ 350 and 500.</p>
+<p>The transfer price is not fixed: each provider sets it, and you agree it directly with them on WhatsApp. The providers and their prices are listed on the <a href="/transfer">transfer page</a> of Vive Gostoso.</p>
 
-<p>If you travel alone or as a couple and do not want to pay for a whole van, some providers fill the trip with other passengers, and then the price per person drops to somewhere between <strong>R$ 100 and 140</strong>. When you contact them on WhatsApp, ask whether the van leaves full or whether they will split it.</p>
+<p>If you travel alone or as a couple and do not want to pay for a whole van, some providers fill the trip with other passengers, and then the cost is divided among the passengers. When you contact them on WhatsApp, ask whether the van leaves full or whether they will split it.</p>
 
 <p><strong>Payment methods:</strong> most local providers accept Pix and cash. Cards are rare, and when accepted they usually add 5 to 10%. Bring some cash for contingencies (like a planned stop in Touros for a snack).</p>
 
-<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Ol%C3%A1!%20Vi%20o%20artigo%20sobre%20transfer%20do%20aeroporto%20de%20Natal%20para%20Gostoso%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es.">
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Hello!%20I%20read%20the%20article%20about%20the%20Natal%20airport%20transfer%20to%20Gostoso%20and%20would%20like%20more%20information.">
   <span class="inline-cta__title">Want a transfer quote now?</span>
   <span class="inline-cta__desc">We point you to a verified local provider, with price and availability for your date. No intermediary fee.</span>
   <span class="inline-cta__action">Message us on WhatsApp</span>
@@ -103,7 +664,7 @@ SELECT 'airport-transfer-natal-sao-miguel-do-gostoso', 'Natal Airport to Gostoso
 
 <h2 id="como-agendar">4. How to book (and when)</h2>
 
-<p>The earlier the better. Providers at the airport need <strong>at least 2 hours' notice</strong> to get into position at arrivals. At 11 pm, with a delayed flight from São Paulo, the options shrink a lot, and some drivers do not work overnight.</p>
+<p>The earlier the better. Providers at the airport need <strong>at least 24 hours' notice</strong> to get into position at arrivals. At 11 pm, with a delayed flight from São Paulo, the options shrink a lot, and some drivers do not work overnight.</p>
 
 <p>The standard process works like this:</p>
 
@@ -150,7 +711,7 @@ SELECT 'airport-transfer-natal-sao-miguel-do-gostoso', 'Natal Airport to Gostoso
 <h2 id="alternativas">7. Rental car or bus: is it worth it?</h2>
 
 <h3>Rental car</h3>
-<p>It makes sense if you will stay <strong>5 or more days</strong> and want to explore the region: Tourinhos, Cardeiro, Lagoa de Pitangui, Galinhos. It costs R$ 150 to 250 per day for a basic model (1.0) plus about R$ 80 in fuel for the outbound trip alone. Parking in Gostoso is easy (street or at the pousada). The risk: the last stretch of the RN-221 has potholes and little lighting at night.</p>
+<p>It makes sense if you will stay <strong>5 or more days</strong> and want to explore the region: Tourinhos, Cardeiro, Lagoa de Pitangui, Galinhos. It costs R$ 150 to 250 per day for a basic model (1.0) plus about R$ 80 in fuel for the outbound trip alone. Parking in Gostoso is easy (street or at the pousada). The risk: the last stretch near Gostoso has potholes and little lighting at night.</p>
 
 <h3>Bus</h3>
 <p>There is no direct regular line between Natal airport and São Miguel do Gostoso. The closest option is to take a bus from the Natal bus station (downtown, far from the airport) to João Câmara or Touros, and from there a minibus or taxi to Gostoso. <strong>We do not recommend it:</strong> it eats the whole day, costs more than it seems once you add up all the connections, and you arrive exhausted.</p>
@@ -166,7 +727,7 @@ SELECT 'airport-transfer-natal-sao-miguel-do-gostoso', 'Natal Airport to Gostoso
 <ul>
   <li><strong>Hydrate beforehand:</strong> there is a long stretch without a gas station after Touros. Buy water at the airport.</li>
   <li><strong>Phone signal drops:</strong> between Touros and Gostoso, 4G is intermittent. Download the route offline in Maps before you go.</li>
-  <li><strong>Going back to the airport:</strong> book the return 24 hours ahead and leave 4 hours before your flight. BR-101 toward Natal can have heavy traffic in the late afternoon.</li>
+  <li><strong>Going back to the airport:</strong> book the return 24 hours ahead and leave 4 hours before your flight. The road toward Natal can have heavy traffic in the late afternoon.</li>
   <li><strong>Search on Google when you reach Touros:</strong> there is a good bakery for a coffee with tapioca before the last 30 km.</li>
   <li><strong>Kitesurf luggage:</strong> tell the driver in advance. Boards and kites need a bigger van or a proper rack.</li>
 </ul>
@@ -179,11 +740,11 @@ SELECT 'airport-transfer-natal-sao-miguel-do-gostoso', 'Natal Airport to Gostoso
 
 <h2 id="conclusao">9. In short</h2>
 
-<p>The Natal airport → São Miguel do Gostoso transfer is simple if you book ahead. A <strong>private van transfer</strong> costs R$ 200 to 280 per vehicle, takes ~2h, is paid by Pix or cash, and you talk to the driver directly on WhatsApp. A rental car is only worth it if you stay many days. Uber and the bus you can forget.</p>
+<p>The Natal airport → São Miguel do Gostoso transfer is simple if you book ahead. A <strong>private van transfer</strong> is priced directly by the provider, takes about 1h50, is paid by Pix or cash, and you talk to the driver directly on WhatsApp. A rental car is only worth it if you stay many days. Uber and the bus you can forget.</p>
 
 <p>Book your transfer at least 24 hours ahead (preferably 3 to 7 days in high season), confirm the exact meeting point and send the flight number the day before. That is it: you land, find the driver, sleep on the way and wake up in Gostoso with the wind on your face.</p>
 
-<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Ol%C3%A1!%20Vi%20o%20artigo%20sobre%20transfer%20do%20aeroporto%20de%20Natal%20para%20Gostoso%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es.">
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Hello!%20I%20read%20the%20article%20about%20the%20Natal%20airport%20transfer%20to%20Gostoso%20and%20would%20like%20more%20information.">
   <span class="inline-cta__title">Ready to book?</span>
   <span class="inline-cta__desc">We connect you with the right provider for your date and time. Send us a message on WhatsApp.</span>
   <span class="inline-cta__action">Message us on WhatsApp</span>
@@ -193,17 +754,17 @@ SELECT 'airport-transfer-natal-sao-miguel-do-gostoso', 'Natal Airport to Gostoso
 
 <details class="faq">
   <summary>How much does the transfer from Natal airport to São Miguel do Gostoso cost?</summary>
-  <p>A private transfer costs between R$ 200 and R$ 280 per vehicle (up to 4 passengers), paid by Pix or cash. Larger vans (7+ seats) cost R$ 350 to 500. A shared transfer runs between R$ 100 and R$ 140 per person when the driver manages to fill the van with other passengers.</p>
+  <p>The price is not fixed: each provider sets it, and you agree it directly with them on WhatsApp. The providers and their prices are listed on the <a href="/transfer">transfer page</a> of Vive Gostoso. Payment is usually by Pix or cash.</p>
 </details>
 
 <details class="faq">
   <summary>How long does the trip from the airport to Gostoso take?</summary>
-  <p>Between 1h40 and 2h, depending on Natal traffic when leaving the airport. The route goes along BR-101, BR-406 and RN-221, about 110 km in total. At night or in the early hours the trip is shorter; on weekends or in high season it can reach 2h15.</p>
+  <p>About 1h50, for roughly 110 km in total. The route follows the north coast of Rio Grande do Norte, going through Touros. The time can vary a little with Natal traffic when leaving the airport.</p>
 </details>
 
 <details class="faq">
   <summary>Is there Uber or 99 from the airport to São Miguel do Gostoso?</summary>
-  <p>Technically yes, but a driver rarely accepts. The ride is long (110 km) and most Uber/99 drivers do not want to come back empty. When someone does accept, they usually charge between R$ 350 and R$ 500. It is not the most reliable option; a transfer arranged beforehand on WhatsApp is much safer.</p>
+  <p>Technically yes, but a driver rarely accepts. The ride is long (110 km) and most Uber/99 drivers do not want to come back empty. When someone does accept, the price is variable. It is not the most reliable option. A transfer arranged beforehand on WhatsApp is much safer.</p>
 </details>
 
 <details class="faq">
@@ -218,33 +779,27 @@ SELECT 'airport-transfer-natal-sao-miguel-do-gostoso', 'Natal Airport to Gostoso
 
 <details class="faq">
   <summary>How far ahead do I need to book the transfer?</summary>
-  <p>At least 2 hours before the flight lands to guarantee availability; that is the time the driver needs to get into position at the airport. In high season (December to February, July), book 3 to 7 days ahead, especially for night flights. Overnight flights (1 am to 5 am) need prior confirmation, because not all drivers work 24 hours.</p>
+  <p>At least 24 hours ahead to guarantee availability. In high season (December to February, July), book 3 to 7 days ahead, especially for night flights. Overnight flights (1 am to 5 am) need prior confirmation, because not all drivers work 24 hours.</p>
 </details>
 
 <details class="faq">
   <summary>Where do I find the driver at Natal airport?</summary>
   <p>Usually in the arrivals area. Some drivers wait in the inside hall (near the baggage belt) with a sign with your name, others wait on the outside sidewalk near the official taxi stand. Agree on the exact spot on WhatsApp before you fly to Natal, and message as soon as you land to confirm the location.</p>
-</details>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['transfer','how to get there','airport','natal','arriving in gostoso']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much does the transfer from Natal airport to São Miguel do Gostoso cost?","acceptedAnswer":{"@type":"Answer","text":"A private transfer costs between R$ 200 and R$ 280 per vehicle (up to 4 passengers), paid by Pix or cash. Larger vans (7+ seats) cost R$ 350 to 500. A shared transfer runs between R$ 100 and R$ 140 per person when the driver manages to fill the van with other passengers."}},{"@type":"Question","name":"How long does the trip from the airport to Gostoso take?","acceptedAnswer":{"@type":"Answer","text":"Between 1h40 and 2h, depending on Natal traffic when leaving the airport. The route goes along BR-101, BR-406 and RN-221, about 110 km in total. At night or in the early hours the trip is shorter; on weekends or in high season it can reach 2h15."}},{"@type":"Question","name":"Is there Uber or 99 from the airport to São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Technically yes, but a driver rarely accepts. The ride is long (110 km) and most Uber/99 drivers do not want to come back empty. When someone does accept, they usually charge between R$ 350 and R$ 500. It is not the most reliable option. A transfer arranged beforehand on WhatsApp is much safer."}},{"@type":"Question","name":"Can I pay for the transfer by card?","acceptedAnswer":{"@type":"Answer","text":"Most local providers accept only Pix and cash. Some accept cards, but usually add 5 to 10% and may have a limit. Have Pix ready and some cash to avoid surprises. Confirm the payment method on WhatsApp before you fly."}},{"@type":"Question","name":"Is there a regular bus from the airport to Gostoso?","acceptedAnswer":{"@type":"Answer","text":"No. There is no consistent direct bus line between Natal airport and São Miguel do Gostoso. The only bus alternative is to take one from the Natal bus station to João Câmara or Touros and finish the trip by minibus or local taxi, a journey of 4 to 6 hours in total. It is not worth it."}},{"@type":"Question","name":"How far ahead do I need to book the transfer?","acceptedAnswer":{"@type":"Answer","text":"At least 2 hours before the flight lands to guarantee availability: that is the time the driver needs to get into position at the airport. In high season (December to February, July), book 3 to 7 days ahead, especially for night flights. Overnight flights (1 am to 5 am) need prior confirmation, because not all drivers work 24 hours."}},{"@type":"Question","name":"Where do I find the driver at Natal airport?","acceptedAnswer":{"@type":"Answer","text":"Usually in the arrivals area. Some drivers wait in the inside hall (near the baggage belt) with a sign with your name, others wait on the outside sidewalk near the official taxi stand. Agree on the exact spot on WhatsApp before you fly to Natal, and message as soon as you land to confirm the location."}}]}$FAQ$::jsonb
+</details>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['transfer','how to get there','airport','natal','arriving in gostoso']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much does the transfer from Natal airport to São Miguel do Gostoso cost?","acceptedAnswer":{"@type":"Answer","text":"The price is not fixed: each provider sets it, and you agree it directly with them on WhatsApp. The providers and their prices are listed on the transfer page of Vive Gostoso. Payment is usually by Pix or cash."}},{"@type":"Question","name":"How long does the trip from the airport to Gostoso take?","acceptedAnswer":{"@type":"Answer","text":"About 1h50, for roughly 110 km in total. The route follows the north coast of Rio Grande do Norte, going through Touros. The time can vary a little with Natal traffic when leaving the airport."}},{"@type":"Question","name":"Is there Uber or 99 from the airport to São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Technically yes, but a driver rarely accepts. The ride is long (110 km) and most Uber/99 drivers do not want to come back empty. When someone does accept, the price is variable. It is not the most reliable option. A transfer arranged beforehand on WhatsApp is much safer."}},{"@type":"Question","name":"Can I pay for the transfer by card?","acceptedAnswer":{"@type":"Answer","text":"Most local providers accept only Pix and cash. Some accept cards, but usually add 5 to 10% and may have a limit. Have Pix ready and some cash to avoid surprises. Confirm the payment method on WhatsApp before you fly."}},{"@type":"Question","name":"Is there a regular bus from the airport to Gostoso?","acceptedAnswer":{"@type":"Answer","text":"No. There is no consistent direct bus line between Natal airport and São Miguel do Gostoso. The only bus alternative is to take one from the Natal bus station to João Câmara or Touros and finish the trip by minibus or local taxi, a journey of 4 to 6 hours in total. It is not worth it."}},{"@type":"Question","name":"How far ahead do I need to book the transfer?","acceptedAnswer":{"@type":"Answer","text":"At least 24 hours ahead to guarantee availability. In high season (December to February, July), book 3 to 7 days ahead, especially for night flights. Overnight flights (1 am to 5 am) need prior confirmation, because not all drivers work 24 hours."}},{"@type":"Question","name":"Where do I find the driver at Natal airport?","acceptedAnswer":{"@type":"Answer","text":"Usually in the arrivals area. Some drivers wait in the inside hall (near the baggage belt) with a sign with your name, others wait on the outside sidewalk near the official taxi stand. Agree on the exact spot on WhatsApp before you fly to Natal, and message as soon as you land to confirm the location."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'transfer-aeroporto-natal-sao-miguel-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'airport-transfer-natal-sao-miguel-do-gostoso');
 
 INSERT INTO public.gostoso_blog_posts (slug, title, excerpt, content, cover_url, author, tags, is_published, published_at, faq_jsonld)
 SELECT 'traslado-aeropuerto-natal-sao-miguel-do-gostoso', 'Traslado del aeropuerto de Natal a Gostoso: lo que nadie te cuenta', '110 km entre el Aeropuerto de Natal y São Miguel do Gostoso. Cuánto cuesta el traslado en van, cómo reservarlo, dónde encontrar al conductor y qué confirmar antes de embarcar.', $POST$
-<p><strong>Respuesta rápida:</strong> hay <strong>110 km</strong> entre el Aeropuerto de Natal (NAT) y São Miguel do Gostoso, unas <strong>1h40 a 2h</strong> de viaje. El <strong>traslado privado en van o auto</strong> cuesta entre <strong>R$ 200 y R$ 280</strong> por vehículo (hasta 4 pasajeros), y se paga con Pix o en efectivo. Reserva con al menos 2 horas de anticipación por WhatsApp. No hay una línea regular de autobús confiable hasta Gostoso, y los conductores de Uber/99 casi nunca aceptan viajes tan largos.</p>
+<p><strong>Respuesta rápida:</strong> hay <strong>110 km</strong> entre el Aeropuerto de Natal (NAT) y São Miguel do Gostoso, unas <strong>1h50</strong> de viaje. El <strong>traslado privado en van o auto</strong> tiene un precio que se acuerda directamente con cada prestador por WhatsApp, y los prestadores y sus precios están listados en la <a href="/transfer">página de traslados</a>. Reserva con al menos 24 horas de antelación. No hay una línea regular de autobús confiable hasta Gostoso, y los conductores de Uber/99 casi nunca aceptan viajes tan largos.</p>
 
-<p>110 km parece poco en el papel. En la práctica son la BR-101, carreteras estatales y un tramo de asfalto dudoso cerca de Touros, con poca señal de GPS justo cuando más la necesitas. Se puede hacer en auto alquilado, pero si es tu primera vez vas a gastar unos 20 minutos intentando entender una bifurcación que Maps marca mal. Esta guía la escribió alguien que vive en Gostoso y recibe visitantes casi todas las semanas, sin maquillar nada.</p>
+<p>110 km parece poco en el papel. En la práctica son carreteras del litoral norte y un tramo de asfalto dudoso cerca de Touros, con poca señal de GPS justo cuando más la necesitas. Se puede hacer en auto alquilado, pero si es tu primera vez vas a gastar unos 20 minutos intentando entender una bifurcación que Maps marca mal. Esta guía la escribió alguien que vive en Gostoso y recibe visitantes casi todas las semanas, sin maquillar nada.</p>
 
 <h2 id="distancia-tempo">1. Distancia y tiempo real de viaje</h2>
 
-<p>São Miguel do Gostoso queda a <strong>~110 km</strong> del Aeropuerto Internacional de Natal (NAT, oficialmente Aeropuerto de São Gonçalo do Amarante). El viaje tarda entre <strong>1h40 y 2h</strong>, y la variable es cuánto demoras en salir del tráfico de Natal por la BR-101. Pasando Touros, la RN-221 es tranquila y el paisaje mejora: salinas, aerogeneradores, cocotales.</p>
+<p>São Miguel do Gostoso queda a <strong>~110 km</strong> del Aeropuerto Internacional de Natal (NAT, oficialmente Aeropuerto de São Gonçalo do Amarante). El viaje tarda unas <strong>1h50</strong>, y la variable es cuánto demoras en salir del tráfico de Natal. Pasando Touros, la carretera es tranquila y el paisaje mejora: salinas, aerogeneradores, cocotales.</p>
 
-<p>El trayecto típico pasa por:</p>
-
-<ul>
-  <li><strong>BR-101 norte</strong> desde São Gonçalo do Amarante (el aeropuerto)</li>
-  <li><strong>BR-406</strong> en dirección a Touros</li>
-  <li><strong>RN-221</strong> en los últimos 30 km hasta Gostoso</li>
-</ul>
+<p>La ruta sigue por el litoral norte de Rio Grande do Norte y pasa por Touros camino a Gostoso.</p>
 
 <div class="callout callout--info">
   <p><strong>Nota:</strong> el aeropuerto de Natal no está en Natal, está en São Gonçalo do Amarante, a ~30 km al oeste. Eso ya adelanta algo del camino para quien va a Gostoso (litoral norte). Para quien va a Pipa (litoral sur), lo alarga.</p>
@@ -267,29 +822,29 @@ SELECT 'traslado-aeropuerto-natal-sao-miguel-do-gostoso', 'Traslado del aeropuer
   <tbody>
     <tr>
       <td>Traslado privado (van/auto)</td>
-      <td>R$ 200 a 280 por vehículo</td>
-      <td>~2h directo</td>
+      <td>Se acuerda con el prestador</td>
+      <td>~1h50 directo</td>
       <td>Alta, equipaje seguro, conductor local</td>
       <td>Primer viaje, con familia, vuelo nocturno, equipaje grande</td>
     </tr>
     <tr>
       <td>Traslado compartido</td>
-      <td>R$ 100 a 140 por persona</td>
-      <td>~2h30 (paradas)</td>
+      <td>Se acuerda con el prestador</td>
+      <td>~1h50 más las paradas</td>
       <td>Media, compartes la van con otros</td>
       <td>Solo o en pareja, sin prisa, para ahorrar</td>
     </tr>
     <tr>
       <td>Auto alquilado</td>
       <td>R$ 150 a 250/día + combustible (~R$ 80 de ida)</td>
-      <td>~2h</td>
+      <td>~1h50</td>
       <td>Alta, pero manejas tú</td>
       <td>Te quedas 5+ días y quieres recorrer Tourinhos, Pitangui, Galinhos</td>
     </tr>
     <tr>
       <td>Uber/99 + tramo complementario</td>
-      <td>R$ 350 a 500 (casi nunca lo aceptan)</td>
-      <td>2h+</td>
+      <td>Casi nunca lo aceptan, precio variable</td>
+      <td>~1h50</td>
       <td>Variable</td>
       <td>Casi nunca, los conductores rechazan viajes largos</td>
     </tr>
@@ -297,18 +852,18 @@ SELECT 'traslado-aeropuerto-natal-sao-miguel-do-gostoso', 'Traslado del aeropuer
 </table>
 
 <div class="callout callout--tip">
-  <p><strong>Consejo:</strong> si viajas en pareja o en familia, el traslado privado sale prácticamente al mismo precio por persona que el compartido, pero es más rápido y privado. Si viajas solo, el compartido te ahorra la mitad. El auto alquilado solo compensa si te quedas varios días y quieres explorar la región.</p>
+  <p><strong>Consejo:</strong> si viajas en pareja o en familia, el traslado privado es más rápido y te da más privacidad. Si viajas solo, el compartido puede salir más barato por persona cuando la van sale con otros pasajeros. El auto alquilado solo compensa si te quedas varios días y quieres explorar la región.</p>
 </div>
 
-<h2 id="quanto-custa">3. Cuánto cuesta el traslado (rango real de precios)</h2>
+<h2 id="quanto-custa">3. Cuánto cuesta el traslado</h2>
 
-<p>Por <strong>vehículo completo</strong>, el rango más común es <strong>R$ 200 a 280</strong> entre el aeropuerto y Gostoso, en auto o van para hasta 4 pasajeros. El regreso cuesta lo mismo. Las vans más grandes (7+ pasajeros) cuestan entre R$ 350 y R$ 500.</p>
+<p>El precio del traslado no es fijo: cada prestador lo define y lo acuerdas directamente con él por WhatsApp. Los prestadores y sus precios están listados en la <a href="/transfer">página de traslados</a> de Vive Gostoso.</p>
 
-<p>Si viajas solo o en pareja y no quieres pagar la van entera, algunos prestadores completan el viaje con otros pasajeros, y entonces el valor por persona baja a algo entre <strong>R$ 100 y R$ 140</strong>. Cuando los contactes por WhatsApp, pregunta si la van sale llena o si van a compartirla.</p>
+<p>Si viajas solo o en pareja y no quieres pagar la van entera, algunos prestadores completan el viaje con otros pasajeros, y entonces el costo se divide entre los pasajeros. Cuando los contactes por WhatsApp, pregunta si la van sale llena o si van a compartirla.</p>
 
 <p><strong>Formas de pago:</strong> la mayoría de los prestadores locales acepta Pix y efectivo. La tarjeta es rara, y cuando la aceptan suelen cobrar entre 5 y 10% más. Lleva algo de efectivo para imprevistos (como una parada en Touros para comer algo).</p>
 
-<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Ol%C3%A1!%20Vi%20o%20artigo%20sobre%20transfer%20do%20aeroporto%20de%20Natal%20para%20Gostoso%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es.">
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=%C2%A1Hola!%20Vi%20el%20art%C3%ADculo%20sobre%20el%20traslado%20del%20aeropuerto%20de%20Natal%20a%20Gostoso%20y%20me%20gustar%C3%ADa%20recibir%20m%C3%A1s%20informaci%C3%B3n.">
   <span class="inline-cta__title">¿Quieres cotizar el traslado ahora?</span>
   <span class="inline-cta__desc">Te indicamos un prestador local verificado, con precio y disponibilidad para tu fecha. Sin costo de intermediación.</span>
   <span class="inline-cta__action">Escribir por WhatsApp</span>
@@ -316,7 +871,7 @@ SELECT 'traslado-aeropuerto-natal-sao-miguel-do-gostoso', 'Traslado del aeropuer
 
 <h2 id="como-agendar">4. Cómo reservar (y cuándo)</h2>
 
-<p>Cuanto antes, mejor. Los prestadores en el aeropuerto necesitan <strong>al menos 2 horas de aviso</strong> para ubicarse en la llegada. A las 23h, con un vuelo retrasado desde São Paulo, las opciones se reducen bastante, y algunos conductores no trabajan de madrugada.</p>
+<p>Cuanto antes, mejor. Los prestadores en el aeropuerto necesitan <strong>al menos 24 horas de antelación</strong> para ubicarse en la llegada. A las 23h, con un vuelo retrasado desde São Paulo, las opciones se reducen bastante, y algunos conductores no trabajan de madrugada.</p>
 
 <p>El proceso estándar funciona así:</p>
 
@@ -363,7 +918,7 @@ SELECT 'traslado-aeropuerto-natal-sao-miguel-do-gostoso', 'Traslado del aeropuer
 <h2 id="alternativas">7. Auto alquilado o autobús: ¿vale la pena?</h2>
 
 <h3>Auto alquilado</h3>
-<p>Tiene sentido si te vas a quedar <strong>5 días o más</strong> y quieres explorar la región: Tourinhos, Cardeiro, Lagoa de Pitangui, Galinhos. Cuesta R$ 150 a 250 por día en un modelo básico (1.0) y unos R$ 80 más de combustible solo para la ida. Estacionar en Gostoso es fácil (en la calle o en la posada). El riesgo: el tramo final de la RN-221 tiene baches y poca iluminación de noche.</p>
+<p>Tiene sentido si te vas a quedar <strong>5 días o más</strong> y quieres explorar la región: Tourinhos, Cardeiro, Lagoa de Pitangui, Galinhos. Cuesta R$ 150 a 250 por día en un modelo básico (1.0) y unos R$ 80 más de combustible solo para la ida. Estacionar en Gostoso es fácil (en la calle o en la posada). El riesgo: el tramo final cerca de Gostoso tiene baches y poca iluminación de noche.</p>
 
 <h3>Autobús</h3>
 <p>No hay línea regular directa entre el aeropuerto de Natal y São Miguel do Gostoso. La opción más cercana es tomar un autobús desde la Terminal de Autobuses de Natal (en el centro, lejos del aeropuerto) hasta João Câmara o Touros, y de ahí un minibús o taxi hasta Gostoso. <strong>No lo recomendamos:</strong> consume el día entero, sale más caro de lo que parece al sumar todas las conexiones y llegas agotado.</p>
@@ -379,7 +934,7 @@ SELECT 'traslado-aeropuerto-natal-sao-miguel-do-gostoso', 'Traslado del aeropuer
 <ul>
   <li><strong>Hidrátate antes:</strong> hay un tramo largo sin gasolinera después de Touros. Compra agua en el aeropuerto.</li>
   <li><strong>Se cae la señal del celular:</strong> entre Touros y Gostoso el 4G es intermitente. Descarga la ruta sin conexión en Maps antes de salir.</li>
-  <li><strong>De regreso al aeropuerto:</strong> reserva el regreso con 24h de anticipación y sal con 4h de margen antes del vuelo. La BR-101 hacia Natal puede tener mucho tráfico al final de la tarde.</li>
+  <li><strong>De regreso al aeropuerto:</strong> reserva el regreso con 24h de anticipación y sal con 4h de margen antes del vuelo. La carretera hacia Natal puede tener mucho tráfico al final de la tarde.</li>
   <li><strong>Busca en Google al llegar a Touros:</strong> hay una buena panadería para un café con tapioca antes de seguir los últimos 30 km.</li>
   <li><strong>Equipaje de kitesurf:</strong> avisa al conductor con anticipación. Las tablas y las velas necesitan una van más grande o un portaequipajes adecuado.</li>
 </ul>
@@ -392,11 +947,11 @@ SELECT 'traslado-aeropuerto-natal-sao-miguel-do-gostoso', 'Traslado del aeropuer
 
 <h2 id="conclusao">9. En resumen</h2>
 
-<p>El traslado aeropuerto de Natal → São Miguel do Gostoso es simple si reservas con anticipación. El <strong>traslado privado en van</strong> cuesta R$ 200 a 280 por vehículo, lleva ~2h, se paga con Pix o en efectivo, y hablas directo con el conductor por WhatsApp. El auto alquilado solo vale si te quedas muchos días. Uber y autobús puedes olvidarlos.</p>
+<p>El traslado aeropuerto de Natal → São Miguel do Gostoso es simple si reservas con anticipación. El <strong>traslado privado en van</strong> tiene el precio acordado directamente con el prestador, lleva unas 1h50, se paga con Pix o en efectivo, y hablas directo con el conductor por WhatsApp. El auto alquilado solo vale si te quedas muchos días. Uber y autobús puedes olvidarlos.</p>
 
 <p>Reserva tu traslado con al menos 24h de anticipación (de preferencia 3 a 7 días en temporada alta), confirma el punto de encuentro exacto y manda el número de vuelo el día anterior. Listo: aterrizas, encuentras al conductor, duermes en el camino y despiertas en Gostoso con el viento en la cara.</p>
 
-<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Ol%C3%A1!%20Vi%20o%20artigo%20sobre%20transfer%20do%20aeroporto%20de%20Natal%20para%20Gostoso%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es.">
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=%C2%A1Hola!%20Vi%20el%20art%C3%ADculo%20sobre%20el%20traslado%20del%20aeropuerto%20de%20Natal%20a%20Gostoso%20y%20me%20gustar%C3%ADa%20recibir%20m%C3%A1s%20informaci%C3%B3n.">
   <span class="inline-cta__title">¿Listo para reservar?</span>
   <span class="inline-cta__desc">Te conectamos con el prestador adecuado para tu fecha y horario. Escríbenos por WhatsApp.</span>
   <span class="inline-cta__action">Escribir por WhatsApp</span>
@@ -406,17 +961,17 @@ SELECT 'traslado-aeropuerto-natal-sao-miguel-do-gostoso', 'Traslado del aeropuer
 
 <details class="faq">
   <summary>¿Cuánto cuesta el traslado del aeropuerto de Natal a São Miguel do Gostoso?</summary>
-  <p>El traslado privado cuesta entre R$ 200 y R$ 280 por vehículo (hasta 4 pasajeros), con pago en Pix o en efectivo. Las vans más grandes (7+ plazas) cuestan R$ 350 a 500. El compartido sale entre R$ 100 y R$ 140 por persona cuando el conductor logra completar la van con otros pasajeros.</p>
+  <p>El precio no es fijo: cada prestador lo define y lo acuerdas directamente con él por WhatsApp. Los prestadores y sus precios están listados en la <a href="/transfer">página de traslados</a> de Vive Gostoso. El pago suele ser en Pix o en efectivo.</p>
 </details>
 
 <details class="faq">
   <summary>¿Cuánto tarda el viaje del aeropuerto a Gostoso?</summary>
-  <p>Entre 1h40 y 2h, según el tráfico de Natal a la salida del aeropuerto. El trayecto pasa por la BR-101, la BR-406 y la RN-221, con aproximadamente 110 km en total. De noche o de madrugada el tiempo es menor; en fin de semana o en temporada alta puede llegar a 2h15.</p>
+  <p>Unas 1h50, con aproximadamente 110 km en total. El trayecto sigue por el litoral norte de Rio Grande do Norte y pasa por Touros. El tiempo puede variar un poco según el tráfico de Natal a la salida del aeropuerto.</p>
 </details>
 
 <details class="faq">
   <summary>¿Hay Uber o 99 del aeropuerto a São Miguel do Gostoso?</summary>
-  <p>Técnicamente sí, pero rara vez algún conductor acepta. El viaje es largo (110 km) y la mayoría de los conductores de Uber/99 no quiere volver vacío. Cuando alguien acepta, suele cobrar entre R$ 350 y R$ 500. No es la opción más confiable; un traslado acordado antes por WhatsApp es mucho más seguro.</p>
+  <p>Técnicamente sí, pero rara vez algún conductor acepta. El viaje es largo (110 km) y la mayoría de los conductores de Uber/99 no quiere volver vacío. Cuando alguien acepta, el precio es variable. No es la opción más confiable. Un traslado acordado antes por WhatsApp es mucho más seguro.</p>
 </details>
 
 <details class="faq">
@@ -431,13 +986,13 @@ SELECT 'traslado-aeropuerto-natal-sao-miguel-do-gostoso', 'Traslado del aeropuer
 
 <details class="faq">
   <summary>¿Con cuánta anticipación debo reservar el traslado?</summary>
-  <p>Mínimo 2 horas antes de que aterrice el vuelo para asegurar disponibilidad; es el tiempo que el conductor necesita para ubicarse en el aeropuerto. En temporada alta (diciembre a febrero, julio), reserva con 3 a 7 días de anticipación, sobre todo para vuelos nocturnos. Los vuelos de madrugada (1h a 5h) necesitan confirmación previa, porque no todos trabajan las 24 horas.</p>
+  <p>Al menos 24 horas de antelación para asegurar disponibilidad. En temporada alta (diciembre a febrero, julio), reserva con 3 a 7 días de anticipación, sobre todo para vuelos nocturnos. Los vuelos de madrugada (1h a 5h) necesitan confirmación previa, porque no todos trabajan las 24 horas.</p>
 </details>
 
 <details class="faq">
   <summary>¿Dónde encuentro al conductor en el aeropuerto de Natal?</summary>
   <p>Generalmente en la zona de llegadas. Algunos conductores esperan en el hall interno (cerca de la cinta de equipaje) con un cartel con tu nombre, otros esperan en la vereda exterior junto a la parada oficial de taxis. Acuerda el punto exacto por WhatsApp antes de volar a Natal y escribe apenas aterrices para confirmar la ubicación.</p>
-</details>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['traslado','cómo llegar','aeropuerto','natal','llegando a gostoso']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuánto cuesta el traslado del aeropuerto de Natal a São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"El traslado privado cuesta entre R$ 200 y R$ 280 por vehículo (hasta 4 pasajeros), con pago en Pix o en efectivo. Las vans más grandes (7+ plazas) cuestan R$ 350 a 500. El compartido sale entre R$ 100 y R$ 140 por persona cuando el conductor logra completar la van con otros pasajeros."}},{"@type":"Question","name":"¿Cuánto tarda el viaje del aeropuerto a Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Entre 1h40 y 2h, según el tráfico de Natal a la salida del aeropuerto. El trayecto pasa por la BR-101, la BR-406 y la RN-221, con aproximadamente 110 km en total. De noche o de madrugada el tiempo es menor; en fin de semana o en temporada alta puede llegar a 2h15."}},{"@type":"Question","name":"¿Hay Uber o 99 del aeropuerto a São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Técnicamente sí, pero rara vez algún conductor acepta. El viaje es largo (110 km) y la mayoría de los conductores de Uber/99 no quiere volver vacío. Cuando alguien acepta, suele cobrar entre R$ 350 y R$ 500. No es la opción más confiable. Un traslado acordado antes por WhatsApp es mucho más seguro."}},{"@type":"Question","name":"¿Puedo pagar el traslado con tarjeta?","acceptedAnswer":{"@type":"Answer","text":"La mayoría de los prestadores locales acepta solo Pix y efectivo. Algunos aceptan tarjeta, pero suelen cobrar entre 5 y 10% más y pueden tener un límite. Ten Pix listo y algo de efectivo para evitar sorpresas. Confirma la forma de pago por WhatsApp antes de volar."}},{"@type":"Question","name":"¿Hay autobús regular del aeropuerto a Gostoso?","acceptedAnswer":{"@type":"Answer","text":"No. No existe una línea de autobús directa y constante entre el aeropuerto de Natal y São Miguel do Gostoso. La única alternativa en autobús es tomar uno desde la Terminal de Autobuses de Natal hasta João Câmara o Touros y completar el trayecto en minibús o taxi local, un recorrido de 4 a 6 horas en total. No vale la pena."}},{"@type":"Question","name":"¿Con cuánta anticipación debo reservar el traslado?","acceptedAnswer":{"@type":"Answer","text":"Mínimo 2 horas antes de que aterrice el vuelo para asegurar disponibilidad: es el tiempo que el conductor necesita para ubicarse en el aeropuerto. En temporada alta (diciembre a febrero, julio), reserva con 3 a 7 días de anticipación, sobre todo para vuelos nocturnos. Los vuelos de madrugada (1h a 5h) necesitan confirmación previa, porque no todos trabajan las 24 horas."}},{"@type":"Question","name":"¿Dónde encuentro al conductor en el aeropuerto de Natal?","acceptedAnswer":{"@type":"Answer","text":"Generalmente en la zona de llegadas. Algunos conductores esperan en el hall interno (cerca de la cinta de equipaje) con un cartel con tu nombre, otros esperan en la vereda exterior junto a la parada oficial de taxis. Acuerda el punto exacto por WhatsApp antes de volar a Natal y escribe apenas aterrices para confirmar la ubicación."}}]}$FAQ$::jsonb
+</details>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['traslado','cómo llegar','aeropuerto','natal','llegando a gostoso']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuánto cuesta el traslado del aeropuerto de Natal a São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"El precio no es fijo: cada prestador lo define y lo acuerdas directamente con él por WhatsApp. Los prestadores y sus precios están listados en la página de traslados de Vive Gostoso. El pago suele ser en Pix o en efectivo."}},{"@type":"Question","name":"¿Cuánto tarda el viaje del aeropuerto a Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Unas 1h50, con aproximadamente 110 km en total. El trayecto sigue por el litoral norte de Rio Grande do Norte y pasa por Touros. El tiempo puede variar un poco según el tráfico de Natal a la salida del aeropuerto."}},{"@type":"Question","name":"¿Hay Uber o 99 del aeropuerto a São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Técnicamente sí, pero rara vez algún conductor acepta. El viaje es largo (110 km) y la mayoría de los conductores de Uber/99 no quiere volver vacío. Cuando alguien acepta, el precio es variable. No es la opción más confiable. Un traslado acordado antes por WhatsApp es mucho más seguro."}},{"@type":"Question","name":"¿Puedo pagar el traslado con tarjeta?","acceptedAnswer":{"@type":"Answer","text":"La mayoría de los prestadores locales acepta solo Pix y efectivo. Algunos aceptan tarjeta, pero suelen cobrar entre 5 y 10% más y pueden tener un límite. Ten Pix listo y algo de efectivo para evitar sorpresas. Confirma la forma de pago por WhatsApp antes de volar."}},{"@type":"Question","name":"¿Hay autobús regular del aeropuerto a Gostoso?","acceptedAnswer":{"@type":"Answer","text":"No. No existe una línea de autobús directa y constante entre el aeropuerto de Natal y São Miguel do Gostoso. La única alternativa en autobús es tomar uno desde la Terminal de Autobuses de Natal hasta João Câmara o Touros y completar el trayecto en minibús o taxi local, un recorrido de 4 a 6 horas en total. No vale la pena."}},{"@type":"Question","name":"¿Con cuánta anticipación debo reservar el traslado?","acceptedAnswer":{"@type":"Answer","text":"Al menos 24 horas de antelación para asegurar disponibilidad. En temporada alta (diciembre a febrero, julio), reserva con 3 a 7 días de anticipación, sobre todo para vuelos nocturnos. Los vuelos de madrugada (1h a 5h) necesitan confirmación previa, porque no todos trabajan las 24 horas."}},{"@type":"Question","name":"¿Dónde encuentro al conductor en el aeropuerto de Natal?","acceptedAnswer":{"@type":"Answer","text":"Generalmente en la zona de llegadas. Algunos conductores esperan en el hall interno (cerca de la cinta de equipaje) con un cartel con tu nombre, otros esperan en la vereda exterior junto a la parada oficial de taxis. Acuerda el punto exacto por WhatsApp antes de volar a Natal y escribe apenas aterrices para confirmar la ubicación."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'transfer-aeroporto-natal-sao-miguel-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'traslado-aeropuerto-natal-sao-miguel-do-gostoso');
 
@@ -464,13 +1019,13 @@ SELECT 'sao-miguel-do-gostoso-or-pipa-which-to-choose', 'São Miguel do Gostoso 
     <tr><td>Sports</td><td>Surf, stand-up paddle, diving, dolphins</td><td>Kitesurf, windsurf, SUP, buggy tours</td></tr>
     <tr><td>Food</td><td>International, sushi, Italian, many options</td><td>Regional seafood, beach food, chef-driven</td></tr>
     <tr><td>Average price (high season)</td><td>R$ 350 to 900 per night at a pousada</td><td>R$ 200 to 600 per night at a pousada</td></tr>
-    <tr><td>Distance from Natal</td><td>~85 km (1h45)</td><td>~110 km (2h)</td></tr>
+    <tr><td>Distance from Natal</td><td>~85 km (1h45)</td><td>110 km (about 1h50)</td></tr>
     <tr><td>Best for</td><td>Couples, groups of friends, partying</td><td>Families, kitesurfers, real rest</td></tr>
   </tbody>
 </table>
 
 <div class="callout callout--tip">
-  <p><strong>Tip:</strong> if you have 7+ days, do both. 3 nights in Pipa for the action, 4 in Gostoso to slow down. Going straight from Natal, the transfer between the two takes about 3h30 (it costs R$ 600 to 900 depending on the vehicle).</p>
+  <p><strong>Tip:</strong> if you have 7+ days, do both. 3 nights in Pipa for the action, 4 in Gostoso to slow down. Going straight from Natal, the transfer between the two takes about 3h30 (prices are on the <a href="/transfer">/transfer</a> page).</p>
 </div>
 
 <h2>1. Beaches and scenery</h2>
@@ -567,12 +1122,14 @@ SELECT 'sao-miguel-do-gostoso-or-pipa-which-to-choose', 'São Miguel do Gostoso 
 
 <p>Both start from the same airport: <strong>Natal Airport (NAT)</strong>.</p>
 <ul>
-  <li><strong>Natal → Pipa:</strong> ~85 km, 1h45 by car. Shared transfer R$ 60 to 100 per person, private R$ 250 to 400.</li>
-  <li><strong>Natal → Gostoso:</strong> ~110 km, 2h by car. Private transfer R$ 300 to 450 (there is no reliable regular line, so arrange it beforehand).</li>
-  <li><strong>Pipa → Gostoso:</strong> ~200 km, 3h30 by car. Private transfer R$ 600 to 900.</li>
+  <li><strong>Natal → Pipa:</strong> ~85 km, 1h45 by car. Shared and private transfers are available.</li>
+  <li><strong>Natal → Gostoso:</strong> 110 km, about 1h50 by car. Private transfer (there is no reliable regular line, so arrange it beforehand).</li>
+  <li><strong>Pipa → Gostoso:</strong> ~200 km, 3h30 by car. Private transfer.</li>
 </ul>
 
-<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Ol%C3%A1!%20Quero%20ajuda%20pra%20montar%20meu%20roteiro%20em%20S%C3%A3o%20Miguel%20do%20Gostoso.">
+<p>Transfer prices are on the <a href="/transfer">/transfer</a> page of the site. The real price is agreed with each provider.</p>
+
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Hello%21%20I%20want%20help%20planning%20my%20itinerary%20in%20S%C3%A3o%20Miguel%20do%20Gostoso.">
   <span class="inline-cta__title">Want help planning your itinerary?</span>
   <span class="inline-cta__desc">We know the pousadas, transfers, kite schools and restaurants. Message us on WhatsApp and we will help at no cost.</span>
   <span class="inline-cta__action">Message us on WhatsApp</span>
@@ -606,8 +1163,8 @@ SELECT 'sao-miguel-do-gostoso-or-pipa-which-to-choose', 'São Miguel do Gostoso 
   <li><strong>Day 1:</strong> arrive in Natal, transfer to Pipa</li>
   <li><strong>Days 2 to 4:</strong> Pipa, cliffs, dolphins, nightlife</li>
   <li><strong>Day 5:</strong> transfer Pipa → Gostoso (via Natal)</li>
-  <li><strong>Days 5 to 7:</strong> Gostoso, slow down, sunsets, kite/buggy</li>
-  <li><strong>Day 8:</strong> return Gostoso → Natal → home</li>
+  <li><strong>Day 6:</strong> Gostoso, slow down, sunsets, kite/buggy</li>
+  <li><strong>Day 7:</strong> return Gostoso → Natal → home</li>
 </ul>
 
 <p>This order works because it <strong>ends with rest</strong>. If you reverse it (Gostoso first, Pipa after), you go home worn out from the partying.</p>
@@ -627,7 +1184,7 @@ SELECT 'sao-miguel-do-gostoso-or-pipa-which-to-choose', 'São Miguel do Gostoso 
 
 <details class="faq">
   <summary>Can you drive from Pipa to São Miguel do Gostoso?</summary>
-  <p>Yes. It is about 200 km and a 3h30 trip, usually going through Natal. There is no reliable direct bus line, so the options are a private transfer (R$ 600 to 900) or a rental car. Book the transfer at least 24 hours ahead.</p>
+  <p>Yes. It is about 200 km and a 3h30 trip, usually going through Natal. There is no reliable direct bus line, so the options are a private transfer or a rental car. Transfer prices are on the <a href="/transfer">/transfer</a> page of the site. Book the transfer at least 24 hours ahead.</p>
 </details>
 
 <details class="faq">
@@ -648,7 +1205,7 @@ SELECT 'sao-miguel-do-gostoso-or-pipa-which-to-choose', 'São Miguel do Gostoso 
 <details class="faq">
   <summary>Is a one-day round trip between the two worth it?</summary>
   <p>We don't recommend it. The distance (200 km, 3h30 each way) eats the whole day and you don't enjoy anything. If you only have a weekend, pick one of the two and stay. If you have 5+ days, split the trip into two stays.</p>
-</details>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['comparison','planning','pipa','when to go','first trip']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"São Miguel do Gostoso or Pipa: which is cheaper?","acceptedAnswer":{"@type":"Answer","text":"São Miguel do Gostoso is, on average, 30 to 40% cheaper than Pipa for pousada rates, food and tours. In high season the gap is even bigger: a basic pousada in Gostoso from R$ 200 per night vs. R$ 350 per night in Pipa."}},{"@type":"Question","name":"Can you drive from Pipa to São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Yes. It is about 200 km and a 3h30 trip, usually going through Natal. There is no reliable direct bus line, so the options are a private transfer (R$ 600 to 900) or a rental car. Book the transfer at least 24 hours ahead."}},{"@type":"Question","name":"Which is better for a family with children?","acceptedAnswer":{"@type":"Answer","text":"São Miguel do Gostoso, no doubt. The sea is shallow and calm at most beaches (Maceió, Xepa, Tourinhos), there are natural pools at low tide, nightlife is low-key and there are beachfront pousadas. Pipa has a more open sea with waves, and the nightlife in the village can disturb children's sleep."}},{"@type":"Question","name":"When is the best time to kitesurf in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"From August to March, peaking between September and January. In that period the wind turns east and stays steady (25 to 35 knots) almost every day of the week. May to July has weaker wind. You can still sail, but with shorter windows."}},{"@type":"Question","name":"Are Pipa and São Miguel do Gostoso in the same state?","acceptedAnswer":{"@type":"Answer","text":"Yes, both are in Rio Grande do Norte (RN). Pipa is on the south coast (municipality of Tibau do Sul), 85 km from Natal. São Miguel do Gostoso is on the north coast, 110 km from Natal. Both use the same airport: Natal International Airport (NAT)."}},{"@type":"Question","name":"Is a one-day round trip between the two worth it?","acceptedAnswer":{"@type":"Answer","text":"We don't recommend it. The distance (200 km, 3h30 each way) eats the whole day and you don't enjoy anything. If you only have a weekend, pick one of the two and stay. If you have 5+ days, split the trip into two stays."}}]}$FAQ$::jsonb
+</details>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['comparison','planning','pipa','when to go','first trip']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"São Miguel do Gostoso or Pipa: which is cheaper?","acceptedAnswer":{"@type":"Answer","text":"São Miguel do Gostoso is, on average, 30 to 40% cheaper than Pipa for pousada rates, food and tours. In high season the gap is even bigger: a basic pousada in Gostoso from R$ 200 per night vs. R$ 350 per night in Pipa."}},{"@type":"Question","name":"Can you drive from Pipa to São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Yes. It is about 200 km and a 3h30 trip, usually going through Natal. There is no reliable direct bus line, so the options are a private transfer or a rental car. Transfer prices are on the /transfer page of the site. Book the transfer at least 24 hours ahead."}},{"@type":"Question","name":"Which is better for a family with children?","acceptedAnswer":{"@type":"Answer","text":"São Miguel do Gostoso, no doubt. The sea is shallow and calm at most beaches (Maceió, Xepa, Tourinhos), there are natural pools at low tide, nightlife is low-key and there are beachfront pousadas. Pipa has a more open sea with waves, and the nightlife in the village can disturb children's sleep."}},{"@type":"Question","name":"When is the best time to kitesurf in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"From August to March, peaking between September and January. In that period the wind turns east and stays steady (25 to 35 knots) almost every day of the week. May to July has weaker wind. You can still sail, but with shorter windows."}},{"@type":"Question","name":"Are Pipa and São Miguel do Gostoso in the same state?","acceptedAnswer":{"@type":"Answer","text":"Yes, both are in Rio Grande do Norte (RN). Pipa is on the south coast (municipality of Tibau do Sul), 85 km from Natal. São Miguel do Gostoso is on the north coast, 110 km from Natal. Both use the same airport: Natal International Airport (NAT)."}},{"@type":"Question","name":"Is a one-day round trip between the two worth it?","acceptedAnswer":{"@type":"Answer","text":"We don't recommend it. The distance (200 km, 3h30 each way) eats the whole day and you don't enjoy anything. If you only have a weekend, pick one of the two and stay. If you have 5+ days, split the trip into two stays."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'sao-miguel-do-gostoso-ou-pipa-qual-escolher'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'sao-miguel-do-gostoso-or-pipa-which-to-choose');
 
@@ -675,13 +1232,13 @@ SELECT 'sao-miguel-do-gostoso-o-pipa-cual-elegir', 'São Miguel do Gostoso o Pip
     <tr><td>Deportes</td><td>Surf, stand-up paddle, buceo, delfines</td><td>Kitesurf, windsurf, SUP, paseos en buggy</td></tr>
     <tr><td>Gastronomía</td><td>Internacional, sushi, italiana, mucha oferta</td><td>Mariscos regionales, comida de playa, de autor</td></tr>
     <tr><td>Precio medio (temporada alta)</td><td>R$ 350 a 900 la noche en pousada</td><td>R$ 200 a 600 la noche en pousada</td></tr>
-    <tr><td>Distancia desde Natal</td><td>~85 km (1h45)</td><td>~110 km (2h)</td></tr>
+    <tr><td>Distancia desde Natal</td><td>~85 km (1h45)</td><td>110 km (cerca de 1h50)</td></tr>
     <tr><td>Mejor para</td><td>Parejas, grupos de amigos, fiesta</td><td>Familias, kitesurfistas, descanso de verdad</td></tr>
   </tbody>
 </table>
 
 <div class="callout callout--tip">
-  <p><strong>Consejo:</strong> si tienes 7 días o más, haz los dos. 3 noches en Pipa para el movimiento, 4 en Gostoso para bajar el ritmo. Saliendo directo desde Natal, el traslado entre los dos tarda unas 3h30 (cuesta R$ 600 a 900 según el vehículo).</p>
+  <p><strong>Consejo:</strong> si tienes 7 días o más, haz los dos. 3 noches en Pipa para el movimiento, 4 en Gostoso para bajar el ritmo. Saliendo directo desde Natal, el traslado entre los dos tarda unas 3h30 (los valores están en la página <a href="/transfer">/transfer</a>).</p>
 </div>
 
 <h2>1. Playas y paisaje</h2>
@@ -778,12 +1335,14 @@ SELECT 'sao-miguel-do-gostoso-o-pipa-cual-elegir', 'São Miguel do Gostoso o Pip
 
 <p>Los dos salen del mismo aeropuerto: el <strong>Aeropuerto de Natal (NAT)</strong>.</p>
 <ul>
-  <li><strong>Natal → Pipa:</strong> ~85 km, 1h45 en auto. Traslado compartido R$ 60 a 100 por persona, privado R$ 250 a 400.</li>
-  <li><strong>Natal → Gostoso:</strong> ~110 km, 2h en auto. Traslado privado R$ 300 a 450 (no hay una línea regular confiable, conviene acordarlo antes).</li>
-  <li><strong>Pipa → Gostoso:</strong> ~200 km, 3h30 en auto. Traslado privado R$ 600 a 900.</li>
+  <li><strong>Natal → Pipa:</strong> ~85 km, 1h45 en auto. Hay traslado compartido y privado.</li>
+  <li><strong>Natal → Gostoso:</strong> 110 km, cerca de 1h50 en auto. Traslado privado (no hay una línea regular confiable, conviene acordarlo antes).</li>
+  <li><strong>Pipa → Gostoso:</strong> ~200 km, 3h30 en auto. Traslado privado.</li>
 </ul>
 
-<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Ol%C3%A1!%20Quero%20ajuda%20pra%20montar%20meu%20roteiro%20em%20S%C3%A3o%20Miguel%20do%20Gostoso.">
+<p>Los valores de traslado están en la página <a href="/transfer">/transfer</a> del sitio. El precio real se acuerda con cada proveedor.</p>
+
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=%C2%A1Hola%21%20Quiero%20ayuda%20para%20armar%20mi%20itinerario%20en%20S%C3%A3o%20Miguel%20do%20Gostoso.">
   <span class="inline-cta__title">¿Quieres ayuda para armar tu itinerario?</span>
   <span class="inline-cta__desc">Conocemos pousadas, traslados, escuelas de kite y restaurantes. Escríbenos por WhatsApp y te ayudamos sin costo.</span>
   <span class="inline-cta__action">Hablar por WhatsApp</span>
@@ -817,8 +1376,8 @@ SELECT 'sao-miguel-do-gostoso-o-pipa-cual-elegir', 'São Miguel do Gostoso o Pip
   <li><strong>Día 1:</strong> llegada a Natal, traslado a Pipa</li>
   <li><strong>Días 2 a 4:</strong> Pipa, acantilados, delfines, vida nocturna</li>
   <li><strong>Día 5:</strong> traslado Pipa → Gostoso (pasa por Natal)</li>
-  <li><strong>Días 5 a 7:</strong> Gostoso, bajar el ritmo, atardeceres, kite/buggy</li>
-  <li><strong>Día 8:</strong> regreso Gostoso → Natal → casa</li>
+  <li><strong>Día 6:</strong> Gostoso, bajar el ritmo, atardeceres, kite/buggy</li>
+  <li><strong>Día 7:</strong> regreso Gostoso → Natal → casa</li>
 </ul>
 
 <p>Este orden funciona porque <strong>termina con descanso</strong>. Si lo inviertes (primero Gostoso, después Pipa), vuelves a casa cansado del movimiento.</p>
@@ -838,7 +1397,7 @@ SELECT 'sao-miguel-do-gostoso-o-pipa-cual-elegir', 'São Miguel do Gostoso o Pip
 
 <details class="faq">
   <summary>¿Se puede ir de Pipa a São Miguel do Gostoso en auto?</summary>
-  <p>Sí. Son unos 200 km y 3h30 de viaje, generalmente pasando por Natal. No hay una línea de autobús directa confiable, así que las opciones son un traslado privado (R$ 600 a 900) o alquilar un auto. Reserva el traslado con al menos 24 horas de anticipación.</p>
+  <p>Sí. Son unos 200 km y 3h30 de viaje, generalmente pasando por Natal. No hay una línea de autobús directa confiable, así que las opciones son un traslado privado o alquilar un auto. Los valores de traslado están en la página <a href="/transfer">/transfer</a> del sitio. Reserva el traslado con al menos 24 horas de anticipación.</p>
 </details>
 
 <details class="faq">
@@ -859,57 +1418,57 @@ SELECT 'sao-miguel-do-gostoso-o-pipa-cual-elegir', 'São Miguel do Gostoso o Pip
 <details class="faq">
   <summary>¿Vale la pena hacer un viaje de ida y vuelta en un solo día entre los dos?</summary>
   <p>No lo recomendamos. La distancia (200 km, 3h30 solo de ida) consume el día entero y no disfrutas nada. Si solo tienes un fin de semana, elige uno de los dos y quédate. Si tienes 5 días o más, divide el viaje en dos estadías.</p>
-</details>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['comparativo','planificación','pipa','cuándo ir','primer viaje']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"São Miguel do Gostoso o Pipa: ¿cuál es más barato?","acceptedAnswer":{"@type":"Answer","text":"São Miguel do Gostoso es, en promedio, 30 a 40% más barato que Pipa en tarifas de pousada, comida y paseos. En temporada alta la diferencia es aún mayor: pousada sencilla en Gostoso desde R$ 200 la noche vs. R$ 350 la noche en Pipa."}},{"@type":"Question","name":"¿Se puede ir de Pipa a São Miguel do Gostoso en auto?","acceptedAnswer":{"@type":"Answer","text":"Sí. Son unos 200 km y 3h30 de viaje, generalmente pasando por Natal. No hay una línea de autobús directa confiable, así que las opciones son un traslado privado (R$ 600 a 900) o alquilar un auto. Reserva el traslado con al menos 24 horas de anticipación."}},{"@type":"Question","name":"¿Cuál es mejor para ir en familia con niños?","acceptedAnswer":{"@type":"Answer","text":"São Miguel do Gostoso, sin duda. El mar es poco profundo y calmo en la mayoría de las playas (Maceió, Xepa, Tourinhos), hay piscinas naturales con marea baja, la vida nocturna es discreta y hay pousadas pie en la arena. Pipa tiene un mar más abierto y con olas, y la vida nocturna en el pueblo puede perturbar el sueño de los niños."}},{"@type":"Question","name":"¿Cuándo es la mejor época para hacer kitesurf en São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"De agosto a marzo, con el pico entre septiembre y enero. En ese período el viento gira al este y se mantiene constante (25 a 35 nudos) casi todos los días de la semana. De mayo a julio hay viento más débil. Todavía se puede navegar, pero con ventanas más cortas."}},{"@type":"Question","name":"¿Pipa y São Miguel do Gostoso están en el mismo estado?","acceptedAnswer":{"@type":"Answer","text":"Sí, los dos están en Rio Grande do Norte (RN). Pipa está en el litoral sur (municipio de Tibau do Sul), a 85 km de Natal. São Miguel do Gostoso está en el litoral norte, a 110 km de Natal. Ambos comparten el mismo aeropuerto: el Aeropuerto Internacional de Natal (NAT)."}},{"@type":"Question","name":"¿Vale la pena hacer un viaje de ida y vuelta en un solo día entre los dos?","acceptedAnswer":{"@type":"Answer","text":"No lo recomendamos. La distancia (200 km, 3h30 solo de ida) consume el día entero y no disfrutas nada. Si solo tienes un fin de semana, elige uno de los dos y quédate. Si tienes 5 días o más, divide el viaje en dos estadías."}}]}$FAQ$::jsonb
+</details>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['comparativo','planificación','pipa','cuándo ir','primer viaje']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"São Miguel do Gostoso o Pipa: ¿cuál es más barato?","acceptedAnswer":{"@type":"Answer","text":"São Miguel do Gostoso es, en promedio, 30 a 40% más barato que Pipa en tarifas de pousada, comida y paseos. En temporada alta la diferencia es aún mayor: pousada sencilla en Gostoso desde R$ 200 la noche vs. R$ 350 la noche en Pipa."}},{"@type":"Question","name":"¿Se puede ir de Pipa a São Miguel do Gostoso en auto?","acceptedAnswer":{"@type":"Answer","text":"Sí. Son unos 200 km y 3h30 de viaje, generalmente pasando por Natal. No hay una línea de autobús directa confiable, así que las opciones son un traslado privado o alquilar un auto. Los valores de traslado están en la página /transfer del sitio. Reserva el traslado con al menos 24 horas de anticipación."}},{"@type":"Question","name":"¿Cuál es mejor para ir en familia con niños?","acceptedAnswer":{"@type":"Answer","text":"São Miguel do Gostoso, sin duda. El mar es poco profundo y calmo en la mayoría de las playas (Maceió, Xepa, Tourinhos), hay piscinas naturales con marea baja, la vida nocturna es discreta y hay pousadas pie en la arena. Pipa tiene un mar más abierto y con olas, y la vida nocturna en el pueblo puede perturbar el sueño de los niños."}},{"@type":"Question","name":"¿Cuándo es la mejor época para hacer kitesurf en São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"De agosto a marzo, con el pico entre septiembre y enero. En ese período el viento gira al este y se mantiene constante (25 a 35 nudos) casi todos los días de la semana. De mayo a julio hay viento más débil. Todavía se puede navegar, pero con ventanas más cortas."}},{"@type":"Question","name":"¿Pipa y São Miguel do Gostoso están en el mismo estado?","acceptedAnswer":{"@type":"Answer","text":"Sí, los dos están en Rio Grande do Norte (RN). Pipa está en el litoral sur (municipio de Tibau do Sul), a 85 km de Natal. São Miguel do Gostoso está en el litoral norte, a 110 km de Natal. Ambos comparten el mismo aeropuerto: el Aeropuerto Internacional de Natal (NAT)."}},{"@type":"Question","name":"¿Vale la pena hacer un viaje de ida y vuelta en un solo día entre los dos?","acceptedAnswer":{"@type":"Answer","text":"No lo recomendamos. La distancia (200 km, 3h30 solo de ida) consume el día entero y no disfrutas nada. Si solo tienes un fin de semana, elige uno de los dos y quédate. Si tienes 5 días o más, divide el viaje en dos estadías."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'sao-miguel-do-gostoso-ou-pipa-qual-escolher'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'sao-miguel-do-gostoso-o-pipa-cual-elegir');
 
 INSERT INTO public.gostoso_blog_posts (slug, title, excerpt, content, cover_url, author, tags, is_published, published_at, faq_jsonld)
-SELECT 'where-to-stay-sao-miguel-do-gostoso', 'Pousadas in São Miguel do Gostoso: Where to Stay in 2026', 'Guide to pousadas in Gostoso: areas, prices, seasons and how to book direct with the owners, no middleman.', $POST$<p>São Miguel do Gostoso has about 250 lodging options. But unlike mass-market destinations, most here are family-run: the owner greets you at the door.</p><h2>By area</h2><h3>Center (Praia da Xepa)</h3><p>Everything close, walkable. Good if you want a social scene. R$ 150 to 400 (low season) / R$ 250 to 700 (high season).</p><h3>Waterfront: on the sand</h3><p>Sea view, direct beach access. R$ 250 to 600 (low season) / R$ 400 to 1,000 (high season).</p><h3>Ponta do Santo Cristo</h3><p>The kiters' area. Pousadas 2 to 5 minutes from the water. R$ 200 to 500 (low season) / R$ 350 to 800 (high season).</p><h2>Types of pousada</h2><ul><li><strong>Boutique:</strong> carefully decorated, R$ 400 to 1,000 in high season</li><li><strong>Family-run:</strong> good value, R$ 150 to 350 in high season</li><li><strong>Chalets:</strong> more space and privacy, R$ 200 to 600 in high season</li><li><strong>Hostel:</strong> R$ 60 to 120 in high season</li></ul><h2>Airbnb vs. pousada</h2><p>Booking direct with the pousada costs up to 20% less than Airbnb (no platform fee). The owner earns more and you pay less.</p><h2>Best time to book</h2><p>High season (Dec to Feb, July): book 3+ months ahead. Kite season (Aug to Nov): 2 to 4 weeks. Low season (Mar to Jun): 1 to 2 weeks.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['pousadas','lodging','where to stay']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much does a pousada cost in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Low season: R$ 120 to 200 (basic), R$ 300 to 500 (boutique). High season: R$ 250 to 400 (basic), R$ 600 to 1,200 (boutique)."}},{"@type":"Question","name":"What is the best area to stay in Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Center (social scene), waterfront (views), Ponta do Santo Cristo (kite), the road (budget)."}},{"@type":"Question","name":"Is there an all-inclusive pousada in Gostoso?","acceptedAnswer":{"@type":"Answer","text":"No. Most include breakfast. The town has good restaurants nearby."}},{"@type":"Question","name":"Do pousadas in Gostoso accept pets?","acceptedAnswer":{"@type":"Answer","text":"Some do. Check before booking and tell them the size of your animal."}}]}$FAQ$::jsonb
+SELECT 'where-to-stay-sao-miguel-do-gostoso', 'Pousadas in São Miguel do Gostoso: Where to Stay in 2026', 'Guide to pousadas in Gostoso: areas, prices, seasons and how to book direct with the owners, no middleman.', $POST$<p>São Miguel do Gostoso has about 250 lodging options. But unlike mass-market destinations, most here are family-run: the owner greets you at the door.</p><h2>By area</h2><h3>Center (Praia da Xepa)</h3><p>Everything close, walkable. Good if you want a social scene. R$ 150 to 400 (low season) / R$ 250 to 700 (high season).</p><h3>Waterfront: on the sand</h3><p>Sea view, direct beach access. R$ 250 to 600 (low season) / R$ 400 to 1,000 (high season).</p><h3>Ponta do Santo Cristo</h3><p>The kiters' area. Pousadas 2 to 5 minutes from the water. R$ 200 to 500 (low season) / R$ 350 to 800 (high season).</p><h2>Types of pousada</h2><ul><li><strong>Boutique:</strong> carefully decorated, R$ 400 to 1,000 in high season</li><li><strong>Family-run:</strong> good value, R$ 150 to 350 in high season</li><li><strong>Chalets:</strong> more space and privacy, R$ 200 to 600 in high season</li><li><strong>Hostel:</strong> R$ 60 to 120 in high season</li></ul><h2>Airbnb vs. pousada</h2><p>Booking direct with the pousada costs up to 20% less than Airbnb (no platform fee). The owner earns more and you pay less.</p><h2>Best time to book</h2><p>High season (Dec to Feb, July): book 3+ months ahead. Kite season (Aug to Nov): 2 to 4 weeks. Low season (Mar to Jun): 1 to 2 weeks.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['pousadas','lodging','where to stay']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much does a pousada cost in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Low season: R$ 120 to 200 (basic), R$ 300 to 500 (boutique). High season: R$ 250 to 400 (basic), R$ 600 to 1,200 (boutique)."}},{"@type":"Question","name":"What is the best area to stay in Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Center (social scene), waterfront (views), Ponta do Santo Cristo (kite), the road (budget)."}},{"@type":"Question","name":"Is there an all-inclusive pousada in Gostoso?","acceptedAnswer":{"@type":"Answer","text":"No. Most include breakfast. The town has good restaurants nearby."}},{"@type":"Question","name":"Do pousadas in Gostoso accept pets?","acceptedAnswer":{"@type":"Answer","text":"Some do. Check before booking and tell them the size of your animal."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'pousadas-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'where-to-stay-sao-miguel-do-gostoso');
 
 INSERT INTO public.gostoso_blog_posts (slug, title, excerpt, content, cover_url, author, tags, is_published, published_at, faq_jsonld)
-SELECT 'donde-alojarse-sao-miguel-do-gostoso', 'Pousadas en São Miguel do Gostoso: dónde alojarse en 2026', 'Guía de pousadas en Gostoso: zonas, precios, temporadas y cómo reservar directo con los dueños, sin intermediarios.', $POST$<p>São Miguel do Gostoso tiene cerca de 250 alojamientos. Pero a diferencia de los destinos masificados, aquí la mayoría son familiares: el dueño te recibe en la puerta.</p><h2>Por zona</h2><h3>Centro (Praia da Xepa)</h3><p>Todo cerca, se recorre a pie. Ideal para quien busca vida social. R$ 150 a 400 (temporada baja) / R$ 250 a 700 (temporada alta).</p><h3>Frente al mar: con los pies en la arena</h3><p>Vista al mar, acceso directo a la playa. R$ 250 a 600 (temporada baja) / R$ 400 a 1.000 (temporada alta).</p><h3>Ponta do Santo Cristo</h3><p>La zona de los kiters. Pousadas a 2 a 5 minutos del agua. R$ 200 a 500 (temporada baja) / R$ 350 a 800 (temporada alta).</p><h2>Tipos de pousada</h2><ul><li><strong>Boutique:</strong> decoración cuidada, R$ 400 a 1.000 en temporada alta</li><li><strong>Familiar:</strong> buena relación calidad-precio, R$ 150 a 350 en temporada alta</li><li><strong>Cabañas:</strong> más espacio y privacidad, R$ 200 a 600 en temporada alta</li><li><strong>Hostel:</strong> R$ 60 a 120 en temporada alta</li></ul><h2>Airbnb vs. pousada</h2><p>Reservar directo con la pousada sale hasta un 20% más barato que en Airbnb (sin comisión de plataforma). El dueño recibe más y tú pagas menos.</p><h2>Mejor época para reservar</h2><p>Temporada alta (dic a feb, julio): reserva con 3 o más meses de anticipación. Temporada de kite (ago a nov): 2 a 4 semanas. Temporada baja (mar a jun): 1 a 2 semanas.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['pousadas','alojamiento','dónde alojarse']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuánto cuesta una pousada en São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Temporada baja: R$ 120 a 200 (sencilla), R$ 300 a 500 (boutique). Temporada alta: R$ 250 a 400 (sencilla), R$ 600 a 1.200 (boutique)."}},{"@type":"Question","name":"¿Cuál es la mejor zona para alojarse en Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Centro (vida social), frente al mar (vista), Ponta do Santo Cristo (kite), carretera (presupuesto)."}},{"@type":"Question","name":"¿Hay pousadas todo incluido en Gostoso?","acceptedAnswer":{"@type":"Answer","text":"No. La mayoría incluye el desayuno. El pueblo tiene buenos restaurantes cerca."}},{"@type":"Question","name":"¿Las pousadas de Gostoso aceptan mascotas?","acceptedAnswer":{"@type":"Answer","text":"Algunas sí. Consulta antes de reservar e indica el tamaño del animal."}}]}$FAQ$::jsonb
+SELECT 'donde-alojarse-sao-miguel-do-gostoso', 'Pousadas en São Miguel do Gostoso: dónde alojarse en 2026', 'Guía de pousadas en Gostoso: zonas, precios, temporadas y cómo reservar directo con los dueños, sin intermediarios.', $POST$<p>São Miguel do Gostoso tiene cerca de 250 alojamientos. Pero a diferencia de los destinos masificados, aquí la mayoría son familiares: el dueño te recibe en la puerta.</p><h2>Por zona</h2><h3>Centro (Praia da Xepa)</h3><p>Todo cerca, se recorre a pie. Ideal para quien busca vida social. R$ 150 a 400 (temporada baja) / R$ 250 a 700 (temporada alta).</p><h3>Frente al mar: con los pies en la arena</h3><p>Vista al mar, acceso directo a la playa. R$ 250 a 600 (temporada baja) / R$ 400 a 1.000 (temporada alta).</p><h3>Ponta do Santo Cristo</h3><p>La zona de los kiters. Pousadas a 2 a 5 minutos del agua. R$ 200 a 500 (temporada baja) / R$ 350 a 800 (temporada alta).</p><h2>Tipos de pousada</h2><ul><li><strong>Boutique:</strong> decoración cuidada, R$ 400 a 1.000 en temporada alta</li><li><strong>Familiar:</strong> buena relación calidad-precio, R$ 150 a 350 en temporada alta</li><li><strong>Cabañas:</strong> más espacio y privacidad, R$ 200 a 600 en temporada alta</li><li><strong>Hostel:</strong> R$ 60 a 120 en temporada alta</li></ul><h2>Airbnb vs. pousada</h2><p>Reservar directo con la pousada sale hasta un 20% más barato que en Airbnb (sin comisión de plataforma). El dueño recibe más y tú pagas menos.</p><h2>Mejor época para reservar</h2><p>Temporada alta (dic a feb, julio): reserva con 3 o más meses de anticipación. Temporada de kite (ago a nov): 2 a 4 semanas. Temporada baja (mar a jun): 1 a 2 semanas.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['pousadas','alojamiento','dónde alojarse']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuánto cuesta una pousada en São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Temporada baja: R$ 120 a 200 (sencilla), R$ 300 a 500 (boutique). Temporada alta: R$ 250 a 400 (sencilla), R$ 600 a 1.200 (boutique)."}},{"@type":"Question","name":"¿Cuál es la mejor zona para alojarse en Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Centro (vida social), frente al mar (vista), Ponta do Santo Cristo (kite), carretera (presupuesto)."}},{"@type":"Question","name":"¿Hay pousadas todo incluido en Gostoso?","acceptedAnswer":{"@type":"Answer","text":"No. La mayoría incluye el desayuno. El pueblo tiene buenos restaurantes cerca."}},{"@type":"Question","name":"¿Las pousadas de Gostoso aceptan mascotas?","acceptedAnswer":{"@type":"Answer","text":"Algunas sí. Consulta antes de reservar e indica el tamaño del animal."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'pousadas-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'donde-alojarse-sao-miguel-do-gostoso');
 
 INSERT INTO public.gostoso_blog_posts (slug, title, excerpt, content, cover_url, author, tags, is_published, published_at, faq_jsonld)
-SELECT 'how-to-get-to-sao-miguel-do-gostoso', 'How to Get to São Miguel do Gostoso: Complete Guide 2026', 'Everything about getting to São Miguel do Gostoso by plane, car and bus. Transfer tips, roads and the nearest airport.', $POST$<p>São Miguel do Gostoso has no airport of its own. It does not need one: the nearest airport is 70 km away, the road is good and the drive is part of the trip. This guide covers everything you need to know to reach Gostoso by plane, car or bus, with tips from someone who makes this trip every week and knows every curve of the RN-160.</p><h2>By plane: the nearest airport</h2><p>The nearest airport to São Miguel do Gostoso is <strong>Gov. Aluízio Alves Airport</strong>, in Mossoró (OYK), about 70 km away. The second most used is <strong>Natal International Airport</strong> (NAT), 160 km away. The choice depends on where you are flying from and which airline has a direct flight to the region.</p><h3>Mossoró Airport (OYK): 70 km from Gostoso</h3><p>Opened in 2014, Mossoró airport receives Azul and Gol flights from Recife, Fortaleza, São Paulo and Belo Horizonte. The advantage is the short distance: in 1h15 by car you are at the beach. The airport is modern, small and hassle-free: within 20 minutes you are in the car on your way to Gostoso.</p><ul><li><strong>Distance to Gostoso:</strong> 70 km</li><li><strong>Drive time:</strong> 1h15 to 1h30</li><li><strong>Private transfer:</strong> R$ 200 to R$ 350</li><li><strong>Shared transfer:</strong> from R$ 80 per person</li></ul><h3>Natal Airport (NAT): 160 km from Gostoso</h3><p>Natal airport has more flights, more airlines and higher frequency than Mossoró. Latam, Gol and Azul operate direct routes from Brasília, São Paulo (Guarulhos and Congonhas), Rio de Janeiro, Recife, Salvador and Belo Horizonte. If your direct flight leaves from Mossoró, great. If not, Natal is the most practical option.</p><ul><li><strong>Distance to Gostoso:</strong> 160 km</li><li><strong>Drive time:</strong> 2h to 2h30</li><li><strong>Private transfer:</strong> R$ 300 to R$ 500</li><li><strong>Shared transfer:</strong> from R$ 100 per person</li></ul><p>The route from Natal to Gostoso on the RN-160 is paved and well signposted. It passes through Ceará-Mirim and Pureza, with coconut-grove scenery that puts visitors in a Northeastern mood.</p><h2>By car: routes and distances</h2><h3>From Natal (160 km, 2h to 2h30)</h3><p>Leave Natal on the BR-406 toward Mossoró. After Ceará-Mirim, take the RN-160 toward São Miguel do Gostoso. The road is paved all the way. There are no tolls on this stretch.</p><h3>From Mossoró (70 km, 1h15)</h3><p>Leave Mossoró on the RN-116 toward the coast until the junction with the RN-160. Turn left toward Gostoso. Paved road, little traffic, caatinga scenery that turns into coconut groves as you get closer to the sea.</p><h3>From Fortaleza (480 km, 5h30 to 6h)</h3><p>Take the BR-222 or the CE-040 to Mossoró, then the RN-116 and RN-160 to Gostoso. Tip: fill up in Fortaleza before leaving. There are few gas stations between Mossoró and Gostoso, and they keep limited hours.</p><h3>From João Pessoa (220 km, 3h to 3h30)</h3><p>BR-101 south to Goianinha, then the RN-160 toward Gostoso. Simple, well-paved route.</p><h3>From Recife (400 km, 5h to 5h30)</h3><p>BR-101 north to Goianinha (RN), then the RN-160 to Gostoso. Long but direct route, fully paved.</p><h2>By bus</h2><p>Empresa Nordeste runs the line between Natal and São Miguel do Gostoso. The bus leaves from the Natal bus station and the trip takes about 2h45, costing around R$ 25 to R$ 35. Schedules vary by day of the week: check with the company directly.</p><h2>Transfer: the most practical option</h2><p>Private transfer from Mossoró: R$ 200 to R$ 350 (1h15). Transfer from Natal: R$ 300 to R$ 500 private, from R$ 100 shared (2h to 2h30). Arrange it at least 24 hours ahead.</p><h2>Car rental</h2><p>Rental companies like Hertz, Localiza, Movida and Unidas have counters at the Natal and Mossoró airports. Prices: economy R$ 120 to R$ 180/day, SUV R$ 200 to R$ 350/day in high season.</p><p><strong>Driving tips:</strong> the RN-160 is paved but has no shoulder in places. Watch out for animals on the road after 6 pm. Fill up in Ceará-Mirim or Mossoró. There are no tolls.</p><h2>Final tips from someone who lives here</h2><ul><li>Flight arriving at night? Mossoró is better than Natal (shorter trip and a quieter road)</li><li>High season: book your transfer 3+ days ahead</li><li>Arrange everything on WhatsApp, drivers reply fast</li><li>If you cannot decide between Natal and Mossoró: compare the airfare</li></ul>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['how to get there','transfer','airport','bus']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is there an airport in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"No. The nearest airport is in Mossoró (OYK), 70 km away, or in Natal (NAT), 160 km away."}},{"@type":"Question","name":"What is the nearest airport to São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Gov. Aluízio Alves Airport, in Mossoró (OYK), 70 km away. Natal (NAT) is 160 km away but has more flights."}},{"@type":"Question","name":"Is there a direct bus from Natal to São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Yes, Empresa Nordeste runs the line. The trip takes about 2h45 and costs R$ 25 to R$ 35. Limited frequency."}},{"@type":"Question","name":"How much does a transfer from Mossoró to Gostoso cost?","acceptedAnswer":{"@type":"Answer","text":"A private transfer from Mossoró costs between R$ 200 and R$ 350. Shared from R$ 80 per person."}},{"@type":"Question","name":"Is the road to São Miguel do Gostoso paved?","acceptedAnswer":{"@type":"Answer","text":"Yes. The RN-160 is paved all the way. Watch out for animals on the road after 6 pm."}}]}$FAQ$::jsonb
+SELECT 'how-to-get-to-sao-miguel-do-gostoso', 'How to Get to São Miguel do Gostoso: Complete Guide 2026', 'Everything about getting to São Miguel do Gostoso by plane, car and bus. Transfer tips, roads and the nearest airport.', $POST$<p>São Miguel do Gostoso has no airport of its own. It does not need one: the nearest airport is 70 km away, the road is good and the drive is part of the trip. This guide covers everything you need to know to reach Gostoso by plane, car or bus, with tips from someone who makes this trip every week and knows every curve of the road.</p><h2>By plane: the nearest airport</h2><p>The nearest airport to São Miguel do Gostoso is <strong>Gov. Aluízio Alves Airport</strong>, in Mossoró (OYK), about 70 km away. The second most used is <strong>Natal International Airport</strong> (NAT), 110 km away. The choice depends on where you are flying from and which airline has a direct flight to the region.</p><h3>Mossoró Airport (OYK): 70 km from Gostoso</h3><p>Opened in 2014, Mossoró airport receives Azul and Gol flights from Recife, Fortaleza, São Paulo and Belo Horizonte. The advantage is the short distance: in 1h15 by car you are at the beach. The airport is modern, small and hassle-free: within 20 minutes you are in the car on your way to Gostoso.</p><ul><li><strong>Distance to Gostoso:</strong> 70 km</li><li><strong>Drive time:</strong> 1h15 to 1h30</li><li><strong>Transfer:</strong> price agreed with the provider</li></ul><h3>Natal Airport (NAT): 110 km from Gostoso</h3><p>Natal airport has more flights, more airlines and higher frequency than Mossoró. Latam, Gol and Azul operate direct routes from Brasília, São Paulo (Guarulhos and Congonhas), Rio de Janeiro, Recife, Salvador and Belo Horizonte. If your direct flight leaves from Mossoró, great. If not, Natal is the most practical option.</p><ul><li><strong>Distance to Gostoso:</strong> 110 km</li><li><strong>Drive time:</strong> about 1h50</li><li><strong>Transfer:</strong> price agreed with the provider</li></ul><p>The route from Natal to Gostoso is paved and well signposted. It follows the north coast of Rio Grande do Norte and goes through Touros, with coconut-grove scenery that puts visitors in a Northeastern mood.</p><h2>By car: routes and distances</h2><h3>From Natal (110 km, about 1h50)</h3><p>Leave Natal along the north coast of Rio Grande do Norte, going through Touros, toward São Miguel do Gostoso. The road is paved all the way. There are no tolls on this stretch.</p><h3>From Mossoró (70 km, 1h15)</h3><p>Leave Mossoró toward the coast and Gostoso. Paved road, little traffic, caatinga scenery that turns into coconut groves as you get closer to the sea.</p><h3>From Fortaleza (480 km, 5h30 to 6h)</h3><p>Go to Mossoró and from there on to Gostoso. Tip: fill up in Fortaleza before leaving. There are few gas stations between Mossoró and Gostoso, and they keep limited hours.</p><h3>From João Pessoa (220 km, 3h to 3h30)</h3><p>Head toward the north coast of Rio Grande do Norte and then on to Gostoso. Simple, well-paved route.</p><h3>From Recife (400 km, 5h to 5h30)</h3><p>Enter Rio Grande do Norte and continue to Gostoso. Long but direct route, fully paved.</p><h2>By bus</h2><p>Empresa Nordeste runs the line between Natal and São Miguel do Gostoso. The bus leaves from the Natal bus station and the trip takes about 2h45, costing around R$ 25 to R$ 35. Schedules vary by day of the week: check with the company directly.</p><h2>Transfer: the most practical option</h2><p>The transfer price is agreed directly with the provider on WhatsApp; providers and their prices are listed on the <a href="/transfer">transfer page</a>. From Mossoró it takes about 1h15, and from Natal about 1h50. Arrange it at least 24 hours ahead.</p><h2>Car rental</h2><p>Rental companies like Hertz, Localiza, Movida and Unidas have counters at the Natal and Mossoró airports. Prices: economy R$ 120 to R$ 180/day, SUV R$ 200 to R$ 350/day in high season.</p><p><strong>Driving tips:</strong> the road is paved but has no shoulder in places. Watch out for animals on the road after 6 pm. Fill up in Ceará-Mirim or Mossoró. There are no tolls.</p><h2>Final tips from someone who lives here</h2><ul><li>Flight arriving at night? Mossoró is better than Natal (shorter trip and a quieter road)</li><li>High season: book your transfer 3+ days ahead</li><li>Arrange everything on WhatsApp, drivers reply fast</li><li>If you cannot decide between Natal and Mossoró: compare the airfare</li></ul>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['how to get there','transfer','airport','bus']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is there an airport in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"No. The nearest airport is in Mossoró (OYK), 70 km away, or in Natal (NAT), 110 km away."}},{"@type":"Question","name":"What is the nearest airport to São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Gov. Aluízio Alves Airport, in Mossoró (OYK), 70 km away. Natal (NAT) is 110 km away but has more flights."}},{"@type":"Question","name":"Is there a direct bus from Natal to São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Yes, Empresa Nordeste runs the line. The trip takes about 2h45 and costs R$ 25 to R$ 35. Limited frequency."}},{"@type":"Question","name":"How much does a transfer from Mossoró to Gostoso cost?","acceptedAnswer":{"@type":"Answer","text":"The price is agreed directly with the provider on WhatsApp. The providers and their prices are listed on the transfer page of Vive Gostoso."}},{"@type":"Question","name":"Is the road to São Miguel do Gostoso paved?","acceptedAnswer":{"@type":"Answer","text":"Yes. The road is paved all the way. Watch out for animals on the road after 6 pm."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'como-chegar-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'how-to-get-to-sao-miguel-do-gostoso');
 
 INSERT INTO public.gostoso_blog_posts (slug, title, excerpt, content, cover_url, author, tags, is_published, published_at, faq_jsonld)
-SELECT 'como-llegar-a-sao-miguel-do-gostoso', 'Cómo llegar a São Miguel do Gostoso: guía completa 2026', 'Todo sobre cómo llegar a São Miguel do Gostoso en avión, auto y autobús. Consejos de traslado, carreteras y el aeropuerto más cercano.', $POST$<p>São Miguel do Gostoso no tiene aeropuerto propio. No hace falta: el aeropuerto más cercano queda a 70 km, la carretera es buena y el camino ya es parte del viaje. Esta guía reúne todo lo que necesitas saber para llegar a Gostoso en avión, auto o autobús, con consejos de quien hace este trayecto cada semana y conoce cada curva de la RN-160.</p><h2>En avión: el aeropuerto más cercano</h2><p>El aeropuerto más cercano a São Miguel do Gostoso es el <strong>Aeropuerto Gov. Aluízio Alves</strong>, en Mossoró (OYK), a unos 70 km. El segundo más usado es el <strong>Aeropuerto Internacional de Natal</strong> (NAT), a 160 km. La elección depende de desde dónde salgas y qué aerolínea tenga vuelo directo a la región.</p><h3>Aeropuerto de Mossoró (OYK): 70 km de Gostoso</h3><p>Inaugurado en 2014, el aeropuerto de Mossoró recibe vuelos de Azul y Gol desde Recife, Fortaleza, São Paulo y Belo Horizonte. La ventaja es la distancia corta: en 1h15 de auto ya estás en la playa. El aeropuerto es moderno, pequeño y sin complicaciones: en 20 minutos ya estás en el auto rumbo a Gostoso.</p><ul><li><strong>Distancia hasta Gostoso:</strong> 70 km</li><li><strong>Tiempo en auto:</strong> 1h15 a 1h30</li><li><strong>Traslado privado:</strong> R$ 200 a R$ 350</li><li><strong>Traslado compartido:</strong> desde R$ 80 por persona</li></ul><h3>Aeropuerto de Natal (NAT): 160 km de Gostoso</h3><p>El aeropuerto de Natal tiene más vuelos, más aerolíneas y más frecuencia que el de Mossoró. Latam, Gol y Azul operan rutas directas desde Brasilia, São Paulo (Guarulhos y Congonhas), Río de Janeiro, Recife, Salvador y Belo Horizonte. Si tu vuelo directo sale de Mossoró, perfecto. Si no, Natal es la opción más práctica.</p><ul><li><strong>Distancia hasta Gostoso:</strong> 160 km</li><li><strong>Tiempo en auto:</strong> 2h a 2h30</li><li><strong>Traslado privado:</strong> R$ 300 a R$ 500</li><li><strong>Traslado compartido:</strong> desde R$ 100 por persona</li></ul><p>La ruta de Natal a Gostoso por la RN-160 está pavimentada y bien señalizada. El trayecto pasa por Ceará-Mirim y Pureza, con un paisaje de cocotales que ya mete al visitante en el clima del Nordeste.</p><h2>En auto: rutas y distancias</h2><h3>Desde Natal (160 km, 2h a 2h30)</h3><p>Sal de Natal por la BR-406 en dirección a Mossoró. Después de Ceará-Mirim, toma la RN-160 hacia São Miguel do Gostoso. La carretera está pavimentada de principio a fin. No hay peaje en este tramo.</p><h3>Desde Mossoró (70 km, 1h15)</h3><p>Sal de Mossoró por la RN-116 hacia el litoral hasta el cruce con la RN-160. Gira a la izquierda hacia Gostoso. Carretera pavimentada, poco movimiento, paisaje de caatinga que cambia a cocotales a medida que te acercas al mar.</p><h3>Desde Fortaleza (480 km, 5h30 a 6h)</h3><p>Toma la BR-222 o la CE-040 hasta Mossoró, luego la RN-116 y la RN-160 hasta Gostoso. Consejo: carga combustible en Fortaleza antes de salir. Las gasolineras entre Mossoró y Gostoso son pocas y con horario limitado.</p><h3>Desde João Pessoa (220 km, 3h a 3h30)</h3><p>BR-101 sur hasta Goianinha, luego la RN-160 en dirección a Gostoso. Ruta simple y bien pavimentada.</p><h3>Desde Recife (400 km, 5h a 5h30)</h3><p>BR-101 norte hasta Goianinha (RN), luego la RN-160 hasta Gostoso. Ruta larga pero directa, toda asfaltada.</p><h2>En autobús</h2><p>La Empresa Nordeste opera la línea entre Natal y São Miguel do Gostoso. El autobús sale de la Terminal de Autobuses de Natal y el viaje dura cerca de 2h45, con un costo de entre R$ 25 y R$ 35. Los horarios varían según el día de la semana: consulta directamente con la empresa.</p><h2>Traslado: la opción más práctica</h2><p>Traslado privado desde Mossoró: R$ 200 a R$ 350 (1h15). Traslado desde Natal: R$ 300 a R$ 500 privado, desde R$ 100 compartido (2h a 2h30). Acuérdalo con al menos 24h de anticipación.</p><h2>Alquiler de auto</h2><p>Empresas como Hertz, Localiza, Movida y Unidas tienen mostrador en los aeropuertos de Natal y Mossoró. Precios: económico R$ 120 a R$ 180/día, SUV R$ 200 a R$ 350/día en temporada alta.</p><p><strong>Consejos de manejo:</strong> la RN-160 está pavimentada pero en algunos tramos no tiene banquina. Cuidado con los animales en la pista después de las 18h. Carga combustible en Ceará-Mirim o Mossoró. No hay peaje.</p><h2>Consejos finales de quien vive aquí</h2><ul><li>¿Vuelo que llega de noche? Mossoró es mejor que Natal (trayecto más corto y carretera más tranquila)</li><li>Temporada alta: reserva el traslado con 3 o más días de anticipación</li><li>Acuerda todo por WhatsApp, los conductores responden rápido</li><li>Si dudas entre Natal y Mossoró: compara el precio del pasaje aéreo</li></ul>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['cómo llegar','traslado','aeropuerto','autobús']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Hay aeropuerto en São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"No. El aeropuerto más cercano está en Mossoró (OYK), a 70 km, o en Natal (NAT), a 160 km."}},{"@type":"Question","name":"¿Cuál es el aeropuerto más cercano a São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"El Aeropuerto Gov. Aluízio Alves, en Mossoró (OYK), a 70 km. El de Natal (NAT) queda a 160 km pero tiene más vuelos."}},{"@type":"Question","name":"¿Hay autobús directo de Natal a São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Sí, la Empresa Nordeste opera la línea. El viaje dura cerca de 2h45 y cuesta R$ 25 a R$ 35. Frecuencia limitada."}},{"@type":"Question","name":"¿Cuánto cuesta el traslado de Mossoró a Gostoso?","acceptedAnswer":{"@type":"Answer","text":"El traslado privado desde Mossoró cuesta entre R$ 200 y R$ 350. Compartido desde R$ 80 por persona."}},{"@type":"Question","name":"¿La carretera a São Miguel do Gostoso está pavimentada?","acceptedAnswer":{"@type":"Answer","text":"Sí. La RN-160 está pavimentada de principio a fin. Cuidado con los animales en la pista después de las 18h."}}]}$FAQ$::jsonb
+SELECT 'como-llegar-a-sao-miguel-do-gostoso', 'Cómo llegar a São Miguel do Gostoso: guía completa 2026', 'Todo sobre cómo llegar a São Miguel do Gostoso en avión, auto y autobús. Consejos de traslado, carreteras y el aeropuerto más cercano.', $POST$<p>São Miguel do Gostoso no tiene aeropuerto propio. No hace falta: el aeropuerto más cercano queda a 70 km, la carretera es buena y el camino ya es parte del viaje. Esta guía reúne todo lo que necesitas saber para llegar a Gostoso en avión, auto o autobús, con consejos de quien hace este trayecto cada semana y conoce cada curva del camino.</p><h2>En avión: el aeropuerto más cercano</h2><p>El aeropuerto más cercano a São Miguel do Gostoso es el <strong>Aeropuerto Gov. Aluízio Alves</strong>, en Mossoró (OYK), a unos 70 km. El segundo más usado es el <strong>Aeropuerto Internacional de Natal</strong> (NAT), a 110 km. La elección depende de desde dónde salgas y qué aerolínea tenga vuelo directo a la región.</p><h3>Aeropuerto de Mossoró (OYK): 70 km de Gostoso</h3><p>Inaugurado en 2014, el aeropuerto de Mossoró recibe vuelos de Azul y Gol desde Recife, Fortaleza, São Paulo y Belo Horizonte. La ventaja es la distancia corta: en 1h15 de auto ya estás en la playa. El aeropuerto es moderno, pequeño y sin complicaciones: en 20 minutos ya estás en el auto rumbo a Gostoso.</p><ul><li><strong>Distancia hasta Gostoso:</strong> 70 km</li><li><strong>Tiempo en auto:</strong> 1h15 a 1h30</li><li><strong>Traslado:</strong> precio acordado con el prestador</li></ul><h3>Aeropuerto de Natal (NAT): 110 km de Gostoso</h3><p>El aeropuerto de Natal tiene más vuelos, más aerolíneas y más frecuencia que el de Mossoró. Latam, Gol y Azul operan rutas directas desde Brasilia, São Paulo (Guarulhos y Congonhas), Río de Janeiro, Recife, Salvador y Belo Horizonte. Si tu vuelo directo sale de Mossoró, perfecto. Si no, Natal es la opción más práctica.</p><ul><li><strong>Distancia hasta Gostoso:</strong> 110 km</li><li><strong>Tiempo en auto:</strong> unas 1h50</li><li><strong>Traslado:</strong> precio acordado con el prestador</li></ul><p>La ruta de Natal a Gostoso está pavimentada y bien señalizada. Sigue por el litoral norte de Rio Grande do Norte y pasa por Touros, con un paisaje de cocotales que ya mete al visitante en el clima del Nordeste.</p><h2>En auto: rutas y distancias</h2><h3>Desde Natal (110 km, unas 1h50)</h3><p>Sal de Natal por el litoral norte de Rio Grande do Norte, pasando por Touros, hacia São Miguel do Gostoso. La carretera está pavimentada de principio a fin. No hay peaje en este tramo.</p><h3>Desde Mossoró (70 km, 1h15)</h3><p>Sal de Mossoró hacia el litoral y Gostoso. Carretera pavimentada, poco movimiento, paisaje de caatinga que cambia a cocotales a medida que te acercas al mar.</p><h3>Desde Fortaleza (480 km, 5h30 a 6h)</h3><p>Ve hasta Mossoró y de ahí sigue hasta Gostoso. Consejo: carga combustible en Fortaleza antes de salir. Las gasolineras entre Mossoró y Gostoso son pocas y con horario limitado.</p><h3>Desde João Pessoa (220 km, 3h a 3h30)</h3><p>Dirígete al litoral norte de Rio Grande do Norte y luego sigue hasta Gostoso. Ruta simple y bien pavimentada.</p><h3>Desde Recife (400 km, 5h a 5h30)</h3><p>Entra en Rio Grande do Norte y sigue hasta Gostoso. Ruta larga pero directa, toda asfaltada.</p><h2>En autobús</h2><p>La Empresa Nordeste opera la línea entre Natal y São Miguel do Gostoso. El autobús sale de la Terminal de Autobuses de Natal y el viaje dura cerca de 2h45, con un costo de entre R$ 25 y R$ 35. Los horarios varían según el día de la semana: consulta directamente con la empresa.</p><h2>Traslado: la opción más práctica</h2><p>El precio del traslado se acuerda directamente con el prestador por WhatsApp; los prestadores y sus precios están listados en la <a href="/transfer">página de traslados</a>. Desde Mossoró son unas 1h15 y desde Natal unas 1h50. Acuérdalo con al menos 24 horas de antelación.</p><h2>Alquiler de auto</h2><p>Empresas como Hertz, Localiza, Movida y Unidas tienen mostrador en los aeropuertos de Natal y Mossoró. Precios: económico R$ 120 a R$ 180/día, SUV R$ 200 a R$ 350/día en temporada alta.</p><p><strong>Consejos de manejo:</strong> la carretera está pavimentada pero en algunos tramos no tiene banquina. Cuidado con los animales en la pista después de las 18h. Carga combustible en Ceará-Mirim o Mossoró. No hay peaje.</p><h2>Consejos finales de quien vive aquí</h2><ul><li>¿Vuelo que llega de noche? Mossoró es mejor que Natal (trayecto más corto y carretera más tranquila)</li><li>Temporada alta: reserva el traslado con 3 o más días de anticipación</li><li>Acuerda todo por WhatsApp, los conductores responden rápido</li><li>Si dudas entre Natal y Mossoró: compara el precio del pasaje aéreo</li></ul>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['cómo llegar','traslado','aeropuerto','autobús']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Hay aeropuerto en São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"No. El aeropuerto más cercano está en Mossoró (OYK), a 70 km, o en Natal (NAT), a 110 km."}},{"@type":"Question","name":"¿Cuál es el aeropuerto más cercano a São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"El Aeropuerto Gov. Aluízio Alves, en Mossoró (OYK), a 70 km. El de Natal (NAT) queda a 110 km pero tiene más vuelos."}},{"@type":"Question","name":"¿Hay autobús directo de Natal a São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Sí, la Empresa Nordeste opera la línea. El viaje dura cerca de 2h45 y cuesta R$ 25 a R$ 35. Frecuencia limitada."}},{"@type":"Question","name":"¿Cuánto cuesta el traslado de Mossoró a Gostoso?","acceptedAnswer":{"@type":"Answer","text":"El precio se acuerda directamente con el prestador por WhatsApp. Los prestadores y sus precios están listados en la página de traslados de Vive Gostoso."}},{"@type":"Question","name":"¿La carretera a São Miguel do Gostoso está pavimentada?","acceptedAnswer":{"@type":"Answer","text":"Sí. La carretera está pavimentada de principio a fin. Cuidado con los animales en la pista después de las 18h."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'como-chegar-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'como-llegar-a-sao-miguel-do-gostoso');
 
 INSERT INTO public.gostoso_blog_posts (slug, title, excerpt, content, cover_url, author, tags, is_published, published_at, faq_jsonld)
-SELECT 'what-to-do-sao-miguel-do-gostoso', 'What to Do in São Miguel do Gostoso: 20 Experiences Worth Your Time', 'Beaches, buggy tours, kitesurfing, food, nightlife and events. The complete guide to what to do in Gostoso, with tips from a local.', $POST$<p>São Miguel do Gostoso has 10 km of waterfront, 8 distinct beaches, surprisingly good restaurants and an events calendar that fills the town. This guide covers the 20 experiences you should not skip.</p><h2>Beaches you should not miss</h2><h3>1. Praia da Xepa</h3><p>The sunset beach. In the center, with drink stands, live music and a sky that looks painted. The whole town stops every day to watch the sun go down.</p><h3>2. Ponta do Santo Cristo</h3><p>The kitesurfing spot. Even if you don't kite, it is worth going to watch the colorful kites against the sky.</p><h3>3. Praia de Tourinhos</h3><p>Red dunes, natural pools, an abandoned lighthouse on top. The most photographed beach in Gostoso.</p><h3>4. Praia do Maceió</h3><p>Clear, warm water. Perfect for families. Shallow bottom, no current.</p><h3>5. Praia do Marco</h3><p>Flat water, a spot for beginner kiters. Kite schools and beach stands.</p><h2>Buggy tours</h2><ul><li><strong>Buggy to Tourinhos:</strong> 2 to 3h, R$ 150 to 250 per buggy (4 people)</li><li><strong>Buggy to Lagoa de Pitangui:</strong> half day, R$ 300 to 500</li><li><strong>Sunset buggy:</strong> arrange it with a local driver</li><li><strong>Buggy to Zé Martins:</strong> deserted beach, half day, R$ 300 to 500</li></ul><h2>Kitesurfing and water sports</h2><p>Kite lessons: 8h package from R$ 1.000. SUP: R$ 50 to 80 per day. Windsurfing and wingfoil at Ponta do Santo Cristo.</p><h2>Boat trips</h2><p>Sunset catamaran: R$ 80 to 120 per person, 1h30 of sailing. Jangada trip with a local fisherman: an authentic experience.</p><h2>Food</h2><p>Fresh seafood on the waterfront, tapioca with coalho cheese at the Xepa stands, chef-driven restaurants in the center. Dishes from R$ 40.</p><h2>Nightlife</h2><p>Sunset at Xepa every day from 4 p.m. Bars in the center with live forró until 11 p.m. Gostoso is not a clubbing destination.</p><h2>Events</h2><p>Gostoso Sunset Festival (Jul to Sep), Réveillon do Gostoso (Dec 28 to Jan 2), Bossa Nova & Jazz, Festival Eita Camarão, Mostra de Cinema, Brazilian Wing Foil Championship.</p><h2>3-day itinerary</h2><p>Day 1: Arrival, Xepa, sunset. Day 2: Buggy to Tourinhos, lunch at Maceió. Day 3: Kite or SUP, lunch, departure.</p><h2>5-day itinerary</h2><p>Day 1: Arrival, Xepa. Day 2: Buggy Tourinhos + Cardeiro. Day 3: Kite + catamaran. Day 4: Lagoa de Pitangui. Day 5: Crafts, departure.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['what to do','tours','beaches','food']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How many days should I stay in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"At least 3 days. Ideal: 5 days. For the kite season: 7 to 14 days."}},{"@type":"Question","name":"Are there beaches for children in Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Yes. Praia do Maceió and Xepa have shallow, warm water. Tourinhos has natural pools at low tide."}},{"@type":"Question","name":"Is there nightlife in Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Low-key: sunset at Xepa with music, bars with forró until 11 p.m. For clubs, Pipa is 3h30 away."}},{"@type":"Question","name":"Do I need a car in Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Not necessarily. The center is walkable. For the farther beaches, take a buggy or a moto-taxi."}}]}$FAQ$::jsonb
+SELECT 'what-to-do-sao-miguel-do-gostoso', 'What to Do in São Miguel do Gostoso: 20 Experiences Worth Your Time', 'Beaches, buggy tours, kitesurfing, food, nightlife and events. The complete guide to what to do in Gostoso, with tips from a local.', $POST$<p>São Miguel do Gostoso has 10 km of waterfront, 8 distinct beaches, surprisingly good restaurants and an events calendar that fills the town. This guide covers the 20 experiences you should not skip.</p><h2>Beaches you should not miss</h2><h3>1. Praia da Xepa</h3><p>The sunset beach. In the center, with drink stands, live music and a sky that looks painted. The whole town stops every day to watch the sun go down.</p><h3>2. Ponta do Santo Cristo</h3><p>The kitesurfing spot. Even if you don't kite, it is worth going to watch the colorful kites against the sky.</p><h3>3. Praia de Tourinhos</h3><p>Red dunes, natural pools, an abandoned lighthouse on top. The most photographed beach in Gostoso.</p><h3>4. Praia do Maceió</h3><p>Clear, warm water. Perfect for families. Shallow bottom, no current.</p><h3>5. Praia do Marco</h3><p>Flat water, a spot for beginner kiters. Kite schools and beach stands.</p><h2>Buggy tours</h2><ul><li><strong>Buggy to Tourinhos:</strong> 2 to 3h, R$ 150 to 250 per buggy (4 people)</li><li><strong>Buggy to Lagoa de Pitangui:</strong> half day, R$ 300 to 500</li><li><strong>Sunset buggy:</strong> arrange it with a local driver</li><li><strong>Buggy to Zé Martins:</strong> deserted beach, half day, R$ 300 to 500</li></ul><h2>Kitesurfing and water sports</h2><p>Kite lessons: 8h package from R$ 1.000. SUP: R$ 50 to 80 per day. Windsurfing and wingfoil at Ponta do Santo Cristo.</p><h2>Boat trips</h2><p>Sunset catamaran: R$ 80 to 120 per person, 1h30 of sailing. Jangada trip with a local fisherman: an authentic experience.</p><h2>Food</h2><p>Fresh seafood on the waterfront, tapioca with coalho cheese at the Xepa stands, chef-driven restaurants in the center. Dishes from R$ 40.</p><h2>Nightlife</h2><p>Sunset at Xepa every day from 4 p.m. Bars in the center with live forró until 11 p.m. Gostoso is not a clubbing destination.</p><h2>Events</h2><p>Gostoso Sunset Festival (Jul to Sep), Réveillon do Gostoso (Dec 28 to Jan 2), Bossa Nova & Jazz, Festival Eita Camarão, Mostra de Cinema, Brazilian Wing Foil Championship.</p><h2>3-day itinerary</h2><p>Day 1: Arrival, Xepa, sunset. Day 2: Buggy to Tourinhos, lunch at Maceió. Day 3: Kite or SUP, lunch, departure.</p><h2>5-day itinerary</h2><p>Day 1: Arrival, Xepa. Day 2: Buggy Tourinhos + Cardeiro. Day 3: Kite + catamaran. Day 4: Lagoa de Pitangui. Day 5: Crafts, departure.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['what to do','tours','beaches','food']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How many days should I stay in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"At least 3 days. Ideal: 5 days. For the kite season: 7 to 14 days."}},{"@type":"Question","name":"Are there beaches for children in Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Yes. Praia do Maceió and Xepa have shallow, warm water. Tourinhos has natural pools at low tide."}},{"@type":"Question","name":"Is there nightlife in Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Low-key: sunset at Xepa with music, bars with forró until 11 p.m. For clubs, Pipa is 3h30 away."}},{"@type":"Question","name":"Do I need a car in Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Not necessarily. The center is walkable. For the farther beaches, take a buggy or a moto-taxi."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'o-que-fazer-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'what-to-do-sao-miguel-do-gostoso');
 
 INSERT INTO public.gostoso_blog_posts (slug, title, excerpt, content, cover_url, author, tags, is_published, published_at, faq_jsonld)
-SELECT 'que-hacer-sao-miguel-do-gostoso', 'Qué hacer en São Miguel do Gostoso: 20 experiencias que valen la pena', 'Playas, paseos en buggy, kitesurf, gastronomía, vida nocturna y eventos. La guía completa de qué hacer en Gostoso, con consejos de gente local.', $POST$<p>São Miguel do Gostoso tiene 10 km de costanera, 8 playas distintas, restaurantes sorprendentes y un calendario de eventos que llena el pueblo. Esta guía reúne las 20 experiencias que no te puedes saltar.</p><h2>Playas que no te puedes perder</h2><h3>1. Praia da Xepa</h3><p>La playa del atardecer. En el centro, con puestos de tragos, música en vivo y un cielo que parece pintado. El pueblo se detiene todos los días para ver caer el sol.</p><h3>2. Ponta do Santo Cristo</h3><p>El lugar del kitesurf. Aunque no hagas kite, vale la pena ir a ver los kites de colores contra el cielo.</p><h3>3. Praia de Tourinhos</h3><p>Dunas rojas, piscinas naturales, un faro abandonado en lo alto. La más fotografiada de Gostoso.</p><h3>4. Praia do Maceió</h3><p>Agua cristalina y tibia. Perfecta para familias. Fondo poco profundo, sin corriente.</p><h3>5. Praia do Marco</h3><p>Agua plana, spot de kiters principiantes. Escuelas de kite y barracas.</p><h2>Paseos en buggy</h2><ul><li><strong>Buggy hasta Tourinhos:</strong> 2 a 3h, R$ 150 a 250 por buggy (4 personas)</li><li><strong>Buggy hasta Lagoa de Pitangui:</strong> medio día, R$ 300 a 500</li><li><strong>Buggy al atardecer:</strong> acuérdalo con un conductor local</li><li><strong>Buggy hasta Zé Martins:</strong> playa desierta, medio día, R$ 300 a 500</li></ul><h2>Kitesurf y deportes náuticos</h2><p>Clases de kite: paquete de 8h desde R$ 1.000. SUP: R$ 50 a 80 por día. Windsurf y wingfoil en Ponta do Santo Cristo.</p><h2>Paseos en barco</h2><p>Catamarán al atardecer: R$ 80 a 120 por persona, 1h30 de navegación. Paseo en jangada con un pescador local: una experiencia auténtica.</p><h2>Gastronomía</h2><p>Mariscos frescos en la costanera, tapioca con queso coalho en las barracas de Xepa, restaurantes de autor en el centro. Platos desde R$ 40.</p><h2>Vida nocturna</h2><p>Atardecer en Xepa todos los días a partir de las 16h. Bares en el centro con forró en vivo hasta las 23h. Gostoso no es destino de discotecas.</p><h2>Eventos</h2><p>Gostoso Sunset Festival (jul a sep), Réveillon do Gostoso (28 dic a 2 ene), Bossa Nova & Jazz, Festival Eita Camarão, Mostra de Cinema, Campeonato Brasileño de Wing Foil.</p><h2>Itinerario de 3 días</h2><p>Día 1: Llegada, Xepa, atardecer. Día 2: Buggy hasta Tourinhos, almuerzo en Maceió. Día 3: Kite o SUP, almuerzo, salida.</p><h2>Itinerario de 5 días</h2><p>Día 1: Llegada, Xepa. Día 2: Buggy Tourinhos + Cardeiro. Día 3: Kite + catamarán. Día 4: Lagoa de Pitangui. Día 5: Artesanías, salida.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['qué hacer','paseos','playas','gastronomía']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuántos días quedarse en São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Mínimo 3 días. Ideal: 5 días. Para la temporada de kite: 7 a 14 días."}},{"@type":"Question","name":"¿Hay playa para niños en Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Sí. Praia do Maceió y Xepa tienen agua poco profunda y tibia. Tourinhos tiene piscinas naturales con marea baja."}},{"@type":"Question","name":"¿Hay vida nocturna en Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Discreta: atardecer en Xepa con música, bares con forró hasta las 23h. Para discotecas, Pipa está a 3h30."}},{"@type":"Question","name":"¿Se necesita auto en Gostoso?","acceptedAnswer":{"@type":"Answer","text":"No es obligatorio. El centro se recorre a pie. Para las playas más lejanas, buggy o mototaxi."}}]}$FAQ$::jsonb
+SELECT 'que-hacer-sao-miguel-do-gostoso', 'Qué hacer en São Miguel do Gostoso: 20 experiencias que valen la pena', 'Playas, paseos en buggy, kitesurf, gastronomía, vida nocturna y eventos. La guía completa de qué hacer en Gostoso, con consejos de gente local.', $POST$<p>São Miguel do Gostoso tiene 10 km de costanera, 8 playas distintas, restaurantes sorprendentes y un calendario de eventos que llena el pueblo. Esta guía reúne las 20 experiencias que no te puedes saltar.</p><h2>Playas que no te puedes perder</h2><h3>1. Praia da Xepa</h3><p>La playa del atardecer. En el centro, con puestos de tragos, música en vivo y un cielo que parece pintado. El pueblo se detiene todos los días para ver caer el sol.</p><h3>2. Ponta do Santo Cristo</h3><p>El lugar del kitesurf. Aunque no hagas kite, vale la pena ir a ver los kites de colores contra el cielo.</p><h3>3. Praia de Tourinhos</h3><p>Dunas rojas, piscinas naturales, un faro abandonado en lo alto. La más fotografiada de Gostoso.</p><h3>4. Praia do Maceió</h3><p>Agua cristalina y tibia. Perfecta para familias. Fondo poco profundo, sin corriente.</p><h3>5. Praia do Marco</h3><p>Agua plana, spot de kiters principiantes. Escuelas de kite y barracas.</p><h2>Paseos en buggy</h2><ul><li><strong>Buggy hasta Tourinhos:</strong> 2 a 3h, R$ 150 a 250 por buggy (4 personas)</li><li><strong>Buggy hasta Lagoa de Pitangui:</strong> medio día, R$ 300 a 500</li><li><strong>Buggy al atardecer:</strong> acuérdalo con un conductor local</li><li><strong>Buggy hasta Zé Martins:</strong> playa desierta, medio día, R$ 300 a 500</li></ul><h2>Kitesurf y deportes náuticos</h2><p>Clases de kite: paquete de 8h desde R$ 1.000. SUP: R$ 50 a 80 por día. Windsurf y wingfoil en Ponta do Santo Cristo.</p><h2>Paseos en barco</h2><p>Catamarán al atardecer: R$ 80 a 120 por persona, 1h30 de navegación. Paseo en jangada con un pescador local: una experiencia auténtica.</p><h2>Gastronomía</h2><p>Mariscos frescos en la costanera, tapioca con queso coalho en las barracas de Xepa, restaurantes de autor en el centro. Platos desde R$ 40.</p><h2>Vida nocturna</h2><p>Atardecer en Xepa todos los días a partir de las 16h. Bares en el centro con forró en vivo hasta las 23h. Gostoso no es destino de discotecas.</p><h2>Eventos</h2><p>Gostoso Sunset Festival (jul a sep), Réveillon do Gostoso (28 dic a 2 ene), Bossa Nova & Jazz, Festival Eita Camarão, Mostra de Cinema, Campeonato Brasileño de Wing Foil.</p><h2>Itinerario de 3 días</h2><p>Día 1: Llegada, Xepa, atardecer. Día 2: Buggy hasta Tourinhos, almuerzo en Maceió. Día 3: Kite o SUP, almuerzo, salida.</p><h2>Itinerario de 5 días</h2><p>Día 1: Llegada, Xepa. Día 2: Buggy Tourinhos + Cardeiro. Día 3: Kite + catamarán. Día 4: Lagoa de Pitangui. Día 5: Artesanías, salida.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['qué hacer','paseos','playas','gastronomía']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuántos días quedarse en São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Mínimo 3 días. Ideal: 5 días. Para la temporada de kite: 7 a 14 días."}},{"@type":"Question","name":"¿Hay playa para niños en Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Sí. Praia do Maceió y Xepa tienen agua poco profunda y tibia. Tourinhos tiene piscinas naturales con marea baja."}},{"@type":"Question","name":"¿Hay vida nocturna en Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Discreta: atardecer en Xepa con música, bares con forró hasta las 23h. Para discotecas, Pipa está a 3h30."}},{"@type":"Question","name":"¿Se necesita auto en Gostoso?","acceptedAnswer":{"@type":"Answer","text":"No es obligatorio. El centro se recorre a pie. Para las playas más lejanas, buggy o mototaxi."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'o-que-fazer-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'que-hacer-sao-miguel-do-gostoso');
 
 INSERT INTO public.gostoso_blog_posts (slug, title, excerpt, content, cover_url, author, tags, is_published, published_at, faq_jsonld)
-SELECT 'beaches-sao-miguel-do-gostoso', 'The 8 Best Beaches in São Miguel do Gostoso: Guide with Map', 'From Ponta do Santo Cristo to Praia do Amor: the 8 beaches of Gostoso, how to get there, who each one suits and local tips.', $POST$<p>São Miguel do Gostoso has 8 beaches along 10 km of coastline, each with its own character. This guide covers each beach in detail.</p><h2>1. Ponta do Santo Cristo</h2><p>The queen of kite. Cross-onshore wind from the right, flat water, sandy bottom. 4 km from the center. Good for kiters and windsurfers. Schools, rentals, beach huts.</p><h2>2. Praia do Marco</h2><p>Flat-water heaven. 8 km from the center. Good for beginner kiters. Shallow, still water, no waves.</p><h2>3. Praia do Maceió</h2><p>The family beach. 2 km from the center. Clear, warm, calm water. Fully equipped beach huts. Perfect for kids.</p><h2>4. Praia de Tourinhos</h2><p>The most photographed. 12 km from the center, buggy only. Red dunes, natural pools, abandoned lighthouse.</p><h2>5. Praia do Minhoto</h2><p>The fishermen's beach. 1.5 km from the center. Colorful jangadas, fresh fish straight off the boat. Living culture.</p><h2>6. Praia do Cardeiro</h2><p>Quiet, close to the center. 3 km. Less crowded, good for swimming and picnics.</p><h2>7. Praia de Zé Martins</h2><p>The hidden beach. 15 km, buggy only. White sand, coconut palms, total privacy.</p><h2>8. Praia do Amor</h2><p>The romantic beach. 10 km. Shell-shaped, sheltered from the wind. Good for couples and snorkeling.</p><h2>Which beach to pick: quick guide</h2><p>Kitesurfing: Ponta do Santo Cristo or Marco. Family: Maceió. Photos: Tourinhos. Culture: Minhoto. Romance: Amor. Seclusion: Zé Martins. Quiet nearby: Cardeiro. Sunset: Xepa.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['beaches','ponta do santo cristo','maceió','tourinhos']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the prettiest beach in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Tourinhos is the most photographed (red dunes). Ponta do Santo Cristo is the most famous (kite). Xepa has the best sunset."}},{"@type":"Question","name":"Is there a beach with natural pools in Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Yes. Tourinhos and Maceió form natural pools at low tide."}},{"@type":"Question","name":"Which beach is best for kitesurfing?","acceptedAnswer":{"@type":"Answer","text":"Ponta do Santo Cristo (main spot) and Praia do Marco (beginners)."}},{"@type":"Question","name":"Is there a calm beach for kids?","acceptedAnswer":{"@type":"Answer","text":"Praia do Maceió is the best: shallow, warm water with no current."}}]}$FAQ$::jsonb
+SELECT 'beaches-sao-miguel-do-gostoso', 'The 8 Best Beaches in São Miguel do Gostoso: Guide with Map', 'From Ponta do Santo Cristo to Praia do Amor: the 8 beaches of Gostoso, how to get there, who each one suits and local tips.', $POST$<p>São Miguel do Gostoso has 8 beaches along 10 km of coastline, each with its own character. This guide covers each beach in detail.</p><h2>1. Ponta do Santo Cristo</h2><p>The queen of kite. Cross-onshore wind from the right, flat water, sandy bottom. 4 km from the center. Good for kiters and windsurfers. Schools, rentals, beach huts.</p><h2>2. Praia do Marco</h2><p>Flat-water heaven. 8 km from the center. Good for beginner kiters. Shallow, still water, no waves.</p><h2>3. Praia do Maceió</h2><p>The family beach. 2 km from the center. Clear, warm, calm water. Fully equipped beach huts. Perfect for kids.</p><h2>4. Praia de Tourinhos</h2><p>The most photographed. 12 km from the center, buggy only. Red dunes, natural pools, abandoned lighthouse.</p><h2>5. Praia do Minhoto</h2><p>The fishermen's beach. 1.5 km from the center. Colorful jangadas, fresh fish straight off the boat. Living culture.</p><h2>6. Praia do Cardeiro</h2><p>Quiet, close to the center. 3 km. Less crowded, good for swimming and picnics.</p><h2>7. Praia de Zé Martins</h2><p>The hidden beach. 15 km, buggy only. White sand, coconut palms, total privacy.</p><h2>8. Praia do Amor</h2><p>The romantic beach. 10 km. Shell-shaped, sheltered from the wind. Good for couples and snorkeling.</p><h2>Which beach to pick: quick guide</h2><p>Kitesurfing: Ponta do Santo Cristo or Marco. Family: Maceió. Photos: Tourinhos. Culture: Minhoto. Romance: Amor. Seclusion: Zé Martins. Quiet nearby: Cardeiro. Sunset: Xepa.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['beaches','ponta do santo cristo','maceió','tourinhos']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the prettiest beach in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Tourinhos is the most photographed (red dunes). Ponta do Santo Cristo is the most famous (kite). Xepa has the best sunset."}},{"@type":"Question","name":"Is there a beach with natural pools in Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Yes. Tourinhos and Maceió form natural pools at low tide."}},{"@type":"Question","name":"Which beach is best for kitesurfing?","acceptedAnswer":{"@type":"Answer","text":"Ponta do Santo Cristo (main spot) and Praia do Marco (beginners)."}},{"@type":"Question","name":"Is there a calm beach for kids?","acceptedAnswer":{"@type":"Answer","text":"Praia do Maceió is the best: shallow, warm water with no current."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'praias-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'beaches-sao-miguel-do-gostoso');
 
 INSERT INTO public.gostoso_blog_posts (slug, title, excerpt, content, cover_url, author, tags, is_published, published_at, faq_jsonld)
-SELECT 'playas-sao-miguel-do-gostoso', 'Las 8 mejores playas de São Miguel do Gostoso: guía con mapa', 'De Ponta do Santo Cristo a Praia do Amor: las 8 playas de Gostoso, cómo llegar, para quién sirve cada una y consejos de los locales.', $POST$<p>São Miguel do Gostoso tiene 8 playas a lo largo de 10 km de costa, cada una con su propia personalidad. Esta guía describe cada playa en detalle.</p><h2>1. Ponta do Santo Cristo</h2><p>La reina del kite. Viento cruzado desde la derecha, agua plana, fondo de arena. A 4 km del centro. Ideal para kiters y windsurfistas. Escuelas, alquiler, barracas.</p><h2>2. Praia do Marco</h2><p>El paraíso del agua plana. A 8 km del centro. Ideal para kiters principiantes. Agua baja y quieta, sin olas.</p><h2>3. Praia do Maceió</h2><p>La playa de las familias. A 2 km del centro. Agua cristalina, tibia y calma. Barracas completas. Perfecta para niños.</p><h2>4. Praia de Tourinhos</h2><p>La más fotografiada. A 12 km del centro, solo en buggy. Dunas rojas, piscinas naturales, faro abandonado.</p><h2>5. Praia do Minhoto</h2><p>La playa de los pescadores. A 1,5 km del centro. Jangadas de colores, pescado fresco directo del barco. Cultura viva.</p><h2>6. Praia do Cardeiro</h2><p>Tranquila y cerca del centro. A 3 km. Menos concurrida, ideal para bañarse y hacer picnic.</p><h2>7. Praia de Zé Martins</h2><p>La playa escondida. A 15 km, solo en buggy. Arena blanca, cocoteros, privacidad total.</p><h2>8. Praia do Amor</h2><p>La playa romántica. A 10 km. Forma de concha, protegida del viento. Ideal para parejas y snorkel.</p><h2>Qué playa elegir: guía rápida</h2><p>Kitesurf: Ponta do Santo Cristo o Marco. Familia: Maceió. Fotos: Tourinhos. Cultura: Minhoto. Romanticismo: Amor. Aislamiento: Zé Martins. Tranquilidad cerca: Cardeiro. Puesta de sol: Xepa.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['playas','ponta do santo cristo','maceió','tourinhos']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuál es la playa más linda de São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Tourinhos es la más fotografiada (dunas rojas). Ponta do Santo Cristo es la más conocida (kite). Xepa tiene la mejor puesta de sol."}},{"@type":"Question","name":"¿Hay playas con piscinas naturales en Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Sí. Tourinhos y Maceió forman piscinas naturales con la marea baja."}},{"@type":"Question","name":"¿Qué playa es mejor para kitesurf?","acceptedAnswer":{"@type":"Answer","text":"Ponta do Santo Cristo (el spot principal) y Praia do Marco (principiantes)."}},{"@type":"Question","name":"¿Hay una playa calma para niños?","acceptedAnswer":{"@type":"Answer","text":"Praia do Maceió es la mejor: agua baja, tibia y sin corriente."}}]}$FAQ$::jsonb
+SELECT 'playas-sao-miguel-do-gostoso', 'Las 8 mejores playas de São Miguel do Gostoso: guía con mapa', 'De Ponta do Santo Cristo a Praia do Amor: las 8 playas de Gostoso, cómo llegar, para quién sirve cada una y consejos de los locales.', $POST$<p>São Miguel do Gostoso tiene 8 playas a lo largo de 10 km de costa, cada una con su propia personalidad. Esta guía describe cada playa en detalle.</p><h2>1. Ponta do Santo Cristo</h2><p>La reina del kite. Viento cruzado desde la derecha, agua plana, fondo de arena. A 4 km del centro. Ideal para kiters y windsurfistas. Escuelas, alquiler, barracas.</p><h2>2. Praia do Marco</h2><p>El paraíso del agua plana. A 8 km del centro. Ideal para kiters principiantes. Agua baja y quieta, sin olas.</p><h2>3. Praia do Maceió</h2><p>La playa de las familias. A 2 km del centro. Agua cristalina, tibia y calma. Barracas completas. Perfecta para niños.</p><h2>4. Praia de Tourinhos</h2><p>La más fotografiada. A 12 km del centro, solo en buggy. Dunas rojas, piscinas naturales, faro abandonado.</p><h2>5. Praia do Minhoto</h2><p>La playa de los pescadores. A 1,5 km del centro. Jangadas de colores, pescado fresco directo del barco. Cultura viva.</p><h2>6. Praia do Cardeiro</h2><p>Tranquila y cerca del centro. A 3 km. Menos concurrida, ideal para bañarse y hacer picnic.</p><h2>7. Praia de Zé Martins</h2><p>La playa escondida. A 15 km, solo en buggy. Arena blanca, cocoteros, privacidad total.</p><h2>8. Praia do Amor</h2><p>La playa romántica. A 10 km. Forma de concha, protegida del viento. Ideal para parejas y snorkel.</p><h2>Qué playa elegir: guía rápida</h2><p>Kitesurf: Ponta do Santo Cristo o Marco. Familia: Maceió. Fotos: Tourinhos. Cultura: Minhoto. Romanticismo: Amor. Aislamiento: Zé Martins. Tranquilidad cerca: Cardeiro. Puesta de sol: Xepa.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['playas','ponta do santo cristo','maceió','tourinhos']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuál es la playa más linda de São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Tourinhos es la más fotografiada (dunas rojas). Ponta do Santo Cristo es la más conocida (kite). Xepa tiene la mejor puesta de sol."}},{"@type":"Question","name":"¿Hay playas con piscinas naturales en Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Sí. Tourinhos y Maceió forman piscinas naturales con la marea baja."}},{"@type":"Question","name":"¿Qué playa es mejor para kitesurf?","acceptedAnswer":{"@type":"Answer","text":"Ponta do Santo Cristo (el spot principal) y Praia do Marco (principiantes)."}},{"@type":"Question","name":"¿Hay una playa calma para niños?","acceptedAnswer":{"@type":"Answer","text":"Praia do Maceió es la mejor: agua baja, tibia y sin corriente."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'praias-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'playas-sao-miguel-do-gostoso');
 
 INSERT INTO public.gostoso_blog_posts (slug, title, excerpt, content, cover_url, author, tags, is_published, published_at, faq_jsonld)
-SELECT 'kitesurf-in-sao-miguel-do-gostoso', 'Kitesurfing in São Miguel do Gostoso: The Kite Mecca of the Northeast', 'Why Gostoso is a world reference for kitesurfing. Spots, schools, best seasons and everything you need to plan a kite trip.', $POST$<p>São Miguel do Gostoso is one of the best kitesurfing destinations on the planet. Steady wind, flat water, mild temperatures and a community that makes the village a second home for kiters from all over the world.</p><h2>Why Gostoso is the kite mecca</h2><ul><li><strong>Flat, shallow water:</strong> sandy bottom, and you can stand up to 200 m from shore</li><li><strong>Water temperature:</strong> 26 to 28 degrees all year, no wetsuit</li><li><strong>Variety of spots:</strong> flat water, waves, lagoons within 15 km</li><li><strong>Full infrastructure:</strong> schools, rentals, storage, repair, shops</li><li><strong>Welcoming community:</strong> kiters from Brazil, Europe and North America</li></ul><h2>Ponta do Santo Cristo: the most famous spot</h2><p>Southeast wind (side-onshore), 20 to 35 knots in season, flat water to light chop, sandy bottom, no obstacles. In season there can be 50+ kites on the water at once.</p><h2>Praia do Marco: flat water for beginners</h2><p>8 km from the center, it forms a still-water lagoon at low tide. Ideal for learning: shallow water, no current, steady wind.</p><h2>Best seasons</h2><p>Season: August to March. Peak: September to January (25 to 35 knots). October is usually the best month. April to July: weak wind (5 to 15 knots).</p><h2>Average prices (2026)</h2><ul><li>Private lesson (1h): R$ 200 to R$ 300</li><li>Beginner package (6 to 8h): R$ 1.000 to R$ 1.800</li><li>Full kite gear (1 day): R$ 150 to R$ 250</li><li>Gear storage (1 day): R$ 20 to R$ 40</li></ul><h2>Wingfoil and windfoil</h2><p>Gostoso is also a wingfoil and windfoil spot. The Brazilian Wing Foil Championship has held a stage here. Wing lessons: R$ 200 to 300 per hour.</p><h2>After kiting</h2><p>Buggy to Tourinhos, a sunset catamaran, seafood. Sunset at Praia da Xepa is where the whole kite community meets.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['kitesurf','wind','water sports','ponta do santo cristo']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"When is the kitesurfing season in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"From August to March, peaking between September and January (25 to 35 knots). October is the best month."}},{"@type":"Question","name":"Where should I stay in Gostoso to kite?","acceptedAnswer":{"@type":"Answer","text":"At Ponta do Santo Cristo, with pousadas 2 to 5 minutes from the beach. See options at vivegostoso.com.br/fique"}},{"@type":"Question","name":"Do I need to bring my own kitesurfing gear?","acceptedAnswer":{"@type":"Answer","text":"No. Schools offer rentals from R$ 150 per day. Gear storage costs R$ 20 to 40 per day."}},{"@type":"Question","name":"Are there lessons for beginners in Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is one of the best towns to learn. Beginner package (6 to 8h): R$ 1.000 to R$ 1.800."}},{"@type":"Question","name":"What is the most famous spot?","acceptedAnswer":{"@type":"Answer","text":"Ponta do Santo Cristo. Flat water, side-onshore wind, sandy bottom."}}]}$FAQ$::jsonb
+SELECT 'kitesurf-in-sao-miguel-do-gostoso', 'Kitesurfing in São Miguel do Gostoso: The Kite Mecca of the Northeast', 'Why Gostoso is a world reference for kitesurfing. Spots, schools, best seasons and everything you need to plan a kite trip.', $POST$<p>São Miguel do Gostoso is one of the best kitesurfing destinations on the planet. Steady wind, flat water, mild temperatures and a community that makes the village a second home for kiters from all over the world.</p><h2>Why Gostoso is the kite mecca</h2><ul><li><strong>Flat, shallow water:</strong> sandy bottom, and you can stand up to 200 m from shore</li><li><strong>Water temperature:</strong> 26 to 28 degrees all year, no wetsuit</li><li><strong>Variety of spots:</strong> flat water, waves, lagoons within 15 km</li><li><strong>Full infrastructure:</strong> schools, rentals, storage, repair, shops</li><li><strong>Welcoming community:</strong> kiters from Brazil, Europe and North America</li></ul><h2>Ponta do Santo Cristo: the most famous spot</h2><p>Southeast wind (side-onshore), 20 to 35 knots in season, flat water to light chop, sandy bottom, no obstacles. In season there can be 50+ kites on the water at once.</p><h2>Praia do Marco: flat water for beginners</h2><p>8 km from the center, it forms a still-water lagoon at low tide. Ideal for learning: shallow water, no current, steady wind.</p><h2>Best seasons</h2><p>Season: August to March. Peak: September to January (25 to 35 knots). October is usually the best month. April to July: weak wind (5 to 15 knots).</p><h2>Average prices (2026)</h2><ul><li>Private lesson (1h): R$ 200 to R$ 300</li><li>Beginner package (6 to 8h): R$ 1.000 to R$ 1.800</li><li>Full kite gear (1 day): R$ 150 to R$ 250</li><li>Gear storage (1 day): R$ 20 to R$ 40</li></ul><h2>Wingfoil and windfoil</h2><p>Gostoso is also a wingfoil and windfoil spot. The Brazilian Wing Foil Championship has held a stage here. Wing lessons: R$ 200 to 300 per hour.</p><h2>After kiting</h2><p>Buggy to Tourinhos, a sunset catamaran, seafood. Sunset at Praia da Xepa is where the whole kite community meets.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['kitesurf','wind','water sports','ponta do santo cristo']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"When is the kitesurfing season in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"From August to March, peaking between September and January (25 to 35 knots). October is the best month."}},{"@type":"Question","name":"Where should I stay in Gostoso to kite?","acceptedAnswer":{"@type":"Answer","text":"At Ponta do Santo Cristo, with pousadas 2 to 5 minutes from the beach. See options at vivegostoso.com.br/fique"}},{"@type":"Question","name":"Do I need to bring my own kitesurfing gear?","acceptedAnswer":{"@type":"Answer","text":"No. Schools offer rentals from R$ 150 per day. Gear storage costs R$ 20 to 40 per day."}},{"@type":"Question","name":"Are there lessons for beginners in Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Yes, it is one of the best towns to learn. Beginner package (6 to 8h): R$ 1.000 to R$ 1.800."}},{"@type":"Question","name":"What is the most famous spot?","acceptedAnswer":{"@type":"Answer","text":"Ponta do Santo Cristo. Flat water, side-onshore wind, sandy bottom."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'kitesurf-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'kitesurf-in-sao-miguel-do-gostoso');
 
 INSERT INTO public.gostoso_blog_posts (slug, title, excerpt, content, cover_url, author, tags, is_published, published_at, faq_jsonld)
-SELECT 'kitesurf-en-sao-miguel-do-gostoso', 'Kitesurf en São Miguel do Gostoso: la meca del kite en el Nordeste', 'Por qué Gostoso es una referencia mundial en kitesurf. Spots, escuelas, mejores épocas y todo para planificar tu temporada de kite.', $POST$<p>São Miguel do Gostoso es uno de los mejores destinos de kitesurf del planeta. Viento constante, agua plana, temperatura agradable y una comunidad que convierte el pueblo en un segundo hogar para kiters de todo el mundo.</p><h2>Por qué Gostoso es la meca del kite</h2><ul><li><strong>Agua plana y poco profunda:</strong> fondo de arena, y se puede hacer pie hasta 200 m de la costa</li><li><strong>Temperatura del agua:</strong> 26 a 28 grados todo el año, sin traje de neopreno</li><li><strong>Variedad de spots:</strong> agua plana, olas, lagunas en un radio de 15 km</li><li><strong>Infraestructura completa:</strong> escuelas, alquiler, guardería de equipos, reparación, tiendas</li><li><strong>Comunidad acogedora:</strong> kiters de Brasil, Europa y Norteamérica</li></ul><h2>Ponta do Santo Cristo: el spot más famoso</h2><p>Viento sudeste (side-onshore), 20 a 35 nudos en temporada, agua plana a chop leve, fondo de arena, sin obstáculos. En temporada puede haber más de 50 kites en el agua al mismo tiempo.</p><h2>Praia do Marco: agua plana para principiantes</h2><p>A 8 km del centro, forma una laguna de agua quieta con marea baja. Ideal para aprender: agua poco profunda, sin corriente, viento constante.</p><h2>Mejores épocas</h2><p>Temporada: agosto a marzo. Pico: septiembre a enero (25 a 35 nudos). Octubre suele ser el mejor mes. Abril a julio: viento débil (5 a 15 nudos).</p><h2>Precios medios (2026)</h2><ul><li>Clase particular (1h): R$ 200 a R$ 300</li><li>Paquete para principiantes (6 a 8h): R$ 1.000 a R$ 1.800</li><li>Equipo de kite completo (1 día): R$ 150 a R$ 250</li><li>Guardería de equipos (1 día): R$ 20 a R$ 40</li></ul><h2>Wingfoil y windfoil</h2><p>Gostoso también es spot de wingfoil y windfoil. El Campeonato Brasileño de Wing Foil ya tuvo una etapa aquí. Clases de wing: R$ 200 a 300 por hora.</p><h2>Después del kite</h2><p>Buggy hasta Tourinhos, catamarán al atardecer, gastronomía de mariscos. El atardecer en la Praia da Xepa es el punto de encuentro de toda la comunidad kite.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['kitesurf','viento','deportes náuticos','ponta do santo cristo']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuándo es la temporada de kitesurf en São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"De agosto a marzo, con el pico entre septiembre y enero (25 a 35 nudos). Octubre es el mejor mes."}},{"@type":"Question","name":"¿Dónde alojarse en Gostoso para practicar kite?","acceptedAnswer":{"@type":"Answer","text":"En Ponta do Santo Cristo, con pousadas a 2 a 5 minutos de la playa. Mira las opciones en vivegostoso.com.br/fique"}},{"@type":"Question","name":"¿Necesito llevar mi equipo de kitesurf?","acceptedAnswer":{"@type":"Answer","text":"No. Las escuelas ofrecen alquiler desde R$ 150 por día. La guardería de equipos cuesta R$ 20 a 40 por día."}},{"@type":"Question","name":"¿Hay clases para principiantes en Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Sí, es una de las mejores ciudades para aprender. Paquete para principiantes (6 a 8h): R$ 1.000 a R$ 1.800."}},{"@type":"Question","name":"¿Cuál es el spot más famoso?","acceptedAnswer":{"@type":"Answer","text":"Ponta do Santo Cristo. Agua plana, viento side-onshore, fondo de arena."}}]}$FAQ$::jsonb
+SELECT 'kitesurf-en-sao-miguel-do-gostoso', 'Kitesurf en São Miguel do Gostoso: la meca del kite en el Nordeste', 'Por qué Gostoso es una referencia mundial en kitesurf. Spots, escuelas, mejores épocas y todo para planificar tu temporada de kite.', $POST$<p>São Miguel do Gostoso es uno de los mejores destinos de kitesurf del planeta. Viento constante, agua plana, temperatura agradable y una comunidad que convierte el pueblo en un segundo hogar para kiters de todo el mundo.</p><h2>Por qué Gostoso es la meca del kite</h2><ul><li><strong>Agua plana y poco profunda:</strong> fondo de arena, y se puede hacer pie hasta 200 m de la costa</li><li><strong>Temperatura del agua:</strong> 26 a 28 grados todo el año, sin traje de neopreno</li><li><strong>Variedad de spots:</strong> agua plana, olas, lagunas en un radio de 15 km</li><li><strong>Infraestructura completa:</strong> escuelas, alquiler, guardería de equipos, reparación, tiendas</li><li><strong>Comunidad acogedora:</strong> kiters de Brasil, Europa y Norteamérica</li></ul><h2>Ponta do Santo Cristo: el spot más famoso</h2><p>Viento sudeste (side-onshore), 20 a 35 nudos en temporada, agua plana a chop leve, fondo de arena, sin obstáculos. En temporada puede haber más de 50 kites en el agua al mismo tiempo.</p><h2>Praia do Marco: agua plana para principiantes</h2><p>A 8 km del centro, forma una laguna de agua quieta con marea baja. Ideal para aprender: agua poco profunda, sin corriente, viento constante.</p><h2>Mejores épocas</h2><p>Temporada: agosto a marzo. Pico: septiembre a enero (25 a 35 nudos). Octubre suele ser el mejor mes. Abril a julio: viento débil (5 a 15 nudos).</p><h2>Precios medios (2026)</h2><ul><li>Clase particular (1h): R$ 200 a R$ 300</li><li>Paquete para principiantes (6 a 8h): R$ 1.000 a R$ 1.800</li><li>Equipo de kite completo (1 día): R$ 150 a R$ 250</li><li>Guardería de equipos (1 día): R$ 20 a R$ 40</li></ul><h2>Wingfoil y windfoil</h2><p>Gostoso también es spot de wingfoil y windfoil. El Campeonato Brasileño de Wing Foil ya tuvo una etapa aquí. Clases de wing: R$ 200 a 300 por hora.</p><h2>Después del kite</h2><p>Buggy hasta Tourinhos, catamarán al atardecer, gastronomía de mariscos. El atardecer en la Praia da Xepa es el punto de encuentro de toda la comunidad kite.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['kitesurf','viento','deportes náuticos','ponta do santo cristo']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuándo es la temporada de kitesurf en São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"De agosto a marzo, con el pico entre septiembre y enero (25 a 35 nudos). Octubre es el mejor mes."}},{"@type":"Question","name":"¿Dónde alojarse en Gostoso para practicar kite?","acceptedAnswer":{"@type":"Answer","text":"En Ponta do Santo Cristo, con pousadas a 2 a 5 minutos de la playa. Mira las opciones en vivegostoso.com.br/fique"}},{"@type":"Question","name":"¿Necesito llevar mi equipo de kitesurf?","acceptedAnswer":{"@type":"Answer","text":"No. Las escuelas ofrecen alquiler desde R$ 150 por día. La guardería de equipos cuesta R$ 20 a 40 por día."}},{"@type":"Question","name":"¿Hay clases para principiantes en Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Sí, es una de las mejores ciudades para aprender. Paquete para principiantes (6 a 8h): R$ 1.000 a R$ 1.800."}},{"@type":"Question","name":"¿Cuál es el spot más famoso?","acceptedAnswer":{"@type":"Answer","text":"Ponta do Santo Cristo. Agua plana, viento side-onshore, fondo de arena."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'kitesurf-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'kitesurf-en-sao-miguel-do-gostoso');
 
@@ -936,7 +1495,7 @@ SELECT 'best-time-to-visit-sao-miguel-do-gostoso', 'Wind season: the best time t
 
 <p><strong>Kitesurfer or windsurfer:</strong> September to December, no question. <strong>Looking for quiet and savings:</strong> April to July. <strong>Families with children:</strong> June and July (mild weather) or February (calm sea, after New Year's). <strong>New Year's and parties:</strong> December and January, but book months ahead.</p>
 
-<p>Whatever the season, the sunset at Praia do Maceió, the artisanal farinhada (cassava flour making) and the village's welcoming way are there all year. Explore the Vive Gostoso guides to plan your trip: where to eat, where to stay and what to do in every corner of São Miguel do Gostoso.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['best time','wind season','kitesurf','weather','when to go']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the best time to visit São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"It depends on what you want: for kitesurfing and wind, August to January (peak between September and December); for quiet, empty beaches and lower prices, February to July."}},{"@type":"Question","name":"When is the wind season in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"From August to January, with steady trade winds of 20 to 30 knots. September, October and November are the most reliable months."}},{"@type":"Question","name":"Does it rain a lot in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Rain is concentrated between March and July, usually in short showers that pass in less than an hour. The rest of the year is mostly dry and sunny."}},{"@type":"Question","name":"What is the best time to learn kitesurfing in Gostoso?","acceptedAnswer":{"@type":"Answer","text":"August and September: the wind is already consistent and the schools and Ponta do Santo Cristo are still less crowded than in the December and January high season."}}]}$FAQ$::jsonb
+<p>Whatever the season, the sunset at Praia do Maceió, the artisanal farinhada (cassava flour making) and the village's welcoming way are there all year. Explore the Vive Gostoso guides to plan your trip: where to eat, where to stay and what to do in every corner of São Miguel do Gostoso.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['best time','wind season','kitesurf','weather','when to go']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the best time to visit São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"It depends on what you want: for kitesurfing and wind, August to January (peak between September and December); for quiet, empty beaches and lower prices, February to July."}},{"@type":"Question","name":"When is the wind season in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"From August to January, with steady trade winds of 20 to 30 knots. September, October and November are the most reliable months."}},{"@type":"Question","name":"Does it rain a lot in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Rain is concentrated between March and July, usually in short showers that pass in less than an hour. The rest of the year is mostly dry and sunny."}},{"@type":"Question","name":"What is the best time to learn kitesurfing in Gostoso?","acceptedAnswer":{"@type":"Answer","text":"August and September: the wind is already consistent and the schools and Ponta do Santo Cristo are still less crowded than in the December and January high season."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'melhor-epoca-para-visitar-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'best-time-to-visit-sao-miguel-do-gostoso');
 
@@ -963,7 +1522,7 @@ SELECT 'mejor-epoca-para-visitar-sao-miguel-do-gostoso', 'Temporada de vientos: 
 
 <p><strong>Kitesurfista o windsurfista:</strong> septiembre a diciembre, sin duda. <strong>Quien busca tranquilidad y ahorro:</strong> abril a julio. <strong>Familias con niños:</strong> junio y julio (clima templado) o febrero (mar calmo, después de Año Nuevo). <strong>Año Nuevo y fiestas:</strong> diciembre y enero, pero reserva con meses de anticipación.</p>
 
-<p>Sea cual sea la época, el atardecer en la playa de Maceió, la farinhada artesanal (elaboración de harina de mandioca) y el trato acogedor del pueblo están garantizados todo el año. Explora las guías de Vive Gostoso para armar tu itinerario: dónde comer, dónde alojarse y qué hacer en cada rincón de São Miguel do Gostoso.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['mejor época','temporada de vientos','kitesurf','clima','cuándo ir']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuál es la mejor época para visitar São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Depende del perfil: para kitesurf y viento, de agosto a enero (pico entre septiembre y diciembre); para tranquilidad, playas vacías y precios menores, de febrero a julio."}},{"@type":"Question","name":"¿Cuándo es la temporada de vientos en São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"De agosto a enero, con vientos alisios constantes de 20 a 30 nudos. Septiembre, octubre y noviembre son los meses más confiables."}},{"@type":"Question","name":"¿Llueve mucho en São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Las lluvias se concentran entre marzo y julio, generalmente en chubascos breves que pasan en menos de una hora. El resto del año es mayormente seco y soleado."}},{"@type":"Question","name":"¿Cuál es la mejor época para aprender kitesurf en Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Agosto y septiembre: el viento ya es consistente y las escuelas y Ponta do Santo Cristo están todavía menos llenas que en la temporada alta de diciembre y enero."}}]}$FAQ$::jsonb
+<p>Sea cual sea la época, el atardecer en la playa de Maceió, la farinhada artesanal (elaboración de harina de mandioca) y el trato acogedor del pueblo están garantizados todo el año. Explora las guías de Vive Gostoso para armar tu itinerario: dónde comer, dónde alojarse y qué hacer en cada rincón de São Miguel do Gostoso.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['mejor época','temporada de vientos','kitesurf','clima','cuándo ir']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuál es la mejor época para visitar São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Depende del perfil: para kitesurf y viento, de agosto a enero (pico entre septiembre y diciembre); para tranquilidad, playas vacías y precios menores, de febrero a julio."}},{"@type":"Question","name":"¿Cuándo es la temporada de vientos en São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"De agosto a enero, con vientos alisios constantes de 20 a 30 nudos. Septiembre, octubre y noviembre son los meses más confiables."}},{"@type":"Question","name":"¿Llueve mucho en São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Las lluvias se concentran entre marzo y julio, generalmente en chubascos breves que pasan en menos de una hora. El resto del año es mayormente seco y soleado."}},{"@type":"Question","name":"¿Cuál es la mejor época para aprender kitesurf en Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Agosto y septiembre: el viento ya es consistente y las escuelas y Ponta do Santo Cristo están todavía menos llenas que en la temporada alta de diciembre y enero."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'melhor-epoca-para-visitar-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'mejor-epoca-para-visitar-sao-miguel-do-gostoso');
 
@@ -977,7 +1536,7 @@ SELECT 'why-sao-miguel-do-gostoso-beats-pipa', 'Why São Miguel do Gostoso Beats
 
 <p>In high season, lodging in Pipa starts at R$ 350 a night for a basic pousada and reaches R$ 900 in charming pousadas in the central area. In Gostoso, the same kind of pousada runs R$ 200 to R$ 350 in low and mid season, and R$ 400 to R$ 600 for the nicer ones in high season.</p>
 
-<p>To put it in perspective, here is an estimated budget for a couple, 7 nights, in high season:</p>
+<p>To put it in perspective, here is an estimated budget for a couple, 7 nights, in high season, not counting the transfer:</p>
 
 <table class="comparison-table">
   <thead>
@@ -987,12 +1546,11 @@ SELECT 'why-sao-miguel-do-gostoso-beats-pipa', 'Why São Miguel do Gostoso Beats
     <tr><td>Lodging</td><td>R$ 2.450 to R$ 4.200</td><td>R$ 1.400 to R$ 2.800</td></tr>
     <tr><td>Food</td><td>R$ 1.400 to R$ 2.100</td><td>R$ 900 to R$ 1.500</td></tr>
     <tr><td>Tours and sports</td><td>R$ 400 to R$ 800</td><td>R$ 400 to R$ 900 (kite costs more)</td></tr>
-    <tr><td>Airport transfer (round trip)</td><td>R$ 120 to R$ 200</td><td>R$ 300 to R$ 500</td></tr>
-    <tr><td>Approximate total</td><td>R$ 4.370 to R$ 7.300</td><td>R$ 3.000 to R$ 5.700</td></tr>
+    <tr><td>Approximate total (without transfer)</td><td>R$ 4.250 to R$ 7.100</td><td>R$ 2.700 to R$ 5.200</td></tr>
   </tbody>
 </table>
 
-<p>Two honest caveats: the transfer costs more to Gostoso because the town has no airport of its own and the distance to Natal is greater. And if your plan includes kitesurfing lessons, the equipment and instructor package can match or even exceed what you save in other categories compared with Pipa. Even so, adding it all up, Gostoso usually comes out 25 to 35% cheaper in a regular week, mainly because of lodging and food.</p>
+<p>Two honest caveats: the transfer is not in the budget above, because the price is agreed with each provider on WhatsApp (the providers are listed on the <a href="/transfer">transfer</a> page), and Gostoso has no airport of its own: from Natal it is 110 km, about 1h50. And if your plan includes kitesurfing lessons, the equipment and instructor package can match or even exceed what you save in other categories compared with Pipa. Even so, adding it all up, Gostoso usually comes out 25 to 35% cheaper in a regular week, mainly because of lodging and food.</p>
 
 <div class="callout callout--tip">
   <p><strong>Practical tip:</strong> prices in Gostoso go up a lot in December, February, Carnival and New Year's Eve. Outside those peaks, the cost gap with Pipa gets even wider, because Gostoso drops its prices more in low season than Pipa does.</p>
@@ -1014,7 +1572,7 @@ SELECT 'why-sao-miguel-do-gostoso-beats-pipa', 'Why São Miguel do Gostoso Beats
 
 <h2>4. Tourist infrastructure: where Pipa still wins</h2>
 
-<p>Let's be honest here: Pipa has more mature tourist infrastructure. More restaurants, more tour agencies, more variety of lodging, an ATM and a pharmacy on every corner, and facilities ready for big groups. Gostoso has improved a lot in recent years, but still has fewer options of everything: fewer restaurants open out of season, less variety in luxury lodging, and some services (such as transfers) have to be arranged in advance because there is no regular line.</p>
+<p>Let's be honest here: Pipa has more mature tourist infrastructure. More restaurants, more tour agencies, more variety of lodging, an ATM and a pharmacy on every corner, and facilities ready for big groups. Gostoso has improved a lot in recent years, but still has fewer options of everything: fewer restaurants open out of season, less variety in luxury lodging, and some services (such as transfers) have to be arranged at least 24 hours in advance because there is no regular line.</p>
 
 <p>If your criterion is convenience and a variety of ready-made services, Pipa wins without a doubt. If your criterion is cost, quiet and fewer people, Gostoso wins.</p>
 
@@ -1034,7 +1592,7 @@ SELECT 'why-sao-miguel-do-gostoso-beats-pipa', 'Why São Miguel do Gostoso Beats
   <span class="inline-cta__action">Explore tours →</span>
 </a>
 
-<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Ol%C3%A1!%20Quero%20ajuda%20pra%20montar%20meu%20roteiro%20em%20S%C3%A3o%20Miguel%20do%20Gostoso.">
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Hello!%20I%20want%20help%20planning%20my%20itinerary%20in%20S%C3%A3o%20Miguel%20do%20Gostoso.">
   <span class="inline-cta__title">Want help deciding on your itinerary?</span>
   <span class="inline-cta__desc">We live here and can help you put together the right plan for your type of trip.</span>
   <span class="inline-cta__action">Message us on WhatsApp</span>
@@ -1097,7 +1655,7 @@ SELECT 'why-sao-miguel-do-gostoso-beats-pipa', 'Why São Miguel do Gostoso Beats
       }
     }
   ]
-}$FAQ$::jsonb
+}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'por-que-gostoso-e-melhor-que-pipa'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'why-sao-miguel-do-gostoso-beats-pipa');
 
@@ -1111,7 +1669,7 @@ SELECT 'por-que-sao-miguel-do-gostoso-es-mejor-que-pipa', 'Por qué São Miguel 
 
 <p>En temporada alta, el alojamiento en Pipa parte de R$ 350 la noche en una pousada sencilla y llega a R$ 900 en pousadas con encanto de la zona central. En Gostoso, el mismo tipo de pousada cuesta de R$ 200 a R$ 350 en temporada baja y media, y de R$ 400 a R$ 600 en las más lindas en temporada alta.</p>
 
-<p>Para dimensionarlo, esta es una estimación de presupuesto para una pareja, 7 noches, en temporada alta:</p>
+<p>Para dimensionarlo, esta es una estimación de presupuesto para una pareja, 7 noches, en temporada alta, sin contar el traslado:</p>
 
 <table class="comparison-table">
   <thead>
@@ -1121,12 +1679,11 @@ SELECT 'por-que-sao-miguel-do-gostoso-es-mejor-que-pipa', 'Por qué São Miguel 
     <tr><td>Alojamiento</td><td>R$ 2.450 a R$ 4.200</td><td>R$ 1.400 a R$ 2.800</td></tr>
     <tr><td>Comida</td><td>R$ 1.400 a R$ 2.100</td><td>R$ 900 a R$ 1.500</td></tr>
     <tr><td>Paseos y deportes</td><td>R$ 400 a R$ 800</td><td>R$ 400 a R$ 900 (el kite cuesta más)</td></tr>
-    <tr><td>Traslado del aeropuerto (ida y vuelta)</td><td>R$ 120 a R$ 200</td><td>R$ 300 a R$ 500</td></tr>
-    <tr><td>Total aproximado</td><td>R$ 4.370 a R$ 7.300</td><td>R$ 3.000 a R$ 5.700</td></tr>
+    <tr><td>Total aproximado (sin traslado)</td><td>R$ 4.250 a R$ 7.100</td><td>R$ 2.700 a R$ 5.200</td></tr>
   </tbody>
 </table>
 
-<p>Dos salvedades honestas: el traslado cuesta más hasta Gostoso porque la ciudad no tiene aeropuerto propio y la distancia hasta Natal es mayor. Y si el plan incluye clases de kitesurf, el paquete de equipo e instructor puede igualar o incluso superar lo que se ahorra en otras categorías frente a Pipa. Aun así, sumando todo, Gostoso suele salir entre 25 y 35% más barato en una semana común, sobre todo por el alojamiento y la comida.</p>
+<p>Dos salvedades honestas: el traslado no entra en el presupuesto de arriba, porque el precio se acuerda con cada prestador por WhatsApp (los prestadores están en la página de <a href="/transfer">traslado</a>), y Gostoso no tiene aeropuerto propio: desde Natal son 110 km, unas 1h50. Y si el plan incluye clases de kitesurf, el paquete de equipo e instructor puede igualar o incluso superar lo que se ahorra en otras categorías frente a Pipa. Aun así, sumando todo, Gostoso suele salir entre 25 y 35% más barato en una semana común, sobre todo por el alojamiento y la comida.</p>
 
 <div class="callout callout--tip">
   <p><strong>Consejo práctico:</strong> los precios de Gostoso suben bastante en diciembre, febrero, carnaval y fin de año. Fuera de esos picos, la diferencia de costo con Pipa es todavía mayor, porque Gostoso baja más los precios en temporada baja que Pipa.</p>
@@ -1148,7 +1705,7 @@ SELECT 'por-que-sao-miguel-do-gostoso-es-mejor-que-pipa', 'Por qué São Miguel 
 
 <h2>4. Infraestructura turística: dónde Pipa todavía gana</h2>
 
-<p>Seamos honestos: Pipa tiene una infraestructura turística más madura. Más opciones de restaurantes, más agencias de paseos, más variedad de alojamiento, cajero automático y farmacia en cada esquina, y estructura lista para grupos grandes. Gostoso mejoró mucho en los últimos años, pero todavía tiene menos opciones de todo: menos restaurantes abiertos fuera de temporada, menos variedad de alojamiento de lujo, y algunos servicios (como el traslado) hay que coordinarlos con anticipación porque no existe una línea regular.</p>
+<p>Seamos honestos: Pipa tiene una infraestructura turística más madura. Más opciones de restaurantes, más agencias de paseos, más variedad de alojamiento, cajero automático y farmacia en cada esquina, y estructura lista para grupos grandes. Gostoso mejoró mucho en los últimos años, pero todavía tiene menos opciones de todo: menos restaurantes abiertos fuera de temporada, menos variedad de alojamiento de lujo, y algunos servicios (como el traslado) hay que coordinarlos con al menos 24 horas de anticipación porque no existe una línea regular.</p>
 
 <p>Si el criterio es la practicidad y la variedad de servicios ya listos, Pipa gana sin duda. Si el criterio es el costo, la tranquilidad y menos gente, gana Gostoso.</p>
 
@@ -1168,7 +1725,7 @@ SELECT 'por-que-sao-miguel-do-gostoso-es-mejor-que-pipa', 'Por qué São Miguel 
   <span class="inline-cta__action">Explorar paseos →</span>
 </a>
 
-<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Ol%C3%A1!%20Quero%20ajuda%20pra%20montar%20meu%20roteiro%20em%20S%C3%A3o%20Miguel%20do%20Gostoso.">
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=%C2%A1Hola!%20Quiero%20ayuda%20para%20armar%20mi%20itinerario%20en%20S%C3%A3o%20Miguel%20do%20Gostoso.">
   <span class="inline-cta__title">¿Quieres ayuda para decidir tu itinerario?</span>
   <span class="inline-cta__desc">Vivimos aquí y te ayudamos a armar el plan adecuado para tu perfil de viaje.</span>
   <span class="inline-cta__action">Escribir por WhatsApp</span>
@@ -1231,7 +1788,7 @@ SELECT 'por-que-sao-miguel-do-gostoso-es-mejor-que-pipa', 'Por qué São Miguel 
       }
     }
   ]
-}$FAQ$::jsonb
+}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'por-que-gostoso-e-melhor-que-pipa'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'por-que-sao-miguel-do-gostoso-es-mejor-que-pipa');
 
@@ -1320,7 +1877,7 @@ SELECT 'beginner-kitesurf-guide-sao-miguel-do-gostoso', 'Never Kitesurfed Before
 
 <p>Whatever your level, a few habits prevent most incidents: check the wind forecast before rigging the equipment, look at the tide and current at the chosen spot, keep your distance from other kitesurfers and swimmers, and do not enter the water without a life vest during the first months of practice. Serious schools stress these rules in the very first lesson, and it is a good sign if the instructor insists on them before talking about tricks.</p>
 
-<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Ol%C3%A1!%20Quero%20ajuda%20pra%20escolher%20uma%20escola%20de%20kitesurf%20em%20S%C3%A3o%20Miguel%20do%20Gostoso.">
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Hello!%20I%20want%20help%20choosing%20a%20kitesurf%20school%20in%20S%C3%A3o%20Miguel%20do%20Gostoso.">
   <span class="inline-cta__title">Want help choosing the right school?</span>
   <span class="inline-cta__desc">We live here and can connect you with reliable schools, based on your level and your travel dates.</span>
   <span class="inline-cta__action">Message us on WhatsApp</span>
@@ -1383,7 +1940,7 @@ SELECT 'beginner-kitesurf-guide-sao-miguel-do-gostoso', 'Never Kitesurfed Before
       }
     }
   ]
-}$FAQ$::jsonb
+}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'guia-iniciante-kitesurf-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'beginner-kitesurf-guide-sao-miguel-do-gostoso');
 
@@ -1472,7 +2029,7 @@ SELECT 'guia-principiantes-kitesurf-sao-miguel-do-gostoso', 'Guía para quien nu
 
 <p>Sea cual sea tu nivel, unos pocos hábitos evitan la mayoría de los incidentes: revisar el pronóstico de viento antes de armar el equipo, observar la marea y la corriente del spot elegido, mantener distancia de otros kitesurfistas y bañistas, y no entrar al agua sin chaleco salvavidas durante los primeros meses de práctica. Las escuelas serias refuerzan estas reglas desde la primera clase, y es buena señal que el instructor insista en estos puntos antes de hablar de maniobras.</p>
 
-<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Ol%C3%A1!%20Quero%20ajuda%20pra%20escolher%20uma%20escola%20de%20kitesurf%20em%20S%C3%A3o%20Miguel%20do%20Gostoso.">
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=%C2%A1Hola!%20Quiero%20ayuda%20para%20elegir%20una%20escuela%20de%20kitesurf%20en%20S%C3%A3o%20Miguel%20do%20Gostoso.">
   <span class="inline-cta__title">¿Quieres ayuda para elegir la escuela adecuada?</span>
   <span class="inline-cta__desc">Vivimos aquí y te conectamos con escuelas confiables, según tu nivel y la fecha de tu viaje.</span>
   <span class="inline-cta__action">Escribir por WhatsApp</span>
@@ -1535,7 +2092,7 @@ SELECT 'guia-principiantes-kitesurf-sao-miguel-do-gostoso', 'Guía para quien nu
       }
     }
   ]
-}$FAQ$::jsonb
+}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'guia-iniciante-kitesurf-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'guia-principiantes-kitesurf-sao-miguel-do-gostoso');
 
@@ -1638,7 +2195,7 @@ SELECT 'gostoso-film-festival-2026-sao-miguel-do-gostoso', 'Gostoso Film Festiva
 <ul>
 <li>The program is free, but the town fills up during festival week, so <a href="/blog/where-to-stay-sao-miguel-do-gostoso">book lodging</a> well ahead.</li>
 <li>Praia do Maceió is a few minutes from the center; use the days without screenings to see the rest of the <a href="/blog/beaches-sao-miguel-do-gostoso">Gostoso coast</a>.</li>
-<li>Coming through Natal, the drive to Gostoso takes about 1h30. See the options in <a href="/blog/how-to-get-to-sao-miguel-do-gostoso">how to get to São Miguel do Gostoso</a>.</li>
+<li>From Natal airport to Gostoso it is 110 km, about 1h50. See the options in <a href="/blog/how-to-get-to-sao-miguel-do-gostoso">how to get to São Miguel do Gostoso</a>.</li>
 </ul>
 
 <h2>Practical information</h2>
@@ -1653,7 +2210,7 @@ SELECT 'gostoso-film-festival-2026-sao-miguel-do-gostoso', 'Gostoso Film Festiva
 <p><strong>Does the Mostra de Cinema de Gostoso cost money?</strong><br>No. The whole program is free, subject to room capacity.</p>
 <p><strong>How many days does the festival last in 2026?</strong><br>Five days, from November 20 to 24.</p>
 <p><strong>Do I need to buy tickets in advance?</strong><br>There are no tickets for sale. Since seating is limited, 700 in the open-air room and about 130 in the Sala Petrobras, the most popular screenings tend to fill up first, so arriving early helps you get a seat.</p>
-<p><strong>Is the Sala Petrobras open during the day?</strong><br>Yes. Unlike the open-air room, which runs at night, the Sala Petrobras is an air-conditioned tent designed for daytime screenings, keeping good picture and sound quality even under strong sun.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['cinema','events','culture','praia do maceió','november']::text[], false, src.published_at, $FAQ${"@type":"FAQPage","@context":"https://schema.org","mainEntity":[{"name":"Does the Mostra de Cinema de Gostoso cost money?","@type":"Question","acceptedAnswer":{"text":"No. The whole program is free, subject to room capacity.","@type":"Answer"}},{"name":"How many days does the festival last in 2026?","@type":"Question","acceptedAnswer":{"text":"Five days, from November 20 to 24, 2026.","@type":"Answer"}},{"name":"Do I need to buy tickets in advance?","@type":"Question","acceptedAnswer":{"text":"There are no tickets for sale. Since seating is limited, 700 in the open-air room and about 130 in the Sala Petrobras, the most popular screenings tend to fill up first, so arriving early helps you get a seat.","@type":"Answer"}},{"name":"Is the Sala Petrobras open during the day?","@type":"Question","acceptedAnswer":{"text":"Yes. Unlike the open-air room, which runs at night, the Sala Petrobras is an air-conditioned tent designed for daytime screenings, keeping good picture and sound quality even under strong sun.","@type":"Answer"}}]}$FAQ$::jsonb
+<p><strong>Is the Sala Petrobras open during the day?</strong><br>Yes. Unlike the open-air room, which runs at night, the Sala Petrobras is an air-conditioned tent designed for daytime screenings, keeping good picture and sound quality even under strong sun.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['cinema','events','culture','praia do maceió','november']::text[], false, src.published_at, $FAQ${"@type":"FAQPage","@context":"https://schema.org","mainEntity":[{"name":"Does the Mostra de Cinema de Gostoso cost money?","@type":"Question","acceptedAnswer":{"text":"No. The whole program is free, subject to room capacity.","@type":"Answer"}},{"name":"How many days does the festival last in 2026?","@type":"Question","acceptedAnswer":{"text":"Five days, from November 20 to 24, 2026.","@type":"Answer"}},{"name":"Do I need to buy tickets in advance?","@type":"Question","acceptedAnswer":{"text":"There are no tickets for sale. Since seating is limited, 700 in the open-air room and about 130 in the Sala Petrobras, the most popular screenings tend to fill up first, so arriving early helps you get a seat.","@type":"Answer"}},{"name":"Is the Sala Petrobras open during the day?","@type":"Question","acceptedAnswer":{"text":"Yes. Unlike the open-air room, which runs at night, the Sala Petrobras is an air-conditioned tent designed for daytime screenings, keeping good picture and sound quality even under strong sun.","@type":"Answer"}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'mostra-de-cinema-de-gostoso-2026'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'gostoso-film-festival-2026-sao-miguel-do-gostoso');
 
@@ -1688,7 +2245,7 @@ SELECT 'muestra-de-cine-de-gostoso-2026-sao-miguel-do-gostoso', 'Muestra de Cine
 <ul>
 <li>La programación es gratuita, pero la ciudad se llena la semana del festival, así que <a href="/blog/donde-alojarse-sao-miguel-do-gostoso">reserva alojamiento</a> con anticipación.</li>
 <li>Praia do Maceió queda a pocos minutos del centro; aprovecha los días sin proyecciones para conocer el resto del <a href="/blog/playas-sao-miguel-do-gostoso">litoral de Gostoso</a>.</li>
-<li>Llegando por Natal, el trayecto hasta Gostoso toma cerca de 1h30. Mira las opciones en <a href="/blog/como-llegar-a-sao-miguel-do-gostoso">cómo llegar a São Miguel do Gostoso</a>.</li>
+<li>Del aeropuerto de Natal a Gostoso son 110 km, cerca de 1h50. Mira las opciones en <a href="/blog/como-llegar-a-sao-miguel-do-gostoso">cómo llegar a São Miguel do Gostoso</a>.</li>
 </ul>
 
 <h2>Información práctica</h2>
@@ -1703,7 +2260,7 @@ SELECT 'muestra-de-cine-de-gostoso-2026-sao-miguel-do-gostoso', 'Muestra de Cine
 <p><strong>¿La Mostra de Cinema de Gostoso es de pago?</strong><br>No. Toda la programación es gratuita, sujeta al aforo de las salas.</p>
 <p><strong>¿Cuántos días dura el festival en 2026?</strong><br>Cinco días, del 20 al 24 de noviembre.</p>
 <p><strong>¿Necesito comprar entrada con anticipación?</strong><br>No hay venta de entradas. Como los asientos son limitados, 700 en la sala al aire libre y cerca de 130 en la Sala Petrobras, es común que las proyecciones más concurridas se llenen primero, así que llegar temprano ayuda a asegurar lugar.</p>
-<p><strong>¿La Sala Petrobras funciona durante el día?</strong><br>Sí. A diferencia de la sala al aire libre, que funciona de noche, la Sala Petrobras es una carpa climatizada pensada para proyecciones diurnas, y mantiene buena calidad de imagen y sonido incluso bajo sol fuerte.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['cine','eventos','cultura','praia do maceió','noviembre']::text[], false, src.published_at, $FAQ${"@type":"FAQPage","@context":"https://schema.org","mainEntity":[{"name":"¿La Mostra de Cinema de Gostoso es de pago?","@type":"Question","acceptedAnswer":{"text":"No. Toda la programación es gratuita, sujeta al aforo de las salas.","@type":"Answer"}},{"name":"¿Cuántos días dura el festival en 2026?","@type":"Question","acceptedAnswer":{"text":"Cinco días, del 20 al 24 de noviembre de 2026.","@type":"Answer"}},{"name":"¿Necesito comprar entrada con anticipación?","@type":"Question","acceptedAnswer":{"text":"No hay venta de entradas. Como los asientos son limitados, 700 en la sala al aire libre y cerca de 130 en la Sala Petrobras, es común que las proyecciones más concurridas se llenen primero, así que llegar temprano ayuda a asegurar lugar.","@type":"Answer"}},{"name":"¿La Sala Petrobras funciona durante el día?","@type":"Question","acceptedAnswer":{"text":"Sí. A diferencia de la sala al aire libre, que funciona de noche, la Sala Petrobras es una carpa climatizada pensada para proyecciones diurnas, y mantiene buena calidad de imagen y sonido incluso bajo sol fuerte.","@type":"Answer"}}]}$FAQ$::jsonb
+<p><strong>¿La Sala Petrobras funciona durante el día?</strong><br>Sí. A diferencia de la sala al aire libre, que funciona de noche, la Sala Petrobras es una carpa climatizada pensada para proyecciones diurnas, y mantiene buena calidad de imagen y sonido incluso bajo sol fuerte.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['cine','eventos','cultura','praia do maceió','noviembre']::text[], false, src.published_at, $FAQ${"@type":"FAQPage","@context":"https://schema.org","mainEntity":[{"name":"¿La Mostra de Cinema de Gostoso es de pago?","@type":"Question","acceptedAnswer":{"text":"No. Toda la programación es gratuita, sujeta al aforo de las salas.","@type":"Answer"}},{"name":"¿Cuántos días dura el festival en 2026?","@type":"Question","acceptedAnswer":{"text":"Cinco días, del 20 al 24 de noviembre de 2026.","@type":"Answer"}},{"name":"¿Necesito comprar entrada con anticipación?","@type":"Question","acceptedAnswer":{"text":"No hay venta de entradas. Como los asientos son limitados, 700 en la sala al aire libre y cerca de 130 en la Sala Petrobras, es común que las proyecciones más concurridas se llenen primero, así que llegar temprano ayuda a asegurar lugar.","@type":"Answer"}},{"name":"¿La Sala Petrobras funciona durante el día?","@type":"Question","acceptedAnswer":{"text":"Sí. A diferencia de la sala al aire libre, que funciona de noche, la Sala Petrobras es una carpa climatizada pensada para proyecciones diurnas, y mantiene buena calidad de imagen y sonido incluso bajo sol fuerte.","@type":"Answer"}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'mostra-de-cinema-de-gostoso-2026'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'muestra-de-cine-de-gostoso-2026-sao-miguel-do-gostoso');
 
@@ -1760,7 +2317,7 @@ SELECT 'sao-miguel-arcanjo-festival-2026-sao-miguel-do-gostoso', 'São Miguel Ar
 <li><strong>Admission:</strong> public event run by the city government, with no ticket charge announced in the official program</li>
 </ul>
 
-<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584994035461?text=Ol%C3%A1!%20Vou%20pra%20Festa%20de%20S%C3%A3o%20Miguel%20Arcanjo%20e%20queria%20ajuda%20pra%20organizar%20a%20viagem.">
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584994035461?text=Hello!%20I%20am%20going%20to%20the%20S%C3%A3o%20Miguel%20Arcanjo%20Festival%20and%20would%20like%20help%20organizing%20my%20trip.">
   <span class="inline-cta__title">Coming for the festival?</span>
   <span class="inline-cta__desc">We live here and can help organize accommodation, tours and what to do in the days before and after the show.</span>
   <span class="inline-cta__action">Message us on WhatsApp</span>
@@ -1845,7 +2402,7 @@ SELECT 'sao-miguel-arcanjo-festival-2026-sao-miguel-do-gostoso', 'São Miguel Ar
       }
     }
   ]
-}$FAQ$::jsonb
+}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'festa-sao-miguel-arcanjo-2026-praia-da-xepa-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'sao-miguel-arcanjo-festival-2026-sao-miguel-do-gostoso');
 
@@ -1902,7 +2459,7 @@ SELECT 'fiesta-san-miguel-arcangel-2026-sao-miguel-do-gostoso', 'Fiesta de São 
 <li><strong>Entrada:</strong> evento público organizado por la Prefeitura, sin cobro de entrada anunciado en la programación oficial</li>
 </ul>
 
-<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584994035461?text=Ol%C3%A1!%20Vou%20pra%20Festa%20de%20S%C3%A3o%20Miguel%20Arcanjo%20e%20queria%20ajuda%20pra%20organizar%20a%20viagem.">
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584994035461?text=%C2%A1Hola!%20Voy%20a%20la%20Fiesta%20de%20S%C3%A3o%20Miguel%20Arcanjo%20y%20me%20gustar%C3%ADa%20ayuda%20para%20organizar%20el%20viaje.">
   <span class="inline-cta__title">¿Vienes a la fiesta?</span>
   <span class="inline-cta__desc">Vivimos aquí y ayudamos a organizar alojamiento, paseos y qué hacer en los días antes y después del show.</span>
   <span class="inline-cta__action">Escribir por WhatsApp</span>
@@ -1987,7 +2544,7 @@ SELECT 'fiesta-san-miguel-arcangel-2026-sao-miguel-do-gostoso', 'Fiesta de São 
       }
     }
   ]
-}$FAQ$::jsonb
+}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'festa-sao-miguel-arcanjo-2026-praia-da-xepa-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'fiesta-san-miguel-arcangel-2026-sao-miguel-do-gostoso');
 
@@ -2070,7 +2627,7 @@ SELECT 'where-to-eat-sao-miguel-do-gostoso', 'Where to Eat in São Miguel do Gos
 
 <p>The festival article warns that the Xêpa usually fills up after 9 pm on a show night. If you want a sit-down dinner before the performance, book or arrive early, because a free table near the action is the first thing to go. If you'd rather graze standing up, the bars on the street itself and on Av. Enseada das Baleias work as a last-minute option, though without guaranteed hours outside festival days: confirm by WhatsApp before leaving your pousada.</p>
 
-<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Ol%C3%A1!%20Vou%20a%20S%C3%A3o%20Miguel%20do%20Gostoso%20e%20queria%20indica%C3%A7%C3%A3o%20de%20onde%20comer.">
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Hello!%20I%20am%20going%20to%20S%C3%A3o%20Miguel%20do%20Gostoso%20and%20would%20like%20a%20recommendation%20on%20where%20to%20eat.">
   <span class="inline-cta__title">Want a tailored recommendation?</span>
   <span class="inline-cta__desc">We live here and can help you put together a restaurant plan based on your travel dates and what you're looking for.</span>
   <span class="inline-cta__action">Message us on WhatsApp</span>
@@ -2152,7 +2709,7 @@ SELECT 'where-to-eat-sao-miguel-do-gostoso', 'Where to Eat in São Miguel do Gos
       }
     }
   ]
-}$FAQ$::jsonb
+}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'onde-comer-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'where-to-eat-sao-miguel-do-gostoso');
 
@@ -2235,7 +2792,7 @@ SELECT 'donde-comer-sao-miguel-do-gostoso', 'Dónde comer en São Miguel do Gost
 
 <p>El artículo sobre la fiesta avisa que la Xêpa suele llenarse después de las 21:00 en noche de show. Quien quiera cenar sentado antes de ver la presentación debe reservar o llegar temprano, porque la mesa libre cerca del movimiento es lo primero que se acaba. Para quien prefiere picar de pie, los bares de la propia calle y de la Av. Enseada das Baleias sirven como opción de último momento, aunque sin horario garantizado fuera de los días de fiesta: confirma por WhatsApp antes de salir de la pousada.</p>
 
-<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=Ol%C3%A1!%20Vou%20a%20S%C3%A3o%20Miguel%20do%20Gostoso%20e%20queria%20indica%C3%A7%C3%A3o%20de%20onde%20comer.">
+<a class="inline-cta inline-cta--whatsapp" href="https://wa.me/5584936180839?text=%C2%A1Hola!%20Voy%20a%20S%C3%A3o%20Miguel%20do%20Gostoso%20y%20me%20gustar%C3%ADa%20una%20recomendaci%C3%B3n%20de%20d%C3%B3nde%20comer.">
   <span class="inline-cta__title">¿Quieres una recomendación a tu medida?</span>
   <span class="inline-cta__desc">Vivimos aquí y te ayudamos a armar el recorrido de restaurantes según la fecha de tu viaje y lo que buscas.</span>
   <span class="inline-cta__action">Escribir por WhatsApp</span>
@@ -2317,7 +2874,7 @@ SELECT 'donde-comer-sao-miguel-do-gostoso', 'Dónde comer en São Miguel do Gost
       }
     }
   ]
-}$FAQ$::jsonb
+}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'onde-comer-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'donde-comer-sao-miguel-do-gostoso');
 
@@ -2424,7 +2981,7 @@ SELECT 'how-vive-gostoso-works-sao-miguel-do-gostoso', 'How Vive Gostoso Works: 
 
 <h2>How to get started</h2>
 
-<p>If you have a business in São Miguel do Gostoso and you are not in the guide yet, the next step is to <a href="/cadastre">create your account and register the business</a>. It takes a few minutes, it is free, and it stays free afterwards.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['about','how it works','free listing','promote your business','transparency','são miguel do gostoso']::text[], false, src.published_at, $FAQ${"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I have to pay to appear on Vive Gostoso?", "acceptedAnswer": {"@type": "Answer", "text": "No. Registration is free, with no time limit and no hidden charges. No plan is needed to appear in the guide."}}, {"@type": "Question", "name": "How long does it take for my business to go live?", "acceptedAnswer": {"@type": "Answer", "text": "Registration takes a few minutes and the profile goes live as soon as you publish. The verified badge check is done afterwards, separately."}}, {"@type": "Question", "name": "Can I edit my profile later?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The profile is yours. Hours, phone number, photos, description and Instagram link can be changed by you at any time."}}, {"@type": "Question", "name": "Does contributing make my business appear better?", "acceptedAnswer": {"@type": "Answer", "text": "No. Contributions are voluntary and serve to keep the site online. They give a thank-you badge and do not change the order, size or reach of any profile."}}, {"@type": "Question", "name": "Does Vive Gostoso sell tours or accommodation?", "acceptedAnswer": {"@type": "Answer", "text": "No. The guide does not sell anything it lists and does not take commission. The deal is always directly between you and the business."}}, {"@type": "Question", "name": "Is my business left out if I am not on Instagram?", "acceptedAnswer": {"@type": "Answer", "text": "No. Registration on the site is independent of social media. The Instagram field is optional."}}]}$FAQ$::jsonb
+<p>If you have a business in São Miguel do Gostoso and you are not in the guide yet, the next step is to <a href="/cadastre">create your account and register the business</a>. It takes a few minutes, it is free, and it stays free afterwards.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['about','how it works','free listing','promote your business','transparency','são miguel do gostoso']::text[], false, src.published_at, $FAQ${"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I have to pay to appear on Vive Gostoso?", "acceptedAnswer": {"@type": "Answer", "text": "No. Registration is free, with no time limit and no hidden charges. No plan is needed to appear in the guide."}}, {"@type": "Question", "name": "How long does it take for my business to go live?", "acceptedAnswer": {"@type": "Answer", "text": "Registration takes a few minutes and the profile goes live as soon as you publish. The verified badge check is done afterwards, separately."}}, {"@type": "Question", "name": "Can I edit my profile later?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The profile is yours. Hours, phone number, photos, description and Instagram link can be changed by you at any time."}}, {"@type": "Question", "name": "Does contributing make my business appear better?", "acceptedAnswer": {"@type": "Answer", "text": "No. Contributions are voluntary and serve to keep the site online. They give a thank-you badge and do not change the order, size or reach of any profile."}}, {"@type": "Question", "name": "Does Vive Gostoso sell tours or accommodation?", "acceptedAnswer": {"@type": "Answer", "text": "No. The guide does not sell anything it lists and does not take commission. The deal is always directly between you and the business."}}, {"@type": "Question", "name": "Is my business left out if I am not on Instagram?", "acceptedAnswer": {"@type": "Answer", "text": "No. Registration on the site is independent of social media. The Instagram field is optional."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'como-funciona-o-vive-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'how-vive-gostoso-works-sao-miguel-do-gostoso');
 
@@ -2531,7 +3088,7 @@ SELECT 'como-funciona-vive-gostoso-sao-miguel-do-gostoso', 'Cómo funciona Vive 
 
 <h2>Cómo empezar</h2>
 
-<p>Si tienes un negocio en São Miguel do Gostoso y todavía no estás en la guía, el siguiente paso es <a href="/cadastre">crear tu cuenta y registrar el negocio</a>. Toma pocos minutos, es gratis, y sigue siendo gratis después.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['sobre nosotros','cómo funciona','registro gratuito','promocionar negocio','transparencia','são miguel do gostoso']::text[], false, src.published_at, $FAQ${"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Tengo que pagar para aparecer en Vive Gostoso?", "acceptedAnswer": {"@type": "Answer", "text": "No. El registro es gratuito, sin plazo y sin cobros ocultos. No existe ningún plan necesario para aparecer en la guía."}}, {"@type": "Question", "name": "¿Cuánto tarda mi negocio en salir en línea?", "acceptedAnswer": {"@type": "Answer", "text": "El registro toma pocos minutos y el perfil sale en línea en cuanto lo publicas. La comprobación del sello de verificado se hace después, por separado."}}, {"@type": "Question", "name": "¿Puedo editar mi perfil después?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. El perfil es tuyo. Horario, teléfono, fotos, descripción y enlace de Instagram pueden ser cambiados por ti en cualquier momento."}}, {"@type": "Question", "name": "¿Contribuir hace que mi negocio aparezca mejor?", "acceptedAnswer": {"@type": "Answer", "text": "No. La contribución es voluntaria y sirve para mantener el sitio en línea. Da un sello de agradecimiento y no altera el orden, el tamaño ni el alcance de ningún perfil."}}, {"@type": "Question", "name": "¿Vive Gostoso vende paseos o alojamiento?", "acceptedAnswer": {"@type": "Answer", "text": "No. La guía no vende nada de lo que lista y no cobra comisión. La negociación es siempre directa entre tú y el negocio."}}, {"@type": "Question", "name": "¿Mi negocio queda fuera si no estoy en Instagram?", "acceptedAnswer": {"@type": "Answer", "text": "No. El registro en el sitio es independiente de las redes sociales. El campo de Instagram es opcional."}}]}$FAQ$::jsonb
+<p>Si tienes un negocio en São Miguel do Gostoso y todavía no estás en la guía, el siguiente paso es <a href="/cadastre">crear tu cuenta y registrar el negocio</a>. Toma pocos minutos, es gratis, y sigue siendo gratis después.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['sobre nosotros','cómo funciona','registro gratuito','promocionar negocio','transparencia','são miguel do gostoso']::text[], false, src.published_at, $FAQ${"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Tengo que pagar para aparecer en Vive Gostoso?", "acceptedAnswer": {"@type": "Answer", "text": "No. El registro es gratuito, sin plazo y sin cobros ocultos. No existe ningún plan necesario para aparecer en la guía."}}, {"@type": "Question", "name": "¿Cuánto tarda mi negocio en salir en línea?", "acceptedAnswer": {"@type": "Answer", "text": "El registro toma pocos minutos y el perfil sale en línea en cuanto lo publicas. La comprobación del sello de verificado se hace después, por separado."}}, {"@type": "Question", "name": "¿Puedo editar mi perfil después?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. El perfil es tuyo. Horario, teléfono, fotos, descripción y enlace de Instagram pueden ser cambiados por ti en cualquier momento."}}, {"@type": "Question", "name": "¿Contribuir hace que mi negocio aparezca mejor?", "acceptedAnswer": {"@type": "Answer", "text": "No. La contribución es voluntaria y sirve para mantener el sitio en línea. Da un sello de agradecimiento y no altera el orden, el tamaño ni el alcance de ningún perfil."}}, {"@type": "Question", "name": "¿Vive Gostoso vende paseos o alojamiento?", "acceptedAnswer": {"@type": "Answer", "text": "No. La guía no vende nada de lo que lista y no cobra comisión. La negociación es siempre directa entre tú y el negocio."}}, {"@type": "Question", "name": "¿Mi negocio queda fuera si no estoy en Instagram?", "acceptedAnswer": {"@type": "Answer", "text": "No. El registro en el sitio es independiente de las redes sociales. El campo de Instagram es opcional."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'como-funciona-o-vive-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'como-funciona-vive-gostoso-sao-miguel-do-gostoso');
 
@@ -2550,7 +3107,7 @@ SELECT 'how-much-does-it-cost-to-travel-sao-miguel-do-gostoso', 'How much does i
 <p>The directory lists 17 tours, 9 kite and windsurf businesses and 6 buggy and quad bike businesses. Each tour is priced per person, and the bill grows with the size of the group. To ask for a price, these verified profiles are a good starting point:</p>
 <ul><li>Tours and local agency: <a href="/negocio/luck-receptivo">Luck Receptivo</a> (<a href="https://www.instagram.com/luckreceptivo/" rel="noopener">@luckreceptivo</a>) and <a href="/negocio/jonath-turismo">Jonath Turismo</a>.</li><li>Buggy and quad bike: <a href="/negocio/gostoso-adventure">Gostoso Adventure</a> (<a href="https://gostosoadventure.com.br" rel="noopener">website</a> and <a href="https://www.instagram.com/gostoso_adventure/" rel="noopener">@gostoso_adventure</a>).</li><li>Kite and windsurf: <a href="/negocio/dr-wind">Dr. Wind Beach Club</a> (<a href="https://www.instagram.com/drwindgostoso/" rel="noopener">@drwindgostoso</a>) and <a href="/negocio/tribo-do-kite">Tribo do Kite</a> (<a href="https://www.instagram.com/tribodokite/" rel="noopener">@tribodokite</a>).</li></ul>
 <p>There is one third-party reference. The Quanto Custa Viajar guide, published on 07/08/2025 and updated on 03/09/2025, cites a wind or kite lesson or rental at around R$200, and the boia cross tour at an average of R$60 per person. These are two loose figures from 2025, outside our directory. Use them as an order of magnitude and confirm with the school or operator before adding them up.</p>
-<p>If you have never kited, first read the <a href="/blog/beginner-kitesurf-guide-sao-miguel-do-gostoso">guide for people who have never kitesurfed</a>. To fit a tour into the right day, check the <a href="/blog/tide-table-sao-miguel-do-gostoso">Gostoso tide table</a> and ask the operator whether the start time depends on the tide.</p>
+<p>If you have never kited, first read the <a href="/blog/beginner-kitesurf-guide-sao-miguel-do-gostoso">guide for people who have never kitesurfed</a>. To fit a tour into the right day, check the <a href="/blog/tabua-de-mares-sao-miguel-do-gostoso">Gostoso tide table</a> and ask the operator whether the start time depends on the tide.</p>
 <h3>Food</h3>
 <p>The directory has 36 active restaurants and 12 bars. Ask for the current menu before deciding how many meals out you put in the bill. To choose a place, use <a href="/blog/where-to-eat-sao-miguel-do-gostoso">where to eat in São Miguel do Gostoso</a> or the <a href="/come">COME</a> page.</p>
 <h2>The worksheet, day by day</h2>
@@ -2577,7 +3134,7 @@ SELECT 'how-much-does-it-cost-to-travel-sao-miguel-do-gostoso', 'How much does i
 <h3>Do the Quanto Custa Viajar prices hold for 2026?</h3>
 <p>Not necessarily. The figures are from 2025, from a third-party site, and serve only as an order of magnitude.</p>
 <h2>Want a budget for your dates?</h2>
-<p>Vive Gostoso is free for travelers. Message us on <a href="https://wa.me/5584936180839" rel="noopener">WhatsApp</a>, tell us your dates and how many people are going, and we will point you to the businesses in the directory to ask for the price directly.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['cost','budget','planning','são miguel do gostoso']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much should I spend per day in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"The prices the directory has today are not enough for an average. Build the number with the post's worksheet, using the prices the businesses give you for your dates."}},{"@type":"Question","name":"What weighs most on the budget?","acceptedAnswer":{"@type":"Answer","text":"Lodging and getting there, because they multiply by night and by trip. Tours are priced per person."}},{"@type":"Question","name":"Is there a cheap way to travel to Gostoso?","acceptedAnswer":{"@type":"Answer","text":"A cheaper trip is possible when you control the lines that weigh most. Splitting a transfer charged per vehicle and confirming what the nightly rate includes are the first steps."}},{"@type":"Question","name":"Do the Quanto Custa Viajar prices hold for 2026?","acceptedAnswer":{"@type":"Answer","text":"Not necessarily. The figures are from 2025, from a third-party site, and serve only as an order of magnitude."}}]}$FAQ$::jsonb
+<p>Vive Gostoso is free for travelers. Message us on <a href="https://wa.me/5584936180839" rel="noopener">WhatsApp</a>, tell us your dates and how many people are going, and we will point you to the businesses in the directory to ask for the price directly.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['cost','budget','planning','são miguel do gostoso']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much should I spend per day in São Miguel do Gostoso?","acceptedAnswer":{"@type":"Answer","text":"The prices the directory has today are not enough for an average. Build the number with the post's worksheet, using the prices the businesses give you for your dates."}},{"@type":"Question","name":"What weighs most on the budget?","acceptedAnswer":{"@type":"Answer","text":"Lodging and getting there, because they multiply by night and by trip. Tours are priced per person."}},{"@type":"Question","name":"Is there a cheap way to travel to Gostoso?","acceptedAnswer":{"@type":"Answer","text":"A cheaper trip is possible when you control the lines that weigh most. Splitting a transfer charged per vehicle and confirming what the nightly rate includes are the first steps."}},{"@type":"Question","name":"Do the Quanto Custa Viajar prices hold for 2026?","acceptedAnswer":{"@type":"Answer","text":"Not necessarily. The figures are from 2025, from a third-party site, and serve only as an order of magnitude."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'quanto-custa-viajar-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'how-much-does-it-cost-to-travel-sao-miguel-do-gostoso');
 
@@ -2596,7 +3153,7 @@ SELECT 'cuanto-cuesta-viajar-sao-miguel-do-gostoso', 'Cuánto cuesta viajar a S�
 <p>El directorio lista 17 paseos, 9 negocios de kite y windsurf y 6 de buggy y cuatriciclo. Cada paseo se cobra por persona, y la cuenta crece con el tamaño del grupo. Para pedir precio, estos perfiles verificados son un buen punto de partida:</p>
 <ul><li>Paseos y agencia receptiva: <a href="/negocio/luck-receptivo">Luck Receptivo</a> (<a href="https://www.instagram.com/luckreceptivo/" rel="noopener">@luckreceptivo</a>) y <a href="/negocio/jonath-turismo">Jonath Turismo</a>.</li><li>Buggy y cuatriciclo: <a href="/negocio/gostoso-adventure">Gostoso Adventure</a> (<a href="https://gostosoadventure.com.br" rel="noopener">sitio</a> y <a href="https://www.instagram.com/gostoso_adventure/" rel="noopener">@gostoso_adventure</a>).</li><li>Kite y windsurf: <a href="/negocio/dr-wind">Dr. Wind Beach Club</a> (<a href="https://www.instagram.com/drwindgostoso/" rel="noopener">@drwindgostoso</a>) y <a href="/negocio/tribo-do-kite">Tribo do Kite</a> (<a href="https://www.instagram.com/tribodokite/" rel="noopener">@tribodokite</a>).</li></ul>
 <p>Existe una referencia de terceros. La guía Quanto Custa Viajar, publicada el 07/08/2025 y actualizada el 03/09/2025, cita clase o alquiler de wind y kite en torno a R$200, y el paseo de boia cross en promedio a R$60 por persona. Son dos valores sueltos, de 2025, ajenos a nuestro directorio. Úsalos como orden de magnitud y confirma con la escuela o el operador antes de sumarlos.</p>
-<p>Si nunca has hecho kite, lee antes la <a href="/blog/guia-principiantes-kitesurf-sao-miguel-do-gostoso">guía para quien nunca ha hecho kitesurf</a>. Para encajar un paseo en el día correcto, consulta la <a href="/blog/tabla-de-mareas-sao-miguel-do-gostoso">tabla de mareas de Gostoso</a> y pregunta al operador si el horario depende de la marea.</p>
+<p>Si nunca has hecho kite, lee antes la <a href="/blog/guia-principiantes-kitesurf-sao-miguel-do-gostoso">guía para quien nunca ha hecho kitesurf</a>. Para encajar un paseo en el día correcto, consulta la <a href="/blog/tabua-de-mares-sao-miguel-do-gostoso">tabla de mareas de Gostoso</a> y pregunta al operador si el horario depende de la marea.</p>
 <h3>Comida</h3>
 <p>Hay 36 restaurantes y 12 bares activos en el directorio. Pide el menú actual antes de decidir cuántas comidas fuera pones en la cuenta. Para elegir el lugar, usa <a href="/blog/donde-comer-sao-miguel-do-gostoso">dónde comer en São Miguel do Gostoso</a> o la página <a href="/come">COME</a>.</p>
 <h2>La planilla por día</h2>
@@ -2623,7 +3180,7 @@ SELECT 'cuanto-cuesta-viajar-sao-miguel-do-gostoso', 'Cuánto cuesta viajar a S�
 <h3>¿Los precios de Quanto Custa Viajar valen para 2026?</h3>
 <p>No necesariamente. Los valores son de 2025, de un sitio de terceros, y sirven solo como orden de magnitud.</p>
 <h2>¿Quieres un presupuesto para tus fechas?</h2>
-<p>Vive Gostoso es gratuito para quien viaja. Escríbenos por <a href="https://wa.me/5584936180839" rel="noopener">WhatsApp</a>, di tus fechas y cuántas personas van, y te indicamos los negocios del directorio para que pidas el precio directamente.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['costo','presupuesto','planificación','são miguel do gostoso']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuánto gastar en São Miguel do Gostoso por día?","acceptedAnswer":{"@type":"Answer","text":"Los valores que el directorio tiene hoy son insuficientes para un promedio. Arma el número con la planilla del post, usando los valores que los negocios te den para tus fechas."}},{"@type":"Question","name":"¿Qué es lo que más pesa en el presupuesto?","acceptedAnswer":{"@type":"Answer","text":"Alojamiento y llegada, porque se multiplican por noche y por viaje. Los paseos pesan por persona."}},{"@type":"Question","name":"¿Existe un viaje barato a Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Existe un viaje más barato cuando controlas las líneas que más pesan. Dividir un transfer cobrado por vehículo y confirmar qué incluye la tarifa por noche son los primeros pasos."}},{"@type":"Question","name":"¿Los precios de Quanto Custa Viajar valen para 2026?","acceptedAnswer":{"@type":"Answer","text":"No necesariamente. Los valores son de 2025, de un sitio de terceros, y sirven solo como orden de magnitud."}}]}$FAQ$::jsonb
+<p>Vive Gostoso es gratuito para quien viaja. Escríbenos por <a href="https://wa.me/5584936180839" rel="noopener">WhatsApp</a>, di tus fechas y cuántas personas van, y te indicamos los negocios del directorio para que pidas el precio directamente.</p>$POST$, src.cover_url, 'Vive Gostoso', ARRAY['costo','presupuesto','planificación','são miguel do gostoso']::text[], false, src.published_at, $FAQ${"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuánto gastar en São Miguel do Gostoso por día?","acceptedAnswer":{"@type":"Answer","text":"Los valores que el directorio tiene hoy son insuficientes para un promedio. Arma el número con la planilla del post, usando los valores que los negocios te den para tus fechas."}},{"@type":"Question","name":"¿Qué es lo que más pesa en el presupuesto?","acceptedAnswer":{"@type":"Answer","text":"Alojamiento y llegada, porque se multiplican por noche y por viaje. Los paseos pesan por persona."}},{"@type":"Question","name":"¿Existe un viaje barato a Gostoso?","acceptedAnswer":{"@type":"Answer","text":"Existe un viaje más barato cuando controlas las líneas que más pesan. Dividir un transfer cobrado por vehículo y confirmar qué incluye la tarifa por noche son los primeros pasos."}},{"@type":"Question","name":"¿Los precios de Quanto Custa Viajar valen para 2026?","acceptedAnswer":{"@type":"Answer","text":"No necesariamente. Los valores son de 2025, de un sitio de terceros, y sirven solo como orden de magnitud."}}]}$FAQ$
 FROM public.gostoso_blog_posts src WHERE src.slug = 'quanto-custa-viajar-sao-miguel-do-gostoso'
 AND NOT EXISTS (SELECT 1 FROM public.gostoso_blog_posts x WHERE x.slug = 'cuanto-cuesta-viajar-sao-miguel-do-gostoso');
 
@@ -2663,3 +3220,8 @@ UPDATE public.gostoso_blog_posts SET is_published = true WHERE slug IN (
   'how-much-does-it-cost-to-travel-sao-miguel-do-gostoso',
   'cuanto-cuesta-viajar-sao-miguel-do-gostoso'
 );
+
+-- ===================== REVERSAO =====================
+-- Parte 0: UPDATE public.gostoso_blog_posts p SET content = b.content, faq_jsonld = b.faq_jsonld, title = b.title, excerpt = b.excerpt FROM public.gostoso_blog_posts_bkp_20261008 b WHERE p.slug = b.slug;
+-- Partes 1 e 2: DELETE FROM public.gostoso_blog_posts WHERE slug IN ('airport-transfer-natal-sao-miguel-do-gostoso', 'traslado-aeropuerto-natal-sao-miguel-do-gostoso', 'sao-miguel-do-gostoso-or-pipa-which-to-choose', 'sao-miguel-do-gostoso-o-pipa-cual-elegir', 'where-to-stay-sao-miguel-do-gostoso', 'donde-alojarse-sao-miguel-do-gostoso', 'how-to-get-to-sao-miguel-do-gostoso', 'como-llegar-a-sao-miguel-do-gostoso', 'what-to-do-sao-miguel-do-gostoso', 'que-hacer-sao-miguel-do-gostoso', 'beaches-sao-miguel-do-gostoso', 'playas-sao-miguel-do-gostoso', 'kitesurf-in-sao-miguel-do-gostoso', 'kitesurf-en-sao-miguel-do-gostoso', 'best-time-to-visit-sao-miguel-do-gostoso', 'mejor-epoca-para-visitar-sao-miguel-do-gostoso', 'why-sao-miguel-do-gostoso-beats-pipa', 'por-que-sao-miguel-do-gostoso-es-mejor-que-pipa', 'beginner-kitesurf-guide-sao-miguel-do-gostoso', 'guia-principiantes-kitesurf-sao-miguel-do-gostoso', 'sustainable-tourism-sao-miguel-do-gostoso', 'turismo-sostenible-sao-miguel-do-gostoso', 'gostoso-film-festival-2026-sao-miguel-do-gostoso', 'muestra-de-cine-de-gostoso-2026-sao-miguel-do-gostoso', 'sao-miguel-arcanjo-festival-2026-sao-miguel-do-gostoso', 'fiesta-san-miguel-arcangel-2026-sao-miguel-do-gostoso', 'where-to-eat-sao-miguel-do-gostoso', 'donde-comer-sao-miguel-do-gostoso', 'how-vive-gostoso-works-sao-miguel-do-gostoso', 'como-funciona-vive-gostoso-sao-miguel-do-gostoso', 'how-much-does-it-cost-to-travel-sao-miguel-do-gostoso', 'cuanto-cuesta-viajar-sao-miguel-do-gostoso');
+-- Depois de conferir tudo: DROP TABLE public.gostoso_blog_posts_bkp_20261008;
