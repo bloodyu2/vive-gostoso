@@ -9,6 +9,7 @@ import { safeJsonLd } from '@/lib/json-ld'
 import { melhorJanela } from '@/lib/mares/melhor-janela'
 import { formatarHora } from '@/lib/mares/tempo'
 import { CartaoDoDia, EstadoVazio, RodapeFonte, SeletorPraias, caminhoLocal } from '@/components/mares/partes'
+import { BlurFade } from '@/components/magicui/blur-fade'
 import { LinkGuiaMares } from '@/components/mares/link-guia'
 
 /* Tabua de mares, pagina indice. Renderizada no servidor; o navegador nao
@@ -58,8 +59,8 @@ export default async function MaresPage({ params }: { params: Promise<{ lang: st
 
       <section className="mt-12">
         <h2 className="font-display text-2xl font-semibold text-fg-1">{t.hoje_em}</h2>
-        {grupos.map((g) => (
-          <div key={g.municipio} className="mt-6">
+        {grupos.map((g, gi) => (
+          <BlurFade key={g.municipio} delay={(gi % 4) * 70} className="mt-6">
             <h3 className="text-sm font-semibold uppercase tracking-wide text-fg-3">{g.municipio}</h3>
             <ul className="mt-2 divide-y divide-border-1 border-y border-border-1">
               {g.praias.map(({ p, janela }) => (
@@ -86,7 +87,7 @@ export default async function MaresPage({ params }: { params: Promise<{ lang: st
                 </li>
               ))}
             </ul>
-          </div>
+          </BlurFade>
         ))}
       </section>
 

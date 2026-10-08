@@ -2,10 +2,13 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { Search, Store, CheckCircle, ArrowRight, ExternalLink, X } from 'lucide-react'
+import { Search, CheckCircle, ArrowRight, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { supabase } from '@/lib/supabase'
+import { BlurFade } from '@/components/magicui/blur-fade'
+import { MagicCard } from '@/components/magicui/magic-card'
+import { ShimmerButton } from '@/components/magicui/shimmer-button'
 
 interface BusinessResult {
   id: string
@@ -60,68 +63,94 @@ export default function Reivindicar() {
     return () => clearTimeout(timer)
   }, [query])
 
+  /* Ordem de quem chega sem conta: entrar, pedir o perfil, enviar as fotos. */
+  const PASSOS = [
+    { titulo: t('reivindicar:how_step2_titulo'), desc: t('reivindicar:how_step2_desc') },
+    { titulo: t('reivindicar:passo_reivindicar_titulo'), desc: t('reivindicar:passo_reivindicar_desc') },
+    { titulo: t('reivindicar:passo_fotos_titulo'), desc: t('reivindicar:passo_fotos_desc') },
+  ]
+
   return (
-    <div className="min-h-screen bg-[#FAFAF9]">
+    <div>
+      {/* ── Abertura e passos ── */}
+      <section className="max-w-4xl mx-auto px-5 md:px-8 pt-12 md:pt-16 pb-10">
+        <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-tight text-fg-1 mb-5">
+          {t('reivindicar:hero_titulo')}{' '}
+          <span className="text-teal-dark dark:text-teal">Vive Gostoso</span>
+        </h1>
+        <p className="text-xl leading-relaxed text-fg-3-texto max-w-xl mb-10">
+          {t('reivindicar:hero_desc')}
+        </p>
 
-      {/* ── Hero ── */}
-      <section className="bg-[#1A1A1A] text-white">
-        <div className="max-w-3xl mx-auto px-5 md:px-8 py-14 md:py-20">
-          <div className="inline-flex items-center gap-2 bg-ocre/20 text-ocre text-xs font-semibold px-3 py-1.5 rounded-full mb-5">
-            <Store className="w-3.5 h-3.5" />
-            {t('reivindicar:badge')}
-          </div>
+        <h2 className="font-display font-semibold text-2xl text-fg-1 mb-1">{t('reivindicar:how_titulo')}</h2>
+        <p className="text-base text-fg-3-texto mb-5">{t('reivindicar:how_desc')}</p>
+        <ol className="grid md:grid-cols-3 gap-3 md:gap-4">
+          {PASSOS.map((p, i) => (
+            <li key={p.titulo}>
+              <BlurFade delay={(i % 4) * 70} className="h-full">
+                <MagicCard className="h-full rounded-2xl bg-white dark:bg-card border border-border-1 p-5 flex gap-4 md:block">
+                  <span className="font-display font-bold text-4xl leading-none text-teal-dark dark:text-teal md:block md:mb-3" aria-hidden="true">{i + 1}</span>
+                  <div>
+                    <h3 className="font-semibold text-base text-fg-1 mb-1">{p.titulo}</h3>
+                    <p className="text-sm text-fg-3-texto leading-relaxed">{p.desc}</p>
+                  </div>
+                </MagicCard>
+              </BlurFade>
+            </li>
+          ))}
+        </ol>
+      </section>
 
-          <h1 className="font-display text-3xl md:text-4xl font-bold leading-tight mb-4 max-w-xl">
-            {t('reivindicar:hero_titulo')}{' '}
-            <span className="text-teal">Vive Gostoso</span>
-          </h1>
-
-          <p className="text-fg-3-texto text-base leading-relaxed max-w-lg mb-8">
-            {t('reivindicar:hero_desc')}
-          </p>
-
-          {/* ── Search box ── */}
-          <div className="relative max-w-lg">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-fg-3-texto" />
+      {/* ── Busca: comportamento igual ao anterior ── */}
+      <section className="max-w-4xl mx-auto px-5 md:px-8 pb-16">
+        <div className="rounded-2xl bg-teal-dark text-white p-5 md:p-8">
+          <label htmlFor="busca-negocio" className="block font-display font-semibold text-2xl mb-4">
+            {t('reivindicar:how_step1_titulo')}
+          </label>
+          <div className="relative max-w-xl">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-fg-3-texto" aria-hidden="true" />
             <input
+              id="busca-negocio"
               ref={inputRef}
               type="text"
               placeholder={t('reivindicar:search_placeholder')}
               value={query}
               onChange={e => handleQueryChange(e.target.value)}
-              className="w-full bg-white text-[#1A1A1A] rounded-2xl pl-11 pr-10 py-4 text-sm font-medium placeholder:text-fg-3-texto focus:outline-none focus:ring-2 focus:ring-teal"
+              className="w-full min-h-14 bg-white text-[#1A1A1A] rounded-2xl pl-12 pr-14 text-base font-medium placeholder:text-[#5C5C5C] focus:outline-none focus:ring-2 focus:ring-white"
             />
             {query && (
               <button
+                type="button"
+                aria-label={t('reivindicar:limpar_busca')}
                 onClick={() => { setQuery(''); setResults([]); setSearched(false) }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-fg-3-texto hover:text-fg-3-texto transition-colors"
+                className="absolute right-1 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-[#5C5C5C] hover:text-[#1A1A1A] transition-colors"
               >
-                <X className="w-4 h-4" />
+                <X className="w-5 h-5" aria-hidden="true" />
               </button>
             )}
           </div>
 
-          {/* ── Search results ── */}
+          {/* ── Resultados ── */}
           {(results.length > 0 || searched) && (
-            <div className="mt-3 bg-white rounded-2xl shadow-lg overflow-hidden max-w-lg">
+            <div className="mt-3 bg-white text-[#1A1A1A] rounded-2xl overflow-hidden max-w-xl" aria-live="polite">
               {loading && (
-                <div className="px-5 py-4 text-sm text-fg-3-texto">{t('reivindicar:search_loading')}</div>
+                <div className="px-5 py-4 text-sm text-[#5C5C5C]">{t('reivindicar:search_loading')}</div>
               )}
 
               {!loading && results.length === 0 && searched && (
                 <div className="px-5 py-5">
-                  <p className="text-sm font-semibold text-[#1A1A1A] mb-1">
+                  <p className="text-base font-semibold mb-1">
                     {t('reivindicar:not_found_titulo')}
                   </p>
-                  <p className="text-xs text-fg-3-texto mb-3">
+                  <p className="text-sm text-[#5C5C5C] mb-3">
                     {t('reivindicar:not_found_desc')}
                   </p>
                   <Link
                     href={localePath('/cadastre')}
-                    className="inline-flex items-center gap-2 bg-teal text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-teal/90 transition-colors"
+                    className="inline-flex items-center gap-2 min-h-11 bg-teal-dark text-white px-5 rounded-xl text-sm font-semibold hover:bg-teal-dark/90 transition-colors"
                   >
                     {t('reivindicar:not_found_cta')}
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
                   </Link>
                 </div>
               )}
@@ -129,26 +158,23 @@ export default function Reivindicar() {
               {!loading && results.map(biz => (
                 <div
                   key={biz.id}
-                  className="flex items-center gap-3 px-5 py-3.5 border-b border-[#F5F2EE] last:border-0"
+                  className="flex items-center gap-3 px-5 py-3 min-h-16 border-b border-[#F1ECE6] last:border-0"
                 >
-                  <div className="w-9 h-9 rounded-xl bg-teal/10 flex items-center justify-center flex-shrink-0">
-                    <Store className="w-4 h-4 text-teal" />
-                  </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-[#1A1A1A] truncate">{biz.name}</p>
+                    <p className="text-base font-semibold truncate">{biz.name}</p>
                     {biz.category && (
-                      <p className="text-xs text-fg-3-texto">{biz.category.name}</p>
+                      <p className="text-sm text-[#5C5C5C]">{biz.category.name}</p>
                     )}
                   </div>
                   <div className="flex-shrink-0">
                     {biz.profile_id ? (
-                      <span className="text-xs text-fg-3-texto bg-[#F5F2EE] px-2.5 py-1 rounded-full">
+                      <span className="text-sm text-[#5C5C5C] bg-[#F5F2EE] px-3 py-1.5 rounded-full">
                         {t('reivindicar:claimed_badge')}
                       </span>
                     ) : (
                       <Link
                         href={localePath(`/cadastre/claim/${biz.slug}`)}
-                        className="text-xs font-semibold text-teal border border-teal/30 bg-teal/5 px-3 py-1.5 rounded-xl hover:bg-teal/10 transition-colors"
+                        className="inline-flex items-center min-h-11 text-sm font-semibold text-teal-dark border border-teal-dark/40 bg-teal/5 px-4 rounded-xl hover:bg-teal/10 transition-colors"
                       >
                         {t('reivindicar:claim_cta')} →
                       </Link>
@@ -161,96 +187,56 @@ export default function Reivindicar() {
         </div>
       </section>
 
-      {/* ── How it works ── */}
-      <section className="max-w-3xl mx-auto px-5 md:px-8 py-16">
-        <div className="text-center mb-10">
-          <h2 className="font-display text-2xl font-bold text-[#1A1A1A] mb-2">
-            {t('reivindicar:how_titulo')}
+      <div className="max-w-4xl mx-auto px-5 md:px-8 pb-20 space-y-16">
+        {/* ── O que voce ganha ── */}
+        <section>
+          <h2 className="font-display font-semibold text-2xl md:text-3xl tracking-tight text-fg-1 mb-6">
+            {t('reivindicar:control_titulo')}
           </h2>
-          <p className="text-fg-3-texto text-sm">
-            {t('reivindicar:how_desc')}
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {[
-            {
-              step: '1',
-              title: t('reivindicar:how_step1_titulo'),
-              desc: t('reivindicar:how_step1_desc'),
-            },
-            {
-              step: '2',
-              title: t('reivindicar:how_step2_titulo'),
-              desc: t('reivindicar:how_step2_desc'),
-            },
-            {
-              step: '3',
-              title: t('reivindicar:how_step3_titulo'),
-              desc: t('reivindicar:how_step3_desc'),
-            },
-          ].map(({ step, title, desc }) => (
-            <div key={step} className="text-center">
-              <div className="w-12 h-12 rounded-2xl bg-teal text-white font-bold text-xl flex items-center justify-center mx-auto mb-4">
-                {step}
-              </div>
-              <h3 className="font-semibold text-[#1A1A1A] mb-1">{title}</h3>
-              <p className="text-sm text-fg-3-texto leading-relaxed">{desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Benefits ── */}
-      <section className="bg-white border-y border-[#E8E4DF] py-14">
-        <div className="max-w-3xl mx-auto px-5 md:px-8">
-          <div className="text-center mb-8">
-            <h2 className="font-display text-xl font-bold text-[#1A1A1A] mb-2">
-              {t('reivindicar:control_titulo')}
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg mx-auto">
-            {t('reivindicar:control_items').split('|').map(item => (
-              <div key={item} className="flex items-start gap-2.5 text-sm text-[#3D3D3D]">
-                <CheckCircle className="w-4 h-4 text-teal flex-shrink-0 mt-0.5" />
-                {item}
-              </div>
+          <ul className="grid sm:grid-cols-2 gap-3">
+            {t('reivindicar:control_items').split('|').map((item, i) => (
+              <li key={item}>
+                <BlurFade delay={(i % 4) * 70} className="h-full">
+                  <div className="h-full flex items-start gap-3 rounded-2xl bg-white dark:bg-card border border-border-1 p-5 text-base text-fg-1">
+                    <CheckCircle className="w-5 h-5 text-teal-dark dark:text-teal flex-shrink-0 mt-0.5" aria-hidden="true" />
+                    {item}
+                  </div>
+                </BlurFade>
+              </li>
             ))}
-          </div>
-        </div>
-      </section>
+          </ul>
+        </section>
 
-      {/* ── Final CTA ── */}
-      <section className="max-w-3xl mx-auto px-5 md:px-8 py-16 text-center">
-        <div className="bg-[#1A1A1A] text-white rounded-3xl px-8 py-12">
-          <Store className="w-10 h-10 text-teal mx-auto mb-4" />
-          <h2 className="font-display text-2xl font-bold mb-3">
-            {t('reivindicar:not_found_cta_titulo')}
-          </h2>
-          <p className="text-fg-3-texto text-sm mb-8 max-w-sm mx-auto">
-            {t('reivindicar:not_found_cta_desc')}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              href={localePath('/cadastre')}
-              className="inline-flex items-center justify-center gap-2 bg-teal text-white px-7 py-3.5 rounded-2xl font-semibold text-sm hover:bg-teal/90 transition-colors"
-            >
-              <Store className="w-4 h-4" />
-              {t('reivindicar:not_found_cta_btn')}
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              href={localePath('/parceiros')}
-              className="inline-flex items-center justify-center gap-2 border border-white/20 text-white px-7 py-3.5 rounded-2xl font-semibold text-sm hover:bg-white/5 transition-colors"
-            >
-              <ExternalLink className="w-4 h-4" />
-              {t('reivindicar:not_found_cta_alt')}
-            </Link>
-          </div>
-          <p className="text-xs text-fg-3-texto mt-5">{t('reivindicar:not_found_fineprint')}</p>
-        </div>
-      </section>
-
+        {/* ── Negocio nao esta na lista ── */}
+        <section>
+          <BlurFade>
+            <div className="rounded-2xl bg-areia dark:bg-card border border-border-1 p-6 md:p-10">
+              <h2 className="font-display font-semibold text-2xl md:text-3xl tracking-tight text-fg-1 mb-3">
+                {t('reivindicar:not_found_cta_titulo')}
+              </h2>
+              <p className="text-base text-fg-3-texto mb-6 max-w-md">
+                {t('reivindicar:not_found_cta_desc')}
+              </p>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <ShimmerButton
+                  href={localePath('/cadastre')}
+                  className="bg-teal-dark hover:bg-teal-dark/90 min-h-12 px-8 rounded-full text-base"
+                >
+                  {t('reivindicar:not_found_cta_btn')}
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </ShimmerButton>
+                <Link
+                  href={localePath('/parceiros')}
+                  className="inline-flex items-center min-h-11 text-fg-1 font-semibold underline underline-offset-4 decoration-fg-3-texto/50 hover:decoration-fg-1"
+                >
+                  {t('reivindicar:not_found_cta_alt')}
+                </Link>
+              </div>
+              <p className="text-sm text-fg-3-texto mt-5">{t('reivindicar:not_found_fineprint')}</p>
+            </div>
+          </BlurFade>
+        </section>
+      </div>
     </div>
   )
 }

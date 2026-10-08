@@ -2,6 +2,7 @@ import { Phone } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { ServiceListing } from '@/types/database'
 import { SERVICE_CATEGORY_LABELS } from '@/types/database'
+import { MagicCard } from '@/components/magicui/magic-card'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 
 interface Props { service: ServiceListing }
@@ -20,7 +21,7 @@ export function ServiceCard({ service }: Props) {
   )
 
   return (
-    <div className="bg-white dark:bg-card rounded-2xl border border-[#E8E4DF] dark:border-border-1 p-5 hover:shadow-md transition-shadow">
+    <MagicCard className="h-full bg-white dark:bg-card rounded-2xl border border-[#E8E4DF] dark:border-border-1 p-5 flex flex-col">
       <div className="flex items-start gap-3 mb-3">
         <div className="relative flex-shrink-0">
           {service.photo_url ? (
@@ -53,7 +54,7 @@ export function ServiceCard({ service }: Props) {
         </div>
       </div>
 
-      <span className="inline-block text-[10px] font-semibold text-[#555] dark:text-[#C0BCB8] bg-[#F5F2EE] dark:bg-white/10 px-2 py-0.5 rounded-full mb-2.5">
+      <span className="self-start text-[10px] font-semibold text-[#555] dark:text-[#C0BCB8] bg-[#F5F2EE] dark:bg-white/10 px-2 py-0.5 rounded-full mb-2.5">
         {SERVICE_CATEGORY_LABELS[service.service_category]}
       </span>
 
@@ -65,11 +66,11 @@ export function ServiceCard({ service }: Props) {
         href={wa}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center gap-1.5 w-full bg-teal text-white rounded-xl py-2 text-xs font-semibold hover:bg-teal/90 transition-colors"
+        className="mt-auto flex items-center justify-center gap-1.5 w-full min-h-11 bg-teal text-white rounded-xl text-sm font-semibold hover:bg-teal-dark transition-colors"
       >
-        <Phone className="w-3.5 h-3.5" />
+        <Phone className="w-4 h-4" aria-hidden="true" />
         {t('contrate.chamar_whatsapp')}
       </a>
-    </div>
+    </MagicCard>
   )
 }

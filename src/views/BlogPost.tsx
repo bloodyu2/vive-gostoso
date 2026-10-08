@@ -11,6 +11,7 @@ import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { RelatedPosts, TableOfContents } from '@/components/blog'
+import { BlurFade } from '@/components/magicui/blur-fade'
 import { ScrollProgress } from '@/components/magicui/scroll-progress'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import type { RotaModulo } from '@/components/layout/links-modulos'
@@ -219,7 +220,9 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
         </Link>
       </nav>
 
-      <RelatedPosts currentSlug={post.slug} tags={post.tags} />
+      <BlurFade>
+        <RelatedPosts currentSlug={post.slug} tags={post.tags} />
+      </BlurFade>
     </main>
   )
 }

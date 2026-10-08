@@ -6,6 +6,7 @@ import type { FaseDaLua } from '@/lib/mares/lua'
 import { formatarAltura, rotuloDoDia } from '@/lib/mares/formato'
 import { preencher, textosMares, caminhoMares } from '@/lib/mares/seo-mares'
 import { ESTACOES, PRAIAS_MARES, distanciaKm, praiasPorMunicipio, type CodigoEstacao } from '@/data/praias-mares'
+import { BlurFade } from '@/components/magicui/blur-fade'
 import { CurvaMare } from './curva-mare'
 
 const PREFIXO: Record<Idioma, string> = { pt: '', en: '/en', es: '/es' }
@@ -47,8 +48,8 @@ export function SeletorPraias({ lang, atual }: { lang: Idioma; atual?: string })
                   <Link
                     href={caminhoLocal(lang, p.slug)}
                     aria-current={ativa ? 'page' : undefined}
-                    className={`inline-flex items-center min-h-11 rounded-full border px-4 text-sm font-semibold whitespace-nowrap transition-colors motion-reduce:transition-none ${
-                      ativa ? 'bg-teal border-teal text-white' : 'bg-elev border-border-1 text-fg-1 hover:border-teal hover:text-teal'
+                    className={`inline-flex items-center min-h-11 rounded-full border-2 px-5 text-sm font-semibold whitespace-nowrap transition-colors motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal ${
+                      ativa ? 'bg-teal border-teal text-white' : 'bg-elev border-border-1 text-fg-1 hover:border-teal hover:text-teal active:bg-teal/10'
                     }`}
                   >
                     {p.nome.replace(/^Praia (do|da|de) /, '')}
@@ -178,6 +179,7 @@ export function TabelaSemana({
 }) {
   const t = textosMares(lang)
   return (
+    <BlurFade>
     <section className="mt-12">
       <h2 className="font-display text-2xl font-semibold text-fg-1">{t.semana}</h2>
       <div className="mt-4 overflow-x-auto">
@@ -234,6 +236,7 @@ export function TabelaSemana({
         </table>
       </div>
     </section>
+    </BlurFade>
   )
 }
 
@@ -266,6 +269,7 @@ export function RodapeFonte({
   const km = praia ? distanciaKm(praia, ESTACOES[principal]) : undefined
   const kmReserva = praia ? distanciaKm(praia, ESTACOES[reserva]) : undefined
   return (
+    <BlurFade>
     <footer className="mt-12 border-t border-border-1 pt-6 text-sm text-fg-2 leading-relaxed max-w-[65ch]">
       <p>
         <a
@@ -302,5 +306,6 @@ export function RodapeFonte({
       )}
       <p className="mt-2">{preencher(t.aviso, { estacao: nomePrincipal, reserva: nomeReserva })}</p>
     </footer>
+    </BlurFade>
   )
 }

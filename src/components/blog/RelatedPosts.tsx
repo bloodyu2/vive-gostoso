@@ -1,10 +1,8 @@
 'use client'
-import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
-import { useLocalePath } from '@/hooks/useLocalePath'
 import type { BlogPost } from '@/types/database'
-import { SafeCoverImage } from '@/components/ui/safe-cover-image'
+import { PostCard } from './PostCard'
 import { useTranslation } from 'react-i18next'
 import { normalizarIdioma, visivelNoIdioma } from '@/lib/blog/traducoes'
 
@@ -22,8 +20,7 @@ interface RelatedPostsProps {
  * Fallback para posts mais recentes se não houver overlap.
  */
 export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPostsProps) {
-  const lp = useLocalePath()
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const idioma = normalizarIdioma(i18n.language)
   const { data: todosPosts = [] } = useQuery({
     queryKey: ['related-posts', currentSlug, tags.join(','), idioma],
@@ -72,41 +69,10 @@ export function RelatedPosts({ currentSlug, tags = [], limit = 3 }: RelatedPosts
   return (
     <section className="not-prose my-12">
       <h2 className="font-display text-2xl font-bold text-[#1A1A1A] dark:text-white mb-6">
-        Continue lendo
+        {t('blog.continue_lendo')}
       </h2>
       <div className={`grid grid-cols-1 gap-4 ${posts.length === 1 ? 'max-w-sm' : posts.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-3'}`}>
-        {posts.map(post => (
-          <Link
-            key={post.id}
-            href={lp(`/blog/${post.slug}`)}
-            className="group rounded-2xl overflow-hidden border border-[#E8E4DF] dark:border-[#2D2D2D] bg-white dark:bg-[#222] hover:shadow-lg transition-shadow"
-          >
-            {post.cover_url ? (
-              <div className="aspect-[16/10] overflow-hidden bg-gradient-to-br from-teal to-teal-dark">
-                <SafeCoverImage
-                  src={post.cover_url}
-                  alt={post.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ) : (
-              <div className="aspect-[16/10] bg-gradient-to-br from-teal to-teal-dark" />
-            )}
-            <div className="p-4">
-              <h3
-                className="font-display font-bold text-base text-[#1A1A1A] dark:text-white group-hover:text-teal transition-colors leading-snug line-clamp-3"
-                style={{ wordBreak: 'normal', overflowWrap: 'break-word', hyphens: 'auto' }}
-              >
-                {post.title}
-              </h3>
-              {post.excerpt && (
-                <p className="mt-1.5 text-xs text-fg-3-texto line-clamp-2 leading-relaxed">
-                  {post.excerpt}
-                </p>
-              )}
-            </div>
-          </Link>
-        ))}
+        {posts.map(post => <PostCard key={post.id} post={post} />)}
       </div>
     </section>
   )

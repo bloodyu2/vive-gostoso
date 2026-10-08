@@ -9,6 +9,8 @@ import { useLocalePath } from '@/hooks/useLocalePath'
 import type { Business } from '@/types/database'
 import { MAPBOX_TOKEN, MAP_STYLE, GOSTOSO_CENTER, GOSTOSO_ZOOM, PIN_COLORS } from '@/lib/mapbox'
 import { BusinessCover } from '@/components/business/business-cover'
+import { StatusAberturaSelo, useStatusAbertura } from '@/components/business/status-abertura'
+import type { Horarios } from '@/lib/status-abertura'
 import { CATEGORIAS_PONTO, linkComoChegar, type CategoriaPonto, type PontoMapa } from '@/data/pontos-mapa'
 import type { Idioma } from '@/data/praias-mares'
 import type pt from '@/locales/pt.json'
@@ -33,12 +35,20 @@ const VERB_ICON: Record<string, LucideIcon> = {
   passeie: Compass,
 }
 
+/** Selo aberto/fechado no fuso de Gostoso. Sem horarios cadastrados, nao mostra nada. */
+function StatusDoPonto({ horarios }: { horarios: Horarios | null | undefined }) {
+  const status = useStatusAbertura(horarios)
+  const temHorarios = !!horarios && Object.keys(horarios).length > 0
+  return <StatusAberturaSelo status={status} temHorarios={temHorarios} />
+}
+
 interface PopupBusiness {
   name: string
   slug: string
   cover_url: string | null
   category: Business['category']
   address: string | null
+  opening_hours?: Horarios | null
 }
 
 interface ExploreMapProps {
@@ -163,7 +173,7 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
       el.addEventListener('click', (e) => {
         e.stopPropagation()
         setPontoAberto(null)
-        setPopup({ name: b.name, slug: b.slug, cover_url: b.cover_url, category: b.category, address: b.address })
+        setPopup({ name: b.name, slug: b.slug, cover_url: b.cover_url, category: b.category, address: b.address, opening_hours: b.opening_hours })
         map.current?.flyTo({ center: [b.lng!, b.lat!], zoom: Math.max(map.current.getZoom(), 15), duration: 600 })
       })
 
@@ -259,7 +269,7 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
                   type="button"
                   aria-pressed={ativo}
                   onClick={() => { setFiltro(c); setPontoAberto(null) }}
-                  className={`flex-shrink-0 flex items-center gap-1.5 min-h-9 text-xs font-semibold px-3 py-1.5 rounded-full border shadow-sm transition-colors motion-reduce:transition-none ${ativo ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]' : 'bg-white/95 text-[#1A1A1A] border-[#E8E4DF] hover:border-teal'}`}
+                  className={`flex-shrink-0 flex items-center gap-1.5 min-h-11 text-xs font-semibold px-4 py-1.5 rounded-full border shadow-sm transition-colors motion-reduce:transition-none ${ativo ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]' : 'bg-white/95 text-[#1A1A1A] border-[#E8E4DF] hover:border-teal'}`}
                 >
                   {c !== 'todos' && <span aria-hidden="true" className="w-2.5 h-2.5 rotate-45 rounded-[2px]" style={{ background: COR_CATEGORIA[c] }} />}
                   {c === 'todos' ? textos.todos : textos.categorias[c]}
@@ -335,6 +345,7 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
                     </div>
                   )}
                   <div className="font-semibold text-[#1A1A1A] leading-tight">{popup.name}</div>
+                  <div className="mt-1.5"><StatusDoPonto horarios={popup.opening_hours} /></div>
                   {popup.address && (
                     <div className="text-xs text-fg-3-texto flex items-center gap-1 mt-1">
                       <MapPin className="w-3 h-3 flex-shrink-0" />{popup.address}
@@ -373,7 +384,7 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
                   <button
                     key={verb}
                     onClick={() => jumpToSection(verb)}
-                    className="flex-shrink-0 flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors hover:opacity-80"
+                    className="flex-shrink-0 flex items-center gap-1 min-h-11 text-xs font-semibold px-4 py-1.5 rounded-full border transition-colors hover:opacity-80"
                     style={{
                       borderColor: VERB_COLOR[verb] + '55',
                       color: VERB_COLOR[verb],
@@ -412,7 +423,7 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
                     onClick={() => {
                       if (b.lat && b.lng) {
                         map.current?.flyTo({ center: [b.lng, b.lat], zoom: 16, duration: 800 })
-                        setPopup({ name: b.name, slug: b.slug, cover_url: b.cover_url, category: b.category, address: b.address })
+                        setPopup({ name: b.name, slug: b.slug, cover_url: b.cover_url, category: b.category, address: b.address, opening_hours: b.opening_hours })
                       }
                     }}
                     className="w-full flex items-center gap-3 px-5 py-3.5 hover:bg-[#F5F2EE] transition-colors group text-left"
@@ -428,6 +439,7 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="text-sm font-medium text-[#1A1A1A] truncate group-hover:text-teal transition-colors">{b.name}</div>
+                      <div className="mt-0.5 empty:hidden"><StatusDoPonto horarios={b.opening_hours} /></div>
                       {b.address && (
                         <div className="text-xs text-fg-3-texto truncate flex items-center gap-1 mt-0.5">
                           <MapPin className="w-3 h-3 flex-shrink-0" />{b.address}
