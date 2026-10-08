@@ -4,7 +4,13 @@ import Link from 'next/link'
 import { MapPin, Phone, Globe, AtSign, Clock, ArrowLeft, CheckCircle, Share2, Check, BookOpen, Wifi, Car, UserCheck, CalendarCheck, Navigation } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useBusiness } from '@/hooks/useBusinesses'
-import { isBusinessOpen, safeExternalUrl, cn } from '@/lib/utils'
+import { safeExternalUrl, cn } from '@/lib/utils'
+import { StatusAberturaSelo, useStatusAbertura } from '@/components/business/status-abertura'
+import { BlurFade } from '@/components/magicui/blur-fade'
+import { BorderBeam } from '@/components/magicui/border-beam'
+import { MagicCard } from '@/components/magicui/magic-card'
+import { NumberTicker } from '@/components/magicui/number-ticker'
+import { ShimmerButton } from '@/components/magicui/shimmer-button'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { pushDataLayer } from '@/lib/analytics'
 import { ManagedBadge } from '@/components/business/managed-badge'
@@ -42,6 +48,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
   const { data: ratingsMap } = useBusinessRatings()
   const { t } = useTranslation()
   const lp = useLocalePath()
+  const status = useStatusAbertura(b?.opening_hours)
 
   /* Barra fixa de contato no celular: some quando a sidebar (que ja tem o CTA)
      entra na tela, para nao dizer a mesma coisa duas vezes. */
@@ -100,7 +107,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
     </main>
   )
 
-  const open = isBusinessOpen(b.opening_hours)
+  const temHorarios = !!b.opening_hours && Object.keys(b.opening_hours).length > 0
   const websiteHref = safeExternalUrl(b.website)
   const menuUrlHref = safeExternalUrl(b.menu_url)
   const verb = b.category?.verb ?? 'come'
@@ -167,10 +174,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
         <div className="lg:col-span-2">
           <div className="flex gap-2 mb-3 flex-wrap items-center">
             {b.category && <Badge kind="cat">{b.category.name}</Badge>}
-            {open
-              ? <Badge kind="open" dot>{t('negocio.aberto')}</Badge>
-              : <Badge kind="closed" dot>{t('negocio.fechado')}</Badge>
-            }
+            <StatusAberturaSelo status={status} temHorarios={temHorarios} />
             {b.plan === 'associado' && <Badge kind="verif">✓ Associado</Badge>}
             {b.plan === 'destaque' && (
               <span className="inline-flex items-center gap-1 text-xs font-semibold text-ocre bg-ocre/10 border border-ocre/20 px-2.5 py-0.5 rounded-full">
@@ -184,7 +188,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
           {avgRating !== null && (
             <div className="flex items-center gap-2 mb-4">
               <StarRating value={Math.round(avgRating)} readonly size="md" />
-              <span className="text-sm font-semibold text-[#1A1A1A]">{avgRating.toFixed(1)}</span>
+              <NumberTicker value={avgRating} className="text-sm font-semibold text-[#1A1A1A] dark:text-white" />
               <span className="text-sm text-fg-3-texto">
                 ({reviewCount} {reviewCount === 1 ? t('negocio.avaliacao_singular') : t('negocio.avaliacao_plural')})
               </span>
@@ -207,32 +211,46 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
 
           {/* Fotos */}
           {b.photos && b.photos.length > 0 && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
-              {b.photos.map((url, i) => (
-                <div
-                  key={i}
-                  className="relative aspect-square rounded-xl overflow-hidden bg-[#E8E4DF] dark:bg-[#2D2D2D] cursor-pointer hover:opacity-90 transition-opacity"
-                  onClick={() => setLightboxIndex(capaReal ? i + 1 : i)}
-                >
-                  <Lens className="w-full h-full">
-                    <SafeCoverImage src={url} alt={`${b.name} foto ${i + 1}`} className="w-full h-full object-cover" />
-                  </Lens>
-                  {temLicenca(b.imagens_licenciadas, url) && (
-                    <FotoPropriaBadge className="absolute bottom-2 left-2 scale-90 origin-bottom-left" />
-                  )}
-                </div>
-              ))}
+            /* Bento: com 3 fotos ou mais a primeira ocupa 2x2 e as outras
+               preenchem ao redor; com 1 ou 2 ficam lado a lado, sem buraco. */
+            <div className={cn(
+              'grid gap-3 mb-8',
+              b.photos.length === 1 ? 'grid-cols-1' : b.photos.length === 2 ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3',
+            )}>
+              {b.photos.map((url, i) => {
+                const destaque = i === 0 && b.photos!.length >= 3
+                return (
+                  <BlurFade key={i} delay={Math.min(i, 5) * 70} className={destaque ? 'col-span-2 row-span-2' : ''}>
+                    <button
+                      type="button"
+                      aria-label={`${t('negocio.galeria')}: ${b.name}, ${i + 1} / ${b.photos!.length}`}
+                      className={cn(
+                        'relative block w-full overflow-hidden rounded-xl bg-[#E8E4DF] dark:bg-[#2D2D2D] cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal',
+                        destaque ? 'h-full aspect-square' : b.photos!.length === 1 ? 'aspect-[16/10]' : 'aspect-square',
+                      )}
+                      onClick={() => setLightboxIndex(capaReal ? i + 1 : i)}
+                    >
+                      <Lens className="w-full h-full">
+                        <SafeCoverImage src={url} alt={`${b.name} foto ${i + 1}`} className="w-full h-full object-cover" />
+                      </Lens>
+                      {temLicenca(b.imagens_licenciadas, url) && (
+                        <FotoPropriaBadge className="absolute bottom-2 left-2 scale-90 origin-bottom-left" />
+                      )}
+                    </button>
+                  </BlurFade>
+                )
+              })}
             </div>
           )}
 
           {/* Avaliações */}
           <div className="mt-8">
             <h2 className="font-display font-semibold text-2xl mb-5">{t('negocio.avaliacoes')}</h2>
-            <ReviewList targetType="business" targetId={b.id} />
+            <ReviewList targetType="business" targetId={b.id} ctaHref="#avaliar" />
           </div>
 
           {/* Avaliar */}
-          <div className="mt-6">
+          <div id="avaliar" className="mt-6 scroll-mt-24">
             <ReviewForm targetType="business" targetId={b.id} />
           </div>
         </div>
@@ -241,17 +259,27 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
         <aside ref={asideRef} className="space-y-5">
           {/* WhatsApp CTA */}
           {b.whatsapp && (
-            <a
+            <ShimmerButton
               href={buildWhatsAppLink(b.whatsapp)}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => pushDataLayer('contato_negocio_click', { business_name: b.name })}
-              className="w-full flex items-center justify-center gap-2 bg-whatsapp hover:bg-[#0E7440] text-white rounded-2xl px-5 py-4 text-sm font-semibold transition-colors"
+              className="w-full bg-whatsapp hover:bg-[#0E7440] rounded-2xl px-5 py-4 text-sm"
             >
               <Phone className="w-4 h-4" />
               {t('negocio.falar_whatsapp')}
-            </a>
+            </ShimmerButton>
           )}
+          {/* Como chegar: no celular a barra fixa ja leva, no desktop so existia o mapa do rodape */}
+          <a
+            href={mapsUrlContato}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full flex items-center justify-center gap-2 border border-[#D8D2CA] dark:border-border-1 text-fg-1 rounded-2xl px-5 py-3.5 text-sm font-semibold hover:bg-areia dark:hover:bg-white/10 transition-colors"
+          >
+            <Navigation className="w-4 h-4" />
+            {t('negocio.como_chegar')}
+          </a>
           {/* Share */}
           <button
             onClick={handleShare}
@@ -279,8 +307,11 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
 
           {/* Contatos / Amenidades / Horários / Fundo — one surface, divide-y sections
               instead of four stacked cards (was card-in-card-in-card). */}
-          <div className="bg-white dark:bg-card border border-[#E8E4DF] dark:border-border-1 rounded-2xl divide-y divide-[#E8E4DF] dark:divide-border-1 overflow-hidden">
+          <MagicCard className="bg-white dark:bg-card border border-[#E8E4DF] dark:border-border-1 rounded-2xl divide-y divide-[#E8E4DF] dark:divide-border-1 overflow-hidden">
+            {/* Quem apoia a cidade (destaque, associado) ganha o feixe na borda */}
+            {(b.plan === 'destaque' || b.plan === 'associado') && <BorderBeam />}
             {/* Contatos */}
+            {(b.whatsapp || b.phone || b.instagram || websiteHref) && (
             <div className="p-5 space-y-3">
               <h3 className="font-semibold text-sm text-[#1A1A1A] dark:text-white uppercase tracking-wide">{t('negocio.contato')}</h3>
 
@@ -316,6 +347,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
                 </a>
               )}
             </div>
+            )}
 
             {/* Amenidades */}
             {b.amenities && Object.values(b.amenities).some(Boolean) && (
@@ -356,9 +388,19 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
                   {DAY_ORDER.map(day => {
                     const h = (b.opening_hours as Record<string, { open: string; close: string; closed: boolean }>)[day]
                     if (!h) return null
+                    const ehHoje = status?.hoje === day
                     return (
-                      <div key={day} className="flex justify-between text-sm">
-                        <span className="text-fg-3-texto">{days[day]}</span>
+                      <div
+                        key={day}
+                        aria-current={ehHoje ? 'date' : undefined}
+                        className={cn(
+                          'flex justify-between text-sm',
+                          ehHoje && '-mx-2 px-2 py-1 rounded-lg bg-teal-light dark:bg-teal/15 font-semibold',
+                        )}
+                      >
+                        <span className={ehHoje ? 'text-teal-dark dark:text-white' : 'text-fg-3-texto'}>
+                          {days[day]}{ehHoje && <span className="ml-1.5 text-xs font-medium">({t('negocio.hoje').toLowerCase()})</span>}
+                        </span>
                         <span className={h.closed ? 'text-coral' : 'text-[#1A1A1A] dark:text-white font-medium'}>
                           {h.closed ? t('negocio.fechado_dia') : `${h.open} – ${h.close}`}
                         </span>
@@ -376,7 +418,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
                 <Link href={lp('/apoie')} className="underline">{t('negocio.saiba_mais')}</Link>
               </div>
             )}
-          </div>
+          </MagicCard>
         </aside>
       </div>
       {/* Barra fixa de contato (celular) — WhatsApp e rota sempre a um toque. */}

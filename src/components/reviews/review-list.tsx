@@ -9,6 +9,8 @@ import i18n from '@/i18n'
 interface ReviewListProps {
   targetType: 'business' | 'professional' | 'transfer'
   targetId: string
+  /** Quando ha um formulario na mesma pagina, o estado vazio aponta para ele. */
+  ctaHref?: string
 }
 
 function formatDate(iso: string) {
@@ -66,7 +68,7 @@ function PaginationBar({ page, totalPages, onChange }: { page: number; totalPage
   )
 }
 
-export function ReviewList({ targetType, targetId }: ReviewListProps) {
+export function ReviewList({ targetType, targetId, ctaHref }: ReviewListProps) {
   const { t } = useTranslation('review_list')
   const [page, setPage] = useState(1)
   const listRef = useRef<HTMLDivElement>(null)
@@ -85,7 +87,18 @@ export function ReviewList({ targetType, targetId }: ReviewListProps) {
     </div>
   )
 
-  if (!reviews.length && page === 1) return (
+  if (!reviews.length && page === 1) return ctaHref ? (
+    <div className="rounded-2xl border border-dashed border-[#D8D2CA] dark:border-border-1 px-5 py-6 text-center">
+      <p className="font-display font-semibold text-lg text-[#1A1A1A] dark:text-white">{t('empty_titulo')}</p>
+      <p className="text-sm text-fg-3-texto mt-1 mb-4">{t('empty_desc')}</p>
+      <a
+        href={ctaHref}
+        className="inline-flex items-center justify-center min-h-11 px-5 rounded-xl bg-[#1A1A1A] text-white dark:bg-white dark:text-[#1A1A1A] text-sm font-semibold hover:opacity-90 transition-opacity"
+      >
+        {t('empty_cta')}
+      </a>
+    </div>
+  ) : (
     <p className="text-sm text-placeholder text-center py-4">
       {t('empty')}
     </p>

@@ -617,7 +617,13 @@
     "dia_sab": "Saturday",
     "dia_dom": "Sunday",
     "fechado_dia": "Closed",
-    "foto_propria": "The business's own photo"
+    "foto_propria": "The business's own photo",
+    "status_aberto_ate": "Open now · closes at {{hora}}",
+    "status_fecha_em_breve": "Closing soon · at {{hora}}",
+    "status_abre_hoje": "Closed · opens today at {{hora}}",
+    "status_abre_amanha": "Closed · opens tomorrow at {{hora}}",
+    "status_abre_dia": "Closed · opens {{dia}} at {{hora}}",
+    "hoje": "Today"
   },
   "footer": {
     "privacidade": "Privacy",
@@ -1308,6 +1314,9 @@
   },
   "review_list": {
     "empty": "No reviews yet. Be the first!",
+    "empty_titulo": "No reviews yet",
+    "empty_desc": "Been here? Tell us how it was, the next visitor will thank you.",
+    "empty_cta": "Write the first review",
     "count": "review",
     "count_plural": "reviews",
     "anonymous": "Visitor"

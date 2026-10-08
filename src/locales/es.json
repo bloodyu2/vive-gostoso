@@ -617,7 +617,13 @@
     "dia_sab": "Sábado",
     "dia_dom": "Domingo",
     "fechado_dia": "Cerrado",
-    "foto_propria": "Foto del propio negocio"
+    "foto_propria": "Foto del propio negocio",
+    "status_aberto_ate": "Abierto ahora · cierra a las {{hora}}",
+    "status_fecha_em_breve": "Cierra pronto · a las {{hora}}",
+    "status_abre_hoje": "Cerrado · abre hoy a las {{hora}}",
+    "status_abre_amanha": "Cerrado · abre mañana a las {{hora}}",
+    "status_abre_dia": "Cerrado · abre {{dia}} a las {{hora}}",
+    "hoje": "Hoy"
   },
   "footer": {
     "privacidade": "Privacidad",
@@ -998,6 +1004,9 @@
   },
   "review_list": {
     "empty": "Aún no hay reseñas. ¡Sé el primero!",
+    "empty_titulo": "Nadie ha opinado todavía",
+    "empty_desc": "¿Estuviste aquí? Cuenta cómo fue, la próxima persona lo agradecerá.",
+    "empty_cta": "Escribir la primera opinión",
     "count": "reseña",
     "count_plural": "reseñas",
     "anonymous": "Visitante"
