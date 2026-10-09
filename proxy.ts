@@ -54,7 +54,7 @@ function montarCsp(nonce: string): string {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.mapbox.com",
     "font-src 'self' https://fonts.gstatic.com",
     `img-src 'self' data: blob: ${SUPABASE_ORIGIN} ${UNSPLASH_ORIGINS} https://api.mapbox.com https://*.tiles.mapbox.com`,
-    `connect-src 'self' ${SUPABASE_ORIGIN} ${SUPABASE_WS_ORIGIN} https://api.mapbox.com https://*.tiles.mapbox.com https://events.mapbox.com https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com`,
+    `connect-src 'self' ${SUPABASE_ORIGIN} ${SUPABASE_WS_ORIGIN} https://api.mapbox.com https://*.tiles.mapbox.com https://events.mapbox.com https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://www.google.com`,
     "worker-src 'self' blob:",
     "child-src 'self' blob:",
     "frame-src 'none'",
