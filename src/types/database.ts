@@ -130,7 +130,10 @@ export interface ServiceListing {
   headline: string
   description: string | null
   service_category: ServiceCategory
+  /** Todos os tipos do servico (inclui service_category, o principal). */
+  service_categories: ServiceCategory[]
   photo_url: string | null
+  photos: string[]
   whatsapp: string
   is_active: boolean
   is_featured: boolean

@@ -15,6 +15,7 @@ import type { TransferFormData } from '@/hooks/useTransfers'
 import type { Transfer, TransferRoute } from '@/types/database'
 import { useTransferRatings } from '@/hooks/useReviews'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import { PhotoUploader } from '@/components/ui/photo-uploader'
 
 const VEHICLE_TYPES = ['Van', 'Carro', 'Buggy', 'SUV']
 const LANGUAGES_LIST = ['Português', 'Inglês', 'Espanhol', 'Francês']
@@ -191,6 +192,7 @@ function RegistrationModal({ onClose }: RegistrationModalProps) {
     payment_methods: [],
     meeting_point: '',
     observations: '',
+    photo_url: '',
     routes: [{ from: '', to: '', price_brl: 0 }],
   })
 
@@ -347,6 +349,13 @@ function RegistrationModal({ onClose }: RegistrationModalProps) {
                 placeholder="Ex: Bagagem extra, pets, taxa adicional..." rows={2}
                 className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-colors resize-none" />
             </div>
+
+            <PhotoUploader
+              label="Foto do veículo ou do serviço"
+              max={1}
+              value={form.photo_url ? [form.photo_url] : []}
+              onChange={urls => setField('photo_url', urls[0] ?? '')}
+            />
 
             {/* Routes section */}
             <div className="space-y-3">

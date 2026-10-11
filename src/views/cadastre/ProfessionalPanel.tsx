@@ -15,6 +15,7 @@ import {
   type PortfolioItem,
 } from '@/types/professional'
 import { safeExternalUrl } from '@/lib/utils'
+import { PhotoUploader } from '@/components/ui/photo-uploader'
 
 export default function ProfessionalPanel() {
   return <AuthGuard><ProfessionalPanelInner /></AuthGuard>
@@ -56,6 +57,7 @@ function ProfessionalPanelInner() {
   const [instagram, setInstagram] = useState('')
   const [website, setWebsite] = useState('')
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([])
+  const [photoUrl, setPhotoUrl] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
@@ -73,6 +75,7 @@ function ProfessionalPanelInner() {
       setInstagram(pro.instagram ?? '')
       setWebsite(pro.website ?? '')
       setPortfolioItems(pro.portfolio_items ?? [])
+      setPhotoUrl(pro.photo_url ?? '')
     }
   }, [pro])
 
@@ -134,6 +137,7 @@ function ProfessionalPanelInner() {
         display_name: displayName.trim(),
         headline: headline.trim(),
         bio: bio.trim() || undefined,
+        photo_url: photoUrl,
         category,
         specialties,
         portfolio_items: portfolioItems,
@@ -225,6 +229,12 @@ function ProfessionalPanelInner() {
         {/* ── Tab: Perfil ── */}
         {tab === 'perfil' && (
           <div className="space-y-5">
+            <PhotoUploader
+              label="Sua foto"
+              max={1}
+              value={photoUrl ? [photoUrl] : []}
+              onChange={urls => setPhotoUrl(urls[0] ?? '')}
+            />
             <div>
               <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wide mb-1.5">
                 {t('professional_panel.display_name_label')}
@@ -365,11 +375,11 @@ function ProfessionalPanelInner() {
                   placeholder={t('professional_panel.portfolio_desc_placeholder')}
                   className="w-full border border-[#E8E4DF] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
                 />
-                <input
-                  value={item.image_url ?? ''}
-                  onChange={e => updatePortfolioItem(item.id, 'image_url', e.target.value)}
-                  placeholder={t('professional_panel.portfolio_image_placeholder')}
-                  className="w-full border border-[#E8E4DF] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
+                <PhotoUploader
+                  label="Foto do trabalho"
+                  max={1}
+                  value={item.image_url ? [item.image_url] : []}
+                  onChange={urls => updatePortfolioItem(item.id, 'image_url', urls[0] ?? '')}
                 />
                 <input
                   value={item.url ?? ''}

@@ -87,7 +87,7 @@ function AdminInner() {
       icon: User,
       title: t('admin.module_professionals'),
       desc: t('admin.module_professionals_desc'),
-      badge: 0,
+      badge: stats?.draftProfessionals ?? 0,
     },
   ]
 
@@ -97,6 +97,7 @@ function AdminInner() {
     + (stats?.pendingServices ?? 0)
     + (stats?.pendingJobs ?? 0)
     + (stats?.pendingTransfers ?? 0)
+    + (stats?.draftProfessionals ?? 0)
 
   const statItems = [
     { value: stats?.pendingReviews ?? '—', label: t('admin.stat_reviews'), urgent: (stats?.pendingReviews ?? 0) > 0 },

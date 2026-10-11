@@ -43,7 +43,7 @@ export function useServices(
         .eq('is_active', true)
         .order('is_featured', { ascending: false })
         .order('created_at', { ascending: false })
-      if (category) q = q.eq('service_category', category)
+      if (category) q = q.contains('service_categories', [category])
       const { data, error } = await q
       if (error) throw error
       return (data ?? []) as ServiceListing[]
@@ -57,6 +57,8 @@ export interface ServiceFormData {
   headline: string
   description: string
   service_category: ServiceCategory
+  service_categories: ServiceCategory[]
+  photos: string[]
   whatsapp: string
 }
 
@@ -68,7 +70,7 @@ export function useSubmitService() {
         .from('gostoso_service_listings')
         .insert({
           ...form,
-          photo_url: null,
+          photo_url: form.photos[0] ?? null,
           is_active: false, // fica pendente até admin aprovar
           is_featured: false,
         })
