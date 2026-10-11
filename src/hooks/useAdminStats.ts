@@ -10,6 +10,7 @@ export interface AdminStats {
   pendingTransfers: number
   totalBusinesses: number
   draftBusinesses: number
+  draftProfessionals: number
 }
 
 export function useAdminStats() {
@@ -26,6 +27,7 @@ export function useAdminStats() {
         transfersResult,
         businessesResult,
         draftBusinessesResult,
+        draftProfessionalsResult,
       ] = await Promise.all([
         supabase
           .from('gostoso_reviews')
@@ -59,6 +61,10 @@ export function useAdminStats() {
           .select('id', { count: 'exact', head: true })
           .eq('active', true)
           .eq('is_published', false),
+        supabase
+          .from('gostoso_professionals')
+          .select('id', { count: 'exact', head: true })
+          .eq('is_published', false),
       ])
 
       if (reviewsResult.error) throw reviewsResult.error
@@ -69,6 +75,7 @@ export function useAdminStats() {
       if (transfersResult.error) throw transfersResult.error
       if (businessesResult.error) throw businessesResult.error
       if (draftBusinessesResult.error) throw draftBusinessesResult.error
+      if (draftProfessionalsResult.error) throw draftProfessionalsResult.error
 
       return {
         pendingReviews:   reviewsResult.count ?? 0,
@@ -79,6 +86,7 @@ export function useAdminStats() {
         pendingTransfers: transfersResult.count ?? 0,
         totalBusinesses:  businessesResult.count ?? 0,
         draftBusinesses:  draftBusinessesResult.count ?? 0,
+        draftProfessionals: draftProfessionalsResult.count ?? 0,
       }
     },
   })
