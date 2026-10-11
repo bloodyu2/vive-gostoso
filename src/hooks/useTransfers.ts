@@ -15,6 +15,7 @@ export interface TransferFormData {
   payment_methods: string[]
   meeting_point: string
   observations: string
+  photo_url?: string
   routes: { from: string; to: string; price_brl: number }[]
 }
 
@@ -91,7 +92,7 @@ export function useSubmitTransfer() {
           payment_methods: form.payment_methods.length > 0 ? form.payment_methods : null,
           meeting_point: form.meeting_point || null,
           observations: form.observations || null,
-          photo_url: null,
+          photo_url: form.photo_url || null,
           routes: form.routes.length > 0 ? form.routes : null,
           active: false,
         })

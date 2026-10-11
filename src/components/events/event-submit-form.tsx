@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { useSubmitEvent } from '@/hooks/useEventSubmissions'
 import { showToast } from '@/components/ui/toast'
+import { PhotoUploader } from '@/components/ui/photo-uploader'
 import type { EventSubmission } from '@/types/database'
 
 const INPUT_CLS = 'w-full rounded-xl border border-[#E8E4DF] dark:border-[#2D2D2D] bg-white dark:bg-[#1C1C1C] dark:text-white px-4 py-3 text-sm focus:border-teal focus:ring-2 focus:ring-teal/20 focus:outline-none'
@@ -162,6 +163,12 @@ export function EventSubmitForm({ open, onClose }: Props) {
               <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wider mb-1.5">{t('field_source_url_label')}</label>
               <input type="url" value={form.source_url} onChange={e => set('source_url', e.target.value)} placeholder="https://..." className={INPUT_CLS} />
             </div>
+            <PhotoUploader
+              label="Foto do evento"
+              max={1}
+              value={form.cover_url.includes('/business-photos/u/') ? [form.cover_url] : []}
+              onChange={urls => set('cover_url', urls[0] ?? '')}
+            />
             <div>
               <label className="block text-xs font-semibold text-fg-3-texto uppercase tracking-wider mb-1.5">{t('field_cover_url_label')}</label>
               <input type="url" value={form.cover_url} onChange={e => set('cover_url', e.target.value)} placeholder="https://..." className={INPUT_CLS} />

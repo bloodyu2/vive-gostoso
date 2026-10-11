@@ -54,9 +54,23 @@ export function ServiceCard({ service }: Props) {
         </div>
       </div>
 
-      <span className="self-start text-[10px] font-semibold text-[#555] dark:text-[#C0BCB8] bg-[#F5F2EE] dark:bg-white/10 px-2 py-0.5 rounded-full mb-2.5">
-        {SERVICE_CATEGORY_LABELS[service.service_category]}
-      </span>
+      <div className="flex flex-wrap gap-1.5 mb-2.5">
+        {(service.service_categories?.length ? service.service_categories : [service.service_category]).map(c => (
+          <span key={c} className="text-[10px] font-semibold text-[#555] dark:text-[#C0BCB8] bg-[#F5F2EE] dark:bg-white/10 px-2 py-0.5 rounded-full">
+            {SERVICE_CATEGORY_LABELS[c]}
+          </span>
+        ))}
+      </div>
+
+      {(service.photos?.length ?? 0) > 0 && (
+        <ul className="flex gap-1.5 mb-3 overflow-x-auto">
+          {service.photos.map(url => (
+            <li key={url} className="flex-shrink-0">
+              <img src={url} alt="" loading="lazy" decoding="async" className="w-20 h-20 rounded-xl object-cover" />
+            </li>
+          ))}
+        </ul>
+      )}
 
       {service.description && (
         <p className="text-fg-3-texto text-xs leading-relaxed line-clamp-2 mb-3">{service.description}</p>

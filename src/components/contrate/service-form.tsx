@@ -4,6 +4,7 @@ import { SERVICE_CATEGORY_LABELS } from '@/types/database'
 import type { ServiceCategory } from '@/types/database'
 import { useSubmitService } from '@/hooks/useServices'
 import { useTranslation } from 'react-i18next'
+import { PhotoUploader } from '@/components/ui/photo-uploader'
 
 interface Props { onClose: () => void }
 
@@ -18,19 +19,27 @@ export function ServiceForm({ onClose }: Props) {
     name: '',
     headline: '',
     description: '',
-    service_category: '' as ServiceCategory | '',
+    service_categories: [] as ServiceCategory[],
+    photos: [] as string[],
     whatsapp: '',
   })
 
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }))
-  const valid = form.name && form.headline && form.service_category && form.whatsapp
+  const toggleCategory = (c: ServiceCategory) =>
+    setForm(f => ({
+      ...f,
+      service_categories: f.service_categories.includes(c)
+        ? f.service_categories.filter(x => x !== c)
+        : [...f.service_categories, c],
+    }))
+  const valid = form.name && form.headline && form.service_categories.length > 0 && form.whatsapp
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!valid) return
     setSubmitError(false)
     try {
-      await mutateAsync({ ...form, service_category: form.service_category as ServiceCategory })
+      await mutateAsync({ ...form, service_category: form.service_categories[0] })
       setSent(true)
     } catch {
       setSubmitError(true)
@@ -91,17 +100,24 @@ export function ServiceForm({ onClose }: Props) {
 
             <div>
               <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('field_category_label')}</label>
-              <select
-                value={form.service_category}
-                onChange={e => set('service_category', e.target.value)}
-                className="w-full border border-[#E8E4DF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal bg-white transition-colors"
-                required
-              >
-                <option value="">{t('select_placeholder')}</option>
-                {CATEGORIES.map(([k, v]) => (
-                  <option key={k} value={k}>{v}</option>
-                ))}
-              </select>
+              <div className="flex flex-wrap gap-2" role="group" aria-label={t('field_category_label')}>
+                {CATEGORIES.map(([k, v]) => {
+                  const on = form.service_categories.includes(k)
+                  return (
+                    <button
+                      key={k}
+                      type="button"
+                      aria-pressed={on}
+                      onClick={() => toggleCategory(k)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                        on ? 'bg-teal text-white border-teal' : 'bg-white text-fg-3-texto border-[#E8E4DF] hover:border-teal/40'
+                      }`}
+                    >
+                      {v}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
 
             <div>
@@ -126,6 +142,14 @@ export function ServiceForm({ onClose }: Props) {
                 required
               />
             </div>
+
+            <PhotoUploader
+              label="Fotos do serviço"
+              max={5}
+              value={form.photos}
+              onChange={photos => setForm(f => ({ ...f, photos }))}
+              loginHint="Quer mostrar fotos do seu trabalho? Entre na sua conta antes de cadastrar o serviço."
+            />
 
             <p className="text-xs text-fg-3-texto leading-relaxed">
               {t('privacy_text')}
