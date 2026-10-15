@@ -164,7 +164,7 @@ export function EventSubmitForm({ open, onClose }: Props) {
               <input type="url" value={form.source_url} onChange={e => set('source_url', e.target.value)} placeholder="https://..." className={INPUT_CLS} />
             </div>
             <PhotoUploader
-              label="Foto do evento"
+              label={t('translation:photo_uploader.event_label')}
               max={1}
               value={form.cover_url.includes('/business-photos/u/') ? [form.cover_url] : []}
               onChange={urls => set('cover_url', urls[0] ?? '')}

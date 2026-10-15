@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { ImagePlus, X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/hooks/useAuth'
 import { compressImage, validateImageFile } from '@/lib/image-upload'
 import { assertSession } from '@/lib/supabase-errors'
@@ -23,7 +24,8 @@ interface Props {
  * profissional, servico, transfer, evento. O envio fica desligado ate a pessoa
  * declarar que tem direito sobre a imagem, mesma regra do painel do negocio.
  */
-export function PhotoUploader({ value, onChange, max = 3, label = 'Fotos', loginHint }: Props) {
+export function PhotoUploader({ value, onChange, max = 3, label, loginHint }: Props) {
+  const { t } = useTranslation()
   const { user, supabase, loading } = useAuth()
   const [aceite, setAceite] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -36,7 +38,7 @@ export function PhotoUploader({ value, onChange, max = 3, label = 'Fotos', login
     setError(null)
     const room = max === 1 ? 1 : Math.max(0, max - value.length)
     const toSend = files.slice(0, room)
-    if (!toSend.length) { setError(`Limite de ${max} fotos.`); return }
+    if (!toSend.length) { setError(t('photo_uploader.limit', { max })); return }
     for (const f of toSend) {
       const invalid = validateImageFile(f)
       if (invalid) { setError(invalid); return }
@@ -57,7 +59,7 @@ export function PhotoUploader({ value, onChange, max = 3, label = 'Fotos', login
       }
       onChange(max === 1 ? urls.slice(0, 1) : [...value, ...urls])
     } catch {
-      setError('Não foi possível enviar a foto. Confira a conexão e tente de novo.')
+      setError(t('photo_uploader.upload_failed'))
     } finally {
       setUploading(false)
     }
@@ -68,7 +70,7 @@ export function PhotoUploader({ value, onChange, max = 3, label = 'Fotos', login
   return (
     <div>
       <p className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">
-        {label} <span className="text-xs font-normal text-fg-3-texto">(até {max})</span>
+        {label ?? t('photo_uploader.default_label')} <span className="text-xs font-normal text-fg-3-texto">{t('photo_uploader.max', { max })}</span>
       </p>
 
       {value.length > 0 && (
@@ -79,7 +81,7 @@ export function PhotoUploader({ value, onChange, max = 3, label = 'Fotos', login
               <button
                 type="button"
                 onClick={() => onChange(value.filter(u => u !== url))}
-                aria-label="Remover foto"
+                aria-label={t('photo_uploader.remove')}
                 className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-white border border-[#E8E4DF] shadow flex items-center justify-center"
               >
                 <X className="w-3.5 h-3.5" />
@@ -91,7 +93,7 @@ export function PhotoUploader({ value, onChange, max = 3, label = 'Fotos', login
 
       {!loading && !user ? (
         <p className="text-xs text-fg-3-texto leading-relaxed">
-          {loginHint ?? 'Entre na sua conta para enviar fotos.'}
+          {loginHint ?? t('photo_uploader.login_hint')}
         </p>
       ) : (
         <>
@@ -102,7 +104,7 @@ export function PhotoUploader({ value, onChange, max = 3, label = 'Fotos', login
               onChange={e => setAceite(e.target.checked)}
               className="mt-0.5"
             />
-            <span>Tenho direito de usar estas imagens e autorizo o Vive Gostoso a exibi-las.</span>
+            <span>{t('photo_uploader.consent')}</span>
           </label>
           <label
             className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold border transition-colors ${
@@ -112,7 +114,7 @@ export function PhotoUploader({ value, onChange, max = 3, label = 'Fotos', login
             }`}
           >
             <ImagePlus className="w-4 h-4" aria-hidden="true" />
-            {uploading ? 'Enviando...' : max === 1 && value.length ? 'Trocar foto' : 'Adicionar foto'}
+            {uploading ? t('photo_uploader.uploading') : max === 1 && value.length ? t('photo_uploader.replace') : t('photo_uploader.add')}
             <input
               type="file"
               accept="image/jpeg,image/png,image/webp,image/heic,image/heif"

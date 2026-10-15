@@ -351,7 +351,7 @@ function RegistrationModal({ onClose }: RegistrationModalProps) {
             </div>
 
             <PhotoUploader
-              label="Foto do veículo ou do serviço"
+              label={t('photo_uploader.vehicle_label')}
               max={1}
               value={form.photo_url ? [form.photo_url] : []}
               onChange={urls => setField('photo_url', urls[0] ?? '')}

@@ -101,7 +101,7 @@ export function ServiceForm({ onClose }: Props) {
             <div>
               <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{t('field_category_label')}</label>
               <div className="flex flex-wrap gap-2" role="group" aria-label={t('field_category_label')}>
-                {CATEGORIES.map(([k, v]) => {
+                {CATEGORIES.map(([k]) => {
                   const on = form.service_categories.includes(k)
                   return (
                     <button
@@ -113,7 +113,7 @@ export function ServiceForm({ onClose }: Props) {
                         on ? 'bg-teal text-white border-teal' : 'bg-white text-fg-3-texto border-[#E8E4DF] hover:border-teal/40'
                       }`}
                     >
-                      {v}
+                      {t(`translation:service_categories.${k}`)}
                     </button>
                   )
                 })}
@@ -144,11 +144,11 @@ export function ServiceForm({ onClose }: Props) {
             </div>
 
             <PhotoUploader
-              label="Fotos do serviço"
+              label={t('translation:photo_uploader.service_label')}
               max={5}
               value={form.photos}
               onChange={photos => setForm(f => ({ ...f, photos }))}
-              loginHint="Quer mostrar fotos do seu trabalho? Entre na sua conta antes de cadastrar o serviço."
+              loginHint={t('translation:photo_uploader.service_login_hint')}
             />
 
             <p className="text-xs text-fg-3-texto leading-relaxed">

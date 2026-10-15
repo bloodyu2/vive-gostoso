@@ -5,7 +5,6 @@ import { AdminGuard } from '@/components/auth/admin-guard'
 import { ErrorState } from '@/components/ui/error-state'
 import { AdminListSkeleton } from '@/components/ui/admin-list-skeleton'
 import { useAdminPendingServices, useModerateService } from '@/hooks/useServices'
-import { SERVICE_CATEGORY_LABELS } from '@/types/database'
 import type { ServiceListing } from '@/types/database'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { useTranslation } from 'react-i18next'
@@ -32,7 +31,7 @@ function ServiceRow({ svc }: { svc: ServiceListing }) {
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-[#1A1A1A]">{svc.name}</h3>
           <p className="text-xs text-fg-3-texto mt-0.5">
-            {(svc.service_categories?.length ? svc.service_categories : [svc.service_category]).map(c => SERVICE_CATEGORY_LABELS[c]).join(', ')} · {t('submitted_at', { date: formatDate(svc.created_at) })}
+            {(svc.service_categories?.length ? svc.service_categories : [svc.service_category]).map(c => t(`translation:service_categories.${c}`)).join(', ')} · {t('submitted_at', { date: formatDate(svc.created_at) })}
           </p>
         </div>
         <div className="flex gap-2 flex-shrink-0">

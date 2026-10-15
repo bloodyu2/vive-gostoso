@@ -1,7 +1,6 @@
 import { Phone } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { ServiceListing } from '@/types/database'
-import { SERVICE_CATEGORY_LABELS } from '@/types/database'
 import { MagicCard } from '@/components/magicui/magic-card'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 
@@ -57,7 +56,7 @@ export function ServiceCard({ service }: Props) {
       <div className="flex flex-wrap gap-1.5 mb-2.5">
         {(service.service_categories?.length ? service.service_categories : [service.service_category]).map(c => (
           <span key={c} className="text-[10px] font-semibold text-[#555] dark:text-[#C0BCB8] bg-[#F5F2EE] dark:bg-white/10 px-2 py-0.5 rounded-full">
-            {SERVICE_CATEGORY_LABELS[c]}
+            {t(`service_categories.${c}`)}
           </span>
         ))}
       </div>

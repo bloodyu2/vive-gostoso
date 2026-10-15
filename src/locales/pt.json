@@ -1722,5 +1722,32 @@
   },
   "institucional": {
     "nesta_pagina": "Nesta página"
+  },
+  "service_categories": {
+    "transporte": "Transporte",
+    "guia": "Guia / Turismo",
+    "domestico": "Serviços domésticos",
+    "construcao": "Construção / Reparos",
+    "gastronomia": "Gastronomia",
+    "midia": "Foto / Vídeo / Design",
+    "outro": "Outro"
+  },
+  "photo_uploader": {
+    "default_label": "Fotos",
+    "max": "(até {{max}})",
+    "service_label": "Fotos do serviço",
+    "service_login_hint": "Quer mostrar fotos do seu trabalho? Entre na sua conta antes de cadastrar o serviço.",
+    "event_label": "Foto do evento",
+    "vehicle_label": "Foto do veículo ou do serviço",
+    "own_label": "Sua foto",
+    "work_label": "Foto do trabalho",
+    "login_hint": "Entre na sua conta para enviar fotos.",
+    "consent": "Tenho direito de usar estas imagens e autorizo o Vive Gostoso a exibi-las.",
+    "uploading": "Enviando...",
+    "replace": "Trocar foto",
+    "add": "Adicionar foto",
+    "remove": "Remover foto",
+    "limit": "Limite de {{max}} fotos.",
+    "upload_failed": "Não foi possível enviar a foto. Confira a conexão e tente de novo."
   }
 }

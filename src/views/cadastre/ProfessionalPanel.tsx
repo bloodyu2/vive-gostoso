@@ -230,7 +230,7 @@ function ProfessionalPanelInner() {
         {tab === 'perfil' && (
           <div className="space-y-5">
             <PhotoUploader
-              label="Sua foto"
+              label={t('photo_uploader.own_label')}
               max={1}
               value={photoUrl ? [photoUrl] : []}
               onChange={urls => setPhotoUrl(urls[0] ?? '')}
@@ -376,7 +376,7 @@ function ProfessionalPanelInner() {
                   className="w-full border border-[#E8E4DF] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
                 />
                 <PhotoUploader
-                  label="Foto do trabalho"
+                  label={t('photo_uploader.work_label')}
                   max={1}
                   value={item.image_url ? [item.image_url] : []}
                   onChange={urls => updatePortfolioItem(item.id, 'image_url', urls[0] ?? '')}

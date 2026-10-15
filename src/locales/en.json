@@ -1722,5 +1722,32 @@
   },
   "institucional": {
     "nesta_pagina": "On this page"
+  },
+  "service_categories": {
+    "transporte": "Transport",
+    "guia": "Guide / Tourism",
+    "domestico": "Home services",
+    "construcao": "Construction / Repairs",
+    "gastronomia": "Food & catering",
+    "midia": "Photo / Video / Design",
+    "outro": "Other"
+  },
+  "photo_uploader": {
+    "default_label": "Photos",
+    "max": "(up to {{max}})",
+    "service_label": "Service photos",
+    "service_login_hint": "Want to show photos of your work? Sign in to your account before listing the service.",
+    "event_label": "Event photo",
+    "vehicle_label": "Photo of the vehicle or service",
+    "own_label": "Your photo",
+    "work_label": "Photo of the work",
+    "login_hint": "Sign in to your account to upload photos.",
+    "consent": "I have the right to use these images and I authorize Vive Gostoso to display them.",
+    "uploading": "Uploading...",
+    "replace": "Replace photo",
+    "add": "Add photo",
+    "remove": "Remove photo",
+    "limit": "Limit of {{max}} photos.",
+    "upload_failed": "We couldn't upload the photo. Check your connection and try again."
   }
 }
