@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { MapPin, X, Utensils, BedDouble, Compass, Navigation, Waves, ExternalLink } from 'lucide-react'
+import { MapPin, X, Utensils, BedDouble, Compass, Navigation, Waves, ExternalLink, LocateFixed, Loader2 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 // mapbox-gl is loaded dynamically on component mount to keep it out of the
 // initial bundle entry graph (prevents Vite from adding a modulepreload for it)
@@ -13,6 +13,8 @@ import { StatusAberturaSelo, useStatusAbertura } from '@/components/business/sta
 import type { Horarios } from '@/lib/status-abertura'
 import { CATEGORIAS_PONTO, linkComoChegar, type CategoriaPonto, type PontoMapa } from '@/data/pontos-mapa'
 import type { Idioma } from '@/data/praias-mares'
+import { CENTRO_DA_VILA, LONGE_DA_VILA_M, distanciaMetros, type Coord } from '@/lib/perto'
+import { PertoDeVoce } from './perto-de-voce'
 import type pt from '@/locales/pt.json'
 
 export type TextosMapa = typeof pt.mapa
@@ -73,6 +75,11 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
   const [filtro, setFiltro] = useState<CategoriaPonto | 'todos'>('todos')
   const marcadoresPontos = useRef<Array<{ categoria: CategoriaPonto; el: HTMLElement; marker: InstanceType<MapboxGLModule['Marker']> }>>([])
   const [mapReady, setMapReady] = useState(false)
+  // "Onde estou": a posicao so existe aqui, no navegador, e nunca e enviada.
+  const [minhaPosicao, setMinhaPosicao] = useState<(Coord & { precisao: number }) | null>(null)
+  const [localizacao, setLocalizacao] = useState<'ocioso' | 'buscando' | 'erro'>('ocioso')
+  const [erroLocalizacao, setErroLocalizacao] = useState<string | null>(null)
+  const marcadorMinhaPosicao = useRef<InstanceType<MapboxGLModule['Marker']> | null>(null)
   const lp = useLocalePath()
 
   const geo = businesses.filter(b => b.lat != null && b.lng != null)
@@ -224,6 +231,79 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
     })
   }, [filtro, mapReady])
 
+  function abrirNegocio(b: Business) {
+    if (b.lat == null || b.lng == null) return
+    setPontoAberto(null)
+    setPopup({ name: b.name, slug: b.slug, cover_url: b.cover_url, category: b.category, address: b.address, opening_hours: b.opening_hours })
+    map.current?.flyTo({ center: [b.lng, b.lat], zoom: 17, duration: 800 })
+  }
+
+  function abrirPonto(p: PontoMapa) {
+    setPopup(null)
+    setPontoAberto(p)
+    map.current?.flyTo({ center: [p.lon, p.lat], zoom: 14, duration: 800 })
+  }
+
+  function pedirLocalizacao() {
+    const t = textos?.perto
+    if (!t) return
+    if (typeof navigator === 'undefined' || !navigator.geolocation) {
+      setLocalizacao('erro')
+      setErroLocalizacao(t.erro_sem_suporte)
+      return
+    }
+    setLocalizacao('buscando')
+    setErroLocalizacao(null)
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const eu = { lat: pos.coords.latitude, lng: pos.coords.longitude, precisao: pos.coords.accuracy }
+        setMinhaPosicao(eu)
+        setLocalizacao('ocioso')
+        setPopup(null)
+        setPontoAberto(null)
+        const distVila = distanciaMetros(eu, CENTRO_DA_VILA)
+        if (distVila > LONGE_DA_VILA_M) {
+          // Longe de Gostoso: enquadra a pessoa e a vila em vez de dar zoom no vazio.
+          const b = new mapboxRef.current!.LngLatBounds([eu.lng, eu.lat], [eu.lng, eu.lat])
+          b.extend([CENTRO_DA_VILA.lng, CENTRO_DA_VILA.lat])
+          map.current?.fitBounds(b, { padding: 64, maxZoom: 11, duration: 900 })
+        } else {
+          map.current?.flyTo({ center: [eu.lng, eu.lat], zoom: 15.5, duration: 900 })
+        }
+        sidebarRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+      },
+      (err) => {
+        setLocalizacao('erro')
+        setErroLocalizacao(err.code === 1 ? t.erro_negado : t.erro_indisponivel)
+      },
+      { enableHighAccuracy: true, timeout: 12000, maximumAge: 30000 },
+    )
+  }
+
+  function sairDaMinhaPosicao() {
+    setMinhaPosicao(null)
+    setLocalizacao('ocioso')
+    setErroLocalizacao(null)
+  }
+
+  // Ponto azul da pessoa: cor fora da paleta das categorias, para nao confundir.
+  useEffect(() => {
+    marcadorMinhaPosicao.current?.remove()
+    marcadorMinhaPosicao.current = null
+    if (!minhaPosicao || !map.current || !mapboxRef.current || !mapReady) return
+    const el = document.createElement('div')
+    el.setAttribute('role', 'img')
+    el.setAttribute('aria-label', textos?.perto.aqui ?? '')
+    el.className = 'minha-posicao'
+    marcadorMinhaPosicao.current = new mapboxRef.current.Marker({ element: el, anchor: 'center' })
+      .setLngLat([minhaPosicao.lng, minhaPosicao.lat])
+      .addTo(map.current)
+    return () => {
+      marcadorMinhaPosicao.current?.remove()
+      marcadorMinhaPosicao.current = null
+    }
+  }, [minhaPosicao, mapReady, textos])
+
   const VERB_LABEL: Record<string, string> = { come: 'Restaurantes', fique: 'Hospedagem', passeie: 'Passeios' }
   const VERB_TO: Record<string, string>    = { come: '/come', fique: '/fique', passeie: '/passeie' }
   const SIDEBAR_VERBS = ['come', 'fique', 'passeie']
@@ -251,6 +331,28 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
       {/* Mapa */}
       <div className="h-[42vh] flex-shrink-0 md:flex-1 md:h-full relative min-h-[240px]">
         <div ref={mapContainer} className="w-full h-full" />
+
+        {/* Onde estou */}
+        {textos && (
+          <div className="absolute bottom-9 left-3 z-10 max-w-[calc(100%-6.5rem)] flex flex-col items-start gap-2">
+            {erroLocalizacao && (
+              <p role="alert" className="rounded-xl bg-white/95 border border-[#E8E4DF] shadow-sm px-3 py-2 text-xs text-[#1A1A1A] leading-snug">
+                {erroLocalizacao}
+              </p>
+            )}
+            <button
+              type="button"
+              onClick={pedirLocalizacao}
+              disabled={localizacao === 'buscando'}
+              className="inline-flex items-center gap-2 min-h-11 px-4 rounded-full bg-teal text-white text-sm font-semibold shadow-lg hover:bg-teal-dark disabled:opacity-80 transition-colors motion-reduce:transition-none"
+            >
+              {localizacao === 'buscando'
+                ? <Loader2 aria-hidden="true" className="w-4 h-4 animate-spin motion-reduce:animate-none" />
+                : <LocateFixed aria-hidden="true" className="w-4 h-4" />}
+              {localizacao === 'buscando' ? textos.perto.buscando : minhaPosicao ? textos.perto.botao_de_novo : textos.perto.botao}
+            </button>
+          </div>
+        )}
 
         {/* Stats chip */}
         <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur border border-[#E8E4DF] rounded-xl px-3 py-2 text-xs text-[#3D3D3D] shadow-sm pointer-events-none">
@@ -369,6 +471,19 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
 
       {/* Sidebar */}
       <div ref={sidebarRef} className="flex-1 min-h-0 w-full md:flex-none md:w-80 md:h-full bg-white border-t md:border-t-0 md:border-l border-[#E8E4DF] overflow-y-auto">
+        {minhaPosicao && textos && (
+          <PertoDeVoce
+            origem={minhaPosicao}
+            businesses={geo}
+            pontos={pontos}
+            textos={textos}
+            lang={lang}
+            avisos={avisosDaPosicao(minhaPosicao, textos, lang)}
+            onAbrirNegocio={abrirNegocio}
+            onAbrirPonto={abrirPonto}
+            onSair={sairDaMinhaPosicao}
+          />
+        )}
         {/* Sticky header: count + category jump pills */}
         <div ref={sidebarHeaderRef} className="sticky top-0 bg-white z-10 border-b border-[#E8E4DF]">
           <div className="px-5 pt-4 pb-2">
@@ -470,4 +585,18 @@ export function ExploreMap({ businesses, pontos = [], textos, lang = 'pt' }: Exp
       </div>
     </div>
   )
+}
+
+/** Frases de contexto da posicao: longe de Gostoso e GPS pouco preciso. */
+function avisosDaPosicao(eu: Coord & { precisao: number }, textos: TextosMapa, lang: Idioma): string[] {
+  const avisos: string[] = []
+  const distVila = distanciaMetros(eu, CENTRO_DA_VILA)
+  if (distVila > LONGE_DA_VILA_M) {
+    const km = new Intl.NumberFormat(lang, { maximumFractionDigits: 0 }).format(distVila / 1000)
+    avisos.push(textos.perto.longe.replace('{km}', km))
+  }
+  if (eu.precisao > 200) {
+    avisos.push(textos.perto.precisao.replace('{m}', String(Math.round(eu.precisao / 50) * 50)))
+  }
+  return avisos
 }

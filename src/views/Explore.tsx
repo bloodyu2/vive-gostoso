@@ -38,7 +38,7 @@ type ExploreProps = {
 export default function Explore({ initialBusinesses = [], pontos, textos, lang }: ExploreProps) {
   const { data: businesses = initialBusinesses, isError, refetch } = useBusinesses(undefined, { initialData: initialBusinesses })
   return (
-    <div role="region" aria-label={textos?.mapa_aria} className="h-[75dvh] min-h-[480px] border-y border-border-1">
+    <div role="region" aria-label={textos?.mapa_aria} className="h-[88dvh] md:h-[75dvh] min-h-[480px] border-y border-border-1">
       {isError ? (
         <div className="w-full h-full flex items-center justify-center">
           <ErrorState onRetry={() => refetch()} />
