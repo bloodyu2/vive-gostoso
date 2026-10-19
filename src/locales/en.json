@@ -1709,7 +1709,32 @@
     "lista_titulo": "Points on the map",
     "fonte": "Location source",
     "mapa_aria": "Map with the points of the region",
-    "fechar": "Close"
+    "fechar": "Close",
+    "perto": {
+      "botao": "Where am I",
+      "botao_de_novo": "Center on me",
+      "buscando": "Locating…",
+      "aqui": "You are here",
+      "titulo": "Near you",
+      "sub": "Nearest first. Your position stays on your device.",
+      "filtro": "Filter what is nearby",
+      "filtros": {
+        "todos": "All",
+        "come": "Eat",
+        "fique": "Stay",
+        "passeie": "Do",
+        "pontos": "Beaches and spots"
+      },
+      "ir_a_pe": "Walk there",
+      "ver_perfil": "View profile",
+      "vazio": "Nothing in this filter near you.",
+      "longe": "You are {km} km from São Miguel do Gostoso village. The list shows what is closest to you.",
+      "precisao": "Your device reports an accuracy of about {m} m. Outdoors it is better.",
+      "sair": "Stop using my position",
+      "erro_negado": "Location permission is off. Allow it in your browser and tap again.",
+      "erro_indisponivel": "I could not get your position right now. Try again outdoors.",
+      "erro_sem_suporte": "This browser does not share location."
+    }
   },
   "blog_mares": {
     "titulo": "Tides for the beaches in this post",

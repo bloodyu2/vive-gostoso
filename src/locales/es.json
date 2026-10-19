@@ -1709,7 +1709,32 @@
     "lista_titulo": "Puntos en el mapa",
     "fonte": "Fuente de la ubicación",
     "mapa_aria": "Mapa con los puntos de la región",
-    "fechar": "Cerrar"
+    "fechar": "Cerrar",
+    "perto": {
+      "botao": "Dónde estoy",
+      "botao_de_novo": "Centrar en mí",
+      "buscando": "Localizando…",
+      "aqui": "Estás aquí",
+      "titulo": "Cerca de ti",
+      "sub": "De lo más cercano a lo más lejano. Tu posición se queda en tu dispositivo.",
+      "filtro": "Filtrar lo que está cerca",
+      "filtros": {
+        "todos": "Todo",
+        "come": "Comer",
+        "fique": "Alojarse",
+        "passeie": "Pasear",
+        "pontos": "Playas y puntos"
+      },
+      "ir_a_pe": "Ir a pie",
+      "ver_perfil": "Ver perfil",
+      "vazio": "No hay nada en este filtro cerca de ti.",
+      "longe": "Estás a {km} km de la villa de São Miguel do Gostoso. La lista muestra lo que está más cerca de ti.",
+      "precisao": "La precisión del dispositivo es de unos {m} m. Al aire libre mejora.",
+      "sair": "Dejar de usar mi posición",
+      "erro_negado": "Sin permiso para ver tu ubicación. Actívalo en el navegador y toca de nuevo.",
+      "erro_indisponivel": "No pude obtener tu posición ahora. Inténtalo de nuevo al aire libre.",
+      "erro_sem_suporte": "Este navegador no comparte la ubicación."
+    }
   },
   "blog_mares": {
     "titulo": "Mareas de las playas de este texto",

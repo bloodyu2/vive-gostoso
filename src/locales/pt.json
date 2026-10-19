@@ -1709,7 +1709,32 @@
     "lista_titulo": "Pontos no mapa",
     "fonte": "Fonte da localização",
     "mapa_aria": "Mapa com os pontos da região",
-    "fechar": "Fechar"
+    "fechar": "Fechar",
+    "perto": {
+      "botao": "Onde estou",
+      "botao_de_novo": "Centralizar em mim",
+      "buscando": "Localizando…",
+      "aqui": "Você está aqui",
+      "titulo": "Perto de você",
+      "sub": "Do mais perto para o mais longe. Sua posição fica só no seu aparelho.",
+      "filtro": "Filtrar o que está perto",
+      "filtros": {
+        "todos": "Tudo",
+        "come": "Comer",
+        "fique": "Ficar",
+        "passeie": "Passear",
+        "pontos": "Praias e pontos"
+      },
+      "ir_a_pe": "Ir a pé",
+      "ver_perfil": "Ver perfil",
+      "vazio": "Nada nesse filtro perto de você.",
+      "longe": "Você está a {km} km da vila de São Miguel do Gostoso. A lista mostra o que está mais perto de você.",
+      "precisao": "A precisão do aparelho é de cerca de {m} m. Ao ar livre fica melhor.",
+      "sair": "Parar de usar minha posição",
+      "erro_negado": "Sem permissão para ver sua localização. Libere no navegador e toque de novo.",
+      "erro_indisponivel": "Não consegui pegar sua posição agora. Tente de novo ao ar livre.",
+      "erro_sem_suporte": "Este navegador não informa a localização."
+    }
   },
   "blog_mares": {
     "titulo": "Maré das praias deste texto",
