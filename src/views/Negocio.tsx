@@ -14,6 +14,7 @@ import { ShimmerButton } from '@/components/magicui/shimmer-button'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { pushDataLayer } from '@/lib/analytics'
 import { ManagedBadge } from '@/components/business/managed-badge'
+import { SelosDoNegocio } from '@/components/business/selo'
 import { ClaimCta } from '@/components/business/claim-cta'
 import { Lightbox } from '@/components/ui/lightbox'
 import { Lens } from '@/components/magicui/lens'
@@ -184,7 +185,10 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
             <ManagedBadge profileId={b.profile_id} isVerified={b.is_verified} />
           </div>
 
-          <h1 className="font-display font-bold text-3xl sm:text-4xl tracking-tight mb-1 break-words">{b.name}</h1>
+          <h1 className="font-display font-bold text-3xl sm:text-4xl tracking-tight mb-1 break-words">
+            {b.name}
+            <SelosDoNegocio negocio={b} size="lg" className="ml-2 align-middle" />
+          </h1>
           {avgRating !== null && (
             <div className="flex items-center gap-2 mb-4">
               <StarRating value={Math.round(avgRating)} readonly size="md" />

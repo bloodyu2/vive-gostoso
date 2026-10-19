@@ -1749,5 +1749,9 @@
     "remove": "Remover foto",
     "limit": "Limite de {{max}} fotos.",
     "upload_failed": "Não foi possível enviar a foto. Confira a conexão e tente de novo."
+  },
+  "selo": {
+    "prata": "Verificado pelo Vive Gostoso",
+    "ouro": "Assinante do Vive Gostoso"
   }
 }

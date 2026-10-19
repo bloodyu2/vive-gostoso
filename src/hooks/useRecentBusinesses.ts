@@ -20,8 +20,7 @@ export function useRecentBusinesses(limit = 4) {
         .select('id, name, slug, cover_url, is_verified, category:gostoso_categories(name)')
         .eq('active', true)
         .eq('is_published', true)
-        .not('profile_id', 'is', null)
-        .order('updated_at', { ascending: false })
+        .order('created_at', { ascending: false })
         .limit(limit)
       if (!data) return []
       return data.map(b => ({

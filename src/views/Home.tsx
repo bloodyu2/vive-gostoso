@@ -6,6 +6,7 @@ import { BadgeCheck, ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { BusinessCard } from '@/components/business/business-card'
+import { Selo } from '@/components/business/selo'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { Hoje } from '@/components/home/hoje'
 import { PostCard } from '@/components/blog/PostCard'
@@ -166,7 +167,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
                     <p className="font-display font-bold text-xl md:text-2xl text-fg-1 leading-tight">{destaque.name}</p>
                     <div className="mt-1.5 flex flex-wrap items-center gap-2">
                       {destaque.category && <span className="text-sm text-fg-3-texto">{destaque.category.name}</span>}
-                      {destaque.is_verified && <span className="inline-block text-[10px] font-bold tracking-wide uppercase text-teal-dark bg-teal-light px-2 py-0.5 rounded-full">{t('filters.verificado')}</span>}
+                      {destaque.is_verified && <Selo tipo="prata" size="md" />}
                     </div>
                   </div>
                 </Link>
@@ -186,7 +187,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
                         <div className="min-w-0">
                           <p className="text-sm font-semibold text-fg-1 truncate leading-snug">{b.name}</p>
                           {b.category && <p className="text-xs text-fg-3-texto mt-0.5 truncate">{b.category.name}</p>}
-                          {b.is_verified && <span className="inline-block mt-1 text-[10px] font-bold tracking-wide uppercase text-teal-dark bg-teal-light px-1.5 py-0.5 rounded-full">{t('filters.verificado')}</span>}
+                          {b.is_verified && <Selo tipo="prata" size="sm" className="mt-1" />}
                         </div>
                       </Link>
                     </BlurFade>

@@ -1749,5 +1749,9 @@
     "remove": "Remove photo",
     "limit": "Limit of {{max}} photos.",
     "upload_failed": "We couldn't upload the photo. Check your connection and try again."
+  },
+  "selo": {
+    "prata": "Verified by Vive Gostoso",
+    "ouro": "Vive Gostoso subscriber"
   }
 }
