@@ -22,7 +22,7 @@ update gostoso_businesses
 
 insert into gostoso_businesses (
   name, slug, description, category_id, profile_id, address, lat, lng,
-  phone, whatsapp, instagram, cover_url, photos, opening_hours,
+  phone, whatsapp, instagram, cover_url, logo_url, photos, opening_hours,
   is_verified, is_featured, plan, active, display_order, is_published,
   business_type, horario_conferido_em, horario_fonte
 )
@@ -39,8 +39,19 @@ select
   '5584981417096',
   'biscoitos_damy',
   '/negocios/biscoitos-damy/ambiente.jpg',
-  array['/negocios/biscoitos-damy/tapioca.jpg', '/negocios/biscoitos-damy/noite.jpg'],
+  '/negocios/biscoitos-damy/logo.png',
+  array['/negocios/biscoitos-damy/casal-e-letreiro.jpg', '/negocios/biscoitos-damy/tapioca.jpg', '/negocios/biscoitos-damy/placa.jpg', '/negocios/biscoitos-damy/por-do-sol.jpg'],
   '{"dom":{"open":"11:00","close":"19:00","closed":false},"seg":{"open":"11:00","close":"19:00","closed":false},"ter":{"open":"11:00","close":"19:00","closed":false},"qua":{"open":"11:00","close":"19:00","closed":false},"qui":{"open":"11:00","close":"19:00","closed":false},"sex":{"open":"11:00","close":"19:00","closed":false},"sab":{"open":"11:00","close":"19:00","closed":false}}'::jsonb,
   true, false, 'free', true, 100, true,
   'local', date '2026-10-18', 'google_maps_18_10'
 where not exists (select 1 from gostoso_businesses where slug = 'cafe-com-biscoitos-damy');
+
+-- Segunda rodada (18/10/2026): coluna de logo, aplicada ANTES do deploy
+-- (migracao vg_logo_do_negocio). Reversao: alter table gostoso_businesses drop column logo_url;
+--   alter table gostoso_businesses add column if not exists logo_url text;
+--   grant select (logo_url) on gostoso_businesses to anon, authenticated;
+--   grant select, insert, update (logo_url) on gostoso_businesses to service_role;
+-- Depois do deploy, a Damy ja cadastrada recebe logo e as fotos novas:
+--   update gostoso_businesses set logo_url = '/negocios/biscoitos-damy/logo.png',
+--     photos = array['/negocios/biscoitos-damy/casal-e-letreiro.jpg','/negocios/biscoitos-damy/tapioca.jpg','/negocios/biscoitos-damy/placa.jpg','/negocios/biscoitos-damy/por-do-sol.jpg']
+--   where slug = 'cafe-com-biscoitos-damy';

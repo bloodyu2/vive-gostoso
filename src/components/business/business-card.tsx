@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Badge } from '@/components/ui/badge'
 import { ManagedBadge } from '@/components/business/managed-badge'
 import { SelosDoNegocio } from '@/components/business/selo'
+import { LogoDoNegocio } from '@/components/business/logo-do-negocio'
 import { BusinessCover } from '@/components/business/business-cover'
 import { usaCapaTipografica } from '@/lib/capa-negocio'
 import { temLicenca } from '@/lib/licenca-imagem'
@@ -231,6 +232,7 @@ export function BusinessCard({ business: b, view = 'grid', acimaDaDobra = false 
         {temLicenca(b.imagens_licenciadas, b.cover_url) && (
           <FotoPropriaBadge className="absolute bottom-3 left-3" />
         )}
+        <LogoDoNegocio src={b.logo_url} nome={b.name} className="absolute bottom-3 right-3 w-11 h-11" />
       </Link>
 
       {/* Body */}
