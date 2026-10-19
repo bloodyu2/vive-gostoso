@@ -27,6 +27,8 @@ export interface Business {
   website: string | null
   instagram: string | null
   cover_url: string | null
+  /** Logo redonda do negocio (so alguns tem). */
+  logo_url?: string | null
   photos: string[]
   /** Imagens cobertas por aceite da clausula de licenca. Coluna derivada,
    *  mantida por gatilho a partir de gostoso_aceites_licenca_imagem. So estas

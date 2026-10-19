@@ -15,6 +15,7 @@ import { buildWhatsAppLink } from '@/lib/whatsapp'
 import { pushDataLayer } from '@/lib/analytics'
 import { ManagedBadge } from '@/components/business/managed-badge'
 import { SelosDoNegocio } from '@/components/business/selo'
+import { LogoDoNegocio } from '@/components/business/logo-do-negocio'
 import { ClaimCta } from '@/components/business/claim-cta'
 import { Lightbox } from '@/components/ui/lightbox'
 import { Lens } from '@/components/magicui/lens'
@@ -186,6 +187,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
           </div>
 
           <h1 className="font-display font-bold text-3xl sm:text-4xl tracking-tight mb-1 break-words">
+            <LogoDoNegocio src={b.logo_url} nome={b.name} className="inline-block w-11 h-11 mr-3 align-middle" />
             {b.name}
             <SelosDoNegocio negocio={b} size="lg" className="ml-2 align-middle" />
           </h1>
