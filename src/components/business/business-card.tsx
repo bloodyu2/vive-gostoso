@@ -3,6 +3,7 @@ import { Phone, MapPin, Navigation, ExternalLink, Star, Wifi, Car, UserCheck, Ca
 import { useTranslation } from 'react-i18next'
 import { Badge } from '@/components/ui/badge'
 import { ManagedBadge } from '@/components/business/managed-badge'
+import { SelosDoNegocio } from '@/components/business/selo'
 import { BusinessCover } from '@/components/business/business-cover'
 import { usaCapaTipografica } from '@/lib/capa-negocio'
 import { temLicenca } from '@/lib/licenca-imagem'
@@ -165,8 +166,9 @@ export function BusinessCard({ business: b, view = 'grid', acimaDaDobra = false 
               <StatusAberturaSelo status={status} temHorarios={temHorarios} />
             </div>
             <Link href={lp(`/negocio/${b.slug}`)}>
-              <h3 className="font-display font-semibold text-lg tracking-tight hover:text-teal transition-colors">{b.name}</h3>
+              <h3 className="font-display font-semibold text-lg tracking-tight hover:text-teal transition-colors inline">{b.name}</h3>
             </Link>
+            <SelosDoNegocio negocio={b} size="sm" className="ml-1.5 align-middle" />
             <div className="mt-1.5 flex flex-wrap gap-1.5 items-center">
               {b.price_range && <PriceChip priceRange={b.price_range} prominent={isFique} />}
               <RatingChip businessId={b.id} />
@@ -249,8 +251,9 @@ export function BusinessCard({ business: b, view = 'grid', acimaDaDobra = false 
         </div>
 
         <Link href={lp(`/negocio/${b.slug}`)}>
-          <h3 className="font-display font-semibold text-xl tracking-tight hover:text-teal transition-colors">{b.name}</h3>
+          <h3 className="font-display font-semibold text-xl tracking-tight hover:text-teal transition-colors inline">{b.name}</h3>
         </Link>
+        <SelosDoNegocio negocio={b} size="md" className="ml-1.5 align-middle" />
         <div className="mt-1.5 flex flex-wrap gap-1.5 items-center">
           {b.price_range && <PriceChip priceRange={b.price_range} prominent={isFique} />}
           <RatingChip businessId={b.id} />
