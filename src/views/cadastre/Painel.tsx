@@ -16,6 +16,7 @@ import { useMyProfessional } from '@/hooks/useProfessionals'
 import { startCheckout } from '@/hooks/useCheckout'
 import { useParametros } from '@/hooks/useParametros'
 import { CHAVES, parametro, precosDoPlano } from '@/lib/parametros'
+import { pagamentosAtivos } from '@/lib/pagamentos'
 
 export default function Painel() {
   return <AuthGuard><PainelInner /></AuthGuard>
@@ -311,7 +312,7 @@ function PainelInner() {
           )}
         </div>
 
-        {businesses.length > 0 && (
+        {pagamentosAtivos() && businesses.length > 0 && (
           <section>
             <div className="flex items-center gap-2 mb-1">
               <Sparkles className="w-4 h-4 text-ocre" />

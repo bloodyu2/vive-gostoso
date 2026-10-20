@@ -13,6 +13,7 @@ import { useAuth } from '@/hooks/useAuth'
 import dynamic from 'next/dynamic'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import { pagamentosAtivos } from '@/lib/pagamentos'
 
 /* KAN-463: a busca so aparece depois do clique e o sino so para quem esta logado.
    Nenhum dos dois sai no HTML do servidor, entao carregam em pedaco separado, fora
@@ -89,7 +90,9 @@ export function Header() {
     { href: lp('/come'),    label: t('nav.come'),    color: 'text-coral',      bare: '/come' },
     { href: lp('/fique'),   label: t('nav.fique'),   color: 'text-teal',       bare: '/fique' },
     { href: lp('/passeie'), label: t('nav.passeie'), color: 'text-[#3D8B5A]', bare: '/passeie' },
-    { href: lp('/apoie'),   label: t('nav.apoie'),   color: 'text-ocre',       bare: '/apoie' },
+    ...(pagamentosAtivos()
+      ? [{ href: lp('/apoie'), label: t('nav.apoie'), color: 'text-ocre', bare: '/apoie' }]
+      : []),
     { href: lp('/blog'),    label: t('nav.blog'),    color: 'text-[#1A1A1A]', bare: '/blog' },
   ]
 

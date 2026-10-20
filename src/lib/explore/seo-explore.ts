@@ -4,7 +4,7 @@ import es from '@/locales/es.json'
 import type { Idioma } from '@/data/praias-mares'
 import { PONTOS_MAPA, type PontoMapa } from '@/data/pontos-mapa'
 import { localizedUrl } from '@/lib/seo'
-import { ITENS_VITRINE, textosVitrine } from './vitrine'
+import { itensVitrinePublicos, textosVitrine } from './vitrine'
 import { urlMares } from '@/lib/mares/seo-mares'
 
 const DICIONARIOS = { pt, en, es } as const
@@ -39,7 +39,7 @@ export function jsonLdVitrine(lang: Idioma): Record<string, unknown> {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: t.titulo,
-    itemListElement: ITENS_VITRINE.map((i, n) => ({
+    itemListElement: itensVitrinePublicos().map((i, n) => ({
       '@type': 'ListItem',
       position: n + 1,
       name: t.itens[i.id].titulo,

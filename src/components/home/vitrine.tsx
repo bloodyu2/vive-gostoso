@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import type { Idioma } from '@/data/praias-mares'
 import type { DiaDeMare } from '@/lib/mares/semana'
-import { ITENS_VITRINE, caminhoNoIdioma, textosVitrine, type IdVitrine } from '@/lib/explore/vitrine'
+import { itensVitrinePublicos, caminhoNoIdioma, textosVitrine, type IdVitrine } from '@/lib/explore/vitrine'
 import { contagensDaVitrine } from '@/lib/explore/contagens'
 import { jsonLdVitrine } from '@/lib/explore/seo-explore'
 import { safeJsonLd } from '@/lib/json-ld'
@@ -44,7 +44,8 @@ export async function Vitrine({ lang, mareHoje }: { lang: Idioma; mareHoje: DiaD
     postPublicado(slugNoIdioma(SLUG_GUIA_MARES, lang)),
   ])
   const t = textosVitrine(lang, contagens)
-  const [mares, ...resto] = ITENS_VITRINE
+  const itens = itensVitrinePublicos()
+  const [mares, ...resto] = itens
 
   return (
     <section aria-labelledby="vitrine-titulo" className="max-w-6xl mx-auto py-10 md:py-16">
@@ -150,7 +151,7 @@ export async function Vitrine({ lang, mareHoje }: { lang: Idioma; mareHoje: DiaD
 
       <VitrineControles
         listaId={LISTA_ID}
-        total={ITENS_VITRINE.length}
+        total={itens.length}
         anterior={t.anterior}
         proximo={t.proximo}
         pagina={t.pagina}

@@ -25,6 +25,7 @@ import { useBusinessRatings } from '@/hooks/useReviews'
 import { StarRating } from '@/components/reviews/star-rating'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import { pagamentosAtivos } from '@/lib/pagamentos'
 import type { Business } from '@/types/database'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { BusinessCover } from '@/components/business/business-cover'
@@ -417,11 +418,16 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
               </div>
             )}
 
-            {/* Fundo */}
+            {/* Fundo — link /apoie só com pagamentos ativos (KAN-356) */}
             {b.plan === 'associado' && (
               <div className="p-5 bg-teal-light text-sm text-teal leading-relaxed">
-                <strong>{t('negocio.negocio_associado')}</strong> {t('negocio.negocio_associado_desc')}{' '}
-                <Link href={lp('/apoie')} className="underline">{t('negocio.saiba_mais')}</Link>
+                <strong>{t('negocio.negocio_associado')}</strong> {t('negocio.negocio_associado_desc')}
+                {pagamentosAtivos() && (
+                  <>
+                    {' '}
+                    <Link href={lp('/apoie')} className="underline">{t('negocio.saiba_mais')}</Link>
+                  </>
+                )}
               </div>
             )}
           </MagicCard>

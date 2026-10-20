@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { pagamentosAtivos } from '@/lib/pagamentos'
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL as string
 
@@ -13,11 +14,15 @@ export const STRIPE_PRICES = {
   },
 } as const
 
+const PAGAMENTOS_PAUSADOS = 'Pagamentos temporariamente indisponíveis.'
+
 export async function startCheckout(
   businessId: string,
   plan: 'associado' | 'destaque',
   billing: 'monthly' | 'annual' = 'monthly',
 ) {
+  if (!pagamentosAtivos()) throw new Error(PAGAMENTOS_PAUSADOS)
+
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) throw new Error('Not authenticated')
 
@@ -48,6 +53,8 @@ export async function startCheckout(
  * o caminho já com o prefixo de idioma correto é passado pronto.
  */
 export async function startDonation(amountCents: number, apoiePath = '/apoie') {
+  if (!pagamentosAtivos()) throw new Error(PAGAMENTOS_PAUSADOS)
+
   const resp = await fetch(`${SUPABASE_URL}/functions/v1/create-donation-session`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

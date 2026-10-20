@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { useParametros } from '@/hooks/useParametros'
 import { CHAVES, parametro, precoEmReais, type Parametros } from '@/lib/parametros'
+import { pagamentosAtivos } from '@/lib/pagamentos'
 import { BentoCard, BentoGrid } from '@/components/magicui/bento-grid'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { BorderBeam } from '@/components/magicui/border-beam'
@@ -75,7 +76,9 @@ export default function Sobre({ initialParametros }: SobreProps) {
     { v: t('nav.explore'),   href: lp('/explore'),   desc: t('sobre.verbos_explore_desc') },
     { v: t('nav.participe'), href: lp('/participe'), desc: t('sobre.verbos_participe_desc') },
     { v: t('nav.conheca'),   href: lp('/conheca'),   desc: t('sobre.verbos_conheca_desc') },
-    { v: t('nav.apoie'),     href: lp('/apoie'),     desc: t('sobre.verbos_apoie_desc') },
+    ...(pagamentosAtivos()
+      ? [{ v: t('nav.apoie'), href: lp('/apoie'), desc: t('sobre.verbos_apoie_desc') }]
+      : []),
     { v: t('nav.contrate'),  href: lp('/contrate'),  desc: t('sobre.verbos_contrate_desc') },
   ]
 
@@ -187,11 +190,11 @@ export default function Sobre({ initialParametros }: SobreProps) {
             </ul>
           </section>
 
-          {/* Planos: o feixe so no que tem selo de destaque */}
+          {/* Planos: o feixe so no que tem selo de destaque; pagos só com flag */}
           <section id="planos" className="scroll-mt-24">
             <h2 className={`${H2} mb-3`}>{t('sobre.planos_h2')}</h2>
             <p className="text-lg text-fg-3-texto max-w-2xl mb-8">{t('sobre.planos_desc')}</p>
-            <div className="grid md:grid-cols-3 gap-4 md:gap-5 items-stretch">
+            <div className={`grid gap-4 md:gap-5 items-stretch ${pagamentosAtivos() ? 'md:grid-cols-3' : 'md:grid-cols-1 max-w-md'}`}>
               {/* Gratuito */}
               <BlurFade className="h-full">
                 <MagicCard className={`${CARTAO} h-full p-6 flex flex-col`}>
@@ -208,54 +211,60 @@ export default function Sobre({ initialParametros }: SobreProps) {
                 </MagicCard>
               </BlurFade>
 
-              {/* Associado */}
-              <BlurFade delay={70} className="h-full">
-                <MagicCard className={`${CARTAO} h-full p-6 flex flex-col`}>
-                  <div className="font-display font-bold text-4xl text-teal-dark dark:text-teal mb-1 tabular-nums">
-                    {preco(CHAVES.planoAssociado)}<span className="text-sm font-normal text-fg-3-texto ml-1">/mês</span>
-                  </div>
-                  <h3 className="font-semibold text-fg-1 mb-5">{t('sobre.planos_assoc_label')}</h3>
-                  <ul className="space-y-2.5 text-sm text-fg-3-texto flex-1">
-                    <li className="flex items-start gap-2"><span className="text-teal-dark dark:text-teal" aria-hidden="true">✓</span> {t('sobre.planos_assoc_item_0')}</li>
-                    <li className="flex items-start gap-2"><span className="text-teal-dark dark:text-teal" aria-hidden="true">✓</span> {t('sobre.planos_assoc_item_1')}</li>
-                    <li className="flex items-start gap-2"><span className="text-teal-dark dark:text-teal" aria-hidden="true">✓</span> {t('sobre.planos_assoc_item_2')}</li>
-                    <li className="flex items-start gap-2"><span className="text-teal-dark dark:text-teal" aria-hidden="true">✓</span>
-                      <span><strong>{t('sobre.planos_assoc_item_3_label')}</strong> {t('sobre.planos_assoc_item_3_text')}</span>
-                    </li>
-                    <li className="flex items-start gap-2"><span className="text-teal-dark dark:text-teal" aria-hidden="true">✓</span> {t('sobre.planos_assoc_item_4', { pct: rateio })}</li>
-                  </ul>
-                  <Link href={lp('/cadastre')} className="mt-6 flex items-center justify-center min-h-11 bg-teal-dark text-white font-semibold text-sm px-4 rounded-xl hover:bg-teal-dark/90 transition-colors">
-                    {t('sobre.planos_assoc_btn')}
-                  </Link>
-                </MagicCard>
-              </BlurFade>
+              {pagamentosAtivos() && (
+                <>
+                  {/* Associado */}
+                  <BlurFade delay={70} className="h-full">
+                    <MagicCard className={`${CARTAO} h-full p-6 flex flex-col`}>
+                      <div className="font-display font-bold text-4xl text-teal-dark dark:text-teal mb-1 tabular-nums">
+                        {preco(CHAVES.planoAssociado)}<span className="text-sm font-normal text-fg-3-texto ml-1">/mês</span>
+                      </div>
+                      <h3 className="font-semibold text-fg-1 mb-5">{t('sobre.planos_assoc_label')}</h3>
+                      <ul className="space-y-2.5 text-sm text-fg-3-texto flex-1">
+                        <li className="flex items-start gap-2"><span className="text-teal-dark dark:text-teal" aria-hidden="true">✓</span> {t('sobre.planos_assoc_item_0')}</li>
+                        <li className="flex items-start gap-2"><span className="text-teal-dark dark:text-teal" aria-hidden="true">✓</span> {t('sobre.planos_assoc_item_1')}</li>
+                        <li className="flex items-start gap-2"><span className="text-teal-dark dark:text-teal" aria-hidden="true">✓</span> {t('sobre.planos_assoc_item_2')}</li>
+                        <li className="flex items-start gap-2"><span className="text-teal-dark dark:text-teal" aria-hidden="true">✓</span>
+                          <span><strong>{t('sobre.planos_assoc_item_3_label')}</strong> {t('sobre.planos_assoc_item_3_text')}</span>
+                        </li>
+                        <li className="flex items-start gap-2"><span className="text-teal-dark dark:text-teal" aria-hidden="true">✓</span> {t('sobre.planos_assoc_item_4', { pct: rateio })}</li>
+                      </ul>
+                      <Link href={lp('/cadastre')} className="mt-6 flex items-center justify-center min-h-11 bg-teal-dark text-white font-semibold text-sm px-4 rounded-xl hover:bg-teal-dark/90 transition-colors">
+                        {t('sobre.planos_assoc_btn')}
+                      </Link>
+                    </MagicCard>
+                  </BlurFade>
 
-              {/* Associado Plus: destaque */}
-              <BlurFade delay={140} className="h-full">
-                <MagicCard className={`${CARTAO} relative overflow-hidden h-full p-6 flex flex-col`}>
-                  <BorderBeam />
-                  <span className="self-start mb-3 bg-ocre-light dark:bg-ocre/20 text-fg-1 text-xs font-semibold px-3 py-1 rounded-full">
-                    {t('sobre.planos_plus_badge')}
-                  </span>
-                  <div className="font-display font-bold text-4xl text-fg-1 mb-1 tabular-nums">
-                    {preco(CHAVES.planoDestaque)}<span className="text-sm font-normal text-fg-3-texto ml-1">/mês</span>
-                  </div>
-                  <h3 className="font-semibold text-fg-1 mb-5">{t('sobre.planos_plus_label')}</h3>
-                  <ul className="space-y-2.5 text-sm text-fg-3-texto flex-1">
-                    <li className="flex items-start gap-2"><span className="text-ocre-dark dark:text-ocre" aria-hidden="true">✓</span> {t('sobre.planos_plus_item_0')}</li>
-                    <li className="flex items-start gap-2"><span className="text-ocre-dark dark:text-ocre" aria-hidden="true">✓</span>
-                      <span>{t('sobre.planos_plus_item_1_pre')} <a href="https://balaio.net" target="_blank" rel="noopener noreferrer" className="text-teal-dark dark:text-teal underline">Balaio</a>{t('sobre.planos_plus_item_1_post')}</span>
-                    </li>
-                    <li className="flex items-start gap-2"><span className="text-ocre-dark dark:text-ocre" aria-hidden="true">✓</span> {t('sobre.planos_plus_item_2')}</li>
-                    <li className="flex items-start gap-2"><span className="text-ocre-dark dark:text-ocre" aria-hidden="true">✓</span> {t('sobre.planos_plus_item_3', { pct: rateio })}</li>
-                  </ul>
-                  <Link href={lp('/cadastre')} className="mt-6 flex items-center justify-center min-h-11 bg-ocre-dark text-white font-semibold text-sm px-4 rounded-xl hover:bg-ocre-dark/90 transition-colors">
-                    {t('sobre.planos_plus_btn')}
-                  </Link>
-                </MagicCard>
-              </BlurFade>
+                  {/* Associado Plus: destaque */}
+                  <BlurFade delay={140} className="h-full">
+                    <MagicCard className={`${CARTAO} relative overflow-hidden h-full p-6 flex flex-col`}>
+                      <BorderBeam />
+                      <span className="self-start mb-3 bg-ocre-light dark:bg-ocre/20 text-fg-1 text-xs font-semibold px-3 py-1 rounded-full">
+                        {t('sobre.planos_plus_badge')}
+                      </span>
+                      <div className="font-display font-bold text-4xl text-fg-1 mb-1 tabular-nums">
+                        {preco(CHAVES.planoDestaque)}<span className="text-sm font-normal text-fg-3-texto ml-1">/mês</span>
+                      </div>
+                      <h3 className="font-semibold text-fg-1 mb-5">{t('sobre.planos_plus_label')}</h3>
+                      <ul className="space-y-2.5 text-sm text-fg-3-texto flex-1">
+                        <li className="flex items-start gap-2"><span className="text-ocre-dark dark:text-ocre" aria-hidden="true">✓</span> {t('sobre.planos_plus_item_0')}</li>
+                        <li className="flex items-start gap-2"><span className="text-ocre-dark dark:text-ocre" aria-hidden="true">✓</span>
+                          <span>{t('sobre.planos_plus_item_1_pre')} <a href="https://balaio.net" target="_blank" rel="noopener noreferrer" className="text-teal-dark dark:text-teal underline">Balaio</a>{t('sobre.planos_plus_item_1_post')}</span>
+                        </li>
+                        <li className="flex items-start gap-2"><span className="text-ocre-dark dark:text-ocre" aria-hidden="true">✓</span> {t('sobre.planos_plus_item_2')}</li>
+                        <li className="flex items-start gap-2"><span className="text-ocre-dark dark:text-ocre" aria-hidden="true">✓</span> {t('sobre.planos_plus_item_3', { pct: rateio })}</li>
+                      </ul>
+                      <Link href={lp('/cadastre')} className="mt-6 flex items-center justify-center min-h-11 bg-ocre-dark text-white font-semibold text-sm px-4 rounded-xl hover:bg-ocre-dark/90 transition-colors">
+                        {t('sobre.planos_plus_btn')}
+                      </Link>
+                    </MagicCard>
+                  </BlurFade>
+                </>
+              )}
             </div>
-            <p className="text-sm text-fg-3-texto mt-6">{t('sobre.planos_disclaimer')}</p>
+            {pagamentosAtivos() && (
+              <p className="text-sm text-fg-3-texto mt-6">{t('sobre.planos_disclaimer')}</p>
+            )}
           </section>
 
           {/* Prestacao de contas */}
@@ -275,9 +284,15 @@ export default function Sobre({ initialParametros }: SobreProps) {
                 </dl>
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-6 border-t border-white/20">
                   <p className="text-white/85 text-sm leading-relaxed max-w-md">{t('sobre.transp_desc')}</p>
-                  <Link href={lp('/apoie')} className="shrink-0 inline-flex items-center justify-center gap-2 min-h-11 bg-white text-teal-dark font-semibold px-5 rounded-full hover:bg-areia transition-colors text-sm">
-                    {t('sobre.transp_btn')} <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                  </Link>
+                  {pagamentosAtivos() ? (
+                    <Link href={lp('/apoie')} className="shrink-0 inline-flex items-center justify-center gap-2 min-h-11 bg-white text-teal-dark font-semibold px-5 rounded-full hover:bg-areia transition-colors text-sm">
+                      {t('sobre.transp_btn')} <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                    </Link>
+                  ) : (
+                    <Link href={lp('/transparencia')} className="shrink-0 inline-flex items-center justify-center gap-2 min-h-11 bg-white text-teal-dark font-semibold px-5 rounded-full hover:bg-areia transition-colors text-sm">
+                      {t('sobre.transparencia_link')} <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                    </Link>
+                  )}
                 </div>
               </div>
             </BlurFade>
@@ -345,13 +360,15 @@ export default function Sobre({ initialParametros }: SobreProps) {
                 tom="teal"
                 className="lg:col-span-2"
               />
-              <BentoCard
-                titulo={t('sobre.participar_alcance_h3')}
-                descricao={t('sobre.participar_alcance_desc', { pct: rateio })}
-                href={lp('/apoie')}
-                acao={t('sobre.participar_alcance_btn')}
-                atraso={70}
-              />
+              {pagamentosAtivos() && (
+                <BentoCard
+                  titulo={t('sobre.participar_alcance_h3')}
+                  descricao={t('sobre.participar_alcance_desc', { pct: rateio })}
+                  href={lp('/apoie')}
+                  acao={t('sobre.participar_alcance_btn')}
+                  atraso={70}
+                />
+              )}
               <BentoCard
                 titulo={t('sobre.participar_morador_h3')}
                 descricao={t('sobre.participar_morador_desc')}
