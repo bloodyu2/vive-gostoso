@@ -1,13 +1,29 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { ABAS_DO_MENU, ITENS_VITRINE, textosVitrine } from './vitrine'
+import { ABAS_DO_MENU, ITENS_VITRINE, itensVitrinePublicos, textosVitrine } from './vitrine'
 import { PRAIAS_MARES } from '@/data/praias-mares'
 
 describe('vitrine de recursos da home', () => {
   it('tem um cartao por aba do menu', () => {
     const caminhos = ITENS_VITRINE.map((i) => i.caminho)
     for (const aba of ABAS_DO_MENU) expect(caminhos, aba).toContain(`/${aba}`)
+  })
+
+  describe('itensVitrinePublicos (KAN-356)', () => {
+    afterEach(() => {
+      vi.unstubAllEnvs()
+    })
+
+    it('esconde o cartão apoie com pagamentos desligados', () => {
+      vi.stubEnv('NEXT_PUBLIC_PAGAMENTOS_ATIVOS', undefined)
+      expect(itensVitrinePublicos().some((i) => i.id === 'apoie')).toBe(false)
+    })
+
+    it('mantém o cartão apoie com pagamentos ligados', () => {
+      vi.stubEnv('NEXT_PUBLIC_PAGAMENTOS_ATIVOS', 'true')
+      expect(itensVitrinePublicos().some((i) => i.id === 'apoie')).toBe(true)
+    })
   })
 
   it('cada aba do menu existe como rota em app/[lang]', () => {

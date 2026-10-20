@@ -12,6 +12,11 @@
 import { rotasMares } from './mares-slugs.mjs'
 
 export function paginasEstaticas(raiz) {
+  // KAN-356: /apoie é entrada de doação Stripe — some do sitemap enquanto
+  // NEXT_PUBLIC_PAGAMENTOS_ATIVOS não for literalmente "true".
+  const apoie = process.env.NEXT_PUBLIC_PAGAMENTOS_ATIVOS === 'true'
+    ? [{ path: '/apoie', freq: 'monthly', priority: '0.6' }]
+    : []
   return [
     { path: '/',          freq: 'daily',   priority: '1.0' },
     { path: '/come',      freq: 'weekly',  priority: '0.9' },
@@ -21,7 +26,7 @@ export function paginasEstaticas(raiz) {
     { path: '/explore/mapa', freq: 'weekly', priority: '0.7' },
     { path: '/participe', freq: 'daily',   priority: '0.8' },
     { path: '/conheca',   freq: 'monthly', priority: '0.7' },
-    { path: '/apoie',     freq: 'monthly', priority: '0.6' },
+    ...apoie,
     { path: '/contrate',  freq: 'weekly',  priority: '0.7' },
     { path: '/sobre', freq: 'monthly', priority: '0.6' },
     { path: '/blog', freq: 'weekly', priority: '0.6' },

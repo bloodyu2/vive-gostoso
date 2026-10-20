@@ -11,6 +11,7 @@ import { useParametros } from '@/hooks/useParametros'
 import type { Parametros } from '@/lib/parametros'
 import { useGoals } from '@/hooks/useGoals'
 import { startDonation } from '@/hooks/useCheckout'
+import { pagamentosAtivos } from '@/lib/pagamentos'
 import {
   CheckCircle, Clock, Globe, Mail, Database, Layers,
   Phone, Smartphone, Zap, Server, Heart, Target, Megaphone, Users,
@@ -105,6 +106,10 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
     selectedPreset ?? (customAmount ? parseFloat(customAmount.replace(',', '.')) : null)
 
   async function handleDonate() {
+    if (!pagamentosAtivos()) {
+      setDonationError(t('apoie.pagamentos_pausados_titulo'))
+      return
+    }
     if (!amountBRL || amountBRL < 5) {
       setDonationError(t('apoie.erro_valor_minimo'))
       return
@@ -120,6 +125,31 @@ export default function Apoie({ initialEntries = [], initialParametros }: ApoieP
   }
 
   const totalMes = CUSTOS_ATIVOS.reduce((s, c) => s + c.valor_mes, 0)
+
+  /* KAN-356: rota direta de doação — mensagem neutra, sem widget Stripe. */
+  if (!pagamentosAtivos()) {
+    return (
+      <main>
+        <section className="max-w-xl mx-auto px-5 md:px-8 py-20 md:py-28 text-center">
+          <p className="text-xs font-semibold tracking-widest uppercase text-[#737373] mb-3">
+            {t('apoie.badge')}
+          </p>
+          <h1 className="font-display font-bold text-3xl md:text-4xl tracking-tight mb-4">
+            {t('apoie.pagamentos_pausados_titulo')}
+          </h1>
+          <p className="text-[#737373] leading-relaxed mb-8">
+            {t('apoie.pagamentos_pausados_desc')}
+          </p>
+          <Link
+            href={lp('/')}
+            className="inline-flex items-center justify-center bg-teal text-white font-semibold px-6 py-3 rounded-xl hover:bg-teal-dark transition-colors text-sm"
+          >
+            {t('apoie.pagamentos_pausados_voltar')}
+          </Link>
+        </section>
+      </main>
+    )
+  }
 
   return (
     <main>

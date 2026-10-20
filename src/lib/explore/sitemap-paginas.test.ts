@@ -27,3 +27,14 @@ describe('a /bio fica fora do sitemap', () => {
     expect(caminhos.some((c) => /(^|\/)bio(\/|$)/.test(c))).toBe(false)
   })
 })
+
+describe('KAN-356: /apoie no sitemap segue a flag de pagamentos', () => {
+  it('some do sitemap com pagamentos desligados (padrão)', () => {
+    const caminhos = (paginasEstaticas(process.cwd()) as Array<{ path: string }>).map((p) => p.path)
+    if (process.env.NEXT_PUBLIC_PAGAMENTOS_ATIVOS === 'true') {
+      expect(caminhos).toContain('/apoie')
+    } else {
+      expect(caminhos).not.toContain('/apoie')
+    }
+  })
+})

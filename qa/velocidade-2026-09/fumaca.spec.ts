@@ -320,20 +320,13 @@ test.describe('formularios (envio interceptado)', () => {
 })
 
 test.describe('apoie e checkout', () => {
-  test('doacao chega ate o Stripe com o valor certo (interceptado)', async ({ page }) => {
+  // KAN-356: pagamentos Stripe desligados por padrão (NEXT_PUBLIC_PAGAMENTOS_ATIVOS).
+  // Com a flag off, /apoie mostra mensagem neutra e não inicia sessão Stripe.
+  test('doacao escondida enquanto pagamentos estao pausados', async ({ page }) => {
     await page.goto('/apoie')
-    await page.getByRole('button', { name: /^R\$\s?\d+$/ }).first().click()
-    const botao = page.getByRole('button', { name: /Apoiar com/i })
-    await expect(botao).toBeEnabled()
-    const texto = (await botao.textContent()) || ''
-    const valor = Number(texto.replace(/\D/g, ''))
-    const irParaStripe = page.waitForURL(/checkout\.stripe\.com/, { timeout: 20_000 })
-    await botao.click()
-    await irParaStripe
-    const envio = capturas.find((c) => c.url.includes('create-donation-session'))!
-    const corpo = JSON.parse(envio.body || '{}')
-    expect(corpo.amountCents).toBe(valor * 100)
-    expect(corpo.successUrl).toMatch(/\/apoie\?doacao=success$/)
+    await expect(page.getByRole('heading', { name: /temporariamente indispon/i })).toBeVisible({ timeout: 20_000 })
+    await expect(page.getByRole('button', { name: /Apoiar com/i })).toHaveCount(0)
+    expect(capturas.some((c) => c.url.includes('create-donation-session'))).toBe(false)
   })
 })
 

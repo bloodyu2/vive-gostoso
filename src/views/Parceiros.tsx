@@ -7,6 +7,7 @@ import { useLocalePath } from '@/hooks/useLocalePath'
 import { useStats } from '@/hooks/useStats'
 import { useParametros } from '@/hooks/useParametros'
 import { CHAVES, parametro, precoEmReais, type Parametros } from '@/lib/parametros'
+import { pagamentosAtivos } from '@/lib/pagamentos'
 import { buildWhatsAppLink, OFFICIAL_WHATSAPP } from '@/lib/whatsapp'
 import { cn } from '@/lib/utils'
 import { BentoCard, BentoGrid } from '@/components/magicui/bento-grid'
@@ -94,6 +95,7 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
   }
   const localePath = useLocalePath()
   const { data: stats } = useStats()
+  const planosPagosAtivos = pagamentosAtivos()
   const planData = [
     {
       name: t('parceiros:plan_gratuito'),
@@ -109,6 +111,7 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
       ],
       cta: 'Começar grátis',
       ctaStyle: 'border border-border-1 text-fg-1 hover:border-teal',
+      pago: false,
     },
     {
       name: t('parceiros:plan_associado'),
@@ -124,6 +127,7 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
       ],
       cta: 'Assinar Associado',
       ctaStyle: 'bg-teal-dark text-white hover:bg-teal-dark/90',
+      pago: true,
     },
     {
       name: t('parceiros:plan_destaque'),
@@ -140,8 +144,9 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
       ],
       cta: 'Assinar Destaque',
       ctaStyle: 'bg-ocre-dark text-white hover:bg-ocre-dark/90',
+      pago: true,
     },
-  ]
+  ].filter((p) => planosPagosAtivos || !p.pago)
 
   const numeros = stats
     ? [
@@ -251,7 +256,7 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
           <h2 className={`${H2} mb-2`}>{t('parceiros:plans_titulo')}</h2>
           <p className="text-lg text-fg-3-texto mb-8">{t('parceiros:plans_desc')}</p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+          <div className={cn('grid grid-cols-1 gap-4 md:gap-5', planosPagosAtivos ? 'md:grid-cols-3' : 'md:grid-cols-1 max-w-md')}>
             {planData.map((plan, i) => (
               <BlurFade key={plan.name} delay={(i % 4) * 70} className="h-full">
                 <MagicCard
@@ -294,9 +299,11 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
             ))}
           </div>
 
-          <p className="text-sm text-fg-3-texto mt-6">
-            {t('parceiros:plan_disclaimer', { pct: parametro(param, CHAVES.rateioCidade) ?? '' })}
-          </p>
+          {planosPagosAtivos && (
+            <p className="text-sm text-fg-3-texto mt-6">
+              {t('parceiros:plan_disclaimer', { pct: parametro(param, CHAVES.rateioCidade) ?? '' })}
+            </p>
+          )}
         </section>
 
         {/* ── Depoimentos ── */}

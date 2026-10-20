@@ -5,7 +5,7 @@ import { jsonLdMares } from '@/lib/mares/seo-mares'
 import { webSiteSchema } from '@/lib/seo'
 import { PONTOS_MAPA } from '@/data/pontos-mapa'
 import { PRAIAS_MARES } from '@/data/praias-mares'
-import { ITENS_VITRINE } from './vitrine'
+import { itensVitrinePublicos } from './vitrine'
 
 const LANGS = ['pt', 'en', 'es'] as const
 
@@ -37,7 +37,7 @@ describe('JSON-LD das paginas tocadas', () => {
       const d = jsonLdVitrine(lang)
       expect(validarJsonLd(d)).toEqual([])
       expect(d['@type']).toBe('ItemList')
-      expect((d.itemListElement as unknown[]).length).toBe(ITENS_VITRINE.length)
+      expect((d.itemListElement as unknown[]).length).toBe(itensVitrinePublicos().length)
     }
   })
 
