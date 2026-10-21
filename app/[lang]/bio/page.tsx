@@ -146,6 +146,13 @@ export default async function BioPage({ params }: Props) {
             Vive Gostoso<span className="text-[#E05A3A]">.</span>
           </h1>
           <p className="mt-4 max-w-[34ch] text-[1rem] leading-snug text-pretty text-[#D9D4CE]">{t.tagline}</p>
+          <a
+            href={comUtm(`${VIVE.site}${prefixo(idioma)}`)}
+            className={`${FOCO_CLARO} mt-3 inline-flex min-h-12 items-center gap-2 text-[0.9375rem] font-semibold text-[#F5F2EE] underline decoration-1 underline-offset-4`}
+          >
+            <Globe className="size-4 shrink-0" aria-hidden />
+            {rotuloConhecerSite(idioma)}
+          </a>
         </div>
       </header>
 
@@ -252,13 +259,6 @@ export default async function BioPage({ params }: Props) {
             >
               <UserPlus className="size-4 shrink-0" aria-hidden />
               {t.save}
-            </a>
-            <a
-              href={comUtm(`${VIVE.site}${prefixo(idioma)}`)}
-              className={`${FOCO} flex min-h-12 items-center gap-2 text-[0.875rem] font-semibold text-teal-700 underline decoration-1 underline-offset-4`}
-            >
-              <Globe className="size-4 shrink-0" aria-hidden />
-              {rotuloConhecerSite(idioma)}
             </a>
           </div>
         </div>
