@@ -8,6 +8,7 @@ import { BlurFade } from '@/components/magicui/blur-fade'
 import { EventSubmitForm } from '@/components/events/event-submit-form'
 import { useEvents } from '@/hooks/useEvents'
 import { Button } from '@/components/ui/button'
+import { BannerOfertas } from '@/components/ofertas/banner-ofertas'
 
 export default function Participe() {
   const { t, i18n } = useTranslation()
@@ -51,6 +52,8 @@ export default function Participe() {
           {t('participe.submeter_evento')}
         </Button>
       </div>
+
+      <BannerOfertas />
 
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
