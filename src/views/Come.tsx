@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { ErrorState } from '@/components/ui/error-state'
 import { LinksModulos } from '@/components/layout/links-modulos'
+import { BannerOfertas } from '@/components/ofertas/banner-ofertas'
 import type { Business } from '@/types/database'
 
 type ComeProps = {
@@ -48,6 +49,7 @@ export default function Come({ initialBusinesses = [] }: ComeProps) {
           {t('come.abrir_mapa')}
         </Link>
       </div>
+      <BannerOfertas />
       {isError ? (
         <ErrorState onRetry={() => refetch()} />
       ) : (

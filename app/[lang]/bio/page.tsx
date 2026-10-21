@@ -9,13 +9,14 @@ import {
   CalendarDays,
   Compass,
   Map as MapaIcone,
-  MessageCircle,
+  Globe,
   Store,
+  Tag,
   UserPlus,
   UtensilsCrossed,
 } from 'lucide-react'
 
-import { VIVE, linkWhatsAppBio } from '@/lib/bio/contato'
+import { VIVE } from '@/lib/bio/contato'
 import { dicionario, ehIdioma, prefixo } from '@/lib/bio/dicionario'
 import { comUtm, linksDaBio, linksDoRodape, type IdBloco } from '@/lib/bio/links-bio'
 import { proximasMares, type ProximaMare } from '@/lib/bio/proximas-mares'
@@ -23,6 +24,7 @@ import { SLUG_GUIA_MARES, postPublicado } from '@/lib/blog/post-publicado'
 import { slugNoIdioma } from '@/lib/blog/traducoes'
 import { carregarSemana } from '@/lib/mares/carregar'
 import { formatarAltura } from '@/lib/mares/formato'
+import { linkOfertas, rotuloConhecerSite, textosOfertas } from '@/lib/ofertas'
 
 /* A PÁGINA DO LINK DA BIO DO INSTAGRAM (ordem do dono, 27/09/2026).
  *
@@ -32,7 +34,7 @@ import { formatarAltura } from '@/lib/mares/formato'
  *
  *  - Todo link interno leva utm_source=instagram&utm_medium=bio (src/lib/bio/links-bio.ts).
  *  - A etiqueta NFC que já existe aponta para esta mesma URL, então o vCard e o
- *    WhatsApp continuam aqui, numa linha discreta acima do rodapé.
+ *    site continuam aqui, numa linha discreta acima do rodapé.
  *  - Sem JavaScript no cliente: dicionário lido no servidor, idioma de params.lang.
  *  - Fora do layout do site (SEM_CROMO em chrome-do-site.tsx), noindex e fora do sitemap.
  *
@@ -133,6 +135,8 @@ export default async function BioPage({ params }: Props) {
   const blocoMare = blocos[0]
   const destinos = blocos.filter((b): b is { id: IdCartao; href: string } => b.id !== 'mares')
   const rodape = linksDoRodape(idioma)
+  const hrefOfertas = linkOfertas('bio')
+  const ofertas = textosOfertas(idioma)
 
   return (
     <div className="min-h-dvh bg-page text-fg-1">
@@ -217,6 +221,23 @@ export default async function BioPage({ params }: Props) {
                 </li>
               )
             })}
+            {hrefOfertas && (
+              <li>
+                <a
+                  href={hrefOfertas}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${FOCO} flex min-h-12 items-center gap-3 rounded-xl px-4 py-2 text-fg-2 transition-colors duration-150 ease-out hover:text-fg-1 motion-reduce:transition-none`}
+                >
+                  <Tag className="size-4 shrink-0" aria-hidden />
+                  <span className="flex min-w-0 flex-1 flex-col">
+                    <span className="text-[0.9375rem] leading-tight font-semibold text-balance">{ofertas.titulo}</span>
+                    <span className="mt-0.5 text-[0.75rem] leading-snug">{ofertas.linha}</span>
+                  </span>
+                  <ArrowRight className="size-4 shrink-0" aria-hidden />
+                </a>
+              </li>
+            )}
           </ul>
         </nav>
 
@@ -233,13 +254,11 @@ export default async function BioPage({ params }: Props) {
               {t.save}
             </a>
             <a
-              href={linkWhatsAppBio(t.whatsapp_msg)}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={comUtm(`${VIVE.site}${prefixo(idioma)}`)}
               className={`${FOCO} flex min-h-12 items-center gap-2 text-[0.875rem] font-semibold text-teal-700 underline decoration-1 underline-offset-4`}
             >
-              <MessageCircle className="size-4 shrink-0" aria-hidden />
-              {t.whatsapp}
+              <Globe className="size-4 shrink-0" aria-hidden />
+              {rotuloConhecerSite(idioma)}
             </a>
           </div>
         </div>
