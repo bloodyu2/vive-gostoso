@@ -4,13 +4,16 @@ import { linkOfertas, ofertasAtivas, rotuloConhecerSite, textosOfertas } from '.
 const CANAL = 'https://t.me/balaiodeofertasrn'
 
 describe('ofertasAtivas', () => {
-  it('desligado sem flag', () => {
-    expect(ofertasAtivas(undefined, CANAL)).toBe(false)
+  it('liga por padrão, com o canal oficial', () => {
+    expect(ofertasAtivas(undefined, undefined)).toBe(true)
+    expect(ofertasAtivas('true', '')).toBe(true)
+    expect(linkOfertas('bio', undefined, undefined)).toContain('t.me/BalaioDeOfertasRN')
+  })
+  it('desliga com NEXT_PUBLIC_OFERTAS_ATIVAS=false', () => {
     expect(ofertasAtivas('false', CANAL)).toBe(false)
   })
-  it('desligado sem URL, mesmo com flag', () => {
-    expect(ofertasAtivas('true', undefined)).toBe(false)
-    expect(ofertasAtivas('true', '')).toBe(false)
+  it('variável de URL sobrescreve o padrão', () => {
+    expect(linkOfertas('bio', 'true', 'https://exemplo.com/c')).toContain('exemplo.com/c')
   })
   it('recusa URL que não é https', () => {
     expect(ofertasAtivas('true', 'http://t.me/x')).toBe(false)
@@ -24,8 +27,8 @@ describe('ofertasAtivas', () => {
 
 describe('linkOfertas', () => {
   it('null quando desligado', () => {
-    expect(linkOfertas('bio', undefined, CANAL)).toBeNull()
-    expect(linkOfertas('site', 'true', undefined)).toBeNull()
+    expect(linkOfertas('bio', 'false', CANAL)).toBeNull()
+    expect(linkOfertas('site', 'true', 'http://t.me/x')).toBeNull()
   })
   it('bio leva as três UTM pedidas', () => {
     const url = new URL(linkOfertas('bio', 'true', CANAL)!)

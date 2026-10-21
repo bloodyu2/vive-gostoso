@@ -1,13 +1,15 @@
 /**
  * Canal de ofertas da região (Balaio de Ofertas), KAN-743.
  *
- * Duas variáveis, as duas lidas só aqui:
- *   NEXT_PUBLIC_CANAL_OFERTAS_URL    endereço do canal (ainda não existe, o Victor cria)
- *   NEXT_PUBLIC_OFERTAS_ATIVAS=true  liga o item da /bio e o banner do site
+ * Ligado por padrão, com o canal https://t.me/BalaioDeOfertasRN. Duas variáveis
+ * podem sobrescrever, as duas lidas só aqui:
+ *   NEXT_PUBLIC_OFERTAS_ATIVAS=false  desliga o item da /bio e o banner do site
+ *   NEXT_PUBLIC_CANAL_OFERTAS_URL     outro endereço https para o canal
  *
- * Desligado por padrão. Mesmo com a flag ligada, sem uma URL https válida nada
- * aparece, para nunca publicar link quebrado.
+ * URL que não seja https desliga tudo, para nunca publicar link quebrado.
  */
+
+export const CANAL_OFERTAS_URL_PADRAO = 'https://t.me/BalaioDeOfertasRN'
 
 export type OrigemOfertas = 'bio' | 'site'
 
@@ -21,21 +23,28 @@ function urlBase(valor: string | undefined): URL | null {
   }
 }
 
+type Entrada = string | undefined
+
+function resolver(flag: Entrada, canal: Entrada): URL | null {
+  if (flag === 'false') return null
+  const valor = canal === undefined || canal.trim() === '' ? CANAL_OFERTAS_URL_PADRAO : canal
+  return urlBase(valor)
+}
+
 export function ofertasAtivas(
-  flag: string | undefined = process.env.NEXT_PUBLIC_OFERTAS_ATIVAS,
-  canal: string | undefined = process.env.NEXT_PUBLIC_CANAL_OFERTAS_URL,
+  flag: Entrada = process.env.NEXT_PUBLIC_OFERTAS_ATIVAS,
+  canal: Entrada = process.env.NEXT_PUBLIC_CANAL_OFERTAS_URL,
 ): boolean {
-  return flag === 'true' && urlBase(canal) !== null
+  return resolver(flag, canal) !== null
 }
 
 /** URL do canal com a UTM da origem, ou null se o canal não está pronto. */
 export function linkOfertas(
   origem: OrigemOfertas,
-  flag: string | undefined = process.env.NEXT_PUBLIC_OFERTAS_ATIVAS,
-  canal: string | undefined = process.env.NEXT_PUBLIC_CANAL_OFERTAS_URL,
+  flag: Entrada = process.env.NEXT_PUBLIC_OFERTAS_ATIVAS,
+  canal: Entrada = process.env.NEXT_PUBLIC_CANAL_OFERTAS_URL,
 ): string | null {
-  if (flag !== 'true') return null
-  const url = urlBase(canal)
+  const url = resolver(flag, canal)
   if (!url) return null
   url.searchParams.set('utm_source', 'vivegostoso')
   url.searchParams.set('utm_medium', origem)
