@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { linkOfertas, ofertasAtivas, rotuloConhecerSite, textosOfertas } from './ofertas'
+import { linkOfertas, linkOfertasWhatsapp, ofertasAtivas, rotuloConhecerSite, textosOfertas } from './ofertas'
 
 const CANAL = 'https://t.me/balaiodeofertasrn'
 
@@ -43,12 +43,32 @@ describe('linkOfertas', () => {
   })
 })
 
+describe('linkOfertasWhatsapp', () => {
+  it('bio leva as UTM pedidas com utm_content=whatsapp', () => {
+    const url = new URL(linkOfertasWhatsapp('bio', undefined)!)
+    expect(url.host).toBe('whatsapp.com')
+    expect(url.pathname).toBe('/channel/0029VbE2IWD5PO0rcUA1x017')
+    expect(url.searchParams.get('utm_source')).toBe('vivegostoso')
+    expect(url.searchParams.get('utm_medium')).toBe('bio')
+    expect(url.searchParams.get('utm_campaign')).toBe('ofertas')
+    expect(url.searchParams.get('utm_content')).toBe('whatsapp')
+  })
+  it('site usa utm_medium=site', () => {
+    expect(new URL(linkOfertasWhatsapp('site', 'true')!).searchParams.get('utm_medium')).toBe('site')
+  })
+  it('desliga com NEXT_PUBLIC_OFERTAS_ATIVAS=false', () => {
+    expect(linkOfertasWhatsapp('bio', 'false')).toBeNull()
+  })
+})
+
 describe('textos', () => {
   it('três idiomas, sem travessão longo e com o nome do canal', () => {
     for (const l of ['pt', 'en', 'es']) {
       const t = textosOfertas(l)
       expect(JSON.stringify(t)).not.toContain('—')
       expect(t.titulo).toContain('Balaio de Ofertas')
+      expect(t.linha).toContain('WhatsApp')
+      expect(JSON.stringify(t).toLowerCase()).not.toContain('grup')
       expect(rotuloConhecerSite(l)).not.toContain('—')
     }
     expect(textosOfertas('fr').botao).toBe('Ver o canal')
