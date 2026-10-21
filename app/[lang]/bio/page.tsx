@@ -24,7 +24,7 @@ import { SLUG_GUIA_MARES, postPublicado } from '@/lib/blog/post-publicado'
 import { slugNoIdioma } from '@/lib/blog/traducoes'
 import { carregarSemana } from '@/lib/mares/carregar'
 import { formatarAltura } from '@/lib/mares/formato'
-import { linkOfertas, rotuloConhecerSite, textosOfertas } from '@/lib/ofertas'
+import { linkOfertas, linkOfertasWhatsapp, rotuloConhecerSite, textosOfertas } from '@/lib/ofertas'
 
 /* A PÁGINA DO LINK DA BIO DO INSTAGRAM (ordem do dono, 27/09/2026).
  *
@@ -136,6 +136,7 @@ export default async function BioPage({ params }: Props) {
   const destinos = blocos.filter((b): b is { id: IdCartao; href: string } => b.id !== 'mares')
   const rodape = linksDoRodape(idioma)
   const hrefOfertas = linkOfertas('bio')
+  const hrefOfertasWhatsapp = linkOfertasWhatsapp('bio')
   const ofertas = textosOfertas(idioma)
 
   return (
@@ -239,7 +240,24 @@ export default async function BioPage({ params }: Props) {
                   <Tag className="size-4 shrink-0" aria-hidden />
                   <span className="flex min-w-0 flex-1 flex-col">
                     <span className="text-[0.9375rem] leading-tight font-semibold text-balance">{ofertas.titulo}</span>
-                    <span className="mt-0.5 text-[0.75rem] leading-snug">{ofertas.linha}</span>
+                    <span className="mt-0.5 text-[0.75rem] leading-snug">{ofertas.bioTelegram}</span>
+                  </span>
+                  <ArrowRight className="size-4 shrink-0" aria-hidden />
+                </a>
+              </li>
+            )}
+            {hrefOfertasWhatsapp && (
+              <li>
+                <a
+                  href={hrefOfertasWhatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${FOCO} flex min-h-12 items-center gap-3 rounded-xl px-4 py-2 text-fg-2 transition-colors duration-150 ease-out hover:text-fg-1 motion-reduce:transition-none`}
+                >
+                  <Tag className="size-4 shrink-0" aria-hidden />
+                  <span className="flex min-w-0 flex-1 flex-col">
+                    <span className="text-[0.9375rem] leading-tight font-semibold text-balance">{ofertas.bioWhatsappTitulo}</span>
+                    <span className="mt-0.5 text-[0.75rem] leading-snug">{ofertas.bioWhatsapp}</span>
                   </span>
                   <ArrowRight className="size-4 shrink-0" aria-hidden />
                 </a>

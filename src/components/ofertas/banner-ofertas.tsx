@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { ArrowRight, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { linkOfertas, textosOfertas } from '@/lib/ofertas'
+import { linkOfertas, linkOfertasWhatsapp, textosOfertas } from '@/lib/ofertas'
 
 const CHAVE = 'vg-banner-ofertas-fechado'
 
@@ -15,6 +15,7 @@ export function BannerOfertas() {
   const { i18n } = useTranslation()
   const [fechado, setFechado] = useState(true)
   const href = linkOfertas('site')
+  const hrefWhatsapp = linkOfertasWhatsapp('site')
 
   useEffect(() => {
     let salvo: string | null = null
@@ -47,15 +48,28 @@ export function BannerOfertas() {
         <p className="font-display text-[1rem] leading-tight font-bold text-[#1A1A1A]">{t.titulo}</p>
         <p className="mt-0.5 text-[0.875rem] leading-snug text-[#3D3D3D]">{t.linha}</p>
       </div>
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-xl bg-[#1A1A1A] px-4 text-[0.875rem] font-semibold text-[#F5F2EE] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-[#1A1A1A]"
-      >
-        {t.botao}
-        <ArrowRight className="size-4" aria-hidden />
-      </a>
+      <div className="flex shrink-0 items-center gap-2">
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-[#1A1A1A] px-4 text-[0.875rem] font-semibold text-[#F5F2EE] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-[#1A1A1A]"
+        >
+          Telegram
+          <ArrowRight className="size-4" aria-hidden />
+        </a>
+        {hrefWhatsapp && (
+          <a
+            href={hrefWhatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-[#1A1A1A] px-4 text-[0.875rem] font-semibold text-[#1A1A1A] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-[#1A1A1A]"
+          >
+            WhatsApp
+            <ArrowRight className="size-4" aria-hidden />
+          </a>
+        )}
+      </div>
       <button
         type="button"
         onClick={fechar}

@@ -10,6 +10,7 @@
  */
 
 export const CANAL_OFERTAS_URL_PADRAO = 'https://t.me/BalaioDeOfertasRN'
+export const CANAL_WHATSAPP_URL = 'https://whatsapp.com/channel/0029VbE2IWD5PO0rcUA1x017'
 
 export type OrigemOfertas = 'bio' | 'site'
 
@@ -52,26 +53,59 @@ export function linkOfertas(
   return url.toString()
 }
 
-type Textos = { titulo: string; linha: string; botao: string; fechar: string }
+/** URL do canal do WhatsApp com a UTM da origem. Sem variável: a constante é a fonte.
+ *  Segue a mesma chave de desligar do Telegram (NEXT_PUBLIC_OFERTAS_ATIVAS=false). */
+export function linkOfertasWhatsapp(
+  origem: OrigemOfertas,
+  flag: Entrada = process.env.NEXT_PUBLIC_OFERTAS_ATIVAS,
+): string | null {
+  if (flag === 'false') return null
+  const url = urlBase(CANAL_WHATSAPP_URL)
+  if (!url) return null
+  url.searchParams.set('utm_source', 'vivegostoso')
+  url.searchParams.set('utm_medium', origem)
+  url.searchParams.set('utm_campaign', 'ofertas')
+  url.searchParams.set('utm_content', 'whatsapp')
+  return url.toString()
+}
+
+type Textos = {
+  titulo: string
+  linha: string
+  botao: string
+  fechar: string
+  bioTelegram: string
+  bioWhatsappTitulo: string
+  bioWhatsapp: string
+}
 
 const TEXTOS: Record<'pt' | 'en' | 'es', Textos> = {
   pt: {
     titulo: 'Ofertas da região (Balaio de Ofertas)',
-    linha: 'Promoções de negócios da região, num canal só',
+    linha: 'Canal de promoções da região, no Telegram e no WhatsApp',
     botao: 'Ver o canal',
     fechar: 'Fechar aviso',
+    bioTelegram: 'Canal de ofertas no Telegram',
+    bioWhatsappTitulo: 'Balaio de Ofertas no WhatsApp',
+    bioWhatsapp: 'Canal de ofertas no WhatsApp',
   },
   en: {
     titulo: 'Local offers (Balaio de Ofertas)',
-    linha: 'Deals from businesses around the region, in one channel',
+    linha: 'Offers channel for the region, on Telegram and WhatsApp',
     botao: 'See the channel',
     fechar: 'Dismiss',
+    bioTelegram: 'Offers channel on Telegram',
+    bioWhatsappTitulo: 'Balaio de Ofertas on WhatsApp',
+    bioWhatsapp: 'Offers channel on WhatsApp',
   },
   es: {
     titulo: 'Ofertas de la región (Balaio de Ofertas)',
-    linha: 'Promociones de negocios de la región, en un solo canal',
+    linha: 'Canal de ofertas de la región, en Telegram y WhatsApp',
     botao: 'Ver el canal',
     fechar: 'Cerrar aviso',
+    bioTelegram: 'Canal de ofertas en Telegram',
+    bioWhatsappTitulo: 'Balaio de Ofertas en WhatsApp',
+    bioWhatsapp: 'Canal de ofertas en WhatsApp',
   },
 }
 
