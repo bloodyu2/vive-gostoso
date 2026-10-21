@@ -45,6 +45,9 @@ export async function proxy(request: NextRequest) {
   } else if (pathname.startsWith('/cadastre') || pathname.startsWith('/auth')) {
     // Rotas autenticadas: supabase session primeiro (sem i18n prefix)
     resposta = await updateSession(request)
+  } else if (pathname.startsWith('/p/')) {
+    // Link curto das plaquinhas (QR/NFC): redireciona direto, sem prefixo de idioma
+    resposta = NextResponse.next({ request: { headers: request.headers } })
   } else if (pathname === '/sitemap.xml' || pathname === '/robots.txt') {
     // Arquivos especiais do Next.js que nao devem passar pelo i18n
     resposta = NextResponse.next({ request: { headers: request.headers } })
