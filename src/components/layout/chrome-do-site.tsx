@@ -26,7 +26,7 @@ import { WhatsAppButton } from '@/components/layout/whatsapp-button'
  *  "as-needed", então o português vive em /bio e os outros em /en/bio e /es/bio. Por
  *  isso a comparação tira o prefixo antes de olhar a rota, em vez de listar as três
  *  formas na mão e esquecer uma quando entrar um idioma novo. */
-const SEM_CROMO = ['/bio']
+const SEM_CROMO = ['/bio', '/clube', '/p']
 
 function semPrefixo(caminho: string): string {
   const sem = caminho.replace(/^\/(pt|en|es)(?=\/|$)/, '')

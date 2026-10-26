@@ -93,6 +93,17 @@ const EXCECOES: Array<{ arquivo: string; marcador: string; motivo: string }> = [
   { arquivo: 'locales/en.json', marcador: 'aprende_item_1', motivo: 'programa APRENDE' },
   { arquivo: 'locales/es.json', marcador: 'aprende_item_1', motivo: 'programa APRENDE' },
 
+  // Passaporte Gostoso: o percentual e a vantagem que o PROPRIO parceiro escreve (ou o
+  // exemplo no formulario dele), e o selo "100% gratis" e a regra do clube. Nenhum e
+  // percentual de rateio do produto.
+  { arquivo: 'lib/clube/vantagens.ts', marcador: '5% de desconto', motivo: 'vantagem do parceiro fundador, so o plano B se o banco falhar' },
+  { arquivo: 'locales/pt.json', marcador: '"selo": "100% grátis"', motivo: 'selo do Passaporte: regra do clube, nao percentual do produto' },
+  { arquivo: 'locales/en.json', marcador: '"selo": "100% free"', motivo: 'selo do Passaporte' },
+  { arquivo: 'locales/es.json', marcador: '"selo": "100% gratis"', motivo: 'selo do Passaporte' },
+  { arquivo: 'locales/pt.json', marcador: 'ajuda_beneficio', motivo: 'exemplo de preenchimento no formulario do parceiro' },
+  { arquivo: 'locales/en.json', marcador: 'ajuda_beneficio', motivo: 'exemplo de preenchimento' },
+  { arquivo: 'locales/es.json', marcador: 'ajuda_beneficio', motivo: 'exemplo de preenchimento' },
+
   // Texto sobre a cidade, não sobre o produto: o comércio local não aceita
   // aplicativo de entrega. Nada a consultar.
   { arquivo: 'locales/pt.json', marcador: 'infra_desc', motivo: 'texto da /conheca sobre o comércio da cidade' },

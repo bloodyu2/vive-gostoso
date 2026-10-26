@@ -1,22 +1,60 @@
-import { describe, expect, it } from 'vitest'
-import { DESTINO_PADRAO, PLAQUINHAS, destinoDaPlaquinha } from './plaquinhas'
+import { afterEach, describe, expect, it } from 'vitest'
+import { DESTINO_PADRAO, PLAQUINHAS, codigoValido, linkDeAvaliacao, plaquinhaDoCodigo } from './plaquinhas'
 
-describe('destinoDaPlaquinha', () => {
-  it('codigo sem destino cai na home', () => {
-    expect(destinoDaPlaquinha('01')).toBe(DESTINO_PADRAO)
+afterEach(() => {
+  for (const k of Object.keys(PLAQUINHAS)) if (k.startsWith('9')) delete PLAQUINHAS[k]
+})
+
+describe('codigoValido', () => {
+  it('so aceita dois digitos', () => {
+    expect(codigoValido('01')).toBe(true)
+    expect(codigoValido('10')).toBe(true)
+    expect(codigoValido('1')).toBe(false)
+    expect(codigoValido('001')).toBe(false)
+    expect(codigoValido('abc')).toBe(false)
+    expect(codigoValido('../x')).toBe(false)
   })
-  it('codigo invalido cai na home', () => {
-    expect(destinoDaPlaquinha('1')).toBe(DESTINO_PADRAO)
-    expect(destinoDaPlaquinha('abc')).toBe(DESTINO_PADRAO)
-    expect(destinoDaPlaquinha('../x')).toBe(DESTINO_PADRAO)
+})
+
+describe('plaquinhaDoCodigo', () => {
+  it('codigo sem negocio cadastrado nao tem pagina (cai na home)', () => {
+    expect(plaquinhaDoCodigo('01')).toBeNull()
+    expect(DESTINO_PADRAO).toBe('https://www.vivegostoso.com.br/')
   })
-  it('usa o destino cadastrado quando e https', () => {
-    PLAQUINHAS['99'] = 'https://g.page/r/abc/review'
-    expect(destinoDaPlaquinha('99')).toBe('https://g.page/r/abc/review')
-    PLAQUINHAS['98'] = 'http://inseguro.example'
-    expect(destinoDaPlaquinha('98')).toBe(DESTINO_PADRAO)
-    PLAQUINHAS['97'] = 'javascript:alert(1)'
-    expect(destinoDaPlaquinha('97')).toBe(DESTINO_PADRAO)
-    delete PLAQUINHAS['99']; delete PLAQUINHAS['98']; delete PLAQUINHAS['97']
+  it('codigo invalido nao tem pagina, mesmo que alguem tente forcar', () => {
+    PLAQUINHAS['99'] = { slug: 'x' }
+    expect(plaquinhaDoCodigo('99')).toEqual({ slug: 'x' })
+    expect(plaquinhaDoCodigo('9')).toBeNull()
+    expect(plaquinhaDoCodigo('099')).toBeNull()
+  })
+})
+
+describe('linkDeAvaliacao', () => {
+  it('sem dado, sem link (o botao some)', () => {
+    expect(linkDeAvaliacao({ slug: 'x' })).toBeNull()
+  })
+  it('monta o link do Google a partir do place_id', () => {
+    expect(linkDeAvaliacao({ slug: 'x', placeId: 'ChIJabc_-123' })).toBe(
+      'https://search.google.com/local/writereview?placeid=ChIJabc_-123',
+    )
+  })
+  it('recusa place_id com caracteres estranhos', () => {
+    expect(linkDeAvaliacao({ slug: 'x', placeId: 'abc&x=1' })).toBeNull()
+    expect(linkDeAvaliacao({ slug: 'x', placeId: '' })).toBeNull()
+  })
+  it('aceita link pronto so em https e em dominio do Google', () => {
+    expect(linkDeAvaliacao({ slug: 'x', avaliar: 'https://g.page/r/abc/review' })).toBe('https://g.page/r/abc/review')
+    expect(linkDeAvaliacao({ slug: 'x', avaliar: 'https://search.google.com/local/writereview?placeid=ChIJ1' })).toBe(
+      'https://search.google.com/local/writereview?placeid=ChIJ1',
+    )
+    expect(linkDeAvaliacao({ slug: 'x', avaliar: 'http://g.page/r/abc/review' })).toBeNull()
+    expect(linkDeAvaliacao({ slug: 'x', avaliar: 'javascript:alert(1)' })).toBeNull()
+    expect(linkDeAvaliacao({ slug: 'x', avaliar: 'https://exemplo.com/review' })).toBeNull()
+    expect(linkDeAvaliacao({ slug: 'x', avaliar: 'https://g.page.evil.com/r/abc' })).toBeNull()
+  })
+  it('o link pronto vence o place_id', () => {
+    expect(linkDeAvaliacao({ slug: 'x', avaliar: 'https://g.page/r/abc/review', placeId: 'ChIJ1' })).toBe(
+      'https://g.page/r/abc/review',
+    )
   })
 })

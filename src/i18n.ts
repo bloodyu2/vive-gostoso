@@ -11,7 +11,7 @@ const ns = [
   'admin_businesses', 'admin_professionals', 'admin_services', 'admin_jobs',
   'admin_events', 'admin_claims', 'admin_transfers', 'admin_reviews',
   'cookie', 'whatsapp',
-  'parceiros', 'reivindicar', 'bio',
+  'parceiros', 'reivindicar', 'bio', 'passaporte',
   'service_form', 'job_form', 'review_form', 'review_list', 'share', 'lightbox',
   'fund', 'event_submit', 'event_card', 'hoje', 'global_search',
 ] as const

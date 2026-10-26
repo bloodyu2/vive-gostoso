@@ -1,0 +1,451 @@
+/* Passaporte Gostoso: tema das paginas /clube e /p/NN (desenho aprovado em 26/10/2026).
+   Paleta e fontes proprias, so dentro de .clube. Contraste conferido: texto de corpo
+   #3E4F4F sobre #F6EBD4 ou #FFFBF0 passa de 7:1; bloco laranja usa #C8441F com texto
+   branco (4,9:1), porque #E4572E com branco ficaria em 3,7:1. */
+
+.clube {
+  --c-fundo: #f6ebd4;
+  --c-verde: #0f5e5e;
+  --c-mostarda: #e8a317;
+  --c-laranja: #e4572e;
+  --c-laranja-forte: #c8441f;
+  --c-tinta: #1b2a2a;
+  --c-suave: #3e4f4f;
+  --c-mudo: #4d5f5f;
+  --c-card: #fffbf0;
+  --c-borda: #e3d3ae;
+  --c-input: #c9b88f;
+  --c-ok: #bfe3c8;
+  --c-aguarda: #f3d98b;
+
+  min-height: 100dvh;
+  background: var(--c-fundo);
+  color: var(--c-tinta);
+  font-family: var(--font-clube-corpo), system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+.clube h1,
+.clube h2,
+.clube h3 {
+  font-family: var(--font-clube-titulo), system-ui, sans-serif;
+  text-wrap: balance;
+}
+
+:where(.clube) :is(p, h1, h2, h3, ul, ol) {
+  margin: 0;
+}
+
+:where(.clube) a {
+  color: inherit;
+}
+
+.clube-col {
+  width: 100%;
+  max-width: 28rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+/* ── topo verde ───────────────────────────────────────────── */
+
+.clube-topo {
+  background: var(--c-verde);
+  color: var(--c-fundo);
+  padding-block: 1.25rem 2.5rem;
+}
+
+.clube-marca-linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.clube-marca {
+  font-family: var(--font-clube-titulo), system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.clube-selo {
+  border: 1.5px solid var(--c-fundo);
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.clube-h1 {
+  margin-top: 2.5rem;
+  font-weight: 800;
+  font-size: clamp(2.5rem, 12vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.clube-intro {
+  margin-top: 1rem;
+  max-width: 32ch;
+  font-size: 1.0625rem;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+/* ── botoes ───────────────────────────────────────────────── */
+
+.clube-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.25rem;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  font: inherit;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 150ms cubic-bezier(0.25, 1, 0.5, 1), background-color 150ms;
+}
+
+.clube-btn:active {
+  transform: translateY(1px);
+}
+
+.clube-btn:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.clube-btn--mostarda {
+  background: var(--c-mostarda);
+  color: var(--c-tinta);
+}
+
+.clube-btn--verde {
+  background: var(--c-verde);
+  color: var(--c-fundo);
+}
+
+.clube-btn--creme {
+  background: var(--c-fundo);
+  color: var(--c-tinta);
+}
+
+.clube-btn--contorno {
+  background: transparent;
+  border-color: var(--c-verde);
+  color: var(--c-verde);
+}
+
+.clube-btn--cheio {
+  width: 100%;
+}
+
+.clube a:focus-visible,
+.clube button:focus-visible,
+.clube input:focus-visible,
+.clube textarea:focus-visible,
+.clube select:focus-visible {
+  outline: 3px solid var(--c-tinta);
+  outline-offset: 2px;
+}
+
+.clube-topo a:focus-visible,
+.clube-laranja a:focus-visible,
+.clube-laranja button:focus-visible {
+  outline-color: var(--c-fundo);
+}
+
+.clube-topo .clube-btn:focus-visible {
+  outline-color: var(--c-fundo);
+}
+
+/* ── secoes ───────────────────────────────────────────────── */
+
+.clube-secao {
+  padding-block: 2.25rem;
+}
+
+.clube-secao + .clube-secao {
+  padding-top: 0.5rem;
+}
+
+.clube-h2 {
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.clube-passos {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.clube-passo {
+  display: grid;
+  grid-template-columns: 2.25rem 1fr;
+  gap: 0.875rem;
+  align-items: start;
+}
+
+.clube-passo-num {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--c-laranja);
+  color: #fff;
+  font-family: var(--font-clube-titulo), system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 1.0625rem;
+}
+
+.clube-passo-t {
+  font-family: var(--font-clube-titulo), system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.0625rem;
+  line-height: 1.2;
+}
+
+.clube-passo-d {
+  margin-top: 0.125rem;
+  color: var(--c-suave);
+}
+
+/* ── cards de vantagem ────────────────────────────────────── */
+
+.clube-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.clube-card {
+  background: var(--c-card);
+  border: 1px solid var(--c-borda);
+  border-radius: 12px;
+  padding: 1.125rem;
+}
+
+.clube-card-topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.clube-tipo {
+  color: var(--c-verde);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.clube-nome {
+  margin-top: 0.125rem;
+  font-weight: 800;
+  font-size: 1.25rem;
+  line-height: 1.15;
+}
+
+.clube-nome a {
+  text-decoration: none;
+}
+
+.clube-nome a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.clube-tag {
+  flex-shrink: 0;
+  border-radius: 999px;
+  padding: 0.1875rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.clube-tag--no-ar {
+  background: var(--c-ok);
+  color: #14391f;
+}
+
+.clube-tag--combinacao {
+  background: var(--c-aguarda);
+  color: #4a3600;
+}
+
+.clube-beneficio {
+  margin-top: 0.75rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.clube-regra {
+  margin-top: 0.375rem;
+  color: var(--c-mudo);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.clube-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-top: 1rem;
+}
+
+.clube-acoes .clube-btn {
+  flex: 1 1 8rem;
+}
+
+.clube-aviso {
+  margin-top: 1rem;
+  color: var(--c-mudo);
+  font-size: 0.875rem;
+}
+
+.clube-erro {
+  margin-top: 0.75rem;
+  color: #8a2410;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.clube-codigo-caixa {
+  margin-top: 1rem;
+  border-radius: 12px;
+  background: var(--c-tinta);
+  color: var(--c-fundo);
+  padding: 1rem;
+  text-align: center;
+}
+
+.clube-codigo-legenda {
+  font-size: 0.875rem;
+}
+
+.clube-codigo {
+  margin-top: 0.25rem;
+  color: var(--c-mostarda);
+  font-family: var(--font-clube-titulo), system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 1.75rem;
+  letter-spacing: 0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.clube-nota {
+  margin-top: 1rem;
+  color: var(--c-mudo);
+  font-size: 0.875rem;
+}
+
+/* ── bloco para negocios ──────────────────────────────────── */
+
+.clube-laranja {
+  margin-top: 2.25rem;
+  background: var(--c-laranja-forte);
+  color: #fff;
+  padding-block: 2rem;
+}
+
+.clube-laranja .clube-h2 {
+  font-size: 1.625rem;
+}
+
+.clube-laranja p {
+  margin-top: 0.75rem;
+  max-width: 38ch;
+  text-wrap: pretty;
+}
+
+.clube-laranja .clube-btn {
+  margin-top: 1.25rem;
+}
+
+/* ── fundo da cidade e rodape ─────────────────────────────── */
+
+.clube-fundo p {
+  margin-top: 0.75rem;
+  max-width: 40ch;
+  color: var(--c-suave);
+  text-wrap: pretty;
+}
+
+.clube-rodape {
+  border-top: 1px solid var(--c-borda);
+  padding-block: 1.25rem 2rem;
+  color: var(--c-mudo);
+  font-size: 0.8125rem;
+}
+
+/* ── pagina da plaquinha (/p/NN) ──────────────────────────── */
+
+.clube-foto {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 12px;
+  background: var(--c-borda);
+}
+
+.clube-pilha {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.clube-destaque {
+  background: var(--c-card);
+  border: 1px solid var(--c-borda);
+  border-radius: 12px;
+  padding: 1.125rem;
+}
+
+/* ── painel do parceiro: campos ───────────────────────────── */
+
+.clube-campo {
+  display: block;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.625rem 0.75rem;
+  border: 1.5px solid var(--c-input);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--c-tinta);
+  font: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clube-btn {
+    transition: none;
+  }
+}
