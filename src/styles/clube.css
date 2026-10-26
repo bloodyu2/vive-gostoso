@@ -1,30 +1,37 @@
-/* Passaporte Gostoso: tema das paginas /clube e /p/NN (desenho aprovado em 26/10/2026).
-   Paleta e fontes proprias, so dentro de .clube. Contraste conferido: texto de corpo
-   #3E4F4F sobre #F6EBD4 ou #FFFBF0 passa de 7:1; bloco laranja usa #C8441F com texto
-   branco (4,9:1), porque #E4572E com branco ficaria em 3,7:1. */
+/* Passaporte Gostoso: tema das paginas /clube e /p/NN e da area do parceiro.
+   Direcao visual (26/10/2026): um passaporte de verdade. Capa com foto do por do sol
+   de Gostoso, carimbos, paginas em papel com picote, vantagens como bilhetes com
+   canhoto. Paleta aprovada (areia, verde, mostarda, laranja) e as duas fontes do
+   desenho (Bricolage Grotesque e Figtree). Tudo vale so dentro de .clube.
+
+   Contraste conferido: texto #3E4F4F sobre #F6EBD4 e #FFFBF0 passa de 7:1; creme sobre
+   a faixa verde #0A4545 passa de 10:1; branco sobre #C8441F fica em 4,9:1. */
 
 .clube {
   --c-fundo: #f6ebd4;
+  --c-papel: #fffbf0;
   --c-verde: #0f5e5e;
+  --c-verde-fundo: #0a4545;
   --c-mostarda: #e8a317;
   --c-laranja: #e4572e;
   --c-laranja-forte: #c8441f;
   --c-tinta: #1b2a2a;
   --c-suave: #3e4f4f;
   --c-mudo: #4d5f5f;
-  --c-card: #fffbf0;
   --c-borda: #e3d3ae;
   --c-input: #c9b88f;
   --c-ok: #bfe3c8;
   --c-aguarda: #f3d98b;
+  --ease-saida: cubic-bezier(0.22, 1, 0.36, 1);
 
   min-height: 100dvh;
   background: var(--c-fundo);
   color: var(--c-tinta);
   font-family: var(--font-clube-corpo), system-ui, -apple-system, 'Segoe UI', sans-serif;
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.55;
   -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
 }
 
 .clube h1,
@@ -34,7 +41,7 @@
   text-wrap: balance;
 }
 
-:where(.clube) :is(p, h1, h2, h3, ul, ol) {
+:where(.clube) :is(p, h1, h2, h3, ul, ol, dl, dd, figure) {
   margin: 0;
 }
 
@@ -49,53 +56,181 @@
   padding-inline: 1.25rem;
 }
 
-/* ── topo verde ───────────────────────────────────────────── */
-
-.clube-topo {
-  background: var(--c-verde);
-  color: var(--c-fundo);
-  padding-block: 1.25rem 2.5rem;
+.clube-wrap {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
 }
 
-.clube-marca-linha {
+@media (min-width: 768px) {
+  .clube-wrap {
+    padding-inline: 2rem;
+  }
+}
+
+/* ── capa (hero) ──────────────────────────────────────────── */
+
+.clube-hero {
+  position: relative;
+  isolation: isolate;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: space-between;
-  gap: 0.75rem;
+  min-height: min(44rem, 100svh);
+  padding-block: 1.25rem 3.25rem;
+  background: var(--c-verde-fundo);
+  color: var(--c-fundo);
+}
+
+.clube-hero-img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 64%;
+}
+
+.clube-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 36, 36, 0.62) 0%,
+    rgba(8, 36, 36, 0) 26%,
+    rgba(8, 44, 44, 0.3) 48%,
+    rgba(8, 48, 48, 0.82) 74%,
+    rgba(8, 48, 48, 0.96) 100%
+  );
+}
+
+/* borda de bilhete: meia-lua recortada na base da capa */
+.clube-hero::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 14px;
+  background: radial-gradient(circle at 11px 0, transparent 8.5px, var(--c-fundo) 9px) repeat-x;
+  background-size: 22px 14px;
+}
+
+.clube-topo-linha {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .clube-marca {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
   font-family: var(--font-clube-titulo), system-ui, sans-serif;
   font-weight: 800;
-  font-size: 0.9375rem;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
   text-decoration: none;
 }
 
-.clube-selo {
-  border: 1.5px solid var(--c-fundo);
-  border-radius: 999px;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
+.clube-carimbo {
+  flex-shrink: 0;
+  width: 5.75rem;
+  height: 5.75rem;
+  color: var(--c-fundo);
+  transform: rotate(-8deg);
+}
+
+.clube-carimbo-anel {
+  transform-origin: 50% 50%;
+  animation: clube-gira 48s linear infinite;
+}
+
+.clube-carimbo text {
+  font-family: var(--font-clube-corpo), system-ui, sans-serif;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  white-space: nowrap;
+}
+
+.clube-hero-corpo {
+  padding-top: 5rem;
 }
 
 .clube-h1 {
-  margin-top: 2.5rem;
   font-weight: 800;
-  font-size: clamp(2.5rem, 12vw, 2.75rem);
-  line-height: 1;
-  letter-spacing: -0.02em;
+  font-size: clamp(3.25rem, 16.5vw, 5.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
 }
 
 .clube-intro {
-  margin-top: 1rem;
-  max-width: 32ch;
-  font-size: 1.0625rem;
-  line-height: 1.45;
+  margin-top: 1.25rem;
+  max-width: 30ch;
+  font-size: 1.1875rem;
+  line-height: 1.4;
   text-wrap: pretty;
+}
+
+.clube-hero-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  margin-top: 1.75rem;
+}
+
+@media (min-width: 900px) {
+  .clube-hero {
+    min-height: min(46rem, 88svh);
+    padding-block: 1.75rem 4.5rem;
+  }
+  .clube-hero::before {
+    background:
+      linear-gradient(90deg, rgba(8, 44, 44, 0.9) 0%, rgba(8, 44, 44, 0.55) 42%, rgba(8, 44, 44, 0.05) 72%),
+      linear-gradient(180deg, rgba(8, 36, 36, 0.5) 0%, rgba(8, 36, 36, 0) 30%);
+  }
+  .clube-hero-img {
+    object-position: 50% 58%;
+  }
+  .clube-carimbo {
+    width: 7.5rem;
+    height: 7.5rem;
+  }
+  .clube-intro {
+    max-width: 34ch;
+    font-size: 1.3125rem;
+  }
+  .clube-hero-corpo {
+    padding-top: 6rem;
+    max-width: 36rem;
+  }
+}
+
+.clube-lancamento {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  margin-top: 1.5rem;
+  max-width: 30rem;
+  border: 1px solid rgba(246, 235, 212, 0.4);
+  border-radius: 12px;
+  background: rgba(8, 44, 44, 0.62);
+  padding: 0.75rem 0.875rem;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.clube-lancamento svg {
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+  color: var(--c-mostarda);
 }
 
 /* ── botoes ───────────────────────────────────────────────── */
@@ -105,8 +240,8 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  min-height: 2.75rem;
-  padding: 0.5rem 1.25rem;
+  min-height: 3rem;
+  padding: 0.5rem 1.375rem;
   border: 2px solid transparent;
   border-radius: 12px;
   font: inherit;
@@ -116,11 +251,15 @@
   text-align: center;
   text-decoration: none;
   cursor: pointer;
-  transition: transform 150ms cubic-bezier(0.25, 1, 0.5, 1), background-color 150ms;
+  touch-action: manipulation;
+  transition:
+    transform 160ms var(--ease-saida),
+    background-color 160ms,
+    box-shadow 160ms;
 }
 
 .clube-btn:active {
-  transform: translateY(1px);
+  transform: translateY(1px) scale(0.985);
 }
 
 .clube-btn:disabled {
@@ -131,11 +270,21 @@
 .clube-btn--mostarda {
   background: var(--c-mostarda);
   color: var(--c-tinta);
+  box-shadow: 0 2px 0 rgba(27, 42, 42, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.clube-btn--mostarda:hover {
+  background: #f0ad24;
 }
 
 .clube-btn--verde {
   background: var(--c-verde);
   color: var(--c-fundo);
+  box-shadow: 0 2px 0 rgba(8, 40, 40, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.clube-btn--verde:hover {
+  background: #0c5252;
 }
 
 .clube-btn--creme {
@@ -149,6 +298,17 @@
   color: var(--c-verde);
 }
 
+.clube-btn--fantasma {
+  min-height: 2.75rem;
+  padding-inline: 0.25rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+}
+
 .clube-btn--cheio {
   width: 100%;
 }
@@ -158,116 +318,173 @@
 .clube input:focus-visible,
 .clube textarea:focus-visible,
 .clube select:focus-visible {
-  outline: 3px solid var(--c-tinta);
+  outline: 3px solid var(--c-mostarda);
   outline-offset: 2px;
 }
 
-.clube-topo a:focus-visible,
-.clube-laranja a:focus-visible,
-.clube-laranja button:focus-visible {
-  outline-color: var(--c-fundo);
-}
-
-.clube-topo .clube-btn:focus-visible {
-  outline-color: var(--c-fundo);
+.clube-secao-clara a:focus-visible,
+.clube-secao-clara button:focus-visible {
+  outline-color: var(--c-tinta);
 }
 
 /* ── secoes ───────────────────────────────────────────────── */
 
 .clube-secao {
-  padding-block: 2.25rem;
-}
-
-.clube-secao + .clube-secao {
-  padding-top: 0.5rem;
+  padding-block: 3.5rem;
 }
 
 .clube-h2 {
   font-weight: 800;
-  font-size: 1.5rem;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  font-size: clamp(1.875rem, 7.5vw, 2.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
 }
 
+.clube-sub {
+  margin-top: 0.625rem;
+  max-width: 44ch;
+  color: var(--c-suave);
+  text-wrap: pretty;
+}
+
+/* como funciona: tres carimbos ligados por uma linha pontilhada */
+
 .clube-passos {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  margin: 1.25rem 0 0;
+  position: relative;
+  display: grid;
+  gap: 1.75rem;
+  margin: 2rem 0 0;
   padding: 0;
   list-style: none;
 }
 
+.clube-passos::before {
+  content: '';
+  position: absolute;
+  left: 1.6875rem;
+  top: 2rem;
+  bottom: 2rem;
+  border-left: 2px dotted var(--c-input);
+}
+
 .clube-passo {
+  position: relative;
   display: grid;
-  grid-template-columns: 2.25rem 1fr;
-  gap: 0.875rem;
+  grid-template-columns: 3.375rem 1fr;
+  gap: 1rem;
   align-items: start;
 }
 
 .clube-passo-num {
   display: grid;
   place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 3.375rem;
+  height: 3.375rem;
+  border: 2px solid var(--c-laranja-forte);
   border-radius: 50%;
-  background: var(--c-laranja);
-  color: #fff;
+  background: var(--c-fundo);
+  color: var(--c-laranja-forte);
   font-family: var(--font-clube-titulo), system-ui, sans-serif;
   font-weight: 800;
-  font-size: 1.0625rem;
+  font-size: 1.5rem;
+  box-shadow: inset 0 0 0 4px var(--c-fundo), inset 0 0 0 5.5px var(--c-laranja-forte);
 }
 
 .clube-passo-t {
+  padding-top: 0.25rem;
   font-family: var(--font-clube-titulo), system-ui, sans-serif;
-  font-weight: 700;
-  font-size: 1.0625rem;
-  line-height: 1.2;
+  font-weight: 800;
+  font-size: 1.3125rem;
+  line-height: 1.15;
 }
 
 .clube-passo-d {
-  margin-top: 0.125rem;
+  margin-top: 0.25rem;
+  max-width: 34ch;
   color: var(--c-suave);
 }
 
-/* ── cards de vantagem ────────────────────────────────────── */
+@media (min-width: 900px) {
+  .clube-passos {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+  .clube-passos::before {
+    left: 3.375rem;
+    right: 3.375rem;
+    top: 1.6875rem;
+    bottom: auto;
+    border-left: 0;
+    border-top: 2px dotted var(--c-input);
+  }
+  .clube-passo {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .clube-passo-num {
+    justify-self: start;
+  }
+}
+
+/* ── bilhetes (vantagens) ─────────────────────────────────── */
 
 .clube-lista {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin: 1.25rem 0 0;
+  display: grid;
+  gap: 1.25rem;
+  margin: 2rem 0 0;
   padding: 0;
   list-style: none;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19.5rem), 1fr));
 }
 
 .clube-card {
-  background: var(--c-card);
+  position: relative;
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--c-borda);
-  border-radius: 12px;
-  padding: 1.125rem;
+  border-radius: 16px;
+  background: var(--c-papel);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 10px 24px -14px rgba(79, 58, 16, 0.4);
+  overflow: hidden;
+}
+
+.clube-card-corpo {
+  position: relative;
+  flex: 1;
+  padding: 1.25rem 1.25rem 1.5rem;
 }
 
 .clube-card-topo {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
   gap: 0.75rem;
+}
+
+.clube-icone {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: #f7e3ae;
+  color: #7a5200;
 }
 
 .clube-tipo {
   color: var(--c-verde);
   font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .clube-nome {
   margin-top: 0.125rem;
   font-weight: 800;
-  font-size: 1.25rem;
-  line-height: 1.15;
+  font-size: 1.375rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
 }
 
 .clube-nome a {
@@ -279,158 +496,314 @@
   text-underline-offset: 3px;
 }
 
+/* carimbo de status, como o de tinta em passaporte: retangular, borda dupla, torto */
 .clube-tag {
-  flex-shrink: 0;
-  border-radius: 999px;
-  padding: 0.1875rem 0.625rem;
+  position: absolute;
+  z-index: 2;
+  bottom: -1.1rem;
+  right: 1.25rem;
+  border: 2px solid currentColor;
+  border-radius: 8px;
+  background: var(--c-papel);
+  padding: 0.3125rem 0.625rem;
   font-size: 0.75rem;
-  font-weight: 700;
-  line-height: 1.3;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
   white-space: nowrap;
+  box-shadow: inset 0 0 0 2px var(--c-papel), inset 0 0 0 3.5px currentColor;
+  transform: rotate(-4deg);
 }
 
 .clube-tag--no-ar {
-  background: var(--c-ok);
-  color: #14391f;
+  color: #14633a;
 }
 
 .clube-tag--combinacao {
-  background: var(--c-aguarda);
-  color: #4a3600;
+  color: #8a5a00;
+  border-style: dashed;
 }
 
 .clube-beneficio {
-  margin-top: 0.75rem;
-  font-size: 1rem;
-  font-weight: 500;
-  line-height: 1.4;
+  margin-top: 1rem;
+  font-family: var(--font-clube-titulo), system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.375rem;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  text-wrap: pretty;
 }
 
 .clube-regra {
-  margin-top: 0.375rem;
+  margin-top: 0.5rem;
   color: var(--c-mudo);
-  font-size: 0.8125rem;
-  line-height: 1.4;
+  font-size: 0.875rem;
+  line-height: 1.45;
 }
 
-.clube-acoes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.625rem;
-  margin-top: 1rem;
+/* picote: linha tracejada com meia-lua nas pontas, separa o bilhete do canhoto */
+.clube-picote {
+  position: relative;
+  height: 0;
+  border-top: 2px dashed var(--c-borda);
 }
 
-.clube-acoes .clube-btn {
-  flex: 1 1 8rem;
+.clube-picote::before,
+.clube-picote::after {
+  content: '';
+  position: absolute;
+  top: -11px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--c-fundo);
+  border: 1px solid var(--c-borda);
+}
+
+.clube-picote::before {
+  left: -11px;
+  clip-path: inset(0 0 0 50%);
+}
+
+.clube-picote::after {
+  right: -11px;
+  clip-path: inset(0 50% 0 0);
+}
+
+.clube-canhoto {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.75rem 1.25rem 1.25rem;
+  background: rgba(247, 227, 174, 0.28);
 }
 
 .clube-aviso {
-  margin-top: 1rem;
   color: var(--c-mudo);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
 }
 
 .clube-erro {
-  margin-top: 0.75rem;
   color: #8a2410;
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 0.9375rem;
+  font-weight: 600;
 }
 
 .clube-codigo-caixa {
-  margin-top: 1rem;
+  position: relative;
   border-radius: 12px;
   background: var(--c-tinta);
   color: var(--c-fundo);
-  padding: 1rem;
+  padding: 1rem 1rem 1.125rem;
   text-align: center;
+  animation: clube-carimba 360ms var(--ease-saida) both;
+}
+
+.clube-codigo-caixa::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1.5px dashed rgba(232, 163, 23, 0.55);
+  border-radius: 8px;
+  pointer-events: none;
 }
 
 .clube-codigo-legenda {
+  position: relative;
   font-size: 0.875rem;
 }
 
 .clube-codigo {
+  position: relative;
   margin-top: 0.25rem;
   color: var(--c-mostarda);
   font-family: var(--font-clube-titulo), system-ui, sans-serif;
   font-weight: 800;
-  font-size: 1.75rem;
-  letter-spacing: 0.03em;
+  font-size: clamp(1.5rem, 7.4vw, 2.25rem);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
 
+.clube-codigo-validade {
+  position: relative;
+  margin-top: 0.25rem;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
 .clube-nota {
-  margin-top: 1rem;
+  margin-top: 1.25rem;
   color: var(--c-mudo);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
 }
 
-/* ── bloco para negocios ──────────────────────────────────── */
+/* ── faixa para negocios: dunas, sol e uma proposta so ─────── */
 
-.clube-laranja {
-  margin-top: 2.25rem;
-  background: var(--c-laranja-forte);
-  color: #fff;
-  padding-block: 2rem;
+.clube-faixa {
+  position: relative;
+  isolation: isolate;
+  margin-top: 4.5rem;
+  background: var(--c-verde-fundo);
+  color: var(--c-fundo);
+  padding-block: 4.5rem 4rem;
+  overflow: hidden;
 }
 
-.clube-laranja .clube-h2 {
-  font-size: 1.625rem;
+.clube-faixa::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 28px;
+  background: var(--c-fundo);
+  -webkit-mask: radial-gradient(34px 28px at 34px 0, #000 98%, transparent 100%) repeat-x;
+  mask: radial-gradient(34px 28px at 34px 0, #000 98%, transparent 100%) repeat-x;
+  -webkit-mask-size: 68px 28px;
+  mask-size: 68px 28px;
 }
 
-.clube-laranja p {
-  margin-top: 0.75rem;
-  max-width: 38ch;
+.clube-sol {
+  position: absolute;
+  z-index: -1;
+  right: -3.5rem;
+  bottom: -4rem;
+  width: 11.5rem;
+  height: 11.5rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, #f3b83a 0%, var(--c-mostarda) 55%, var(--c-laranja) 100%);
+  opacity: 0.95;
+}
+
+.clube-faixa .clube-h2 {
+  max-width: 14ch;
+  font-size: clamp(2.25rem, 10vw, 3.5rem);
+}
+
+.clube-faixa p {
+  margin-top: 1rem;
+  max-width: 40ch;
+  font-size: 1.0625rem;
   text-wrap: pretty;
 }
 
-.clube-laranja .clube-btn {
-  margin-top: 1.25rem;
+.clube-faixa-acoes {
+  margin-top: 1.75rem;
 }
 
-/* ── fundo da cidade e rodape ─────────────────────────────── */
+@media (min-width: 900px) {
+  .clube-faixa {
+    padding-block: 6rem 5.5rem;
+  }
+  .clube-sol {
+    right: 6%;
+    top: 50%;
+    bottom: auto;
+    width: 22rem;
+    height: 22rem;
+    transform: translateY(-40%);
+  }
+}
 
-.clube-fundo p {
-  margin-top: 0.75rem;
-  max-width: 40ch;
+/* ── fundo da cidade: uma frase grande e o resto em segundo plano ─ */
+
+.clube-fundo {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.clube-fundo-frase {
+  font-family: var(--font-clube-titulo), system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.5rem, 12vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  color: var(--c-verde);
+  text-wrap: balance;
+}
+
+.clube-fundo-texto {
+  max-width: 44ch;
   color: var(--c-suave);
   text-wrap: pretty;
 }
 
+@media (min-width: 900px) {
+  .clube-fundo {
+    grid-template-columns: 1.1fr 1fr;
+    align-items: end;
+    gap: 4rem;
+  }
+}
+
 .clube-rodape {
-  border-top: 1px solid var(--c-borda);
-  padding-block: 1.25rem 2rem;
+  border-top: 1px dashed var(--c-input);
+  padding-block: 1.5rem 2.5rem;
   color: var(--c-mudo);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
 }
 
 /* ── pagina da plaquinha (/p/NN) ──────────────────────────── */
 
-.clube-foto {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  border-radius: 12px;
-  background: var(--c-borda);
+.clube-capa-p {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 21rem;
+  padding-block: 1.25rem 3rem;
+  background: var(--c-verde-fundo);
+  color: var(--c-fundo);
+}
+
+.clube-capa-p::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(8, 36, 36, 0.55) 0%, rgba(8, 36, 36, 0.1) 30%, rgba(8, 48, 48, 0.92) 100%);
+}
+
+.clube-capa-p .clube-hero-img {
+  object-position: 50% 62%;
+}
+
+.clube-capa-p .clube-marca-linha {
+  position: absolute;
+  top: 1.25rem;
+  left: 0;
+  right: 0;
+}
+
+.clube-p-titulo {
+  font-weight: 800;
+  font-size: clamp(2.25rem, 10.5vw, 3.25rem);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+}
+
+.clube-p-quadro {
+  position: relative;
+  margin-top: -2rem;
+  border: 1px solid var(--c-borda);
+  border-radius: 16px;
+  background: var(--c-papel);
+  padding: 1.25rem;
+  box-shadow: 0 12px 28px -16px rgba(79, 58, 16, 0.5);
 }
 
 .clube-pilha {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 0.75rem;
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
 }
 
-.clube-destaque {
-  background: var(--c-card);
-  border: 1px solid var(--c-borda);
-  border-radius: 12px;
-  padding: 1.125rem;
-}
-
-/* ── painel do parceiro: campos ───────────────────────────── */
+/* ── area do parceiro ─────────────────────────────────────── */
 
 .clube-campo {
   display: block;
@@ -444,7 +817,89 @@
   font: inherit;
 }
 
+.clube-marca-linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.clube-selo {
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.clube-intro-painel {
+  margin-top: 0.75rem;
+  max-width: 32ch;
+  font-size: 1.0625rem;
+}
+
+.clube-topo-painel {
+  background: var(--c-verde-fundo);
+  color: var(--c-fundo);
+  padding-block: 1.25rem 2.25rem;
+}
+
+.clube-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-top: 1rem;
+}
+
+.clube-acoes .clube-btn {
+  flex: 1 1 8rem;
+}
+
+/* ── movimento ────────────────────────────────────────────── */
+
+@keyframes clube-gira {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* So transform: o conteudo nunca fica invisivel se a animacao nao rodar (aba em segundo
+   plano, captura de tela). */
+@keyframes clube-sobe {
+  from {
+    transform: translateY(16px);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* o carimbo desce no papel: vem maior e assenta rapido */
+@keyframes clube-carimba {
+  from {
+    opacity: 0.4;
+    transform: scale(1.1) rotate(-1.5deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.clube-entra {
+  animation: clube-sobe 640ms var(--ease-saida) both;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .clube-carimbo-anel,
+  .clube-entra,
+  .clube-codigo-caixa {
+    animation: none;
+  }
   .clube-btn {
     transition: none;
   }
