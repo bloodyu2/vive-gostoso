@@ -230,3 +230,8 @@ Guamaré fica mais perto de todas. Natal ficou por três motivos: é a estação
 
 **Não rodado no navegador.** A área do parceiro (exige login e a migração aplicada) e o fluxo Usar contra o banco real. O banco é coberto por 32 testes em PGlite e a leitura da resposta do Usar por teste unitário (`vantagens.test.ts`). O toque em Usar contra o banco real não foi exercitado: a caixa do código foi conferida só no visual, com marcação injetada na página.
 
+## Nada sobe em preview nem em ambiente de desenvolvimento (regra do Victor, 26/10/2026, inegociável)
+**Decisão:** branch ou PR empurrado para o GitHub gera deploy de preview na Vercel, e cada deploy pesa no custo mensal dele. A regra é testar tudo localmente (tsc, eslint, vitest, build e dev server no PC, Chrome do Windows) e, deu certo, subir direto para produção. Nenhum push de branch de trabalho, nenhum PR por etapa.
+**Como fica com a proteção da master:** a master exige PR, então o merge só sai por um PR, e o PR precisa de uma branch remota. Isso gera o deploy de preview que a regra quer evitar. Enquanto a proteção existir, a entrega é um único push e um único PR por missão, nunca mais de um, e o agente avisa antes quanto isso custa em deploys. Correção depois de empurrar entra só se for indispensável; senão espera a próxima entrega. Tirar o preview de vez é decisão do Victor na Vercel (ignorar o build de branches que não são a master) ou na proteção da master.
+**Origem:** o PR 54 (Passaporte Gostoso) foi empurrado como branch e gerou um preview. O Victor chamou atenção no mesmo dia.
+
