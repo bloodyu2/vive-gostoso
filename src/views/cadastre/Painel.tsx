@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import {
   CheckCircle, Store, PlusCircle, Eye, LayoutDashboard,
-  Sparkles, ArrowRight, LogOut, User,
+  Sparkles, ArrowRight, LogOut, User, Ticket,
 } from 'lucide-react'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { useAuth } from '@/hooks/useAuth'
@@ -38,6 +38,23 @@ function StatCard({ label, value, sub }: { label: string; value: string | number
       <p className="text-xs text-fg-3-texto mt-0.5 font-medium">{label}</p>
       {sub && <p className="text-[11px] text-teal mt-1 font-medium">{sub}</p>}
     </div>
+  )
+}
+
+function CartaoPassaporte() {
+  const { t } = useTranslation('passaporte')
+  const lp = useLocalePath()
+  return (
+    <Link
+      href={lp('/cadastre/passaporte')}
+      className="group bg-white border border-[#E8E4DF] rounded-2xl p-5 hover:shadow-md hover:-translate-y-0.5 transition-all"
+    >
+      <Ticket className="w-5 h-5 mb-3 text-teal" />
+      <h2 className="font-semibold text-[15px] text-[#1A1A1A] group-hover:text-teal transition-colors">
+        {t('card_titulo')}
+      </h2>
+      <p className="text-xs text-fg-3-texto mt-1 leading-relaxed">{t('card_desc')}</p>
+    </Link>
   )
 }
 
@@ -295,6 +312,8 @@ function PainelInner() {
               {t('module_preview_desc')}
             </p>
           </Link>
+
+          {businesses.length > 0 && <CartaoPassaporte />}
 
           {myProfessional && (
             <Link href={lp('/cadastre/profissional')} className="block bg-white rounded-2xl border border-[#E8E4DF] p-5 hover:shadow-md transition-shadow">
