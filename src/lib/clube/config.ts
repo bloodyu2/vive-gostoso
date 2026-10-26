@@ -11,5 +11,9 @@
 // rota em scripts/generate-sitemap.mjs.
 export const CLUBE_PUBLICO = false
 
+/** Quando as plaquinhas chegam e o Passaporte abre para os turistas (AAAA-MM-DD).
+ * Aparece na capa da /clube nos tres idiomas. Para ajustar a data, e so mudar aqui. */
+export const LANCAMENTO_PREVISTO = '2026-11-05'
+
 export const CLUBE_ROTA = '/clube'
 export const CLUBE_URL = 'https://www.vivegostoso.com.br/clube'

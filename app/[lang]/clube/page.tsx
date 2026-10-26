@@ -6,12 +6,14 @@
 import type { CSSProperties } from 'react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import { CalendarDays } from 'lucide-react'
 import { Carimbo } from '@/components/clube/carimbo'
 import { ListaVantagens } from '@/components/clube/lista-vantagens'
 import { TemaClube } from '@/components/clube/tema'
 import { dicionario, ehIdioma, prefixo } from '@/lib/bio/dicionario'
 import { VIVE } from '@/lib/bio/contato'
 import { carregarVantagens } from '@/lib/clube/carregar'
+import { LANCAMENTO_PREVISTO } from '@/lib/clube/config'
 import { origemValida } from '@/lib/clube/vantagens'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 
@@ -50,6 +52,11 @@ export default async function ClubePage({ params, searchParams }: Props) {
   const pre = prefixo(idioma)
   const { vantagens, doBanco } = await carregarVantagens()
   const [fundoFrase, fundoResto] = separarPrimeiraFrase(t.fundo_texto)
+  const dataDoLancamento = new Intl.DateTimeFormat(idioma === 'pt' ? 'pt-BR' : idioma, {
+    timeZone: 'UTC',
+    day: 'numeric',
+    month: 'long',
+  }).format(new Date(`${LANCAMENTO_PREVISTO}T12:00:00Z`))
 
   const passos = [
     { t: t.passo1_t, d: t.passo1_d },
@@ -92,6 +99,10 @@ export default async function ClubePage({ params, searchParams }: Props) {
                 {t.como_titulo}
               </a>
             </div>
+            <p className="clube-lancamento clube-entra" style={{ '--i': 4 } as CSSProperties}>
+              <CalendarDays size={20} aria-hidden />
+              <span>{t.lancamento.replace('{data}', dataDoLancamento)}</span>
+            </p>
           </div>
         </div>
       </header>
