@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { disparar } from '@/lib/clube/disparar'
 import { interpretarUso, linkParaAmigo, textoParaAmigo, type ResultadoUso, type Vantagem } from '@/lib/clube/vantagens'
 
 /** Textos já no idioma da página (o servidor resolve; este componente não carrega
@@ -89,7 +90,7 @@ export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, 
     } catch {
       /* sem sessionStorage: conta mesmo assim */
     }
-    void supabase.rpc('gostoso_club_registrar_vistas', { p_partner_ids: ids })
+    disparar(supabase.rpc('gostoso_club_registrar_vistas', { p_partner_ids: ids }))
   }, [doBanco, vantagens])
 
   async function usar(v: Vantagem) {
