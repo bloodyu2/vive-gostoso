@@ -49,7 +49,7 @@ function PassaporteInner() {
 
   return (
     <div>
-      <header className="clube-topo" style={{ paddingBottom: '1.5rem' }}>
+      <header className="clube-topo-painel">
         <div className="clube-col">
           <div className="clube-marca-linha">
             <Link className="clube-marca" href={lp('/cadastre/painel')}>
@@ -57,10 +57,10 @@ function PassaporteInner() {
             </Link>
             <span className="clube-selo">{t('header')}</span>
           </div>
-          <h1 className="clube-h1" style={{ fontSize: '2.25rem', marginTop: '1.75rem' }}>
+          <h1 className="clube-h1" style={{ fontSize: '2.75rem', marginTop: '1.5rem' }}>
             {t('titulo')}
           </h1>
-          <p className="clube-intro">{t('sub')}</p>
+          <p className="clube-intro-painel">{t('sub')}</p>
         </div>
       </header>
 
@@ -192,7 +192,7 @@ function FormVantagem({ negocioId, parceiro }: { negocioId: string; parceiro: Pa
   }
 
   return (
-    <section className="clube-card" aria-labelledby="minha-vantagem" style={{ marginTop: '1.25rem' }}>
+    <section className="clube-card" aria-labelledby="minha-vantagem" style={{ marginTop: '1.25rem', padding: '1.25rem' }}>
       {!parceiro ? (
         <>
           <h2 id="minha-vantagem" className="clube-nome">

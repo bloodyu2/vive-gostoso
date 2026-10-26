@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { BedDouble, Compass, Palette, Share2, Ticket, UtensilsCrossed, Waves } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { disparar } from '@/lib/clube/disparar'
 import { interpretarUso, linkParaAmigo, textoParaAmigo, type ResultadoUso, type Vantagem } from '@/lib/clube/vantagens'
@@ -14,6 +15,7 @@ export interface TextosLista {
   fechar: string
   carregando: string
   codigo_legenda: string
+  valido_hoje: string
   amigo: string
   amigo_texto: string
   rodape_vantagens: string
@@ -67,9 +69,29 @@ function diaDeGostoso(): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Fortaleza' }).format(new Date())
 }
 
+function hojeLegivel(lang: string): string {
+  return new Intl.DateTimeFormat(lang === 'pt' ? 'pt-BR' : lang, {
+    timeZone: 'America/Fortaleza',
+    day: '2-digit',
+    month: '2-digit',
+  }).format(new Date())
+}
+
 function dataCurta(iso: string, lang: string): string {
   const d = new Date(`${iso}T12:00:00Z`)
   return new Intl.DateTimeFormat(lang === 'pt' ? 'pt-BR' : lang, { timeZone: 'UTC' }).format(d)
+}
+
+/** Um ícone por tipo de negócio, pelo rótulo do card. Cai em bilhete. */
+function IconeDoTipo({ tipo }: { tipo: string | null }) {
+  const t = (tipo ?? '').toLowerCase()
+  const props = { size: 22, strokeWidth: 2, 'aria-hidden': true } as const
+  if (/passeio|tour|aventura|kite|buggy/.test(t)) return <Compass {...props} />
+  if (/hosped|pousada|hotel|stay|lodging/.test(t)) return <BedDouble {...props} />
+  if (/artesan|craft|loja|shop/.test(t)) return <Palette {...props} />
+  if (/com(er|ida)|restaur|food|bar|caf/.test(t)) return <UtensilsCrossed {...props} />
+  if (/praia|beach|esporte|sport/.test(t)) return <Waves {...props} />
+  return <Ticket {...props} />
 }
 
 export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, lang, doBanco }: Props) {
@@ -77,7 +99,7 @@ export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, 
   const contou = useRef(false)
 
   /* Vezes que a vantagem foi vista: uma chamada por visita, uma vez por dia por
-     aparelho (sessionStorage). Sem dado pessoal, falha em silêncio. */
+     aba (sessionStorage). Sem dado pessoal, falha em silêncio. */
   useEffect(() => {
     if (!doBanco || contou.current) return
     contou.current = true
@@ -132,7 +154,7 @@ export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, 
   return (
     <>
       <ul className="clube-lista">
-        {vantagens.map((v) => {
+        {vantagens.map((v, i) => {
           const estado = estados[v.partnerId]
           const noAr = v.status === 'no_ar'
           const meta = [
@@ -144,70 +166,75 @@ export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, 
           const mensagemAmigo = textoParaAmigo(textos.amigo_texto, v, linkClube)
 
           return (
-            <li key={v.partnerId} className="clube-card">
-              <div className="clube-card-topo">
-                <div>
-                  {v.tipo ? <p className="clube-tipo">{v.tipo}</p> : null}
-                  <h3 className="clube-nome">
-                    <a href={`${prefixo}/negocio/${v.slug}`}>{v.nome}</a>
-                  </h3>
+            <li key={v.partnerId} className="clube-card clube-entra" style={{ '--i': i } as CSSProperties}>
+              <div className="clube-card-corpo">
+                <div className="clube-card-topo">
+                  <span className="clube-icone">
+                    <IconeDoTipo tipo={v.tipo} />
+                  </span>
+                  <div>
+                    {v.tipo ? <p className="clube-tipo">{v.tipo}</p> : null}
+                    <h3 className="clube-nome">
+                      <a href={`${prefixo}/negocio/${v.slug}`}>{v.nome}</a>
+                    </h3>
+                  </div>
                 </div>
                 <span className={`clube-tag ${noAr ? 'clube-tag--no-ar' : 'clube-tag--combinacao'}`}>
                   {noAr ? textos.status_no_ar : textos.status_combinacao}
                 </span>
+
+                <p className="clube-beneficio">{v.beneficio}</p>
+                {regra ? <p className="clube-regra">{regra}</p> : null}
               </div>
 
-              <p className="clube-beneficio">{v.beneficio}</p>
-              {regra ? <p className="clube-regra">{regra}</p> : null}
+              <div className="clube-picote" aria-hidden="true" />
 
-              {!noAr ? (
-                <p className="clube-aviso">{textos.em_breve}</p>
-              ) : v.esgotada ? (
-                <p className="clube-aviso">{textos.esgotada}</p>
-              ) : (
-                <div className="clube-acoes">
-                  {aberto ? (
-                    <button type="button" className="clube-btn clube-btn--contorno" onClick={() => fechar(v.partnerId)}>
+              <div className="clube-canhoto">
+                {!noAr ? (
+                  <p className="clube-aviso">{textos.em_breve}</p>
+                ) : v.esgotada ? (
+                  <p className="clube-aviso">{textos.esgotada}</p>
+                ) : aberto ? (
+                  <>
+                    <div className="clube-codigo-caixa" role="status">
+                      <p className="clube-codigo-legenda">{textos.codigo_legenda}</p>
+                      <p className="clube-codigo">{estado.codigo}</p>
+                      <p className="clube-codigo-validade">{textos.valido_hoje.replace('{data}', hojeLegivel(lang))}</p>
+                    </div>
+                    <button type="button" className="clube-btn clube-btn--contorno clube-btn--cheio" onClick={() => fechar(v.partnerId)}>
                       {textos.fechar}
                     </button>
-                  ) : (
-                    <button
-                      type="button"
-                      className="clube-btn clube-btn--verde"
-                      onClick={() => usar(v)}
-                      disabled={!doBanco || estado?.tipo === 'carregando'}
-                    >
-                      {estado?.tipo === 'carregando' ? textos.carregando : textos.usar}
-                    </button>
-                  )}
-                </div>
-              )}
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    className="clube-btn clube-btn--verde clube-btn--cheio"
+                    onClick={() => usar(v)}
+                    disabled={!doBanco || estado?.tipo === 'carregando'}
+                  >
+                    {estado?.tipo === 'carregando' ? textos.carregando : textos.usar}
+                  </button>
+                )}
 
-              {aberto ? (
-                <div className="clube-codigo-caixa" role="status">
-                  <p className="clube-codigo-legenda">{textos.codigo_legenda}</p>
-                  <p className="clube-codigo">{estado.codigo}</p>
-                </div>
-              ) : null}
+                {estado?.tipo === 'erro' ? (
+                  <p className="clube-erro" role="alert">
+                    {estado.mensagem}
+                  </p>
+                ) : null}
 
-              {estado?.tipo === 'erro' ? (
-                <p className="clube-erro" role="alert">
-                  {estado.mensagem}
-                </p>
-              ) : null}
-
-              {noAr && doBanco ? (
-                <div className="clube-acoes">
+                {noAr && doBanco ? (
                   <a
-                    className="clube-btn clube-btn--contorno"
+                    className="clube-btn clube-btn--fantasma"
                     href={linkParaAmigo(mensagemAmigo)}
                     target="_blank"
                     rel="noopener noreferrer"
+                    style={{ justifySelf: 'start', color: 'var(--c-verde)' }}
                   >
+                    <Share2 size={18} aria-hidden />
                     {textos.amigo}
                   </a>
-                </div>
-              ) : null}
+                ) : null}
+              </div>
             </li>
           )
         })}
