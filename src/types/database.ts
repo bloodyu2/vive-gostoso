@@ -57,6 +57,8 @@ export interface Business {
   is_published: boolean
   business_type: 'local' | 'service_company'
   services: { name: string; description?: string; price?: string }[]
+  /** Transfer ligado a este negocio (ex.: o dono tambem faz transfer). Mostra o cartao 'Transfer do dono'. */
+  transfer_id?: string | null
   category?: Category
 }
 

@@ -22,6 +22,7 @@ import { Lens } from '@/components/magicui/lens'
 import { ReviewList } from '@/components/reviews/review-list'
 import { ReviewForm } from '@/components/reviews/review-form'
 import { useBusinessRatings } from '@/hooks/useReviews'
+import { useTransferDoNegocio } from '@/hooks/useTransfers'
 import { StarRating } from '@/components/reviews/star-rating'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
@@ -52,6 +53,7 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
   const { t } = useTranslation()
   const lp = useLocalePath()
   const status = useStatusAbertura(b?.opening_hours)
+  const { data: transferDoDono } = useTransferDoNegocio(b?.transfer_id)
 
   /* Barra fixa de contato no celular: some quando a sidebar (que ja tem o CTA)
      entra na tela, para nao dizer a mesma coisa duas vezes. */
@@ -295,6 +297,20 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
             {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
             {copied ? t('negocio.link_copiado') : t('negocio.compartilhar')}
           </button>
+
+          {/* Transfer do dono */}
+          {transferDoDono?.slug && (
+            <Link
+              href={lp(`/transfer/${transferDoDono.slug}`)}
+              className="w-full flex items-center gap-3 bg-white dark:bg-card border border-[#E8E4DF] dark:border-border-1 rounded-2xl px-5 py-4 hover:border-teal transition-colors"
+            >
+              <Car className="w-5 h-5 text-teal flex-shrink-0" />
+              <span className="min-w-0">
+                <span className="block text-sm font-semibold text-[#1A1A1A] dark:text-white">{t('negocio.transfer_do_dono')}</span>
+                <span className="block text-xs text-[#737373] truncate">{transferDoDono.provider_name.trim()}{transferDoDono.vehicle_type ? ` · ${transferDoDono.vehicle_type}` : ''}</span>
+              </span>
+            </Link>
+          )}
 
           {/* Cardápio */}
           {menuUrlHref && (

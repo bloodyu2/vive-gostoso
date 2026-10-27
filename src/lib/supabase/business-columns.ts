@@ -7,7 +7,7 @@ export const PUBLIC_BUSINESS_COLUMNS =
   'id, name, slug, description, category_id, profile_id, address, lat, lng, phone, whatsapp, ' +
   'website, instagram, cover_url, logo_url, photos, imagens_licenciadas, opening_hours, is_verified, is_featured, plan, active, ' +
   'display_order, created_at, updated_at, price_range, menu_url, amenities, is_published, ' +
-  'business_type, services'
+  'business_type, services, transfer_id'
 
 export const PUBLIC_BUSINESS_COLUMNS_WITH_CATEGORY =
   `${PUBLIC_BUSINESS_COLUMNS}, category:gostoso_categories(*)`

@@ -34,6 +34,26 @@ export function useTransfers() {
   })
 }
 
+export type TransferResumo = Pick<Transfer, 'id' | 'provider_name' | 'slug' | 'vehicle_type'>
+
+/** Transfer ligado a um negocio pelo campo transfer_id (cartao "Transfer do dono"). */
+export function useTransferDoNegocio(transferId: string | null | undefined) {
+  return useQuery({
+    queryKey: ['transfers', 'do-negocio', transferId],
+    enabled: !!transferId,
+    queryFn: async (): Promise<TransferResumo | null> => {
+      const { data, error } = await supabase
+        .from('gostoso_transfers')
+        .select('id, provider_name, slug, vehicle_type')
+        .eq('id', transferId as string)
+        .eq('active', true)
+        .maybeSingle()
+      if (error) throw error
+      return (data ?? null) as TransferResumo | null
+    },
+  })
+}
+
 export function useAdminTransfers() {
   return useQuery({
     queryKey: ['transfers', 'admin'],
