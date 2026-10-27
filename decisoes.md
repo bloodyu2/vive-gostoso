@@ -210,3 +210,28 @@ Guamaré fica mais perto de todas. Natal ficou por três motivos: é a estação
 **O que a rodada 1 deixou passar.** As fotos do Storage viraram `/_next/image` com srcSet em 640 e 1080 (rodada 1), mas quem nao declarava `sizes` herdava o padrao `100vw` do `SafeCoverImage`. MEDIDO no build local: o cartao \"Chale Gostoso SMG\" da home, exibido a 178 px, pedia a variante de 1080 px e baixava 218 KB; a mesma foto em 640 sai em 85 KB. `BusinessCover` ganhou a prop `sizes` e a home, o cartao de negocio e o bloco \"Agora em Gostoso\" passam a largura real. As larguras 640 e 1080 da rodada 1 nao mudaram: a correcao foi so no `sizes`, sem nova transformacao na Vercel.
 
 **O que ficou de fora, com motivo:** cache do HTML (segue `private, no-store` por causa do nonce de CSP, igual a rodada 1); preload de fonte (o `next/font` com `--webpack` nao emite no HTML, e mexer em preload de fonte derrubou a /explore do vive-paraty em 29/09); o `useBusinesses` da home (247 KB de JSON no navegador para filtrar destaques que o servidor ja manda) muda o HTML servido, entao e decisao de comportamento, nao de velocidade.
+
+## Passaporte Gostoso: grátis, vantagem do próprio parceiro, escondido até o lançamento (26/10/2026)
+**Ordem do Victor de 26/10/2026.** Branch `feat/clube-passaporte`.
+
+**Regras de produto.** 100% grátis para turista e negócio: sem dinheiro, Stripe, PIX, app nem cadastro do turista. Cada parceiro define a própria vantagem ao entrar (texto, limite por mês, validade) e muda quando quiser, valendo na hora, sem aprovação nossa. Parceiro "em combinação" aparece no card assim e sem botão Usar. O que o Passaporte gerar com patrocínio e pacotes vira fundo da cidade, com saldo publicado todo mês.
+
+**Código do dia no banco.** `GOSTOSO-NNNN`, derivado de uma semente guardada em `gostoso_club_segredo` (RLS ligada, sem grant) e da data no fuso de Gostoso. Nenhuma variável nova na Vercel. Cada toque em Usar chama `gostoso_club_usar`, que grava uma linha. O código é próprio de cada parceiro e muda todo dia (o do balcão A não vale no B); o dono confere o dele no painel. O mesmo aparelho (id aleatório no navegador, sem dado pessoal) que toca de novo em Usar no mesmo parceiro no mesmo dia recebe o mesmo código e não gera linha nova: fechar a caixa ou recarregar não conta como outro uso.
+
+**Escrita só por função.** Usos, vistas e visitas de plaquinha não aceitam insert direto de ninguém. As funções `SECURITY DEFINER` têm teto de 20 usos por minuto por parceiro e conferem o limite mensal sob trava (`pg_advisory_xact_lock`). A vantagem do parceiro usa grant por coluna: o dono liga e pausa (`no_ar` ou `pausado`) e edita texto, regra, limite e validade; `tipo` e `em_combinacao` são nossos. O dono não apaga a vantagem (apagar levaria o histórico de usos junto; pausar existe). Desvio consciente do template de grants, registrado no cabeçalho da migração. Visitas de plaquinha e vistas são contadores por dia, não uma linha por evento.
+
+**Limite conhecido.** Sem cadastro e sem service role no app, quem chama a função direto com a chave anon pode gastar o limite mensal de um parceiro. Defesas de hoje: um uso por aparelho por parceiro por dia e teto de 20 usos novos por minuto por parceiro. Se houver abuso, o passo seguinte é um Route Handler com service_role e hash de IP, tirando o `execute` de anon.
+
+**Escondido até o lançamento.** `/clube` com `noindex, nofollow`, fora do sitemap, sem link público. Nas páginas `/p/NN` a chamada para o Passaporte depende de `CLUBE_PUBLICO` (`src/lib/clube/config.ts`, hoje `false`). Lançar é trocar essa constante; para entrar na busca, tirar o `noindex` de `app/[lang]/clube/page.tsx` e incluir a rota em `scripts/generate-sitemap.mjs`. Não pus `/clube` no `Disallow` do `robots.ts`: bloquear o rastreio esconderia o `noindex` do buscador.
+
+**`/p/NN` é página do estabelecimento.** `src/lib/plaquinhas.ts` mapeia cada código a um negócio. O QR impresso continua apontando para `/p/NN`. Sem link de avaliação do Google no mapa, o botão some (o banco e o código não têm `place_id`).
+
+**Fora desta entrega, por ordem do coordenador.** Bloco "Indique um negócio" e tabela de compartilhamentos (`gostoso_club_shares`). Fica só o botão "Mandar para um amigo", dentro da `/clube`.
+
+**Não rodado no navegador.** A área do parceiro (exige login e a migração aplicada) e o fluxo Usar contra o banco real. O banco é coberto por 32 testes em PGlite e a leitura da resposta do Usar por teste unitário (`vantagens.test.ts`). O toque em Usar contra o banco real não foi exercitado: a caixa do código foi conferida só no visual, com marcação injetada na página.
+
+## Nada sobe em preview nem em ambiente de desenvolvimento (regra do Victor, 26/10/2026, inegociável)
+**Decisão:** branch ou PR empurrado para o GitHub gera deploy de preview na Vercel, e cada deploy pesa no custo mensal dele. A regra é testar tudo localmente (tsc, eslint, vitest, build e dev server no PC, Chrome do Windows) e, deu certo, subir direto para produção. Nenhum push de branch de trabalho, nenhum PR por etapa.
+**Como fica com a proteção da master:** a master exige PR, então o merge só sai por um PR, e o PR precisa de uma branch remota. Isso gera o deploy de preview que a regra quer evitar. Enquanto a proteção existir, a entrega é um único push e um único PR por missão, nunca mais de um, e o agente avisa antes quanto isso custa em deploys. Correção depois de empurrar entra só se for indispensável; senão espera a próxima entrega. Tirar o preview de vez é decisão do Victor na Vercel (ignorar o build de branches que não são a master) ou na proteção da master.
+**Origem:** o PR 54 (Passaporte Gostoso) foi empurrado como branch e gerou um preview. O Victor chamou atenção no mesmo dia.
+
