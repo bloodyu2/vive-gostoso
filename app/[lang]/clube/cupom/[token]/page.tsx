@@ -11,6 +11,9 @@ import { cupomDoTitular } from '@/lib/clube/cupom'
 
 type Props = { params: Promise<{ lang: string; token: string }> }
 
+/* dado pessoal por token: nunca prerenderizada nem compartilhada em cache */
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
   return {
@@ -70,7 +73,7 @@ export default async function CupomPage({ params }: Props) {
               ) : null}
               <img
                 src={urlImagem}
-                alt={t.alt_imagem.replace('{negocio}', cupom.negocio ?? '')}
+                alt={t.alt_imagem.replace('{negocio}', () => cupom.negocio ?? '')}
                 width={1080}
                 height={1560}
                 style={{
@@ -90,7 +93,7 @@ export default async function CupomPage({ params }: Props) {
                   baixar: t.baixar,
                   compartilhar: t.compartilhar,
                   link_copiado: t.link_copiado,
-                  compartilhar_texto: t.compartilhar_texto.replace('{negocio}', cupom.negocio ?? ''),
+                  compartilhar_texto: t.compartilhar_texto.replace('{negocio}', () => cupom.negocio ?? ''),
                 }}
               />
               <p className="clube-regra">{t.ajuda_salvar}</p>

@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import type { PGlite } from '@electric-sql/pglite'
 import { IDS, como, criarBanco } from './banco'
+import { textoConsentimento } from '../clube/resgate'
 
 /* Roda as DUAS migracoes do Passaporte (a de 26/10 e a do resgate, 28/10) num Postgres em
    memoria e confere o resgate com cadastro: validacao no servidor, consentimento, uso
@@ -22,6 +23,8 @@ const P_AGUARDA = '40000000-0000-4000-8000-0000000000d1'
 
 const VERSAO = '2026-10-28'
 const TEXTO = 'Autorizo repassar meu nome, e-mail e telefone a Publicado para que ele me procure sobre esta vantagem.'
+const textoPara = (negocio: string) =>
+  `Autorizo repassar meu nome, e-mail e telefone a ${negocio} para que ele me procure sobre esta vantagem.`
 const APARELHO = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`
 
 let db: PGlite
@@ -49,20 +52,30 @@ async function resgatar(
     origem: string | null
     aparelho: string | null
     isca: string | null
+    /** true: nao recua os registros antes (teste de teto) */
+    mantem: boolean
   }> = {},
 ): Promise<Resp> {
+  if (!campos.mantem) await envelhecer()
+  // o texto que a pessoa le cita o negocio do parceiro; o servidor confere isso
+  const nome = (
+    await db.query<{ name: string }>(
+      `select b.name from public.gostoso_club_partners cp join public.gostoso_businesses b on b.id = cp.business_id where cp.id = '${partner}'`,
+    )
+  ).rows[0]?.name
   const c = {
     nome: 'Ana Souza',
     email: 'ana@exemplo.com',
     telefone: '(84) 99999-1234',
     consentimento: true,
     versao: VERSAO,
-    texto: TEXTO,
+    texto: nome ? textoPara(nome) : TEXTO,
     origem: null,
     aparelho: null,
     isca: null,
     ...campos,
   }
+  delete (c as { mantem?: boolean }).mantem
   const lit = (v: string | null) => (v === null ? 'null' : `'${v.replace(/'/g, "''")}'`)
   const r = await como<{ r: Resp }>(
     db,
@@ -75,11 +88,11 @@ async function resgatar(
 }
 
 
-/** O teto de 20 resgates por minuto olha a ultima hora cheia de relogio; como os testes rodam
- *  em sequencia, recuo o que ja foi criado para cada teste comecar sem rajada acumulada. */
+/** Os tetos de 5 por minuto e 30 por hora por parceiro olham o relogio; como os testes rodam em
+ *  sequencia, recuo o que ja foi criado para cada chamada comecar sem rajada acumulada. */
 async function envelhecer() {
   await db.exec(
-    `update public.gostoso_club_vouchers set created_at = created_at - interval '3 minutes' where created_at > now() - interval '2 minutes'`,
+    `update public.gostoso_club_vouchers set created_at = created_at - interval '61 minutes' where created_at > now() - interval '59 minutes'`,
   )
 }
 
@@ -179,6 +192,11 @@ describe('resgatar: o servidor valida de novo', () => {
     expect(await resgatar(P_A, { versao: 'ontem', email: 'c2@exemplo.com' })).toEqual({ ok: false, motivo: 'consentimento' })
     expect(await resgatar(P_A, { texto: 'ok', email: 'c3@exemplo.com' })).toEqual({ ok: false, motivo: 'consentimento' })
     expect(await resgatar(P_A, { texto: 'x'.repeat(601), email: 'c4@exemplo.com' })).toEqual({ ok: false, motivo: 'consentimento' })
+    // texto qualquer, versao que a politica nunca publicou, ou texto de outro negocio
+    expect(await resgatar(P_A, { texto: 'xxxxxxxxxxxxxxxxxxxxxxxxx', email: 'c5@exemplo.com' })).toEqual({ ok: false, motivo: 'consentimento' })
+    expect(await resgatar(P_A, { versao: '2020-01-01', email: 'c6@exemplo.com' })).toEqual({ ok: false, motivo: 'consentimento' })
+    expect(await resgatar(P_A, { texto: 'Autorizo repassar meus dados a Outro Lugar para que ele me procure.', email: 'c7@exemplo.com' })).toEqual({ ok: false, motivo: 'consentimento' })
+    expect(await resgatar(P_A, { texto: 'Publicado vai receber tudo sobre mim sem eu autorizar nada.', email: 'c8@exemplo.com' })).toEqual({ ok: false, motivo: 'consentimento' })
     expect((await linhas()).length).toBe(antes)
   })
 
@@ -270,20 +288,51 @@ describe('resgatar: parceiro e limites', () => {
     expect(ultimo.aparelho).toBeNull()
   })
 
-  it('mais de 20 resgates por minuto no mesmo parceiro é recusado', async () => {
-    const antes = await db.query<{ n: number }>(
-      `select count(*)::int as n from public.gostoso_club_vouchers where partner_id = '${P_B}' and created_at > now() - interval '1 minute'`,
-    )
+  it('mais de 5 resgates por minuto no mesmo parceiro é recusado', async () => {
+    await envelhecer()
     let ultimo: Resp = { ok: true }
-    for (let i = 0; i < 30 && ultimo.ok; i++) {
-      ultimo = await resgatar(P_B, { email: `rajada${i}@exemplo.com`, aparelho: APARELHO(2000 + i) })
+    let feitos = 0
+    for (let i = 0; i < 10 && ultimo.ok; i++) {
+      ultimo = await resgatar(P_B, { email: `rajada${i}@exemplo.com`, aparelho: APARELHO(2000 + i), mantem: true })
+      if (ultimo.ok) feitos++
     }
     expect(ultimo).toEqual({ ok: false, motivo: 'muitos' })
-    const depois = await db.query<{ n: number }>(
-      `select count(*)::int as n from public.gostoso_club_vouchers where partner_id = '${P_B}' and created_at > now() - interval '1 minute'`,
+    expect(feitos).toBe(5)
+  })
+
+  it('mais de 30 resgates por hora no mesmo parceiro é recusado, mesmo espaçados', async () => {
+    await envelhecer()
+    // 30 emitidos nos ultimos 50 minutos, espalhados, sem pico por minuto
+    await db.exec(
+      `insert into public.gostoso_club_vouchers (partner_id, business_id, codigo, nome, email, telefone,
+         consentimento_versao, consentimento_texto, expira_em, created_at)
+       select '${P_B}', (select business_id from public.gostoso_club_partners where id = '${P_B}'),
+              'HHHH' || chr(65 + g % 5) || chr(65 + g / 5) || 'KK', 'Pessoa', 'hora' || g || '@exemplo.com', '84999991234',
+              '${VERSAO}', '${TEXTO}', public.gostoso_club_hoje() + 30, now() - (g || ' minutes')::interval
+         from generate_series(1, 30) g`,
     )
-    expect(depois.rows[0].n).toBe(20)
-    expect(antes.rows[0].n).toBeLessThan(20)
+    expect(await resgatar(P_B, { email: 'hora-extra@exemplo.com', mantem: true })).toEqual({ ok: false, motivo: 'muitos' })
+  })
+
+  it('o texto de consentimento que o formulário monta em pt, en e es passa na checagem do servidor', async () => {
+    const idiomas = ['pt', 'en', 'es'] as const
+    for (const [i, lang] of idiomas.entries()) {
+      const d = JSON.parse(readFileSync(resolve(process.cwd(), `src/locales/${lang}.json`), 'utf8'))
+      const texto = textoConsentimento(d.clube.consentimento, 'Publicado')
+      const r = await resgatar(P_A, { texto, email: `idioma${i}@exemplo.com` })
+      expect(r.ok, `${lang}: ${texto}`).toBe(true)
+    }
+  })
+
+  it('o mesmo e-mail com +etiqueta ou pontos do Gmail conta como um só cupom ativo', async () => {
+    const r = await resgatar(P_A, { email: 'Fulano.Tal+um@gmail.com' })
+    expect(r.ok).toBe(true)
+    expect(await resgatar(P_A, { email: 'fulanotal+dois@gmail.com' })).toEqual({ ok: false, motivo: 'ja_tem' })
+    expect(await resgatar(P_A, { email: 'fulano.tal@googlemail.com' })).toEqual({ ok: false, motivo: 'ja_tem' })
+    // fora do Gmail os pontos importam, mas a etiqueta nao
+    expect((await resgatar(P_A, { email: 'beltrano.x@exemplo.com' })).ok).toBe(true)
+    expect(await resgatar(P_A, { email: 'beltrano.x+promo@exemplo.com' })).toEqual({ ok: false, motivo: 'ja_tem' })
+    expect((await resgatar(P_A, { email: 'beltranox@exemplo.com' })).ok).toBe(true)
   })
 })
 

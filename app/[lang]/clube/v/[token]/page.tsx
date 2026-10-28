@@ -12,6 +12,9 @@ import { formatarCodigo } from '@/lib/clube/resgate'
 
 type Props = { params: Promise<{ lang: string; token: string }> }
 
+/* dado pessoal por token: nunca prerenderizada nem compartilhada em cache */
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
   return {
@@ -119,7 +122,7 @@ export default async function VerificarPage({ params }: Props) {
                   {v.beneficio}
                 </p>
                 <p className="clube-regra" style={{ marginTop: '1rem' }}>
-                  {t.verificar_de.replace('{nome}', v.primeiro_nome ?? '')}
+                  {t.verificar_de.replace('{nome}', () => v.primeiro_nome ?? '')}
                 </p>
               </>
             ) : null}

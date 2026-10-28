@@ -119,6 +119,25 @@ $$;
 revoke execute on function public.gostoso_club__codigo_cupom() from public, anon, authenticated;
 grant execute on function public.gostoso_club__codigo_cupom() to service_role;
 
+-- ── chave do e-mail ─────────────────────────────────────────────────────────
+-- Para o "um cupom ativo por e-mail": minuscula, sem o +etiqueta da parte local e, no
+-- Gmail, sem pontos. Assim ana+1@gmail.com e a.na@gmail.com contam como ana@gmail.com.
+
+create or replace function public.gostoso_club__email_chave(p_email text) returns text
+  language sql immutable set search_path = public as
+$$
+  select case
+    when lower(split_part(lower(btrim(p_email)), '@', 2)) in ('gmail.com', 'googlemail.com')
+      then replace(split_part(split_part(lower(btrim(p_email)), '@', 1), '+', 1), '.', '') || '@gmail.com'
+    else split_part(split_part(lower(btrim(p_email)), '@', 1), '+', 1) || '@' || split_part(lower(btrim(p_email)), '@', 2)
+  end
+$$;
+revoke execute on function public.gostoso_club__email_chave(text) from public, anon, authenticated;
+grant execute on function public.gostoso_club__email_chave(text) to service_role;
+
+create index if not exists idx_gostoso_club_vouchers_email_chave
+  on public.gostoso_club_vouchers (partner_id, (public.gostoso_club__email_chave(email)));
+
 -- ── resgatar ────────────────────────────────────────────────────────────────
 -- Devolve {ok:true, token, codigo, expira_em, negocio, beneficio} ou {ok:false, motivo}.
 -- Motivos: consentimento, nome, email, telefone, indisponivel, ja_tem, esgotada, muitos.
@@ -158,8 +177,10 @@ begin
   end if;
 
   -- consentimento explicito, com versao da politica e o texto que a pessoa leu
+  -- A versao tem de ser uma das que a politica publicou (lista abaixo; politica nova
+  -- entra aqui numa migracao). O texto e conferido adiante contra o nome do negocio.
   if p_consentimento is not true
-     or p_versao is null or p_versao !~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
+     or p_versao is null or p_versao not in ('2026-10-28')
      or char_length(coalesce(p_texto, '')) not between 20 and 600 then
     return json_build_object('ok', false, 'motivo', 'consentimento');
   end if;
@@ -197,12 +218,19 @@ begin
   end if;
   select b.name into v_negocio from public.gostoso_businesses b where b.id = v_cp.business_id;
 
+  -- o texto que a pessoa leu tem de citar o negocio que vai receber os dados e comecar com
+  -- o verbo de autorizacao de um dos tres idiomas; o que nao bate nao vira "consentimento"
+  if position(lower(v_negocio) in lower(p_texto)) = 0
+     or p_texto !~* '^(autorizo|i agree|i authorize)' then
+    return json_build_object('ok', false, 'motivo', 'consentimento');
+  end if;
+
   -- um cupom ativo por e-mail por parceiro (nao devolvemos o token do existente: o e-mail
   -- digitado nao foi confirmado, e entregar o cupom a quem sabe o e-mail seria um vazamento)
   if exists (
     select 1 from public.gostoso_club_vouchers v
      where v.partner_id = v_cp.id
-       and lower(v.email) = v_email
+       and public.gostoso_club__email_chave(v.email) = public.gostoso_club__email_chave(v_email)
        and v.status = 'valido'
        and v.expira_em >= public.gostoso_club_hoje()
   ) then
@@ -217,14 +245,20 @@ begin
     return json_build_object('ok', false, 'motivo', 'esgotada');
   end if;
 
-  -- anti-abuso: 3 resgates por aparelho por dia (qualquer parceiro) e 20 por minuto por parceiro
+  -- anti-abuso: 3 resgates por aparelho por dia (qualquer parceiro), 5 por minuto e 30 por
+  -- hora por parceiro. O aparelho e informado pelo navegador, entao so freia o uso normal;
+  -- quem chama a funcao direto esbarra nos tetos por parceiro.
   if v_aparelho is not null and (
        select count(*) from public.gostoso_club_vouchers v
         where v.aparelho = v_aparelho and v.created_at > now() - interval '1 day') >= 3 then
     return json_build_object('ok', false, 'motivo', 'muitos');
   end if;
   if (select count(*) from public.gostoso_club_vouchers v
-       where v.partner_id = v_cp.id and v.created_at > now() - interval '1 minute') >= 20 then
+       where v.partner_id = v_cp.id and v.created_at > now() - interval '1 minute') >= 5 then
+    return json_build_object('ok', false, 'motivo', 'muitos');
+  end if;
+  if (select count(*) from public.gostoso_club_vouchers v
+       where v.partner_id = v_cp.id and v.created_at > now() - interval '1 hour') >= 30 then
     return json_build_object('ok', false, 'motivo', 'muitos');
   end if;
 
@@ -514,7 +548,7 @@ create or replace view public.gostoso_club_resgates_mensais with (security_invok
          count(*) filter (where v.status = 'usado')::int as usados
     from public.gostoso_club_vouchers v
    group by v.partner_id, v.business_id, 3;
-revoke all on public.gostoso_club_resgates_mensais from anon;
+revoke all on public.gostoso_club_resgates_mensais from anon, authenticated;
 grant select on public.gostoso_club_resgates_mensais to authenticated, service_role;
 
 -- ── texto do parceiro fundador: o cupom substitui o codigo do dia ───────────

@@ -403,9 +403,10 @@ function useMarcarUsado(parceiroId: string) {
     const { data, error } = await supabase.rpc('gostoso_club_marcar_usado', { p_partner: parceiroId, ...args })
     const r = data as { ok?: boolean; primeiro_nome?: string; motivo?: MotivoMarcar } | null
     if (error || !r) return { ok: false, mensagem: t('confirmar_erro') }
+    // a lista muda tambem quando o cupom ja estava usado, vencido ou cancelado
+    await qc.invalidateQueries({ queryKey: ['clube-resgates', parceiroId] })
+    await qc.invalidateQueries({ queryKey: ['clube-painel', parceiroId] })
     if (r.ok) {
-      await qc.invalidateQueries({ queryKey: ['clube-resgates', parceiroId] })
-      await qc.invalidateQueries({ queryKey: ['clube-painel', parceiroId] })
       return { ok: true, mensagem: t('confirmar_ok', { nome: r.primeiro_nome ?? '' }) }
     }
     const mensagens: Record<MotivoMarcar, string> = {
@@ -530,14 +531,27 @@ function Resgates({ parceiro, negocio }: { parceiro: Parceiro; negocio: string }
   async function baixarCsv() {
     setBaixando(true)
     try {
-      const { data, error } = await supabase
-        .from('gostoso_club_vouchers')
-        .select(COLUNAS_LEAD)
-        .eq('partner_id', parceiro.id)
-        .order('created_at', { ascending: false })
-        .limit(10000)
-      if (error) throw error
-      const blob = new Blob([csvDeLeads((data ?? []) as LinhaLead[])], { type: 'text/csv;charset=utf-8' })
+      /* o PostgREST corta a resposta em um numero de linhas (max_rows); pagina ate acabar e
+         confere com o total, para o CSV nunca sair incompleto sem aviso */
+      const PAGINA = 500
+      const todas: LinhaLead[] = []
+      let esperado: number | null = null
+      for (let de = 0; de < 100000; de += PAGINA) {
+        const { data, error, count } = await supabase
+          .from('gostoso_club_vouchers')
+          .select(COLUNAS_LEAD, { count: 'exact' })
+          .eq('partner_id', parceiro.id)
+          .order('created_at', { ascending: false })
+          .order('id', { ascending: true })
+          .range(de, de + PAGINA - 1)
+        if (error) throw error
+        esperado = count ?? esperado
+        const pagina = (data ?? []) as LinhaLead[]
+        todas.push(...pagina)
+        if (pagina.length < PAGINA) break
+      }
+      if (esperado !== null && todas.length < esperado) throw new Error('csv incompleto')
+      const blob = new Blob([csvDeLeads(todas)], { type: 'text/csv;charset=utf-8' })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
@@ -583,7 +597,7 @@ function Resgates({ parceiro, negocio }: { parceiro: Parceiro; negocio: string }
           <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: '0.75rem' }}>
             {linhas.map((l) => {
               const st = statusDe(l)
-              const wa = buildWhatsAppLink(l.telefone, t('lead_msg_whatsapp', { nome: primeiroNome(l.nome), negocio }))
+              const wa = buildWhatsAppLink(`55${l.telefone}`, t('lead_msg_whatsapp', { nome: primeiroNome(l.nome), negocio }))
               return (
                 <li key={l.id} className="clube-card" style={{ padding: '1rem' }}>
                   <div className="clube-card-topo" style={{ justifyContent: 'space-between' }}>
@@ -595,7 +609,7 @@ function Resgates({ parceiro, negocio }: { parceiro: Parceiro; negocio: string }
                     </span>
                   </div>
                   <p className="clube-regra" style={{ margin: '0.375rem 0 0', wordBreak: 'break-word' }}>
-                    <a href={`mailto:${l.email}`} style={{ textDecoration: 'underline', textUnderlineOffset: 3 }}>
+                    <a href={`mailto:${encodeURIComponent(l.email)}`} style={{ textDecoration: 'underline', textUnderlineOffset: 3 }}>
                       {l.email}
                     </a>
                   </p>

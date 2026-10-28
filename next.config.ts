@@ -100,4 +100,14 @@ export default withPWA({
   cacheOnFrontEndNav: true,
   reloadOnOnline: true,
   disable: process.env.NODE_ENV === 'development',
+  /* Dado pessoal nao fica no cache do navegador: a lista de resgates (Supabase, outra origem),
+     a pagina e a imagem do cupom e a verificacao. NetworkOnly vem antes das regras padrao. */
+  extendDefaultRuntimeCaching: true,
+  workboxOptions: {
+    runtimeCaching: [
+      { urlPattern: /\/rest\/v1\/gostoso_club_vouchers/, handler: 'NetworkOnly' },
+      { urlPattern: /\/rest\/v1\/rpc\/gostoso_club_(resgatar|cupom|verificar|marcar_usado)/, handler: 'NetworkOnly' },
+      { urlPattern: /\/clube\/(cupom|v)\//, handler: 'NetworkOnly' },
+    ],
+  },
 })(withNextIntl(config))
