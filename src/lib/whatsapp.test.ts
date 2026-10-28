@@ -10,13 +10,13 @@ describe('buildWhatsAppLink', () => {
      mensagem quebrada, porque o vitest não checa tipo. */
   it('monta o link do CTA fixo com a mensagem padrao inteira', () => {
     expect(buildWhatsAppLink(OFFICIAL_WHATSAPP, { source: 'official_cta' })).toBe(
-      `https://wa.me/5584936180839?text=${encodeURIComponent(MENSAGEM_PADRAO)}`
+      `https://wa.me/558488182779?text=${encodeURIComponent(MENSAGEM_PADRAO)}`
     )
   })
 
   it('prefixa o 55 quando o numero vem sem ele', () => {
-    expect(buildWhatsAppLink('84936180839', 'oi')).toBe(
-      'https://wa.me/5584936180839?text=oi'
+    expect(buildWhatsAppLink('8488182779', 'oi')).toBe(
+      'https://wa.me/558488182779?text=oi'
     )
   })
 
