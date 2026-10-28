@@ -3,7 +3,7 @@
 // (/_next/image), no formato moderno e na largura da tela, sem trocar o <img>
 // nem o layout. So o que `images.remotePatterns` do next.config ja libera.
 
-const PREFIXO = 'https://wppsmvgbagalczoardfl.supabase.co/storage/v1/object/public/'
+export const PREFIXO = 'https://wppsmvgbagalczoardfl.supabase.co/storage/v1/object/public/'
 
 /** Duas larguras de `deviceSizes` padrao do Next: celular e tela grande. Poucas
  *  de proposito, porque cada combinacao conta como uma transformacao na Vercel. */

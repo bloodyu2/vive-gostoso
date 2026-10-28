@@ -46,6 +46,11 @@ export default async function PrivacidadePage({ params }: { params: Promise<{ la
           <h2 className="font-display font-semibold text-xl md:text-2xl text-fg-1 mb-3">{t.sec6_title ?? '6. Retencao'}</h2>
           <p>{t.sec6_text ?? 'Mantemos seus dados enquanto sua conta ou negocio estiver ativo na plataforma. Apos exclusao, removemos em ate 30 dias, salvo obrigacoes legais.'}</p>
         </section>
+        <section className="border-t border-border-1 pt-6">
+          <h2 className="font-display font-semibold text-xl md:text-2xl text-fg-1 mb-3">{t.sec7_title ?? '7. Passaporte Gostoso (cupons)'}</h2>
+          <p>{t.sec7_text}</p>
+        </section>
+        {t.atualizada ? <p className="text-sm text-fg-3-texto">{t.atualizada}</p> : null}
       </div>
     </div>
   )
