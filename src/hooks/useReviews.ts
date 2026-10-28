@@ -2,9 +2,14 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { Review, ReviewInsert, ReviewTarget } from '@/types/reviews'
 import { useModerateListing } from '@/hooks/useModeration'
-import { mediaAvaliacoes } from '@/lib/media-avaliacoes'
 
 const PAGE_SIZE = 10
+
+const VIEW_DE_NOTAS = {
+  business: 'gostoso_business_ratings',
+  professional: 'gostoso_professional_ratings',
+  transfer: 'gostoso_transfer_ratings',
+} as const
 
 export interface ReviewPage {
   reviews: Review[]
@@ -33,18 +38,18 @@ export function useReviews(targetType: ReviewTarget, targetId: string, page = 1)
           .eq('approved', true)
           .order('created_at', { ascending: false })
           .range(from, to),
-        // Agregado real: soma e quantidade de TODAS as avaliacoes aprovadas,
-        // nao apenas as da pagina (a media antiga estava errada).
+        // Media real de TODAS as avaliacoes aprovadas, lida da view de notas do
+        // alvo. A agregacao `rating.sum()` do PostgREST nao esta ligada neste
+        // projeto: a chamada falhava em silencio e a pagina mostrava 0.0.
         supabase
-          .from('gostoso_reviews')
-          .select('rating.sum(),rating.count()')
+          .from(VIEW_DE_NOTAS[targetType])
+          .select('avg_rating')
           .eq(idField, targetId)
-          .eq('approved', true),
+          .maybeSingle(),
       ])
       if (pageRes.error) throw pageRes.error
       const total = pageRes.count ?? 0
-      const agg = (aggRes.data as unknown as { sum: number | null; count: number | null }[] | null)?.[0]
-      const average = mediaAvaliacoes(Number(agg?.sum ?? 0), Number(agg?.count ?? 0))
+      const average = total > 0 ? Number((aggRes.data as { avg_rating: string | number } | null)?.avg_rating ?? 0) : 0
       return {
         reviews: (pageRes.data ?? []) as Review[],
         total,
