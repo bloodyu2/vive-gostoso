@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import Link from 'next/link'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -8,6 +8,15 @@ import { AuthGuard } from '@/components/auth/auth-guard'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { useMyBusinesses, type BusinessSummary } from '@/hooks/useMyBusinesses'
 import { supabase } from '@/lib/supabase'
+import { buildWhatsAppLink } from '@/lib/whatsapp'
+import {
+  codigoCurtoNormalizado,
+  csvDeLeads,
+  formatarCodigo,
+  mascararTelefone,
+  primeiroNome,
+  type LinhaLead,
+} from '@/lib/clube/resgate'
 
 /* Area do parceiro do Passaporte Gostoso. O dono muda a propria vantagem (texto,
    regra, limite por mes, validade), liga e pausa, e acompanha usos. Tudo vale na
@@ -25,11 +34,15 @@ interface Parceiro {
 }
 
 interface PainelDados {
-  codigo_hoje: string
-  usos_mes: number
+  resgates_mes: number
+  usados_mes: number
+  ativos: number
   vistas_mes: number
   dias_de_pico: number[]
-  usos: { criado_em: string; codigo: string }[]
+}
+
+interface Lead extends LinhaLead {
+  id: string
 }
 
 export default function Passaporte() {
@@ -124,6 +137,8 @@ function AreaDoNegocio({ negocio }: { negocio: BusinessSummary }) {
     <>
       {!negocio.is_published || !negocio.active ? <p className="clube-aviso">{t('nao_publicado')}</p> : null}
       {parceiro.data ? <Numeros parceiro={parceiro.data} /> : null}
+      {parceiro.data ? <ConfirmarCupom parceiroId={parceiro.data.id} /> : null}
+      {parceiro.data ? <Resgates parceiro={parceiro.data} negocio={negocio.name} /> : null}
       <FormVantagem
         key={parceiro.data?.id ?? 'novo'}
         negocioId={negocio.id}
@@ -355,60 +370,265 @@ function Numeros({ parceiro }: { parceiro: Parceiro }) {
 
   if (painel.isLoading || !dados) return null
 
-  const quando = (iso: string) =>
-    new Intl.DateTimeFormat(undefined, {
-      timeZone: 'America/Fortaleza',
-      day: '2-digit',
-      month: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(new Date(iso))
-
   return (
     <section aria-labelledby="neste-mes">
       <h2 id="neste-mes" className="clube-h2" style={{ fontSize: '1.25rem' }}>
         {t('numeros_titulo')}
       </h2>
       <dl style={{ display: 'grid', gap: '0.75rem', gridTemplateColumns: '1fr 1fr', margin: '0.875rem 0 0' }}>
-        <Numero rotulo={t('numero_usos')} valor={String(dados.usos_mes)} />
+        <Numero rotulo={t('numero_resgates')} valor={String(dados.resgates_mes)} />
+        <Numero rotulo={t('numero_usados')} valor={String(dados.usados_mes)} />
+        <Numero rotulo={t('numero_ativos')} valor={String(dados.ativos)} />
         <Numero rotulo={t('numero_vistas')} valor={String(dados.vistas_mes)} />
         <div style={{ gridColumn: '1 / -1' }}>
           <Numero rotulo={t('numero_pico')} valor={pico} pequeno />
         </div>
       </dl>
+    </section>
+  )
+}
 
-      <div className="clube-codigo-caixa" style={{ marginTop: '1rem' }}>
-        <p className="clube-codigo-legenda">{t('codigo_hoje')}</p>
-        <p className="clube-codigo">{dados.codigo_hoje}</p>
-        <p className="clube-codigo-legenda" style={{ marginTop: '0.25rem' }}>
-          {t('codigo_ajuda')}
+type MotivoMarcar = 'sem_permissao' | 'nao_encontrado' | 'ja_usado' | 'cancelado' | 'expirado'
+
+interface RespostaMarcar {
+  ok: boolean
+  mensagem: string
+}
+
+/** Chama gostoso_club_marcar_usado() e devolve a resposta na mensagem certa. */
+function useMarcarUsado(parceiroId: string) {
+  const { t } = useTranslation('passaporte')
+  const qc = useQueryClient()
+  return async (args: { p_voucher?: string; p_codigo?: string }): Promise<RespostaMarcar> => {
+    const { data, error } = await supabase.rpc('gostoso_club_marcar_usado', { p_partner: parceiroId, ...args })
+    const r = data as { ok?: boolean; primeiro_nome?: string; motivo?: MotivoMarcar } | null
+    if (error || !r) return { ok: false, mensagem: t('confirmar_erro') }
+    if (r.ok) {
+      await qc.invalidateQueries({ queryKey: ['clube-resgates', parceiroId] })
+      await qc.invalidateQueries({ queryKey: ['clube-painel', parceiroId] })
+      return { ok: true, mensagem: t('confirmar_ok', { nome: r.primeiro_nome ?? '' }) }
+    }
+    const mensagens: Record<MotivoMarcar, string> = {
+      sem_permissao: t('confirmar_sem_permissao'),
+      nao_encontrado: t('confirmar_nao_encontrado'),
+      ja_usado: t('confirmar_ja_usado'),
+      cancelado: t('confirmar_cancelado'),
+      expirado: t('confirmar_expirado'),
+    }
+    return { ok: false, mensagem: (r.motivo && mensagens[r.motivo]) || t('confirmar_erro') }
+  }
+}
+
+function ConfirmarCupom({ parceiroId }: { parceiroId: string }) {
+  const { t } = useTranslation('passaporte')
+  const marcar = useMarcarUsado(parceiroId)
+  const [codigo, setCodigo] = useState('')
+  const [enviando, setEnviando] = useState(false)
+  const [resposta, setResposta] = useState<RespostaMarcar | null>(null)
+
+  async function enviar(e: FormEvent) {
+    e.preventDefault()
+    if (enviando) return
+    const c = codigoCurtoNormalizado(codigo)
+    if (!c) {
+      setResposta({ ok: false, mensagem: t('confirmar_codigo_invalido') })
+      return
+    }
+    setEnviando(true)
+    setResposta(null)
+    const r = await marcar({ p_codigo: c })
+    setResposta(r)
+    if (r.ok) setCodigo('')
+    setEnviando(false)
+  }
+
+  return (
+    <section className="clube-card" aria-labelledby="confirmar-cupom" style={{ marginTop: '1.25rem', padding: '1.25rem' }}>
+      <h2 id="confirmar-cupom" className="clube-nome">
+        {t('confirmar_titulo')}
+      </h2>
+      <p className="clube-regra">{t('confirmar_ajuda')}</p>
+      <form onSubmit={enviar} noValidate style={{ display: 'grid', gap: '0.75rem', marginTop: '0.75rem' }}>
+        <label>
+          <span className="clube-tipo">{t('confirmar_campo')}</span>
+          <input
+            className="clube-campo"
+            type="text"
+            autoCapitalize="characters"
+            autoComplete="off"
+            spellCheck={false}
+            placeholder="GP-XXXX-XXXX"
+            maxLength={16}
+            value={codigo}
+            onChange={(e) => setCodigo(e.target.value)}
+            style={{ marginTop: '0.375rem', letterSpacing: '0.08em' }}
+          />
+        </label>
+        <div className="clube-acoes">
+          <button type="submit" className="clube-btn clube-btn--verde" disabled={enviando || codigo.trim() === ''}>
+            {t('confirmar_botao')}
+          </button>
+        </div>
+        <p role="status" className={resposta && !resposta.ok ? 'clube-erro' : 'clube-regra'}>
+          {resposta?.mensagem ?? ''}
         </p>
-      </div>
+      </form>
+    </section>
+  )
+}
 
-      <h3 className="clube-nome" style={{ marginTop: '1.5rem', fontSize: '1.0625rem' }}>
-        {t('recentes')}
-      </h3>
-      {dados.usos.length === 0 ? (
-        <p className="clube-regra">{t('recentes_vazio')}</p>
+const LIMITE_LISTA = 200
+const COLUNAS_LEAD = 'nome, email, telefone, codigo, status, created_at, expira_em'
+
+function Resgates({ parceiro, negocio }: { parceiro: Parceiro; negocio: string }) {
+  const { t, i18n } = useTranslation('passaporte')
+  const marcar = useMarcarUsado(parceiro.id)
+  const [aviso, setAviso] = useState<RespostaMarcar | null>(null)
+  const [ocupado, setOcupado] = useState<string | null>(null)
+  const [baixando, setBaixando] = useState(false)
+
+  const lista = useQuery<{ linhas: Lead[]; total: number }>({
+    queryKey: ['clube-resgates', parceiro.id],
+    queryFn: async () => {
+      const { data, error, count } = await supabase
+        .from('gostoso_club_vouchers')
+        .select(`id, ${COLUNAS_LEAD}`, { count: 'exact' })
+        .eq('partner_id', parceiro.id)
+        .order('created_at', { ascending: false })
+        .limit(LIMITE_LISTA)
+      if (error) throw error
+      return { linhas: (data ?? []) as Lead[], total: count ?? data?.length ?? 0 }
+    },
+  })
+
+  const hoje = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Fortaleza' }).format(new Date())
+  /* um cupom 'valido' com a data vencida aparece como vencido (o banco nao grava essa mudanca) */
+  const statusDe = (l: LinhaLead) => (l.status === 'valido' && l.expira_em < hoje ? 'expirado' : l.status)
+  const rotuloStatus: Record<string, string> = {
+    valido: t('lead_status_valido'),
+    usado: t('lead_status_usado'),
+    expirado: t('lead_status_expirado'),
+    cancelado: t('lead_status_cancelado'),
+  }
+  const quando = (iso: string) =>
+    new Intl.DateTimeFormat(i18n.language, {
+      timeZone: 'America/Fortaleza',
+      day: '2-digit',
+      month: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    }).format(new Date(iso))
+  const dataCurta = (d: string) =>
+    new Intl.DateTimeFormat(i18n.language, { timeZone: 'UTC' }).format(new Date(`${d}T12:00:00Z`))
+
+  async function usar(l: Lead) {
+    setOcupado(l.id)
+    setAviso(await marcar({ p_voucher: l.id }))
+    setOcupado(null)
+  }
+
+  async function baixarCsv() {
+    setBaixando(true)
+    try {
+      const { data, error } = await supabase
+        .from('gostoso_club_vouchers')
+        .select(COLUNAS_LEAD)
+        .eq('partner_id', parceiro.id)
+        .order('created_at', { ascending: false })
+        .limit(10000)
+      if (error) throw error
+      const blob = new Blob([csvDeLeads((data ?? []) as LinhaLead[])], { type: 'text/csv;charset=utf-8' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `passaporte-resgates-${hoje}.csv`
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      setTimeout(() => URL.revokeObjectURL(url), 1000)
+    } catch {
+      setAviso({ ok: false, mensagem: t('erro_carregar') })
+    }
+    setBaixando(false)
+  }
+
+  const linhas = lista.data?.linhas ?? []
+  const total = lista.data?.total ?? 0
+
+  return (
+    <section aria-labelledby="quem-resgatou" style={{ marginTop: '1.5rem' }}>
+      <h2 id="quem-resgatou" className="clube-h2" style={{ fontSize: '1.25rem' }}>
+        {t('resgates_titulo')}
+      </h2>
+      <p className="clube-regra">{t('resgates_ajuda')}</p>
+
+      {lista.isLoading ? (
+        <p className="clube-aviso">{t('carregando')}</p>
+      ) : lista.isError ? (
+        <p className="clube-erro">{t('erro_carregar')}</p>
+      ) : linhas.length === 0 ? (
+        <p className="clube-aviso">{t('leads_vazio')}</p>
       ) : (
-        <ul style={{ listStyle: 'none', margin: '0.5rem 0 0', padding: 0 }}>
-          {dados.usos.map((u) => (
-            <li
-              key={`${u.criado_em}-${u.codigo}`}
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                gap: '1rem',
-                padding: '0.5rem 0',
-                borderBottom: '1px solid var(--c-borda)',
-                fontVariantNumeric: 'tabular-nums',
-              }}
-            >
-              <span>{quando(u.criado_em)}</span>
-              <span style={{ fontWeight: 700 }}>{u.codigo}</span>
-            </li>
-          ))}
-        </ul>
+        <>
+          <div
+            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', margin: '0.75rem 0' }}
+          >
+            <p className="clube-regra" style={{ margin: 0 }}>
+              {t('leads_total', { n: total })}
+            </p>
+            <button type="button" className="clube-btn clube-btn--contorno" onClick={baixarCsv} disabled={baixando}>
+              {t('leads_csv')}
+            </button>
+          </div>
+          <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: '0.75rem' }}>
+            {linhas.map((l) => {
+              const st = statusDe(l)
+              const wa = buildWhatsAppLink(l.telefone, t('lead_msg_whatsapp', { nome: primeiroNome(l.nome), negocio }))
+              return (
+                <li key={l.id} className="clube-card" style={{ padding: '1rem' }}>
+                  <div className="clube-card-topo" style={{ justifyContent: 'space-between' }}>
+                    <p className="clube-nome" style={{ margin: 0, fontSize: '1.0625rem' }}>
+                      {l.nome}
+                    </p>
+                    <span className={`clube-tag ${st === 'valido' ? 'clube-tag--no-ar' : 'clube-tag--combinacao'}`}>
+                      {rotuloStatus[st] ?? st}
+                    </span>
+                  </div>
+                  <p className="clube-regra" style={{ margin: '0.375rem 0 0', wordBreak: 'break-word' }}>
+                    <a href={`mailto:${l.email}`} style={{ textDecoration: 'underline', textUnderlineOffset: 3 }}>
+                      {l.email}
+                    </a>
+                  </p>
+                  <p className="clube-regra" style={{ margin: '0.125rem 0 0', fontVariantNumeric: 'tabular-nums' }}>
+                    {mascararTelefone(l.telefone)} · {formatarCodigo(l.codigo)}
+                  </p>
+                  <p className="clube-regra" style={{ margin: '0.125rem 0 0' }}>
+                    {quando(l.created_at)} · {t('lead_valido_ate', { data: dataCurta(l.expira_em) })}
+                  </p>
+                  <div className="clube-acoes" style={{ marginTop: '0.75rem' }}>
+                    <a className="clube-btn clube-btn--verde" href={wa} target="_blank" rel="noopener noreferrer">
+                      {t('lead_whatsapp')}
+                    </a>
+                    {st === 'valido' ? (
+                      <button
+                        type="button"
+                        className="clube-btn clube-btn--contorno"
+                        onClick={() => usar(l)}
+                        disabled={ocupado === l.id}
+                      >
+                        {t('lead_marcar_usado')}
+                      </button>
+                    ) : null}
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
+          {total > linhas.length ? <p className="clube-regra">{t('leads_mais')}</p> : null}
+          <p role="status" className={aviso && !aviso.ok ? 'clube-erro' : 'clube-regra'}>
+            {aviso?.mensagem ?? ''}
+          </p>
+        </>
       )}
     </section>
   )

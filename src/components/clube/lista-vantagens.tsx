@@ -3,27 +3,23 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { BedDouble, Compass, Palette, Share2, Ticket, UtensilsCrossed, Waves } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { armazemDoNavegador, lerCupons } from '@/lib/clube/cupons-locais'
 import { disparar } from '@/lib/clube/disparar'
-import { interpretarUso, linkParaAmigo, textoParaAmigo, type ResultadoUso, type Vantagem } from '@/lib/clube/vantagens'
+import { linkParaAmigo, textoParaAmigo, type Vantagem } from '@/lib/clube/vantagens'
+import { FormResgate, type TextosForm } from './form-resgate'
 
 /** Textos já no idioma da página (o servidor resolve; este componente não carrega
  *  o i18n do cliente, que só sincroniza o idioma depois da hidratação). */
-export interface TextosLista {
+export interface TextosLista extends TextosForm {
   status_no_ar: string
   status_combinacao: string
   usar: string
-  fechar: string
-  carregando: string
-  codigo_legenda: string
-  valido_hoje: string
+  ver_cupom: string
+  resgatar_de_novo: string
   amigo: string
   amigo_texto: string
   rodape_vantagens: string
   em_breve: string
-  esgotada: string
-  erro_usar: string
-  erro_indisponivel: string
-  erro_muitos: string
   vazio: string
   validade: string
   limite: string
@@ -40,41 +36,13 @@ interface Props {
   linkClube: string
   /** Idioma, para formatar a data de validade. */
   lang: string
-  /** false quando o banco não respondeu: os cartões aparecem, mas sem Usar. */
+  /** false quando o banco não respondeu: os cartões aparecem, mas sem Resgatar. */
   doBanco: boolean
 }
 
-type Estado =
-  | { tipo: 'carregando' }
-  | { tipo: 'codigo'; codigo: string }
-  | { tipo: 'erro'; mensagem: string }
-
-/** Id aleatório do aparelho, guardado no navegador. Não é dado pessoal: serve só para
- *  o mesmo aparelho receber o mesmo código no mesmo dia, sem contar duas vezes. */
-function idDoAparelho(): string | null {
-  try {
-    let id = localStorage.getItem('vg-clube-aparelho')
-    if (!id || !/^[0-9a-f-]{36}$/.test(id)) {
-      id = crypto.randomUUID()
-      localStorage.setItem('vg-clube-aparelho', id)
-    }
-    return id
-  } catch {
-    return null
-  }
-}
-
-/** Dia no fuso de Gostoso (o mesmo que o banco usa para virar o código). */
+/** Dia no fuso de Gostoso (o mesmo que o banco usa). */
 function diaDeGostoso(): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Fortaleza' }).format(new Date())
-}
-
-function hojeLegivel(lang: string): string {
-  return new Intl.DateTimeFormat(lang === 'pt' ? 'pt-BR' : lang, {
-    timeZone: 'America/Fortaleza',
-    day: '2-digit',
-    month: '2-digit',
-  }).format(new Date())
 }
 
 function dataCurta(iso: string, lang: string): string {
@@ -95,8 +63,16 @@ function IconeDoTipo({ tipo }: { tipo: string | null }) {
 }
 
 export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, lang, doBanco }: Props) {
-  const [estados, setEstados] = useState<Record<string, Estado | undefined>>({})
+  const [formAberto, setFormAberto] = useState<string | null>(null)
+  const [cupons, setCupons] = useState<Record<string, string>>({})
   const contou = useRef(false)
+
+  /* Cupons que esta pessoa ja resgatou neste aparelho: "Ver meu cupom" em vez de pedir tudo
+     de novo. So existe no navegador, por isso entra depois da hidratacao. */
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- leitura do navegador, so existe depois de montar
+    setCupons(lerCupons(armazemDoNavegador()))
+  }, [])
 
   /* Vezes que a vantagem foi vista: uma chamada por visita, uma vez por dia por
      aba (sessionStorage). Sem dado pessoal, falha em silêncio. */
@@ -115,38 +91,6 @@ export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, 
     disparar(supabase.rpc('gostoso_club_registrar_vistas', { p_partner_ids: ids }))
   }, [doBanco, vantagens])
 
-  async function usar(v: Vantagem) {
-    setEstados((e) => ({ ...e, [v.partnerId]: { tipo: 'carregando' } }))
-    let resultado: ResultadoUso
-    try {
-      const { data, error } = await supabase.rpc('gostoso_club_usar', {
-        p_partner: v.partnerId,
-        p_origem: origem,
-        p_aparelho: idDoAparelho(),
-      })
-      resultado = interpretarUso(data, error)
-    } catch {
-      resultado = { tipo: 'erro', motivo: 'erro' }
-    }
-    if (resultado.tipo === 'codigo') {
-      setEstados((e) => ({ ...e, [v.partnerId]: { tipo: 'codigo', codigo: resultado.codigo } }))
-      return
-    }
-    const mensagem =
-      resultado.motivo === 'esgotada'
-        ? textos.esgotada
-        : resultado.motivo === 'muitos'
-          ? textos.erro_muitos
-          : resultado.motivo === 'indisponivel'
-            ? textos.erro_indisponivel
-            : textos.erro_usar
-    setEstados((e) => ({ ...e, [v.partnerId]: { tipo: 'erro', mensagem } }))
-  }
-
-  function fechar(id: string) {
-    setEstados((e) => ({ ...e, [id]: undefined }))
-  }
-
   if (vantagens.length === 0) {
     return <p className="clube-aviso">{textos.vazio}</p>
   }
@@ -155,15 +99,15 @@ export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, 
     <>
       <ul className="clube-lista">
         {vantagens.map((v, i) => {
-          const estado = estados[v.partnerId]
           const noAr = v.status === 'no_ar'
           const meta = [
             v.limiteMensal ? textos.limite.replace('{n}', String(v.limiteMensal)) : null,
             v.validoAte ? textos.validade.replace('{data}', dataCurta(v.validoAte, lang)) : null,
           ].filter(Boolean)
           const regra = [v.regra, ...meta].filter(Boolean).join(' ')
-          const aberto = estado?.tipo === 'codigo'
           const mensagemAmigo = textoParaAmigo(textos.amigo_texto, v, linkClube)
+          const tokenDaPessoa = cupons[v.partnerId]
+          const formularioAberto = formAberto === v.partnerId
 
           return (
             <li key={v.partnerId} className="clube-card clube-entra" style={{ '--i': i } as CSSProperties}>
@@ -192,37 +136,38 @@ export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, 
               <div className="clube-canhoto">
                 {!noAr ? (
                   <p className="clube-aviso">{textos.em_breve}</p>
-                ) : v.esgotada ? (
-                  <p className="clube-aviso">{textos.esgotada}</p>
-                ) : aberto ? (
-                  <>
-                    <div className="clube-codigo-caixa" role="status">
-                      <p className="clube-codigo-legenda">{textos.codigo_legenda}</p>
-                      <p className="clube-codigo">{estado.codigo}</p>
-                      <p className="clube-codigo-validade">{textos.valido_hoje.replace('{data}', hojeLegivel(lang))}</p>
-                    </div>
-                    <button type="button" className="clube-btn clube-btn--contorno clube-btn--cheio" onClick={() => fechar(v.partnerId)}>
-                      {textos.fechar}
-                    </button>
-                  </>
+                ) : formularioAberto ? (
+                  <FormResgate
+                    partnerId={v.partnerId}
+                    negocio={v.nome}
+                    textos={textos}
+                    origem={origem}
+                    prefixo={prefixo}
+                    onCancelar={() => setFormAberto(null)}
+                  />
                 ) : (
-                  <button
-                    type="button"
-                    className="clube-btn clube-btn--verde clube-btn--cheio"
-                    onClick={() => usar(v)}
-                    disabled={!doBanco || estado?.tipo === 'carregando'}
-                  >
-                    {estado?.tipo === 'carregando' ? textos.carregando : textos.usar}
-                  </button>
+                  <>
+                    {tokenDaPessoa ? (
+                      <a className="clube-btn clube-btn--verde clube-btn--cheio" href={`${prefixo}/clube/cupom/${tokenDaPessoa}`}>
+                        {textos.ver_cupom}
+                      </a>
+                    ) : null}
+                    {v.esgotada ? (
+                      <p className="clube-aviso">{textos.esgotada}</p>
+                    ) : (
+                      <button
+                        type="button"
+                        className={`clube-btn ${tokenDaPessoa ? 'clube-btn--contorno' : 'clube-btn--verde'} clube-btn--cheio`}
+                        onClick={() => setFormAberto(v.partnerId)}
+                        disabled={!doBanco}
+                      >
+                        {tokenDaPessoa ? textos.resgatar_de_novo : textos.usar}
+                      </button>
+                    )}
+                  </>
                 )}
 
-                {estado?.tipo === 'erro' ? (
-                  <p className="clube-erro" role="alert">
-                    {estado.mensagem}
-                  </p>
-                ) : null}
-
-                {noAr && doBanco ? (
+                {noAr && doBanco && !formularioAberto ? (
                   <a
                     className="clube-btn clube-btn--fantasma"
                     href={linkParaAmigo(mensagemAmigo)}

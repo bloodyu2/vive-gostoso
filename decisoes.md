@@ -235,3 +235,18 @@ Guamaré fica mais perto de todas. Natal ficou por três motivos: é a estação
 **Como fica com a proteção da master:** a master exige PR, então o merge só sai por um PR, e o PR precisa de uma branch remota. Isso gera o deploy de preview que a regra quer evitar. Enquanto a proteção existir, a entrega é um único push e um único PR por missão, nunca mais de um, e o agente avisa antes quanto isso custa em deploys. Correção depois de empurrar entra só se for indispensável; senão espera a próxima entrega. Tirar o preview de vez é decisão do Victor na Vercel (ignorar o build de branches que não são a master) ou na proteção da master.
 **Origem:** o PR 54 (Passaporte Gostoso) foi empurrado como branch e gerou um preview. O Victor chamou atenção no mesmo dia.
 
+
+## Passaporte: resgate com cadastro no lugar do código do dia (28/10/2026)
+**Nova decisão do Victor, 28/10/2026.** O turista informa nome, e-mail e telefone, autoriza o repasse ao negócio e recebe um cupom de uso único. O código do dia deixa de ser o fluxo (a função `gostoso_club_usar` segue no banco, sem execute para anon e authenticated).
+
+**Consentimento.** Caixa desmarcada, texto com o nome do negócio, link para a política. O banco grava por resgate a data e a hora, a versão da política (`2026-10-28`), o texto exato que a pessoa leu e o negócio. Sem IP. Sem consentimento a função recusa, mesmo chamada direto.
+
+**Token e código.** Token de 64 hex (dois UUID v4, 244 bits aleatórios do Postgres) é o segredo do cupom e vai na URL. O código curto (8 letras e números sem 0, O, 1, I, L) é o que o dono digita e só vale dentro do negócio.
+
+**Quem lê o quê.** Anon só chama funções `SECURITY DEFINER`: resgatar, verificar (primeiro nome e status) e cupom do titular (por token). Dono lê os resgates do próprio negócio (política RLS mais grant por coluna, sem `token`, `aparelho` nem o texto do consentimento); admin lê tudo; a chave anon não lê a tabela. O e-mail repetido no mesmo parceiro devolve `ja_tem` sem o token, porque o e-mail não é verificado e devolver o token entregaria o cupom a quem só soubesse o e-mail.
+
+**Proteção dos dados, o que foi e o que não foi feito.** Não há criptografia de coluna: a chave ficaria no mesmo banco e não protegeria contra quem lê o banco. A proteção é RLS, grant por coluna e funções definer, testadas em PGlite (32 testes). A criptografia em repouso do disco do Supabase não foi verificada e nenhuma página afirma "criptografado". Retenção de 12 meses: a função `gostoso_club_limpar_resgates` existe, mas o `pg_cron` não está instalado, então o agendamento é passo manual. O e-mail `privacidade@vivegostoso.com.br` já estava na política e não foi conferido.
+
+**Imagem do cupom.** `next/og` (`ImageResponse`) com as mesmas fontes e cores do Passaporte. QR por `qrcode-generator`. Fontes TTF estáticas em `src/assets/fonts/clube`, lidas com `process.cwd()`; sem a linha em `outputFileTracingIncludes` elas ficam fora do pacote e a imagem quebra só em produção.
+
+**Teste local sem tocar a produção.** O servidor de desenvolvimento lê o banco de produção. O resgate foi testado com um mini PostgREST sobre PGlite (porta 54321) e o `.env` apontando para ele, com um ajuste temporário da CSP que foi revertido. Nada de teste foi escrito no banco real.

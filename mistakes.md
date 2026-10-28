@@ -5,6 +5,10 @@
 
 ---
 
+## 2026-10-28: o servidor de desenvolvimento lê e escreve no banco de produção
+**O que aconteceu:** o `.env.local` aponta para o Supabase de produção. Testar o formulário de resgate com `npm run dev` criaria resgates e consentimentos reais.
+**Regra:** fluxo que escreve no banco não se testa contra o servidor local com o `.env` normal. Subir o banco de teste local (PGlite com a migração, mini PostgREST) e trocar as variáveis só no processo do teste. Conferir o endereço do Supabase na aba de rede antes de apertar o botão.
+
 ## 2026-10-26: rota nova em app/[lang] não chega se o proxy tiver desvio para o prefixo
 **O que aconteceu:** ao trocar o link curto das plaquinhas (`/p/NN`, antes um route handler fora de `[lang]`) por uma página em `app/[lang]/p/[codigo]`, o `/p/01` dava 404 em português e funcionava em `/en/p/01`. O `proxy.ts` tinha um desvio `pathname.startsWith('/p/')` (PR 51) que pulava o next-intl: sem o rewrite para `/pt/p/01`, o Next casava `p` como idioma. Procurei no layout e em `generateStaticParams` antes de olhar o proxy.
 **Regra:** rota nova sob `app/[lang]` que responde sem prefixo precisa passar pelo next-intl. Antes de depurar a página, conferir o cabeçalho `x-middleware-rewrite` da resposta (`curl -D -`): se ele não existe, o desvio está no `proxy.ts`.

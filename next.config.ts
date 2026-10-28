@@ -23,6 +23,7 @@ const config: NextConfig = {
      imagem quebra so em producao, que e o pior lugar para descobrir. */
   outputFileTracingIncludes: {
     '/[lang]/bio/opengraph-image': ['./app/[lang]/bio/*.ttf'],
+    '/[lang]/clube/cupom/[token]/imagem': ['./src/assets/fonts/clube/*.ttf'],
   },
   images: {
     remotePatterns: [
