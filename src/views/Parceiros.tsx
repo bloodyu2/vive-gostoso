@@ -17,7 +17,6 @@ import { MagicCard } from '@/components/magicui/magic-card'
 import { Marquee } from '@/components/magicui/marquee'
 import { NumberTicker } from '@/components/magicui/number-ticker'
 import { ShimmerButton } from '@/components/magicui/shimmer-button'
-import { Citacao } from '@/components/institucional/citacao'
 
 const BENEFITS = [
   {
@@ -33,8 +32,8 @@ const BENEFITS = [
     desc: 'Faça parte de uma plataforma criada por e para São Miguel do Gostoso. Apoie o digital local.',
   },
   {
-    title: 'Destaque no resultado',
-    desc: 'Planos pagos colocam seu negócio no topo do diretório e em posições estratégicas de busca.',
+    title: 'Planos pagos',
+    desc: 'Os planos pagos, que dão mais destaque no diretório, ainda não estão disponíveis. Por enquanto o cadastro é gratuito.',
   },
 ]
 
@@ -43,25 +42,12 @@ const FAIXA = [
   'Seja encontrado',
   'Presença digital',
   'Comunidade local',
-  'Destaque no resultado',
+  'Planos pagos: ainda não disponíveis',
   'Perfil básico no diretório',
   'Fotos e descrição',
   'Link para Instagram e WhatsApp',
   'Horários de funcionamento',
   'Selo de negócio verificado',
-]
-
-const TESTIMONIALS = [
-  {
-    name: 'Tribo do Kite',
-    category: 'Kite & Windsurf',
-    quote: 'Nossa visibilidade aumentou muito depois de entrar no Vive Gostoso. Os turistas chegam sabendo exatamente quem somos.',
-  },
-  {
-    name: 'Baboon Restaurante',
-    category: 'Gastronomia',
-    quote: 'A plataforma é muito bem feita e o atendimento da equipe é excelente. Vale muito a pena estar listado aqui.',
-  },
 ]
 
 const PASSOS = [
@@ -254,7 +240,7 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
         {/* ── Planos: o feixe so no plano em destaque ── */}
         <section>
           <h2 className={`${H2} mb-2`}>{t('parceiros:plans_titulo')}</h2>
-          <p className="text-lg text-fg-3-texto mb-8">{t('parceiros:plans_desc')}</p>
+          <p className="text-lg text-fg-3-texto mb-8">{t(planosPagosAtivos ? 'parceiros:plans_desc' : 'parceiros:plans_desc_gratis')}</p>
 
           <div className={cn('grid grid-cols-1 gap-4 md:gap-5', planosPagosAtivos ? 'md:grid-cols-3' : 'md:grid-cols-1 max-w-md')}>
             {planData.map((plan, i) => (
@@ -299,31 +285,16 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
             ))}
           </div>
 
-          {planosPagosAtivos && (
+          {planosPagosAtivos ? (
             <p className="text-sm text-fg-3-texto mt-6">
               {t('parceiros:plan_disclaimer', { pct: parametro(param, CHAVES.rateioCidade) ?? '' })}
             </p>
+          ) : (
+            <div className="mt-6 rounded-2xl border border-dashed border-border-1 p-5 max-w-md">
+              <p className="font-semibold text-fg-1">{t('parceiros:planos_pagos_titulo')}</p>
+              <p className="text-sm text-fg-3-texto mt-1 leading-relaxed">{t('parceiros:planos_pagos_desc')}</p>
+            </div>
           )}
-        </section>
-
-        {/* ── Depoimentos ── */}
-        <section>
-          <h2 className={`${H2} mb-8`}>{t('parceiros:testimonial_titulo')}</h2>
-          <div className="grid md:grid-cols-2 gap-10 md:gap-14">
-            {TESTIMONIALS.map(({ name, category, quote }, i) => (
-              <BlurFade key={name} delay={(i % 4) * 70}>
-                <figure>
-                  <blockquote>
-                    <Citacao className="text-xl md:text-2xl">&ldquo;{quote}&rdquo;</Citacao>
-                  </blockquote>
-                  <figcaption className="mt-4">
-                    <p className="text-base font-semibold text-fg-1">{name}</p>
-                    <p className="text-sm text-fg-3-texto">{category}</p>
-                  </figcaption>
-                </figure>
-              </BlurFade>
-            ))}
-          </div>
         </section>
 
         {/* ── CTA final ── */}

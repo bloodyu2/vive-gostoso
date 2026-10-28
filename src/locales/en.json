@@ -703,7 +703,7 @@
   "transfer": {
     "badge": "TRANSFER.",
     "titulo": "Transfer São Miguel do Gostoso",
-    "desc": "Arriving or departing? Direct transfer to Natal Airport and tours around the region. 110 km, ~1h50.",
+    "desc": "Arriving or departing? Direct transfer to Natal Airport and tours around the region. 110 km, ~1h40.",
     "filtro_todas": "All routes",
     "filtro_rota": "Filter by route",
     "cadastre_btn": "List my Transfer",
@@ -947,12 +947,14 @@
     "plan_destaque": "Featured",
     "plan_destaque_badge": "Maximum visibility",
     "plan_disclaimer": "Paid plans are optional and fund the collective promotion of Gostoso. {{pct}}% goes to the City Fund.",
-    "testimonial_titulo": "What partners say",
     "final_titulo": "Your business belongs here",
     "final_desc": "Join the businesses already on Vive Gostoso and get seen by visitors to the city.",
     "final_cta": "List now",
     "final_fineprint": "Free. No commitment. Built by people who live in Gostoso.",
-    "stats_verificados": "verified"
+    "stats_verificados": "verified",
+    "plans_desc_gratis": "For now, listing is free. All businesses are welcome.",
+    "planos_pagos_titulo": "Paid plans: not available yet",
+    "planos_pagos_desc": "The Member and Featured plans, with more visibility in the directory, are not available yet. When they open, businesses already listed will be told."
   },
   "reivindicar": {
     "badge": "CLAIM",
@@ -1822,12 +1824,14 @@
     "validade": "Valid until {data}",
     "limite": "Limit of {n} per month",
     "negocio_titulo": "Do you run a business in Gostoso?",
-    "negocio_texto": "Joining the Passport is free. You choose one simple perk, set the limit and the end date, and get a count of how many times it was used. The QR sign for your counter is on us too.",
+    "negocio_texto": "Joining the Passport is completely free. We invite the businesses in town, and you can also reach out to us whenever you like. You choose one simple perk, set the limit and the end date, and get a count of how many times it was used. The QR sign for your counter is on us too.",
     "quero": "I want to join",
     "quero_msg": "Hi! I want to join the Gostoso Passport with my business.",
-    "fundo_titulo": "Where what the Passport earns goes",
-    "fundo_texto": "Nothing is taken from the businesses. What the Passport earns from sponsors and packages becomes a town fund, used for tourism and promotion for everyone. The balance is published every month.",
-    "assinatura": "Gostoso Passport is an initiative of Vive Gostoso, with Balaio."
+    "fundo_titulo": "Sponsorship",
+    "fundo_texto": "Open to sponsors. Companies in the region can sponsor the Passport, and all of the money goes into paid ads for the club page, to bring more visitors to the partners. Results are tracked with numbers.",
+    "assinatura": "Gostoso Passport is an initiative of Vive Gostoso, with Balaio.",
+    "patrocinar": "I want to sponsor",
+    "patrocinar_msg": "Hi! I would like to know how to sponsor the Gostoso Passport with my company."
   },
   "plaquinha": {
     "page_title": "Thanks for visiting",

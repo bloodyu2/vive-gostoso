@@ -452,7 +452,7 @@ export default function Transfer() {
           </h1>
           <p className="text-[#1E7A9E]/80 dark:text-sky/80 text-base md:text-lg max-w-xl leading-relaxed">{t('transfer.desc')}</p>
           <div className="flex flex-wrap gap-3 mt-6">
-            {[{ label: '110 km' }, { label: '~1h50' }, { label: 'Aeroporto de Natal (NAT)' }].map(c => (
+            {[{ label: '110 km' }, { label: '~1h40' }, { label: 'Aeroporto de Natal (NAT)' }].map(c => (
               <div key={c.label} className="bg-white dark:bg-card text-[#1E7A9E] dark:text-sky border border-[#1E7A9E]/15 rounded-xl px-4 py-2 text-sm font-semibold">{c.label}</div>
             ))}
           </div>

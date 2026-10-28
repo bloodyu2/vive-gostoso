@@ -2,6 +2,7 @@
 // Cliente anonimo, sem cookie, com as respostas guardadas no cache de dados do
 // Next (KAN-463). Para as leituras publicas das paginas de servidor.
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import { fetchComPrazo } from './prazo'
 
 /** Tag de tudo que as paginas publicas leem por este cliente. Limpa por
  *  `POST /api/revalidar` quando alguem logado grava pelo site. */
@@ -15,8 +16,9 @@ export const SEGUNDOS_VITRINE = 300
  *  da para guardar e a resposta do Supabase. Mesmo desenho do `fetchComCache`
  *  das mares, com prazo menor e a tag da vitrine. */
 export function fetchDaVitrine(base: typeof fetch = fetch): typeof fetch {
+  const comPrazo = fetchComPrazo(base)
   return ((entrada: RequestInfo | URL, init?: RequestInit) =>
-    base(entrada, { ...init, next: { revalidate: SEGUNDOS_VITRINE, tags: [TAG_VITRINE] } } as RequestInit)) as typeof fetch
+    comPrazo(entrada, { ...init, next: { revalidate: SEGUNDOS_VITRINE, tags: [TAG_VITRINE] } } as RequestInit)) as typeof fetch
 }
 
 /** Mesma visao do visitante anonimo: chave anon e RLS de leitura publica. Sem
