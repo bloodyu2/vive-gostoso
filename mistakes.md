@@ -5,6 +5,14 @@
 
 ---
 
+## 2026-10-28: `scrollbar-none` nunca funcionou, por causa de camada
+**O que aconteceu:** o `globals.css` tinha `* { scrollbar-width: thin }` fora de qualquer `@layer`. Regra sem camada ganha de qualquer utilidade do Tailwind v4 (que mora em `@layer utilities`), então `scrollbar-none` (e `[scrollbar-width:none]`) não escondiam nada. O comentário do arquivo já dizia que "o scrollbar continuava aparecendo onde o código achava que tinha escondido". Achado medindo `getComputedStyle(...).scrollbarWidth` (`thin`) no carrossel novo da home.
+**Regra:** CSS global de elemento (`*`, `body`, `a`) entra em `@layer base`. Utilidade que "não pega" se confere pelo valor computado no navegador, não pela classe no HTML.
+
+## 2026-10-28: upload no Storage pelo painel cai na raiz se a pasta não for criada a tempo
+**O que aconteceu:** ao subir fotos em lote pelo painel do Supabase (criar pasta com o id do negócio e enviar), em 3 de 40 tentativas a pasta não abriu e o arquivo foi para a raiz do bucket. Duas vezes foi o primeiro arquivo logo após carregar a página.
+**Regra:** esperar a página carregar (5 a 6 s), conferir `location.search` com `?path=<id>` antes de enviar e, no fim, rodar `select name from storage.objects where bucket_id = 'business-photos' and name not like '%/%'` para achar solto na raiz. Não renomear por SQL em `storage.objects` (a chave física não acompanha); apagar o arquivo errado e reenviar.
+
 ## 2026-10-28: o servidor de desenvolvimento lê e escreve no banco de produção
 **O que aconteceu:** o `.env.local` aponta para o Supabase de produção. Testar o formulário de resgate com `npm run dev` criaria resgates e consentimentos reais.
 **Regra:** fluxo que escreve no banco não se testa contra o servidor local com o `.env` normal. Subir o banco de teste local (PGlite com a migração, mini PostgREST) e trocar as variáveis só no processo do teste. Conferir o endereço do Supabase na aba de rede antes de apertar o botão.
