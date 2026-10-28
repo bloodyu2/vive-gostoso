@@ -24,6 +24,8 @@ export interface CupomDoTitular {
   negocio?: string
   slug?: string
   beneficio?: string
+  /** foto do estabelecimento (capa ou primeira da galeria), quando tem */
+  capa?: string | null
   codigo?: string
   expira_em?: string
   usado_em?: string | null

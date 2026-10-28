@@ -9,6 +9,8 @@ export interface Vantagem {
   nome: string
   slug: string
   logoUrl: string | null
+  /** foto do estabelecimento (capa, ou a primeira da galeria); null quando nao tem */
+  capaUrl: string | null
   tipo: string | null
   beneficio: string
   regra: string | null
@@ -25,6 +27,7 @@ export interface LinhaVantagem {
   nome: string
   slug: string
   logo_url: string | null
+  capa_url?: string | null
   tipo: string | null
   beneficio: string
   regra: string | null
@@ -41,6 +44,7 @@ export function paraVantagem(l: LinhaVantagem): Vantagem {
     nome: l.nome,
     slug: l.slug,
     logoUrl: l.logo_url,
+    capaUrl: l.capa_url ?? null,
     tipo: l.tipo,
     beneficio: l.beneficio,
     regra: l.regra,
@@ -57,50 +61,46 @@ export function origemValida(n: string | string[] | undefined): string | null {
   return v && /^\d{2}$/.test(v) ? v : null
 }
 
-/** Os tres parceiros fundadores, so para a pagina nao ficar vazia se o banco falhar. */
+/** Os parceiros de hoje, so para a pagina nao ficar vazia se o banco falhar (sem botao
+ *  Resgatar nesse caso, e sem foto: a foto vem do banco). */
+function fundador(
+  id: string,
+  nome: string,
+  slug: string,
+  tipo: string,
+  beneficio: string,
+  regra: string | null,
+  status: StatusVantagem,
+): Vantagem {
+  return {
+    partnerId: `fundador-${id}`,
+    businessId: '',
+    nome,
+    slug,
+    logoUrl: null,
+    capaUrl: null,
+    tipo,
+    beneficio,
+    regra,
+    limiteMensal: null,
+    validoAte: null,
+    status,
+    esgotada: false,
+  }
+}
+
 export const VANTAGENS_FUNDADORAS: Vantagem[] = [
-  {
-    partnerId: 'fundador-gostoso-expedicoes',
-    businessId: '',
-    nome: 'Gostoso Expedições',
-    slug: 'gostoso-expedicoes',
-    logoUrl: null,
-    tipo: 'Passeios',
-    beneficio: '5% de desconto no Pix ou em espécie, em qualquer passeio.',
-    regra: 'Qualquer dia da semana. Mostre o código antes de pagar.',
-    limiteMensal: null,
-    validoAte: null,
-    status: 'no_ar',
-    esgotada: false,
-  },
-  {
-    partnerId: 'fundador-pousada-parcel',
-    businessId: '',
-    nome: 'Pousada Parcel do Gostoso',
-    slug: 'pousada-parcel-do-gostoso',
-    logoUrl: null,
-    tipo: 'Hospedagem',
-    beneficio: 'Late check-out de cortesia.',
-    regra: null,
-    limiteMensal: null,
-    validoAte: null,
-    status: 'em_combinacao',
-    esgotada: false,
-  },
-  {
-    partnerId: 'fundador-casa-reduto',
-    businessId: '',
-    nome: 'Casa Reduto',
-    slug: 'casa-reduto-artesanato',
-    logoUrl: null,
-    tipo: 'Artesanato',
-    beneficio: 'Brinde feito pelas artesãs da casa.',
-    regra: null,
-    limiteMensal: null,
-    validoAte: null,
-    status: 'em_combinacao',
-    esgotada: false,
-  },
+  fundador('gostoso-expedicoes', 'Gostoso Expedições', 'gostoso-expedicoes', 'Passeios',
+    '5% de desconto no Pix ou em espécie, em qualquer passeio.', 'Qualquer dia da semana. Mostre o cupom antes de pagar.', 'no_ar'),
+  fundador('pousada-parcel', 'Pousada Parcel do Gostoso', 'pousada-parcel-do-gostoso', 'Hospedagem',
+    'Late check-out de cortesia até as 16h.', 'Não vale para diária que termina na sexta ou no sábado. Sujeito à disponibilidade.', 'no_ar'),
+  fundador('casa-gostoso-mar', 'Casa Gostoso Mar', 'casa-gostoso-mar', 'Hospedagem',
+    'Late check-out de cortesia.', 'Sujeito à disponibilidade. Consulte o horário na recepção.', 'no_ar'),
+  fundador('damy', 'Café com Biscoitos Damy', 'cafe-com-biscoitos-damy', 'Café', 'Um cafezinho de cortesia.', null, 'no_ar'),
+  fundador('casa-reduto', 'Casa Reduto', 'casa-reduto-artesanato', 'Artesanato',
+    'Brinde feito pelas artesãs da casa.', null, 'em_combinacao'),
+  fundador('serido-praia', 'Seridó Praia', 'serido-praia', 'Passeios',
+    'Vantagem em combinação com a casa.', null, 'em_combinacao'),
 ]
 
 /** Link "Mandar para um amigo": wa.me sem numero (a pessoa escolhe o contato),

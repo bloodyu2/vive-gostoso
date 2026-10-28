@@ -52,6 +52,18 @@ describe('mandar para um amigo', () => {
   })
 })
 
+describe('paraVantagem: foto do card', () => {
+  const base = {
+    partner_id: 'p', business_id: 'b', nome: 'N', slug: 's', logo_url: null, tipo: null, beneficio: 'x1x',
+    regra: null, limite_mensal: null, valido_ate: null, esgotada: false, status: 'no_ar',
+  }
+  it('leva a capa que o banco mandou; sem capa, null', () => {
+    expect(paraVantagem({ ...base, capa_url: 'https://x.test/a.jpg' }).capaUrl).toBe('https://x.test/a.jpg')
+    expect(paraVantagem({ ...base, capa_url: null }).capaUrl).toBeNull()
+    expect(paraVantagem(base).capaUrl).toBeNull()
+  })
+})
+
 describe('paraVantagem', () => {
   it('status desconhecido cai em combinação, nunca no ar', () => {
     const base = {

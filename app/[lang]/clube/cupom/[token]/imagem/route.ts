@@ -5,6 +5,7 @@
 import { dicionario, ehIdioma } from '@/lib/bio/dicionario'
 import { cupomDoTitular, tokenValido } from '@/lib/clube/cupom'
 import { imagemDoCupom } from '@/lib/clube/cupom-imagem'
+import { fotoParaCupom } from '@/lib/clube/cupom-foto'
 import { VIVE } from '@/lib/bio/contato'
 
 const LOCALES = { pt: 'pt-BR', en: 'en', es: 'es' } as const
@@ -25,9 +26,11 @@ export async function GET(req: Request, { params }: { params: Promise<{ lang: st
   const idioma = ehIdioma(lang) ? lang : 'pt'
   const t = dicionario(idioma).cupom
   const prefixo = idioma === 'pt' ? '' : `/${idioma}`
+  const foto = await fotoParaCupom(cupom.capa, new URL(req.url).origin)
   const imagem = await imagemDoCupom(
     {
       negocio: cupom.negocio,
+      foto,
       beneficio: cupom.beneficio ?? '',
       nome: cupom.nome,
       codigo: cupom.codigo,

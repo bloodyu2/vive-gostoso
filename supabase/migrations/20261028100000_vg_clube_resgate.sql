@@ -216,7 +216,7 @@ begin
   if not found then
     return json_build_object('ok', false, 'motivo', 'indisponivel');
   end if;
-  select b.name into v_negocio from public.gostoso_businesses b where b.id = v_cp.business_id;
+  select btrim(b.name) into v_negocio from public.gostoso_businesses b where b.id = v_cp.business_id;
 
   -- o texto que a pessoa leu tem de citar o negocio que vai receber os dados e comecar com
   -- o verbo de autorizacao de um dos tres idiomas; o que nao bate nao vira "consentimento"
@@ -309,7 +309,7 @@ begin
   if p_token is null or p_token !~ '^[0-9a-f]{64}$' then
     return json_build_object('status', 'invalido');
   end if;
-  select v2.status, v2.nome, v2.codigo, v2.expira_em, v2.usado_em, b.name as negocio, b.slug, cp.beneficio
+  select v2.status, v2.nome, v2.codigo, v2.expira_em, v2.usado_em, btrim(b.name) as negocio, b.slug, cp.beneficio
     into v
     from public.gostoso_club_vouchers v2
     join public.gostoso_businesses b on b.id = v2.business_id
@@ -346,7 +346,8 @@ begin
   if p_token is null or p_token !~ '^[0-9a-f]{64}$' then
     return json_build_object('status', 'invalido');
   end if;
-  select v2.status, v2.nome, v2.codigo, v2.expira_em, v2.usado_em, b.name as negocio, b.slug, cp.beneficio
+  select v2.status, v2.nome, v2.codigo, v2.expira_em, v2.usado_em, btrim(b.name) as negocio, b.slug, cp.beneficio,
+         coalesce(nullif(btrim(b.cover_url), ''), nullif(btrim(b.photos[1]), '')) as capa
     into v
     from public.gostoso_club_vouchers v2
     join public.gostoso_businesses b on b.id = v2.business_id
@@ -361,6 +362,7 @@ begin
     'negocio', v.negocio,
     'slug', v.slug,
     'beneficio', v.beneficio,
+    'capa', v.capa,
     'codigo', v.codigo,
     'expira_em', v.expira_em,
     'usado_em', v.usado_em
@@ -453,6 +455,10 @@ grant execute on function public.gostoso_club_limpar_resgates(integer) to servic
 
 -- ── vantagens: "esgotada" agora conta resgates ──────────────────────────────
 
+-- A funcao ganha a coluna capa_url; o tipo de retorno muda, entao o create or replace nao
+-- basta: derruba a versao anterior (que so existe por causa da migracao de 26/10) e recria.
+drop function if exists public.gostoso_club_vantagens(uuid[]);
+
 create or replace function public.gostoso_club_vantagens(p_business_ids uuid[] default null)
   returns table (
     partner_id    uuid,
@@ -460,6 +466,7 @@ create or replace function public.gostoso_club_vantagens(p_business_ids uuid[] d
     nome          text,
     slug          text,
     logo_url      text,
+    capa_url      text,
     tipo          text,
     beneficio     text,
     regra         text,
@@ -470,7 +477,8 @@ create or replace function public.gostoso_club_vantagens(p_business_ids uuid[] d
   )
   language sql stable security definer set search_path = public as
 $$
-  select cp.id, b.id, b.name, b.slug, b.logo_url,
+  select cp.id, b.id, btrim(b.name), b.slug, b.logo_url,
+         coalesce(nullif(btrim(b.cover_url), ''), nullif(btrim(b.photos[1]), '')),
          coalesce(cp.tipo, c.name),
          cp.beneficio, cp.regra, cp.limite_mensal, cp.valido_ate, cp.status,
          (cp.limite_mensal is not null and (
@@ -557,3 +565,33 @@ grant select on public.gostoso_club_resgates_mensais to authenticated, service_r
 update public.gostoso_club_partners
    set regra = 'Qualquer dia da semana. Mostre o cupom antes de pagar.'
  where regra = 'Qualquer dia da semana. Mostre o código antes de pagar.';
+
+-- ── parceiros do lote de 28/10/2026 ─────────────────────────────────────────
+-- Confirmados pelo Victor em 28/10. Idempotente: so insere o que falta e so atualiza a
+-- linha da Parcel enquanto ela ainda esta como a migracao de 26/10 a gravou (se o dono ja
+-- editou, nao mexe). Casa Gostoso Mar: o horario do late check-out NAO foi informado pelo
+-- dono, por isso o texto nao traz hora; A CONFIRMAR com ele antes de pôr horario.
+-- Seridó Praia e Casa Reduto seguem "em combinacao" (visitas em 28 e 29/10); o texto do
+-- Seridó Praia e provisorio e tambem A CONFIRMAR.
+
+insert into public.gostoso_club_partners (business_id, tipo, beneficio, regra, status)
+select b.id, v.tipo, v.beneficio, v.regra, v.status
+  from (values
+    ('casa-gostoso-mar',        'Hospedagem', 'Late check-out de cortesia.',
+       'Sujeito à disponibilidade. Consulte o horário na recepção.', 'no_ar'),
+    ('cafe-com-biscoitos-damy', 'Café',       'Um cafezinho de cortesia.', null::text, 'no_ar'),
+    ('serido-praia',            null::text,   'Vantagem em combinação com a casa.', null::text, 'em_combinacao')
+  ) as v (slug, tipo, beneficio, regra, status)
+  join public.gostoso_businesses b on b.slug = v.slug
+on conflict (business_id) do nothing;
+
+update public.gostoso_club_partners cp
+   set status = 'no_ar',
+       beneficio = 'Late check-out de cortesia até as 16h.',
+       regra = 'Não vale para diária que termina na sexta ou no sábado. Sujeito à disponibilidade.'
+  from public.gostoso_businesses b
+ where b.id = cp.business_id
+   and b.slug = 'pousada-parcel-do-gostoso'
+   and cp.status = 'em_combinacao'
+   and cp.beneficio = 'Late check-out de cortesia.'
+   and cp.regra is null;

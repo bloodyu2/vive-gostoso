@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { BedDouble, Compass, Palette, Share2, Ticket, UtensilsCrossed, Waves } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { armazemDoNavegador, lerCupons } from '@/lib/clube/cupons-locais'
 import { disparar } from '@/lib/clube/disparar'
 import { linkParaAmigo, textoParaAmigo, type Vantagem } from '@/lib/clube/vantagens'
@@ -51,9 +52,9 @@ function dataCurta(iso: string, lang: string): string {
 }
 
 /** Um ícone por tipo de negócio, pelo rótulo do card. Cai em bilhete. */
-function IconeDoTipo({ tipo }: { tipo: string | null }) {
+function IconeDoTipo({ tipo, size = 22 }: { tipo: string | null; size?: number }) {
   const t = (tipo ?? '').toLowerCase()
-  const props = { size: 22, strokeWidth: 2, 'aria-hidden': true } as const
+  const props = { size, strokeWidth: 2, 'aria-hidden': true } as const
   if (/passeio|tour|aventura|kite|buggy/.test(t)) return <Compass {...props} />
   if (/hosped|pousada|hotel|stay|lodging/.test(t)) return <BedDouble {...props} />
   if (/artesan|craft|loja|shop/.test(t)) return <Palette {...props} />
@@ -111,18 +112,36 @@ export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, 
 
           return (
             <li key={v.partnerId} className="clube-card clube-entra" style={{ '--i': i } as CSSProperties}>
-              <div className="clube-card-corpo">
-                <div className="clube-card-topo">
-                  <span className="clube-icone">
-                    <IconeDoTipo tipo={v.tipo} />
+              <div className={`clube-foto ${v.capaUrl ? 'clube-foto--com' : 'clube-foto--vazia'}`}>
+                {v.capaUrl ? (
+                  <SafeCoverImage
+                    src={v.capaUrl}
+                    alt=""
+                    className="clube-foto-img"
+                    sizes="(max-width: 640px) 100vw, 420px"
+                    fallback={
+                      <span className="clube-foto-marca">
+                        <IconeDoTipo tipo={v.tipo} size={64} />
+                      </span>
+                    }
+                  />
+                ) : (
+                  <span className="clube-foto-marca">
+                    <IconeDoTipo tipo={v.tipo} size={64} />
                   </span>
-                  <div>
-                    {v.tipo ? <p className="clube-tipo">{v.tipo}</p> : null}
-                    <h3 className="clube-nome">
-                      <a href={`${prefixo}/negocio/${v.slug}`}>{v.nome}</a>
-                    </h3>
-                  </div>
-                </div>
+                )}
+                {v.tipo ? (
+                  <p className="clube-foto-tipo">
+                    <IconeDoTipo tipo={v.tipo} size={16} />
+                    <span>{v.tipo}</span>
+                  </p>
+                ) : null}
+              </div>
+
+              <div className="clube-card-corpo">
+                <h3 className="clube-nome">
+                  <a href={`${prefixo}/negocio/${v.slug}`}>{v.nome}</a>
+                </h3>
                 <span className={`clube-tag ${noAr ? 'clube-tag--no-ar' : 'clube-tag--combinacao'}`}>
                   {noAr ? textos.status_no_ar : textos.status_combinacao}
                 </span>

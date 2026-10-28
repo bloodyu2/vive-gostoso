@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { ALTURA, LARGURA, caminhoDoQr, encurtar, imagemDoCupom, type DadosCupom, type RotulosCupom } from './cupom-imagem'
+import sharp from 'sharp'
+import { ALTURA, ALTURA_COM_FOTO, LARGURA, caminhoDoQr, encurtar, imagemDoCupom, type DadosCupom, type RotulosCupom } from './cupom-imagem'
 
 const dados: DadosCupom = {
   negocio: 'Gostoso Expedições',
@@ -57,6 +58,20 @@ describe('imagemDoCupom', () => {
     expect(dv.getUint32(16)).toBe(LARGURA)
     expect(dv.getUint32(20)).toBe(ALTURA)
     expect(bytes.length).toBeGreaterThan(20_000)
+  }, 60_000)
+
+  it('com foto o bilhete cresce para a altura com foto; sem foto fica como sempre', async () => {
+    const foto = `data:image/jpeg;base64,${(
+      await sharp({ create: { width: 968, height: 400, channels: 3, background: { r: 30, g: 120, b: 160 } } }).jpeg().toBuffer()
+    ).toString('base64')}`
+    const res = await imagemDoCupom({ ...dados, foto }, rotulos)
+    const bytes = new Uint8Array(await res.arrayBuffer())
+    const dv = new DataView(bytes.buffer, bytes.byteOffset)
+    expect(dv.getUint32(16)).toBe(LARGURA)
+    expect(dv.getUint32(20)).toBe(ALTURA_COM_FOTO)
+    const sem = await imagemDoCupom({ ...dados, foto: null }, rotulos)
+    const bs = new Uint8Array(await sem.arrayBuffer())
+    expect(new DataView(bs.buffer, bs.byteOffset).getUint32(20)).toBe(ALTURA)
   }, 60_000)
 
   it('nome de negócio e vantagem enormes ainda geram a imagem', async () => {

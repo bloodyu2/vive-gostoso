@@ -11,6 +11,9 @@ import { formatarCodigo } from './resgate'
 
 export const LARGURA = 1080
 export const ALTURA = 1560
+/** Com a foto do estabelecimento no topo o bilhete cresce, para o texto nao apertar. */
+export const ALTURA_COM_FOTO = 1740
+export const ALTURA_DA_FOTO = 400
 
 export interface DadosCupom {
   negocio: string
@@ -23,6 +26,8 @@ export interface DadosCupom {
   expiraEm: string
   /** endereco que o QR abre (a pagina de verificacao) */
   urlVerificacao: string
+  /** foto do estabelecimento ja como data URI (jpeg ou png); sem ela o bilhete e o de sempre */
+  foto?: string | null
 }
 
 export interface RotulosCupom {
@@ -105,13 +110,65 @@ function tamanhoDoNome(nome: string): number {
 const ALTURA_CANHOTO = 590
 const MARGEM = 56
 
+export function alturaDoCupom(dados: Pick<DadosCupom, 'foto'>): number {
+  return dados.foto ? ALTURA_COM_FOTO : ALTURA
+}
+
+/** Faixa de foto no topo do bilhete: a foto cobre tudo, um degrade escuro embaixo e em cima
+ *  deixa ler o texto branco por cima, qualquer que seja a foto. */
+function faixaDaFoto(foto: string, r: RotulosCupom): No {
+  const largura = LARGURA - 2 * MARGEM
+  return h(
+    'div',
+    { position: 'relative', width: largura, height: ALTURA_DA_FOTO, background: COR.verde },
+    {
+      type: 'img',
+      props: {
+        src: foto,
+        width: largura,
+        height: ALTURA_DA_FOTO,
+        style: { position: 'absolute', top: 0, left: 0, width: largura, height: ALTURA_DA_FOTO, objectFit: 'cover' },
+      },
+    } as No,
+    h('div', {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: largura,
+      height: ALTURA_DA_FOTO,
+      backgroundImage:
+        'linear-gradient(to bottom, rgba(10,41,41,0.62) 0%, rgba(10,41,41,0) 34%, rgba(10,41,41,0.32) 54%, rgba(10,41,41,0.88) 100%)',
+    }),
+    h(
+      'div',
+      { position: 'absolute', top: 40, left: 72, right: 72, justifyContent: 'space-between', alignItems: 'center' },
+      texto(r.marca.toUpperCase(), { fontSize: 30, fontWeight: 700, color: '#FFFBF0', letterSpacing: 6 }),
+      h(
+        'div',
+        { border: '4px solid #FFFBF0', borderRadius: 14, padding: '8px 18px' },
+        texto(r.umaCompra.toUpperCase(), { fontSize: 24, fontWeight: 700, color: '#FFFBF0', letterSpacing: 3 }),
+      ),
+    ),
+    texto(r.titulo, {
+      position: 'absolute',
+      left: 72,
+      bottom: 32,
+      fontFamily: 'Bricolage',
+      fontSize: 72,
+      color: '#FFFBF0',
+      letterSpacing: -2,
+    }),
+  )
+}
+
 export function montarCupom(dados: DadosCupom, r: RotulosCupom): No {
   const qr = caminhoDoQr(dados.urlVerificacao)
   const lado = 240
   const nome = encurtar(dados.nome, 36)
   const negocio = encurtar(dados.negocio, 56)
   const beneficio = encurtar(dados.beneficio, 120)
-  const alturaCartao = ALTURA - 2 * MARGEM
+  const alturaTotal = alturaDoCupom(dados)
+  const alturaCartao = alturaTotal - 2 * MARGEM
   // meia-lua do picote: pintada por ultimo para ficar por cima do canhoto
   const yPicote = alturaCartao - ALTURA_CANHOTO
 
@@ -130,7 +187,7 @@ export function montarCupom(dados: DadosCupom, r: RotulosCupom): No {
     'div',
     {
       width: LARGURA,
-      height: ALTURA,
+      height: alturaTotal,
       background: COR.fundo,
       padding: MARGEM,
       fontFamily: 'Figtree',
@@ -146,23 +203,28 @@ export function montarCupom(dados: DadosCupom, r: RotulosCupom): No {
         borderRadius: 44,
         overflow: 'hidden',
       },
-      // parte de cima: o bilhete
+      // parte de cima: com foto, a faixa da foto (marca, aviso e titulo por cima); sem foto, o cabecalho de sempre
+      dados.foto ? faixaDaFoto(dados.foto, r) : null,
       h(
         'div',
-        { flexDirection: 'column', flex: 1, padding: '64px 72px 40px 72px' },
-        h(
-          'div',
-          { justifyContent: 'space-between', alignItems: 'center' },
-          texto(r.marca.toUpperCase(), { fontSize: 30, fontWeight: 700, color: COR.verde, letterSpacing: 6 }),
-          h(
-            'div',
-            { border: `4px solid ${COR.verde}`, borderRadius: 14, padding: '8px 18px' },
-            texto(r.umaCompra.toUpperCase(), { fontSize: 24, fontWeight: 700, color: COR.verde, letterSpacing: 3 }),
-          ),
-        ),
-        texto(r.titulo, { marginTop: 40, fontFamily: 'Bricolage', fontSize: 64, color: COR.verde, letterSpacing: -2 }),
+        { flexDirection: 'column', flex: 1, padding: dados.foto ? '48px 72px 40px 72px' : '64px 72px 40px 72px' },
+        dados.foto
+          ? null
+          : h(
+              'div',
+              { justifyContent: 'space-between', alignItems: 'center' },
+              texto(r.marca.toUpperCase(), { fontSize: 30, fontWeight: 700, color: COR.verde, letterSpacing: 6 }),
+              h(
+                'div',
+                { border: `4px solid ${COR.verde}`, borderRadius: 14, padding: '8px 18px' },
+                texto(r.umaCompra.toUpperCase(), { fontSize: 24, fontWeight: 700, color: COR.verde, letterSpacing: 3 }),
+              ),
+            ),
+        dados.foto
+          ? null
+          : texto(r.titulo, { marginTop: 40, fontFamily: 'Bricolage', fontSize: 64, color: COR.verde, letterSpacing: -2 }),
         texto(negocio, {
-          marginTop: 56,
+          marginTop: dados.foto ? 0 : 56,
           fontFamily: 'Bricolage',
           fontSize: tamanhoDoNome(negocio),
           lineHeight: 1.02,
@@ -244,7 +306,7 @@ export async function imagemDoCupom(dados: DadosCupom, rotulos: RotulosCupom): P
   ])
   return new ImageResponse(montarCupom(dados, rotulos) as never, {
     width: LARGURA,
-    height: ALTURA,
+    height: alturaDoCupom(dados),
     fonts: [
       { name: 'Bricolage', data: bricolage, weight: 800, style: 'normal' },
       { name: 'Figtree', data: figtree500, weight: 500, style: 'normal' },
