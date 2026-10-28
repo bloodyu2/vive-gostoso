@@ -6,15 +6,14 @@ import { BadgeCheck, ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { BusinessCard } from '@/components/business/business-card'
-import { Selo } from '@/components/business/selo'
-import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { Hoje } from '@/components/home/hoje'
+import { CarrosselNovos } from '@/components/home/carrossel-novos'
 import { PostCard } from '@/components/blog/PostCard'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { Marquee } from '@/components/magicui/marquee'
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useStats, type SiteStats } from '@/hooks/useStats'
-import { useRecentBusinesses } from '@/hooks/useRecentBusinesses'
+import { useCarrosselNovos } from '@/hooks/useCarrosselNovos'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { supabase } from '@/lib/supabase'
 import { normalizarIdioma, visivelNoIdioma } from '@/lib/blog/traducoes'
@@ -58,7 +57,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
   const { data: allBusinesses = [] } = useBusinesses()
   const featured = allBusinesses.filter(b => b.is_featured)
   const { data: stats } = useStats(initialData ? { initialData: initialData.stats } : undefined)
-  const { data: recentBusinesses = [] } = useRecentBusinesses()
+  const { data: carrossel = [] } = useCarrosselNovos()
   const { data: todosPosts = [] } = useLatestBlogPosts()
   const idioma = normalizarIdioma(i18n.language)
   const latestPosts = todosPosts.filter(p => visivelNoIdioma(p.slug, idioma)).slice(0, 3)
@@ -141,64 +140,8 @@ export default function Home({ initialData, vitrine }: HomeProps) {
         {vitrine}
       </div>
 
-      {/* ── Recém chegados ── */}
-      {recentBusinesses.length > 0 && (
-        <BlurFade>
-        <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10 md:pb-14">
-          <div className="flex justify-between items-center mb-5">
-            <h2 className="font-display text-h3 font-semibold">{t('home.novos_titulo')}</h2>
-            <Link href={lp('/come')} className="text-teal text-sm font-semibold">{t('home.ver_todos')}</Link>
-          </div>
-          {(() => {
-            const [destaque, ...outros] = recentBusinesses
-            return (
-              <div className="grid gap-3 md:gap-4 sm:grid-cols-5">
-                <Link
-                  href={lp(`/negocio/${destaque.slug}`)}
-                  className="group sm:col-span-3 bg-white dark:bg-card rounded-2xl border border-border-1 overflow-hidden hover:shadow-md transition-shadow flex flex-col"
-                >
-                  <div className="aspect-[4/3] sm:aspect-auto sm:flex-1 sm:min-h-64 bg-gradient-to-br from-teal to-teal-dark overflow-hidden">
-                    {destaque.cover_url
-                      ? <SafeCoverImage src={destaque.cover_url} alt="" sizes="(max-width: 639px) 100vw, 55vw" className="w-full h-full object-cover" />
-                      : <div className="w-full h-full min-h-40 flex items-center justify-center text-white/30 text-6xl font-display font-bold">{destaque.name[0]}</div>
-                    }
-                  </div>
-                  <div className="p-4 md:p-5">
-                    <p className="font-display font-bold text-xl md:text-2xl text-fg-1 leading-tight">{destaque.name}</p>
-                    <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                      {destaque.category && <span className="text-sm text-fg-3-texto">{destaque.category.name}</span>}
-                      {destaque.is_verified && <Selo tipo="prata" size="md" />}
-                    </div>
-                  </div>
-                </Link>
-                <div className="sm:col-span-2 flex flex-col gap-3 md:gap-4">
-                  {outros.map((b, i) => (
-                    <BlurFade key={b.id} delay={(i % 4) * 70} className="flex-1">
-                      <Link
-                        href={lp(`/negocio/${b.slug}`)}
-                        className="group h-full min-h-16 flex items-center gap-3 bg-white dark:bg-card rounded-2xl border border-border-1 p-2.5 hover:shadow-md transition-shadow"
-                      >
-                        <div className="w-16 h-16 shrink-0 rounded-xl bg-gradient-to-br from-teal to-teal-dark overflow-hidden">
-                          {b.cover_url
-                            ? <SafeCoverImage src={b.cover_url} alt="" sizes="64px" className="w-full h-full object-cover" />
-                            : <div className="w-full h-full flex items-center justify-center text-white/30 text-2xl font-bold">{b.name[0]}</div>
-                          }
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-sm font-semibold text-fg-1 truncate leading-snug">{b.name}</p>
-                          {b.category && <p className="text-xs text-fg-3-texto mt-0.5 truncate">{b.category.name}</p>}
-                          {b.is_verified && <Selo tipo="prata" size="sm" className="mt-1" />}
-                        </div>
-                      </Link>
-                    </BlurFade>
-                  ))}
-                </div>
-              </div>
-            )
-          })()}
-        </section>
-        </BlurFade>
-      )}
+      {/* ── Banner carrossel: destaque, novos e verificados ── */}
+      <CarrosselNovos itens={carrossel} />
 
       {/* ── Agora em Gostoso ── */}
       <Hoje />

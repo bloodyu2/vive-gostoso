@@ -159,9 +159,14 @@ h4, h5, h6 {
 }
 
 /* --- Scrollbar --- */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #C4C4C4 transparent;
+/* Dentro de `@layer base` de proposito: uma regra `*` fora de camada ganha de
+   qualquer utilidade do Tailwind, e foi por isso que `scrollbar-none` nunca
+   escondeu barra nenhuma (medido em 28/10/2026 no carrossel da home). */
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #C4C4C4 transparent;
+  }
 }
 
 /* Esconde a scrollbar de carrossel horizontal. A classe era usada em vários
