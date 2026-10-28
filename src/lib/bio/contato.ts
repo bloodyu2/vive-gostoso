@@ -25,7 +25,7 @@ export const VIVE = {
   instagramRotulo: '@vivegostoso',
 } as const
 
-/** "(84) 93618-0839", para quando o número é lido na tela em vez de virar link. */
+/** "(84) 8818-2779", para quando o número é lido na tela em vez de virar link. */
 export function whatsappFormatado(): string {
   const d = VIVE.whatsapp
   const ddd = d.slice(2, 4)

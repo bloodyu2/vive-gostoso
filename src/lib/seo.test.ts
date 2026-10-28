@@ -133,7 +133,7 @@ describe('organizationSchema contactPoint', () => {
     expect(s.contactPoint).toBeDefined()
     expect(s.contactPoint?.['@type']).toBe('ContactPoint')
     expect(s.contactPoint?.telephone).toBe(`+${OFFICIAL_WHATSAPP}`)
-    expect(s.contactPoint?.telephone).toBe('+5584936180839')
+    expect(s.contactPoint?.telephone).toBe('+558488182779')
   })
 })
 
