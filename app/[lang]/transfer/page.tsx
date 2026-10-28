@@ -5,7 +5,7 @@ export const revalidate = 1800
 
 export const metadata: Metadata = {
   title: 'Transfer Sao Miguel do Gostoso | Aeroporto Natal',
-  description: 'Transfer do aeroporto de Natal para Sao Miguel do Gostoso. 110 km, ~1h50. Prestadores verificados, preco fixo, direto no WhatsApp.',
+  description: 'Transfer do aeroporto de Natal para Sao Miguel do Gostoso. 110 km, ~1h40. Prestadores verificados, preco fixo, direto no WhatsApp.',
   alternates: {
     canonical: 'https://www.vivegostoso.com.br/transfer',
     languages: {
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Transfer Sao Miguel do Gostoso | Aeroporto Natal',
-    description: 'Transfer do aeroporto de Natal para Sao Miguel do Gostoso. 110 km, ~1h50. Prestadores verificados, preco fixo, direto no WhatsApp.',
+    description: 'Transfer do aeroporto de Natal para Sao Miguel do Gostoso. 110 km, ~1h40. Prestadores verificados, preco fixo, direto no WhatsApp.',
     url: 'https://www.vivegostoso.com.br/transfer',
     siteName: 'Vive Gostoso',
     locale: 'pt_BR',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Transfer Sao Miguel do Gostoso | Aeroporto Natal',
-    description: 'Transfer do aeroporto de Natal para Sao Miguel do Gostoso. 110 km, ~1h50. Prestadores verificados, preco fixo, direto no WhatsApp.',
+    description: 'Transfer do aeroporto de Natal para Sao Miguel do Gostoso. 110 km, ~1h40. Prestadores verificados, preco fixo, direto no WhatsApp.',
     images: ['https://www.vivegostoso.com.br/og-image.png'],
   },
 }

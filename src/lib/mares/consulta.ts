@@ -1,6 +1,7 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import type { LinhaLida } from './semana'
 import { inicioDoDia } from './tempo'
+import { fetchComPrazo } from '../supabase/prazo'
 
 export type ClienteMares = Pick<SupabaseClient, 'from'>
 
@@ -12,8 +13,9 @@ export const SEGUNDOS_DE_CACHE = 3600
  *  continua calculando "hoje" e "agora" a cada visita, mas o banco e lido no
  *  maximo uma vez por hora por consulta. */
 export function fetchComCache(base: typeof fetch = fetch, tag = 'gostoso_mares'): typeof fetch {
+  const comPrazo = fetchComPrazo(base)
   return ((entrada: RequestInfo | URL, init?: RequestInit) =>
-    base(entrada, { ...init, next: { revalidate: SEGUNDOS_DE_CACHE, tags: [tag] } } as RequestInit)) as typeof fetch
+    comPrazo(entrada, { ...init, next: { revalidate: SEGUNDOS_DE_CACHE, tags: [tag] } } as RequestInit)) as typeof fetch
 }
 
 /** Cliente anonimo sem cookies: a tabua e publica. */

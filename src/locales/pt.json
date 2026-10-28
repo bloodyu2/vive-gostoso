@@ -641,7 +641,7 @@
   "transfer": {
     "badge": "TRANSFER.",
     "titulo": "Transfer São Miguel do Gostoso",
-    "desc": "Chegou ou vai partir? Transfer direto para o aeroporto de Natal e passeios pela região. 110 km, ~1h50.",
+    "desc": "Chegou ou vai partir? Transfer direto para o aeroporto de Natal e passeios pela região. 110 km, ~1h40.",
     "filtro_todas": "Todas as rotas",
     "filtro_rota": "Filtrar por rota",
     "cadastre_btn": "Cadastrar meu Transfer",
@@ -1029,12 +1029,14 @@
     "plan_destaque": "Destaque",
     "plan_destaque_badge": "Máxima visibilidade",
     "plan_disclaimer": "Os planos pagos são opcionais e financiam a promoção coletiva de Gostoso. {{pct}}% vai para o Fundo da Cidade.",
-    "testimonial_titulo": "O que dizem os parceiros",
     "final_titulo": "Seu negócio merece estar aqui",
     "final_desc": "Junte-se aos negócios que já fazem parte do Vive Gostoso e apareça para quem visita a cidade.",
     "final_cta": "Cadastrar agora",
     "final_fineprint": "Gratuito. Sem compromisso. Feito por quem vive em Gostoso.",
-    "stats_verificados": "verificados"
+    "stats_verificados": "verificados",
+    "plans_desc_gratis": "Por enquanto o cadastro é gratuito. Todos os negócios são bem-vindos.",
+    "planos_pagos_titulo": "Planos pagos: ainda não disponíveis",
+    "planos_pagos_desc": "Os planos Associado e Destaque, com mais visibilidade no diretório, ainda não estão disponíveis. Quando abrirem, quem já está cadastrado é avisado."
   },
   "reivindicar": {
     "badge": "REIVINDICAR",
@@ -1822,12 +1824,14 @@
     "validade": "Válida até {data}",
     "limite": "Limite de {n} por mês",
     "negocio_titulo": "Tem um negócio em Gostoso?",
-    "negocio_texto": "Entrar no Passaporte é de graça. Você escolhe uma vantagem simples, define o limite e a validade, e recebe a contagem de quantas vezes foi usada. A plaquinha de QR para o balcão também é por nossa conta.",
+    "negocio_texto": "Entrar no Passaporte é totalmente grátis. A gente convida os negócios da cidade, e você também pode nos chamar quando quiser. Você escolhe uma vantagem simples, define o limite e a validade, e recebe a contagem de quantas vezes foi usada. A plaquinha de QR para o balcão também é por nossa conta.",
     "quero": "Quero participar",
     "quero_msg": "Oi! Quero participar do Passaporte Gostoso com o meu negócio.",
-    "fundo_titulo": "Para onde vai o que o Passaporte gera",
-    "fundo_texto": "Nada sai dos negócios. O que o Passaporte gerar com patrocínio e pacotes vira um fundo da cidade, usado em turismo e divulgação para todo mundo. O saldo é publicado todo mês.",
-    "assinatura": "Passaporte Gostoso é uma iniciativa do Vive Gostoso, com a Balaio."
+    "fundo_titulo": "Patrocínio",
+    "fundo_texto": "Aberto a patrocínio. Empresas da região podem patrocinar o Passaporte, e todo o valor vira anúncio pago para a página do clube, para levar mais visitantes aos parceiros. Os resultados são acompanhados com números.",
+    "assinatura": "Passaporte Gostoso é uma iniciativa do Vive Gostoso, com a Balaio.",
+    "patrocinar": "Quero patrocinar",
+    "patrocinar_msg": "Oi! Quero saber como patrocinar o Passaporte Gostoso com a minha empresa."
   },
   "plaquinha": {
     "page_title": "Obrigado pela visita",

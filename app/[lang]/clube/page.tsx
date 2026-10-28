@@ -195,7 +195,19 @@ export default async function ClubePage({ params, searchParams }: Props) {
                 {fundoFrase}
               </p>
             </div>
-            <p className="clube-fundo-texto">{fundoResto}</p>
+            <div>
+              <p className="clube-fundo-texto">{fundoResto}</p>
+              <div className="clube-faixa-acoes" style={{ marginTop: '1.25rem' }}>
+                <a
+                  className="clube-btn clube-btn--verde"
+                  href={buildWhatsAppLink(VIVE.whatsapp, t.patrocinar_msg)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t.patrocinar}
+                </a>
+              </div>
+            </div>
           </div>
         </section>
       </main>
