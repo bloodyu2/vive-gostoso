@@ -5,7 +5,7 @@ import { test, expect, type Page, type BrowserContext, type Request } from '@pla
 // Edge Functions) e interceptada com page.route e respondida aqui, e o payload
 // e conferido. Links de WhatsApp e do Stripe nunca sao abertos.
 
-const WHATS_OFICIAL = '5584936180839'
+const WHATS_OFICIAL = '558488182779'
 
 type Captura = { url: string; method: string; body: string | null }
 
