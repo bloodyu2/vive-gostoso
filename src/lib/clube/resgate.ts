@@ -134,7 +134,9 @@ function celula(valor: string): string {
 /** Marca de ordem de bytes: faz o Excel abrir o CSV como UTF-8, com acento certo. */
 export const BOM = String.fromCharCode(0xfeff)
 
-const CABECALHO ='nome,email,telefone,codigo,status,resgatado_em,valido_ate'
+// contato_verificado: e-mail e telefone sao os que a pessoa digitou, ninguem os confirmou.
+// A coluna deixa isso escrito em cada linha, para a lista nao ser tratada como contato confirmado.
+const CABECALHO = 'nome,email,telefone,codigo,status,resgatado_em,valido_ate,contato_verificado'
 
 /** Lista de resgates em CSV (com BOM, para o Excel abrir com acento). */
 export function csvDeLeads(linhas: LinhaLead[]): string {
@@ -147,6 +149,7 @@ export function csvDeLeads(linhas: LinhaLead[]): string {
       l.status,
       dataHoraDeGostoso(l.created_at),
       l.expira_em,
+      'nao',
     ]
       .map(celula)
       .join(','),
@@ -163,6 +166,7 @@ export type MotivoResgate =
   | 'ja_tem'
   | 'esgotada'
   | 'muitos'
+  | 'limite_contato'
   | 'erro'
 
 export type ResultadoResgate =
@@ -178,6 +182,7 @@ const MOTIVOS: ReadonlySet<string> = new Set([
   'ja_tem',
   'esgotada',
   'muitos',
+  'limite_contato',
 ])
 
 /** A resposta de gostoso_club_resgatar() em algo que a tela entende. So devolve cupom quando

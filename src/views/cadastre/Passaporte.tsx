@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import Link from 'next/link'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -58,6 +58,17 @@ function PassaporteInner() {
   const lp = useLocalePath()
   const { data: negocios = [], isPending } = useMyBusinesses()
   const [escolhido, setEscolhido] = useState<string | null>(null)
+
+  /* Retencao de 12 meses (o que a politica de privacidade promete): quem abre a area do
+     parceiro, dono ou admin logado, pede a limpeza do que passou do prazo. A funcao tem prazo
+     fixo, nao devolve nada e o publico nao a executa (migracao 20261029120000). Se a migracao
+     ainda nao foi aplicada, o erro e ignorado. */
+  useEffect(() => {
+    void supabase.rpc('gostoso_club_manutencao').then(
+      () => null,
+      () => null,
+    )
+  }, [])
   const negocio = negocios.find((n) => n.id === escolhido) ?? negocios[0] ?? null
 
   return (
@@ -575,6 +586,9 @@ function Resgates({ parceiro, negocio }: { parceiro: Parceiro; negocio: string }
         {t('resgates_titulo')}
       </h2>
       <p className="clube-regra">{t('resgates_ajuda')}</p>
+      <p className="clube-aviso" role="note">
+        {t('leads_nao_verificados')}
+      </p>
 
       {lista.isLoading ? (
         <p className="clube-aviso">{t('carregando')}</p>
@@ -618,6 +632,9 @@ function Resgates({ parceiro, negocio }: { parceiro: Parceiro; negocio: string }
                   </p>
                   <p className="clube-regra" style={{ margin: '0.125rem 0 0' }}>
                     {quando(l.created_at)} · {t('lead_valido_ate', { data: dataCurta(l.expira_em) })}
+                  </p>
+                  <p className="clube-regra" style={{ margin: '0.125rem 0 0', fontStyle: 'italic' }}>
+                    {t('lead_contato_nao_verificado')}
                   </p>
                   <div className="clube-acoes" style={{ marginTop: '0.75rem' }}>
                     <a className="clube-btn clube-btn--verde" href={wa} target="_blank" rel="noopener noreferrer">

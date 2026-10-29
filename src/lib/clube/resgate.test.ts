@@ -143,8 +143,14 @@ describe('csvDeLeads', () => {
     const csv = csvDeLeads([linha])
     expect(csv.startsWith(BOM)).toBe(true)
     const [cab, l1] = csv.slice(BOM.length).split('\r\n')
-    expect(cab).toBe('nome,email,telefone,codigo,status,resgatado_em,valido_ate')
-    expect(l1).toBe('Ana Souza,ana@exemplo.com,(84) 99999-1234,GP-7K4Q-9XMB,valido,2026-11-06 10:05,2026-12-06')
+    expect(cab).toBe('nome,email,telefone,codigo,status,resgatado_em,valido_ate,contato_verificado')
+    expect(l1).toBe('Ana Souza,ana@exemplo.com,(84) 99999-1234,GP-7K4Q-9XMB,valido,2026-11-06 10:05,2026-12-06,nao')
+  })
+  it('marca em toda linha que e-mail e telefone não são verificados', () => {
+    const csv = csvDeLeads([linha, { ...linha, codigo: 'ABCDEFGH' }])
+    const linhas = csv.slice(BOM.length).split('\r\n').slice(1)
+    expect(linhas).toHaveLength(2)
+    for (const l of linhas) expect(l.endsWith(',nao')).toBe(true)
   })
   it('escapa aspas, vírgulas e quebras de linha', () => {
     const csv = csvDeLeads([{ ...linha, nome: 'Silva, "Zé"\nJr' }])
@@ -157,7 +163,7 @@ describe('csvDeLeads', () => {
     expect(csv).toContain("'@x")
   })
   it('lista vazia só tem o cabeçalho', () => {
-    expect(csvDeLeads([]).slice(BOM.length)).toBe('nome,email,telefone,codigo,status,resgatado_em,valido_ate')
+    expect(csvDeLeads([]).slice(BOM.length)).toBe('nome,email,telefone,codigo,status,resgatado_em,valido_ate,contato_verificado')
   })
 })
 
@@ -171,7 +177,7 @@ describe('interpretarResgate', () => {
     })
   })
   it('cada motivo de recusa vira o seu', () => {
-    for (const motivo of ['consentimento', 'nome', 'email', 'telefone', 'indisponivel', 'ja_tem', 'esgotada', 'muitos']) {
+    for (const motivo of ['consentimento', 'nome', 'email', 'telefone', 'indisponivel', 'ja_tem', 'esgotada', 'muitos', 'limite_contato']) {
       expect(interpretarResgate({ ok: false, motivo }, null)).toEqual({ tipo: 'erro', motivo })
     }
   })

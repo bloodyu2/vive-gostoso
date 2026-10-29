@@ -31,6 +31,7 @@ export interface TextosForm {
   erro_ja_tem: string
   erro_resgate: string
   erro_muitos: string
+  erro_limite_contato: string
   erro_indisponivel: string
   esgotada: string
 }
@@ -101,6 +102,8 @@ export function FormResgate({ partnerId, negocio, textos, origem, prefixo, onCan
         return textos.esgotada
       case 'muitos':
         return textos.erro_muitos
+      case 'limite_contato':
+        return textos.erro_limite_contato
       case 'indisponivel':
         return textos.erro_indisponivel
       default:

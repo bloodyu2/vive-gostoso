@@ -171,6 +171,7 @@ export default async function ClubePage({ params, searchParams }: Props) {
                 erro_ja_tem: t.erro_ja_tem,
                 erro_resgate: t.erro_resgate,
                 erro_muitos: t.erro_muitos,
+                erro_limite_contato: t.erro_limite_contato,
                 erro_indisponivel: t.erro_indisponivel,
                 esgotada: t.esgotada,
               }}
