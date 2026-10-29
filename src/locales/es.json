@@ -1058,7 +1058,7 @@
     "sec6_title": "6. Retención",
     "sec6_text": "Conservamos tus datos mientras tu cuenta o negocio esté activo en la plataforma. Tras la eliminación, los borramos en un plazo de 30 días, salvo obligaciones legales. Los datos de quienes canjean un cupón del Pasaporte siguen la regla de la sección 7.",
     "sec7_title": "7. Pasaporte Gostoso (cupones)",
-    "sec7_text": "Cuando canjeas un cupón del Pasaporte Gostoso, pedimos tu nombre, correo y teléfono. Los usamos para generar tu cupón y su imagen, para comprobar que el cupón vale una sola compra y para compartir tus datos con el negocio que elegiste, para que te hable de la ventaja. La base legal es tu consentimiento (LGPD, art. 7, inciso I): lo das marcando la casilla de autorización antes de canjear, y sin ella no se emite el cupón. Junto con el canje guardamos la fecha y la hora del consentimiento, la versión de esta política y el texto que leíste. Tus datos van solo al negocio de ese cupón. Después, el negocio es responsable del uso que les dé, y le pedimos que los use solo para hablar de la ventaja. No vendemos ni cedemos tus datos a nadie más. Los datos están en una base de datos en la nube, con acceso limitado al negocio del cupón y al equipo de Vive Gostoso. Guardamos los datos del canje hasta 12 meses y luego los borramos. Puedes retirar tu consentimiento y pedir la eliminación en cualquier momento, por correo, en privacidade@vivegostoso.com.br; también pediremos al negocio que borre su copia.",
+    "sec7_text": "Cuando canjeas un cupón del Pasaporte Gostoso, pedimos tu nombre, correo y teléfono. Los usamos para generar tu cupón y su imagen, para comprobar que el cupón vale una sola compra y para compartir tus datos con el negocio que elegiste, para que te hable de la ventaja. La base legal es tu consentimiento (LGPD, art. 7, inciso I): lo das marcando la casilla de autorización antes de canjear, y sin ella no se emite el cupón. Junto con el canje guardamos la fecha y la hora del consentimiento, la versión de esta política y el texto que leíste. Tus datos van solo al negocio de ese cupón. Después, el negocio es responsable del uso que les dé, y le pedimos que los use solo para hablar de la ventaja. No vendemos ni cedemos tus datos a nadie más. Los datos están en una base de datos en la nube, con acceso limitado al negocio del cupón y al equipo de Vive Gostoso. Guardamos los datos del canje hasta 12 meses y luego los borramos. Puedes retirar tu consentimiento y pedir la eliminación en cualquier momento, por correo, en privacidade@vivegostoso.com.br; también pediremos al negocio que borre su copia. Para limitar el abuso, guardamos una versión codificada (hash) de la dirección IP de cada canje. El negocio no la ve, y se borra junto con el canje. El nombre, el correo y el teléfono son los que escribiste, y no los verificamos.",
     "atualizada": "Actualizada el 28 de octubre de 2026 (versión 2026-10-28)."
   },
   "professional_panel": {
@@ -1852,6 +1852,7 @@
     "erro_ja_tem": "Ya tienes un cupón activo de este socio. Abre la imagen que descargaste o espera a que venza.",
     "erro_resgate": "No se pudo generar el cupón ahora. Inténtalo de nuevo.",
     "erro_muitos": "Demasiadas solicitudes a la vez. Espera un minuto e inténtalo de nuevo.",
+    "erro_limite_contato": "Este correo o teléfono alcanzó el límite mensual de cupones de este socio. Inténtalo de nuevo el mes que viene.",
     "vazio": "No hay ventajas activas ahora. Vuelve pronto.",
     "validade": "Válida hasta {data}",
     "limite": "Límite de {n} por mes",
@@ -1953,6 +1954,8 @@
     "lead_valido_ate": "Vale hasta {data}",
     "lead_msg_whatsapp": "¡Hola, {nome}! Te escribe {negocio}. Vi que canjeaste el cupón del Pasaporte Gostoso y quiero acordar cómo usarlo.",
     "leads_mais": "Mostrando los 200 más recientes. El CSV trae todos.",
+    "leads_nao_verificados": "El correo y el teléfono son los que escribió la persona. Vive Gostoso no los verifica: confírmalos antes de contar con ellos.",
+    "lead_contato_nao_verificado": "contacto no verificado",
     "card_titulo": "Pasaporte Gostoso",
     "card_desc": "Define la ventaja de tu negocio y ve cuántas veces se usó. Gratis."
   },

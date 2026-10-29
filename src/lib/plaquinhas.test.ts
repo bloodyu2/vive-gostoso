@@ -58,3 +58,22 @@ describe('linkDeAvaliacao', () => {
     )
   })
 })
+
+describe('o mapa preenchido (PLAQUINHAS) e coerente', () => {
+  const entradas = Object.entries(PLAQUINHAS)
+  it('so tem codigos de 01 a 10', () => {
+    for (const [codigo] of entradas) expect(codigo, codigo).toMatch(/^(0[1-9]|10)$/)
+  })
+  it('cada linha traz um slug no formato dos slugs do site', () => {
+    for (const [codigo, p] of entradas) expect(p.slug, codigo).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/)
+  })
+  it('nenhum negocio aparece em duas plaquinhas', () => {
+    const slugs = entradas.map(([, p]) => p.slug)
+    expect(new Set(slugs).size).toBe(slugs.length)
+  })
+  it('link de avaliacao e place_id, quando informados, sao validos (senao o botao some sem aviso)', () => {
+    for (const [codigo, p] of entradas) {
+      if (p.avaliar || p.placeId) expect(linkDeAvaliacao(p), codigo).not.toBeNull()
+    }
+  })
+})

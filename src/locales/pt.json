@@ -1557,7 +1557,7 @@
     "sec6_title": "6. Retenção",
     "sec6_text": "Mantemos seus dados enquanto sua conta ou negócio estiver ativo na plataforma. Após exclusão, removemos em até 30 dias, salvo obrigações legais. Os dados de quem resgata um cupom do Passaporte seguem a regra da seção 7.",
     "sec7_title": "7. Passaporte Gostoso (cupons)",
-    "sec7_text": "Quando você resgata um cupom do Passaporte Gostoso, pedimos nome, e-mail e telefone. Usamos esses dados para gerar o seu cupom e a imagem dele, para conferir que o cupom vale uma compra só e para repassar os dados ao estabelecimento que você escolheu, para que ele fale com você sobre a vantagem. A base legal é o seu consentimento (LGPD, art. 7º, inciso I): você dá marcando a caixa de autorização antes de resgatar, e sem ela o cupom não é gerado. Guardamos junto com o resgate a data e a hora do consentimento, a versão desta política e o texto que você leu. Os dados vão só para o estabelecimento daquele cupom. Depois do repasse, ele passa a ser responsável pelo uso que faz dos dados, e pedimos que use só para falar sobre a vantagem. Não vendemos nem cedemos seus dados a mais ninguém. Os dados ficam em um banco de dados em nuvem, com acesso restrito ao estabelecimento do cupom e à equipe do Vive Gostoso. Guardamos os dados do resgate por até 12 meses e depois apagamos. Você pode revogar o consentimento e pedir a exclusão a qualquer momento, por e-mail, em privacidade@vivegostoso.com.br; também pediremos ao estabelecimento que apague os dados dele.",
+    "sec7_text": "Quando você resgata um cupom do Passaporte Gostoso, pedimos nome, e-mail e telefone. Usamos esses dados para gerar o seu cupom e a imagem dele, para conferir que o cupom vale uma compra só e para repassar os dados ao estabelecimento que você escolheu, para que ele fale com você sobre a vantagem. A base legal é o seu consentimento (LGPD, art. 7º, inciso I): você dá marcando a caixa de autorização antes de resgatar, e sem ela o cupom não é gerado. Guardamos junto com o resgate a data e a hora do consentimento, a versão desta política e o texto que você leu. Os dados vão só para o estabelecimento daquele cupom. Depois do repasse, ele passa a ser responsável pelo uso que faz dos dados, e pedimos que use só para falar sobre a vantagem. Não vendemos nem cedemos seus dados a mais ninguém. Os dados ficam em um banco de dados em nuvem, com acesso restrito ao estabelecimento do cupom e à equipe do Vive Gostoso. Guardamos os dados do resgate por até 12 meses e depois apagamos. Você pode revogar o consentimento e pedir a exclusão a qualquer momento, por e-mail, em privacidade@vivegostoso.com.br; também pediremos ao estabelecimento que apague os dados dele. Para limitar abuso, guardamos uma versão embaralhada (hash) do endereço IP de cada resgate. O estabelecimento não a vê, e ela é apagada junto com o resgate. Nome, e-mail e telefone são os que você digitou, e não os verificamos.",
     "atualizada": "Atualizada em 28 de outubro de 2026 (versão 2026-10-28)."
   },
   "whatsapp": {
@@ -1852,6 +1852,7 @@
     "erro_ja_tem": "Você já tem um cupom ativo deste parceiro. Abra a imagem que baixou ou espere o cupom vencer.",
     "erro_resgate": "Não deu para gerar o cupom agora. Tente de novo.",
     "erro_muitos": "Muitos pedidos ao mesmo tempo. Espere um minuto e tente de novo.",
+    "erro_limite_contato": "Este e-mail ou telefone já chegou ao limite de cupons deste parceiro no mês. Tente de novo no mês que vem.",
     "vazio": "Nenhuma vantagem no ar agora. Volte em breve.",
     "validade": "Válida até {data}",
     "limite": "Limite de {n} por mês",
@@ -1953,6 +1954,8 @@
     "lead_valido_ate": "Vale até {data}",
     "lead_msg_whatsapp": "Oi, {nome}! Aqui é do {negocio}. Vi que você resgatou o cupom do Passaporte Gostoso e quero combinar como usar.",
     "leads_mais": "Mostrando os 200 mais recentes. O CSV traz todos.",
+    "leads_nao_verificados": "E-mail e telefone são os que a pessoa digitou. O Vive Gostoso não os verifica: confirme antes de contar com eles.",
+    "lead_contato_nao_verificado": "contato não verificado",
     "card_titulo": "Passaporte Gostoso",
     "card_desc": "Defina a vantagem do seu negócio e veja quantas vezes foi usada. Grátis."
   },

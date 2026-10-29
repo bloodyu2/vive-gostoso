@@ -5,12 +5,13 @@ import type { PGlite } from '@electric-sql/pglite'
 import { IDS, como, criarBanco } from './banco'
 import { textoConsentimento } from '../clube/resgate'
 
-/* Roda as DUAS migracoes do Passaporte (a de 26/10 e a do resgate, 28/10) num Postgres em
+/* Roda as TRES migracoes do Passaporte (26/10, a do resgate de 28/10 e a antiabuso de 29/10) num Postgres em
    memoria e confere o resgate com cadastro: validacao no servidor, consentimento, uso
    unico, quem le os dados pessoais (so o dono do negocio e o admin) e o que o publico ve. */
 
 const MIGRACAO_CLUBE = '20261026120000_vg_clube_passaporte.sql'
 const MIGRACAO_RESGATE = '20261028100000_vg_clube_resgate.sql'
+const MIGRACAO_ANTIABUSO = '20261029120000_vg_clube_resgate_antiabuso.sql'
 
 const CAT = '30000000-0000-4000-8000-000000000001'
 const NEGOCIO_A = IDS.negocioPublicado // dono: usuarioDono
@@ -28,6 +29,7 @@ const textoPara = (negocio: string) =>
 const APARELHO = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`
 
 let db: PGlite
+let contadorTelefone = 0
 
 type Resp = {
   ok: boolean
@@ -66,7 +68,9 @@ async function resgatar(
   const c = {
     nome: 'Ana Souza',
     email: 'ana@exemplo.com',
-    telefone: '(84) 99999-1234',
+    // telefone novo a cada chamada: a migracao antiabuso limita a 3 cupons por telefone por
+    // parceiro por mes, e estes testes repetem muitas vezes o mesmo parceiro
+    telefone: `849${String(20_000_000 + ++contadorTelefone)}`,
     consentimento: true,
     versao: VERSAO,
     texto: nome ? textoPara(nome) : TEXTO,
@@ -114,7 +118,7 @@ beforeAll(async () => {
       ('${NEGOCIO_C}', 'Rascunho do outro', 'rascunho-outro', '${IDS.perfilOutro}', '${CAT}', true, false);
     update public.gostoso_businesses set category_id = '${CAT}' where id = '${NEGOCIO_A}';
   `)
-  for (const m of [MIGRACAO_CLUBE, MIGRACAO_RESGATE]) {
+  for (const m of [MIGRACAO_CLUBE, MIGRACAO_RESGATE, MIGRACAO_ANTIABUSO]) {
     await db.exec(readFileSync(resolve(process.cwd(), 'supabase/migrations', m), 'utf8'))
   }
   await db.exec(`
@@ -130,7 +134,7 @@ beforeAll(async () => {
 
 describe('resgatar: caminho feliz', () => {
   it('devolve token longo, código curto, validade e grava os dados limpos com o consentimento', async () => {
-    const r = await resgatar(P_A, { origem: '07', aparelho: APARELHO(1) })
+    const r = await resgatar(P_A, { origem: '07', aparelho: APARELHO(1), telefone: '(84) 99999-1234' })
     expect(r.ok).toBe(true)
     expect(r.token).toMatch(/^[0-9a-f]{64}$/)
     expect(r.codigo).toMatch(/^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{8}$/)

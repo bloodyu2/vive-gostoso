@@ -254,3 +254,95 @@ Guamaré fica mais perto de todas. Natal ficou por três motivos: é a estação
 **Revisão independente do diff (28/10/2026) e o que mudou.** Corrigido: o servidor agora confere a versão da política (lista fixa na função) e exige que o texto do consentimento cite o negócio e comece com a frase de autorização, então `p_texto` livre deixou de gravar prova falsa; o "um cupom ativo por e-mail" usa uma chave normalizada (sem `+etiqueta`, sem pontos no Gmail); tetos de 5 por minuto e 30 por hora por parceiro (eram 20 por minuto); `mailto:` com `encodeURIComponent`; WhatsApp com o 55 na frente (DDD 55 saía errado); CSV paginado e conferido contra o total; páginas do cupom com `force-dynamic`; campo isca com nome que o autofill ignora; lista recarrega também quando o cupom já estava usado; `replace` com função onde entra nome do turista; view sem privilégio para `authenticated`; service worker em `NetworkOnly` para a lista de resgates, as RPCs e as páginas `/clube/cupom` e `/clube/v`. Os testes de consentimento forjado e de teto por hora foram conferidos com mutante (sem a checagem, o teste falha).
 
 **Riscos que ficam abertos, para o Victor decidir.** (1) Quem chama a função direto com a chave anon ainda pode gastar o limite mensal de um parceiro e cadastrar dados de terceiros: o freio real é o teto por parceiro, que atrasa e não impede. O conserto de fato é um Route Handler com `service_role`, hash de IP e verificação (Turnstile), e tirar o execute de anon; não existe `service_role` no app hoje. (2) E-mail e telefone não são verificados, então o consentimento vale como declaração de quem preencheu; confirmação por e-mail ou WhatsApp (double opt-in) resolveria. (3) O mesmo e-mail pode resgatar de novo depois de usar ou vencer; se não for desejado, limitar por janela. (4) A retenção de 12 meses depende de agendar `gostoso_club_limpar_resgates`. (5) Se uma transferência de negócio trocar o dono, o novo dono passa a ler os resgates antigos. (6) O QR leva o mesmo token do titular, então quem fotografa o QR abre a página do cupom com o nome inteiro.
+
+
+## Passaporte: endurecimento do resgate antes de abrir ao público (29/10/2026)
+**Origem:** ordem do Victor via coordenadora, 29/10/2026. Os riscos 1, 3 e 4 da decisão de 28/10 (acima) ficam tratados como abaixo; os riscos 2, 5 e 6 seguem abertos. Migração `20261029120000_vg_clube_resgate_antiabuso.sql`, só como arquivo: aplicar depois do deploy READY e da frase do Victor. Sem service role, sem chave nova, sem `pg_cron`.
+
+**Tetos novos, dentro de `gostoso_club_resgatar`** (mesma assinatura, o navegador continua chamando pelo PostgREST com a chave pública):
+- 15 cupons por hora e 40 por dia por IP, em todos os parceiros. Resposta `muitos`.
+- 3 cupons por mês por e-mail (chave normalizada, a mesma do `ja_tem`) e 3 por mês por telefone, por parceiro. Conta cupom de qualquer status, então cancelar não zera. Resposta nova `limite_contato`, com texto próprio nos três idiomas (`clube.erro_limite_contato`); o código antigo da tela recebe o motivo como erro genérico, então a migração pode ser aplicada antes ou depois do deploy.
+- Os tetos de antes (por aparelho, 5 por minuto e 30 por hora por parceiro, isca, `ja_tem`) ficam como estavam. Ordem: `ja_tem`, `esgotada`, `limite_contato`, IP, aparelho, minuto, hora.
+- Por que 15 e 40: CGNAT das operadoras móveis do Brasil e Wi-Fi de pousada fazem muita gente dividir um IPv4. Os números são constantes dentro da função; mudar é `create or replace`.
+
+**De onde vem o IP (investigado em 29/10/2026).** O PostgREST entrega os cabeçalhos da requisição em `current_setting('request.headers')`, em JSON com chaves minúsculas. A função usa, nesta ordem: `cf-connecting-ip` (posto pela Cloudflare na frente do Supabase), `x-real-ip` e, só como último recurso, o primeiro item de `x-forwarded-for`. Este último o cliente pode forjar; forjar só desliga o teto para quem forja, nunca bloqueia outra pessoa. IPv6 conta pelo bloco /64. Sem cabeçalho legível, o teto por IP não se aplica (valem os demais). A documentação do Supabase lista `cf-connecting-ip` e `x-real-ip` entre os cabeçalhos de requisição dos logs de API. Nos logs de borda deste projeto, na última hora, `cf-connecting-ip` veio em 134 de 134 requisições e `x-real-ip` em 0 (`x-forwarded-for` não é um dos campos que o log guarda, então não deu para ver). **NÃO VERIFICADO em produção:** que o PostgREST entregue `cf-connecting-ip` à função, e o que ele entrega se o cliente mandar o próprio cabeçalho. Isso só se vê depois de aplicar a migração: a consulta de conferência está no cabeçalho do arquivo (dois resgates de redes diferentes, hashes distintos e nenhum nulo). Se todos caírem no mesmo hash, o teto por IP bloquearia a cidade inteira depois de 15 cupons; nesse caso voltar a função anterior (reversão no cabeçalho do arquivo) antes do lançamento.
+
+**O IP não é guardado puro.** Coluna `ip_hash` (sha256 com prefixo fixo). É pseudonimização, não anonimização: quem tem o banco consegue testar endereços. A coluna não entra no grant do `authenticated`, então o parceiro não a lê (teste em PGlite), e some com o resgate (12 meses). A política de privacidade (seção 7, três idiomas) passou a dizer isso. **Isto revisa a frase "Sem IP" da decisão de 28/10:** o consentimento continua sem IP; o resgate agora guarda o hash para limitar abuso.
+
+**Versão da política não foi trocada** (continua `2026-10-28`). Trocar exigiria a migração aceitar a versão nova antes do código novo sair, ou o resgate inteiro falharia em `consentimento` entre o deploy e a migração. Como o Passaporte está escondido e a política de 28/10 nunca valeu para o público, o texto novo entra na mesma versão. Se existir resgate real com o texto antigo (não verificado), a diferença é a frase do hash e a do e-mail não verificado.
+
+**E-mail e telefone não verificados, dito na tela.** Lista do parceiro: aviso acima da lista e "contato não verificado" em cada linha; CSV com a coluna `contato_verificado` valendo `nao` em toda linha.
+
+**Retenção de 12 meses sem `pg_cron`. Plano e escolha.**
+- Implementado: `gostoso_club_manutencao()`, prazo fixo de 12 meses, sem parâmetro e sem retorno, `execute` só para `authenticated` e `service_role`. A área do parceiro (`/cadastre/passaporte`) a chama ao abrir. Quem a chama não escolhe prazo nem aprende quantas linhas havia. Se a migração ainda não foi aplicada, o erro é ignorado.
+- Rota de cron da Vercel, avaliada e descartada: a rota do Next precisaria apagar linhas de `gostoso_club_vouchers`. Isso exige `service_role` no app (variável nova com acesso total ao banco, que a ordem proíbe) ou abrir uma função de limpeza ao `anon`. A função `gostoso_club_limpar_resgates` continua só do `service_role` e não foi exposta.
+- Limite do que foi feito: a limpeza roda quando algum parceiro ou o admin abre a área, não todo dia. No começo isso basta (nada tem 12 meses antes de 05/11/2027), mas a promessa de retenção fica dependendo de login. Para garantia firme: o Victor liga a extensão `pg_cron` no painel do Supabase (Database, Extensions) e agenda `select public.gostoso_club_limpar_resgates(12);` uma vez por dia. É passo dele; não foi feito. Os dois juntos não se atrapalham.
+
+**Caixa `privacidade@vivegostoso.com.br`:** citada na política em `sec5_text` e `sec7_text` nos três idiomas (teste `privacidade-clube.test.ts`). Não dá para saber daqui se a caixa existe e é lida; conferir antes do lançamento. Nenhum texto promete "criptografado" (o mesmo teste reprova a palavra).
+
+**O que o endurecimento não cobre (riscos que ficam, para o Victor decidir).**
+1. Tentativas que falham não são contadas: `ja_tem` e `limite_contato` dizem que um e-mail ou telefone já resgatou aquele parceiro, e quem chama a função direto pode usar isso para testar listas de e-mails. Contar falhas exigiria gravar linhas numa tabela de tentativas a cada chamada. Fora desta entrega.
+2. Quem troca de IP, de e-mail e de telefone a cada chamada passa; sobra o teto por parceiro (5 por minuto, 30 por hora, limite mensal), que atrasa e não impede. A defesa de verdade continua sendo `service_role` em Route Handler mais Turnstile, e e-mail ou WhatsApp com confirmação (double opt-in). Nenhum dos dois foi feito.
+3. A função não verifica que o telefone ou o e-mail são da pessoa.
+4. Os cabeçalhos de IP não foram vistos chegando à função em produção (acima).
+
+**Testes.** `src/lib/rls/clube-antiabuso-rls.test.ts` (19 testes em PGlite, com o cabeçalho posto por `set_config('request.headers', ...)`) e os de `clube-resgate-rls.test.ts`, agora rodando as três migrações juntas (o telefone padrão deles passou a ser novo a cada chamada, por causa do teto por telefone). Cada regra foi quebrada de propósito e reprovou: IP por hora e por dia, prioridade do `cf-connecting-ip`, bloco /64, teto de e-mail e de telefone, contar só não cancelados, recorte do mês (e-mail e telefone), grant de `ip_hash` ao `authenticated`, manutenção aberta ao anon, prazo de 24 meses no lugar de 12. O PGlite não prova o que o PostgREST entrega.
+
+## /p/NN: estrutura pronta, mapa vazio de propósito (29/10/2026)
+`src/lib/plaquinhas.ts` tem `PLAQUINHAS` vazio porque ninguém passou ainda qual negócio é cada plaquinha nem os links de avaliação do Google. Não foi inventado nada. **Comportamento hoje, lendo o código (`app/[lang]/p/[codigo]/page.tsx`):** `/p/01` a `/p/10` sem linha no mapa, e qualquer código que não seja de dois dígitos, redirecionam (`redirect`, 307) para `https://www.vivegostoso.com.br/`, sem 404 e sem contar visita. Com linha no mapa mas slug que não existe, está inativo ou não publicado em `gostoso_businesses`, o resultado é o mesmo: home. Com linha, slug publicado e sem `avaliar` nem `placeId`: a página do estabelecimento abre sem o botão "Avaliar no Google". A página é `noindex`. A chamada do Passaporte só aparece com `CLUBE_PUBLICO = true`. **As plaquinhas verticais já chegaram: hoje o QR delas cai na home.**
+
+**O que falta, exatamente, para o Victor completar** (uma linha em `PLAQUINHAS` por plaquinha, formato `'01': { slug: 'slug-do-negocio', avaliar: 'https://g.page/r/.../review' }`):
+1. Para cada código de `01` a `10`: o negócio onde aquela plaquinha está, como slug em `gostoso_businesses`. O negócio precisa estar `active` e `is_published`; senão o QR cai na home. Um negócio por plaquinha (o teste reprova repetição).
+2. Para cada negócio: o link de avaliação do Google (`https://g.page/r/<id>/review`, `https://search.google.com/local/writereview?placeid=...`, `maps.app.goo.gl` ou `g.co`, sempre https) **ou** o `place_id` (começa com `ChIJ`). Sem isso o botão some, e a razão de ser da plaquinha é a avaliação. O `place_id` não existe no banco; sai da ficha do negócio no Google Business Profile ou da ferramenta Place ID Finder do Google.
+3. Conferir depois de publicar: abrir cada `/p/NN` no celular. Os testes (`plaquinhas.test.ts`) garantem formato e repetição, não que o slug exista.
+4. Se houver plaquinhas além de `10`: o código aceita qualquer código de dois dígitos, mas o teste do mapa limita a `01` a `10`; ampliar o teste junto.
+
+## Receita para ligar o Passaporte em 05/11/2026 (nada disto está aplicado no código)
+**Data:** o lançamento é **05/11/2026 (quinta)**, quando chegam as plaquinhas horizontais e os adesivos (as verticais já chegaram). A data de segunda 02/11 foi um engano do Victor, corrigido por ele. Tudo abaixo sai junto, num único push na manhã de 05/11. A faixa de data atual da `/clube` continua dizendo 05/11 até lá.
+
+**Antes de ligar (conferir nesta ordem):**
+1. Deploy do endurecimento READY e migração `20261029120000_vg_clube_resgate_antiabuso.sql` aplicada (depende de `20261026120000` e `20261028100000`; conferir com `list_migrations`). Rodar a consulta de conferência do cabeçalho do arquivo e ver hashes distintos.
+2. `PLAQUINHAS` preenchido (seção acima), ao menos para as plaquinhas que já estão nos balcões.
+3. Caixa `privacidade@vivegostoso.com.br` existe e alguém lê.
+4. Pelo menos um parceiro `no_ar` com vantagem confirmada; com a lista vazia a `/clube` diz "Nenhuma vantagem no ar agora".
+
+**(a) `src/lib/clube/config.ts`:** trocar `export const CLUBE_PUBLICO = false` por `export const CLUBE_PUBLICO = true`; apagar a constante `LANCAMENTO_PREVISTO` e atualizar o comentário do arquivo (a flag liga a chamada em `/p/NN`; a `/clube` indexável é o item b, e o sitemap é o item c; o comentário antigo cita `scripts/generate-sitemap.mjs`, mas a lista fica em `scripts/paginas-sitemap.mjs`).
+
+**(b) `app/[lang]/clube/page.tsx`, tirar o noindex e dar canonical e hreflang.** Importar `type Idioma` de `@/lib/bio/dicionario` e trocar `generateMetadata` por:
+```ts
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang } = await params
+  const t = dicionario(lang).clube
+  const atual: Idioma = ehIdioma(lang) ? lang : 'pt'
+  const url = (l: Idioma) => `${VIVE.site}${prefixo(l)}/clube`
+  return {
+    title: { absolute: t.page_title },
+    description: t.page_description,
+    alternates: {
+      canonical: url(atual),
+      languages: { 'pt-BR': url('pt'), en: url('en'), es: url('es'), 'x-default': url('pt') },
+    },
+    openGraph: { title: t.page_title, description: t.page_description, url: url(atual), siteName: VIVE.nome },
+  }
+}
+```
+Não mexer no `noindex` de `app/[lang]/clube/cupom/[token]/page.tsx`, de `clube/v/[token]/page.tsx` nem de `p/[codigo]/page.tsx`: são páginas pessoais (token na URL) ou de balcão e continuam fora do índice. Atualizar o comentário do topo do arquivo, que diz "escondida até o lançamento".
+
+**(c) `scripts/paginas-sitemap.mjs`:** incluir depois de `/transparencia`: `{ path: '/clube', freq: 'weekly', priority: '0.6' },`. O `public/sitemap.xml` é gerado no `prebuild` a partir dessa lista (com hreflang pt, en e es), e `src/lib/explore/sitemap-paginas.test.ts` a importa; acrescentar nesse teste `expect(caminhos).toContain('/clube')`. A prioridade 0,6 fica abaixo da da tábua de marés (0,95), que o teste exige maior que todas.
+
+**(d) Passaporte em destaque na `/bio`**, junto do canal de ofertas, com UTM de bio como os outros itens:
+- `src/lib/bio/links-bio.ts`: incluir `'passaporte'` em `IdBloco`; em `destinos`, logo depois de `['mares', ...]`, a linha `['passaporte', `${p}/clube`]`. O `comUtm` já dá `utm_source=instagram&utm_medium=bio`. Atualizar `links-bio.test.ts` (ordem `mares, passaporte, mapa, ...`, caminho `${p}/clube`, todos com UTM).
+- `app/[lang]/bio/page.tsx`: importar `Ticket` de `lucide-react`; em `ICONES` pôr `passaporte: Ticket`; em `TOM`, `passaporte: 'bg-[#E05A3A]/14 text-[#9E3A22]'`; o cartão usa o mesmo markup dos demais (`destinos.map`), e o selo "Novo" reaproveita o padrão do `blog_novo` com `t.passaporte_novo`.
+- Textos, em `src/locales/{pt,en,es}.json` dentro de `bio`: `cartoes.passaporte.titulo`, `cartoes.passaporte.linha` e `passaporte_novo`:
+  - pt: `"titulo": "Passaporte Gostoso"`, `"linha": "Cupons grátis nos parceiros da cidade"`, `"passaporte_novo": "Novo"`
+  - en: `"titulo": "Gostoso Passport"`, `"linha": "Free coupons at the town's partners"`, `"passaporte_novo": "New"`
+  - es: `"titulo": "Pasaporte Gostoso"`, `"linha": "Cupones gratis en los socios del pueblo"`, `"passaporte_novo": "Nuevo"`
+- Estado em 29/10/2026 (lido, só leitura): o perfil `instagram.com/vivegostoso` mostra na bio o link `www.vivegostoso.com.br/bio`. Como o Instagram embrulha o link, o destino exato do clique não foi lido; o texto exibido é a `/bio`. Nada foi alterado no Instagram, e não precisa: com o item na `/bio`, o link da bio já leva a ele. A `/bio` de hoje (lida no ar) tem Maré, Mapa, Onde comer, Onde ficar, Passeios, Eventos, post do blog, Cadastre e os canais de ofertas do Telegram e do WhatsApp; não tem o Passaporte.
+
+**(e) Troca da faixa de data por texto de clube já no ar**, em `app/[lang]/clube/page.tsx`: apagar o import de `LANCAMENTO_PREVISTO`, a constante `dataDoLancamento` e trocar `<span>{t.lancamento.replace('{data}', dataDoLancamento)}</span>` por `<span>{t.lancamento}</span>`. Trocar o valor de `clube.lancamento` nos três idiomas (o ícone `CalendarDays` pode ficar ou virar `Ticket`):
+- pt: `"lancamento": "O Passaporte já está no ar. Os cupons valem nos parceiros da lista abaixo."`
+- en: `"lancamento": "The Passport is live. Coupons work at the partners listed below."`
+- es: `"lancamento": "El Pasaporte ya está activo. Los cupones valen en los socios de la lista de abajo."`
+O texto não promete data nem diz que as plaquinhas "chegam". Se o Victor quiser citar plaquinhas, o fato de 29/10/2026 é: verticais já chegaram; horizontais e adesivos chegam em 05/11. Rodar `humanizer` e `remove-ai-marks` nesses textos antes de ligar (não rodados nesta entrega, porque o texto não vai ao ar agora).
+
+**Depois de ligar:** `npx tsc --noEmit`, `npx eslint .`, `npx vitest run`, `npm run build`; conferir `/clube` (sem `noindex` no HTML servido, canonical e hreflang), `/sitemap.xml` com `/clube`, `/bio` com o item, `/p/NN` mapeado com a chamada do Passaporte; um resgate de teste de ponta a ponta; e que o hash de IP não é nulo.

@@ -1475,7 +1475,7 @@
     "sec6_title": "6. Retention",
     "sec6_text": "We keep your data while your account or business is active on the platform. After deletion we remove it within 30 days, unless the law requires otherwise. Data from people who claim a Passport coupon follows the rule in section 7.",
     "sec7_title": "7. Gostoso Passport (coupons)",
-    "sec7_text": "When you claim a Gostoso Passport coupon, we ask for your name, e-mail and phone. We use them to create your coupon and its image, to make sure the coupon is good for one purchase only, and to pass your details to the business you chose so it can talk to you about the perk. The legal basis is your consent (LGPD, art. 7, item I): you give it by ticking the permission box before claiming, and without it no coupon is issued. Along with the claim we keep the date and time of your consent, the version of this policy and the text you read. Your details go only to the business of that coupon. After that, the business is responsible for what it does with them, and we ask it to use them only to talk about the perk. We do not sell or hand your data to anyone else. The data sits in a cloud database, with access limited to the coupon business and the Vive Gostoso team. We keep claim data for up to 12 months and then delete it. You can withdraw your consent and ask for deletion at any time by e-mail at privacidade@vivegostoso.com.br; we will also ask the business to delete its copy.",
+    "sec7_text": "When you claim a Gostoso Passport coupon, we ask for your name, e-mail and phone. We use them to create your coupon and its image, to make sure the coupon is good for one purchase only, and to pass your details to the business you chose so it can talk to you about the perk. The legal basis is your consent (LGPD, art. 7, item I): you give it by ticking the permission box before claiming, and without it no coupon is issued. Along with the claim we keep the date and time of your consent, the version of this policy and the text you read. Your details go only to the business of that coupon. After that, the business is responsible for what it does with them, and we ask it to use them only to talk about the perk. We do not sell or hand your data to anyone else. The data sits in a cloud database, with access limited to the coupon business and the Vive Gostoso team. We keep claim data for up to 12 months and then delete it. You can withdraw your consent and ask for deletion at any time by e-mail at privacidade@vivegostoso.com.br; we will also ask the business to delete its copy. To limit abuse, we keep a scrambled version (hash) of the IP address of each claim. The business does not see it, and it is deleted with the claim. Name, e-mail and phone are whatever you typed, and we do not verify them.",
     "atualizada": "Updated on October 28, 2026 (version 2026-10-28)."
   },
   "whatsapp": {
@@ -1852,6 +1852,7 @@
     "erro_ja_tem": "You already have an active coupon from this partner. Open the image you downloaded or wait for it to expire.",
     "erro_resgate": "Could not create the coupon right now. Try again.",
     "erro_muitos": "Too many requests at once. Wait a minute and try again.",
+    "erro_limite_contato": "This e-mail or phone has reached this partner's monthly coupon limit. Try again next month.",
     "vazio": "No perks live right now. Check back soon.",
     "validade": "Valid until {data}",
     "limite": "Limit of {n} per month",
@@ -1953,6 +1954,8 @@
     "lead_valido_ate": "Valid until {data}",
     "lead_msg_whatsapp": "Hi, {nome}! This is {negocio}. I saw you claimed the Gostoso Passport coupon and I would like to arrange how to use it.",
     "leads_mais": "Showing the 200 most recent. The CSV has all of them.",
+    "leads_nao_verificados": "E-mail and phone are what the person typed. Vive Gostoso does not verify them: confirm before relying on them.",
+    "lead_contato_nao_verificado": "contact not verified",
     "card_titulo": "Gostoso Passport",
     "card_desc": "Set your business perk and see how many times it was used. Free."
   },
