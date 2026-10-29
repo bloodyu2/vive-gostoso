@@ -12,11 +12,14 @@ import {
   Globe,
   Store,
   Tag,
+  Ticket,
   UserPlus,
   UtensilsCrossed,
+  Waves,
 } from 'lucide-react'
 
 import { VIVE } from '@/lib/bio/contato'
+import { CLUBE_PUBLICO } from '@/lib/clube/config'
 import { dicionario, ehIdioma, prefixo } from '@/lib/bio/dicionario'
 import { comUtm, linksDaBio, linksDoRodape, type IdBloco } from '@/lib/bio/links-bio'
 import { proximasMares, type ProximaMare } from '@/lib/bio/proximas-mares'
@@ -26,11 +29,15 @@ import { carregarSemana } from '@/lib/mares/carregar'
 import { formatarAltura } from '@/lib/mares/formato'
 import { linkOfertas, linkOfertasWhatsapp, rotuloConhecerSite, textosOfertas } from '@/lib/ofertas'
 
+import '@/styles/bio.css'
+
 /* A PÁGINA DO LINK DA BIO DO INSTAGRAM (ordem do dono, 27/09/2026).
  *
  *  Quem chega aqui já viu o perfil e quer uma coisa só: a maré, um lugar para
- *  comer, um passeio. Por isso a maré de hoje vem primeiro, e o resto é uma lista
- *  de destinos grandes, um por linha, para o polegar.
+ *  comer, um passeio. Tudo é botão, no padrão dos HUBs (src/styles/bio.css), para o
+ *  polegar. A tábua de marés é o primeiro botão e mostra a próxima baixa e alta.
+ *  Quando o lançamento chegar e CLUBE_PUBLICO ligar, o Passaporte Gostoso abre a
+ *  lista, acima da maré (até lá a /clube segue escondida e o botão não existe).
  *
  *  - Todo link interno leva utm_source=instagram&utm_medium=bio (src/lib/bio/links-bio.ts).
  *  - A etiqueta NFC que já existe aponta para esta mesma URL, então o vCard e o
@@ -84,7 +91,7 @@ const FOCO =
 const FOCO_CLARO =
   'focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-[#F5F2EE]'
 
-type IdCartao = Exclude<IdBloco, 'mares'>
+type IdCartao = Exclude<IdBloco, 'clube' | 'mares'>
 
 const ICONES: Record<IdCartao, LucideIcon> = {
   mapa: MapaIcone,
@@ -96,17 +103,20 @@ const ICONES: Record<IdCartao, LucideIcon> = {
   cadastre: Store,
 }
 
-/* Uma cor por destino, só no quadrado do ícone: fundo claro da família e traço no
-   tom escuro da mesma família, acima de 4,5:1. */
+/* Uma cor por destino, só no quadrado do ícone (a classe de tom vive em bio.css).
+   O verde-mar é o padrão do botão; o cadastro é o botão escuro, sem tom. */
 const TOM: Record<IdCartao, string> = {
-  mapa: 'bg-[#0D7C7C]/12 text-[#0A5E5E]',
-  come: 'bg-[#E05A3A]/14 text-[#9E3A22]',
-  fique: 'bg-[#C97D2A]/16 text-[#7A4A14]',
-  passeie: 'bg-[#0D7C7C]/12 text-[#0A5E5E]',
-  eventos: 'bg-[#E05A3A]/14 text-[#9E3A22]',
-  blog: 'bg-[#C97D2A]/16 text-[#7A4A14]',
-  cadastre: 'bg-[#F5F2EE]/15 text-[#F5F2EE]',
+  mapa: '',
+  come: 'bio-tom-terra',
+  fique: 'bio-tom-ocre',
+  passeie: '',
+  eventos: 'bio-tom-terra',
+  blog: 'bio-tom-ocre',
+  cadastre: '',
 }
+
+/* Os quatro destinos de rotina viram quadrados lado a lado; o resto é linha inteira. */
+const QUADRADO: ReadonlySet<IdCartao> = new Set(['come', 'fique', 'passeie', 'eventos'])
 
 async function lerMare(agora: Date) {
   try {
@@ -131,16 +141,14 @@ export default async function BioPage({ params }: Props) {
   const slugDoPost = slugNoIdioma(SLUG_GUIA_MARES, idioma)
   const [mare, temPost] = await Promise.all([lerMare(new Date()), postPublicado(slugDoPost)])
 
-  const blocos = linksDaBio(idioma, { postSlug: temPost ? slugDoPost : null })
-  const blocoMare = blocos[0]
-  const destinos = blocos.filter((b): b is { id: IdCartao; href: string } => b.id !== 'mares')
+  const blocos = linksDaBio(idioma, { postSlug: temPost ? slugDoPost : null, clube: CLUBE_PUBLICO })
   const rodape = linksDoRodape(idioma)
   const hrefOfertas = linkOfertas('bio')
   const hrefOfertasWhatsapp = linkOfertasWhatsapp('bio')
   const ofertas = textosOfertas(idioma)
 
   return (
-    <div className="min-h-dvh bg-page text-fg-1">
+    <div className="bio min-h-dvh bg-page text-fg-1">
       <header className="bg-[#1A1A1A] px-5 pt-9 pb-16">
         <div className="mx-auto w-full max-w-[28rem]">
           <h1 className="font-display text-[2.25rem] leading-none font-bold tracking-[-0.02em] text-[#F5F2EE]">
@@ -158,108 +166,107 @@ export default async function BioPage({ params }: Props) {
       </header>
 
       <main className="relative mx-auto w-full max-w-[28rem] px-5 pb-8">
-        {/* MARÉ DE HOJE: o bloco em destaque, subindo por cima da faixa. */}
-        <section
-          aria-labelledby="mare-titulo"
-          className="-mt-10 rounded-2xl bg-[#0D7C7C] p-5 text-white shadow-[0_6px_8px_-4px_rgba(13,124,124,0.4)]"
-        >
-          <div className="flex items-baseline justify-between gap-3">
-            <h2 id="mare-titulo" className="font-display text-[1.5rem] leading-tight font-bold">
-              {t.mare_titulo}
-            </h2>
-            <span className="text-[0.8125rem] text-[#E6F4F4]">{t.mare_local}</span>
-          </div>
+        <nav aria-label={VIVE.nome} className="-mt-10">
+          <ul className="bio-lista">
+            {blocos.map(({ id, href }) => {
+              if (id === 'clube') {
+                return (
+                  <li key={id}>
+                    <Link href={href} className="bio-btn bio-btn--clube">
+                      <span className="bio-ico">
+                        <Ticket className="size-6" aria-hidden />
+                      </span>
+                      <span className="bio-texto">
+                        <span className="bio-selo">{dic.clube.selo}</span>
+                        <span className="bio-titulo">{t.cartoes.clube.titulo}</span>
+                        <span className="bio-linha">{t.cartoes.clube.linha}</span>
+                      </span>
+                      <ArrowRight className="bio-seta" aria-hidden />
+                    </Link>
+                  </li>
+                )
+              }
 
-          {mare ? (
-            <dl className="mt-4 grid grid-cols-2 gap-3">
-              <LinhaMare rotulo={t.mare_baixa} mare={mare.baixa} amanha={t.mare_amanha} idioma={idioma} />
-              <LinhaMare rotulo={t.mare_alta} mare={mare.alta} amanha={t.mare_amanha} idioma={idioma} />
-            </dl>
-          ) : (
-            <p className="mt-3 text-[0.9375rem] leading-snug text-[#E6F4F4]">{t.mare_vazio}</p>
-          )}
+              if (id === 'mares') {
+                return (
+                  <li key={id}>
+                    <Link href={href} className="bio-btn bio-btn--mare">
+                      <div className="bio-linha-topo">
+                        <span className="bio-ico">
+                          <Waves className="size-[1.375rem]" aria-hidden />
+                        </span>
+                        <span className="bio-texto">
+                          <span className="bio-titulo">{t.cartoes.mares.titulo}</span>
+                          <span className="bio-linha">
+                            {t.mare_titulo} · {t.mare_local}
+                          </span>
+                        </span>
+                        <ArrowRight className="bio-seta" aria-hidden />
+                      </div>
+                      {mare ? (
+                        <dl className="bio-mare">
+                          <LinhaMare rotulo={t.mare_baixa} mare={mare.baixa} amanha={t.mare_amanha} idioma={idioma} />
+                          <LinhaMare rotulo={t.mare_alta} mare={mare.alta} amanha={t.mare_amanha} idioma={idioma} />
+                        </dl>
+                      ) : (
+                        <span className="bio-linha">{t.mare_vazio}</span>
+                      )}
+                    </Link>
+                  </li>
+                )
+              }
 
-          <Link
-            href={blocoMare.href}
-            className={`${FOCO_CLARO} mt-5 flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#F5F2EE] px-5 text-[1rem] font-semibold text-[#0A5E5E] transition-transform duration-150 ease-out active:translate-y-[1px] motion-reduce:transition-none`}
-          >
-            {t.mare_botao}
-            <ArrowRight className="size-5" aria-hidden />
-          </Link>
-        </section>
-
-        <nav aria-label={VIVE.nome} className="mt-6">
-          <ul className="flex flex-col gap-3">
-            {destinos.map(({ id, href }) => {
               const Icone = ICONES[id]
               const c = t.cartoes[id]
-              const escuro = id === 'cadastre'
               const destaquePost = id === 'blog' && temPost
+              const quadrado = QUADRADO.has(id)
+              const classe = id === 'cadastre' ? 'bio-btn--escuro' : quadrado ? 'bio-btn--tile' : ''
               return (
-                <li key={id}>
-                  <Link
-                    href={href}
-                    className={`${FOCO} group flex min-h-[4.5rem] items-center gap-4 rounded-2xl px-4 py-3 transition-colors duration-150 ease-out motion-reduce:transition-none ${
-                      escuro
-                        ? 'bg-[#1A1A1A] text-[#F5F2EE]'
-                        : 'border border-[#1A1A1A]/15 bg-white/70 hover:border-[#1A1A1A]/40 dark:bg-white/5'
-                    }`}
-                  >
-                    <span className={`grid size-11 shrink-0 place-items-center rounded-xl ${TOM[id]}`}>
-                      <Icone className="size-[1.375rem]" aria-hidden />
-                    </span>
-                    <span className="flex min-w-0 flex-1 flex-col">
-                      {destaquePost && (
-                        <span className="mb-1 w-fit rounded-full bg-[#C94A2C] px-2 py-0.5 text-[0.6875rem] font-semibold text-white">
-                          {t.blog_novo}
+                <li key={id} className={quadrado ? 'bio-item-tile' : undefined}>
+                  <Link href={href} className={`bio-btn ${classe} ${TOM[id]}`}>
+                    {quadrado ? (
+                      <div className="bio-topo">
+                        <span className="bio-ico">
+                          <Icone className="size-[1.375rem]" aria-hidden />
                         </span>
-                      )}
-                      <span className="font-display text-[1.1875rem] leading-tight font-bold text-balance">
-                        {destaquePost ? dic.guia_mares.titulo : c.titulo}
+                        <ArrowRight className="bio-seta" aria-hidden />
+                      </div>
+                    ) : (
+                      <span className="bio-ico">
+                        <Icone className="size-[1.375rem]" aria-hidden />
                       </span>
-                      <span className={`mt-0.5 text-[0.8125rem] leading-snug ${escuro ? 'text-[#D9D4CE]' : 'text-fg-2'}`}>
-                        {destaquePost ? dic.guia_mares.linha : c.linha}
-                      </span>
+                    )}
+                    <span className="bio-texto">
+                      {destaquePost && <span className="bio-selo">{t.blog_novo}</span>}
+                      <span className="bio-titulo">{destaquePost ? dic.guia_mares.titulo : c.titulo}</span>
+                      <span className="bio-linha">{destaquePost ? dic.guia_mares.linha : c.linha}</span>
                     </span>
-                    <ArrowRight
-                      className="size-5 shrink-0 transition-transform duration-150 ease-out group-hover:translate-x-0.5 motion-reduce:transition-none"
-                      aria-hidden
-                    />
+                    {!quadrado && <ArrowRight className="bio-seta" aria-hidden />}
                   </Link>
                 </li>
               )
             })}
             {hrefOfertas && (
               <li>
-                <a
-                  href={hrefOfertas}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${FOCO} flex min-h-12 items-center gap-3 rounded-xl px-4 py-2 text-fg-2 transition-colors duration-150 ease-out hover:text-fg-1 motion-reduce:transition-none`}
-                >
-                  <Tag className="size-4 shrink-0" aria-hidden />
-                  <span className="flex min-w-0 flex-1 flex-col">
-                    <span className="text-[0.9375rem] leading-tight font-semibold text-balance">{ofertas.titulo}</span>
-                    <span className="mt-0.5 text-[0.75rem] leading-snug">{ofertas.bioTelegram}</span>
+                <a href={hrefOfertas} target="_blank" rel="noopener noreferrer" className="bio-btn bio-btn--sec">
+                  <Tag aria-hidden />
+                  <span className="bio-texto">
+                    <span className="bio-titulo">{ofertas.titulo}</span>
+                    <span className="bio-linha">{ofertas.bioTelegram}</span>
                   </span>
-                  <ArrowRight className="size-4 shrink-0" aria-hidden />
+                  <ArrowRight className="bio-seta" aria-hidden />
                 </a>
               </li>
             )}
             {hrefOfertasWhatsapp && (
               <li>
-                <a
-                  href={hrefOfertasWhatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${FOCO} flex min-h-12 items-center gap-3 rounded-xl px-4 py-2 text-fg-2 transition-colors duration-150 ease-out hover:text-fg-1 motion-reduce:transition-none`}
-                >
-                  <Tag className="size-4 shrink-0" aria-hidden />
-                  <span className="flex min-w-0 flex-1 flex-col">
-                    <span className="text-[0.9375rem] leading-tight font-semibold text-balance">{ofertas.bioWhatsappTitulo}</span>
-                    <span className="mt-0.5 text-[0.75rem] leading-snug">{ofertas.bioWhatsapp}</span>
+                <a href={hrefOfertasWhatsapp} target="_blank" rel="noopener noreferrer" className="bio-btn bio-btn--sec">
+                  <Tag aria-hidden />
+                  <span className="bio-texto">
+                    <span className="bio-titulo">{ofertas.bioWhatsappTitulo}</span>
+                    <span className="bio-linha">{ofertas.bioWhatsapp}</span>
                   </span>
-                  <ArrowRight className="size-4 shrink-0" aria-hidden />
+                  <ArrowRight className="bio-seta" aria-hidden />
                 </a>
               </li>
             )}
@@ -323,19 +330,19 @@ function LinhaMare({
   idioma: 'pt' | 'en' | 'es'
 }) {
   return (
-    <div className="rounded-xl bg-white/10 px-3 py-2.5">
-      <dt className="text-[0.75rem] text-[#E6F4F4]">{rotulo}</dt>
-      <dd className="mt-0.5">
+    <div>
+      <dt>{rotulo}</dt>
+      <dd>
         {mare ? (
           <>
-            <span className="font-display text-[1.625rem] leading-none font-bold tabular-nums">{mare.hora}</span>
-            <span className="mt-1 block text-[0.75rem] text-[#E6F4F4]">
+            <span className="bio-hora">{mare.hora}</span>
+            <span className="bio-altura">
               {mare.amanha ? `${amanha}, ` : ''}
               {formatarAltura(mare.altura, idioma)}
             </span>
           </>
         ) : (
-          <span className="text-[1rem]">-</span>
+          <span>-</span>
         )}
       </dd>
     </div>

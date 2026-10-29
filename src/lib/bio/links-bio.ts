@@ -9,7 +9,7 @@ import { prefixo } from './dicionario'
 
 export const UTM_BIO = 'utm_source=instagram&utm_medium=bio'
 
-export type IdBloco = 'mares' | 'mapa' | 'come' | 'fique' | 'passeie' | 'eventos' | 'blog' | 'cadastre'
+export type IdBloco = 'clube' | 'mares' | 'mapa' | 'come' | 'fique' | 'passeie' | 'eventos' | 'blog' | 'cadastre'
 export type BlocoBio = { id: IdBloco; href: string }
 
 /** Acrescenta a UTM respeitando query existente e ancora. */
@@ -19,7 +19,7 @@ export function comUtm(href: string): string {
   return `${semAncora}${sep}${UTM_BIO}${ancora !== undefined ? `#${ancora}` : ''}`
 }
 
-export function linksDaBio(lang: string, opcoes: { postSlug?: string | null } = {}): BlocoBio[] {
+export function linksDaBio(lang: string, opcoes: { postSlug?: string | null; clube?: boolean } = {}): BlocoBio[] {
   const p = prefixo(lang)
   const blog = opcoes.postSlug ? `${p}/blog/${opcoes.postSlug}` : `${p}/blog`
   const destinos: Array<[IdBloco, string]> = [
@@ -32,6 +32,9 @@ export function linksDaBio(lang: string, opcoes: { postSlug?: string | null } = 
     ['blog', blog],
     ['cadastre', '/cadastre'],
   ]
+  /* O Passaporte so entra na lista quando a pagina liga a flag CLUBE_PUBLICO
+     (src/lib/clube/config.ts): ate o lancamento a /clube segue escondida. */
+  if (opcoes.clube) destinos.unshift(['clube', `${p}/clube`])
   return destinos.map(([id, href]) => ({ id, href: comUtm(href) }))
 }
 

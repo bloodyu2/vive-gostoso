@@ -1114,6 +1114,13 @@
     "idioma": "Idioma",
     "contato_linha": "Para quem chegou pela etiqueta:",
     "cartoes": {
+      "mares": {
+        "titulo": "Tábua de marés"
+      },
+      "clube": {
+        "titulo": "Passaporte Gostoso",
+        "linha": "Vantagens grátis nos parceiros da cidade"
+      },
       "mapa": {
         "titulo": "Mapa da região",
         "linha": "Praias, restaurantes e pousadas no mesmo mapa"

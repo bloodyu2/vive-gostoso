@@ -37,6 +37,13 @@ describe('linksDaBio', () => {
       ])
     })
 
+    it(`${lang}: o Passaporte abre a lista so quando a flag liga`, () => {
+      const blocos = linksDaBio(lang, { postSlug: null, clube: true })
+      expect(blocos.map((b) => b.id)).toEqual(['clube', ...ORDEM])
+      expect(blocos[0].href).toBe(`${p}/clube?${UTM}`)
+      expect(linksDaBio(lang).some((b) => b.id === 'clube')).toBe(false)
+    })
+
     it(`${lang}: blog aponta para o post quando ha slug`, () => {
       const blog = linksDaBio(lang, { postSlug: 'meu-post' }).find((b) => b.id === 'blog')!
       expect(blog.href).toBe(`${p}/blog/meu-post?${UTM}`)
