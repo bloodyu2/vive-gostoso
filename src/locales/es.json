@@ -1240,6 +1240,13 @@
     "idioma": "Idioma",
     "contato_linha": "Si llegaste por la etiqueta:",
     "cartoes": {
+      "mares": {
+        "titulo": "Tabla de mareas"
+      },
+      "clube": {
+        "titulo": "Pasaporte Gostoso",
+        "linha": "Ventajas gratis en los socios de la ciudad"
+      },
       "mapa": {
         "titulo": "Mapa de la región",
         "linha": "Playas, restaurantes y posadas en el mismo mapa"

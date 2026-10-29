@@ -1032,6 +1032,13 @@
     "idioma": "Language",
     "contato_linha": "If you came from the tag:",
     "cartoes": {
+      "mares": {
+        "titulo": "Tide table"
+      },
+      "clube": {
+        "titulo": "Gostoso Passport",
+        "linha": "Free perks at the town’s partners"
+      },
       "mapa": {
         "titulo": "Area map",
         "linha": "Beaches, restaurants and inns on one map"
