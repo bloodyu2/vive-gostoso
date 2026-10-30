@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from '
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Selo } from '@/components/business/selo'
+import { SelosDoNegocio } from '@/components/business/selo'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { indiceAnterior, proximoIndice, type ItemCarrossel } from '@/lib/carrossel-novos'
@@ -243,7 +243,7 @@ export function CarrosselNovos({ itens }: { itens: ItemCarrossel[] }) {
                   >
                     {t(`home.carrossel_motivo_${b.motivo}`)}
                   </span>
-                  {b.is_verified && b.motivo !== 'verificado' && <Selo tipo="prata" size="md" />}
+                  <SelosDoNegocio negocio={b} size="md" omitir={b.motivo === 'verificado' ? ['prata'] : undefined} />
                 </div>
                 <p className="font-display font-bold text-xl md:text-2xl text-white leading-tight text-balance">{b.name}</p>
                 {b.category && <p className="mt-1 text-sm text-white/90">{b.category.name}</p>}
