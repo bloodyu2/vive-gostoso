@@ -37,3 +37,11 @@
 ## 2026-09-27: e-mail do Victor no User-Agent de consulta ao Nominatim
 **O que aconteceu:** ao conferir praias no OpenStreetMap, uma consulta ao Nominatim saiu com o e-mail do Victor no cabeçalho User-Agent (a política do Nominatim pede contato). Foram 7 requisições. As seguintes saíram só com o nome do projeto.
 **Regra:** dado pessoal do Victor não vai em cabeçalho, URL ou corpo de serviço de terceiro sem ele pedir. Para o Nominatim, identificar o projeto (`vive-gostoso-mares/1.0`) basta.
+
+## 2026-10-30: verificar no navegador com `next dev` mostra a pagina sem JavaScript
+**O que aconteceu:** ao conferir o filtro da /clube com `next dev`, os botoes nao respondiam. A CSP do `proxy.ts` nao aceita `eval` (o relatorio `/api/csp-report` mostrou `blocked-uri: eval`), entao o bundle de desenvolvimento nunca hidrata; o HTML do servidor aparece e parece pronto. Alem disso o Turbopack do `next dev` nao resolve `next/font/google` neste projeto (o build usa `--webpack`).
+**Regra:** conferir interacao de tela so com `npm run build` e `npx next start -p 3100` (com `NEXT_PUBLIC_SUPABASE_URL` e a chave publica anon no ambiente do processo). Antes de acreditar que um clique "nao funciona", conferir se houve hidratacao (`Object.keys(elemento)` com chave `__react`). Para 390 px reais no Chrome do Windows: proxy local que tira `x-frame-options` e a CSP, moldura com iframe de 390 px na mesma origem; a captura de tela so sai se a janela for redimensionada logo antes (`resize_window`), senao o CDP trava em 30 s.
+
+## 2026-10-30: teste de varredura estourava 5 s com os testes de PGlite juntos
+**O que aconteceu:** `numeros-de-produto.test.ts` le todos os arquivos de `src` e passou do prazo padrao do vitest quando rodou junto dos testes de PGlite (passava sozinho).
+**Regra:** teste que varre o repositorio ou sobe PGlite declara o proprio prazo (`60_000` no `beforeAll`, `30_000` na varredura). Falha so no conjunto completo e sinal de prazo, nao de regra.

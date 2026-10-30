@@ -2,6 +2,8 @@
 
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNoClube } from '@/components/clube/contexto-clube'
+import { selosDoNegocio, type FatosDoNegocio, type TipoSelo } from '@/lib/selos'
 import { cn } from '@/lib/utils'
 
 /**
@@ -10,11 +12,14 @@ import { cn } from '@/lib/utils'
  * - prata: negocio verificado pelo Vive Gostoso (campo `is_verified`).
  * - ouro: assinante (plano `associado` ou `destaque`). Hoje nenhum negocio
  *   paga, entao o ouro existe no codigo mas nao aparece em lugar nenhum.
+ * - clube: parceiro do Passaporte Gostoso (vantagem no ar). Metal verde.
  *
  * A forma e a mesma, so muda o metal e o miolo: o prata leva um visto, o ouro
- * leva uma estrela. Quem nao distingue cor ainda distingue pelo desenho.
+ * leva uma estrela, o clube leva um bilhete com picote. Quem nao distingue cor
+ * ainda distingue pelo desenho. A REGRA de qual selo aparece mora em
+ * `src/lib/selos.ts`; aqui so o desenho.
  */
-export type TipoSelo = 'prata' | 'ouro'
+export type { TipoSelo }
 
 const TAMANHOS = { sm: 16, md: 20, lg: 28 } as const
 export type TamanhoSelo = keyof typeof TAMANHOS
@@ -41,6 +46,9 @@ const ESTRELA = (() => {
   return `M${pontos.join('L')}Z`
 })()
 
+/** Bilhete com dois recortes laterais (o cupom do Passaporte). */
+const BILHETE = 'M8.2 10H19.8V12.4A1.6 1.6 0 0 0 19.8 15.6V18H8.2V15.6A1.6 1.6 0 0 0 8.2 12.4Z'
+
 const METAL = {
   prata: {
     de: '#F4F6F7',
@@ -56,7 +64,21 @@ const METAL = {
     aro: '#8F5417',
     miolo: '#5A3208',
   },
+  // verde esmeralda (cor do Passaporte); miolo creme
+  clube: {
+    de: '#D3EFE2',
+    meio: '#2F8F6C',
+    ate: '#1B6A50',
+    aro: '#12503B',
+    miolo: '#FFF6DF',
+  },
 } as const
+
+const ROTULO: Record<TipoSelo, string> = {
+  prata: 'selo.prata',
+  ouro: 'selo.ouro',
+  clube: 'selo.clube',
+}
 
 interface SeloProps {
   tipo: TipoSelo
@@ -69,7 +91,7 @@ export function Selo({ tipo, size = 'md', className }: SeloProps) {
   const id = useId().replace(/:/g, '')
   const m = METAL[tipo]
   const px = TAMANHOS[size]
-  const rotulo = tipo === 'prata' ? t('selo.prata') : t('selo.ouro')
+  const rotulo = t(ROTULO[tipo])
 
   return (
     <svg
@@ -104,29 +126,35 @@ export function Selo({ tipo, size = 'md', className }: SeloProps) {
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-      ) : (
+      ) : tipo === 'ouro' ? (
         <path d={ESTRELA} fill={m.miolo} stroke={m.miolo} strokeWidth="0.8" strokeLinejoin="round" />
+      ) : (
+        <>
+          <path d={BILHETE} fill={m.miolo} stroke={m.miolo} strokeWidth="0.6" strokeLinejoin="round" />
+          <path d="M16.6 11.3V16.7" stroke={m.meio} strokeWidth="0.9" strokeDasharray="1.1 1.1" fill="none" />
+        </>
       )}
     </svg>
   )
 }
 
-/** Regra de qual selo cada negocio mostra. Um lugar so, para cartao, pagina e home. */
-export function selosDoNegocio(b: { is_verified?: boolean | null; plan?: string | null }): TipoSelo[] {
-  const selos: TipoSelo[] = []
-  if (b.is_verified) selos.push('prata')
-  if (b.plan === 'associado' || b.plan === 'destaque') selos.push('ouro')
-  return selos
-}
-
 interface SelosProps {
-  negocio: { is_verified?: boolean | null; plan?: string | null }
+  negocio: FatosDoNegocio & { id?: string | null }
   size?: TamanhoSelo
   className?: string
+  /** Selos que o lugar ja diz por outro meio (ex.: o slide "Verificado" do carrossel). */
+  omitir?: TipoSelo[]
 }
 
-export function SelosDoNegocio({ negocio, size = 'md', className }: SelosProps) {
-  const selos = selosDoNegocio(negocio)
+/** Os selos do negocio, na ordem da regra. O selo do clube vem do contexto que o
+ *  layout alimenta (vazio enquanto o lancamento publico nao acontece). */
+export function useSelosDoNegocio(negocio: FatosDoNegocio & { id?: string | null }): TipoSelo[] {
+  const noClube = useNoClube(negocio.id)
+  return selosDoNegocio(negocio, { noClube })
+}
+
+export function SelosDoNegocio({ negocio, size = 'md', className, omitir }: SelosProps) {
+  const selos = useSelosDoNegocio(negocio).filter(tipo => !omitir?.includes(tipo))
   if (selos.length === 0) return null
   return (
     <span className={cn('inline-flex items-center gap-1', className)}>

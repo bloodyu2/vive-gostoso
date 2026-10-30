@@ -437,6 +437,108 @@
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 19.5rem), 1fr));
 }
 
+/* ── filtro de categoria (chips) ──────────────────────────── */
+
+.clube-filtros-bloco {
+  margin-top: 1.5rem;
+}
+
+/* Celular: uma fileira que rola de lado, sem barra, sangrando ate a borda da tela.
+   O respiro vertical existe para o contorno de foco nao ser cortado pelo overflow. */
+.clube-filtros {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  margin-inline: -1.25rem;
+  padding: 0.5rem 1.25rem;
+  scroll-padding-inline: 1.25rem;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.clube-filtros::-webkit-scrollbar {
+  display: none;
+}
+
+.clube-chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 2px solid var(--c-verde);
+  border-radius: 999px;
+  background: var(--c-papel);
+  color: var(--c-verde);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.clube-chip:hover {
+  background: #eaf3ee;
+}
+
+.clube-chip[aria-pressed='true'] {
+  background: var(--c-verde);
+  color: var(--c-papel);
+}
+
+.clube-chip-n {
+  min-width: 1.5rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 999px;
+  background: rgba(15, 94, 94, 0.12);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.clube-chip[aria-pressed='true'] .clube-chip-n {
+  background: rgba(255, 251, 240, 0.22);
+}
+
+@media (min-width: 768px) {
+  .clube-filtros {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+}
+
+.clube-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.clube-vazio-filtro {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+  margin-top: 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clube-chip {
+    transition: none;
+  }
+}
+
 .clube-card {
   position: relative;
   display: flex;
@@ -788,6 +890,59 @@
 
 .clube-faixa-acoes {
   margin-top: 1.75rem;
+}
+
+/* 1a leva: quantos estabelecimentos ja estao no ar. So informa. */
+.clube-leva {
+  margin-top: 1.5rem;
+  max-width: 26rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.clube .clube-faixa .clube-leva p {
+  margin: 0;
+  max-width: none;
+}
+
+.clube .clube-faixa .clube-leva-titulo {
+  justify-self: start;
+  padding: 0.375rem 0.875rem;
+  border-radius: 999px;
+  background: var(--c-mostarda);
+  color: var(--c-tinta);
+  font-family: var(--font-clube-titulo), system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 0.9375rem;
+  line-height: 1.2;
+}
+
+.clube-leva-barra {
+  height: 0.5rem;
+  border-radius: 999px;
+  background: rgba(246, 235, 212, 0.22);
+  overflow: hidden;
+}
+
+.clube-leva-barra span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--c-mostarda);
+}
+
+.clube .clube-faixa .clube-leva-linha {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.clube .clube-faixa .clube-leva-situacao {
+  font-weight: 400;
+}
+
+.clube .clube-faixa .clube-leva-nota {
+  font-size: 0.875rem;
+  opacity: 0.85;
 }
 
 @media (min-width: 900px) {

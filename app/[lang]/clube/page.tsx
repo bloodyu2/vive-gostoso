@@ -13,7 +13,9 @@ import { TemaClube } from '@/components/clube/tema'
 import { dicionario, ehIdioma, prefixo } from '@/lib/bio/dicionario'
 import { VIVE } from '@/lib/bio/contato'
 import { carregarVantagens } from '@/lib/clube/carregar'
+import { comCategorias } from '@/lib/clube/categorias-vantagem'
 import { LANCAMENTO_PREVISTO } from '@/lib/clube/config'
+import { contarEstabelecimentosNoAr, levaDoClube, textosDaLeva } from '@/lib/clube/leva'
 import { origemValida } from '@/lib/clube/vantagens'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 
@@ -50,8 +52,14 @@ export default async function ClubePage({ params, searchParams }: Props) {
   const { n } = await searchParams
   const origem = origemValida(n)
   const pre = prefixo(idioma)
-  const { vantagens, doBanco } = await carregarVantagens()
+  const lidas = await carregarVantagens()
+  const doBanco = lidas.doBanco
+  // categoria de cada negocio (so para o filtro); falha em silencio e o filtro some
+  const vantagens = doBanco ? await comCategorias(lidas.vantagens, t.categorias) : lidas.vantagens
   const [fundoFrase, fundoResto] = separarPrimeiraFrase(t.fundo_texto)
+  // 1a leva: so informa. Sem o banco (lista dos fundadores de reserva) a conta seria falsa, entao nao mostra.
+  const leva = levaDoClube(contarEstabelecimentosNoAr(vantagens))
+  const levaTexto = textosDaLeva(t, leva)
   const dataDoLancamento = new Intl.DateTimeFormat(idioma === 'pt' ? 'pt-BR' : idioma, {
     timeZone: 'UTC',
     day: 'numeric',
@@ -154,6 +162,11 @@ export default async function ClubePage({ params, searchParams }: Props) {
                 vazio: t.vazio,
                 validade: t.validade,
                 limite: t.limite,
+                filtro_rotulo: t.filtro_rotulo,
+                filtro_todos: t.filtro_todos,
+                filtro_vazio: t.filtro_vazio,
+                filtro_ver_todos: t.filtro_ver_todos,
+                filtro_resultado: t.filtro_resultado,
                 form_titulo: t.form_titulo,
                 campo_nome: t.campo_nome,
                 campo_email: t.campo_email,
@@ -185,6 +198,19 @@ export default async function ClubePage({ params, searchParams }: Props) {
             <h2 id="negocio" className="clube-h2">
               {t.negocio_titulo}
             </h2>
+            <div className="clube-leva">
+              <p className="clube-leva-titulo">{levaTexto.titulo}</p>
+              {doBanco ? (
+                <>
+                  <div className="clube-leva-barra" aria-hidden="true">
+                    <span style={{ width: `${leva.percentual}%` }} />
+                  </div>
+                  {levaTexto.contagem ? <p className="clube-leva-linha">{levaTexto.contagem}</p> : null}
+                  <p className="clube-leva-linha clube-leva-situacao">{levaTexto.situacao}</p>
+                </>
+              ) : null}
+              <p className="clube-leva-nota">{levaTexto.nota}</p>
+            </div>
             <p>{t.negocio_texto}</p>
             <div className="clube-faixa-acoes">
               <a

@@ -17,3 +17,8 @@ export const LANCAMENTO_PREVISTO = '2026-11-05'
 
 export const CLUBE_ROTA = '/clube'
 export const CLUBE_URL = 'https://www.vivegostoso.com.br/clube'
+
+/** Tamanho da 1a leva do Passaporte: 20 ESTABELECIMENTOS parceiros (cada um recebe plaquinha),
+ *  nao 20 cupons nem 20 resgates (Victor, 30/10/2026). E so informacao para a /clube:
+ *  nada no banco nem no codigo impede o 21o estabelecimento de entrar. Unico lugar do 20. */
+export const LEVA_ESTABELECIMENTOS = 20
