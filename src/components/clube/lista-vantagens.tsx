@@ -1,11 +1,12 @@
 'use client'
 
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
-import { BedDouble, Compass, Palette, Share2, Ticket, UtensilsCrossed, Waves } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
+import { BedDouble, Check, Compass, Palette, Share2, Ticket, UtensilsCrossed, Waves } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { armazemDoNavegador, lerCupons } from '@/lib/clube/cupons-locais'
 import { disparar } from '@/lib/clube/disparar'
+import { chipsDeCategorias, filtrarPorCategoria } from '@/lib/clube/filtro'
 import { linkParaAmigo, textoParaAmigo, type Vantagem } from '@/lib/clube/vantagens'
 import { FormResgate, type TextosForm } from './form-resgate'
 
@@ -24,6 +25,12 @@ export interface TextosLista extends TextosForm {
   vazio: string
   validade: string
   limite: string
+  filtro_rotulo: string
+  filtro_todos: string
+  filtro_vazio: string
+  filtro_ver_todos: string
+  /** "Mostrando {n} de {total} parceiros" */
+  filtro_resultado: string
 }
 
 interface Props {
@@ -66,7 +73,19 @@ function IconeDoTipo({ tipo, size = 22 }: { tipo: string | null; size?: number }
 export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, lang, doBanco }: Props) {
   const [formAberto, setFormAberto] = useState<string | null>(null)
   const [cupons, setCupons] = useState<Record<string, string>>({})
+  const [categoria, setCategoria] = useState<string | null>(null)
   const contou = useRef(false)
+
+  /* Filtro de categoria: so no cliente, sem recarregar. Os chips vem das categorias dos
+     parceiros no ar; com menos de duas categorias o filtro nao serve e nem aparece. */
+  const chips = useMemo(() => chipsDeCategorias(vantagens), [vantagens])
+  const visiveis = useMemo(() => filtrarPorCategoria(vantagens, categoria), [vantagens, categoria])
+  const mostraFiltro = chips.length >= 2
+
+  function escolher(id: string | null) {
+    setCategoria(id)
+    setFormAberto(null)
+  }
 
   /* Cupons que esta pessoa ja resgatou neste aparelho: "Ver meu cupom" em vez de pedir tudo
      de novo. So existe no navegador, por isso entra depois da hidratacao. */
@@ -98,8 +117,50 @@ export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, 
 
   return (
     <>
+      {mostraFiltro ? (
+        <div className="clube-filtros-bloco">
+          <div className="clube-filtros" role="group" aria-label={textos.filtro_rotulo}>
+            <button
+              type="button"
+              className="clube-chip"
+              aria-pressed={categoria === null}
+              onClick={() => escolher(null)}
+            >
+              {categoria === null ? <Check size={16} strokeWidth={3} aria-hidden /> : null}
+              <span>{textos.filtro_todos}</span>
+              <span className="clube-chip-n">{vantagens.length}</span>
+            </button>
+            {chips.map((c) => (
+              <button
+                key={c.id}
+                type="button"
+                className="clube-chip"
+                aria-pressed={categoria === c.id}
+                onClick={() => escolher(c.id)}
+              >
+                {categoria === c.id ? <Check size={16} strokeWidth={3} aria-hidden /> : null}
+                <span>{c.rotulo}</span>
+                <span className="clube-chip-n">{c.n}</span>
+              </button>
+            ))}
+          </div>
+          <p className="clube-sr" role="status" aria-live="polite">
+            {textos.filtro_resultado.replace('{n}', String(visiveis.length)).replace('{total}', String(vantagens.length))}
+          </p>
+        </div>
+      ) : null}
+
+      {visiveis.length === 0 ? (
+        <div className="clube-vazio-filtro">
+          <p className="clube-aviso">{textos.filtro_vazio}</p>
+          <button type="button" className="clube-btn clube-btn--contorno" onClick={() => escolher(null)}>
+            {textos.filtro_ver_todos}
+          </button>
+        </div>
+      ) : null}
+
       <ul className="clube-lista">
-        {vantagens.map((v, i) => {
+        {visiveis.map((v, i) => {
           const noAr = v.status === 'no_ar'
           const meta = [
             v.limiteMensal ? textos.limite.replace('{n}', String(v.limiteMensal)) : null,

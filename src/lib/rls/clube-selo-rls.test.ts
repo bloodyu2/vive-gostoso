@@ -42,7 +42,7 @@ beforeAll(async () => {
       ('${PAUSADO}', 'Pausada', 'pausado', null),
       ('${RASCUNHO}', 'Negocio em rascunho', 'no_ar', null);
   `)
-})
+}, 60_000)
 
 describe('consulta do selo do clube, como anon', () => {
   const CONSULTA = `select business_id, status, valido_ate from public.gostoso_club_partners where status = 'no_ar'`

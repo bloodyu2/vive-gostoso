@@ -3,6 +3,16 @@ import { buildWhatsAppLink } from '@/lib/whatsapp'
 
 export type StatusVantagem = 'no_ar' | 'em_combinacao'
 
+/** Categoria do negocio no guia (gostoso_categories), com o nome ja no idioma da pagina.
+ *  Serve so ao filtro da /clube; `tipo` (o rotulo do cartao) segue como estava. */
+export interface CategoriaDaVantagem {
+  id: string
+  slug: string
+  /** nome no idioma da pagina (cai no nome do banco quando nao ha traducao) */
+  nome: string
+  ordem: number
+}
+
 export interface Vantagem {
   partnerId: string
   businessId: string
@@ -18,6 +28,8 @@ export interface Vantagem {
   validoAte: string | null
   status: StatusVantagem
   esgotada: boolean
+  /** Preenchida pela pagina depois da leitura; ausente = sem categoria (so aparece em "Todos"). */
+  categoria?: CategoriaDaVantagem | null
 }
 
 /** Linha como a funcao gostoso_club_vantagens() devolve. */

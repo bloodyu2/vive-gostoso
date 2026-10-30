@@ -220,7 +220,9 @@ describe('numero de estado do produto nao pode ser escrito a mao', () => {
         'Use gostoso_parametros_produto (preco e percentual) ou count() (contagem).\n' +
         'Se o caso for legitimo, adicione em EXCECOES com o motivo.'
     ).toHaveLength(0)
-  })
+    // A varredura le todos os arquivos de src; com os testes de PGlite rodando juntos passa
+    // de 5 s no Windows. O prazo maior e so para a leitura nao estourar, a regra e a mesma.
+  }, 30_000)
 
   it('a varredura sabe achar: as regras casam quando o texto existe', () => {
     /* Controle positivo. Sem isto, o teste acima passando nao prova nada: um

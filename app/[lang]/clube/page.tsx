@@ -13,6 +13,7 @@ import { TemaClube } from '@/components/clube/tema'
 import { dicionario, ehIdioma, prefixo } from '@/lib/bio/dicionario'
 import { VIVE } from '@/lib/bio/contato'
 import { carregarVantagens } from '@/lib/clube/carregar'
+import { comCategorias } from '@/lib/clube/categorias-vantagem'
 import { LANCAMENTO_PREVISTO } from '@/lib/clube/config'
 import { contarEstabelecimentosNoAr, levaDoClube, textosDaLeva } from '@/lib/clube/leva'
 import { origemValida } from '@/lib/clube/vantagens'
@@ -51,7 +52,10 @@ export default async function ClubePage({ params, searchParams }: Props) {
   const { n } = await searchParams
   const origem = origemValida(n)
   const pre = prefixo(idioma)
-  const { vantagens, doBanco } = await carregarVantagens()
+  const lidas = await carregarVantagens()
+  const doBanco = lidas.doBanco
+  // categoria de cada negocio (so para o filtro); falha em silencio e o filtro some
+  const vantagens = doBanco ? await comCategorias(lidas.vantagens, t.categorias) : lidas.vantagens
   const [fundoFrase, fundoResto] = separarPrimeiraFrase(t.fundo_texto)
   // 1a leva: so informa. Sem o banco (lista dos fundadores de reserva) a conta seria falsa, entao nao mostra.
   const leva = levaDoClube(contarEstabelecimentosNoAr(vantagens))
@@ -158,6 +162,11 @@ export default async function ClubePage({ params, searchParams }: Props) {
                 vazio: t.vazio,
                 validade: t.validade,
                 limite: t.limite,
+                filtro_rotulo: t.filtro_rotulo,
+                filtro_todos: t.filtro_todos,
+                filtro_vazio: t.filtro_vazio,
+                filtro_ver_todos: t.filtro_ver_todos,
+                filtro_resultado: t.filtro_resultado,
                 form_titulo: t.form_titulo,
                 campo_nome: t.campo_nome,
                 campo_email: t.campo_email,
