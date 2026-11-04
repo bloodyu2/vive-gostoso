@@ -50,11 +50,15 @@ export const PLAQUINHAS: Record<string, Plaquinha> = {
   '06': { slug: 'cafe-com-biscoitos-damy', placeId: 'ChIJMwadNvVztAcRtw5vrUFQSCA' },
   '07': { slug: 'pousada-oasis-dos-ventos', placeId: 'ChIJPXYOaA8NtAcRYaUEuanrZEQ' },
   '08': { slug: 'o-pico-surf-skate-shop', placeId: 'ChIJNX4GT5ENtAcRRdiaaTZ4u64', foco: 5 },
+  // Plaquinhas dadas de presente a Flor de Caju (Victor, 04/11/2026). Ela ainda nao e parceira do
+  // clube: a pagina mostra o convite. Quando ela entrar (linha em gostoso_club_partners), a pagina
+  // passa a mostrar a vantagem e o selo sozinha, sem mudar nada aqui.
+  '09': { slug: 'flor-de-caju', placeId: 'ChIJm8qC1zQNtAcRjMEUYljgzUw', instagram: 'flordecajucafe' },
 }
 
 /** Codigos impressos que ainda nao tem negocio: abrem uma pagina do proprio Vive Gostoso
  *  (nunca a home crua, nunca 404). Ao dar um negocio a um deles, mover para PLAQUINHAS. */
-export const RESERVADAS: readonly string[] = ['09', '10']
+export const RESERVADAS: readonly string[] = ['10']
 
 const CODIGO = /^\d{2}$/
 const PLACE_ID = /^[A-Za-z0-9_-]{10,}$/

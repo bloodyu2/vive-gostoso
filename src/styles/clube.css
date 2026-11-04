@@ -1252,6 +1252,25 @@
   letter-spacing: -0.01em;
 }
 
+.clube-p-convite {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 1.125rem 1.25rem 1.25rem;
+  border: 1.5px dashed var(--c-input);
+  border-radius: 12px;
+}
+
+.clube-p-convite .clube-btn {
+  margin-top: 0.5rem;
+}
+
+.clube-p-h3 {
+  font-weight: 800;
+  font-size: 1.1875rem;
+  line-height: 1.15;
+}
+
 .clube-p-texto {
   margin-top: 0.5rem;
   color: var(--c-suave);

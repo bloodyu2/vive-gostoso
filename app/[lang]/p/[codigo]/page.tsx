@@ -244,7 +244,19 @@ export default async function PlaquinhaPage({ params }: Props) {
           </div>
         </section>
 
-        {CLUBE_PUBLICO ? (
+        {CLUBE_PUBLICO && !(vantagem && noAr) ? (
+          <section className="clube-p-convite" aria-labelledby="convite">
+            <h2 id="convite" className="clube-p-h3">
+              {t.convite_titulo}
+            </h2>
+            <p className="clube-p-texto">{t.convite_texto}</p>
+            <a className="clube-btn clube-btn--contorno clube-btn--cheio" href={`${pre}${CLUBE_ROTA}?n=${codigo}`}>
+              {t.passaporte_botao}
+            </a>
+          </section>
+        ) : null}
+
+        {CLUBE_PUBLICO && vantagem && noAr ? (
           <section className="clube-card" style={{ marginTop: '1.5rem' }} aria-labelledby="passaporte">
             <div className="clube-card-corpo">
               <div className="clube-card-topo">
@@ -252,64 +264,50 @@ export default async function PlaquinhaPage({ params }: Props) {
                   <Ticket size={22} aria-hidden />
                 </span>
                 <h2 id="passaporte" className="clube-nome" style={{ paddingRight: 0, alignSelf: 'center' }}>
-                  {vantagem ? t.passaporte_titulo : tc.marca}
+                  {t.passaporte_titulo}
                 </h2>
               </div>
-              {vantagem ? (
-                <>
-                  <p className="clube-beneficio" style={{ marginTop: '1rem' }}>
-                    {vantagem.beneficio}
-                  </p>
-                  {regra ? <p className="clube-regra">{regra}</p> : null}
-                  {noAr ? <p className="clube-regra">{t.passaporte_nota}</p> : null}
-                </>
-              ) : (
-                <p className="clube-beneficio" style={{ marginTop: '1rem' }}>
-                  {t.passaporte_chamada}
-                </p>
-              )}
+              <p className="clube-beneficio" style={{ marginTop: '1rem' }}>
+                {vantagem.beneficio}
+              </p>
+              {regra ? <p className="clube-regra">{regra}</p> : null}
+              <p className="clube-regra">{t.passaporte_nota}</p>
             </div>
             <div className="clube-picote" aria-hidden="true" />
             <div className="clube-canhoto">
-              {vantagem && noAr ? (
-                <ResgatePlaquinha
-                  partnerId={vantagem.partnerId}
-                  negocio={negocio.name}
-                  origem={codigo}
-                  prefixo={pre}
-                  doBanco
-                  esgotada={vantagem.esgotada}
-                  textos={{
-                    usar: tc.usar,
-                    ver_cupom: tc.ver_cupom,
-                    resgatar_de_novo: tc.resgatar_de_novo,
-                    form_titulo: tc.form_titulo,
-                    campo_nome: tc.campo_nome,
-                    campo_email: tc.campo_email,
-                    campo_telefone: tc.campo_telefone,
-                    nota_dados: tc.nota_dados,
-                    consentimento: tc.consentimento,
-                    politica_link: tc.politica_link,
-                    gerar_cupom: tc.gerar_cupom,
-                    gerando: tc.gerando,
-                    cancelar: tc.cancelar,
-                    erro_nome: tc.erro_nome,
-                    erro_email: tc.erro_email,
-                    erro_telefone: tc.erro_telefone,
-                    erro_consentimento: tc.erro_consentimento,
-                    erro_ja_tem: tc.erro_ja_tem,
-                    erro_resgate: tc.erro_resgate,
-                    erro_muitos: tc.erro_muitos,
-                    erro_limite_contato: tc.erro_limite_contato,
-                    erro_indisponivel: tc.erro_indisponivel,
-                    esgotada: tc.esgotada,
-                  }}
-                />
-              ) : (
-                <a className="clube-btn clube-btn--verde clube-btn--cheio" href={`${pre}${CLUBE_ROTA}?n=${codigo}`}>
-                  {t.passaporte_botao}
-                </a>
-              )}
+              <ResgatePlaquinha
+                partnerId={vantagem.partnerId}
+                negocio={negocio.name}
+                origem={codigo}
+                prefixo={pre}
+                doBanco
+                esgotada={vantagem.esgotada}
+                textos={{
+                  usar: tc.usar,
+                  ver_cupom: tc.ver_cupom,
+                  resgatar_de_novo: tc.resgatar_de_novo,
+                  form_titulo: tc.form_titulo,
+                  campo_nome: tc.campo_nome,
+                  campo_email: tc.campo_email,
+                  campo_telefone: tc.campo_telefone,
+                  nota_dados: tc.nota_dados,
+                  consentimento: tc.consentimento,
+                  politica_link: tc.politica_link,
+                  gerar_cupom: tc.gerar_cupom,
+                  gerando: tc.gerando,
+                  cancelar: tc.cancelar,
+                  erro_nome: tc.erro_nome,
+                  erro_email: tc.erro_email,
+                  erro_telefone: tc.erro_telefone,
+                  erro_consentimento: tc.erro_consentimento,
+                  erro_ja_tem: tc.erro_ja_tem,
+                  erro_resgate: tc.erro_resgate,
+                  erro_muitos: tc.erro_muitos,
+                  erro_limite_contato: tc.erro_limite_contato,
+                  erro_indisponivel: tc.erro_indisponivel,
+                  esgotada: tc.esgotada,
+                }}
+              />
             </div>
           </section>
         ) : null}

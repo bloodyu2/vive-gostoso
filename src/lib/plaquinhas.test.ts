@@ -91,8 +91,8 @@ describe('o mapa preenchido (PLAQUINHAS) e coerente', () => {
 describe('mapa das plaquinhas (04/11/2026)', () => {
   const codigos = Object.keys(PLAQUINHAS)
 
-  it('os oito primeiros codigos tem negocio, e nenhum negocio se repete', () => {
-    expect(codigos.sort()).toEqual(['01', '02', '03', '04', '05', '06', '07', '08'])
+  it('os nove primeiros codigos tem negocio, e nenhum negocio se repete', () => {
+    expect(codigos.sort()).toEqual(['01', '02', '03', '04', '05', '06', '07', '08', '09'])
     const slugs = codigos.map((c) => PLAQUINHAS[c].slug)
     expect(new Set(slugs).size).toBe(slugs.length)
     expect(slugs).toEqual([
@@ -104,6 +104,7 @@ describe('mapa das plaquinhas (04/11/2026)', () => {
       'cafe-com-biscoitos-damy',
       'pousada-oasis-dos-ventos',
       'o-pico-surf-skate-shop',
+      'flor-de-caju',
     ])
   })
 
@@ -119,12 +120,19 @@ describe('mapa das plaquinhas (04/11/2026)', () => {
     expect(new Set(ids).size).toBe(ids.length)
   })
 
-  it('09 e 10 estao reservados: sem negocio, mas com pagina propria (nao a home)', () => {
-    expect(RESERVADAS).toEqual(['09', '10'])
-    for (const c of ['09', '10']) {
-      expect(plaquinhaDoCodigo(c)).toBeNull()
-      expect(plaquinhaReservada(c)).toBe(true)
-    }
+  it('o 09 e da Flor de Caju (presente), com Google e Instagram', () => {
+    expect(PLAQUINHAS['09'].slug).toBe('flor-de-caju')
+    expect(linkDeAvaliacao(PLAQUINHAS['09'])).toBe(
+      'https://search.google.com/local/writereview?placeid=ChIJm8qC1zQNtAcRjMEUYljgzUw',
+    )
+    expect(linkDoInstagram(PLAQUINHAS['09'].instagram)).toBe('https://www.instagram.com/flordecajucafe/')
+  })
+
+  it('o 10 segue reservado: sem negocio, mas com pagina propria (nao a home)', () => {
+    expect(RESERVADAS).toEqual(['10'])
+    expect(plaquinhaDoCodigo('10')).toBeNull()
+    expect(plaquinhaReservada('10')).toBe(true)
+    expect(plaquinhaReservada('09')).toBe(false)
   })
 
   it('codigo reservado e codigo mapeado nunca se misturam', () => {
