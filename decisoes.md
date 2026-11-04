@@ -297,8 +297,8 @@ Guamaré fica mais perto de todas. Natal ficou por três motivos: é a estação
 3. Conferir depois de publicar: abrir cada `/p/NN` no celular. Os testes (`plaquinhas.test.ts`) garantem formato e repetição, não que o slug exista.
 4. Se houver plaquinhas além de `10`: o código aceita qualquer código de dois dígitos, mas o teste do mapa limita a `01` a `10`; ampliar o teste junto.
 
-## Receita para ligar o Passaporte em 05/11/2026 (nada disto está aplicado no código)
-**Data:** o lançamento é **05/11/2026 (quinta)**, quando chegam as plaquinhas horizontais e os adesivos (as verticais já chegaram). A data de segunda 02/11 foi um engano do Victor, corrigido por ele. Tudo abaixo sai junto, num único push na manhã de 05/11. A faixa de data atual da `/clube` continua dizendo 05/11 até lá.
+## Receita para ligar o Passaporte em 05/11/2026 (preparada em 04/11 na branch `feat/clube-abertura`, itens a, b, c e e; o item d já estava no ar)
+**Data:** o lançamento é **05/11/2026 (quinta)**, quando chegam as plaquinhas horizontais e os adesivos (as verticais já chegaram). A data de segunda 02/11 foi um engano do Victor, corrigido por ele. Tudo abaixo sai junto, num único push na manhã de 05/11. Em 04/11 a virada foi preparada localmente (sem push) em `feat/clube-abertura`: flag ligada, `/clube` indexável com canonical e hreflang, rota no sitemap, faixa trocada por texto de clube no ar, e a constante `LANCAMENTO_PREVISTO` removida.
 
 **Antes de ligar (conferir nesta ordem):**
 1. Deploy do endurecimento READY e migração `20261029120000_vg_clube_resgate_antiabuso.sql` aplicada (depende de `20261026120000` e `20261028100000`; conferir com `list_migrations`). Rodar a consulta de conferência do cabeçalho do arquivo e ver hashes distintos.
@@ -330,7 +330,7 @@ Não mexer no `noindex` de `app/[lang]/clube/cupom/[token]/page.tsx`, de `clube/
 
 **(c) `scripts/paginas-sitemap.mjs`:** incluir depois de `/transparencia`: `{ path: '/clube', freq: 'weekly', priority: '0.6' },`. O `public/sitemap.xml` é gerado no `prebuild` a partir dessa lista (com hreflang pt, en e es), e `src/lib/explore/sitemap-paginas.test.ts` a importa; acrescentar nesse teste `expect(caminhos).toContain('/clube')`. A prioridade 0,6 fica abaixo da da tábua de marés (0,95), que o teste exige maior que todas.
 
-**(d) Passaporte em destaque na `/bio`**, junto do canal de ofertas, com UTM de bio como os outros itens:
+**(d) Passaporte em destaque na `/bio`. JÁ FEITO no PR 62 (29/10/2026), não repetir.** O botão do clube entra na `/bio` por `linksDaBio(..., { clube: CLUBE_PUBLICO })` (`src/lib/bio/links-bio.ts`), ou seja, aparece sozinho quando a flag liga; o texto abaixo é o plano original, mantido só como registro e já superado pelo código:
 - `src/lib/bio/links-bio.ts`: incluir `'passaporte'` em `IdBloco`; em `destinos`, logo depois de `['mares', ...]`, a linha `['passaporte', `${p}/clube`]`. O `comUtm` já dá `utm_source=instagram&utm_medium=bio`. Atualizar `links-bio.test.ts` (ordem `mares, passaporte, mapa, ...`, caminho `${p}/clube`, todos com UTM).
 - `app/[lang]/bio/page.tsx`: importar `Ticket` de `lucide-react`; em `ICONES` pôr `passaporte: Ticket`; em `TOM`, `passaporte: 'bg-[#E05A3A]/14 text-[#9E3A22]'`; o cartão usa o mesmo markup dos demais (`destinos.map`), e o selo "Novo" reaproveita o padrão do `blog_novo` com `t.passaporte_novo`.
 - Textos, em `src/locales/{pt,en,es}.json` dentro de `bio`: `cartoes.passaporte.titulo`, `cartoes.passaporte.linha` e `passaporte_novo`:

@@ -32,6 +32,7 @@ export function paginasEstaticas(raiz) {
     { path: '/blog', freq: 'weekly', priority: '0.6' },
     { path: '/transfer', freq: 'weekly', priority: '0.7' },
     { path: '/transparencia', freq: 'monthly', priority: '0.6' },
+    { path: '/clube', freq: 'weekly', priority: '0.6' },
     // Tabua de mares: indice e uma pagina por praia, lidos da lista unica em
     // src/data/praias-mares.ts (scripts/mares-slugs.mjs).
     ...rotasMares(raiz),

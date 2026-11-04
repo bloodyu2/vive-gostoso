@@ -1,20 +1,18 @@
 // app/[lang]/clube/page.tsx
-// Passaporte Gostoso: a pagina do clube de vantagens. Escondida ate o lancamento
-// (ordem do Victor, 26/10/2026): noindex, nofollow, fora do sitemap, sem link em
-// nenhuma pagina publica. Quem chega aqui recebeu o link direto.
-// Para lancar, ver src/lib/clube/config.ts.
+// Passaporte Gostoso: a pagina do clube de vantagens. No ar e indexavel desde o
+// lancamento de 05/11/2026 (canonical e hreflang nos tres idiomas, no sitemap).
+// A flag do clube esta em src/lib/clube/config.ts.
 import type { CSSProperties } from 'react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import { CalendarDays } from 'lucide-react'
+import { Ticket } from 'lucide-react'
 import { Carimbo } from '@/components/clube/carimbo'
 import { ListaVantagens } from '@/components/clube/lista-vantagens'
 import { TemaClube } from '@/components/clube/tema'
-import { dicionario, ehIdioma, prefixo } from '@/lib/bio/dicionario'
+import { dicionario, ehIdioma, prefixo, type Idioma } from '@/lib/bio/dicionario'
 import { VIVE } from '@/lib/bio/contato'
 import { carregarVantagens } from '@/lib/clube/carregar'
 import { comCategorias } from '@/lib/clube/categorias-vantagem'
-import { LANCAMENTO_PREVISTO } from '@/lib/clube/config'
 import { contarEstabelecimentosNoAr, levaDoClube, textosDaLeva } from '@/lib/clube/leva'
 import { origemValida } from '@/lib/clube/vantagens'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
@@ -31,11 +29,16 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
   const t = dicionario(lang).clube
+  const atual: Idioma = ehIdioma(lang) ? lang : 'pt'
+  const url = (l: Idioma) => `${VIVE.site}${prefixo(l)}/clube`
   return {
     title: { absolute: t.page_title },
     description: t.page_description,
-    robots: { index: false, follow: false, nocache: true },
-    openGraph: { title: t.page_title, description: t.page_description, siteName: VIVE.nome },
+    alternates: {
+      canonical: url(atual),
+      languages: { 'pt-BR': url('pt'), en: url('en'), es: url('es'), 'x-default': url('pt') },
+    },
+    openGraph: { title: t.page_title, description: t.page_description, url: url(atual), siteName: VIVE.nome },
   }
 }
 
@@ -60,11 +63,6 @@ export default async function ClubePage({ params, searchParams }: Props) {
   // 1a leva: so informa. Sem o banco (lista dos fundadores de reserva) a conta seria falsa, entao nao mostra.
   const leva = levaDoClube(contarEstabelecimentosNoAr(vantagens))
   const levaTexto = textosDaLeva(t, leva)
-  const dataDoLancamento = new Intl.DateTimeFormat(idioma === 'pt' ? 'pt-BR' : idioma, {
-    timeZone: 'UTC',
-    day: 'numeric',
-    month: 'long',
-  }).format(new Date(`${LANCAMENTO_PREVISTO}T12:00:00Z`))
 
   const passos = [
     { t: t.passo1_t, d: t.passo1_d },
@@ -108,8 +106,8 @@ export default async function ClubePage({ params, searchParams }: Props) {
               </a>
             </div>
             <p className="clube-lancamento clube-entra" style={{ '--i': 4 } as CSSProperties}>
-              <CalendarDays size={20} aria-hidden />
-              <span>{t.lancamento.replace('{data}', dataDoLancamento)}</span>
+              <Ticket size={20} aria-hidden />
+              <span>{t.lancamento}</span>
             </p>
           </div>
         </div>

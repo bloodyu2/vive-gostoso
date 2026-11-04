@@ -7,7 +7,7 @@ describe('paginas fixas do sitemap', () => {
 
   it('tem o Explore, o mapa e a tabua de mares', () => {
     const caminhos = paginas.map((p) => p.path)
-    for (const c of ['/', '/explore', '/explore/mapa', '/explore/mares']) expect(caminhos).toContain(c)
+    for (const c of ['/', '/explore', '/explore/mapa', '/explore/mares', '/clube']) expect(caminhos).toContain(c)
   })
 
   it('a tabua de mares tem a maior prioridade depois da home', () => {
