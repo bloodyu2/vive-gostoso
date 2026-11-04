@@ -5,6 +5,7 @@
 // dele, a vantagem do Passaporte Gostoso com o resgate do cupom e o caminho para o resto
 // do guia. Codigo reservado (sem negocio ainda) abre uma pagina do Vive Gostoso; codigo
 // sem nada cai na home, nunca em 404 (a plaquinha ja esta no balcao).
+import type { CSSProperties } from 'react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
@@ -181,7 +182,7 @@ export default async function PlaquinhaPage({ params }: Props) {
   return (
     <TemaClube escuroAuto>
       <RegistrarVisita codigo={codigo} />
-      <header className="clube-capa-p">
+      <header className="clube-capa-p" style={plaquinha.foco ? ({ '--foco': plaquinha.foco } as CSSProperties) : undefined}>
         {foto ? (
           <SafeCoverImage
             src={foto}

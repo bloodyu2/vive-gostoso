@@ -147,6 +147,13 @@ describe('mapa das plaquinhas (04/11/2026)', () => {
     expect(linkDoInstagram(PLAQUINHAS['04'].instagram)).toBe('https://www.instagram.com/ojardimdoserido/')
   })
 
+  it('so o foco vindo do mapa e uma porcentagem', () => {
+    for (const c of Object.keys(PLAQUINHAS)) {
+      const f = PLAQUINHAS[c].foco
+      if (f !== undefined) expect(f, c).toMatch(/^\d{1,3}%$/)
+    }
+  })
+
   it('o botao do Google some quando o negocio nao tem link', () => {
     expect(linkDeAvaliacao({ slug: 'sem-link' })).toBeNull()
   })

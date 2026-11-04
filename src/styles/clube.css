@@ -1020,7 +1020,7 @@
 }
 
 .clube-capa-p .clube-hero-img {
-  object-position: 50% 62%;
+  object-position: 50% var(--foco, 62%);
 }
 
 .clube-capa-p .clube-marca-linha {

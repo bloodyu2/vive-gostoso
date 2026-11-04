@@ -406,7 +406,7 @@ O texto não promete data nem diz que as plaquinhas "chegam". Se o Victor quiser
 
 **Instagram.** Vale o do banco (`gostoso_businesses.instagram`, com ou sem arroba). Gostoso Expedições não tem no banco; `@gostosoexpedicoes` fica em `plaquinhas.ts` (o link da bio do perfil, bit.ly/gostosoexpedicoes, é o mesmo do site da ficha do Maps). Seridó Praia: `@ojardimdoserido`, confirmado pelo Victor em 04/11 (mesmo negócio).
 
-**O Pico.** A capa do banco é uma imagem gerada por IA (marca de estrela do Gemini no canto), não foto real. `fotoGenerica: true` faz a página usar a foto de pôr do sol no topo até chegarem fotos reais da loja (pedidas por WhatsApp em 02/11). Ao chegarem: subir no Storage, gravar em `photos` e `cover_url` e tirar a flag.
+**O Pico.** A capa que estava no banco era uma imagem gerada por IA (marca de estrela do Gemini no canto), então a página usou o pôr do sol até a loja mandar fotos reais. Em 04/11 a loja mandou fotos pelo WhatsApp (conversa de 02/11); 6 foram baixadas (só as imagens), comprimidas em JPEG 82 sem EXIF (as originais já vinham em 900 x 1600 ou 1200 x 1600, retrato, sem ampliar), enviadas ao Storage em `e2611905-.../1793798215963..68-o-pico-surf-skate-shop-01..06.jpg` e gravadas em `photos`, com a fachada com a placa como `cover_url`. A opção `fotoGenerica` do mapa continua existindo para qualquer lugar que precise dela. A imagem de IA antiga (`1790675905666-O PICO B2.jpg`) segue no Storage, sem uso.
 
 **Reservados.** 09 e 10 abrem uma página do Vive Gostoso (texto, botão do Passaporte, caminhos do guia) e contam visita. Ao dar um negócio a um deles: mover de `RESERVADAS` para `PLAQUINHAS`. Código fora dos dois (11 em diante, ou inválido) segue indo para a home.
 
