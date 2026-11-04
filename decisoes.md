@@ -398,3 +398,18 @@ O texto não promete data nem diz que as plaquinhas "chegam". Se o Victor quiser
 **Reversão.** No cabeçalho do modelo: apagar a vantagem e o perfil pelo slug, e a pasta `<id>/` do bucket.
 
 **Não faz:** criar conta de dono, publicar texto de blog, tocar em plano ou destaque, nem aceitar o negócio por ele (o aceite é do dono, antes disto).
+
+## Páginas das plaquinhas `/p/NN` (04/11/2026)
+**Pedido do Victor, via coordenação.** As plaquinhas chegaram: 10 horizontais e 10 verticais, 10 códigos de QR (`/p/01` a `/p/10`); o mesmo código vai em uma horizontal e uma vertical, as duas para o mesmo lugar. Mapa decidido: 01 Gostoso Expedições, 02 Pousada Parcel do Gostoso, 03 Casa Reduto, 04 Seridó Praia, 05 Casa Gostoso Mar, 06 Café com Biscoitos Damy, 07 Pousada Oasis dos Ventos, 08 O Pico Surf Skate Shop; 09 e 10 reservados. Publicado junto com a abertura do clube, no mesmo PR (`feat/clube-abertura`).
+
+**Link de avaliação do Google.** Cada lugar usa `placeId` (o `search.google.com/local/writereview?placeid=` é montado em `linkDeAvaliacao`). O `place_id` (começa com `ChIJ`) foi calculado a partir do id da ficha no Google Maps (o par `0x...:0x...` do endereço da ficha: protobuf `0a 12 09 <8 bytes> 11 <8 bytes>` em base64 url, validado contra um place_id conhecido) e **conferido um a um abrindo o link de avaliação no Chrome**: o Google abriu o lugar certo nos oito. Nada foi postado. Seridó Praia: a ficha do Google se chama "O Jardim do Seridó" (mesmo endereço, Av. Enseada das Baleias, 340; uma foto da ficha mostra a placa "Seridó Praia"). Se o Victor souber que são negócios diferentes, tirar o `placeId` do `04`: o botão some.
+
+**Instagram.** Vale o do banco (`gostoso_businesses.instagram`, com ou sem arroba). Gostoso Expedições não tem no banco; `@gostosoexpedicoes` fica em `plaquinhas.ts` (o link da bio do perfil, bit.ly/gostosoexpedicoes, é o mesmo do site da ficha do Maps). Seridó Praia: sem @ confirmado (a busca devolve `@ojardimdoserido`, de um negócio que não foi confirmado como o mesmo), então sem botão.
+
+**O Pico.** A capa do banco é uma imagem gerada por IA (marca de estrela do Gemini no canto), não foto real. `fotoGenerica: true` faz a página usar a foto de pôr do sol no topo até chegarem fotos reais da loja (pedidas por WhatsApp em 02/11). Ao chegarem: subir no Storage, gravar em `photos` e `cover_url` e tirar a flag.
+
+**Reservados.** 09 e 10 abrem uma página do Vive Gostoso (texto, botão do Passaporte, caminhos do guia) e contam visita. Ao dar um negócio a um deles: mover de `RESERVADAS` para `PLAQUINHAS`. Código fora dos dois (11 em diante, ou inválido) segue indo para a home.
+
+**Resgate na própria página.** O botão abre o mesmo formulário da `/clube` (`FormResgate`), com a plaquinha como origem. A `/clube` não muda.
+
+**Modo escuro.** Só nesta página (`TemaClube escuroAuto`, classe `clube--escuro-auto`), seguindo o aparelho. O resto do clube continua no tema claro do passaporte. A capa fica sempre com texto creme sobre a foto.

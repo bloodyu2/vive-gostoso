@@ -16,6 +16,8 @@ const corpo = Figtree({
   variable: '--font-clube-corpo',
 })
 
-export function TemaClube({ children }: { children: React.ReactNode }) {
-  return <div className={`clube ${titulo.variable} ${corpo.variable}`}>{children}</div>
+/** `escuroAuto`: a pagina segue o modo escuro do aparelho (hoje so a /p/NN). O resto do
+ *  clube segue so no tema claro do passaporte. */
+export function TemaClube({ children, escuroAuto = false }: { children: React.ReactNode; escuroAuto?: boolean }) {
+  return <div className={`clube ${titulo.variable} ${corpo.variable}${escuroAuto ? ' clube--escuro-auto' : ''}`}>{children}</div>
 }

@@ -543,4 +543,11 @@ describe('visita à plaquinha', () => {
     const r = await db.query<{ codigo: string; n: number }>('select codigo, n from public.gostoso_plaquinha_visitas')
     expect(r.rows).toEqual([{ codigo: '03', n: 2 }])
   })
+
+  it('registra a visita de cada codigo impresso, de 01 a 10 (negocios e reservados)', async () => {
+    const codigos = Array.from({ length: 10 }, (_, i) => String(i + 1).padStart(2, '0'))
+    for (const c of codigos) await como(db, 'anon', null, `select public.gostoso_club_registrar_visita_plaquinha('${c}')`)
+    const r = await db.query<{ codigo: string }>('select codigo from public.gostoso_plaquinha_visitas order by codigo')
+    expect(r.rows.map((x) => x.codigo)).toEqual(codigos)
+  })
 })

@@ -1016,7 +1016,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(180deg, rgba(8, 36, 36, 0.55) 0%, rgba(8, 36, 36, 0.1) 30%, rgba(8, 48, 48, 0.92) 100%);
+  background: linear-gradient(180deg, rgba(8, 36, 36, 0.55) 0%, rgba(8, 36, 36, 0.28) 26%, rgba(8, 40, 40, 0.86) 62%, rgba(8, 48, 48, 0.95) 100%);
 }
 
 .clube-capa-p .clube-hero-img {
@@ -1032,8 +1032,8 @@
 
 .clube-p-titulo {
   font-weight: 800;
-  font-size: clamp(2.25rem, 10.5vw, 3.25rem);
-  line-height: 0.98;
+  font-size: clamp(2rem, 9vw, 3rem);
+  line-height: 1;
   letter-spacing: -0.025em;
 }
 
@@ -1217,6 +1217,145 @@
     animation: none;
   }
   .clube-btn {
+    transition: none;
+  }
+}
+
+/* ── /p/NN, desenho de 04/11/2026 ─────────────────────────── */
+
+.clube-p-obrigado {
+  margin-bottom: 0.5rem;
+  color: var(--c-mostarda);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.clube-p-selo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.3125rem 0.875rem 0.3125rem 0.4375rem;
+  border: 1.5px solid rgba(246, 235, 212, 0.55);
+  border-radius: 999px;
+  background: rgba(8, 36, 36, 0.55);
+  color: var(--c-fundo);
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 1.2;
+}
+
+.clube-p-h2 {
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.clube-p-texto {
+  margin-top: 0.5rem;
+  color: var(--c-suave);
+  max-width: 34ch;
+}
+
+.clube-btn--grande {
+  min-height: 3.5rem;
+  font-size: 1.125rem;
+}
+
+.clube-p-explorar {
+  margin-top: 2rem;
+}
+
+.clube-p-links {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.clube-p-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.5rem;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid var(--c-borda);
+  border-radius: 12px;
+  background: var(--c-papel);
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 160ms, border-color 160ms;
+}
+
+.clube-p-link:hover {
+  border-color: var(--c-verde);
+}
+
+.clube-p-link-icone {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: #f7e3ae;
+  color: #7a5200;
+}
+
+.clube-p-link-seta {
+  margin-left: auto;
+  color: var(--c-mudo);
+}
+
+/* Modo escuro do aparelho, so na /p/NN (o resto do clube segue no tema claro do passaporte). */
+@media (prefers-color-scheme: dark) {
+  .clube.clube--escuro-auto {
+    --c-fundo: #0b2626;
+    --c-papel: #123232;
+    --c-verde: #5cc7b4;
+    --c-verde-fundo: #08201f;
+    --c-tinta: #f4ead3;
+    --c-suave: #d3dcd6;
+    --c-mudo: #b9c7c2;
+    --c-borda: #2a5555;
+    --c-input: #4d7b7b;
+    color-scheme: dark;
+  }
+
+  /* A capa fica sobre foto escura nos dois modos: o texto dela e sempre creme. */
+  .clube--escuro-auto .clube-capa-p,
+  .clube--escuro-auto .clube-p-selo {
+    color: #f6ebd4;
+  }
+
+  .clube--escuro-auto .clube-btn--mostarda {
+    color: #1b2a2a;
+  }
+
+  .clube--escuro-auto .clube-btn--verde:hover {
+    background: #74d3c2;
+  }
+
+  .clube--escuro-auto .clube-card {
+    box-shadow: 0 10px 24px -14px rgba(0, 0, 0, 0.7);
+  }
+
+  .clube--escuro-auto .clube-canhoto {
+    background: rgba(232, 163, 23, 0.1);
+  }
+
+  .clube--escuro-auto .clube-p-quadro {
+    box-shadow: 0 12px 28px -16px rgba(0, 0, 0, 0.7);
+  }
+
+  .clube--escuro-auto .clube-campo {
+    background: #0b2626;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clube-p-link {
     transition: none;
   }
 }
