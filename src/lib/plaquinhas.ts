@@ -21,8 +21,8 @@ export interface Plaquinha {
   instagram?: string
   /** nome a mostrar na pagina quando o do banco nao e o nome certo do negocio */
   nome?: string
-  /** altura do foco da foto no topo da pagina (0% = topo da foto, 100% = base); padrao 62% */
-  foco?: string
+  /** altura do foco da foto no topo da pagina, de 0 (topo da foto) a 100 (base); padrao 62 */
+  foco?: number
   /** true: nao usa a capa do banco na pagina (ela nao e foto real do lugar) */
   fotoGenerica?: boolean
 }
@@ -49,7 +49,7 @@ export const PLAQUINHAS: Record<string, Plaquinha> = {
   '05': { slug: 'casa-gostoso-mar', placeId: 'ChIJJ8_sBNUNtAcRKxU6do-yUDE' },
   '06': { slug: 'cafe-com-biscoitos-damy', placeId: 'ChIJMwadNvVztAcRtw5vrUFQSCA' },
   '07': { slug: 'pousada-oasis-dos-ventos', placeId: 'ChIJPXYOaA8NtAcRYaUEuanrZEQ' },
-  '08': { slug: 'o-pico-surf-skate-shop', placeId: 'ChIJNX4GT5ENtAcRRdiaaTZ4u64', foco: '5%' },
+  '08': { slug: 'o-pico-surf-skate-shop', placeId: 'ChIJNX4GT5ENtAcRRdiaaTZ4u64', foco: 5 },
 }
 
 /** Codigos impressos que ainda nao tem negocio: abrem uma pagina do proprio Vive Gostoso

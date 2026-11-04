@@ -182,7 +182,7 @@ export default async function PlaquinhaPage({ params }: Props) {
   return (
     <TemaClube escuroAuto>
       <RegistrarVisita codigo={codigo} />
-      <header className="clube-capa-p" style={plaquinha.foco ? ({ '--foco': plaquinha.foco } as CSSProperties) : undefined}>
+      <header className="clube-capa-p" style={plaquinha.foco !== undefined ? ({ '--foco': `${plaquinha.foco}%` } as CSSProperties) : undefined}>
         {foto ? (
           <SafeCoverImage
             src={foto}
