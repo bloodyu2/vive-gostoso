@@ -142,6 +142,11 @@ describe('mapa das plaquinhas (04/11/2026)', () => {
     }
   })
 
+  it('o 04 mostra o nome certo, O Jardim do Seridó, e o Instagram dele', () => {
+    expect(PLAQUINHAS['04'].nome).toBe('O Jardim do Seridó')
+    expect(linkDoInstagram(PLAQUINHAS['04'].instagram)).toBe('https://www.instagram.com/ojardimdoserido/')
+  })
+
   it('o botao do Google some quando o negocio nao tem link', () => {
     expect(linkDeAvaliacao({ slug: 'sem-link' })).toBeNull()
   })

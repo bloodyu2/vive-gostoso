@@ -19,6 +19,8 @@ export interface Plaquinha {
   placeId?: string
   /** @ do Instagram do negocio quando o banco nao tem (o do banco vale primeiro) */
   instagram?: string
+  /** nome a mostrar na pagina quando o do banco nao e o nome certo do negocio */
+  nome?: string
   /** true: nao usa a capa do banco na pagina (ela nao e foto real do lugar) */
   fotoGenerica?: boolean
 }
@@ -35,7 +37,13 @@ export const PLAQUINHAS: Record<string, Plaquinha> = {
   '01': { slug: 'gostoso-expedicoes', placeId: 'ChIJldqjdTYNtAcRdymDC3gymGM', instagram: 'gostosoexpedicoes' },
   '02': { slug: 'pousada-parcel-do-gostoso', placeId: 'ChIJuaTOKpUNtAcRa1AsybalEM0' },
   '03': { slug: 'casa-reduto-artesanato', placeId: 'ChIJ_cvxpfEPtAcRUb4jnsKYVsM' },
-  '04': { slug: 'serido-praia', placeId: 'ChIJXz2VsTkMtAcRT7gQp1I82Xw' },
+  // O nome certo e "O Jardim do Seridó" (Victor, 04/11/2026); a linha do banco ainda se chama "Seridó Praia".
+  '04': {
+    slug: 'serido-praia',
+    nome: 'O Jardim do Seridó',
+    placeId: 'ChIJXz2VsTkMtAcRT7gQp1I82Xw',
+    instagram: 'ojardimdoserido',
+  },
   '05': { slug: 'casa-gostoso-mar', placeId: 'ChIJJ8_sBNUNtAcRKxU6do-yUDE' },
   '06': { slug: 'cafe-com-biscoitos-damy', placeId: 'ChIJMwadNvVztAcRtw5vrUFQSCA' },
   '07': { slug: 'pousada-oasis-dos-ventos', placeId: 'ChIJPXYOaA8NtAcRYaUEuanrZEQ' },

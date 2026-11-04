@@ -164,7 +164,7 @@ export default async function PlaquinhaPage({ params }: Props) {
     .maybeSingle()
   const achado = data as NegocioDaPlaquinha | null
   if (!achado) redirect(DESTINO_PADRAO)
-  const negocio = { ...achado, name: achado.name.trim() }
+  const negocio = { ...achado, name: (plaquinha.nome ?? achado.name).trim() }
 
   const avaliar = linkDeAvaliacao(plaquinha)
   const instagram = linkDoInstagram(negocio.instagram) ?? linkDoInstagram(plaquinha.instagram)
