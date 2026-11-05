@@ -10,9 +10,24 @@
 
 export const DESTINO_PADRAO = 'https://www.vivegostoso.com.br/'
 
+/** Outro negocio no mesmo lugar da plaquinha (o dono tem duas coisas, a pousada oferece kite...).
+ *  Aparece na pagina depois do principal, com a sua propria foto, avaliacao do Google, Instagram e,
+ *  so se tiver vantagem no ar, o cupom. Se o slug nao existir (ou nao estiver publicado), some sem erro. */
+export interface PlaquinhaExtra {
+  /** slug do negocio em gostoso_businesses */
+  slug: string
+  /** nome a mostrar quando o do banco nao e o certo */
+  nome?: string
+  avaliar?: string
+  placeId?: string
+  instagram?: string
+}
+
 export interface Plaquinha {
   /** slug do negocio em gostoso_businesses */
   slug: string
+  /** negocios a mais no mesmo lugar, em ordem: o principal (acima) vem sempre primeiro */
+  extras?: PlaquinhaExtra[]
   /** link de avaliacao do Google ja pronto (https, dominio do Google) */
   avaliar?: string
   /** place_id do Google; com ele o link de avaliacao e montado aqui */
@@ -48,7 +63,13 @@ export const PLAQUINHAS: Record<string, Plaquinha> = {
   },
   '05': { slug: 'casa-gostoso-mar', placeId: 'ChIJJ8_sBNUNtAcRKxU6do-yUDE' },
   '06': { slug: 'cafe-com-biscoitos-damy', placeId: 'ChIJMwadNvVztAcRtw5vrUFQSCA' },
-  '07': { slug: 'pousada-oasis-dos-ventos', placeId: 'ChIJPXYOaA8NtAcRYaUEuanrZEQ' },
+  '07': {
+    slug: 'pousada-oasis-dos-ventos',
+    placeId: 'ChIJPXYOaA8NtAcRYaUEuanrZEQ',
+    // Aulas de kitesurf na propria pousada, do marido da dona (Victor, 05/11/2026). Sem Google: a
+    // ficha da Lokos por Kite nao existe no Maps (nao achei), entao o botao some. Sem vantagem.
+    extras: [{ slug: 'lokos-por-kite', nome: 'Lokos por Kite', instagram: 'lokosporkite' }],
+  },
   '08': { slug: 'o-pico-surf-skate-shop', placeId: 'ChIJNX4GT5ENtAcRRdiaaTZ4u64', foco: 5 },
   // Plaquinhas dadas de presente a Flor de Caju (Victor, 04/11/2026). Ela ainda nao e parceira do
   // clube: a pagina mostra o convite. Quando ela entrar (linha em gostoso_club_partners), a pagina
@@ -104,4 +125,9 @@ const HANDLE_INSTAGRAM = /^[A-Za-z0-9._]{1,30}$/
 export function linkDoInstagram(handle: string | null | undefined): string | null {
   const h = (handle ?? '').trim().replace(/^@/, '')
   return HANDLE_INSTAGRAM.test(h) ? `https://www.instagram.com/${h}/` : null
+}
+
+/** O link de avaliacao e o Instagram de um negocio extra, no mesmo padrao do principal. */
+export function linkDeAvaliacaoExtra(e: PlaquinhaExtra): string | null {
+  return linkDeAvaliacao({ slug: e.slug, avaliar: e.avaliar, placeId: e.placeId })
 }

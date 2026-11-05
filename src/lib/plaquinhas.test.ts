@@ -5,6 +5,7 @@ import {
   RESERVADAS,
   codigoValido,
   linkDeAvaliacao,
+  linkDeAvaliacaoExtra,
   linkDoInstagram,
   plaquinhaDoCodigo,
   plaquinhaReservada,
@@ -188,5 +189,40 @@ describe('linkDoInstagram', () => {
     expect(linkDoInstagram('a/../b')).toBeNull()
     expect(linkDoInstagram('https://evil.example')).toBeNull()
     expect(linkDoInstagram('x'.repeat(31))).toBeNull()
+  })
+})
+
+describe('varios negocios na mesma plaquinha', () => {
+  const principais = Object.values(PLAQUINHAS)
+  const comExtras = Object.entries(PLAQUINHAS).filter(([, p]) => (p.extras ?? []).length > 0)
+
+  it('a 07 (Oasis dos Ventos) traz a Lokos por Kite depois da pousada, com o Instagram dela', () => {
+    expect(PLAQUINHAS['07'].slug).toBe('pousada-oasis-dos-ventos')
+    const extra = PLAQUINHAS['07'].extras?.[0]
+    expect(extra?.slug).toBe('lokos-por-kite')
+    expect(extra?.nome).toBe('Lokos por Kite')
+    expect(linkDoInstagram(extra?.instagram)).toBe('https://www.instagram.com/lokosporkite/')
+  })
+
+  it('negocio extra sem Google nao tem botao de avaliar (a ficha da Lokos nao existe no Maps)', () => {
+    const extra = PLAQUINHAS['07'].extras?.[0]
+    expect(extra && linkDeAvaliacaoExtra(extra)).toBeNull()
+  })
+
+  it('extra com place_id ganha o link de avaliacao, no mesmo padrao do principal', () => {
+    expect(linkDeAvaliacaoExtra({ slug: 'x', placeId: 'ChIJabc_-123' })).toBe(
+      'https://search.google.com/local/writereview?placeid=ChIJabc_-123',
+    )
+    expect(linkDeAvaliacaoExtra({ slug: 'x', avaliar: 'https://exemplo.com/r' })).toBeNull()
+  })
+
+  it('nenhum negocio aparece duas vezes no mapa (nem como principal e extra, nem em dois codigos)', () => {
+    const slugs = [...principais.map((p) => p.slug), ...principais.flatMap((p) => (p.extras ?? []).map((e) => e.slug))]
+    expect(new Set(slugs).size).toBe(slugs.length)
+  })
+
+  it('o codigo continua apontando para o negocio principal: os adesivos ja colados nao mudam', () => {
+    for (const [codigo] of comExtras) expect(plaquinhaDoCodigo(codigo)?.slug).toBe(PLAQUINHAS[codigo].slug)
+    expect(plaquinhaDoCodigo('07')?.slug).toBe('pousada-oasis-dos-ventos')
   })
 })

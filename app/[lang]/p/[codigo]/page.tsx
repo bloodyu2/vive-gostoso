@@ -9,7 +9,7 @@ import type { CSSProperties } from 'react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
-import { BedDouble, ChevronRight, Compass, ExternalLink, MapPin, Star, Ticket, UtensilsCrossed, Waves } from 'lucide-react'
+import { ArrowDown, BedDouble, ChevronRight, Compass, ExternalLink, MapPin, Star, Ticket, UtensilsCrossed, Waves } from 'lucide-react'
 import { Selo } from '@/components/business/selo'
 import { RegistrarVisita } from '@/components/clube/registrar-visita'
 import { ResgatePlaquinha } from '@/components/clube/resgate-plaquinha'
@@ -19,10 +19,13 @@ import { dicionario, ehIdioma, prefixo } from '@/lib/bio/dicionario'
 import { usaCapaTipografica } from '@/lib/capa-negocio'
 import { CLUBE_PUBLICO, CLUBE_ROTA } from '@/lib/clube/config'
 import { carregarVantagens } from '@/lib/clube/carregar'
+import type { Vantagem } from '@/lib/clube/vantagens'
 import {
   DESTINO_PADRAO,
   linkDeAvaliacao,
+  linkDeAvaliacaoExtra,
   linkDoInstagram,
+  type PlaquinhaExtra,
   plaquinhaDoCodigo,
   plaquinhaReservada,
 } from '@/lib/plaquinhas'
@@ -68,6 +71,37 @@ function IconeInstagram({ size = 20 }: { size?: number }) {
       <circle cx="17.3" cy="6.7" r="0.6" fill="currentColor" stroke="none" />
     </svg>
   )
+}
+
+interface ExtraPronto {
+  cfg: PlaquinhaExtra
+  negocio: NegocioDaPlaquinha
+  vantagem: Vantagem | null
+}
+
+/** Os negocios a mais da plaquinha, na ordem do mapa. Negocio que nao esta publicado some em silencio:
+ *  a plaquinha ja esta colada, entao nunca pode dar erro por causa de um extra. */
+async function carregarExtras(cfgs: PlaquinhaExtra[] | undefined): Promise<ExtraPronto[]> {
+  if (!cfgs || cfgs.length === 0) return []
+  const { data } = await clientePublico()
+    .from('gostoso_businesses')
+    .select('id, name, slug, cover_url, logo_url, instagram')
+    .in('slug', cfgs.map((c) => c.slug))
+    .eq('active', true)
+    .eq('is_published', true)
+  const achados = (data ?? []) as NegocioDaPlaquinha[]
+  const vantagens = CLUBE_PUBLICO && achados.length > 0 ? (await carregarVantagens(achados.map((a) => a.id))).vantagens : []
+  const prontos: ExtraPronto[] = []
+  for (const cfg of cfgs) {
+    const negocio = achados.find((a) => a.slug === cfg.slug)
+    if (!negocio) continue
+    prontos.push({
+      cfg,
+      negocio: { ...negocio, name: (cfg.nome ?? negocio.name).trim() },
+      vantagem: vantagens.find((v) => v.businessId === negocio.id && v.status === 'no_ar') ?? null,
+    })
+  }
+  return prontos
 }
 
 export default async function PlaquinhaPage({ params }: Props) {
@@ -178,6 +212,32 @@ export default async function PlaquinhaPage({ params }: Props) {
   const vantagem = CLUBE_PUBLICO ? ((await carregarVantagens([negocio.id])).vantagens[0] ?? null) : null
   const noAr = vantagem?.status === 'no_ar'
   const regra = vantagem?.regra ?? null
+  const extras = await carregarExtras(plaquinha.extras)
+  const textosResgate = {
+    usar: tc.usar,
+    ver_cupom: tc.ver_cupom,
+    resgatar_de_novo: tc.resgatar_de_novo,
+    form_titulo: tc.form_titulo,
+    campo_nome: tc.campo_nome,
+    campo_email: tc.campo_email,
+    campo_telefone: tc.campo_telefone,
+    nota_dados: tc.nota_dados,
+    consentimento: tc.consentimento,
+    politica_link: tc.politica_link,
+    gerar_cupom: tc.gerar_cupom,
+    gerando: tc.gerando,
+    cancelar: tc.cancelar,
+    erro_nome: tc.erro_nome,
+    erro_email: tc.erro_email,
+    erro_telefone: tc.erro_telefone,
+    erro_consentimento: tc.erro_consentimento,
+    erro_ja_tem: tc.erro_ja_tem,
+    erro_resgate: tc.erro_resgate,
+    erro_muitos: tc.erro_muitos,
+    erro_limite_contato: tc.erro_limite_contato,
+    erro_indisponivel: tc.erro_indisponivel,
+    esgotada: tc.esgotada,
+  }
 
   return (
     <TemaClube escuroAuto>
@@ -242,6 +302,12 @@ export default async function PlaquinhaPage({ params }: Props) {
               {t.ver_perfil.replace('{nome}', negocio.name)}
             </a>
           </div>
+          {extras.length > 0 ? (
+            <a className="clube-p-aviso" href="#mais-aqui">
+              <ArrowDown size={16} aria-hidden />
+              {t.extras_aviso.replace('{nome}', extras.map((e) => e.negocio.name).join(', '))}
+            </a>
+          ) : null}
         </section>
 
         {CLUBE_PUBLICO && !(vantagem && noAr) ? (
@@ -282,33 +348,90 @@ export default async function PlaquinhaPage({ params }: Props) {
                 prefixo={pre}
                 doBanco
                 esgotada={vantagem.esgotada}
-                textos={{
-                  usar: tc.usar,
-                  ver_cupom: tc.ver_cupom,
-                  resgatar_de_novo: tc.resgatar_de_novo,
-                  form_titulo: tc.form_titulo,
-                  campo_nome: tc.campo_nome,
-                  campo_email: tc.campo_email,
-                  campo_telefone: tc.campo_telefone,
-                  nota_dados: tc.nota_dados,
-                  consentimento: tc.consentimento,
-                  politica_link: tc.politica_link,
-                  gerar_cupom: tc.gerar_cupom,
-                  gerando: tc.gerando,
-                  cancelar: tc.cancelar,
-                  erro_nome: tc.erro_nome,
-                  erro_email: tc.erro_email,
-                  erro_telefone: tc.erro_telefone,
-                  erro_consentimento: tc.erro_consentimento,
-                  erro_ja_tem: tc.erro_ja_tem,
-                  erro_resgate: tc.erro_resgate,
-                  erro_muitos: tc.erro_muitos,
-                  erro_limite_contato: tc.erro_limite_contato,
-                  erro_indisponivel: tc.erro_indisponivel,
-                  esgotada: tc.esgotada,
-                }}
+                textos={textosResgate}
               />
             </div>
+          </section>
+        ) : null}
+
+        {extras.length > 0 ? (
+          <section id="mais-aqui" className="clube-p-extras" aria-labelledby="extras">
+            <h2 id="extras" className="clube-p-h2">
+              {t.extras_titulo}
+            </h2>
+            {extras.map((e) => {
+              const linkGoogle = linkDeAvaliacaoExtra(e.cfg)
+              const linkInsta = linkDoInstagram(e.cfg.instagram) ?? linkDoInstagram(e.negocio.instagram)
+              const fotoExtra = !usaCapaTipografica(e.negocio.cover_url) ? e.negocio.cover_url : e.negocio.logo_url
+              return (
+                <article key={e.negocio.id} className="clube-p-extra">
+                  <div className="clube-p-extra-foto">
+                    {fotoExtra ? (
+                      <SafeCoverImage
+                        src={fotoExtra}
+                        alt=""
+                        className="clube-p-extra-img"
+                        loading="lazy"
+                        sizes="(max-width: 640px) 100vw, 448px"
+                        fallback={<span className="clube-p-extra-vazio" aria-hidden />}
+                      />
+                    ) : (
+                      <span className="clube-p-extra-vazio" aria-hidden />
+                    )}
+                    {e.vantagem ? (
+                      <span className="clube-p-extra-selo">
+                        <Selo tipo="clube" size="lg" />
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className="clube-p-extra-corpo">
+                    <h3 className="clube-p-h3">{e.negocio.name}</h3>
+                    {linkGoogle ? (
+                      <a
+                        className="clube-btn clube-btn--mostarda clube-btn--cheio clube-btn--grande"
+                        href={linkGoogle}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Star size={22} aria-hidden />
+                        {t.avaliar}
+                        <ExternalLink size={18} aria-hidden />
+                      </a>
+                    ) : null}
+                    {linkInsta ? (
+                      <a
+                        className="clube-btn clube-btn--contorno clube-btn--cheio"
+                        href={linkInsta}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <IconeInstagram size={20} />
+                        {t.instagram}
+                      </a>
+                    ) : null}
+                    <a className="clube-btn clube-btn--fantasma clube-btn--cheio" href={`${pre}/negocio/${e.negocio.slug}`}>
+                      {t.ver_perfil.replace('{nome}', e.negocio.name)}
+                    </a>
+                  </div>
+                  {e.vantagem ? (
+                    <div className="clube-p-extra-cupom">
+                      <p className="clube-tipo">{t.passaporte_titulo}</p>
+                      <p className="clube-beneficio">{e.vantagem.beneficio}</p>
+                      {e.vantagem.regra ? <p className="clube-regra">{e.vantagem.regra}</p> : null}
+                      <ResgatePlaquinha
+                        partnerId={e.vantagem.partnerId}
+                        negocio={e.negocio.name}
+                        origem={codigo}
+                        prefixo={pre}
+                        doBanco
+                        esgotada={e.vantagem.esgotada}
+                        textos={textosResgate}
+                      />
+                    </div>
+                  ) : null}
+                </article>
+              )
+            })}
           </section>
         ) : null}
 

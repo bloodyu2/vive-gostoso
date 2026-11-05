@@ -1378,3 +1378,105 @@
     transition: none;
   }
 }
+
+/* /p/NN com mais de um negocio no mesmo lugar (05/11/2026) */
+
+.clube-p-aviso {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.375rem;
+  margin-top: 1rem;
+  min-height: 2.75rem;
+  color: var(--c-verde);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.clube-p-aviso svg {
+  flex-shrink: 0;
+  margin-top: 0.1875rem;
+}
+
+.clube-p-aviso:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.clube-p-extras {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+  scroll-margin-top: 1rem;
+}
+
+.clube-p-extra {
+  overflow: hidden;
+  border: 1px solid var(--c-borda);
+  border-radius: 16px;
+  background: var(--c-papel);
+}
+
+.clube-p-extra-foto {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: var(--c-verde-fundo);
+}
+
+.clube-p-extra-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 45%;
+}
+
+.clube-p-extra-vazio {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, var(--c-verde-fundo), var(--c-verde));
+}
+
+.clube-p-extra-selo {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  display: grid;
+  place-items: center;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: rgba(8, 36, 36, 0.7);
+}
+
+.clube-p-extra-corpo {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.25rem;
+}
+
+.clube-p-extra-cupom {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  border-top: 2px dashed var(--c-borda);
+  background: rgba(247, 227, 174, 0.28);
+}
+
+.clube-p-extra-cupom .clube-beneficio {
+  margin-top: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .clube--escuro-auto .clube-p-extra-cupom {
+    background: rgba(232, 163, 23, 0.1);
+  }
+}
+
+/* Telas largas: a pagina segue em uma coluna (o QR quase sempre abre no celular), mas as fotos e os
+   cartoes ganham mais largura para nao ficarem espremidos no meio da tela. */
+@media (min-width: 900px) {
+  .clube-capa-p ~ main.clube-col {
+    max-width: 34rem;
+  }
+}
