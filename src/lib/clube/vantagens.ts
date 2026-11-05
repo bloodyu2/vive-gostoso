@@ -103,7 +103,7 @@ function fundador(
 
 export const VANTAGENS_FUNDADORAS: Vantagem[] = [
   fundador('gostoso-expedicoes', 'Gostoso Expedições', 'gostoso-expedicoes', 'Passeios',
-    '5% de desconto no Pix ou em espécie, em qualquer passeio.', 'Qualquer dia da semana. Mostre o cupom antes de pagar.', 'no_ar'),
+    '10% de desconto no Pix.', 'Em qualquer passeio, qualquer dia da semana. Mostre o cupom antes de pagar.', 'no_ar'),
   fundador('pousada-parcel', 'Pousada Parcel do Gostoso', 'pousada-parcel-do-gostoso', 'Hospedagem',
     'Late check-out de cortesia até as 16h.', 'Não vale para diária que termina na sexta ou no sábado. Sujeito à disponibilidade.', 'no_ar'),
   fundador('casa-gostoso-mar', 'Casa Gostoso Mar', 'casa-gostoso-mar', 'Hospedagem',
