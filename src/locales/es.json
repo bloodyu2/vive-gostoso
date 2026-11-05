@@ -1914,6 +1914,8 @@
     "passaporte_titulo": "Ventaja del Pasaporte Gostoso en este lugar",
     "passaporte_chamada": "Recibe una ventaja en cada socio del pueblo. Gratis.",
     "passaporte_botao": "Ver el Pasaporte",
+    "extras_titulo": "También en este lugar",
+    "extras_aviso": "Aquí también: {nome}",
     "convite_titulo": "Sé parte del Pasaporte Gostoso",
     "convite_texto": "Ventajas gratis en los socios del pueblo. Mira cómo funciona.",
     "passaporte_nota": "Es gratis. El cupón aparece al instante.",
