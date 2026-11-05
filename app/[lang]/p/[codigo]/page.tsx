@@ -168,7 +168,7 @@ export default async function PlaquinhaPage({ params }: Props) {
   const negocio = { ...achado, name: (plaquinha.nome ?? achado.name).trim() }
 
   const avaliar = linkDeAvaliacao(plaquinha)
-  const instagram = linkDoInstagram(negocio.instagram) ?? linkDoInstagram(plaquinha.instagram)
+  const instagram = linkDoInstagram(plaquinha.instagram) ?? linkDoInstagram(negocio.instagram)
   const foto = plaquinha.fotoGenerica
     ? null
     : !usaCapaTipografica(negocio.cover_url)
