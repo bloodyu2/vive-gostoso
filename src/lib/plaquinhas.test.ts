@@ -91,8 +91,8 @@ describe('o mapa preenchido (PLAQUINHAS) e coerente', () => {
 describe('mapa das plaquinhas (04/11/2026)', () => {
   const codigos = Object.keys(PLAQUINHAS)
 
-  it('os nove primeiros codigos tem negocio, e nenhum negocio se repete', () => {
-    expect(codigos.sort()).toEqual(['01', '02', '03', '04', '05', '06', '07', '08', '09'])
+  it('os dez codigos tem negocio, e nenhum negocio se repete', () => {
+    expect(codigos.sort()).toEqual(['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'])
     const slugs = codigos.map((c) => PLAQUINHAS[c].slug)
     expect(new Set(slugs).size).toBe(slugs.length)
     expect(slugs).toEqual([
@@ -105,6 +105,7 @@ describe('mapa das plaquinhas (04/11/2026)', () => {
       'pousada-oasis-dos-ventos',
       'o-pico-surf-skate-shop',
       'flor-de-caju',
+      'gostoso-buggy',
     ])
   })
 
@@ -128,11 +129,18 @@ describe('mapa das plaquinhas (04/11/2026)', () => {
     expect(linkDoInstagram(PLAQUINHAS['09'].instagram)).toBe('https://www.instagram.com/flordecajucafe/')
   })
 
-  it('o 10 segue reservado: sem negocio, mas com pagina propria (nao a home)', () => {
-    expect(RESERVADAS).toEqual(['10'])
-    expect(plaquinhaDoCodigo('10')).toBeNull()
-    expect(plaquinhaReservada('10')).toBe(true)
-    expect(plaquinhaReservada('09')).toBe(false)
+  it('o 10 e o Gostoso Buggy, com Instagram que existe (gostosobuggyturismo)', () => {
+    expect(PLAQUINHAS['10'].slug).toBe('gostoso-buggy')
+    expect(linkDoInstagram(PLAQUINHAS['10'].instagram)).toBe('https://www.instagram.com/gostosobuggyturismo/')
+    expect(linkDeAvaliacao(PLAQUINHAS['10'])).toBe(
+      'https://search.google.com/local/writereview?placeid=ChIJ23kqQNUNtAcRkqdHCye6eTM',
+    )
+  })
+
+  it('nao sobrou codigo reservado: de 01 a 10 todos tem negocio', () => {
+    expect(RESERVADAS).toEqual([])
+    expect(plaquinhaReservada('10')).toBe(false)
+    expect(plaquinhaDoCodigo('10')).not.toBeNull()
   })
 
   it('codigo reservado e codigo mapeado nunca se misturam', () => {
