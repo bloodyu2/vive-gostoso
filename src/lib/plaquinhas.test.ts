@@ -1,8 +1,17 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { DESTINO_PADRAO, PLAQUINHAS, codigoValido, linkDeAvaliacao, plaquinhaDoCodigo } from './plaquinhas'
+import {
+  DESTINO_PADRAO,
+  PLAQUINHAS,
+  RESERVADAS,
+  codigoValido,
+  linkDeAvaliacao,
+  linkDoInstagram,
+  plaquinhaDoCodigo,
+  plaquinhaReservada,
+} from './plaquinhas'
 
 afterEach(() => {
-  for (const k of Object.keys(PLAQUINHAS)) if (k.startsWith('9')) delete PLAQUINHAS[k]
+  for (const k of Object.keys(PLAQUINHAS)) if (k === '99') delete PLAQUINHAS[k]
 })
 
 describe('codigoValido', () => {
@@ -18,7 +27,8 @@ describe('codigoValido', () => {
 
 describe('plaquinhaDoCodigo', () => {
   it('codigo sem negocio cadastrado nao tem pagina (cai na home)', () => {
-    expect(plaquinhaDoCodigo('01')).toBeNull()
+    expect(plaquinhaDoCodigo('11')).toBeNull()
+    expect(plaquinhaDoCodigo('00')).toBeNull()
     expect(DESTINO_PADRAO).toBe('https://www.vivegostoso.com.br/')
   })
   it('codigo invalido nao tem pagina, mesmo que alguem tente forcar', () => {
@@ -75,5 +85,100 @@ describe('o mapa preenchido (PLAQUINHAS) e coerente', () => {
     for (const [codigo, p] of entradas) {
       if (p.avaliar || p.placeId) expect(linkDeAvaliacao(p), codigo).not.toBeNull()
     }
+  })
+})
+
+describe('mapa das plaquinhas (04/11/2026)', () => {
+  const codigos = Object.keys(PLAQUINHAS)
+
+  it('os nove primeiros codigos tem negocio, e nenhum negocio se repete', () => {
+    expect(codigos.sort()).toEqual(['01', '02', '03', '04', '05', '06', '07', '08', '09'])
+    const slugs = codigos.map((c) => PLAQUINHAS[c].slug)
+    expect(new Set(slugs).size).toBe(slugs.length)
+    expect(slugs).toEqual([
+      'gostoso-expedicoes',
+      'pousada-parcel-do-gostoso',
+      'casa-reduto-artesanato',
+      'serido-praia',
+      'casa-gostoso-mar',
+      'cafe-com-biscoitos-damy',
+      'pousada-oasis-dos-ventos',
+      'o-pico-surf-skate-shop',
+      'flor-de-caju',
+    ])
+  })
+
+  it('todo negocio do mapa tem link de avaliacao do Google, sempre de place_id', () => {
+    for (const c of codigos) {
+      const link = linkDeAvaliacao(PLAQUINHAS[c])
+      expect(link, c).toMatch(/^https:\/\/search\.google\.com\/local\/writereview\?placeid=ChIJ[A-Za-z0-9_-]{23}$/)
+    }
+  })
+
+  it('nenhum place_id se repete', () => {
+    const ids = codigos.map((c) => PLAQUINHAS[c].placeId)
+    expect(new Set(ids).size).toBe(ids.length)
+  })
+
+  it('o 09 e da Flor de Caju (presente), com Google e Instagram', () => {
+    expect(PLAQUINHAS['09'].slug).toBe('flor-de-caju')
+    expect(linkDeAvaliacao(PLAQUINHAS['09'])).toBe(
+      'https://search.google.com/local/writereview?placeid=ChIJm8qC1zQNtAcRjMEUYljgzUw',
+    )
+    expect(linkDoInstagram(PLAQUINHAS['09'].instagram)).toBe('https://www.instagram.com/flordecajucafe/')
+  })
+
+  it('o 10 segue reservado: sem negocio, mas com pagina propria (nao a home)', () => {
+    expect(RESERVADAS).toEqual(['10'])
+    expect(plaquinhaDoCodigo('10')).toBeNull()
+    expect(plaquinhaReservada('10')).toBe(true)
+    expect(plaquinhaReservada('09')).toBe(false)
+  })
+
+  it('codigo reservado e codigo mapeado nunca se misturam', () => {
+    for (const c of RESERVADAS) expect(PLAQUINHAS[c]).toBeUndefined()
+    expect(plaquinhaReservada('01')).toBe(false)
+    expect(plaquinhaReservada('11')).toBe(false)
+    expect(plaquinhaReservada('9')).toBe(false)
+    expect(plaquinhaReservada('../')).toBe(false)
+  })
+
+  it('os dez codigos impressos (01 a 10) tem destino: negocio ou pagina reservada', () => {
+    for (let i = 1; i <= 10; i++) {
+      const c = String(i).padStart(2, '0')
+      expect(Boolean(plaquinhaDoCodigo(c)) || plaquinhaReservada(c), c).toBe(true)
+    }
+  })
+
+  it('o 04 mostra o nome certo, O Jardim do Seridó, e o Instagram dele', () => {
+    expect(PLAQUINHAS['04'].nome).toBe('O Jardim do Seridó')
+    expect(linkDoInstagram(PLAQUINHAS['04'].instagram)).toBe('https://www.instagram.com/ojardimdoserido/')
+  })
+
+  it('o foco da foto, quando existe, fica entre 0 e 100', () => {
+    for (const c of Object.keys(PLAQUINHAS)) {
+      const f = PLAQUINHAS[c].foco
+      if (f !== undefined) expect(f >= 0 && f <= 100, c).toBe(true)
+    }
+  })
+
+  it('o botao do Google some quando o negocio nao tem link', () => {
+    expect(linkDeAvaliacao({ slug: 'sem-link' })).toBeNull()
+  })
+})
+
+describe('linkDoInstagram', () => {
+  it('monta o link a partir do @, com ou sem arroba', () => {
+    expect(linkDoInstagram('opico.smg')).toBe('https://www.instagram.com/opico.smg/')
+    expect(linkDoInstagram('@parceldogostosopousada')).toBe('https://www.instagram.com/parceldogostosopousada/')
+    expect(linkDoInstagram('  biscoitos_damy ')).toBe('https://www.instagram.com/biscoitos_damy/')
+  })
+  it('sem @ valido, sem botao', () => {
+    expect(linkDoInstagram(null)).toBeNull()
+    expect(linkDoInstagram('')).toBeNull()
+    expect(linkDoInstagram('a b')).toBeNull()
+    expect(linkDoInstagram('a/../b')).toBeNull()
+    expect(linkDoInstagram('https://evil.example')).toBeNull()
+    expect(linkDoInstagram('x'.repeat(31))).toBeNull()
   })
 })

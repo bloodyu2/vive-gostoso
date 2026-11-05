@@ -33,7 +33,7 @@ export function linksDaBio(lang: string, opcoes: { postSlug?: string | null; clu
     ['cadastre', '/cadastre'],
   ]
   /* O Passaporte so entra na lista quando a pagina liga a flag CLUBE_PUBLICO
-     (src/lib/clube/config.ts): ate o lancamento a /clube segue escondida. */
+     (src/lib/clube/config.ts). */
   if (opcoes.clube) destinos.unshift(['clube', `${p}/clube`])
   return destinos.map(([id, href]) => ({ id, href: comUtm(href) }))
 }

@@ -1,14 +1,12 @@
-// Plaquinhas de avaliacao (QR + NFC) dos estabelecimentos de Sao Miguel do Gostoso.
-// O QR e o chip NFC impressos apontam sempre para vivegostoso.com.br/p/<codigo>
-// (codigo de 2 digitos, 01 a 10) e este arquivo decide de qual negocio e cada um.
-// Assim a plaquinha se imprime uma vez e o negocio se define depois: basta
-// preencher a linha do codigo.
+// Plaquinhas dos estabelecimentos de Sao Miguel do Gostoso.
+// O QR impresso aponta sempre para vivegostoso.com.br/p/<codigo> (codigo de 2 digitos,
+// 01 a 10) e este arquivo decide de qual negocio e cada um. Assim a plaquinha se
+// imprime uma vez e o negocio se define depois: basta preencher a linha do codigo.
 //
-// A pagina /p/<codigo> agradece a visita ao negocio, leva para a avaliacao do Google,
-// para o perfil dele no Vive Gostoso e (depois do lancamento, CLUBE_PUBLICO) para o
-// Passaporte Gostoso.
-//
-// Codigo sem negocio cai na home, nunca em 404 (a plaquinha ja esta no balcao).
+// A pagina /p/<codigo> mostra o lugar, leva para a avaliacao do Google e para o
+// Instagram dele, mostra a vantagem do Passaporte Gostoso (com o resgate do cupom) e
+// aponta o resto do guia. Codigo reservado abre uma pagina do proprio Vive Gostoso;
+// codigo sem nada cai na home, nunca em 404 (a plaquinha ja esta no balcao).
 
 export const DESTINO_PADRAO = 'https://www.vivegostoso.com.br/'
 
@@ -19,12 +17,48 @@ export interface Plaquinha {
   avaliar?: string
   /** place_id do Google; com ele o link de avaliacao e montado aqui */
   placeId?: string
+  /** @ do Instagram do negocio quando o banco nao tem (o do banco vale primeiro) */
+  instagram?: string
+  /** nome a mostrar na pagina quando o do banco nao e o nome certo do negocio */
+  nome?: string
+  /** altura do foco da foto no topo da pagina, de 0 (topo da foto) a 100 (base); padrao 62 */
+  foco?: number
+  /** true: nao usa a capa do banco na pagina (ela nao e foto real do lugar) */
+  fotoGenerica?: boolean
 }
 
-/** codigo -> negocio onde a plaquinha esta. Preencher uma linha por plaquinha:
+/** codigo -> negocio onde a plaquinha esta. Uma linha por codigo:
  *  '01': { slug: 'nome-do-negocio', placeId: 'ChIJ...' }
- *  Sem placeId nem avaliar, a pagina nao mostra o botao do Google. */
-export const PLAQUINHAS: Record<string, Plaquinha> = {}
+ *  Sem placeId nem avaliar, a pagina nao mostra o botao do Google.
+ *
+ *  Mapa de 04/11/2026 (Victor). Cada codigo vale para DUAS plaquinhas, uma horizontal e
+ *  uma vertical, que vao para o mesmo lugar. Os place_id foram montados a partir do id da
+ *  ficha de cada lugar no Google Maps e conferidos abrindo o link de avaliacao: o Google
+ *  abre a avaliacao do lugar certo em todos. */
+export const PLAQUINHAS: Record<string, Plaquinha> = {
+  '01': { slug: 'gostoso-expedicoes', placeId: 'ChIJldqjdTYNtAcRdymDC3gymGM', instagram: 'gostosoexpedicoes' },
+  '02': { slug: 'pousada-parcel-do-gostoso', placeId: 'ChIJuaTOKpUNtAcRa1AsybalEM0' },
+  '03': { slug: 'casa-reduto-artesanato', placeId: 'ChIJ_cvxpfEPtAcRUb4jnsKYVsM' },
+  // O nome certo e "O Jardim do Seridó" (Victor, 04/11/2026); a linha do banco ainda se chama "Seridó Praia".
+  '04': {
+    slug: 'serido-praia',
+    nome: 'O Jardim do Seridó',
+    placeId: 'ChIJXz2VsTkMtAcRT7gQp1I82Xw',
+    instagram: 'ojardimdoserido',
+  },
+  '05': { slug: 'casa-gostoso-mar', placeId: 'ChIJJ8_sBNUNtAcRKxU6do-yUDE' },
+  '06': { slug: 'cafe-com-biscoitos-damy', placeId: 'ChIJMwadNvVztAcRtw5vrUFQSCA' },
+  '07': { slug: 'pousada-oasis-dos-ventos', placeId: 'ChIJPXYOaA8NtAcRYaUEuanrZEQ' },
+  '08': { slug: 'o-pico-surf-skate-shop', placeId: 'ChIJNX4GT5ENtAcRRdiaaTZ4u64', foco: 5 },
+  // Plaquinhas dadas de presente a Flor de Caju (Victor, 04/11/2026). Ela ainda nao e parceira do
+  // clube: a pagina mostra o convite. Quando ela entrar (linha em gostoso_club_partners), a pagina
+  // passa a mostrar a vantagem e o selo sozinha, sem mudar nada aqui.
+  '09': { slug: 'flor-de-caju', placeId: 'ChIJm8qC1zQNtAcRjMEUYljgzUw', instagram: 'flordecajucafe' },
+}
+
+/** Codigos impressos que ainda nao tem negocio: abrem uma pagina do proprio Vive Gostoso
+ *  (nunca a home crua, nunca 404). Ao dar um negocio a um deles, mover para PLAQUINHAS. */
+export const RESERVADAS: readonly string[] = ['10']
 
 const CODIGO = /^\d{2}$/
 const PLACE_ID = /^[A-Za-z0-9_-]{10,}$/
@@ -54,4 +88,17 @@ export function linkDeAvaliacao(p: Plaquinha): string | null {
     return `https://search.google.com/local/writereview?placeid=${p.placeId}`
   }
   return null
+}
+
+export function plaquinhaReservada(codigo: string): boolean {
+  return codigoValido(codigo) && RESERVADAS.includes(codigo)
+}
+
+const HANDLE_INSTAGRAM = /^[A-Za-z0-9._]{1,30}$/
+
+/** O link do perfil de Instagram a partir do @ (com ou sem arroba), ou null. So monta o
+ *  link com caracteres que um @ do Instagram pode ter; o resto some o botao. */
+export function linkDoInstagram(handle: string | null | undefined): string | null {
+  const h = (handle ?? '').trim().replace(/^@/, '')
+  return HANDLE_INSTAGRAM.test(h) ? `https://www.instagram.com/${h}/` : null
 }

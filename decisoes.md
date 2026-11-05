@@ -297,8 +297,8 @@ Guamaré fica mais perto de todas. Natal ficou por três motivos: é a estação
 3. Conferir depois de publicar: abrir cada `/p/NN` no celular. Os testes (`plaquinhas.test.ts`) garantem formato e repetição, não que o slug exista.
 4. Se houver plaquinhas além de `10`: o código aceita qualquer código de dois dígitos, mas o teste do mapa limita a `01` a `10`; ampliar o teste junto.
 
-## Receita para ligar o Passaporte em 05/11/2026 (nada disto está aplicado no código)
-**Data:** o lançamento é **05/11/2026 (quinta)**, quando chegam as plaquinhas horizontais e os adesivos (as verticais já chegaram). A data de segunda 02/11 foi um engano do Victor, corrigido por ele. Tudo abaixo sai junto, num único push na manhã de 05/11. A faixa de data atual da `/clube` continua dizendo 05/11 até lá.
+## Receita para ligar o Passaporte em 05/11/2026 (preparada em 04/11 na branch `feat/clube-abertura`, itens a, b, c e e; o item d já estava no ar)
+**Data:** o lançamento é **05/11/2026 (quinta)**, quando chegam as plaquinhas horizontais e os adesivos (as verticais já chegaram). A data de segunda 02/11 foi um engano do Victor, corrigido por ele. Tudo abaixo sai junto, num único push na manhã de 05/11. Em 04/11 a virada foi preparada localmente (sem push) em `feat/clube-abertura`: flag ligada, `/clube` indexável com canonical e hreflang, rota no sitemap, faixa trocada por texto de clube no ar, e a constante `LANCAMENTO_PREVISTO` removida.
 
 **Antes de ligar (conferir nesta ordem):**
 1. Deploy do endurecimento READY e migração `20261029120000_vg_clube_resgate_antiabuso.sql` aplicada (depende de `20261026120000` e `20261028100000`; conferir com `list_migrations`). Rodar a consulta de conferência do cabeçalho do arquivo e ver hashes distintos.
@@ -330,7 +330,7 @@ Não mexer no `noindex` de `app/[lang]/clube/cupom/[token]/page.tsx`, de `clube/
 
 **(c) `scripts/paginas-sitemap.mjs`:** incluir depois de `/transparencia`: `{ path: '/clube', freq: 'weekly', priority: '0.6' },`. O `public/sitemap.xml` é gerado no `prebuild` a partir dessa lista (com hreflang pt, en e es), e `src/lib/explore/sitemap-paginas.test.ts` a importa; acrescentar nesse teste `expect(caminhos).toContain('/clube')`. A prioridade 0,6 fica abaixo da da tábua de marés (0,95), que o teste exige maior que todas.
 
-**(d) Passaporte em destaque na `/bio`**, junto do canal de ofertas, com UTM de bio como os outros itens:
+**(d) Passaporte em destaque na `/bio`. JÁ FEITO no PR 62 (29/10/2026), não repetir.** O botão do clube entra na `/bio` por `linksDaBio(..., { clube: CLUBE_PUBLICO })` (`src/lib/bio/links-bio.ts`), ou seja, aparece sozinho quando a flag liga; o texto abaixo é o plano original, mantido só como registro e já superado pelo código:
 - `src/lib/bio/links-bio.ts`: incluir `'passaporte'` em `IdBloco`; em `destinos`, logo depois de `['mares', ...]`, a linha `['passaporte', `${p}/clube`]`. O `comUtm` já dá `utm_source=instagram&utm_medium=bio`. Atualizar `links-bio.test.ts` (ordem `mares, passaporte, mapa, ...`, caminho `${p}/clube`, todos com UTM).
 - `app/[lang]/bio/page.tsx`: importar `Ticket` de `lucide-react`; em `ICONES` pôr `passaporte: Ticket`; em `TOM`, `passaporte: 'bg-[#E05A3A]/14 text-[#9E3A22]'`; o cartão usa o mesmo markup dos demais (`destinos.map`), e o selo "Novo" reaproveita o padrão do `blog_novo` com `t.passaporte_novo`.
 - Textos, em `src/locales/{pt,en,es}.json` dentro de `bio`: `cartoes.passaporte.titulo`, `cartoes.passaporte.linha` e `passaporte_novo`:
@@ -398,3 +398,20 @@ O texto não promete data nem diz que as plaquinhas "chegam". Se o Victor quiser
 **Reversão.** No cabeçalho do modelo: apagar a vantagem e o perfil pelo slug, e a pasta `<id>/` do bucket.
 
 **Não faz:** criar conta de dono, publicar texto de blog, tocar em plano ou destaque, nem aceitar o negócio por ele (o aceite é do dono, antes disto).
+
+## Páginas das plaquinhas `/p/NN` (04/11/2026)
+**Pedido do Victor, via coordenação.** As plaquinhas chegaram: 10 horizontais e 10 verticais, 10 códigos de QR (`/p/01` a `/p/10`); o mesmo código vai em uma horizontal e uma vertical, as duas para o mesmo lugar. Mapa decidido: 01 Gostoso Expedições, 02 Pousada Parcel do Gostoso, 03 Casa Reduto, 04 Seridó Praia, 05 Casa Gostoso Mar, 06 Café com Biscoitos Damy, 07 Pousada Oasis dos Ventos, 08 O Pico Surf Skate Shop; 09 e 10 reservados. Publicado junto com a abertura do clube, no mesmo PR (`feat/clube-abertura`).
+
+**Link de avaliação do Google.** Cada lugar usa `placeId` (o `search.google.com/local/writereview?placeid=` é montado em `linkDeAvaliacao`). O `place_id` (começa com `ChIJ`) foi calculado a partir do id da ficha no Google Maps (o par `0x...:0x...` do endereço da ficha: protobuf `0a 12 09 <8 bytes> 11 <8 bytes>` em base64 url, validado contra um place_id conhecido) e **conferido um a um abrindo o link de avaliação no Chrome**: o Google abriu o lugar certo nos oito. Nada foi postado. Seridó Praia: o Victor confirmou em 04/11 que o nome certo do negócio é "O Jardim do Seridó", o mesmo da ficha do Google (Av. Enseada das Baleias, 340). A página mostra esse nome (`nome` em `plaquinhas.ts`) e usa o Instagram `@ojardimdoserido` (perfil conferido: restaurante em São Miguel do Gostoso). **Pendência no banco, não aplicada:** existem duas linhas publicadas, `Seridó Praia` (`d0fc0552-b955-4c0e-970d-8c2271c35aff`, endereço 340, 3 fotos, a vantagem do clube) e `O Jardim do Seridó` (`0cdbad85-a7b1-476e-b524-10b0b52c149c`, endereço 1533, Instagram preenchido, sem foto); nada mais aponta para elas além da vantagem do clube na primeira.
+
+**Instagram.** Vale o do banco (`gostoso_businesses.instagram`, com ou sem arroba). Gostoso Expedições não tem no banco; `@gostosoexpedicoes` fica em `plaquinhas.ts` (o link da bio do perfil, bit.ly/gostosoexpedicoes, é o mesmo do site da ficha do Maps). Seridó Praia: `@ojardimdoserido`, confirmado pelo Victor em 04/11 (mesmo negócio).
+
+**O Pico.** A capa que estava no banco era uma imagem gerada por IA (marca de estrela do Gemini no canto), então a página usou o pôr do sol até a loja mandar fotos reais. Em 04/11 a loja mandou fotos pelo WhatsApp (conversa de 02/11); 6 foram baixadas (só as imagens), comprimidas em JPEG 82 sem EXIF (as originais já vinham em 900 x 1600 ou 1200 x 1600, retrato, sem ampliar), enviadas ao Storage em `e2611905-.../1793798215963..68-o-pico-surf-skate-shop-01..06.jpg` e gravadas em `photos`, com a fachada com a placa como `cover_url`. A opção `fotoGenerica` do mapa continua existindo para qualquer lugar que precise dela. A imagem de IA antiga (`1790675905666-O PICO B2.jpg`) segue no Storage, sem uso.
+
+**09, Flor de Caju (04/11/2026).** As plaquinhas 09 foram um presente para a Flor de Caju Café & Livros (`flor-de-caju`, verificada, Av. dos Arrecifes, 1185). Google `ChIJm8qC1zQNtAcRjMEUYljgzUw` (conferido: abre "Flor de Caju Café & Livros", endereço 1185) e Instagram `@flordecajucafe` (perfil conferido, mesmo endereço; o banco não tem Instagram dela, o do mapa vale). Ela não é parceira do clube: a página não mostra cupom nem selo, só um convite discreto "Faça parte do Passaporte Gostoso" que leva à `/clube`. Se ela entrar (linha `no_ar` em `gostoso_club_partners`), a página passa a mostrar a vantagem, o resgate e o selo sozinha, sem mexer no código. Uma vantagem `em_combinacao` também mostra só o convite.
+
+**Reservados.** O 10 abre uma página do Vive Gostoso (texto, botão do Passaporte, caminhos do guia) e conta visita. Ao dar um negócio a ele: mover de `RESERVADAS` para `PLAQUINHAS`. Código fora do mapa e das reservadas (11 em diante, ou inválido) segue indo para a home. O Victor mandou fazer mais 30 plaquinhas horizontais em 04/11: quando os códigos forem decididos, cada um precisa entrar em `PLAQUINHAS` ou `RESERVADAS` antes de impressos, senão abrem a home.
+
+**Resgate na própria página.** O botão abre o mesmo formulário da `/clube` (`FormResgate`), com a plaquinha como origem. A `/clube` não muda.
+
+**Modo escuro.** Só nesta página (`TemaClube escuroAuto`, classe `clube--escuro-auto`), seguindo o aparelho. O resto do clube continua no tema claro do passaporte. A capa fica sempre com texto creme sobre a foto.
