@@ -96,7 +96,7 @@ const EXCECOES: Array<{ arquivo: string; marcador: string; motivo: string }> = [
   // Passaporte Gostoso: o percentual e a vantagem que o PROPRIO parceiro escreve (ou o
   // exemplo no formulario dele), e o selo "100% gratis" e a regra do clube. Nenhum e
   // percentual de rateio do produto.
-  { arquivo: 'lib/clube/vantagens.ts', marcador: '5% de desconto', motivo: 'vantagem do parceiro fundador, so o plano B se o banco falhar' },
+  { arquivo: 'lib/clube/vantagens.ts', marcador: '10% de desconto', motivo: 'vantagem do parceiro fundador, so o plano B se o banco falhar' },
   { arquivo: 'locales/pt.json', marcador: '"selo": "100% grátis"', motivo: 'selo do Passaporte: regra do clube, nao percentual do produto' },
   { arquivo: 'locales/en.json', marcador: '"selo": "100% free"', motivo: 'selo do Passaporte' },
   { arquivo: 'locales/es.json', marcador: '"selo": "100% gratis"', motivo: 'selo do Passaporte' },
