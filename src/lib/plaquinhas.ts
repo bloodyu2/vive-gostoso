@@ -1,6 +1,6 @@
 // Plaquinhas dos estabelecimentos de Sao Miguel do Gostoso.
 // O QR impresso aponta sempre para vivegostoso.com.br/p/<codigo> (codigo de 2 digitos,
-// 01 a 10) e este arquivo decide de qual negocio e cada um. Assim a plaquinha se
+// 01 a 11) e este arquivo decide de qual negocio e cada um. Assim a plaquinha se
 // imprime uma vez e o negocio se define depois: basta preencher a linha do codigo.
 //
 // A pagina /p/<codigo> mostra o lugar, leva para a avaliacao do Google e para o
@@ -78,6 +78,10 @@ export const PLAQUINHAS: Record<string, Plaquinha> = {
   // Ultimo parceiro da abertura (Victor, 05/11/2026). O banco ainda guarda `gostosobuggy`, perfil que
   // nao existe; o do negocio e `gostosobuggyturismo`, e o do mapa vale primeiro.
   '10': { slug: 'gostoso-buggy', placeId: 'ChIJ23kqQNUNtAcRkqdHCye6eTM', instagram: 'gostosobuggyturismo' },
+  // Estudio de yoga Casa Surya, 11o parceiro (Victor, 07/11/2026). A ficha do Google e a da pousada do
+  // mesmo endereco (Rua Ubaia Doce, 04), "Casa Surya hospedagem e autocuidado": o estudio nao tem ficha propria.
+  // O place_id foi montado a partir do id da ficha e conferido: o link de avaliacao abre essa ficha.
+  '11': { slug: 'casa-surya', placeId: 'ChIJD9mlCyINtAcR7hX6COzVKHw', instagram: 'casasurya.smg' },
 }
 
 /** Codigos impressos que ainda nao tem negocio: abrem uma pagina do proprio Vive Gostoso

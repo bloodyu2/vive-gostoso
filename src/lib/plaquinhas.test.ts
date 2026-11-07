@@ -28,7 +28,7 @@ describe('codigoValido', () => {
 
 describe('plaquinhaDoCodigo', () => {
   it('codigo sem negocio cadastrado nao tem pagina (cai na home)', () => {
-    expect(plaquinhaDoCodigo('11')).toBeNull()
+    expect(plaquinhaDoCodigo('12')).toBeNull()
     expect(plaquinhaDoCodigo('00')).toBeNull()
     expect(DESTINO_PADRAO).toBe('https://www.vivegostoso.com.br/')
   })
@@ -72,8 +72,8 @@ describe('linkDeAvaliacao', () => {
 
 describe('o mapa preenchido (PLAQUINHAS) e coerente', () => {
   const entradas = Object.entries(PLAQUINHAS)
-  it('so tem codigos de 01 a 10', () => {
-    for (const [codigo] of entradas) expect(codigo, codigo).toMatch(/^(0[1-9]|10)$/)
+  it('so tem codigos de 01 a 11', () => {
+    for (const [codigo] of entradas) expect(codigo, codigo).toMatch(/^(0[1-9]|1[01])$/)
   })
   it('cada linha traz um slug no formato dos slugs do site', () => {
     for (const [codigo, p] of entradas) expect(p.slug, codigo).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/)
@@ -92,8 +92,8 @@ describe('o mapa preenchido (PLAQUINHAS) e coerente', () => {
 describe('mapa das plaquinhas (04/11/2026)', () => {
   const codigos = Object.keys(PLAQUINHAS)
 
-  it('os dez codigos tem negocio, e nenhum negocio se repete', () => {
-    expect(codigos.sort()).toEqual(['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'])
+  it('os onze codigos tem negocio, e nenhum negocio se repete', () => {
+    expect(codigos.sort()).toEqual(['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11'])
     const slugs = codigos.map((c) => PLAQUINHAS[c].slug)
     expect(new Set(slugs).size).toBe(slugs.length)
     expect(slugs).toEqual([
@@ -107,6 +107,7 @@ describe('mapa das plaquinhas (04/11/2026)', () => {
       'o-pico-surf-skate-shop',
       'flor-de-caju',
       'gostoso-buggy',
+      'casa-surya',
     ])
   })
 
@@ -138,22 +139,32 @@ describe('mapa das plaquinhas (04/11/2026)', () => {
     )
   })
 
-  it('nao sobrou codigo reservado: de 01 a 10 todos tem negocio', () => {
+  it('o 11 e a Casa Surya (estudio de yoga), com Google da ficha do endereco e Instagram que existe (casasurya.smg)', () => {
+    expect(PLAQUINHAS['11'].slug).toBe('casa-surya')
+    expect(linkDoInstagram(PLAQUINHAS['11'].instagram)).toBe('https://www.instagram.com/casasurya.smg/')
+    expect(linkDeAvaliacao(PLAQUINHAS['11'])).toBe(
+      'https://search.google.com/local/writereview?placeid=ChIJD9mlCyINtAcR7hX6COzVKHw',
+    )
+  })
+
+  it('nao sobrou codigo reservado: de 01 a 11 todos tem negocio', () => {
     expect(RESERVADAS).toEqual([])
     expect(plaquinhaReservada('10')).toBe(false)
+    expect(plaquinhaReservada('11')).toBe(false)
     expect(plaquinhaDoCodigo('10')).not.toBeNull()
+    expect(plaquinhaDoCodigo('11')).not.toBeNull()
   })
 
   it('codigo reservado e codigo mapeado nunca se misturam', () => {
     for (const c of RESERVADAS) expect(PLAQUINHAS[c]).toBeUndefined()
     expect(plaquinhaReservada('01')).toBe(false)
-    expect(plaquinhaReservada('11')).toBe(false)
+    expect(plaquinhaReservada('12')).toBe(false)
     expect(plaquinhaReservada('9')).toBe(false)
     expect(plaquinhaReservada('../')).toBe(false)
   })
 
-  it('os dez codigos impressos (01 a 10) tem destino: negocio ou pagina reservada', () => {
-    for (let i = 1; i <= 10; i++) {
+  it('os onze codigos impressos (01 a 11) tem destino: negocio ou pagina reservada', () => {
+    for (let i = 1; i <= 11; i++) {
       const c = String(i).padStart(2, '0')
       expect(Boolean(plaquinhaDoCodigo(c)) || plaquinhaReservada(c), c).toBe(true)
     }
