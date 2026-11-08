@@ -28,7 +28,10 @@ gtag('consent', 'default', {
   'ad_personalization': 'denied',
   'functionality_storage': 'denied',
   'personalization_storage': 'denied',
-  'security_storage': 'granted'
+  'security_storage': 'granted',
+  // Da 500 ms para o aceite ja gravado ser reaplicado (aplicarEscolhaSalva) antes do
+  // primeiro hit. Sem isso, quem ja tinha aceitado era medido como negado na entrada.
+  'wait_for_update': 500
 });`,
         }}
       />

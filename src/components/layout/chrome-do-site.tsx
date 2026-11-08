@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 
+import { ConsentimentoSalvo } from '@/components/consentimento-salvo'
 import { CookieBanner } from '@/components/cookie-banner'
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
@@ -37,7 +38,18 @@ export function ChromeDoSite({ children }: { children: React.ReactNode }) {
   const caminho = semPrefixo(usePathname() ?? '/')
   const nu = SEM_CROMO.some((rota) => caminho === rota || caminho.startsWith(`${rota}/`))
 
-  if (nu) return <main>{children}</main>
+  /* Medicao (08/11/2026): sem banner o consentimento nunca era concedido e o GA4 nao via
+     nenhuma visita nas plaquinhas. Na /p o banner volta (e a unica forma de quem le o QR
+     poder aceitar); em /bio e /clube segue sem banner, mas o aceite ja gravado e reaplicado. */
+  if (nu) {
+    const naPlaquinha = caminho === '/p' || caminho.startsWith('/p/')
+    return (
+      <>
+        <main>{children}</main>
+        {naPlaquinha ? <CookieBanner /> : <ConsentimentoSalvo />}
+      </>
+    )
+  }
 
   return (
     <>
