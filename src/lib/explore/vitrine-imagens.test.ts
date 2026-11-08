@@ -6,11 +6,12 @@ import { ITENS_VITRINE } from './vitrine'
 const PUBLIC = join(process.cwd(), 'public')
 
 /* Os cartoes da vitrine apareciam com foto cinza (Conheca), foto de comida no
-   Transfer e so icone em Come/Contrate. Este teste segura o basico: todo cartao
-   (menos a tabua de mares, que e um painel, e o Apoie, que e so icone) tem foto,
-   o arquivo existe e nenhuma foto se repete. */
+   Transfer e so icone em Come/Contrate; depois, em 08/11/2026, Mares e Apoie
+   ainda sem foto e Participe com foto de banco de imagem (confete). Este teste
+   segura o basico: TODO cartao tem foto, o arquivo existe, nenhuma foto se repete
+   e ela mora em public/images/vitrine (foto real de Gostoso, nunca banco de imagem). */
 describe('fotos da vitrine', () => {
-  const comFoto = ITENS_VITRINE.filter(i => i.id !== 'mares' && i.id !== 'apoie')
+  const comFoto = ITENS_VITRINE
 
   it('todo cartao tem foto', () => {
     expect(comFoto.filter(i => !i.imagem).map(i => i.id)).toEqual([])
@@ -22,6 +23,10 @@ describe('fotos da vitrine', () => {
       expect(existsSync(arquivo), `${i.id}: ${i.imagem}`).toBe(true)
       expect(statSync(arquivo).size, `${i.id} vazio`).toBeGreaterThan(20_000)
     }
+  })
+
+  it('toda foto fica em public/images/vitrine (nada de pasta de banco de imagem)', () => {
+    for (const i of comFoto) expect(i.imagem, i.id).toMatch(/^\/images\/vitrine\/[a-z-]+\.jpg$/)
   })
 
   it('nenhuma foto se repete entre cartoes', () => {

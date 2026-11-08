@@ -28,25 +28,26 @@ export type IconeVitrine =
   | 'car'
   | 'newspaper'
 
-/** `imagem`: foto local em public/ (decorativa). Sem foto, o cartao usa o icone
- *  grande sobre fundo de cor. */
+/** `imagem`: foto REAL de Gostoso em public/images/vitrine (decorativa; nunca banco
+ *  de imagem). Sem foto, o cartao cai no icone grande sobre fundo de cor, mas todo
+ *  cartao tem foto: o teste vitrine-imagens segura isso. */
 export type ItemVitrine = { id: IdVitrine; caminho: string; icone: IconeVitrine; destaque?: boolean; imagem?: string }
 
 /* "Eventos" e a aba PARTICIPE: a agenda mora em /participe e cada evento em
    /evento/[id], sem pagina propria de lista. Um cartao so, para nao ter dois
    links iguais lado a lado. */
 export const ITENS_VITRINE: ItemVitrine[] = [
-  { id: 'mares', caminho: '/explore/mares', icone: 'waves', destaque: true },
+  { id: 'mares', caminho: '/explore/mares', icone: 'waves', destaque: true, imagem: '/images/vitrine/mares.jpg' },
   { id: 'come', caminho: '/come', icone: 'utensils', imagem: '/images/vitrine/come.jpg' },
   { id: 'fique', caminho: '/fique', icone: 'bed-double', imagem: '/images/vitrine/fique.jpg' },
   { id: 'passeie', caminho: '/passeie', icone: 'compass', imagem: '/images/vitrine/passeie.jpg' },
   { id: 'explore', caminho: '/explore', icone: 'map', imagem: '/images/vitrine/explore.jpg' },
-  { id: 'participe', caminho: '/participe', icone: 'calendar', imagem: '/images/events/reveillon.jpg' },
+  { id: 'participe', caminho: '/participe', icone: 'calendar', imagem: '/images/vitrine/participe.jpg' },
   { id: 'conheca', caminho: '/conheca', icone: 'landmark', imagem: '/images/vitrine/conheca.jpg' },
   { id: 'transfer', caminho: '/transfer', icone: 'car', imagem: '/images/vitrine/transfer.jpg' },
   { id: 'blog', caminho: '/blog', icone: 'newspaper', imagem: '/images/vitrine/blog.jpg' },
   { id: 'contrate', caminho: '/contrate', icone: 'briefcase', imagem: '/images/vitrine/contrate.jpg' },
-  { id: 'apoie', caminho: '/apoie', icone: 'heart-handshake' },
+  { id: 'apoie', caminho: '/apoie', icone: 'heart-handshake', imagem: '/images/vitrine/apoie.jpg' },
 ]
 
 /** Cartões da home/vitrine visíveis ao público. Sem pagamentos ativos, some o

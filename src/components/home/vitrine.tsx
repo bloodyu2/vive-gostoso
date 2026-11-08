@@ -71,6 +71,21 @@ export async function Vitrine({ lang, mareHoje }: { lang: Idioma; mareHoje: DiaD
         >
         <li className="snap-start shrink-0 w-[85%] sm:w-auto sm:col-span-2 lg:row-span-2">
           <div className={`${CARTAO} bg-teal-dark p-6 md:p-8 text-white`}>
+            {mares.imagem && (
+              <>
+                <Image
+                  src={mares.imagem}
+                  alt=""
+                  fill
+                  loading="eager"
+                  fetchPriority="low"
+                  sizes="(min-width: 1024px) 560px, (min-width: 640px) 90vw, 85vw"
+                  className="object-cover"
+                />
+                {/* Camada da cor da marca por cima da foto: o texto branco e a tabua de mares precisam de contraste. */}
+                <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-teal-dark/35 via-teal-dark/65 to-teal-dark/95" />
+              </>
+            )}
             <svg aria-hidden="true" viewBox="0 0 400 120" preserveAspectRatio="none" className="pointer-events-none absolute inset-x-0 bottom-0 h-24 w-full text-white/10">
               <path d="M0 70 C 60 30, 120 30, 200 65 S 330 105, 400 60 L400 120 L0 120 Z" fill="currentColor" />
               <path d="M0 90 C 70 60, 140 60, 210 88 S 340 118, 400 85 L400 120 L0 120 Z" fill="currentColor" />
@@ -117,7 +132,8 @@ export async function Vitrine({ lang, mareHoje }: { lang: Idioma; mareHoje: DiaD
           const largo = largos.includes(item.id)
           return (
             <li key={item.id} className={`snap-start shrink-0 w-[72%] sm:w-auto ${largo ? 'sm:col-span-2' : ''}`}>
-              <BlurFade delay={(i % 4) * 70} className="h-full">
+              {/* No celular os cartoes ficam numa lista que rola de lado: o observador de entrada nunca "via" os de fora da tela e eles nasciam transparentes. A entrada animada fica so na grade (sm+). */}
+              <BlurFade delay={(i % 4) * 70} className="h-full max-sm:opacity-100! max-sm:blur-none! max-sm:translate-y-0!">
               <div className={`${CARTAO} border border-border-1 bg-elev hover:border-teal/50 hover:shadow-md`}>
                 <div className={`relative min-h-32 flex-1 sm:h-32 sm:flex-none ${item.imagem ? 'bg-teal-light' : (PAINEL_SEM_FOTO[item.id] ?? 'bg-teal-light text-teal-dark')}`}>
                   {item.imagem ? (
@@ -125,6 +141,11 @@ export async function Vitrine({ lang, mareHoje }: { lang: Idioma; mareHoje: DiaD
                       src={item.imagem}
                       alt=""
                       fill
+                      /* Eager: no celular a lista rola na horizontal e o navegador nao carrega
+                         foto lazy de cartao que ainda esta fora da tela, entao o cartao chegava
+                         na dobra em branco. Sao 10 fotos leves (otimizadas pelo Next), em baixa prioridade. */
+                      loading="eager"
+                      fetchPriority="low"
                       sizes="(min-width: 1024px) 270px, (min-width: 640px) 45vw, 72vw"
                       className="object-cover"
                     />

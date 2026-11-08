@@ -7,12 +7,15 @@ import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { SelosDoNegocio } from '@/components/business/selo'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { useNovosEmGostoso } from '@/hooks/useNovosEmGostoso'
+import { SetasDaFaixa } from '@/components/home/setas-da-faixa'
 import { pushDataLayer } from '@/lib/analytics'
 
+const LISTA_ID = 'novos-lista'
+
 /**
- * Faixa dos negocios que acabaram de entrar. Sem rolagem automatica: a pessoa
- * arrasta (ou usa o teclado, a lista e focavel por dentro dos links) e cada
- * cartao e um link inteiro para o perfil.
+ * Faixa dos negocios que acabaram de entrar. Sem rolagem automatica: no celular
+ * a pessoa arrasta; no desktop usa as setas (ou Tab, que leva o foco de cartao
+ * em cartao e rola a faixa junto). Cada cartao e um link inteiro para o perfil.
  */
 export function NovosEmGostoso() {
   const { t } = useTranslation()
@@ -30,16 +33,19 @@ export function NovosEmGostoso() {
             {t('home.novos_titulo_faixa')}
           </h2>
         </div>
-        <Link
-          href={lp('/explore')}
-          className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-teal hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
-        >
-          {t('home.novos_ver_todos')}
-          <ArrowRight className="size-4" aria-hidden="true" />
-        </Link>
+        <div className="flex shrink-0 items-center gap-3">
+          <SetasDaFaixa listaId={LISTA_ID} anterior={t('home.novos_anterior')} proximo={t('home.novos_proximo')} />
+          <Link
+            href={lp('/explore')}
+            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-teal hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
+          >
+            {t('home.novos_ver_todos')}
+            <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
+        </div>
       </div>
 
-      <ul className="flex gap-3 md:gap-4 overflow-x-auto snap-x snap-mandatory px-5 md:px-8 scroll-px-5 md:scroll-px-8 pb-2 scrollbar-none">
+      <ul id={LISTA_ID} className="flex gap-3 md:gap-4 overflow-x-auto snap-x snap-mandatory px-5 md:px-8 scroll-px-5 md:scroll-px-8 pb-2 scrollbar-none">
         {novos.map((b, i) => (
           <li key={b.id} className="snap-start shrink-0 w-[62%] sm:w-[34%] md:w-[23%] lg:w-[18.5%]">
             <Link
@@ -50,7 +56,7 @@ export function NovosEmGostoso() {
               <SafeCoverImage
                 src={b.cover_url as string}
                 alt=""
-                loading={i < 2 ? 'eager' : 'lazy'}
+                loading={i < 3 ? 'eager' : 'lazy'}
                 sizes="(max-width: 639px) 62vw, (max-width: 1023px) 28vw, 200px"
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03] motion-reduce:transition-none"
               />

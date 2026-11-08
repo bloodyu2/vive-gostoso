@@ -227,7 +227,8 @@ export function CarrosselNovos({ itens }: { itens: ItemCarrossel[] }) {
               <SafeCoverImage
                 src={b.cover_url as string}
                 alt=""
-                loading={i === 0 ? 'eager' : 'lazy'}
+                /* Os 4 primeiros eager: foto lazy fora da tela nao carrega dentro de lista rolavel na horizontal, e o slide chegava em branco. */
+                loading={i < 4 ? 'eager' : 'lazy'}
                 sizes="(max-width: 639px) 86vw, (max-width: 1023px) 48vw, 32vw"
                 className="absolute inset-0 w-full h-full object-cover"
               />

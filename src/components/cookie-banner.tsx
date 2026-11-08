@@ -13,9 +13,14 @@ const janela = () => window as unknown as JanelaDeMedicao
 
 interface CookieBannerProps {
   forceOpen?: boolean
+  /** No celular a barra do app fica colada na borda de baixo. Sem esta folga o
+   *  aviso (mesma camada, desenhado depois) cobre os cinco botoes da barra e
+   *  engole o toque ate a pessoa responder: foi o "os botoes de baixo nao
+   *  funcionam" de 08/11/2026. Com `acimaDaBarra` o aviso sobe a altura da barra. */
+  acimaDaBarra?: boolean
 }
 
-export function CookieBanner({ forceOpen }: CookieBannerProps = {}) {
+export function CookieBanner({ forceOpen, acimaDaBarra }: CookieBannerProps = {}) {
   const { t } = useTranslation('cookie')
   const [visible, setVisible] = useState(false)
 
@@ -63,10 +68,21 @@ export function CookieBanner({ forceOpen }: CookieBannerProps = {}) {
     setVisible(false)
   }
 
+  // Marca o <html> enquanto o aviso esta aberto: o botao flutuante de compartilhar some
+  // por baixo dele em vez de ficar escondido pela metade (ver share-fab.tsx).
+  useEffect(() => {
+    document.documentElement.toggleAttribute('data-cookie-aberto', visible)
+    return () => document.documentElement.removeAttribute('data-cookie-aberto')
+  }, [visible])
+
   if (!visible) return null
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6 pointer-events-none">
+    <div
+      className={`fixed left-0 right-0 z-50 p-4 md:p-6 pointer-events-none ${
+        acimaDaBarra ? 'bottom-[calc(4rem+env(safe-area-inset-bottom))] md:bottom-0' : 'bottom-0'
+      }`}
+    >
       <div className="max-w-2xl mx-auto bg-[#1A1A1A] text-white rounded-2xl p-5 shadow-2xl pointer-events-auto flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <div className="flex-1 min-w-0">
           <p className="text-sm leading-relaxed">{t('text')}</p>
