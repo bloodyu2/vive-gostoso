@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { eventoPlaquinha, parametrosDoClique } from './medir-plaquinha'
+import { ACOES_PLAQUINHA, eventoPlaquinha, parametrosDoClique } from './medir-plaquinha'
 
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -17,6 +17,20 @@ describe('medir-plaquinha', () => {
       origem: 'plaquinha',
       send_to: 'G-Z915DS14EM',
     })
+  })
+
+  it('mede a setinha e o convite para seguir o @vivegostoso', () => {
+    const gtag = vi.fn()
+    vi.stubGlobal('window', { gtag })
+    eventoPlaquinha('plaquinha_clique', parametrosDoClique('04', 'conhecer_mais', 'O Jardim do Serido'))
+    eventoPlaquinha('plaquinha_clique', parametrosDoClique('04', 'seguir_vive', 'O Jardim do Serido'))
+    expect(gtag).toHaveBeenNthCalledWith(1, 'event', 'plaquinha_clique', expect.objectContaining({ plaquinha_acao: 'conhecer_mais', plaquinha_codigo: '04' }))
+    expect(gtag).toHaveBeenNthCalledWith(2, 'event', 'plaquinha_clique', expect.objectContaining({ plaquinha_acao: 'seguir_vive' }))
+  })
+
+  it('as acoes novas entram junto das antigas, sem repetir', () => {
+    expect(ACOES_PLAQUINHA).toEqual(expect.arrayContaining(['avaliar', 'instagram', 'perfil', 'passaporte', 'conhecer_mais', 'seguir_vive']))
+    expect(new Set(ACOES_PLAQUINHA).size).toBe(ACOES_PLAQUINHA.length)
   })
 
   it('sem gtag na pagina nao faz nada e nao quebra', () => {

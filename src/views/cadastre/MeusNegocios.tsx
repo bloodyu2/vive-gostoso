@@ -16,7 +16,7 @@ import { useMyBusinesses, useInvalidateMyBusinesses, type BusinessSummary } from
 import { OFFICIAL_WHATSAPP, buildWhatsAppLink } from '@/lib/whatsapp'
 
 // Returns 0–100 completion score for a business card
-function completionScore(b: BusinessSummary): number {
+export function completionScore(b: BusinessSummary): number {
   let score = 0
   if (b.name)                      score += 20
   if (b.description)               score += 20
@@ -26,7 +26,7 @@ function completionScore(b: BusinessSummary): number {
   return score
 }
 
-function CompletionBar({ score }: { score: number }) {
+export function CompletionBar({ score }: { score: number }) {
   const { t } = useTranslation('painel')
   const color = score >= 80 ? 'bg-teal' : score >= 40 ? 'bg-ocre' : 'bg-coral'
   return (
@@ -47,7 +47,7 @@ function CompletionBar({ score }: { score: number }) {
   )
 }
 
-function CopyLinkButton({ slug }: { slug: string }) {
+export function CopyLinkButton({ slug }: { slug: string }) {
   const [copied, setCopied] = useState(false)
   const { t } = useTranslation('painel')
   const url = `${window.location.origin}/negocio/${slug}`
@@ -85,7 +85,7 @@ export default function MeusNegocios() {
   return <AuthGuard><MeusNegociosInner /></AuthGuard>
 }
 
-function PublishToggle({ biz, onDone }: { biz: BusinessSummary; onDone: () => void }) {
+export function PublishToggle({ biz, onDone }: { biz: BusinessSummary; onDone: () => void }) {
   const [loading, setLoading] = useState(false)
   const { t } = useTranslation('painel')
 

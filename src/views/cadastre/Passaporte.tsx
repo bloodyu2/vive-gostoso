@@ -17,13 +17,19 @@ import {
   primeiroNome,
   type LinhaLead,
 } from '@/lib/clube/resgate'
+import { filtrarLeads, nomeDoArquivoCsv } from '@/lib/clube/painel-abas'
 
 /* Area do parceiro do Passaporte Gostoso. O dono muda a propria vantagem (texto,
    regra, limite por mes, validade), liga e pausa, e acompanha usos. Tudo vale na
    hora, sem aprovacao. A escrita passa pela RLS de gostoso_club_partners: o dono so
    mexe no proprio negocio, e nunca coloca a vantagem em "em combinacao". */
 
-interface Parceiro {
+/* Os textos antigos desta area usam {nome}, {n}, {data} com uma chave so; o i18next do site
+   le {{nome}}. Sem esta opcao a tela mostrava as chaves cruas ("{n} resgates") e a mensagem
+   de WhatsApp saia com "{nome}" escrito. Os textos novos usam {{ }} e nao passam por aqui. */
+const CHAVES_SIMPLES = { interpolation: { prefix: '{', suffix: '}' } } as const
+
+export interface Parceiro {
   id: string
   business_id: string
   beneficio: string
@@ -124,22 +130,28 @@ function PassaporteInner() {
   )
 }
 
-function AreaDoNegocio({ negocio }: { negocio: BusinessSummary }) {
-  const { t } = useTranslation('passaporte')
-  const lp = useLocalePath()
-
-  const parceiro = useQuery<Parceiro | null>({
-    queryKey: ['clube-parceiro', negocio.id],
+/** A vantagem do negocio no Passaporte (ou null se ele ainda nao entrou). Usada por esta
+ *  tela e pelas abas do painel, com a mesma chave de cache. */
+export function useParceiro(negocioId: string) {
+  return useQuery<Parceiro | null>({
+    queryKey: ['clube-parceiro', negocioId],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('gostoso_club_partners')
         .select('id, business_id, beneficio, regra, limite_mensal, valido_ate, status')
-        .eq('business_id', negocio.id)
+        .eq('business_id', negocioId)
         .maybeSingle()
       if (error) throw error
       return (data as Parceiro | null) ?? null
     },
   })
+}
+
+function AreaDoNegocio({ negocio }: { negocio: BusinessSummary }) {
+  const { t } = useTranslation('passaporte')
+  const lp = useLocalePath()
+
+  const parceiro = useParceiro(negocio.id)
 
   if (parceiro.isLoading) return <p className="clube-aviso">{t('carregando')}</p>
   if (parceiro.isError) return <p className="clube-erro">{t('erro_carregar')}</p>
@@ -170,7 +182,7 @@ function hojeEmGostoso(): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Fortaleza' }).format(new Date())
 }
 
-function FormVantagem({ negocioId, parceiro }: { negocioId: string; parceiro: Parceiro | null }) {
+export function FormVantagem({ negocioId, parceiro }: { negocioId: string; parceiro: Parceiro | null }) {
   const { t } = useTranslation('passaporte')
   const qc = useQueryClient()
   const [beneficio, setBeneficio] = useState(parceiro?.beneficio ?? '')
@@ -364,7 +376,7 @@ function FormVantagem({ negocioId, parceiro }: { negocioId: string; parceiro: Pa
   )
 }
 
-function Numeros({ parceiro }: { parceiro: Parceiro }) {
+export function Numeros({ parceiro }: { parceiro: Parceiro }) {
   const { t } = useTranslation('passaporte')
   const painel = useQuery<PainelDados | null>({
     queryKey: ['clube-painel', parceiro.id],
@@ -418,7 +430,7 @@ function useMarcarUsado(parceiroId: string) {
     await qc.invalidateQueries({ queryKey: ['clube-resgates', parceiroId] })
     await qc.invalidateQueries({ queryKey: ['clube-painel', parceiroId] })
     if (r.ok) {
-      return { ok: true, mensagem: t('confirmar_ok', { nome: r.primeiro_nome ?? '' }) }
+      return { ok: true, mensagem: t('confirmar_ok', { nome: r.primeiro_nome ?? '', ...CHAVES_SIMPLES }) }
     }
     const mensagens: Record<MotivoMarcar, string> = {
       sem_permissao: t('confirmar_sem_permissao'),
@@ -431,7 +443,7 @@ function useMarcarUsado(parceiroId: string) {
   }
 }
 
-function ConfirmarCupom({ parceiroId }: { parceiroId: string }) {
+export function ConfirmarCupom({ parceiroId }: { parceiroId: string }) {
   const { t } = useTranslation('passaporte')
   const marcar = useMarcarUsado(parceiroId)
   const [codigo, setCodigo] = useState('')
@@ -492,7 +504,19 @@ function ConfirmarCupom({ parceiroId }: { parceiroId: string }) {
 const LIMITE_LISTA = 200
 const COLUNAS_LEAD = 'nome, email, telefone, codigo, status, created_at, expira_em'
 
-function Resgates({ parceiro, negocio }: { parceiro: Parceiro; negocio: string }) {
+/** `busca` filtra a lista na tela (nome, e-mail, telefone, codigo); o CSV leva sempre todos
+ *  os contatos. `slug` so da nome ao arquivo baixado. */
+export function Resgates({
+  parceiro,
+  negocio,
+  busca = '',
+  slug = '',
+}: {
+  parceiro: Parceiro
+  negocio: string
+  busca?: string
+  slug?: string
+}) {
   const { t, i18n } = useTranslation('passaporte')
   const marcar = useMarcarUsado(parceiro.id)
   const [aviso, setAviso] = useState<RespostaMarcar | null>(null)
@@ -566,7 +590,7 @@ function Resgates({ parceiro, negocio }: { parceiro: Parceiro; negocio: string }
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `passaporte-resgates-${hoje}.csv`
+      a.download = nomeDoArquivoCsv(slug, hoje)
       document.body.appendChild(a)
       a.click()
       a.remove()
@@ -577,7 +601,9 @@ function Resgates({ parceiro, negocio }: { parceiro: Parceiro; negocio: string }
     setBaixando(false)
   }
 
-  const linhas = lista.data?.linhas ?? []
+  const carregadas = lista.data?.linhas ?? []
+  const linhas = filtrarLeads(carregadas, busca)
+  const filtrando = busca.trim() !== ''
   const total = lista.data?.total ?? 0
 
   return (
@@ -594,24 +620,32 @@ function Resgates({ parceiro, negocio }: { parceiro: Parceiro; negocio: string }
         <p className="clube-aviso">{t('carregando')}</p>
       ) : lista.isError ? (
         <p className="clube-erro">{t('erro_carregar')}</p>
-      ) : linhas.length === 0 ? (
+      ) : carregadas.length === 0 ? (
         <p className="clube-aviso">{t('leads_vazio')}</p>
       ) : (
         <>
           <div
-            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', margin: '0.75rem 0' }}
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: '0.75rem 1rem',
+              margin: '0.75rem 0',
+            }}
           >
             <p className="clube-regra" style={{ margin: 0 }}>
-              {t('leads_total', { n: total })}
+              {filtrando ? t('leads_encontrados', { n: linhas.length, total }) : t('leads_total', { n: total, ...CHAVES_SIMPLES })}
             </p>
             <button type="button" className="clube-btn clube-btn--contorno" onClick={baixarCsv} disabled={baixando}>
-              {t('leads_csv')}
+              {baixando ? t('leads_csv_baixando') : t('leads_csv_botao')}
             </button>
           </div>
+          {linhas.length === 0 ? <p className="clube-aviso">{t('leads_sem_resultado')}</p> : null}
           <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: '0.75rem' }}>
             {linhas.map((l) => {
               const st = statusDe(l)
-              const wa = buildWhatsAppLink(`55${l.telefone}`, t('lead_msg_whatsapp', { nome: primeiroNome(l.nome), negocio }))
+              const wa = buildWhatsAppLink(`55${l.telefone}`, t('lead_msg_whatsapp', { nome: primeiroNome(l.nome), negocio, ...CHAVES_SIMPLES }))
               return (
                 <li key={l.id} className="clube-card" style={{ padding: '1rem' }}>
                   <div className="clube-card-topo" style={{ justifyContent: 'space-between' }}>
@@ -631,7 +665,7 @@ function Resgates({ parceiro, negocio }: { parceiro: Parceiro; negocio: string }
                     {mascararTelefone(l.telefone)} · {formatarCodigo(l.codigo)}
                   </p>
                   <p className="clube-regra" style={{ margin: '0.125rem 0 0' }}>
-                    {quando(l.created_at)} · {t('lead_valido_ate', { data: dataCurta(l.expira_em) })}
+                    {quando(l.created_at)} · {t('lead_valido_ate', { data: dataCurta(l.expira_em), ...CHAVES_SIMPLES })}
                   </p>
                   <p className="clube-regra" style={{ margin: '0.125rem 0 0', fontStyle: 'italic' }}>
                     {t('lead_contato_nao_verificado')}
@@ -655,7 +689,7 @@ function Resgates({ parceiro, negocio }: { parceiro: Parceiro; negocio: string }
               )
             })}
           </ul>
-          {total > linhas.length ? <p className="clube-regra">{t('leads_mais')}</p> : null}
+          {total > carregadas.length ? <p className="clube-regra">{t('leads_mais')}</p> : null}
           <p role="status" className={aviso && !aviso.ok ? 'clube-erro' : 'clube-regra'}>
             {aviso?.mensagem ?? ''}
           </p>

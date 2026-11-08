@@ -8,6 +8,7 @@ import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
 import { ShareFab } from '@/components/share-fab'
 import { WhatsAppButton } from '@/components/layout/whatsapp-button'
+import { BarraDoApp, barraDoAppVisivel } from '@/components/layout/barra-do-app'
 
 /** O que o layout de idioma põe em volta de toda página, e as rotas onde isso
  *  atrapalha.
@@ -51,13 +52,18 @@ export function ChromeDoSite({ children }: { children: React.ReactNode }) {
     )
   }
 
+  const comBarra = barraDoAppVisivel(caminho)
+
   return (
     <>
       <Header />
       <main>{children}</main>
       <Footer />
+      {/* Espaco do tamanho da barra do app (so no celular), para ela nao cobrir o fim do rodape. */}
+      {comBarra && <div aria-hidden="true" className="h-[calc(3.5rem+env(safe-area-inset-bottom))] md:hidden" />}
       <ShareFab />
       <WhatsAppButton variante="fab" />
+      <BarraDoApp />
       <CookieBanner />
     </>
   )

@@ -1,0 +1,134 @@
+/* Painel do parceiro em abas (/cadastre/painel).
+   As abas Passaporte e Contatos reaproveitam as classes clube-* da area do parceiro, mas
+   dentro do painel: com a paleta e as fontes do site (teal, ocre, Fraunces e Jakarta) em vez
+   da areia do passaporte, para a tela inteira parecer uma coisa so. Vale so dentro de
+   .painel-clube. O .clube vem junto para as regras base (campos, botoes, cartoes). */
+
+.painel-clube.clube {
+  --c-fundo: #faf9f7;
+  --c-papel: #ffffff;
+  --c-verde: #0d7c7c;
+  --c-verde-fundo: #0a5f5f;
+  --c-mostarda: #c97d2a;
+  --c-laranja: #e05a3a;
+  --c-laranja-forte: #b9391b;
+  --c-tinta: #1a1a1a;
+  --c-suave: #3d3d3d;
+  --c-mudo: #5a5a5a;
+  --c-borda: #e8e4df;
+  --c-input: #b8b2ab;
+  --c-ok: #cfe8e8;
+  --c-aguarda: #f3e1c4;
+  --font-clube-titulo: var(--font-fraunces), Georgia, serif;
+  --font-clube-corpo: var(--font-jakarta), system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  min-height: 0;
+  background: transparent;
+  overflow-x: visible;
+}
+
+/* O .clube-btn nasceu com 3rem; o minimo de alvo de toque do painel e 44px */
+.painel-clube .clube-btn {
+  min-height: 2.75rem;
+}
+
+/* Foco visivel em tudo que se clica nas abas do Passaporte */
+.painel-clube :is(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--c-verde);
+  outline-offset: 2px;
+}
+
+/* ---------- barra de abas ---------- */
+
+.painel-abas-trilho {
+  position: sticky;
+  top: 3.5rem; /* logo abaixo do cabecalho sticky do painel (h-14) */
+  z-index: 9;
+  margin-inline: calc(-1 * var(--painel-gutter, 1.25rem));
+  padding-inline: var(--painel-gutter, 1.25rem);
+  background: color-mix(in srgb, #faf9f7 94%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #e8e4df;
+}
+
+@media (min-width: 768px) {
+  .painel-abas-trilho {
+    --painel-gutter: 2rem;
+  }
+}
+
+.painel-abas-lista {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.painel-abas-lista::-webkit-scrollbar {
+  display: none;
+}
+
+.painel-aba {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem; /* 44px */
+  min-width: 2.75rem;
+  padding: 0.5rem 0.875rem;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #5a5a5a;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  scroll-snap-align: start;
+  transition: color 160ms, border-color 160ms, background-color 160ms;
+}
+
+.painel-aba:hover {
+  color: #1a1a1a;
+  background: rgba(13, 124, 124, 0.06);
+}
+
+.painel-aba[aria-selected='true'] {
+  color: #0d7c7c;
+  border-bottom-color: #0d7c7c;
+}
+
+.painel-aba:focus-visible {
+  outline: 2px solid #0d7c7c;
+  outline-offset: -2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .painel-aba {
+    transition: none;
+  }
+  .painel-abas-lista {
+    scroll-behavior: auto;
+  }
+}
+
+/* ---------- QR da plaquinha ---------- */
+
+.painel-qr {
+  display: block;
+  width: 100%;
+  max-width: 12rem;
+  height: auto;
+  padding: 0.75rem;
+  border: 1px solid #e8e4df;
+  border-radius: 12px;
+  background: #fff;
+}

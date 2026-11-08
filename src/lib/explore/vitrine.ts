@@ -37,15 +37,15 @@ export type ItemVitrine = { id: IdVitrine; caminho: string; icone: IconeVitrine;
    links iguais lado a lado. */
 export const ITENS_VITRINE: ItemVitrine[] = [
   { id: 'mares', caminho: '/explore/mares', icone: 'waves', destaque: true },
-  { id: 'come', caminho: '/come', icone: 'utensils' },
-  { id: 'fique', caminho: '/fique', icone: 'bed-double', imagem: '/images/blog/pousadas.jpg' },
-  { id: 'passeie', caminho: '/passeie', icone: 'compass', imagem: '/images/blog/kitesurf.jpg' },
-  { id: 'explore', caminho: '/explore', icone: 'map', imagem: '/images/blog/praias.jpg' },
+  { id: 'come', caminho: '/come', icone: 'utensils', imagem: '/images/vitrine/come.jpg' },
+  { id: 'fique', caminho: '/fique', icone: 'bed-double', imagem: '/images/vitrine/fique.jpg' },
+  { id: 'passeie', caminho: '/passeie', icone: 'compass', imagem: '/images/vitrine/passeie.jpg' },
+  { id: 'explore', caminho: '/explore', icone: 'map', imagem: '/images/vitrine/explore.jpg' },
   { id: 'participe', caminho: '/participe', icone: 'calendar', imagem: '/images/events/reveillon.jpg' },
-  { id: 'conheca', caminho: '/conheca', icone: 'landmark', imagem: '/images/blog/festa-sao-miguel-arcanjo-2026-praia-da-xepa-gostoso.jpg' },
-  { id: 'transfer', caminho: '/transfer', icone: 'car', imagem: '/images/blog/como-chegar.jpg' },
-  { id: 'blog', caminho: '/blog', icone: 'newspaper', imagem: '/images/blog/o-que-fazer.jpg' },
-  { id: 'contrate', caminho: '/contrate', icone: 'briefcase' },
+  { id: 'conheca', caminho: '/conheca', icone: 'landmark', imagem: '/images/vitrine/conheca.jpg' },
+  { id: 'transfer', caminho: '/transfer', icone: 'car', imagem: '/images/vitrine/transfer.jpg' },
+  { id: 'blog', caminho: '/blog', icone: 'newspaper', imagem: '/images/vitrine/blog.jpg' },
+  { id: 'contrate', caminho: '/contrate', icone: 'briefcase', imagem: '/images/vitrine/contrate.jpg' },
   { id: 'apoie', caminho: '/apoie', icone: 'heart-handshake' },
 ]
 

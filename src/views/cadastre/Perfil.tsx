@@ -23,8 +23,11 @@ import { useLocalePath } from '@/hooks/useLocalePath'
 import { showToast } from '@/components/ui/toast'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 
-export default function Perfil() {
-  return <AuthGuard><PerfilInner /></AuthGuard>
+/** `embedded`: o formulario dentro da aba "Perfil e fotos" do painel. Sem a barra do topo, sem
+ *  o titulo e com a barra de salvar presa ao fim da aba (nao da janela). `bizId` escolhe o
+ *  negocio direto, sem depender do ?bizId= da URL. */
+export default function Perfil({ embedded = false, bizId }: { embedded?: boolean; bizId?: string | null } = {}) {
+  return <AuthGuard><PerfilInner embedded={embedded} bizIdProp={bizId} /></AuthGuard>
 }
 
 type ServiceItem = { name: string; description?: string; price?: string; photos?: string[] }
@@ -867,13 +870,13 @@ function ServicesSection({
 // Main inner component
 // ---------------------------------------------------------------------------
 
-function PerfilInner() {
+function PerfilInner({ embedded, bizIdProp }: { embedded: boolean; bizIdProp?: string | null }) {
   const { user } = useAuth()
   const { data: categories = [] } = useCategories()
   const searchParams = useSearchParams()
   const { t } = useTranslation()
   const lp = useLocalePath()
-  const bizId = searchParams?.get('bizId') ?? null
+  const bizId = bizIdProp !== undefined ? bizIdProp : (searchParams?.get('bizId') ?? null)
   const invalidateMyBusinesses = useInvalidateMyBusinesses()
 
   const [biz, setBiz] = useState<PartialBusiness>({})
@@ -1124,7 +1127,7 @@ function PerfilInner() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFAF9] pb-24">
+    <div className={embedded ? 'bg-[#FAFAF9]' : 'min-h-screen bg-[#FAFAF9] pb-24'}>
       {/* Save result modal */}
       {saveModal && (
         <SaveResultModal
@@ -1134,7 +1137,8 @@ function PerfilInner() {
         />
       )}
 
-      {/* ── Top bar ── */}
+      {/* ── Top bar ── (no painel em abas quem navega e a barra de abas) */}
+      {!embedded && (
       <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
         <div className="max-w-2xl mx-auto px-5 md:px-8 h-14 flex items-center gap-3">
           <Link
@@ -1152,8 +1156,10 @@ function PerfilInner() {
           }
         </div>
       </div>
+      )}
 
-      <main className="max-w-2xl mx-auto px-5 md:px-8 py-8">
+      <main className={embedded ? 'max-w-2xl' : 'max-w-2xl mx-auto px-5 md:px-8 py-8'}>
+        {!embedded && (
         <div className="mb-7">
           <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">
             {bizId ? t('perfil:edit_business') : t('perfil:new_business')}
@@ -1164,6 +1170,7 @@ function PerfilInner() {
               : t('perfil:new_desc')}
           </p>
         </div>
+        )}
 
       {/* Duplicate detection banner — only in new-business mode */}
       {!bizId && dupMatches.length > 0 && (
@@ -1361,14 +1368,18 @@ function PerfilInner() {
       </main>
 
       {/* ── Sticky save footer ── */}
-      <div className="fixed bottom-0 left-0 right-0 z-20 bg-white border-t border-[#E8E4DF] shadow-[0_-2px_12px_rgba(0,0,0,0.06)]">
-        <div className="max-w-2xl mx-auto px-5 py-3 flex items-center gap-3">
+      <div className={embedded
+        ? 'sticky bottom-0 z-20 mt-6 -mx-1 bg-white border border-[#E8E4DF] rounded-2xl shadow-[0_-2px_12px_rgba(0,0,0,0.06)]'
+        : 'fixed bottom-0 left-0 right-0 z-20 bg-white border-t border-[#E8E4DF] shadow-[0_-2px_12px_rgba(0,0,0,0.06)]'}>
+        <div className={embedded ? 'px-4 py-3 flex items-center gap-3' : 'max-w-2xl mx-auto px-5 py-3 flex items-center gap-3'}>
+          {!embedded && (
           <Link
             href={lp('/cadastre/negocios')}
             className="flex-shrink-0 px-4 py-2.5 rounded-xl border border-[#E8E4DF] text-sm font-medium text-fg-3-texto hover:border-[#737373] transition-colors"
           >
             {t('perfil:cancel')}
           </Link>
+          )}
           <Button
             type="button"
             variant="primary"

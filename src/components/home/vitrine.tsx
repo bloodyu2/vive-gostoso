@@ -15,8 +15,14 @@ import { VitrineControles } from './vitrine-controles'
 import { ProgressiveBlur } from '@/components/magicui/progressive-blur'
 import { BlurFade } from '@/components/magicui/blur-fade'
 
-/** Cartoes largos: quebram a fileira de cartoes iguais e dao ritmo a grade. */
-const LARGOS: IdVitrine[] = ['come', 'apoie']
+/** Cartoes largos: quebram a fileira de cartoes iguais e dao ritmo a grade.
+ *  A grade tem 4 colunas e a tabua de mares ocupa 2x2, entao a conta fecha assim:
+ *  com o Apoie no ar, Blog e Contrate ficam estreitos e o Apoie largo; sem ele
+ *  (pagamentos desligados), Blog e Contrate viram largos. Nas duas, a ultima
+ *  fileira fica cheia, sem buraco. */
+function cartoesLargos(temApoie: boolean): IdVitrine[] {
+  return temApoie ? ['come', 'apoie'] : ['come', 'blog', 'contrate']
+}
 
 const LISTA_ID = 'vitrine-lista'
 
@@ -46,6 +52,7 @@ export async function Vitrine({ lang, mareHoje }: { lang: Idioma; mareHoje: DiaD
   const t = textosVitrine(lang, contagens)
   const itens = itensVitrinePublicos()
   const [mares, ...resto] = itens
+  const largos = cartoesLargos(itens.some(i => i.id === 'apoie'))
 
   return (
     <section aria-labelledby="vitrine-titulo" className="max-w-6xl mx-auto py-10 md:py-16">
@@ -107,7 +114,7 @@ export async function Vitrine({ lang, mareHoje }: { lang: Idioma; mareHoje: DiaD
 
         {resto.map((item, i) => {
           const texto = t.itens[item.id]
-          const largo = LARGOS.includes(item.id)
+          const largo = largos.includes(item.id)
           return (
             <li key={item.id} className={`snap-start shrink-0 w-[72%] sm:w-auto ${largo ? 'sm:col-span-2' : ''}`}>
               <BlurFade delay={(i % 4) * 70} className="h-full">

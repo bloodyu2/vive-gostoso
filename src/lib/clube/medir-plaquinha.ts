@@ -12,7 +12,18 @@
  *
  *  Falha em silencio: o QR ja esta colado no balcao, a medicao nunca pode derrubar a pagina. */
 
-export type AcaoPlaquinha = 'avaliar' | 'instagram' | 'perfil' | 'passaporte'
+export type AcaoPlaquinha =
+  | 'avaliar'
+  | 'instagram'
+  | 'perfil'
+  | 'passaporte'
+  /** a setinha "Conhecer mais" abaixo dos botões */
+  | 'conhecer_mais'
+  /** o botão "Seguir @vivegostoso no Instagram" da seção de convite */
+  | 'seguir_vive'
+
+/** Todas as ações que o banco aceita (gostoso_plaquinha_cliques); mantém o código e a migração alinhados. */
+export const ACOES_PLAQUINHA: readonly AcaoPlaquinha[] = ['avaliar', 'instagram', 'perfil', 'passaporte', 'conhecer_mais', 'seguir_vive']
 
 /** Medicao do GA4 do Vive Gostoso (propriedade 535132611), a mesma que o conteiner GTM-KDGMDLHG carrega. */
 export const GA4_VIVE_GOSTOSO = 'G-Z915DS14EM'

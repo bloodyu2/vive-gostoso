@@ -8,6 +8,7 @@ import { safeJsonLd } from '@/lib/json-ld'
 import { isLocale } from '@/lib/page-metadata'
 import { Vitrine } from '@/components/home/vitrine'
 import { lerMareDeHojeNoCardeiro } from '@/components/explore/mare-de-hoje'
+import { carregarIdsDoClube } from '@/lib/clube/parceiros-no-ar'
 
 export const revalidate = 3600
 
@@ -73,7 +74,11 @@ async function getHomeData() {
 export default async function HomePage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang: bruto } = await params
   const lang = isLocale(bruto) ? bruto : 'pt'
-  const [initialData, mareHoje] = await Promise.all([getHomeData(), lerMareDeHojeNoCardeiro()])
+  const [initialData, mareHoje, idsDoClube] = await Promise.all([
+    getHomeData(),
+    lerMareDeHojeNoCardeiro(),
+    carregarIdsDoClube(),
+  ])
   const jsonLdWeb = webSiteSchema()
   const jsonLdDestination = touristDestinationSchema()
   return (
@@ -86,7 +91,11 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLdDestination) }}
       />
-      <Home initialData={initialData} vitrine={<Vitrine lang={lang} mareHoje={mareHoje} />} />
+      <Home
+        initialData={initialData}
+        clubeNoAr={idsDoClube.length}
+        vitrine={<Vitrine lang={lang} mareHoje={mareHoje} />}
+      />
     </>
   )
 }
