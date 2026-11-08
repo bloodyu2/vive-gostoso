@@ -34,17 +34,19 @@ export function useCarrosselNovos() {
           .not('cover_url', 'is', null)
           .neq('cover_url', '')
 
-      const [destaques, novos, verificados] = await Promise.all([
+      /* Os negocios novos nao entram mais aqui: tem faixa propria na home
+         ("Novos em Gostoso", useNovosEmGostoso). Com 12 destaques eles ficavam
+         nas ultimas posicoes do limite e ninguem chegava a ve-los. */
+      const [destaques, verificados] = await Promise.all([
         /* O destaque mais recente abre o carrossel: quem acabou de ser destacado
          (updated_at) aparece primeiro, nao quem se cadastrou primeiro. */
-        base().eq('is_featured', true).order('updated_at', { ascending: false }).limit(6),
-        base().order('created_at', { ascending: false }).limit(6),
+        base().eq('is_featured', true).order('updated_at', { ascending: false }).limit(8),
         base().eq('is_verified', true).order('created_at', { ascending: false }).limit(6),
       ])
 
       return montarCarrossel({
         destaques: normalizar(destaques.data as Linha[] | null),
-        novos: normalizar(novos.data as Linha[] | null),
+        novos: [],
         verificados: normalizar(verificados.data as Linha[] | null),
       })
     },

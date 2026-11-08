@@ -14,6 +14,8 @@ import { Selo } from '@/components/business/selo'
 import { LinkMedido } from '@/components/clube/link-medido'
 import { RegistrarVisita } from '@/components/clube/registrar-visita'
 import { ResgatePlaquinha } from '@/components/clube/resgate-plaquinha'
+import { SetaConhecerMais } from '@/components/clube/seta-conhecer-mais'
+import { ID_SIGA_VIVE_GOSTOSO, SigaViveGostoso } from '@/components/clube/siga-vive-gostoso'
 import { TemaClube } from '@/components/clube/tema'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { dicionario, ehIdioma, prefixo } from '@/lib/bio/dicionario'
@@ -303,6 +305,13 @@ export default async function PlaquinhaPage({ params }: Props) {
               {t.ver_perfil.replace('{nome}', negocio.name)}
             </LinkMedido>
           </div>
+          <SetaConhecerMais
+            codigo={codigo}
+            negocio={negocio.name}
+            alvo={ID_SIGA_VIVE_GOSTOSO}
+            rotulo={t.conhecer_mais}
+            aria={t.conhecer_mais_aria}
+          />
           {extras.length > 0 ? (
             <a className="clube-p-aviso" href="#mais-aqui">
               <ArrowDown size={16} aria-hidden />
@@ -435,6 +444,14 @@ export default async function PlaquinhaPage({ params }: Props) {
             })}
           </section>
         ) : null}
+
+        <SigaViveGostoso
+          codigo={codigo}
+          negocio={negocio.name}
+          titulo={t.siga_titulo}
+          texto={t.siga_texto}
+          botao={t.siga_botao}
+        />
 
         {caminhos}
       </main>

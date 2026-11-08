@@ -17,6 +17,7 @@ import { ManagedBadge } from '@/components/business/managed-badge'
 import { SelosDoNegocio } from '@/components/business/selo'
 import { LogoDoNegocio } from '@/components/business/logo-do-negocio'
 import { ClaimCta } from '@/components/business/claim-cta'
+import { FaixaPassaporte } from '@/components/business/faixa-passaporte'
 import { Lightbox } from '@/components/ui/lightbox'
 import { Lens } from '@/components/magicui/lens'
 import { ReviewList } from '@/components/reviews/review-list'
@@ -217,6 +218,9 @@ export default function Negocio({ initialBusiness, slug: slugProp }: NegocioProp
           {b.description && (
             <p className="text-[#3D3D3D] leading-relaxed text-base mb-8">{b.description}</p>
           )}
+
+          {/* Passaporte Gostoso: vantagem do parceiro, ou convite ao dono */}
+          <FaixaPassaporte businessId={b.id} slug={b.slug} nome={b.name} temDono={!!b.profile_id} />
 
           {/* Fotos */}
           {b.photos && b.photos.length > 0 && (

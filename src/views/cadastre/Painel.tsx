@@ -1,12 +1,11 @@
 'use client'
-import { useState } from 'react'
-import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import {
-  CheckCircle, Store, PlusCircle, Eye, LayoutDashboard,
-  Sparkles, ArrowRight, LogOut, User, Ticket,
+  CheckCircle, Store, LayoutDashboard,
+  Sparkles, LogOut, User,
 } from 'lucide-react'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { useAuth } from '@/hooks/useAuth'
@@ -17,6 +16,14 @@ import { startCheckout } from '@/hooks/useCheckout'
 import { useParametros } from '@/hooks/useParametros'
 import { CHAVES, parametro, precosDoPlano } from '@/lib/parametros'
 import { pagamentosAtivos } from '@/lib/pagamentos'
+import { ABAS, abaDaUrl, queryDaAba, type AbaId } from '@/lib/clube/painel-abas'
+import { BarraDeAbas, PainelDaAba, type DefinicaoDeAba } from './painel-abas/BarraDeAbas'
+import { useTrocarUrlDoPainel } from './painel-abas/use-url-do-painel'
+import { ResumoAba } from './painel-abas/ResumoAba'
+import { PerfilAba } from './painel-abas/PerfilAba'
+import { PassaporteAba } from './painel-abas/PassaporteAba'
+import { ContatosAba } from './painel-abas/ContatosAba'
+import { PlaquinhaAba } from './painel-abas/PlaquinhaAba'
 
 export default function Painel() {
   return <AuthGuard><PainelInner /></AuthGuard>
@@ -28,33 +35,6 @@ function UserAvatar({ email }: { email: string }) {
     <div className="w-9 h-9 rounded-full bg-teal/15 text-teal flex items-center justify-center text-xs font-bold flex-shrink-0">
       {initials}
     </div>
-  )
-}
-
-function StatCard({ label, value, sub }: { label: string; value: string | number; sub?: string }) {
-  return (
-    <div className="bg-white border border-[#E8E4DF] rounded-2xl px-5 py-4 min-w-0">
-      <p className="text-2xl font-bold text-[#1A1A1A] tabular-nums">{value}</p>
-      <p className="text-xs text-fg-3-texto mt-0.5 font-medium">{label}</p>
-      {sub && <p className="text-[11px] text-teal mt-1 font-medium">{sub}</p>}
-    </div>
-  )
-}
-
-function CartaoPassaporte() {
-  const { t } = useTranslation('passaporte')
-  const lp = useLocalePath()
-  return (
-    <Link
-      href={lp('/cadastre/passaporte')}
-      className="group bg-white border border-[#E8E4DF] rounded-2xl p-5 hover:shadow-md hover:-translate-y-0.5 transition-all"
-    >
-      <Ticket className="w-5 h-5 mb-3 text-teal" />
-      <h2 className="font-semibold text-[15px] text-[#1A1A1A] group-hover:text-teal transition-colors">
-        {t('card_titulo')}
-      </h2>
-      <p className="text-xs text-fg-3-texto mt-1 leading-relaxed">{t('card_desc')}</p>
-    </Link>
   )
 }
 
@@ -83,7 +63,7 @@ function TypeFork() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
                 type="button"
-                onClick={() => router.push(lp('/cadastre/negocios'))}
+                onClick={() => router.push(lp('/cadastre/perfil'))}
                 className="text-left border-2 border-[#E8E4DF] rounded-2xl p-5 hover:border-teal hover:bg-teal/5 transition-all"
               >
                 <Store className="w-8 h-8 text-teal mb-3" />
@@ -150,6 +130,27 @@ function PainelInner() {
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const [billingMode, setBillingMode] = useState<Record<string, 'monthly' | 'annual'>>({})
 
+  /* Abas: a aba e o negocio escolhido moram na URL (?aba=contatos&bizId=...), entao o link
+     abre no lugar certo e o botao de recarregar nao perde onde a pessoa estava. */
+  const trocarUrl = useTrocarUrlDoPainel()
+  const abaParam = searchParams?.get('aba') ?? null
+  const bizParam = searchParams?.get('bizId') ?? null
+  const novoNegocio = searchParams?.get('new') === '1'
+  // #contatos, #passaporte...: o endereco curto das rotas antigas. O hash so existe no navegador,
+  // por isso entra por efeito e nao no primeiro render (senao servidor e navegador discordam).
+  const [hash, setHash] = useState<string | null>(null)
+  useEffect(() => {
+    const ler = () => setHash(window.location.hash || null)
+    ler()
+    window.addEventListener('hashchange', ler)
+    return () => window.removeEventListener('hashchange', ler)
+  }, [])
+  const temNegocio = businesses.length > 0
+  const aba: AbaId = temNegocio ? abaDaUrl(abaParam, hash) : 'resumo'
+  const negocio = businesses.find((b) => b.id === bizParam) ?? businesses[0] ?? null
+  const [visitadas, setVisitadas] = useState<ReadonlySet<AbaId>>(() => new Set<AbaId>())
+  if (!visitadas.has(aba)) setVisitadas(new Set(visitadas).add(aba))
+
   // Must be AFTER all hook calls
   if (profileLoading) return (
     <div className="flex items-center justify-center h-screen">
@@ -163,8 +164,32 @@ function PainelInner() {
     return <TypeFork />
   }
 
-  const publishedCount = businesses.filter(b => b.is_published).length
-  const draftCount = businesses.filter(b => !b.is_published).length
+  // Sem esperar os negocios o Resumo piscava "Nenhum negocio ainda" antes de a lista chegar.
+  if (businessesLoading || profLoading) return (
+    <div className="flex items-center justify-center h-screen">
+      <div className="w-8 h-8 border-4 border-teal border-t-transparent rounded-full animate-spin" />
+    </div>
+  )
+
+  const abasDef: DefinicaoDeAba[] = ABAS.map((id) => ({ id, rotulo: t('abas.' + id) }))
+
+  function irParaAba(id: AbaId) {
+    trocarUrl((p) => new URLSearchParams(queryDaAba(p, id)))
+  }
+
+  function escolherNegocio(id: string) {
+    trocarUrl((p) => {
+      p.set('bizId', id)
+      return p
+    })
+  }
+
+  function fecharNovo() {
+    trocarUrl((p) => {
+      p.delete('new')
+      return p
+    })
+  }
 
   function getBilling(bizId: string): 'monthly' | 'annual' {
     return billingMode[bizId] ?? 'monthly'
@@ -229,108 +254,40 @@ function PainelInner() {
           <p className="text-sm text-fg-3-texto mt-1">{t('greeting_sub')}</p>
         </div>
 
-        {businesses.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
-            <StatCard
-              label={t('stats_businesses')}
-              value={businesses.length}
-            />
-            <StatCard
-              label={t('stats_published')}
-              value={publishedCount}
-              sub={publishedCount > 0 ? t('stats_published_sub') : undefined}
-            />
-            <StatCard
-              label={t('stats_drafts')}
-              value={draftCount}
-              sub={draftCount > 0 ? t('stats_drafts_sub') : undefined}
-            />
-          </div>
-        )}
-
-        {draftCount > 0 && (
-          <div className="mb-6 bg-ocre/8 border border-ocre/25 rounded-2xl px-5 py-4 flex items-start gap-3">
-            <Eye className="w-4 h-4 text-ocre mt-0.5 flex-shrink-0" />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-ocre">
-                {t('draft_alert_title', { count: draftCount })}
-              </p>
-              <p className="text-xs text-fg-3-texto mt-0.5">
-                {t('draft_alert_desc')}
-              </p>
-            </div>
-            <Link
-              href={lp('/cadastre/negocios')}
-              className="flex items-center gap-1 text-xs font-semibold text-ocre hover:underline flex-shrink-0"
+        {temNegocio && negocio && businesses.length > 1 && (
+          <div className="mb-4 max-w-sm">
+            <label htmlFor="painel-negocio" className="block text-xs font-semibold text-fg-3-texto mb-1">
+              {t('abas.negocio_campo')}
+            </label>
+            <select
+              id="painel-negocio"
+              value={negocio.id}
+              onChange={(e) => escolherNegocio(e.target.value)}
+              className="w-full min-h-11 rounded-xl border border-[#E8E4DF] bg-white px-3 text-sm text-[#1A1A1A] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
             >
-              {t('draft_alert_cta')} <ArrowRight className="w-3 h-3" />
-            </Link>
+              {businesses.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.name}
+                </option>
+              ))}
+            </select>
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-10">
-          <Link
-            href={lp('/cadastre/negocios')}
-            className="group bg-white border border-[#E8E4DF] rounded-2xl p-5 hover:shadow-md hover:-translate-y-0.5 transition-all"
+        {temNegocio && (
+          <BarraDeAbas abas={abasDef} ativa={aba} onChange={irParaAba} rotuloDoGrupo={t('abas.nav_label')} />
+        )}
+
+        <PainelDaAba id="resumo" ativa={aba} visitada={visitadas.has('resumo')} semAbas={!temNegocio}>
+          <ResumoAba
+            negocios={businesses}
+            negocio={negocio}
+            profissional={myProfessional ?? null}
+            novoNegocio={novoNegocio}
+            onFecharNovo={fecharNovo}
+            onAba={irParaAba}
+            onEscolher={escolherNegocio}
           >
-            <Store className="w-5 h-5 mb-3 text-teal" />
-            <h2 className="font-semibold text-[15px] text-[#1A1A1A] group-hover:text-teal transition-colors">
-              {t('module_manage')}
-            </h2>
-            <p className="text-xs text-fg-3-texto mt-1 leading-relaxed">
-              {t('module_manage_desc')}
-            </p>
-            {businesses.length > 0 && (
-              <p className="text-[11px] text-teal mt-2.5 font-medium flex items-center gap-1">
-                {t('module_manage_count', { count: businesses.length })} <ArrowRight className="w-3 h-3" />
-              </p>
-            )}
-          </Link>
-
-          <Link
-            href={lp('/cadastre/perfil')}
-            className="group bg-white border border-[#E8E4DF] rounded-2xl p-5 hover:shadow-md hover:-translate-y-0.5 transition-all"
-          >
-            <PlusCircle className="w-5 h-5 mb-3 text-teal" />
-            <h2 className="font-semibold text-[15px] text-[#1A1A1A] group-hover:text-teal transition-colors">
-              {t('module_add')}
-            </h2>
-            <p className="text-xs text-fg-3-texto mt-1 leading-relaxed">
-              {t('module_add_desc')}
-            </p>
-          </Link>
-
-          <Link
-            href={lp('/cadastre/preview')}
-            className="group bg-white border border-[#E8E4DF] rounded-2xl p-5 hover:shadow-md hover:-translate-y-0.5 transition-all"
-          >
-            <Eye className="w-5 h-5 mb-3 text-teal" />
-            <h2 className="font-semibold text-[15px] text-[#1A1A1A] group-hover:text-teal transition-colors">
-              {t('module_preview')}
-            </h2>
-            <p className="text-xs text-fg-3-texto mt-1 leading-relaxed">
-              {t('module_preview_desc')}
-            </p>
-          </Link>
-
-          {businesses.length > 0 && <CartaoPassaporte />}
-
-          {myProfessional && (
-            <Link href={lp('/cadastre/profissional')} className="block bg-white rounded-2xl border border-[#E8E4DF] p-5 hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-xl bg-teal/10 flex items-center justify-center">
-                  <User className="w-5 h-5 text-teal" />
-                </div>
-                <div>
-                  <p className="font-semibold text-[#1A1A1A] text-sm">{myProfessional.display_name}</p>
-                  <p className="text-xs text-fg-3-texto">{myProfessional.headline}</p>
-                </div>
-              </div>
-              <p className="text-xs text-[#0D7C7C] font-semibold">{t('module_edit_professional')}</p>
-            </Link>
-          )}
-        </div>
-
         {pagamentosAtivos() && businesses.length > 0 && (
           <section>
             <div className="flex items-center gap-2 mb-1">
@@ -486,6 +443,26 @@ function PainelInner() {
               </div>
             )}
           </section>
+        )}
+
+          </ResumoAba>
+        </PainelDaAba>
+
+        {temNegocio && negocio && (
+          <>
+            <PainelDaAba id="perfil" ativa={aba} visitada={visitadas.has('perfil')}>
+              <PerfilAba key={negocio.id} negocio={negocio} />
+            </PainelDaAba>
+            <PainelDaAba id="passaporte" ativa={aba} visitada={visitadas.has('passaporte')}>
+              <PassaporteAba key={negocio.id} negocio={negocio} />
+            </PainelDaAba>
+            <PainelDaAba id="contatos" ativa={aba} visitada={visitadas.has('contatos')}>
+              <ContatosAba key={negocio.id} negocio={negocio} onAba={irParaAba} />
+            </PainelDaAba>
+            <PainelDaAba id="plaquinha" ativa={aba} visitada={visitadas.has('plaquinha')}>
+              <PlaquinhaAba key={negocio.id} negocio={negocio} />
+            </PainelDaAba>
+          </>
         )}
 
         <div className="mt-12 pt-6 border-t border-[#E8E4DF] text-center">

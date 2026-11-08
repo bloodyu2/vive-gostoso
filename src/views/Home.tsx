@@ -1,21 +1,23 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
-import { BadgeCheck, ChevronDown } from 'lucide-react'
+import { ArrowRight, BadgeCheck, Compass, Ticket, Sparkles } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { BusinessCard } from '@/components/business/business-card'
 import { Hoje } from '@/components/home/hoje'
 import { CarrosselNovos } from '@/components/home/carrossel-novos'
+import { NovosEmGostoso } from '@/components/home/novos-em-gostoso'
+import { TopoDaHome } from '@/components/home/topo'
 import { PostCard } from '@/components/blog/PostCard'
 import { BlurFade } from '@/components/magicui/blur-fade'
-import { Marquee } from '@/components/magicui/marquee'
 import { useBusinesses } from '@/hooks/useBusinesses'
 import { useStats, type SiteStats } from '@/hooks/useStats'
 import { useCarrosselNovos } from '@/hooks/useCarrosselNovos'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { supabase } from '@/lib/supabase'
+import { pushDataLayer } from '@/lib/analytics'
 import { normalizarIdioma, visivelNoIdioma } from '@/lib/blog/traducoes'
 import type { BlogPost } from '@/types/database'
 
@@ -48,9 +50,18 @@ type HomeProps = {
   initialData?: HomeInitialData
   /** Vitrine de recursos, renderizada no servidor (src/components/home/vitrine.tsx). */
   vitrine?: React.ReactNode
+  /** Parceiros do Passaporte com vantagem no ar (lido no servidor). */
+  clubeNoAr?: number
 }
 
-export default function Home({ initialData, vitrine }: HomeProps) {
+/** Os 3 passos: descobrir, entrar no Passaporte, aproveitar. */
+const PASSOS = [
+  { chave: 'descubra', Icone: Compass, caminho: '/explore' },
+  { chave: 'entre', Icone: Ticket, caminho: '/clube' },
+  { chave: 'aproveite', Icone: Sparkles, caminho: '/clube' },
+] as const
+
+export default function Home({ initialData, vitrine, clubeNoAr = 0 }: HomeProps) {
   const { t, i18n } = useTranslation()
   const lp = useLocalePath()
 
@@ -62,124 +73,85 @@ export default function Home({ initialData, vitrine }: HomeProps) {
   const idioma = normalizarIdioma(i18n.language)
   const latestPosts = todosPosts.filter(p => visivelNoIdioma(p.slug, idioma)).slice(0, 3)
 
-  const verbsRef = useRef<HTMLDivElement>(null)
-  const [scrolled, setScrolled] = useState(false)
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  function scrollToVerbs() {
-    verbsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
   return (
     <div>
-      {/* ── Hero ── */}
-      <section className="relative bg-[#1A1A1A] text-white overflow-hidden">
-        {/* Content */}
-        <div className="relative max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-28">
-          <div className="flex flex-col gap-6 max-w-2xl">
-            {/* Display headline */}
-            <h1 className="font-display font-bold leading-none tracking-tight">
-              <span className="flex items-center gap-3 text-xs font-semibold tracking-widest uppercase text-white/60 mb-6">
-                <span className="inline-block w-2 h-2 rounded-full bg-teal" />
-                {t('home.hero_h1_cidade')}
-              </span>
-              <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">{t('home.hero_h1_1')}</span>
-              <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">{t('home.hero_h1_2')}</span>
-              <span className="block text-4xl sm:text-6xl md:text-7xl text-white/90">{t('home.hero_h1_3')}</span>
-              <span className="block text-3xl sm:text-5xl md:text-7xl text-coral mt-1">{t('home.hero_brand')}</span>
-            </h1>
-
-            {/* Sub */}
-            <p className="text-base md:text-lg text-white/70 max-w-md leading-relaxed">
-              {t('home.hero_sub')}
-            </p>
-
-            {/* CTAs */}
-            <div className="flex flex-wrap gap-3 pt-2">
-              <Link href={lp('/explore')}
-                className="bg-teal text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-teal-dark transition-colors">
-                {t('home.cta_explorar')}
-              </Link>
-              <Link href={lp('/come')}
-                className="bg-white/10 text-white border border-white/20 px-6 py-3 rounded-full text-sm font-semibold hover:bg-white/20 transition-colors">
-                {t('home.cta_restaurantes')}
-              </Link>
-            </div>
-          </div>
-
-          {/* Stats — one sentence, not a tile grid */}
-          {stats && (
-          <p className="mt-14 pt-10 border-t border-white/10 text-white/70 text-sm md:text-base max-w-xl">
-            {/* Dois numeros, os dois calculados. Nunca um so numero com a
-                palavra "verificados" ao lado: e o que a home fazia ate hoje,
-                dizendo "+182 negocios verificados" com 67 verificados de fato.
-                Sem numero, o bloco inteiro nao aparece: um valor inventado
-                seria mentir justo quando a pagina perdeu como saber a verdade. */}
-            {t('home.stats_sentence', { cadastrados: stats.businesses, verificados: stats.verified })}
-          </p>
-          )}
-        </div>
-
-        {/* Scroll incentive */}
-        <button
-          onClick={scrollToVerbs}
-          aria-label={t('home.scroll_label')}
-          className={`absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/70 hover:text-white/80 transition-all duration-500 ${scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
-        >
-          <span className="text-[10px] uppercase tracking-widest font-semibold">{t('home.scroll_label')}</span>
-          <ChevronDown className="w-5 h-5" />
-        </button>
-      </section>
+      <TopoDaHome clubeNoAr={clubeNoAr} stats={stats} />
 
       {/* ── Vitrine de recursos (server component, vem pronta da pagina) ── */}
-      <div ref={verbsRef} className="scroll-mt-20">
-        {vitrine}
-      </div>
+      {vitrine}
 
-      {/* ── Banner carrossel: destaque, novos e verificados ── */}
-      <CarrosselNovos itens={carrossel} />
+      {/* ── Novos em Gostoso: os ultimos cadastros, so eles ── */}
+      <NovosEmGostoso />
 
       {/* ── Agora em Gostoso ── */}
       <Hoje />
 
-      {/* ── Instagram ── */}
-      <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10">
+      {/* ── Instagram: puxado para cima, com a logo da marca ── */}
+      <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10 md:pb-14">
         <BlurFade>
-        <a
-          href="https://instagram.com/vivegostoso"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative flex flex-col sm:flex-row items-center justify-between gap-5 overflow-hidden rounded-2xl bg-teal-dark px-7 py-6 transition-colors hover:bg-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
-        >
-
-          <div className="flex items-center gap-4 relative">
-            {/* Instagram icon */}
-            <div className="w-11 h-11 rounded-2xl bg-white/15 flex items-center justify-center flex-shrink-0">
-              <svg viewBox="0 0 24 24" aria-hidden="true" className="w-5 h-5 text-white fill-current">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-              </svg>
+          <a
+            href="https://instagram.com/vivegostoso"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => pushDataLayer('instagram_click', { local: 'home' })}
+            className="group flex flex-col items-center gap-5 rounded-3xl border border-border-1 bg-card p-6 shadow-sm transition-shadow hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal motion-reduce:transition-none sm:flex-row sm:justify-between md:px-8"
+          >
+            <div className="flex items-center gap-4">
+              <span className="relative size-16 shrink-0 overflow-hidden rounded-full ring-2 ring-teal/30">
+                <Image src="/brand/avatar-circular.png" alt="" fill sizes="64px" className="object-cover" />
+              </span>
+              <div>
+                <p className="font-display text-xl font-bold leading-tight text-fg-1">@vivegostoso</p>
+                <p className="mt-0.5 max-w-sm text-sm text-fg-2 text-pretty">{t('home.instagram_sub')}</p>
+              </div>
             </div>
-            <div>
-              <p className="font-display font-bold text-white text-lg md:text-xl leading-tight">
-                @vivegostoso
-              </p>
-              <p className="text-white/80 text-sm mt-0.5">
-                {t('home.instagram_sub')}
-              </p>
-            </div>
-          </div>
+            <span className="inline-flex min-h-11 flex-shrink-0 items-center gap-2 rounded-full bg-teal px-6 text-sm font-semibold text-white transition-[gap,background-color] group-hover:gap-3 group-hover:bg-teal-dark motion-reduce:transition-none">
+              {t('home.instagram_titulo')}
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </span>
+          </a>
+        </BlurFade>
+      </section>
 
-          <span className="relative flex items-center gap-2 bg-white text-teal-dark font-semibold text-sm px-5 min-h-11 rounded-full group-hover:gap-3 transition-[gap] motion-reduce:transition-none flex-shrink-0">
-            {t('home.instagram_titulo')}
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </span>
-        </a>
+      {/* ── Em destaque (destaques e verificados; os novos tem faixa propria) ── */}
+      <CarrosselNovos itens={carrossel} />
+
+      {/* ── Como funciona, em 3 passos ── */}
+      <section aria-labelledby="como-titulo" className="max-w-6xl mx-auto px-5 md:px-8 pb-10 md:pb-14">
+        <BlurFade>
+          <h2 id="como-titulo" className="font-display text-h3 font-semibold text-fg-1 text-balance">
+            {t('home.como_titulo')}
+          </h2>
+          <ol className="mt-5 grid gap-3 md:grid-cols-3 md:gap-4">
+            {PASSOS.map(({ chave, Icone, caminho }, i) => (
+              <li key={chave}>
+                <Link
+                  href={lp(caminho)}
+                  onClick={() => pushDataLayer('home_passo_click', { passo: chave })}
+                  className="group flex h-full gap-4 rounded-2xl border border-border-1 bg-elev p-5 transition-colors hover:border-teal/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal motion-reduce:transition-none"
+                >
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-teal-light text-teal-dark" aria-hidden="true">
+                    <Icone className="size-5" />
+                  </span>
+                  <span>
+                    <span className="block text-xs font-semibold uppercase tracking-widest text-ocre-texto">
+                      {t('home.como_passo', { n: i + 1 })}
+                    </span>
+                    <span className="mt-0.5 block font-display text-lg font-semibold leading-snug text-fg-1">
+                      {t(`home.como_${chave}_titulo`)}
+                    </span>
+                    <span className="mt-1 block text-sm leading-snug text-fg-2 text-pretty">{t(`home.como_${chave}_desc`)}</span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-4">
+            <Link href={lp('/sobre')} className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-teal hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal">
+              {t('home.como_funciona_cta')}
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </Link>
+          </p>
         </BlurFade>
       </section>
 
@@ -204,33 +176,7 @@ export default function Home({ initialData, vitrine }: HomeProps) {
         </BlurFade>
       )}
 
-      {/* ── Banner: Quer saber como funciona? ── */}
-      <section className="max-w-6xl mx-auto px-5 md:px-8 pb-10">
-        <BlurFade>
-        <Link
-          href={lp('/sobre')}
-          className="group flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#1A1A1A] dark:bg-white/5 text-white rounded-2xl px-6 py-5 hover:bg-[#2A2A2A] dark:hover:bg-white/10 transition-colors"
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-teal/20 flex items-center justify-center flex-shrink-0">
-              <span className="text-teal text-lg">?</span>
-            </div>
-            <div>
-              <p className="font-semibold text-white text-base">{t('home.como_funciona_titulo')}</p>
-              <p className="text-white/50 text-sm mt-0.5">{t('home.como_funciona_desc')}</p>
-            </div>
-          </div>
-          <span className="flex-shrink-0 flex items-center gap-1.5 text-teal text-sm font-semibold group-hover:gap-2.5 transition-all">
-            {t('home.como_funciona_cta')}
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </span>
-        </Link>
-        </BlurFade>
-      </section>
-
-      {/* ── Verificados pela cidade ── */}
+      {/* ── Verificados pela cidade: tres cartoes e uma lista de links ── */}
       {featured.length > 0 && (
         <BlurFade>
         <section className="max-w-6xl mx-auto px-5 md:px-8 pb-16 md:pb-20">
@@ -246,14 +192,19 @@ export default function Home({ initialData, vitrine }: HomeProps) {
             ))}
           </div>
           {featured.length > 3 && (
-            <Marquee duracao={45} className="mt-6 md:mt-8">
+            <ul className="mt-6 flex flex-wrap gap-2 md:mt-8">
               {featured.slice(3).map(b => (
-                <span key={b.id} className="mx-2 inline-flex items-center gap-1.5 rounded-full border border-border-1 bg-white dark:bg-card px-4 min-h-11 text-sm font-medium text-fg-1 whitespace-nowrap">
-                  <BadgeCheck aria-hidden="true" className="w-4 h-4 text-teal" />
-                  {b.name}
-                </span>
+                <li key={b.id}>
+                  <Link
+                    href={lp(`/negocio/${b.slug}`)}
+                    className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-border-1 bg-elev px-4 text-sm font-medium text-fg-1 transition-colors hover:border-teal hover:text-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal motion-reduce:transition-none"
+                  >
+                    <BadgeCheck aria-hidden="true" className="size-4 text-teal" />
+                    {b.name}
+                  </Link>
+                </li>
               ))}
-            </Marquee>
+            </ul>
           )}
         </section>
         </BlurFade>

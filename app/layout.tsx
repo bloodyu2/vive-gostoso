@@ -35,6 +35,20 @@ const jakarta = Plus_Jakarta_Sans({
   variable: '--font-jakarta',
 })
 
+/** [largura css, altura css, densidade] dos iPhones com tela de abertura. */
+const SPLASH_IPHONE: ReadonlyArray<readonly [number, number, number]> = [
+  [440, 956, 3],
+  [430, 932, 3],
+  [428, 926, 3],
+  [414, 896, 3],
+  [414, 896, 2],
+  [402, 874, 3],
+  [393, 852, 3],
+  [390, 844, 3],
+  [375, 812, 3],
+  [375, 667, 2],
+]
+
 export const viewport: Viewport = {
   themeColor: '#0D7C7C',
 }
@@ -101,7 +115,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             suppressHydrationWarning porque este script muta a classe dele de
             proposito antes da hidratacao. */}
         <script nonce={nonce} dangerouslySetInnerHTML={{ __html: SCRIPT_ANTI_FOUC }} />
-      <link rel="apple-touch-startup-image" href="/splash/splash-1170x2532.png" />
+        {/* Abertura do app instalado no iPhone: uma tela por tamanho (largura x altura em
+            pixels CSS e densidade), com o logo original inteiro. Gerada por
+            scripts/gerar-icones-app.py. Sem a tela certa o iOS mostra o fundo em branco. */}
+        {SPLASH_IPHONE.map(([w, h, dpr]) => (
+          <link
+            key={`${w}x${h}x${dpr}`}
+            rel="apple-touch-startup-image"
+            media={`screen and (device-width: ${w}px) and (device-height: ${h}px) and (-webkit-device-pixel-ratio: ${dpr})`}
+            href={`/splash/splash-${w * dpr}x${h * dpr}.png`}
+          />
+        ))}
       <GTMScript nonce={nonce} />
     </head>
       <body className="bg-page text-fg-1 font-sans antialiased">
