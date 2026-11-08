@@ -11,6 +11,7 @@ import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { ArrowDown, BedDouble, ChevronRight, Compass, ExternalLink, MapPin, Star, Ticket, UtensilsCrossed, Waves } from 'lucide-react'
 import { Selo } from '@/components/business/selo'
+import { LinkMedido } from '@/components/clube/link-medido'
 import { RegistrarVisita } from '@/components/clube/registrar-visita'
 import { ResgatePlaquinha } from '@/components/clube/resgate-plaquinha'
 import { TemaClube } from '@/components/clube/tema'
@@ -276,7 +277,7 @@ export default async function PlaquinhaPage({ params }: Props) {
           <p className="clube-p-texto">{t.sub}</p>
           <div className="clube-pilha">
             {avaliar ? (
-              <a
+              <LinkMedido codigo={codigo} acao="avaliar" negocio={negocio.name}
                 className="clube-btn clube-btn--mostarda clube-btn--cheio clube-btn--grande"
                 href={avaliar}
                 target="_blank"
@@ -285,10 +286,10 @@ export default async function PlaquinhaPage({ params }: Props) {
                 <Star size={22} aria-hidden />
                 {t.avaliar}
                 <ExternalLink size={18} aria-hidden />
-              </a>
+              </LinkMedido>
             ) : null}
             {instagram ? (
-              <a
+              <LinkMedido codigo={codigo} acao="instagram" negocio={negocio.name}
                 className="clube-btn clube-btn--contorno clube-btn--cheio"
                 href={instagram}
                 target="_blank"
@@ -296,11 +297,11 @@ export default async function PlaquinhaPage({ params }: Props) {
               >
                 <IconeInstagram size={20} />
                 {t.instagram}
-              </a>
+              </LinkMedido>
             ) : null}
-            <a className="clube-btn clube-btn--fantasma clube-btn--cheio" href={`${pre}/negocio/${negocio.slug}`}>
+            <LinkMedido codigo={codigo} acao="perfil" negocio={negocio.name} className="clube-btn clube-btn--fantasma clube-btn--cheio" href={`${pre}/negocio/${negocio.slug}`}>
               {t.ver_perfil.replace('{nome}', negocio.name)}
-            </a>
+            </LinkMedido>
           </div>
           {extras.length > 0 ? (
             <a className="clube-p-aviso" href="#mais-aqui">
@@ -316,9 +317,9 @@ export default async function PlaquinhaPage({ params }: Props) {
               {t.convite_titulo}
             </h2>
             <p className="clube-p-texto">{t.convite_texto}</p>
-            <a className="clube-btn clube-btn--contorno clube-btn--cheio" href={`${pre}${CLUBE_ROTA}?n=${codigo}`}>
+            <LinkMedido codigo={codigo} acao="passaporte" negocio={negocio.name} className="clube-btn clube-btn--contorno clube-btn--cheio" href={`${pre}${CLUBE_ROTA}?n=${codigo}`}>
               {t.passaporte_botao}
-            </a>
+            </LinkMedido>
           </section>
         ) : null}
 
@@ -387,7 +388,7 @@ export default async function PlaquinhaPage({ params }: Props) {
                   <div className="clube-p-extra-corpo">
                     <h3 className="clube-p-h3">{e.negocio.name}</h3>
                     {linkGoogle ? (
-                      <a
+                      <LinkMedido codigo={codigo} acao="avaliar" negocio={e.negocio.name}
                         className="clube-btn clube-btn--mostarda clube-btn--cheio clube-btn--grande"
                         href={linkGoogle}
                         target="_blank"
@@ -396,10 +397,10 @@ export default async function PlaquinhaPage({ params }: Props) {
                         <Star size={22} aria-hidden />
                         {t.avaliar}
                         <ExternalLink size={18} aria-hidden />
-                      </a>
+                      </LinkMedido>
                     ) : null}
                     {linkInsta ? (
-                      <a
+                      <LinkMedido codigo={codigo} acao="instagram" negocio={e.negocio.name}
                         className="clube-btn clube-btn--contorno clube-btn--cheio"
                         href={linkInsta}
                         target="_blank"
@@ -407,11 +408,11 @@ export default async function PlaquinhaPage({ params }: Props) {
                       >
                         <IconeInstagram size={20} />
                         {t.instagram}
-                      </a>
+                      </LinkMedido>
                     ) : null}
-                    <a className="clube-btn clube-btn--fantasma clube-btn--cheio" href={`${pre}/negocio/${e.negocio.slug}`}>
+                    <LinkMedido codigo={codigo} acao="perfil" negocio={e.negocio.name} className="clube-btn clube-btn--fantasma clube-btn--cheio" href={`${pre}/negocio/${e.negocio.slug}`}>
                       {t.ver_perfil.replace('{nome}', e.negocio.name)}
-                    </a>
+                    </LinkMedido>
                   </div>
                   {e.vantagem ? (
                     <div className="clube-p-extra-cupom">
