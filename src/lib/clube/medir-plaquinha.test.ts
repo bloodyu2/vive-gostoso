@@ -15,6 +15,7 @@ describe('medir-plaquinha', () => {
       plaquinha_acao: 'avaliar',
       plaquinha_negocio: 'Casa Reduto',
       origem: 'plaquinha',
+      send_to: 'G-Z915DS14EM',
     })
   })
 
