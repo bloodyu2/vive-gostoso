@@ -60,7 +60,11 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
+  /* Arquivos estaticos de public/ que NAO podem passar pelo i18n: o proxy os reescrevia para
+     /pt/<arquivo> e davam 404 (visto no QA de 08/11/2026): o swe-worker-*.js e o workbox-*.js do
+     service worker (o sw.js lista o swe-worker no precache) e o arquivo de verificacao do Google
+     Search Console (googleXXXX.html). */
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|icons|manifest.json|sw.js|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|icons|manifest.json|sw.js|swe-worker-[^/]+\\.js|workbox-[^/]+\\.js|google[a-z0-9]+\\.html|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }

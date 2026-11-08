@@ -51,7 +51,8 @@ export function montarCsp(nonce: string): string {
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://www.googletagmanager.com ${CLARITY_SCRIPT}`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.mapbox.com",
     "font-src 'self' https://fonts.gstatic.com",
-    `img-src 'self' data: blob: ${SUPABASE_ORIGIN} ${UNSPLASH_ORIGINS} https://api.mapbox.com https://*.tiles.mapbox.com ${CLARITY_COLETA}`,
+    // googletagmanager.com: o GTM manda um pixel (/a?id=GTM-...) a cada carregamento; sem este host ele era bloqueado e a home dava 12 erros de console (QA de 08/11/2026).
+    `img-src 'self' data: blob: ${SUPABASE_ORIGIN} ${UNSPLASH_ORIGINS} https://api.mapbox.com https://*.tiles.mapbox.com https://www.googletagmanager.com ${CLARITY_COLETA}`,
     `connect-src 'self' ${SUPABASE_ORIGIN} ${SUPABASE_WS_ORIGIN} https://api.mapbox.com https://*.tiles.mapbox.com https://events.mapbox.com https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com ${CLARITY_COLETA}`,
     "worker-src 'self' blob:",
     "child-src 'self' blob: https://www.clarity.ms",

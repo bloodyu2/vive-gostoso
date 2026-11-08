@@ -64,7 +64,7 @@ export function ChromeDoSite({ children }: { children: React.ReactNode }) {
       <ShareFab />
       <WhatsAppButton variante="fab" />
       <BarraDoApp />
-      <CookieBanner />
+      <CookieBanner acimaDaBarra={comBarra} />
     </>
   )
 }

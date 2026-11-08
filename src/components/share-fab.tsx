@@ -33,7 +33,7 @@ export function ShareFab() {
     <button
       onClick={handleShare}
       aria-label={t('aria_label')}
-      className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom))] right-4 z-[45] w-11 h-11 rounded-full bg-white dark:bg-[#1A1A1A] border border-[#E8E4DF] dark:border-[#2D2D2D] shadow-md flex items-center justify-center text-fg-3-texto hover:text-teal hover:border-teal dark:hover:text-teal transition-colors md:hidden"
+      className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom))] right-4 z-[45] [html[data-cookie-aberto]_&]:hidden w-11 h-11 rounded-full bg-white dark:bg-[#1A1A1A] border border-[#E8E4DF] dark:border-[#2D2D2D] shadow-md flex items-center justify-center text-fg-3-texto hover:text-teal hover:border-teal dark:hover:text-teal transition-colors md:hidden"
     >
       {copied
         ? <Check className="w-4 h-4 text-teal" />

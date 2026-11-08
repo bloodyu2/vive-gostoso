@@ -5,6 +5,18 @@
 
 ---
 
+## 2026-11-08: elemento fixo novo na borda de baixo tem de conferir quem mais mora la
+**O que aconteceu:** a barra de app do celular (PR #72) entrou colada embaixo, na mesma camada (z-50) do aviso de cookies, que vem depois no DOM. Quem ainda nao tinha respondido o aviso via a barra coberta e nenhum botao respondia ao toque. O QA do PR so olhou captura de tela e rota, nao o toque, e a captura ja vinha com o aviso fechado.
+**Regra:** todo elemento `fixed` novo se confere com `document.elementFromPoint` no centro de cada controle, com o navegador SEM localStorage (visitante novo, aviso de cookies aberto), em 390 px com toque. Fixos que dividem a borda (barra, aviso, ShareFab, WhatsApp) se empilham de proposito, nunca por acaso de ordem no DOM.
+
+## 2026-11-08: foto "que existe no deploy" nao e foto que o visitante ve
+**O que aconteceu:** o teste `vitrine-imagens` so conferia que o arquivo existia e ficava no arquivo certo. Em lista horizontal no celular a foto `lazy` nao carrega fora da tela e o `BlurFade` deixava o cartao transparente; Mares e Apoie nem tinham foto e Participe usava foto de banco de imagem (confete).
+**Regra:** foto de cartao em carrossel horizontal e `eager`; a conferencia de imagem e `naturalWidth > 0` com o carrossel rolado de ponta a ponta, nao so o arquivo no disco. Nunca foto de banco de imagem: so de Gostoso, e `public/images/events/*` e `public/images/blog/*` (varias de banco de imagem) nao servem de origem.
+
+## 2026-11-08: arquivo estatico de public/ fora do matcher do proxy vira 404
+**O que aconteceu:** o matcher do `proxy.ts` listava `sw.js` mas nao `swe-worker-*.js`, `workbox-*.js` nem o `googleXXXX.html` do Search Console; o next-intl os reescrevia para `/pt/...` e davam 404 (o `sw.js` ainda lista o swe-worker no precache).
+**Regra:** arquivo novo na raiz de `public/` entra no matcher do proxy ou e conferido com `curl -I` na raiz em producao. `src/lib/proxy-matcher.test.ts` cobre os atuais.
+
 ## 2026-10-28: `scrollbar-none` nunca funcionou, por causa de camada
 **O que aconteceu:** o `globals.css` tinha `* { scrollbar-width: thin }` fora de qualquer `@layer`. Regra sem camada ganha de qualquer utilidade do Tailwind v4 (que mora em `@layer utilities`), então `scrollbar-none` (e `[scrollbar-width:none]`) não escondiam nada. O comentário do arquivo já dizia que "o scrollbar continuava aparecendo onde o código achava que tinha escondido". Achado medindo `getComputedStyle(...).scrollbarWidth` (`thin`) no carrossel novo da home.
 **Regra:** CSS global de elemento (`*`, `body`, `a`) entra em `@layer base`. Utilidade que "não pega" se confere pelo valor computado no navegador, não pela classe no HTML.

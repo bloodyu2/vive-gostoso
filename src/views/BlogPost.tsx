@@ -10,6 +10,7 @@ import { praiasCitadas } from '@/lib/explore/praias-citadas'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/types/database'
 import { useLocalePath } from '@/hooks/useLocalePath'
+import { prefixarLinksInternos } from '@/lib/blog/links-do-idioma'
 import { RelatedPosts, TableOfContents } from '@/components/blog'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { ScrollProgress } from '@/components/magicui/scroll-progress'
@@ -101,8 +102,10 @@ export default function BlogPostPage({ initialPost, slug: slugProp }: BlogPostPa
   const lp = useLocalePath()
 
   const sanitizedContent = useMemo(
-    () => (post?.content ? sanitizeBlogContent(post.content) : ''),
-    [post],
+    () => (post?.content ? prefixarLinksInternos(sanitizeBlogContent(post.content), lp) : ''),
+    // lp muda de identidade a cada render; so o idioma importa.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [post, i18n.language],
   )
 
   const modulo = useMemo(() => moduloDoPost(post?.tags), [post])
