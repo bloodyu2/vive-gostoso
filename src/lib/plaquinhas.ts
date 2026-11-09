@@ -53,7 +53,8 @@ export interface Plaquinha {
 export const PLAQUINHAS: Record<string, Plaquinha> = {
   '01': { slug: 'gostoso-expedicoes', placeId: 'ChIJldqjdTYNtAcRdymDC3gymGM', instagram: 'gostosoexpedicoes' },
   '02': { slug: 'pousada-parcel-do-gostoso', placeId: 'ChIJuaTOKpUNtAcRa1AsybalEM0' },
-  '03': { slug: 'casa-reduto-artesanato', placeId: 'ChIJ_cvxpfEPtAcRUb4jnsKYVsM' },
+  // 03 e 05 INVERTIDOS em 09/11/2026 (Victor): as plaquinhas fisicas foram entregues trocadas; a da Casa Reduto e a 05 e a da Casa Gostoso Mar e a 03. Nao reimprimir.
+  '03': { slug: 'casa-gostoso-mar', placeId: 'ChIJJ8_sBNUNtAcRKxU6do-yUDE' },
   // O nome certo e "O Jardim do Seridó" (Victor, 04/11/2026); a linha do banco ainda se chama "Seridó Praia".
   '04': {
     slug: 'serido-praia',
@@ -61,7 +62,7 @@ export const PLAQUINHAS: Record<string, Plaquinha> = {
     placeId: 'ChIJXz2VsTkMtAcRT7gQp1I82Xw',
     instagram: 'ojardimdoserido',
   },
-  '05': { slug: 'casa-gostoso-mar', placeId: 'ChIJJ8_sBNUNtAcRKxU6do-yUDE' },
+  '05': { slug: 'casa-reduto-artesanato', placeId: 'ChIJ_cvxpfEPtAcRUb4jnsKYVsM' },
   '06': { slug: 'cafe-com-biscoitos-damy', placeId: 'ChIJMwadNvVztAcRtw5vrUFQSCA' },
   '07': {
     slug: 'pousada-oasis-dos-ventos',

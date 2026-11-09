@@ -99,9 +99,9 @@ describe('mapa das plaquinhas (04/11/2026)', () => {
     expect(slugs).toEqual([
       'gostoso-expedicoes',
       'pousada-parcel-do-gostoso',
-      'casa-reduto-artesanato',
-      'serido-praia',
       'casa-gostoso-mar',
+      'serido-praia',
+      'casa-reduto-artesanato',
       'cafe-com-biscoitos-damy',
       'pousada-oasis-dos-ventos',
       'o-pico-surf-skate-shop',
@@ -109,6 +109,11 @@ describe('mapa das plaquinhas (04/11/2026)', () => {
       'gostoso-buggy',
       'casa-surya',
     ])
+  })
+
+  it('03 e 05 estao invertidos (09/11/2026): a plaquinha fisica da Casa Reduto e a 05, a da Casa Gostoso Mar e a 03', () => {
+    expect(PLAQUINHAS['05'].slug).toBe('casa-reduto-artesanato')
+    expect(PLAQUINHAS['03'].slug).toBe('casa-gostoso-mar')
   })
 
   it('todo negocio do mapa tem link de avaliacao do Google, sempre de place_id', () => {
