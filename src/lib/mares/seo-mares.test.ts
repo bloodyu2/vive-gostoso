@@ -55,9 +55,24 @@ describe('JSON-LD', () => {
   const tipos = ld['@graph'].map((n) => n['@type'])
 
   it('declara pagina, praia com coordenadas e trilha', () => {
-    expect(tipos).toEqual(['WebPage', 'Beach', 'BreadcrumbList'])
+    expect(tipos).toEqual(['WebPage', ['Beach', 'TouristAttraction'], 'BreadcrumbList'])
     const praia = ld['@graph'][1] as { geo: { latitude: number; longitude: number } }
     expect(praia.geo.latitude).toBe(-5.12024)
+  })
+
+  it('praia: municipio em containedInPlace e mapa pela coordenada; sem avaliacao nem preco', () => {
+    const praia = ld['@graph'][1] as Record<string, unknown>
+    expect(praia.containedInPlace).toMatchObject({ '@type': 'City', name: 'São Miguel do Gostoso' })
+    expect(praia.hasMap).toBe('https://www.google.com/maps/search/?api=1&query=-5.12024,-35.62901')
+    for (const campo of ['aggregateRating', 'review', 'priceRange', 'offers']) expect(praia).not.toHaveProperty(campo)
+  })
+
+  it('praia sem coordenada: sem geo e sem mapa, mas com municipio', () => {
+    const minhoto = praiaPorSlug('minhoto')!
+    const praia = (jsonLdMares('pt', minhoto) as { '@graph': Array<Record<string, unknown>> })['@graph'][1]
+    expect(praia).not.toHaveProperty('geo')
+    expect(praia).not.toHaveProperty('hasMap')
+    expect(praia.containedInPlace).toMatchObject({ name: minhoto.municipio })
   })
 
   it('cita a Marinha como base', () => {

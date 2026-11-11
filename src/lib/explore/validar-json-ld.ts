@@ -16,6 +16,7 @@ const OBRIGATORIAS: Record<string, string[]> = {
   Beach: ['name'],
   TouristAttraction: ['name'],
   Place: ['name'],
+  City: ['name'],
   TouristDestination: ['name'],
   Dataset: ['name', 'description', 'creator'],
   GeoCoordinates: ['latitude', 'longitude'],
@@ -60,8 +61,11 @@ function visitar(no: unknown, caminho: string, erros: string[]): void {
   const o = no as Record<string, unknown>
   const tipo = o['@type']
   if (tipo !== undefined) {
-    if (typeof tipo !== 'string' || !(tipo in OBRIGATORIAS)) erros.push(`${caminho}: @type desconhecido ${String(tipo)}`)
-    else if (!eReferencia(o)) for (const p of OBRIGATORIAS[tipo]) if (o[p] === undefined || o[p] === '') erros.push(`${caminho}: ${tipo} sem ${p}`)
+    // @type pode ser lista (ex.: Beach + TouristAttraction): todos precisam ser conhecidos e cada um exige as suas propriedades.
+    const tipos = Array.isArray(tipo) ? tipo : [tipo]
+    const conhecidos = tipos.length > 0 && tipos.every((x) => typeof x === 'string' && x in OBRIGATORIAS)
+    if (!conhecidos) erros.push(`${caminho}: @type desconhecido ${String(tipo)}`)
+    else if (!eReferencia(o)) for (const t of tipos as string[]) for (const p of OBRIGATORIAS[t]) if (o[p] === undefined || o[p] === '') erros.push(`${caminho}: ${t} sem ${p}`)
     if (tipo === 'ItemList' || tipo === 'BreadcrumbList') {
       const itens = o.itemListElement as Array<Record<string, unknown>>
       if (!Array.isArray(itens) || itens.length === 0) erros.push(`${caminho}: ${tipo} vazio`)

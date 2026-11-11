@@ -10,6 +10,7 @@ import { safeJsonLd } from '@/lib/json-ld'
 import { CartaoDoDia, EstadoVazio, RodapeFonte, SeletorPraias, TabelaSemana, caminhoLocal } from '@/components/mares/partes'
 import { PainelDias } from '@/components/mares/painel-dias'
 import { LinkGuiaMares } from '@/components/mares/link-guia'
+import { Arredores } from '@/components/mares/arredores'
 
 /* Praias em que o guia do blog fala da mare com detalhe. */
 const PRAIAS_COM_GUIA = new Set(['cardeiro', 'perobas'])
@@ -83,6 +84,8 @@ export default async function PraiaMaresPage({ params }: Params) {
       </div>
 
       {!vazia && <TabelaSemana semana={semana} hoje={hoje} lang={lang} reserva={reserva} />}
+
+      <Arredores lang={lang} praia={praia} />
 
       <RodapeFonte lang={lang} principal={principal} reserva={reserva} praia={praia} />
     </main>
