@@ -57,7 +57,8 @@ export function limparResposta(bruto: string, slugsConhecidos: ReadonlySet<strin
     .replace(/\/(?:pt|en|es)\/negocio\/([a-z0-9-]+)/g, (m, slug: string) => {
       if (slugsConhecidos.has(slug)) {
         if (!links.some((l) => l.slug === slug)) links.push({ slug })
-        return m
+        // o caminho cru nao aparece no texto: fica o nome do negocio, e o link vai na lista `links`
+        return nomeDoSlug(slug)
       }
       return ''
     })
@@ -76,6 +77,11 @@ export function limparResposta(bruto: string, slugsConhecidos: ReadonlySet<strin
     return { texto: RECUSA_FORA_DO_TEMA, links: [], trocada: true, motivoDaTroca: v.motivo }
   }
   return { texto, links, trocada: false }
+}
+
+export function nomeDoSlug(slug: string): string {
+  const s = slug.replace(/-/g, ' ')
+  return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
 function slugDoLink(url: string): string | null {
