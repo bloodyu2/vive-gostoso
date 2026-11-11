@@ -1713,7 +1713,20 @@
     "distancias_titulo": "Distancia en línea recta de cada playa a su estación de referencia:",
     "distancia_item": "{praia}: {estacao}, {km} km",
     "com_reserva": "{dia} con datos del {estacao}",
-    "dados_do": "Datos del {estacao}"
+    "dados_do": "Datos del {estacao}",
+    "arredores": {
+      "vizinhas_titulo": "Playas vecinas",
+      "vizinhas_desc": "Las playas de la tabla más cercanas, en línea recta.",
+      "vizinhas_desc_municipio": "Otras playas de la tabla en {municipio}. La posición de esta playa aún no fue verificada, por eso no mostramos distancia.",
+      "vizinha_item": "{praia}, a {dist}",
+      "pontos_titulo": "También cerca",
+      "pontos_desc": "Puntos del mapa de Vive Gostoso en un radio de {raio} km, en línea recta.",
+      "ponto_item": "{nome}, a {dist}",
+      "mapa": "Ver {praia} en Google Maps",
+      "clube_titulo": "Passaporte Gostoso",
+      "clube_parceiros": "Socios del club de beneficios que están en esta playa. El club es gratis.",
+      "clube_cta": "Conocer el club"
+    }
   },
   "vitrine": {
     "titulo": "Lo que resuelves aquí",

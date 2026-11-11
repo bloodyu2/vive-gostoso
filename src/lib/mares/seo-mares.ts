@@ -2,8 +2,9 @@ import type { Metadata } from 'next'
 import pt from '@/locales/pt.json'
 import en from '@/locales/en.json'
 import es from '@/locales/es.json'
-import { ESTACOES, type Idioma, type PraiaMare } from '@/data/praias-mares'
+import { ESTACOES, praiaSemDadoProprio, type Idioma, type PraiaMare } from '@/data/praias-mares'
 import { localizedUrl } from '@/lib/seo'
+import { linkMapaDaPraia } from '@/lib/mares/vizinhanca'
 
 const DICIONARIOS = { pt, en, es } as const
 const OG_LOCALE: Record<Idioma, string> = { pt: 'pt_BR', en: 'en_US', es: 'es_ES' }
@@ -67,6 +68,7 @@ export function metadadosDaPraia(praia: PraiaMare, lang: Idioma, resumoHoje: str
       type: 'website',
     },
     twitter: { card: 'summary_large_image', title: titulo, description: descricao },
+    ...(praiaSemDadoProprio(praia) ? { robots: { index: false, follow: true } } : {}),
   }
 }
 
@@ -123,13 +125,16 @@ export function jsonLdMares(lang: Idioma, praia?: PraiaMare): Record<string, unk
   }
 
   pagina.about = { '@id': `${url}#praia` }
+  const mapa = linkMapaDaPraia(praia)
   const beach = {
-    '@type': 'Beach',
+    '@type': ['Beach', 'TouristAttraction'],
     '@id': `${url}#praia`,
     name: praia.nome,
     ...(praia.lat !== undefined && praia.lon !== undefined
       ? { geo: { '@type': 'GeoCoordinates', latitude: praia.lat, longitude: praia.lon } }
       : {}),
+    ...(mapa ? { hasMap: mapa } : {}),
+    containedInPlace: { '@type': 'City', name: praia.municipio, address: { '@type': 'PostalAddress', addressRegion: 'RN', addressCountry: 'BR' } },
     address: { '@type': 'PostalAddress', addressLocality: praia.municipio, addressRegion: 'RN', addressCountry: 'BR' },
     ...(praia.dica ? { description: praia.dica[lang] } : {}),
   }
