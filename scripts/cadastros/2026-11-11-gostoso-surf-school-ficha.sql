@@ -15,7 +15,11 @@
 --   preenchida: dia da semana inventado e pior que nao ter. O horario entra na descricao, com o aviso de
 --   agendar. Quando a escola disser os dias, preencher `opening_hours`, `horario_conferido_em` e
 --   `horario_fonte` (padrao do SQL da Casa Surya).
--- - Fotos: dois quadros dos Reels publicos da propria escola (@gostososurfschoolll), os mesmos que ja
+-- - Foto principal (ajuste de 11/11 a pedido do Victor): a LOGO da escola, que o Victor ja tinha entregue
+--   (Drive da Balaio, "Vive Gostoso - Passaporte - Gostoso Surf School - logo.jpeg", linkada no KAN-846 em
+--   11/11 as 07h50; copia recortada ja no repositorio em public/parceiros/gostoso-surf-school/logo.jpg, PR 76).
+--   Capa e primeira foto = logo. Os dois quadros abaixo ficam so como fotos de apoio.
+-- - Fotos de apoio: dois quadros dos Reels publicos da propria escola (@gostososurfschoolll), os mesmos que ja
 --   entram no carrossel de 17/11 com credito na legenda: o rack de pranchas (capa) e o por do sol na praia.
 --   Sao quadros de video de 640 px, nao os originais, e a autorizacao de uso NAO foi pedida a escola ainda
 --   (mesmo caso da Casa Surya). Trocar pelos originais assim que ela mandar. Nenhuma foto e de IA.
@@ -30,8 +34,9 @@
 
 update public.gostoso_businesses
    set instagram   = 'gostososurfschoolll',
-       cover_url   = '/parceiros/gostoso-surf-school/gostoso-surf-school-01.jpg',
+       cover_url   = '/parceiros/gostoso-surf-school/logo.jpg',
        photos      = array[
+         '/parceiros/gostoso-surf-school/logo.jpg',
          '/parceiros/gostoso-surf-school/gostoso-surf-school-01.jpg',
          '/parceiros/gostoso-surf-school/gostoso-surf-school-02.jpg'
        ],
