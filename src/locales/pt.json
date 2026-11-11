@@ -1713,7 +1713,20 @@
     "distancias_titulo": "Distância em linha reta de cada praia até a estação de referência:",
     "distancia_item": "{praia}: {estacao}, {km} km",
     "com_reserva": "{dia} com dados do {estacao}",
-    "dados_do": "Dados do {estacao}"
+    "dados_do": "Dados do {estacao}",
+    "arredores": {
+      "vizinhas_titulo": "Praias vizinhas",
+      "vizinhas_desc": "As praias da tábua mais próximas daqui, em linha reta.",
+      "vizinhas_desc_municipio": "Outras praias da tábua em {municipio}. A posição desta praia ainda não foi conferida, por isso não mostramos distância.",
+      "vizinha_item": "{praia}, a {dist}",
+      "pontos_titulo": "Também por perto",
+      "pontos_desc": "Pontos do mapa do Vive Gostoso num raio de {raio} km, em linha reta.",
+      "ponto_item": "{nome}, a {dist}",
+      "mapa": "Ver a {praia} no Google Maps",
+      "clube_titulo": "Passaporte Gostoso",
+      "clube_parceiros": "Parceiros do clube de vantagens que ficam nesta praia. O clube é de graça.",
+      "clube_cta": "Conhecer o clube"
+    }
   },
   "vitrine": {
     "titulo": "O que você resolve por aqui",

@@ -226,6 +226,15 @@ export const PRAIAS_MARES: PraiaMare[] = [
   },
 ]
 
+/** Praia sem dado proprio: nem coordenada conferida nem dica. A pagina so teria a tabua
+ *  da estacao, igual a de qualquer outra praia, entao fica noindex e fora do sitemap
+ *  (programmatic SEO: pagina ralo nao entra no indice) ate alguem dar a fonte. A regra
+ *  e automatica: no dia em que a praia ganhar `lat`/`lon` ou `dica`, o noindex sai.
+ *  O sitemap aplica a mesma regra em scripts/mares-slugs.mjs (teste confere as duas). */
+export function praiaSemDadoProprio(p: PraiaMare): boolean {
+  return p.lat === undefined && p.lon === undefined && p.dica === undefined
+}
+
 export function praiaPorSlug(slug: string): PraiaMare | undefined {
   return PRAIAS_MARES.find((p) => p.slug === slug)
 }

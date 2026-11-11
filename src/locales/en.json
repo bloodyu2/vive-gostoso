@@ -1713,7 +1713,20 @@
     "distancias_titulo": "Straight-line distance from each beach to its reference station:",
     "distancia_item": "{praia}: {estacao}, {km} km",
     "com_reserva": "{dia} with data from {estacao}",
-    "dados_do": "Data from {estacao}"
+    "dados_do": "Data from {estacao}",
+    "arredores": {
+      "vizinhas_titulo": "Neighbouring beaches",
+      "vizinhas_desc": "The nearest beaches on the tide table, in a straight line.",
+      "vizinhas_desc_municipio": "Other beaches on the tide table in {municipio}. This beach's position has not been verified yet, so no distance is shown.",
+      "vizinha_item": "{praia}, {dist} away",
+      "pontos_titulo": "Also nearby",
+      "pontos_desc": "Vive Gostoso map points within {raio} km, in a straight line.",
+      "ponto_item": "{nome}, {dist} away",
+      "mapa": "See {praia} on Google Maps",
+      "clube_titulo": "Passaporte Gostoso",
+      "clube_parceiros": "Partners of the benefits club located on this beach. The club is free.",
+      "clube_cta": "See the club"
+    }
   },
   "vitrine": {
     "titulo": "What you can do here",
