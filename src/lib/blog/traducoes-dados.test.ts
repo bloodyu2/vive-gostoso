@@ -32,4 +32,14 @@ describe('dados de traducao do blog', () => {
     expect(visivelNoIdioma(es, 'pt')).toBe(false)
     expect(visivelNoIdioma(en, 'pt')).toBe(false)
   })
+
+  it('o guia dos reveillons de 2027 esta registrado e so aparece no proprio idioma', () => {
+    const pt = 'reveillon-sao-miguel-do-gostoso-2027-festas-e-ingressos'
+    const es = 'nochevieja-sao-miguel-do-gostoso-2027-fiestas-y-entradas'
+    const en = 'new-years-eve-sao-miguel-do-gostoso-2027-parties-and-tickets'
+    expect(GRUPOS.some((g) => g.pt === pt && g.es === es && g.en === en)).toBe(true)
+    expect(visivelNoIdioma(pt, 'pt')).toBe(true)
+    expect(visivelNoIdioma(es, 'pt')).toBe(false)
+    expect(visivelNoIdioma(en, 'es')).toBe(false)
+  })
 })
