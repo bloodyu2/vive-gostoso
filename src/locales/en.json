@@ -692,6 +692,8 @@
   },
   "footer": {
     "privacidade": "Privacy",
+    "termos": "Terms",
+    "excluir_conta": "Delete account",
     "gerenciar_cookies": "Manage cookies",
     "cadastrar": "Register business",
     "tagline1": "The digital infrastructure",
