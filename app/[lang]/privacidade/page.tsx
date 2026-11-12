@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import { getMessages } from 'next-intl/server'
+import { SecaoLegal } from '@/components/legal/secao-legal'
+import { PRIVACIDADE_APP, PRIVACIDADE_TERCEIROS, type Idioma } from '@/data/paginas-legais'
 import { routing } from '../../../i18n/routing'
 
 export const metadata: Metadata = {
@@ -12,7 +14,8 @@ export function generateStaticParams() {
 }
 
 export default async function PrivacidadePage({ params }: { params: Promise<{ lang: string }> }) {
-  await params
+  const { lang } = await params
+  const idioma: Idioma = lang === 'en' || lang === 'es' ? lang : 'pt'
   const messages = await getMessages()
   const t = (messages as Record<string, Record<string, string>>)?.privacidade ?? {}
 
@@ -50,6 +53,8 @@ export default async function PrivacidadePage({ params }: { params: Promise<{ la
           <h2 className="font-display font-semibold text-xl md:text-2xl text-fg-1 mb-3">{t.sec7_title ?? '7. Passaporte Gostoso (cupons)'}</h2>
           <p>{t.sec7_text}</p>
         </section>
+        <SecaoLegal secao={PRIVACIDADE_APP[idioma]} />
+        <SecaoLegal secao={PRIVACIDADE_TERCEIROS[idioma]} />
         {t.atualizada ? <p className="text-sm text-fg-3-texto">{t.atualizada}</p> : null}
       </div>
     </div>
