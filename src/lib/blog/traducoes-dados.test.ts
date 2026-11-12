@@ -42,4 +42,17 @@ describe('dados de traducao do blog', () => {
     expect(visivelNoIdioma(es, 'pt')).toBe(false)
     expect(visivelNoIdioma(en, 'es')).toBe(false)
   })
+
+  it('os posts de ventos e da Mostra de 2026 estao registrados e so aparecem no proprio idioma', () => {
+    const trios = [
+      ['copa-dos-ventos-e-sertoes-kitesurf-novembro-2026-gostoso', 'copa-dos-ventos-y-sertoes-kitesurf-noviembre-2026-gostoso', 'copa-dos-ventos-and-sertoes-kitesurf-november-2026-gostoso'],
+      ['mostra-de-cinema-de-gostoso-2026-filmes-e-programacao', 'mostra-de-cine-de-gostoso-2026-peliculas-y-programacion', 'gostoso-film-festival-2026-films-and-schedule'],
+    ]
+    for (const [pt, es, en] of trios) {
+      expect(GRUPOS.some((g) => g.pt === pt && g.es === es && g.en === en), pt).toBe(true)
+      expect(visivelNoIdioma(pt, 'pt')).toBe(true)
+      expect(visivelNoIdioma(es, 'pt')).toBe(false)
+      expect(visivelNoIdioma(en, 'es')).toBe(false)
+    }
+  })
 })
