@@ -99,6 +99,14 @@ const EXCECOES: Array<{ arquivo: string; marcador: string; motivo: string }> = [
   { arquivo: 'locales/en.json', marcador: 'ajuda_beneficio', motivo: 'exemplo de preenchimento' },
   { arquivo: 'locales/es.json', marcador: 'ajuda_beneficio', motivo: 'exemplo de preenchimento' },
 
+  // Termos de Uso do aplicativo (KAN-868): o valor da mensalidade de quem trabalha no app
+  // faz parte do contrato que a pessoa aceita. Nao e preco do site (que vem de
+  // gostoso_parametros_produto): o app o define em city.config.ts e o Asaas cobra. E texto
+  // legal datado, e mudar o valor exige reeditar os Termos e avisar os usuarios; por isso
+  // fica literal e registrado aqui.
+  { arquivo: 'data/paginas-legais.ts', marcador: 'R$ 4,99', motivo: 'mensalidade do aplicativo nos Termos de Uso (pt e es), texto legal datado' },
+  { arquivo: 'data/paginas-legais.ts', marcador: 'R$ 4.99', motivo: 'mensalidade do aplicativo nos Termos de Uso (en), texto legal datado' },
+
   // Texto sobre a cidade, não sobre o produto: o comércio local não aceita
   // aplicativo de entrega. Nada a consultar.
   { arquivo: 'locales/pt.json', marcador: 'infra_desc', motivo: 'texto da /conheca sobre o comércio da cidade' },
