@@ -123,6 +123,18 @@ export function Footer() {
           >
             {t('footer.privacidade') ?? 'Privacidade'}
           </Link>
+          <Link
+            href={lp('/termos')}
+            className="p-2 -m-2 opacity-60 hover:opacity-100 transition-opacity"
+          >
+            {t('footer.termos') ?? 'Termos'}
+          </Link>
+          <Link
+            href={lp('/excluir-conta')}
+            className="p-2 -m-2 opacity-60 hover:opacity-100 transition-opacity"
+          >
+            {t('footer.excluir_conta') ?? 'Excluir conta'}
+          </Link>
           <a
             href="https://balaio.net"
             target="_blank"
