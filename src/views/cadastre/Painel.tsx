@@ -4,18 +4,14 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import {
-  CheckCircle, Store, LayoutDashboard,
-  Sparkles, LogOut, User,
+  Store, LayoutDashboard,
+  LogOut, User,
 } from 'lucide-react'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { useAuth } from '@/hooks/useAuth'
 import { useProfile } from '@/hooks/useProfile'
 import { useMyBusinesses } from '@/hooks/useMyBusinesses'
 import { useMyProfessional } from '@/hooks/useProfessionals'
-import { startCheckout } from '@/hooks/useCheckout'
-import { useParametros } from '@/hooks/useParametros'
-import { CHAVES, parametro, precosDoPlano } from '@/lib/parametros'
-import { pagamentosAtivos } from '@/lib/pagamentos'
 import { ABAS, abaDaUrl, queryDaAba, type AbaId } from '@/lib/clube/painel-abas'
 import { BarraDeAbas, PainelDaAba, type DefinicaoDeAba } from './painel-abas/BarraDeAbas'
 import { useTrocarUrlDoPainel } from './painel-abas/use-url-do-painel'
@@ -110,12 +106,6 @@ function TypeFork() {
 }
 
 function PainelInner() {
-  /* Preco da mesma tabela que a /sobre, a /parceiros e a /transparencia leem.
-     Este e o painel onde a pessoa de fato assina, e por isso era o valor certo
-     quando os quatro divergiam. */
-  const { data: paramProduto } = useParametros()
-  const PRECOS = precosDoPlano(paramProduto)
-  const desconto = parametro(paramProduto, CHAVES.descontoAnual)
   const { user, supabase } = useAuth()
   const { data: profile, isLoading: profileLoading } = useProfile()
   const role = profile?.role ?? null
@@ -123,12 +113,8 @@ function PainelInner() {
   const { data: myProfessional, isLoading: profLoading } = useMyProfessional()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { t, i18n: painelI18n } = useTranslation('painel')
+  const { t } = useTranslation('painel')
   const lp = useLocalePath()
-  const successMsg = searchParams?.get('associado') === 'success'
-  const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null)
-  const [checkoutError, setCheckoutError] = useState<string | null>(null)
-  const [billingMode, setBillingMode] = useState<Record<string, 'monthly' | 'annual'>>({})
 
   /* Abas: a aba e o negocio escolhido moram na URL (?aba=contatos&bizId=...), entao o link
      abre no lugar certo e o botao de recarregar nao perde onde a pessoa estava. */
@@ -191,25 +177,6 @@ function PainelInner() {
     })
   }
 
-  function getBilling(bizId: string): 'monthly' | 'annual' {
-    return billingMode[bizId] ?? 'monthly'
-  }
-
-  function toggleBillingMode(bizId: string, mode: 'monthly' | 'annual') {
-    setBillingMode(prev => ({ ...prev, [bizId]: mode }))
-  }
-
-  async function handleCheckout(bizId: string, plan: 'associado' | 'destaque') {
-    setCheckoutLoading(bizId)
-    setCheckoutError(null)
-    try {
-      await startCheckout(bizId, plan, getBilling(bizId))
-    } catch (err) {
-      setCheckoutError(err instanceof Error ? err.message : t('plans_checkout_error'))
-      setCheckoutLoading(null)
-    }
-  }
-
   return (
     <div className="min-h-screen bg-[#FAFAF9]">
       <header className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
@@ -238,16 +205,6 @@ function PainelInner() {
       </header>
 
       <main className="max-w-4xl mx-auto px-5 md:px-8 py-8">
-
-        {successMsg && (
-          <div className="mb-6 bg-teal/10 border border-teal/20 rounded-2xl p-4 flex items-center gap-3">
-            <CheckCircle className="w-5 h-5 text-teal flex-shrink-0" />
-            <div>
-              <p className="font-semibold text-teal text-sm">{t('success_title')}</p>
-              <p className="text-xs text-teal/80 mt-0.5">{t('success_desc')}</p>
-            </div>
-          </div>
-        )}
 
         <div className="mb-6">
           <h1 className="font-display text-2xl font-semibold text-[#1A1A1A]">{t('greeting')}</h1>
@@ -288,163 +245,6 @@ function PainelInner() {
             onAba={irParaAba}
             onEscolher={escolherNegocio}
           >
-        {pagamentosAtivos() && businesses.length > 0 && (
-          <section>
-            <div className="flex items-center gap-2 mb-1">
-              <Sparkles className="w-4 h-4 text-ocre" />
-              <h2 className="font-display text-lg font-semibold">{t('plans_title')}</h2>
-            </div>
-            <p className="text-sm text-fg-3-texto mb-5">
-              {t('plans_desc')}
-            </p>
-
-            {checkoutError && (
-              <div className="mb-4 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-600">
-                {checkoutError}
-              </div>
-            )}
-
-            <div className="space-y-4">
-              {businesses.map(b => {
-                const billing = getBilling(b.id)
-                const isLoading = checkoutLoading === b.id
-                const prices = PRECOS[billing]
-
-                return (
-                  <div
-                    key={b.id}
-                    className={`bg-white border rounded-2xl p-5 transition-colors ${
-                      b.plan === 'destaque'
-                        ? 'border-ocre/30 bg-ocre/[0.02]'
-                        : b.plan === 'associado'
-                        ? 'border-teal/20 bg-teal/[0.01]'
-                        : 'border-[#E8E4DF]'
-                    }`}
-                  >
-                    {/* Business name + current plan */}
-                    <div className="flex items-start justify-between gap-3 mb-4">
-                      <div className="min-w-0">
-                        <p className="font-semibold text-sm text-[#1A1A1A] truncate">{b.name}</p>
-                        <p className="text-xs text-fg-3-texto mt-0.5">
-                          {t('plan_label')}{' '}
-                          <span className={
-                            b.plan === 'destaque'
-                              ? 'font-semibold text-ocre'
-                              : b.plan === 'associado'
-                              ? 'font-semibold text-teal'
-                              : 'text-fg-3-texto'
-                          }>
-                            {b.plan === 'destaque' ? t('plan_destaque') : b.plan === 'associado' ? t('plan_associado') : t('plan_free')}
-                          </span>
-                          {b.plan_expires_at && (
-                            <span className="ml-1 text-fg-3-texto">
-                              {t('plan_expires', { date: new Date(b.plan_expires_at).toLocaleDateString(painelI18n.language === 'en' ? 'en-US' : painelI18n.language === 'es' ? 'es' : 'pt-BR', { day: 'numeric', month: 'short', year: 'numeric' }) })}
-                            </span>
-                          )}
-                        </p>
-                      </div>
-                      {b.plan !== 'destaque' && (
-                        <div className="flex items-center gap-0.5 bg-[#F5F2EE] rounded-xl p-1 flex-shrink-0">
-                          <button
-                            onClick={() => toggleBillingMode(b.id, 'monthly')}
-                            className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
-                              billing === 'monthly'
-                                ? 'bg-white text-[#1A1A1A] shadow-sm'
-                                : 'text-fg-3-texto hover:text-[#1A1A1A]'
-                            }`}
-                          >
-                            {t('billing_monthly')}
-                          </button>
-                          <button
-                            onClick={() => toggleBillingMode(b.id, 'annual')}
-                            className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all flex items-center gap-1.5 ${
-                              billing === 'annual'
-                                ? 'bg-white text-[#1A1A1A] shadow-sm'
-                                : 'text-fg-3-texto hover:text-[#1A1A1A]'
-                            }`}
-                          >
-                            {t('billing_annual')}
-                            {desconto !== undefined && (
-                              <span className="bg-ocre text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full leading-none">
-                                -{desconto}%
-                              </span>
-                            )}
-                          </button>
-                        </div>
-                      )}
-                    </div>
-
-                    {billing === 'annual' && b.plan !== 'destaque' && (
-                      <div className="mb-3 text-xs text-ocre bg-ocre/10 border border-ocre/20 rounded-xl px-3 py-2">
-                        {t('annual_info', { pct: desconto ?? '' })}
-                      </div>
-                    )}
-
-                    <div className="flex gap-2 flex-wrap">
-                      {b.plan === 'free' && (
-                        <>
-                          <button
-                            onClick={() => handleCheckout(b.id, 'associado')}
-                            disabled={isLoading}
-                            className="text-xs font-semibold bg-teal text-white px-4 py-2 rounded-xl hover:bg-teal/90 transition-colors disabled:opacity-50"
-                          >
-                            {isLoading ? '...' : t('btn_associate', { price: prices.associado })}
-                          </button>
-                          <button
-                            onClick={() => handleCheckout(b.id, 'destaque')}
-                            disabled={isLoading}
-                            className="text-xs font-semibold bg-ocre text-white px-4 py-2 rounded-xl hover:bg-ocre/90 transition-colors disabled:opacity-50"
-                          >
-                            {isLoading ? '...' : t('btn_destaque', { price: prices.destaque })}
-                          </button>
-                        </>
-                      )}
-                      {b.plan === 'associado' && (
-                        <button
-                          onClick={() => handleCheckout(b.id, 'destaque')}
-                          disabled={isLoading}
-                          className="text-xs font-semibold bg-ocre text-white px-4 py-2 rounded-xl hover:bg-ocre/90 transition-colors disabled:opacity-50"
-                        >
-                          {isLoading ? '...' : t('btn_upgrade', { price: prices.destaque })}
-                        </button>
-                      )}
-                      {b.plan === 'destaque' && (
-                        <div className="flex items-center gap-1.5 text-xs text-ocre font-semibold">
-                          <CheckCircle className="w-3.5 h-3.5" />
-                          {t('plan_destaque_active')}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-
-            {businesses.some(b => b.plan === 'free') && (
-              <div className="mt-5 rounded-2xl border border-[#E8E4DF] overflow-x-auto">
-                <div className="grid grid-cols-3 text-xs min-w-[420px] sm:min-w-0">
-                  <div className="px-4 py-3 font-semibold text-fg-3-texto border-b border-[#E8E4DF]">{t('feature_header_benefit')}</div>
-                  <div className="px-4 py-3 font-semibold text-teal text-center border-b border-[#E8E4DF]">{t('feature_header_associado')}</div>
-                  <div className="px-4 py-3 font-semibold text-ocre text-center border-b border-[#E8E4DF]">{t('feature_header_destaque')}</div>
-                  {[
-                    [t('feature_listed'), '✓', '✓'],
-                    [t('feature_verified'), '✓', '✓'],
-                    [t('feature_priority'), '—', '✓'],
-                    [t('feature_cover'), '—', '✓'],
-                    [t('feature_support'), '—', '✓'],
-                  ].map(([feat, a, d]) => (
-                    <>
-                      <div key={`f-${feat}`} className="px-4 py-2.5 text-fg-3-texto border-b border-[#F5F2EE] last:border-0">{feat}</div>
-                      <div key={`a-${feat}`} className={`px-4 py-2.5 text-center border-b border-[#F5F2EE] last:border-0 ${a === '✓' ? 'text-teal font-semibold' : 'text-[#C4BFBA]'}`}>{a}</div>
-                      <div key={`d-${feat}`} className={`px-4 py-2.5 text-center border-b border-[#F5F2EE] last:border-0 ${d === '✓' ? 'text-ocre font-semibold' : 'text-[#C4BFBA]'}`}>{d}</div>
-                    </>
-                  ))}
-                </div>
-              </div>
-            )}
-          </section>
-        )}
-
           </ResumoAba>
         </PainelDaAba>
 
