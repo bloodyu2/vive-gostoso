@@ -34,6 +34,15 @@ const ORIGENS_PADRAO = [
   'http://localhost:5173',
 ]
 
+/**
+ * O Command Code so aceita o id com o fabricante na frente (deepseek/deepseek-v4-flash); sem ele responde 400 unsupported_model.
+ * Se GUIA_MODELO vier so com o nome do deepseek, o prefixo e posto aqui. A lista viva fica em /provider/v1/models.
+ */
+export function modeloDoProvedor(bruto?: string): string {
+  const m = (bruto ?? '').trim() || 'deepseek/deepseek-v4-flash'
+  return /^deepseek-/.test(m) ? `deepseek/${m}` : m
+}
+
 /** A chave (CMD_API_KEY) so existe no servidor; sem ela ou sem GUIA_ATIVO=1 o chat fica desligado. */
 export function configDoAmbiente(env: Record<string, string | undefined> = process.env): ConfigDoGuia {
   const chave = env.CMD_API_KEY && env.CMD_API_KEY.trim() ? env.CMD_API_KEY.trim() : null
@@ -42,7 +51,7 @@ export function configDoAmbiente(env: Record<string, string | undefined> = proce
     ativo: env.GUIA_ATIVO === '1' && chave !== null,
     chave,
     base: (env.GUIA_API_BASE || 'https://api.commandcode.ai/provider/v1').replace(/\/+$/, ''),
-    modelo: env.GUIA_MODELO || 'deepseek-v4-flash',
+    modelo: modeloDoProvedor(env.GUIA_MODELO),
     tetoDiario: Number.isFinite(teto) && teto > 0 ? Math.floor(teto) : 600,
     sal: env.GUIA_SAL || 'vg-guia-v1',
     origensPermitidas: env.GUIA_ORIGENS ? env.GUIA_ORIGENS.split(',').map((o) => o.trim()).filter(Boolean) : ORIGENS_PADRAO,

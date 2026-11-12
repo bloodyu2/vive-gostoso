@@ -12,7 +12,7 @@ function montar(opcoes: { env?: Record<string, string | undefined>; respostas?: 
   const config = configDoAmbiente(opcoes.env ?? ENV)
   const logs: EventoDeLog[] = []
   const fila = [...(opcoes.respostas ?? [{ choices: [{ message: { content: 'Resposta do guia.' } }] }])]
-  const chamadas: { url: string; corpo: { messages: { role: string; content: string | null }[]; tools?: unknown } }[] = []
+  const chamadas: { url: string; corpo: { model?: string; messages: { role: string; content: string | null }[]; tools?: unknown } }[] = []
   const chamar = vi.fn(async (url: RequestInfo | URL, init?: RequestInit) => {
     chamadas.push({ url: String(url), corpo: JSON.parse(String(init?.body)) })
     const proxima = fila.shift()
@@ -77,6 +77,7 @@ describe('rota do guia', () => {
     expect(chamadas).toHaveLength(1)
     expect(chamadas[0].url).toBe('https://api.commandcode.ai/provider/v1/chat/completions')
     expect(chamadas[0].corpo.messages[0]).toEqual({ role: 'system', content: SISTEMA })
+    expect(chamadas[0].corpo.model).toBe('deepseek/deepseek-v4-flash') // o Command Code recusa (400 unsupported_model) o id sem o fabricante
     expect(chamadas[0].corpo.tools).toBeDefined()
     expect(JSON.stringify(chamadas[0].corpo)).not.toContain('chave-de-teste')
   })
@@ -194,5 +195,16 @@ describe('rota do guia', () => {
     const m = mascarar('meu email e joao@exemplo.com e o telefone 84 99999-0000 ' + 'x'.repeat(200))
     expect(m).not.toMatch(/joao@|99999/)
     expect(m.length).toBeLessThanOrEqual(80)
+  })
+})
+
+describe('modeloDoProvedor', () => {
+  it('padrao com fabricante; nome antigo do deepseek ganha o prefixo; id completo passa igual', async () => {
+    const { modeloDoProvedor } = await import('./config')
+    expect(modeloDoProvedor(undefined)).toBe('deepseek/deepseek-v4-flash')
+    expect(modeloDoProvedor('  ')).toBe('deepseek/deepseek-v4-flash')
+    expect(modeloDoProvedor('deepseek-v4-flash')).toBe('deepseek/deepseek-v4-flash')
+    expect(modeloDoProvedor('deepseek/deepseek-v4.1-flash')).toBe('deepseek/deepseek-v4.1-flash')
+    expect(modeloDoProvedor('z-ai/glm-5.3-flash')).toBe('z-ai/glm-5.3-flash')
   })
 })
