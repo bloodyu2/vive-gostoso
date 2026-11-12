@@ -9,7 +9,7 @@ export default defineConfig([
   // Next (inclusive .next/types/**, que sozinho gerava ~1400 erros de tipos
   // gerados) e public/sw.js + public/workbox-*.js sao o service worker
   // minificado que o next-pwa emite -- nenhum dos tres e codigo-fonte nosso.
-  globalIgnores(['dist', '.next', 'public/sw.js', 'public/workbox-*.js']),
+  globalIgnores(['dist', '.next', '_to_delete', 'public/sw.js', 'public/workbox-*.js']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

@@ -7,7 +7,6 @@ import { useLocalePath } from '@/hooks/useLocalePath'
 import { CookieBanner } from '@/components/cookie-banner'
 import { organizationSchema } from '@/lib/seo'
 import { safeJsonLd } from '@/lib/json-ld'
-import { pagamentosAtivos } from '@/lib/pagamentos'
 
 export function Footer() {
   const { t } = useTranslation()
@@ -27,15 +26,11 @@ export function Footer() {
     { to: lp('/blog'),           label: t('footer.blog') },
     { to: lp('/conheca'),        label: t('nav.conheca') },
     { to: lp('/participe'),      label: t('nav.participe') },
-    ...(pagamentosAtivos() ? [{ to: lp('/apoie'), label: t('nav.apoie') }] : []),
     { to: lp('/contrate'),       label: t('nav.contrate') },
   ]
   const NEGOCIOS = [
     { to: '/cadastre',        label: t('footer.cadastrar') },
     { to: '/cadastre/painel', label: t('footer.painel') },
-    ...(pagamentosAtivos()
-      ? [{ to: lp('/apoie'), label: t('footer.selo_verificado') }]
-      : []),
   ]
 
   return (

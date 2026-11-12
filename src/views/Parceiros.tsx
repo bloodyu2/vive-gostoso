@@ -7,7 +7,6 @@ import { useLocalePath } from '@/hooks/useLocalePath'
 import { useStats } from '@/hooks/useStats'
 import { useParametros } from '@/hooks/useParametros'
 import { CHAVES, parametro, precoEmReais, type Parametros } from '@/lib/parametros'
-import { pagamentosAtivos } from '@/lib/pagamentos'
 import { buildWhatsAppLink, OFFICIAL_WHATSAPP } from '@/lib/whatsapp'
 import { cn } from '@/lib/utils'
 import { BentoCard, BentoGrid } from '@/components/magicui/bento-grid'
@@ -81,7 +80,6 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
   }
   const localePath = useLocalePath()
   const { data: stats } = useStats()
-  const planosPagosAtivos = pagamentosAtivos()
   const planData = [
     {
       name: t('parceiros:plan_gratuito'),
@@ -97,42 +95,8 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
       ],
       cta: 'Começar grátis',
       ctaStyle: 'border border-border-1 text-fg-1 hover:border-teal',
-      pago: false,
     },
-    {
-      name: t('parceiros:plan_associado'),
-      precoChave: CHAVES.planoAssociado,
-      period: t('parceiros:plan_period_month'),
-      badge: t('parceiros:plan_popular_badge'),
-      destaque: true,
-      features: [
-        'Tudo do plano gratuito',
-        'Selo de negócio verificado ✓',
-        'Posição destacada no diretório',
-        'Suporte direto da equipe',
-      ],
-      cta: 'Assinar Associado',
-      ctaStyle: 'bg-teal-dark text-white hover:bg-teal-dark/90',
-      pago: true,
-    },
-    {
-      name: t('parceiros:plan_destaque'),
-      precoChave: CHAVES.planoDestaque,
-      period: t('parceiros:plan_period_month'),
-      badge: t('parceiros:plan_destaque_badge'),
-      destaque: false,
-      features: [
-        'Tudo do plano Associado',
-        '★ Destaque no topo do diretório',
-        'Foto de capa em destaque',
-        'Prioridade em buscas por categoria',
-        'Apoio na estratégia digital',
-      ],
-      cta: 'Assinar Destaque',
-      ctaStyle: 'bg-ocre-dark text-white hover:bg-ocre-dark/90',
-      pago: true,
-    },
-  ].filter((p) => planosPagosAtivos || !p.pago)
+  ]
 
   const numeros = stats
     ? [
@@ -240,9 +204,9 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
         {/* ── Planos: o feixe so no plano em destaque ── */}
         <section>
           <h2 className={`${H2} mb-2`}>{t('parceiros:plans_titulo')}</h2>
-          <p className="text-lg text-fg-3-texto mb-8">{t(planosPagosAtivos ? 'parceiros:plans_desc' : 'parceiros:plans_desc_gratis')}</p>
+          <p className="text-lg text-fg-3-texto mb-8">{t('parceiros:plans_desc_gratis')}</p>
 
-          <div className={cn('grid grid-cols-1 gap-4 md:gap-5', planosPagosAtivos ? 'md:grid-cols-3' : 'md:grid-cols-1 max-w-md')}>
+          <div className={cn('grid grid-cols-1 gap-4 md:gap-5', 'md:grid-cols-1 max-w-md')}>
             {planData.map((plan, i) => (
               <BlurFade key={plan.name} delay={(i % 4) * 70} className="h-full">
                 <MagicCard
@@ -285,16 +249,10 @@ export default function Parceiros({ initialParametros }: ParceirosProps) {
             ))}
           </div>
 
-          {planosPagosAtivos ? (
-            <p className="text-sm text-fg-3-texto mt-6">
-              {t('parceiros:plan_disclaimer', { pct: parametro(param, CHAVES.rateioCidade) ?? '' })}
-            </p>
-          ) : (
-            <div className="mt-6 rounded-2xl border border-dashed border-border-1 p-5 max-w-md">
-              <p className="font-semibold text-fg-1">{t('parceiros:planos_pagos_titulo')}</p>
-              <p className="text-sm text-fg-3-texto mt-1 leading-relaxed">{t('parceiros:planos_pagos_desc')}</p>
-            </div>
-          )}
+          <div className="mt-6 rounded-2xl border border-dashed border-border-1 p-5 max-w-md">
+            <p className="font-semibold text-fg-1">{t('parceiros:planos_pagos_titulo')}</p>
+            <p className="text-sm text-fg-3-texto mt-1 leading-relaxed">{t('parceiros:planos_pagos_desc')}</p>
+          </div>
         </section>
 
         {/* ── CTA final ── */}

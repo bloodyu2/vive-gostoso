@@ -1,14 +1,11 @@
 'use client'
 
-import Link from 'next/link'
-import { ArrowRight, Mail, MessageCircle } from 'lucide-react'
+import { Mail, MessageCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useParametros } from '@/hooks/useParametros'
-import { CHAVES, parametro, precoEmReais, type Parametros } from '@/lib/parametros'
-import { useLocalePath } from '@/hooks/useLocalePath'
+import { CHAVES, parametro, type Parametros } from '@/lib/parametros'
 import { FAQSection } from '@/components/blog'
 import { buildWhatsAppLink, OFFICIAL_WHATSAPP } from '@/lib/whatsapp'
-import { pagamentosAtivos } from '@/lib/pagamentos'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { MagicCard } from '@/components/magicui/magic-card'
 import { NumberTicker } from '@/components/magicui/number-ticker'
@@ -28,11 +25,6 @@ export default function Transparencia({ initialParametros }: TransparenciaProps)
   const { data: param } = useParametros(
     initialParametros ? { initialData: initialParametros } : undefined
   )
-  const preco = (chave: string) => {
-    const c = parametro(param, chave)
-    return c === undefined ? null : precoEmReais(c)
-  }
-  const lp = useLocalePath()
 
   const faqItems = (i18n.getResource(i18n.language, 'translation', 'transparencia.faq') ??
     i18n.getResource('pt', 'translation', 'transparencia.faq') ??
@@ -154,18 +146,8 @@ export default function Transparencia({ initialParametros }: TransparenciaProps)
                 </dl>
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-6 border-t border-white/20">
                   <p className="text-white/85 text-sm leading-relaxed max-w-md">
-                    {pagamentosAtivos() && preco(CHAVES.planoAssociado) && preco(CHAVES.planoDestaque)
-                      ? t('transparencia.conta_desc', {
-                          precoAssociado: preco(CHAVES.planoAssociado),
-                          precoDestaque: preco(CHAVES.planoDestaque),
-                        })
-                      : t('transparencia.conta_desc_sem_preco')}
+                    {t('transparencia.conta_desc_sem_preco')}
                   </p>
-                  {pagamentosAtivos() && (
-                    <Link href={lp('/apoie')} className="shrink-0 inline-flex items-center justify-center gap-2 min-h-11 bg-white text-teal-dark font-semibold px-5 rounded-full hover:bg-areia transition-colors text-sm text-center">
-                      {t('transparencia.conta_link_texto')} <ArrowRight className="w-4 h-4 shrink-0" aria-hidden="true" />
-                    </Link>
-                  )}
                 </div>
               </div>
             </BlurFade>

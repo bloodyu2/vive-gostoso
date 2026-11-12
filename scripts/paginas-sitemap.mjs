@@ -12,11 +12,8 @@
 import { rotasMares } from './mares-slugs.mjs'
 
 export function paginasEstaticas(raiz) {
-  // KAN-356: /apoie é entrada de doação Stripe — some do sitemap enquanto
-  // NEXT_PUBLIC_PAGAMENTOS_ATIVOS não for literalmente "true".
-  const apoie = process.env.NEXT_PUBLIC_PAGAMENTOS_ATIVOS === 'true'
-    ? [{ path: '/apoie', freq: 'monthly', priority: '0.6' }]
-    : []
+  // /apoie fica fora do sitemap: não há forma de receber doação por enquanto.
+  const apoie = []
   return [
     { path: '/',          freq: 'daily',   priority: '1.0' },
     { path: '/come',      freq: 'weekly',  priority: '0.9' },
