@@ -35,7 +35,7 @@ export const TERMOS: Record<Idioma, PaginaLegal> = {
         titulo: '3. Pagamento e mensalidade',
         paragrafos: [
           'O aplicativo não cobra pedido, corrida nem serviço. O preço é combinado entre as pessoas e pago direto, na hora, em Pix, cartão ou dinheiro. O Vive Gostoso não recebe nem repassa esse dinheiro.',
-          'A única cobrança do aplicativo é a mensalidade de quem trabalha nele: R$ 4,99 por mês por serviço, e R$ 199 por mês no plano do negócio, cobradas pelo Asaas. O primeiro mês é grátis no período de lançamento, e avisaremos pelo aplicativo e por e-mail antes da primeira cobrança. Você pode cancelar a mensalidade quando quiser, sem multa, pelo e-mail ' + CONTATO + '; a cobrança seguinte deixa de ser feita.',
+          'A única cobrança do aplicativo é a mensalidade de quem trabalha nele: R$ 5,99 por mês por serviço, e R$ 199 por mês no plano do negócio, cobradas pelo Asaas. O primeiro mês é grátis no período de lançamento, e avisaremos pelo aplicativo e por e-mail antes da primeira cobrança. Você pode cancelar a mensalidade quando quiser, sem multa, pelo e-mail ' + CONTATO + '; a cobrança seguinte deixa de ser feita.',
           'Se a mensalidade de um papel atrasar, só esse papel é pausado, depois de alguns dias de aviso. Ele volta assim que o pagamento é confirmado. Os outros papéis da mesma conta não são afetados.',
         ],
       },
@@ -116,7 +116,7 @@ export const TERMOS: Record<Idioma, PaginaLegal> = {
         titulo: '3. Payment and subscription',
         paragrafos: [
           'The app does not charge for orders, rides or services. The price is agreed between the people and paid directly, on the spot, by Pix, card or cash. Vive Gostoso does not receive or pass on that money.',
-          'The only charge in the app is the monthly fee for people who work in it: R$ 4.99 per month per service, and R$ 199 per month for the business plan, billed through Asaas. The first month is free during the launch period, and we will notify you in the app and by e-mail before the first charge. You can cancel the subscription at any time, with no penalty, by e-mailing ' + CONTATO + '; the next charge will not be made.',
+          'The only charge in the app is the monthly fee for people who work in it: R$ 5.99 per month per service, and R$ 199 per month for the business plan, billed through Asaas. The first month is free during the launch period, and we will notify you in the app and by e-mail before the first charge. You can cancel the subscription at any time, with no penalty, by e-mailing ' + CONTATO + '; the next charge will not be made.',
           'If the fee for one role is overdue, only that role is paused, after a few days of notice. It comes back as soon as the payment is confirmed. Your other roles are not affected.',
         ],
       },
@@ -197,7 +197,7 @@ export const TERMOS: Record<Idioma, PaginaLegal> = {
         titulo: '3. Pago y mensualidad',
         paragrafos: [
           'La aplicación no cobra pedidos, viajes ni servicios. El precio se acuerda entre las personas y se paga directamente, en el momento, con Pix, tarjeta o efectivo. Vive Gostoso no recibe ni transfiere ese dinero.',
-          'El único cobro de la aplicación es la mensualidad de quienes trabajan en ella: R$ 4,99 al mes por servicio, y R$ 199 al mes en el plan del negocio, cobradas por Asaas. El primer mes es gratis durante el lanzamiento, y avisaremos en la aplicación y por correo antes del primer cobro. Puedes cancelar la mensualidad cuando quieras, sin multa, escribiendo a ' + CONTATO + '; el siguiente cobro dejará de hacerse.',
+          'El único cobro de la aplicación es la mensualidad de quienes trabajan en ella: R$ 5,99 al mes por servicio, y R$ 199 al mes en el plan del negocio, cobradas por Asaas. El primer mes es gratis durante el lanzamiento, y avisaremos en la aplicación y por correo antes del primer cobro. Puedes cancelar la mensualidad cuando quieras, sin multa, escribiendo a ' + CONTATO + '; el siguiente cobro dejará de hacerse.',
           'Si la mensualidad de un rol se atrasa, solo ese rol se pausa, después de unos días de aviso. Vuelve en cuanto se confirma el pago. Tus otros roles no se ven afectados.',
         ],
       },
