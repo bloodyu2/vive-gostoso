@@ -104,8 +104,8 @@ const EXCECOES: Array<{ arquivo: string; marcador: string; motivo: string }> = [
   // gostoso_parametros_produto): o app o define em city.config.ts e o Asaas cobra. E texto
   // legal datado, e mudar o valor exige reeditar os Termos e avisar os usuarios; por isso
   // fica literal e registrado aqui.
-  { arquivo: 'data/paginas-legais.ts', marcador: 'R$ 4,99', motivo: 'mensalidade do aplicativo nos Termos de Uso (pt e es), texto legal datado' },
-  { arquivo: 'data/paginas-legais.ts', marcador: 'R$ 4.99', motivo: 'mensalidade do aplicativo nos Termos de Uso (en), texto legal datado' },
+  { arquivo: 'data/paginas-legais.ts', marcador: 'R$ 5,99', motivo: 'mensalidade do aplicativo nos Termos de Uso (pt e es), texto legal datado' },
+  { arquivo: 'data/paginas-legais.ts', marcador: 'R$ 5.99', motivo: 'mensalidade do aplicativo nos Termos de Uso (en), texto legal datado' },
 
   // Texto sobre a cidade, não sobre o produto: o comércio local não aceita
   // aplicativo de entrega. Nada a consultar.
