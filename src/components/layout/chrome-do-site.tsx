@@ -6,6 +6,7 @@ import { ConsentimentoSalvo } from '@/components/consentimento-salvo'
 import { CookieBanner } from '@/components/cookie-banner'
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
+import { GuiaChat } from '@/components/guia/guia-chat'
 import { ShareFab } from '@/components/share-fab'
 import { WhatsAppButton } from '@/components/layout/whatsapp-button'
 import { BarraDoApp, barraDoAppVisivel } from '@/components/layout/barra-do-app'
@@ -63,6 +64,8 @@ export function ChromeDoSite({ children }: { children: React.ReactNode }) {
       {comBarra && <div aria-hidden="true" className="h-[calc(3.5rem+env(safe-area-inset-bottom))] md:hidden" />}
       <ShareFab />
       <WhatsAppButton variante="fab" />
+      {/* KAN-687: guia de IA. Sem NEXT_PUBLIC_GUIA_ATIVO=1 nao renderiza nada. */}
+      <GuiaChat />
       <BarraDoApp />
       <CookieBanner acimaDaBarra={comBarra} />
     </>
