@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { ABAS_DO_MENU, ITENS_VITRINE, itensVitrinePublicos, textosVitrine } from './vitrine'
@@ -10,19 +10,9 @@ describe('vitrine de recursos da home', () => {
     for (const aba of ABAS_DO_MENU) expect(caminhos, aba).toContain(`/${aba}`)
   })
 
-  describe('itensVitrinePublicos (KAN-356)', () => {
-    afterEach(() => {
-      vi.unstubAllEnvs()
-    })
-
-    it('esconde o cartão apoie com pagamentos desligados', () => {
-      vi.stubEnv('NEXT_PUBLIC_PAGAMENTOS_ATIVOS', undefined)
+  describe('itensVitrinePublicos', () => {
+    it('esconde o cartão apoie (sem doação ativa)', () => {
       expect(itensVitrinePublicos().some((i) => i.id === 'apoie')).toBe(false)
-    })
-
-    it('mantém o cartão apoie com pagamentos ligados', () => {
-      vi.stubEnv('NEXT_PUBLIC_PAGAMENTOS_ATIVOS', 'true')
-      expect(itensVitrinePublicos().some((i) => i.id === 'apoie')).toBe(true)
     })
   })
 

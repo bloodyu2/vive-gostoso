@@ -65,11 +65,6 @@ const EXCECOES: Array<{ arquivo: string; marcador: string; motivo: string }> = [
   { arquivo: 'locales/en.json', marcador: 'services_price_placeholder', motivo: 'exemplo de preenchimento' },
   { arquivo: 'locales/es.json', marcador: 'services_price_placeholder', motivo: 'exemplo de preenchimento' },
 
-  // Valor mínimo de doação: regra do meio de pagamento, não preço de plano.
-  { arquivo: 'locales/pt.json', marcador: 'erro_valor_minimo', motivo: 'mínimo do Stripe para doação avulsa' },
-  { arquivo: 'locales/en.json', marcador: 'erro_valor_minimo', motivo: 'mínimo do Stripe' },
-  { arquivo: 'locales/es.json', marcador: 'erro_valor_minimo', motivo: 'mínimo do Stripe' },
-
   // AINDA HARDCODED, e este é o registro disso: a lista de custos operacionais
   // da /apoie. São fatos sobre o que a Balaio paga, e saem de literal quando
   // essas linhas virarem consulta ao fundo. Enquanto não saírem, ficam aqui à

@@ -3,7 +3,6 @@ import en from '@/locales/en.json'
 import es from '@/locales/es.json'
 import { PRAIAS_MARES, type Idioma } from '@/data/praias-mares'
 import { preencher } from '@/lib/mares/seo-mares'
-import { pagamentosAtivos } from '@/lib/pagamentos'
 import type { Contagens } from './contagens'
 
 const DICIONARIOS = { pt, en, es } as const
@@ -50,10 +49,9 @@ export const ITENS_VITRINE: ItemVitrine[] = [
   { id: 'apoie', caminho: '/apoie', icone: 'heart-handshake', imagem: '/images/vitrine/apoie.jpg' },
 ]
 
-/** Cartões da home/vitrine visíveis ao público. Sem pagamentos ativos, some o
- *  cartão /apoie (entrada de doação Stripe) sem apagar o item da lista canônica. */
+/** Cartões da home/vitrine visíveis ao público. O cartão /apoie fica de fora
+ *  (doação em pausa), sem apagar o item da lista canônica. */
 export function itensVitrinePublicos(): ItemVitrine[] {
-  if (pagamentosAtivos()) return ITENS_VITRINE
   return ITENS_VITRINE.filter((i) => i.id !== 'apoie')
 }
 

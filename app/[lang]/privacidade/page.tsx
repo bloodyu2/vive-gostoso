@@ -35,7 +35,7 @@ export default async function PrivacidadePage({ params }: { params: Promise<{ la
         </section>
         <section className="border-t border-border-1 pt-6">
           <h2 className="font-display font-semibold text-xl md:text-2xl text-fg-1 mb-3">{t.sec3_title ?? '3. Como usamos seus dados'}</h2>
-          <p>{t.sec3_text ?? 'Seus dados sao usados para: exibir seu perfil/negocio na plataforma; permitir contato direto (WhatsApp); analise de uso anonima para melhorar o site; e processamento de pagamentos (Stripe).'}</p>
+          <p>{t.sec3_text ?? 'Seus dados sao usados para: exibir seu perfil/negocio na plataforma; permitir contato direto (WhatsApp); e analise de uso anonima para melhorar o site.'}</p>
         </section>
         <section className="border-t border-border-1 pt-6">
           <h2 className="font-display font-semibold text-xl md:text-2xl text-fg-1 mb-3">{t.sec4_title ?? '4. Cookies'}</h2>

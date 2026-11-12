@@ -39,6 +39,7 @@
     "node_modules",
     "dist",
     ".ruflo",
+    "_to_delete",
     "supabase/functions",
     "vite.config.ts"
   ]

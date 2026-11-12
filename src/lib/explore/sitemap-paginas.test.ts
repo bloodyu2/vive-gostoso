@@ -28,13 +28,9 @@ describe('a /bio fica fora do sitemap', () => {
   })
 })
 
-describe('KAN-356: /apoie no sitemap segue a flag de pagamentos', () => {
-  it('some do sitemap com pagamentos desligados (padrão)', () => {
+describe('/apoie fica fora do sitemap', () => {
+  it('não há doação ativa, então a página não entra', () => {
     const caminhos = (paginasEstaticas(process.cwd()) as Array<{ path: string }>).map((p) => p.path)
-    if (process.env.NEXT_PUBLIC_PAGAMENTOS_ATIVOS === 'true') {
-      expect(caminhos).toContain('/apoie')
-    } else {
-      expect(caminhos).not.toContain('/apoie')
-    }
+    expect(caminhos).not.toContain('/apoie')
   })
 })

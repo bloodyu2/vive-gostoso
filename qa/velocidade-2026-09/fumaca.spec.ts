@@ -3,7 +3,7 @@ import { test, expect, type Page, type BrowserContext, type Request } from '@pla
 // Testes de fumaca do Vive Gostoso (KAN-463).
 // Regra: nada real e gravado. Toda escrita no Supabase (REST, Auth, Storage,
 // Edge Functions) e interceptada com page.route e respondida aqui, e o payload
-// e conferido. Links de WhatsApp e do Stripe nunca sao abertos.
+// e conferido. Links de WhatsApp nunca sao abertos.
 
 const WHATS_OFICIAL = '558488182779'
 
@@ -20,14 +20,10 @@ async function travarEscritas(context: BrowserContext): Promise<Captura[]> {
     // Leitura por RPC via POST passa (so leitura publica, sem gravar nada).
     if (req.method() === 'POST' && /\/rest\/v1\/rpc\//.test(req.url())) return route.continue()
     capturas.push({ url: req.url(), method: req.method(), body: req.postData() })
-    const url = req.url()
-    if (url.includes('/functions/v1/create-donation-session') || url.includes('/functions/v1/create-checkout-session')) {
-      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ url: 'https://checkout.stripe.com/c/pay/fumaca-kan-463' }) })
-    }
     return route.fulfill({ status: 201, contentType: 'application/json', body: '[]', headers: { 'access-control-allow-origin': '*' } })
   })
-  // Checkout do Stripe e WhatsApp: nunca sai daqui.
-  await context.route(/checkout\.stripe\.com|wa\.me|api\.whatsapp\.com/, (route) =>
+  // WhatsApp: nunca sai daqui.
+  await context.route(/wa\.me|api\.whatsapp\.com/, (route) =>
     route.fulfill({ status: 200, contentType: 'text/html', body: '<html><body>interceptado pela fumaca</body></html>' }),
   )
   return capturas
@@ -320,8 +316,7 @@ test.describe('formularios (envio interceptado)', () => {
 })
 
 test.describe('apoie e checkout', () => {
-  // KAN-356: pagamentos Stripe desligados por padrão (NEXT_PUBLIC_PAGAMENTOS_ATIVOS).
-  // Com a flag off, /apoie mostra mensagem neutra e não inicia sessão Stripe.
+  // Sem forma de receber doação, /apoie mostra mensagem neutra e não inicia sessão de pagamento.
   test('doacao escondida enquanto pagamentos estao pausados', async ({ page }) => {
     await page.goto('/apoie')
     await expect(page.getByRole('heading', { name: /temporariamente indispon/i })).toBeVisible({ timeout: 20_000 })
