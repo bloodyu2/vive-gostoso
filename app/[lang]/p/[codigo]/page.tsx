@@ -11,6 +11,7 @@ import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { ArrowDown, BedDouble, ChevronRight, Compass, ExternalLink, MapPin, Star, Ticket, UtensilsCrossed, Waves } from 'lucide-react'
 import { Selo } from '@/components/business/selo'
+import { AvisoAgendamento } from '@/components/clube/aviso-agendamento'
 import { LinkMedido } from '@/components/clube/link-medido'
 import { RegistrarVisita } from '@/components/clube/registrar-visita'
 import { ResgatePlaquinha } from '@/components/clube/resgate-plaquinha'
@@ -22,7 +23,7 @@ import { dicionario, ehIdioma, prefixo } from '@/lib/bio/dicionario'
 import { usaCapaTipografica } from '@/lib/capa-negocio'
 import { CLUBE_PUBLICO, CLUBE_ROTA } from '@/lib/clube/config'
 import { carregarVantagens } from '@/lib/clube/carregar'
-import type { Vantagem } from '@/lib/clube/vantagens'
+import { linkAgendamento, type Vantagem } from '@/lib/clube/vantagens'
 import {
   DESTINO_PADRAO,
   linkDeAvaliacao,
@@ -216,6 +217,14 @@ export default async function PlaquinhaPage({ params }: Props) {
   const noAr = vantagem?.status === 'no_ar'
   const regra = vantagem?.regra ?? null
   const extras = await carregarExtras(plaquinha.extras)
+  const avisoAgendar = (v: Vantagem, nome: string) => (
+    <AvisoAgendamento
+      com={v.agendamentoCom ?? nome}
+      contato={v.agendamentoContato}
+      href={v.agendamentoContato ? linkAgendamento(v.agendamentoContato, tc.agendar_msg, { nome, beneficio: v.beneficio }) : null}
+      textos={{ titulo: tc.agendar_titulo, texto: tc.agendar_texto, botao: tc.agendar_botao }}
+    />
+  )
   const textosResgate = {
     usar: tc.usar,
     ver_cupom: tc.ver_cupom,
@@ -347,6 +356,7 @@ export default async function PlaquinhaPage({ params }: Props) {
                 {vantagem.beneficio}
               </p>
               {regra ? <p className="clube-regra">{regra}</p> : null}
+              {vantagem.requerAgendamento ? avisoAgendar(vantagem, negocio.name) : null}
               <p className="clube-regra">{t.passaporte_nota}</p>
             </div>
             <div className="clube-picote" aria-hidden="true" />
@@ -428,6 +438,7 @@ export default async function PlaquinhaPage({ params }: Props) {
                       <p className="clube-tipo">{t.passaporte_titulo}</p>
                       <p className="clube-beneficio">{e.vantagem.beneficio}</p>
                       {e.vantagem.regra ? <p className="clube-regra">{e.vantagem.regra}</p> : null}
+                      {e.vantagem.requerAgendamento ? avisoAgendar(e.vantagem, e.negocio.name) : null}
                       <ResgatePlaquinha
                         partnerId={e.vantagem.partnerId}
                         negocio={e.negocio.name}

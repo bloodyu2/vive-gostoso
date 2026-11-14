@@ -107,6 +107,7 @@ describe('juntarCategorias', () => {
   const base = (businessId: string): Vantagem => ({
     partnerId: `p-${businessId}`, businessId, nome: businessId, slug: businessId, logoUrl: null, capaUrl: null,
     tipo: null, beneficio: 'x', regra: null, limiteMensal: null, validoAte: null, status: 'no_ar', esgotada: false,
+    requerAgendamento: false, agendamentoContato: null, agendamentoCom: null,
   })
 
   it('poe a categoria traduzida em cada vantagem e mantem a ordem', () => {

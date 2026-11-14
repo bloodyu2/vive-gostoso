@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { interpretarUso, linkParaAmigo, origemValida, paraVantagem, textoParaAmigo } from './vantagens'
+import {
+  formatarWhatsApp,
+  interpretarUso,
+  juntarRegra,
+  limparContato,
+  linkAgendamento,
+  linkParaAmigo,
+  origemValida,
+  paraVantagem,
+  textoParaAmigo,
+} from './vantagens'
 
 describe('interpretarUso', () => {
   it('uso ok devolve o código', () => {
@@ -73,5 +83,57 @@ describe('paraVantagem', () => {
     expect(paraVantagem({ ...base, status: 'no_ar' }).status).toBe('no_ar')
     expect(paraVantagem({ ...base, status: 'pausado' }).status).toBe('em_combinacao')
     expect(paraVantagem({ ...base, status: 'em_combinacao' }).status).toBe('em_combinacao')
+  })
+})
+
+describe('agendamento previo', () => {
+  const linha = {
+    partner_id: 'p', business_id: 'b', nome: 'Casa Surya', slug: 'casa-surya', logo_url: null, tipo: 'Yoga',
+    beneficio: '10% de desconto na primeira aula de yoga.', regra: null, limite_mensal: 5, valido_ate: '2026-11-30',
+    status: 'no_ar', esgotada: false,
+  }
+
+  it('linha sem os campos novos (migration ainda nao rodou) vale como "nao exige"', () => {
+    expect(paraVantagem(linha)).toMatchObject({ requerAgendamento: false, agendamentoContato: null, agendamentoCom: null })
+  })
+
+  it('linha com agendamento leva o contato so com digitos e o nome', () => {
+    const v = paraVantagem({ ...linha, requer_agendamento: true, agendamento_contato: '5561981760790', agendamento_com: ' Satya ' })
+    expect(v).toMatchObject({ requerAgendamento: true, agendamentoContato: '5561981760790', agendamentoCom: 'Satya' })
+  })
+
+  it('contato malformado nunca vira link, e sem exigencia o contato e ignorado', () => {
+    expect(paraVantagem({ ...linha, requer_agendamento: true, agendamento_contato: 'abc' }).agendamentoContato).toBeNull()
+    expect(paraVantagem({ ...linha, requer_agendamento: false, agendamento_contato: '5561981760790' }).agendamentoContato).toBeNull()
+    expect(limparContato('(61) 98176-0790')).toBe('61981760790')
+    expect(limparContato('123')).toBeNull()
+    expect(limparContato(null)).toBeNull()
+  })
+
+  it('formata o WhatsApp brasileiro', () => {
+    expect(formatarWhatsApp('5561981760790')).toBe('(61) 98176-0790')
+    expect(formatarWhatsApp('61981760790')).toBe('(61) 98176-0790')
+    expect(formatarWhatsApp('556132221234')).toBe('(61) 3222-1234')
+  })
+
+  it('o link leva ao numero certo com a mensagem pronta e sem ponto duplicado', () => {
+    const url = linkAgendamento('5561981760790', 'Quero agendar: {beneficio} ({negocio}).', linha)
+    expect(url.startsWith('https://wa.me/5561981760790?text=')).toBe(true)
+    expect(decodeURIComponent(url.split('text=')[1])).toBe('Quero agendar: 10% de desconto na primeira aula de yoga (Casa Surya).')
+  })
+
+  it('texto do parceiro nao e lido como padrao de substituicao', () => {
+    const url = linkAgendamento('5561981760790', '{negocio}', { nome: "Casa $& {beneficio}", beneficio: 'x' })
+    expect(decodeURIComponent(url.split('text=')[1])).toBe('Casa $& {beneficio}')
+  })
+})
+
+describe('juntarRegra', () => {
+  it('termina cada pedaco em ponto, sem duplicar, e ignora o vazio', () => {
+    expect(juntarRegra(['Vale na primeira aula', 'Limite de 5 por mês', 'Válida até 30/11/2026'])).toBe(
+      'Vale na primeira aula. Limite de 5 por mês. Válida até 30/11/2026.',
+    )
+    expect(juntarRegra(['Já tem ponto.', null, '', 'Limite de 5 por mês'])).toBe('Já tem ponto. Limite de 5 por mês.')
+    expect(juntarRegra([null, undefined])).toBe('')
   })
 })

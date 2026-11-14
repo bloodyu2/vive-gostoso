@@ -7,7 +7,8 @@ import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { armazemDoNavegador, lerCupons } from '@/lib/clube/cupons-locais'
 import { disparar } from '@/lib/clube/disparar'
 import { chipsDeCategorias, filtrarPorCategoria } from '@/lib/clube/filtro'
-import { linkParaAmigo, textoParaAmigo, type Vantagem } from '@/lib/clube/vantagens'
+import { juntarRegra, linkAgendamento, linkParaAmigo, textoParaAmigo, type Vantagem } from '@/lib/clube/vantagens'
+import { AvisoAgendamento } from './aviso-agendamento'
 import { FormResgate, type TextosForm } from './form-resgate'
 
 /** Textos já no idioma da página (o servidor resolve; este componente não carrega
@@ -31,6 +32,12 @@ export interface TextosLista extends TextosForm {
   filtro_ver_todos: string
   /** "Mostrando {n} de {total} parceiros" */
   filtro_resultado: string
+  /** "Agende antes com {com}" e o resto do aviso de quem so atende com hora marcada */
+  agendar_titulo: string
+  agendar_texto: string
+  agendar_botao: string
+  /** mensagem pronta do WhatsApp, com {beneficio} e {negocio} */
+  agendar_msg: string
 }
 
 interface Props {
@@ -162,11 +169,11 @@ export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, 
       <ul className="clube-lista">
         {visiveis.map((v, i) => {
           const noAr = v.status === 'no_ar'
-          const meta = [
+          const regra = juntarRegra([
+            v.regra,
             v.limiteMensal ? textos.limite.replace('{n}', String(v.limiteMensal)) : null,
             v.validoAte ? textos.validade.replace('{data}', dataCurta(v.validoAte, lang)) : null,
-          ].filter(Boolean)
-          const regra = [v.regra, ...meta].filter(Boolean).join(' ')
+          ])
           const mensagemAmigo = textoParaAmigo(textos.amigo_texto, v, linkClube)
           const tokenDaPessoa = cupons[v.partnerId]
           const formularioAberto = formAberto === v.partnerId
@@ -209,6 +216,14 @@ export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, 
 
                 <p className="clube-beneficio">{v.beneficio}</p>
                 {regra ? <p className="clube-regra">{regra}</p> : null}
+                {v.requerAgendamento ? (
+                  <AvisoAgendamento
+                    com={v.agendamentoCom ?? v.nome}
+                    contato={v.agendamentoContato}
+                    href={v.agendamentoContato ? linkAgendamento(v.agendamentoContato, textos.agendar_msg, v) : null}
+                    textos={{ titulo: textos.agendar_titulo, texto: textos.agendar_texto, botao: textos.agendar_botao }}
+                  />
+                ) : null}
               </div>
 
               <div className="clube-picote" aria-hidden="true" />

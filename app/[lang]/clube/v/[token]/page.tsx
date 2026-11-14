@@ -124,6 +124,11 @@ export default async function VerificarPage({ params }: Props) {
                 <p className="clube-regra" style={{ marginTop: '1rem' }}>
                   {t.verificar_de.replace('{nome}', () => v.primeiro_nome ?? '')}
                 </p>
+                {v.requer_agendamento && v.status === 'valido' ? (
+                  <p className="clube-agendar clube-agendar-titulo" role="note" style={{ marginTop: '1rem' }}>
+                    {t.verificar_agendamento.replace('{com}', () => v.agendamento_com ?? v.negocio ?? '')}
+                  </p>
+                ) : null}
               </>
             ) : null}
           </div>

@@ -7,6 +7,7 @@ import { cupomDoTitular, tokenValido } from '@/lib/clube/cupom'
 import { imagemDoCupom } from '@/lib/clube/cupom-imagem'
 import { fotoParaCupom } from '@/lib/clube/cupom-foto'
 import { VIVE } from '@/lib/bio/contato'
+import { formatarWhatsApp, limparContato } from '@/lib/clube/vantagens'
 
 const LOCALES = { pt: 'pt-BR', en: 'en', es: 'es' } as const
 
@@ -36,6 +37,14 @@ export async function GET(req: Request, { params }: { params: Promise<{ lang: st
       codigo: cupom.codigo,
       expiraEm: cupom.expira_em,
       urlVerificacao: `${VIVE.site}${prefixo}/clube/v/${token}`,
+      agendar: cupom.requer_agendamento
+        ? {
+            titulo: t.img_agendar.replace('{com}', () => cupom.agendamento_com ?? cupom.negocio ?? ''),
+            whatsapp: limparContato(cupom.agendamento_contato)
+              ? t.img_agendar_whatsapp.replace('{numero}', () => formatarWhatsApp(cupom.agendamento_contato ?? ''))
+              : null,
+          }
+        : null,
     },
     {
       marca: t.img_marca,
