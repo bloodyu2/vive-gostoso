@@ -15,6 +15,27 @@ export function validateImageFile(file: File): string | null {
   return null
 }
 
+/**
+ * Nome de arquivo que o Storage aceita como parte da chave (KAN-883).
+ *
+ * O Storage recusa com 400 InvalidKey chave com acento, colchete, jogo da velha
+ * ou emoji, e foto de celular costuma vir como "Foto São Miguel (1).jpg" ou
+ * "IMG 😀.jpg". Aqui o nome vira so minusculas, digitos e hifen, sem extensao
+ * (quem monta o caminho poe `.jpg`, porque toda foto sai recomprimida em JPEG).
+ */
+export function nomeSeguroDeFoto(nomeOriginal: string): string {
+  const semExtensao = nomeOriginal.replace(/\.[^.]+$/, '')
+  const nome = semExtensao
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60)
+    .replace(/-+$/g, '')
+  return nome || 'foto'
+}
+
 async function toLoadableBlob(file: File): Promise<Blob> {
   const type = file.type.toLowerCase()
   if (type === 'image/heic' || type === 'image/heif' || file.name.match(/\.hei[cf]$/i)) {

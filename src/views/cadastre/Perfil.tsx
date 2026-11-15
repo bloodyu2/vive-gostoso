@@ -11,7 +11,7 @@ import { useCategories } from '@/hooks/useCategories'
 import { useInvalidateMyBusinesses, useMyBusinesses } from '@/hooks/useMyBusinesses'
 import type { Business } from '@/types/database'
 import { ArrowLeft, Camera, ChevronDown, ExternalLink, Loader2 } from 'lucide-react'
-import { validateImageFile, compressImage } from '@/lib/image-upload'
+import { validateImageFile, compressImage, nomeSeguroDeFoto } from '@/lib/image-upload'
 import {
   useLicencaImagem,
   useRegistrarAceite,
@@ -301,9 +301,13 @@ function PhotoSection({
     const toUpload = new File([compressed], safeName, { type: 'image/jpeg' })
     // Validate session right before the storage write, AFTER the slow compression step.
     await assertSession(supabase)
+    /* Sem `upsert` (KAN-883): upsert no Storage exige INSERT, SELECT e UPDATE, e o
+       dono so tem INSERT, UPDATE e DELETE no bucket. Com ele todo envio voltava
+       403 "row-level security". O caminho ja leva carimbo de tempo e indice,
+       entao nunca ha o que sobrescrever. */
     const { error: upErr } = await supabase.storage
       .from('business-photos')
-      .upload(path, toUpload, { upsert: true, contentType: 'image/jpeg' })
+      .upload(path, toUpload, { contentType: 'image/jpeg' })
     if (upErr) throw upErr
     return supabase.storage.from('business-photos').getPublicUrl(path).data.publicUrl
   }
@@ -322,7 +326,8 @@ function PhotoSection({
     }
     setUploadingCover(true)
     try {
-      const path = `${bizId}/${Date.now()}-${file.name.replace(/\.[^.]+$/, '')}.jpg`
+      const nome = nomeSeguroDeFoto(file.name)
+      const path = `${bizId}/${Date.now()}-${nome}.jpg`
       const url = await uploadFile(file, path)
       // uploadFile already validated session before the storage write.
       // Validate again right before the DB write — a separate protected call.
@@ -366,8 +371,12 @@ function PhotoSection({
 
     setUploadingGallery(true)
     try {
+      const carimbo = Date.now()
       const urls = await Promise.all(
-        toUpload.map(f => uploadFile(f, `${bizId}/${Date.now()}-${f.name.replace(/\.[^.]+$/, '')}.jpg`))
+        toUpload.map((f, i) => {
+          const nome = nomeSeguroDeFoto(f.name)
+          return uploadFile(f, `${bizId}/${carimbo}-${i}-${nome}.jpg`)
+        })
       )
       const next = [...currentPhotos, ...urls]
       // Validate session right before the DB write (after all uploads complete).
@@ -638,16 +647,18 @@ function ServicePhotoUploader({
      react-query da PhotoSection, entao nao ha busca duplicada. */
   const { data: aceite } = useLicencaImagem(bizId)
 
-  async function uploadFile(file: File): Promise<string> {
+  async function uploadFile(file: File, indice: number): Promise<string> {
     const compressed = await compressImage(file)
-    const safeName = `${Date.now()}.jpg`
+    // O indice evita colisao quando varias fotos saem no mesmo milissegundo.
+    const safeName = `${Date.now()}-${indice}.jpg`
     const path = `${bizId}/services/${serviceIndex}/${safeName}`
     const toUpload = new File([compressed], safeName, { type: 'image/jpeg' })
     // Validate session right before the storage write, AFTER the slow compression step.
     await assertSession(supabase)
+    // Sem `upsert` (KAN-883): o dono nao tem SELECT no bucket, e upsert exige.
     const { error: upErr } = await supabase.storage
       .from('business-photos')
-      .upload(path, toUpload, { upsert: true, contentType: 'image/jpeg' })
+      .upload(path, toUpload, { contentType: 'image/jpeg' })
     if (upErr) throw upErr
     return supabase.storage.from('business-photos').getPublicUrl(path).data.publicUrl
   }
@@ -671,7 +682,7 @@ function ServicePhotoUploader({
     setUploading(true)
     try {
       const toUpload = files.slice(0, slots)
-      const urls = await Promise.all(toUpload.map(uploadFile))
+      const urls = await Promise.all(toUpload.map((f, i) => uploadFile(f, i)))
       await cobrirImagensPeloAceite(aceite, urls)
       onChange([...photos, ...urls])
     } catch (err) {

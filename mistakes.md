@@ -5,6 +5,12 @@
 
 ---
 
+## 2026-11-15: upload com `upsert: true` volta 403 para o dono (conta nova nao envia foto)
+**O que aconteceu:** o painel do negocio (capa, galeria e fotos de servico) enviava ao bucket `business-photos` com `upsert: true`. No Storage, upsert exige INSERT, SELECT e UPDATE, e o dono so tem INSERT, UPDATE e DELETE nesse bucket (o SELECT de dono saiu de proposito, o bucket e publico). Resultado medido com conta de teste: o mesmo envio, na mesma pasta, deu 200 sem `x-upsert` e 403 "new row violates row-level security policy" com `x-upsert: true`; a tela mostrava "Voce nao tem permissao para editar este negocio". Antes de testar com a conta real, tres sessoes olharam so as politicas no banco, que estavam certas para o dono, e a simulacao em SQL passou, porque ela nao reproduz o caminho do upsert da API.
+**Regra:** envio ao Storage so com INSERT: sem `upsert`, caminho com carimbo de tempo e indice. Bug de upload se reproduz pela API do Storage com a sessao do usuario (cookie `sb-...-auth-token`), nao por SQL simulando o papel. `src/lib/envio-de-foto.test.ts` reprova `upsert: true` em `Perfil.tsx` e `photo-uploader.tsx`. Segundo defeito do mesmo caminho: a chave levava o nome original do arquivo, e acento, colchete ou emoji voltam 400 InvalidKey; o nome passa por `nomeSeguroDeFoto` (`src/lib/image-upload.ts`).
+**Tambem:** DELETE pela API do Storage com a sessao do dono devolve 200 e lista vazia (nada apagado), porque apagar exige ver o objeto (SELECT). Foto de teste so sai com chave de servico.
+**Build local:** com `NODE_ENV` do ambiente do agente o `next build` quebra em `/_global-error` ("reading 'useContext'"); `NODE_ENV=production npx next build --webpack` passa.
+
 ## 2026-11-08: elemento fixo novo na borda de baixo tem de conferir quem mais mora la
 **O que aconteceu:** a barra de app do celular (PR #72) entrou colada embaixo, na mesma camada (z-50) do aviso de cookies, que vem depois no DOM. Quem ainda nao tinha respondido o aviso via a barra coberta e nenhum botao respondia ao toque. O QA do PR so olhou captura de tela e rota, nao o toque, e a captura ja vinha com o aviso fechado.
 **Regra:** todo elemento `fixed` novo se confere com `document.elementFromPoint` no centro de cada controle, com o navegador SEM localStorage (visitante novo, aviso de cookies aberto), em 390 px com toque. Fixos que dividem a borda (barra, aviso, ShareFab, WhatsApp) se empilham de proposito, nunca por acaso de ordem no DOM.
