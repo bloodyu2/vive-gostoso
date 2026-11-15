@@ -28,6 +28,12 @@ export interface Vantagem {
   validoAte: string | null
   status: StatusVantagem
   esgotada: boolean
+  /** true = precisa agendar antes com o parceiro (cupom e cartao avisam). */
+  requerAgendamento: boolean
+  /** WhatsApp so com digitos para agendar; null quando nao exige agendamento ou nao ha numero. */
+  agendamentoContato: string | null
+  /** Com quem agendar (ex.: "Satya"); null = o nome do negocio. */
+  agendamentoCom: string | null
   /** Preenchida pela pagina depois da leitura; ausente = sem categoria (so aparece em "Todos"). */
   categoria?: CategoriaDaVantagem | null
 }
@@ -47,6 +53,10 @@ export interface LinhaVantagem {
   valido_ate: string | null
   status: string
   esgotada: boolean
+  /** ausentes enquanto a migration de agendamento nao rodou: valem como "nao exige" */
+  requer_agendamento?: boolean | null
+  agendamento_contato?: string | null
+  agendamento_com?: string | null
 }
 
 export function paraVantagem(l: LinhaVantagem): Vantagem {
@@ -64,7 +74,50 @@ export function paraVantagem(l: LinhaVantagem): Vantagem {
     validoAte: l.valido_ate,
     status: l.status === 'no_ar' ? 'no_ar' : 'em_combinacao',
     esgotada: !!l.esgotada,
+    requerAgendamento: l.requer_agendamento === true,
+    agendamentoContato: l.requer_agendamento === true ? limparContato(l.agendamento_contato) : null,
+    agendamentoCom: l.requer_agendamento === true ? limparTexto(l.agendamento_com) : null,
   }
+}
+
+/** So digitos, de 10 a 15; qualquer outra coisa vira null (nunca monta link com lixo). */
+export function limparContato(bruto: string | null | undefined): string | null {
+  const d = (bruto ?? '').replace(/\D/g, '')
+  return /^\d{10,15}$/.test(d) ? d : null
+}
+
+function limparTexto(t: string | null | undefined): string | null {
+  const v = (t ?? '').replace(/\s+/g, ' ').trim()
+  return v ? v : null
+}
+
+/** (61) 98176-0790 a partir de 5561981760790 (ou de 61981760790). Outro formato: so os digitos. */
+export function formatarWhatsApp(contato: string): string {
+  let d = contato.replace(/\D/g, '')
+  if ((d.length === 12 || d.length === 13) && d.startsWith('55')) d = d.slice(2)
+  if (d.length === 11) return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`
+  if (d.length === 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`
+  return d
+}
+
+/** Link do WhatsApp de quem agenda, com a mensagem pronta ({negocio} e {beneficio}). */
+export function linkAgendamento(
+  contato: string,
+  modelo: string,
+  v: Pick<Vantagem, 'nome' | 'beneficio'>,
+): string {
+  const valores: Record<string, string> = { negocio: v.nome, beneficio: v.beneficio.replace(/\.$/, '') }
+  return buildWhatsAppLink(contato, modelo.replace(/\{(negocio|beneficio)\}/g, (_, k: string) => valores[k]))
+}
+
+/** Junta os pedacos da regra do cartao (regra, limite, validade) cada um terminando em ponto.
+ *  Evita "mes Valida ate" quando o texto da regra nao traz ponto final. */
+export function juntarRegra(partes: Array<string | null | undefined>): string {
+  return partes
+    .map((p) => (p ?? '').trim())
+    .filter(Boolean)
+    .map((p) => (/[.!?…]$/.test(p) ? p : `${p}.`))
+    .join(' ')
 }
 
 /** Origem da plaquinha: so dois digitos. Qualquer outra coisa vira null. */
@@ -98,6 +151,9 @@ function fundador(
     validoAte: null,
     status,
     esgotada: false,
+    requerAgendamento: false,
+    agendamentoContato: null,
+    agendamentoCom: null,
   }
 }
 

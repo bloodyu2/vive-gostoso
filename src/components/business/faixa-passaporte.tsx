@@ -1,13 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight, Ticket } from 'lucide-react'
+import { ArrowRight, CalendarClock, MessageCircle, Ticket } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useNoClube } from '@/components/clube/contexto-clube'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { useVantagemDoNegocio } from '@/hooks/useVantagemDoNegocio'
 import { pushDataLayer } from '@/lib/analytics'
 import { CLUBE_PUBLICO } from '@/lib/clube/config'
+import { formatarWhatsApp, linkAgendamento } from '@/lib/clube/vantagens'
 
 type Props = { businessId: string; slug: string; nome: string; temDono: boolean }
 
@@ -45,6 +46,27 @@ export function FaixaPassaporte({ businessId, slug, nome, temDono }: Props) {
             {vantagem.regra && <p className="mt-1 text-sm text-fg-2 text-pretty">{vantagem.regra}</p>}
             {vantagem.limiteMensal != null && (
               <p className="mt-1 text-xs text-fg-3-texto">{t('negocio.passaporte_limite', { n: vantagem.limiteMensal })}</p>
+            )}
+            {vantagem.requerAgendamento && (
+              <div role="note" className="mt-3 rounded-xl border border-ocre-400/60 bg-ocre-light px-4 py-3 text-sm text-fg-1">
+                <p className="flex items-center gap-2 font-semibold">
+                  <CalendarClock className="size-4 shrink-0 text-ocre-texto" aria-hidden="true" />
+                  {t('negocio.passaporte_agendar').replace('{com}', () => vantagem.agendamentoCom ?? nome)}
+                </p>
+                {vantagem.agendamentoContato && (
+                  <a
+                    href={linkAgendamento(vantagem.agendamentoContato, t('negocio.passaporte_agendar_msg'), { nome, beneficio: vantagem.beneficio })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => pushDataLayer('perfil_passaporte_click', { slug, acao: 'agendar' })}
+                    className="mt-2 inline-flex min-h-11 items-center gap-2 rounded-full bg-ocre-400 px-4 font-semibold text-fg-1 transition-colors hover:bg-ocre-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal motion-reduce:transition-none"
+                  >
+                    <MessageCircle className="size-4" aria-hidden="true" />
+                    {t('negocio.passaporte_agendar_botao')}
+                    <span className="text-xs font-medium opacity-80">{formatarWhatsApp(vantagem.agendamentoContato)}</span>
+                  </a>
+                )}
+              </div>
             )}
           </div>
           <Link

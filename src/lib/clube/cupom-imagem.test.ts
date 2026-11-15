@@ -74,6 +74,19 @@ describe('imagemDoCupom', () => {
     expect(new DataView(bs.buffer, bs.byteOffset).getUint32(20)).toBe(ALTURA)
   }, 60_000)
 
+  it('com agendamento previo gera a imagem do mesmo tamanho, maior em bytes que sem a faixa', async () => {
+    const sem = new Uint8Array(await (await imagemDoCupom(dados, rotulos)).arrayBuffer())
+    const com = await imagemDoCupom(
+      { ...dados, agendar: { titulo: 'Agende antes com Satya', whatsapp: 'WhatsApp (61) 98176-0790' } },
+      rotulos,
+    )
+    const bytes = new Uint8Array(await com.arrayBuffer())
+    const dv = new DataView(bytes.buffer, bytes.byteOffset)
+    expect(dv.getUint32(16)).toBe(LARGURA)
+    expect(dv.getUint32(20)).toBe(ALTURA)
+    expect(bytes.length).not.toBe(sem.length)
+  }, 60_000)
+
   it('nome de negócio e vantagem enormes ainda geram a imagem', async () => {
     const res = await imagemDoCupom(
       { ...dados, negocio: 'Pousada e Restaurante '.repeat(6), beneficio: 'texto '.repeat(60), nome: 'Maria '.repeat(30) },

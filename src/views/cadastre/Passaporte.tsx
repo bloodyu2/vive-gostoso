@@ -18,6 +18,7 @@ import {
   type LinhaLead,
 } from '@/lib/clube/resgate'
 import { filtrarLeads, nomeDoArquivoCsv } from '@/lib/clube/painel-abas'
+import { limparContato } from '@/lib/clube/vantagens'
 
 /* Area do parceiro do Passaporte Gostoso. O dono muda a propria vantagem (texto,
    regra, limite por mes, validade), liga e pausa, e acompanha usos. Tudo vale na
@@ -37,6 +38,10 @@ export interface Parceiro {
   limite_mensal: number | null
   valido_ate: string | null
   status: 'em_combinacao' | 'no_ar' | 'pausado'
+  /** ausentes enquanto a migration de agendamento nao rodou */
+  requer_agendamento?: boolean
+  agendamento_contato?: string | null
+  agendamento_com?: string | null
 }
 
 interface PainelDados {
@@ -138,7 +143,7 @@ export function useParceiro(negocioId: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('gostoso_club_partners')
-        .select('id, business_id, beneficio, regra, limite_mensal, valido_ate, status')
+        .select('*')
         .eq('business_id', negocioId)
         .maybeSingle()
       if (error) throw error
@@ -191,7 +196,10 @@ export function FormVantagem({ negocioId, parceiro }: { negocioId: string; parce
   const [limite, setLimite] = useState(parceiro?.limite_mensal ? String(parceiro.limite_mensal) : '')
   const [semData, setSemData] = useState(!parceiro?.valido_ate)
   const [validade, setValidade] = useState(parceiro?.valido_ate ?? '')
-  const [estado, setEstado] = useState<'ocioso' | 'salvando' | 'salvo' | 'erro' | 'erro_limite' | 'erro_data'>('ocioso')
+  const [agendar, setAgendar] = useState(parceiro?.requer_agendamento === true)
+  const [agendarCom, setAgendarCom] = useState(parceiro?.agendamento_com ?? '')
+  const [agendarContato, setAgendarContato] = useState(parceiro?.agendamento_contato ? mascararTelefone(parceiro.agendamento_contato) : '')
+  const [estado, setEstado] = useState<'ocioso' | 'salvando' | 'salvo' | 'erro' | 'erro_limite' | 'erro_data' | 'erro_contato'>('ocioso')
 
   const status = parceiro?.status ?? null
   const ligada = status === 'no_ar'
@@ -209,13 +217,29 @@ export function FormVantagem({ negocioId, parceiro }: { negocioId: string; parce
       setEstado('erro_data')
       return
     }
+    const contatoBruto = agendarContato.replace(/\D/g, '')
+    const contato = agendar && contatoBruto ? limparContato(contatoBruto.length <= 11 ? `55${contatoBruto}` : contatoBruto) : null
+    if (agendar && contatoBruto && !contato) {
+      setEstado('erro_contato')
+      return
+    }
     setEstado('salvando')
+    /* Os campos de agendamento so vao junto quando fazem diferenca: assim salvar uma vantagem
+       comum continua funcionando mesmo antes de a migration de agendamento rodar. */
+    const mexeEmAgendamento = agendar || (parceiro != null && parceiro.requer_agendamento === true)
     const campos = {
       beneficio: beneficio.trim(),
       regra: regra.trim() || null,
       limite_mensal: semLimite ? null : limiteNumero,
       valido_ate: semData || !validade ? null : validade,
       status: novoStatus,
+      ...(mexeEmAgendamento
+        ? {
+            requer_agendamento: agendar,
+            agendamento_contato: agendar ? contato : null,
+            agendamento_com: agendar ? agendarCom.trim() || null : null,
+          }
+        : {}),
     }
     const { error } = parceiro
       ? await supabase.from('gostoso_club_partners').update(campos).eq('id', parceiro.id)
@@ -317,6 +341,50 @@ export function FormVantagem({ negocioId, parceiro }: { negocioId: string; parce
             />
           ) : null}
         </fieldset>
+
+        <fieldset style={{ border: 0, padding: 0, margin: 0 }}>
+          <legend className="clube-tipo">{t('campo_agendamento')}</legend>
+          <label style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', minHeight: '2.75rem' }}>
+            <input type="checkbox" checked={agendar} onChange={(e) => setAgendar(e.target.checked)} />
+            {t('agendamento_sim')}
+          </label>
+          <span className="clube-regra" style={{ display: 'block' }}>
+            {t('ajuda_agendamento')}
+          </span>
+          {agendar ? (
+            <div style={{ display: 'grid', gap: '0.75rem', marginTop: '0.75rem' }}>
+              <label>
+                <span className="clube-tipo">{t('campo_agendamento_com')}</span>
+                <input
+                  className="clube-campo"
+                  type="text"
+                  maxLength={40}
+                  value={agendarCom}
+                  onChange={(e) => setAgendarCom(e.target.value)}
+                  style={{ marginTop: '0.375rem' }}
+                />
+                <span className="clube-regra" style={{ display: 'block' }}>
+                  {t('ajuda_agendamento_com')}
+                </span>
+              </label>
+              <label>
+                <span className="clube-tipo">{t('campo_agendamento_contato')}</span>
+                <input
+                  className="clube-campo"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="off"
+                  value={agendarContato}
+                  onChange={(e) => setAgendarContato(mascararTelefone(e.target.value))}
+                  style={{ marginTop: '0.375rem' }}
+                />
+                <span className="clube-regra" style={{ display: 'block' }}>
+                  {t('ajuda_agendamento_contato')}
+                </span>
+              </label>
+            </div>
+          ) : null}
+        </fieldset>
       </div>
 
       <div className="clube-acoes">
@@ -370,7 +438,9 @@ export function FormVantagem({ negocioId, parceiro }: { negocioId: string; parce
               ? t('erro_limite')
               : estado === 'erro_data'
                 ? t('erro_data')
-                : ''}
+                : estado === 'erro_contato'
+                  ? t('erro_contato')
+                  : ''}
       </p>
     </section>
   )
@@ -472,6 +542,17 @@ export function ConfirmarCupom({ parceiroId }: { parceiroId: string }) {
         {t('confirmar_titulo')}
       </h2>
       <p className="clube-regra">{t('confirmar_ajuda')}</p>
+      <details className="clube-como-conferir" style={{ marginTop: '0.75rem' }}>
+        <summary className="clube-tipo" style={{ cursor: 'pointer', minHeight: '2.75rem', display: 'flex', alignItems: 'center' }}>
+          {t('como_titulo')}
+        </summary>
+        <ol className="clube-regra" style={{ paddingLeft: '1.25rem', listStyle: 'decimal', display: 'grid', gap: '0.5rem' }}>
+          <li>{t('como_1')}</li>
+          <li>{t('como_2')}</li>
+          <li>{t('como_3')}</li>
+        </ol>
+        <p className="clube-regra">{t('como_painel')}</p>
+      </details>
       <form onSubmit={enviar} noValidate style={{ display: 'grid', gap: '0.75rem', marginTop: '0.75rem' }}>
         <label>
           <span className="clube-tipo">{t('confirmar_campo')}</span>

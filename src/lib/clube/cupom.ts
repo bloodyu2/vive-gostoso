@@ -15,6 +15,9 @@ export interface Verificacao {
   codigo?: string
   expira_em?: string
   usado_em?: string | null
+  /** o parceiro so atende com hora marcada; ausente enquanto a migration nao rodou */
+  requer_agendamento?: boolean | null
+  agendamento_com?: string | null
 }
 
 export interface CupomDoTitular {
@@ -29,6 +32,10 @@ export interface CupomDoTitular {
   codigo?: string
   expira_em?: string
   usado_em?: string | null
+  requer_agendamento?: boolean | null
+  /** WhatsApp so com digitos, ja resolvido pelo banco (o do agendamento ou o do negocio) */
+  agendamento_contato?: string | null
+  agendamento_com?: string | null
 }
 
 export function tokenValido(token: string): boolean {

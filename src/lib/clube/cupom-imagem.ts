@@ -28,6 +28,8 @@ export interface DadosCupom {
   urlVerificacao: string
   /** foto do estabelecimento ja como data URI (jpeg ou png); sem ela o bilhete e o de sempre */
   foto?: string | null
+  /** parceiro que so atende com hora marcada: a faixa "Agende antes com ..." no bilhete (textos ja prontos) */
+  agendar?: { titulo: string; whatsapp: string | null } | null
 }
 
 export interface RotulosCupom {
@@ -161,6 +163,23 @@ function faixaDaFoto(foto: string, r: RotulosCupom): No {
   )
 }
 
+/** "Agende antes com a Satya" + o WhatsApp: mostarda sobre o papel, para quem mostra o print. */
+function faixaDeAgendamento(a: { titulo: string; whatsapp: string | null }): No {
+  return h(
+    'div',
+    {
+      flexDirection: 'column',
+      marginTop: 28,
+      padding: '20px 28px',
+      border: `4px solid ${COR.mostarda}`,
+      borderRadius: 24,
+      background: '#FBEBC4',
+    },
+    texto(encurtar(a.titulo, 44), { fontSize: 38, fontWeight: 700, lineHeight: 1.15, color: COR.tinta }),
+    a.whatsapp ? texto(a.whatsapp, { marginTop: 6, fontSize: 32, fontWeight: 500, color: COR.suave }) : null,
+  )
+}
+
 export function montarCupom(dados: DadosCupom, r: RotulosCupom): No {
   const qr = caminhoDoQr(dados.urlVerificacao)
   const lado = 240
@@ -232,6 +251,7 @@ export function montarCupom(dados: DadosCupom, r: RotulosCupom): No {
           letterSpacing: -2,
         }),
         texto(beneficio, { marginTop: 28, fontSize: 52, fontWeight: 700, lineHeight: 1.2, color: COR.suave }),
+        dados.agendar ? faixaDeAgendamento(dados.agendar) : null,
         h(
           'div',
           { flexDirection: 'column', marginTop: 'auto', paddingTop: 28 },

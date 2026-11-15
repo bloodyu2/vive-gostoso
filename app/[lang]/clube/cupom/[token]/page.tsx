@@ -5,9 +5,12 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { TemaClube } from '@/components/clube/tema'
 import { AcoesCupom } from '@/components/clube/acoes-cupom'
+import { AvisoAgendamento } from '@/components/clube/aviso-agendamento'
 import { VIVE } from '@/lib/bio/contato'
 import { dicionario, ehIdioma, prefixo } from '@/lib/bio/dicionario'
 import { cupomDoTitular } from '@/lib/clube/cupom'
+import { limparContato, linkAgendamento } from '@/lib/clube/vantagens'
+import { formatarCodigo } from '@/lib/clube/resgate'
 
 type Props = { params: Promise<{ lang: string; token: string }> }
 
@@ -36,6 +39,8 @@ export default async function CupomPage({ params }: Props) {
   const invalido = cupom.status === 'invalido' || !cupom.negocio || !cupom.codigo
 
   const urlImagem = `${pre}/clube/cupom/${token}/imagem`
+  const contatoAgendar = cupom.requer_agendamento ? limparContato(cupom.agendamento_contato) : null
+  const aindaVale = cupom.status === 'valido'
   const banner =
     cupom.status === 'usado'
       ? t.banner_usado
@@ -66,6 +71,22 @@ export default async function CupomPage({ params }: Props) {
           ) : (
             <>
               <p style={{ color: 'var(--c-suave)' }}>{t.sub}</p>
+              {cupom.requer_agendamento && aindaVale ? (
+                <AvisoAgendamento
+                  com={cupom.agendamento_com ?? cupom.negocio ?? ''}
+                  contato={contatoAgendar}
+                  href={
+                    contatoAgendar
+                      ? linkAgendamento(
+                          contatoAgendar,
+                          t.agendar_msg.replace('{codigo}', () => formatarCodigo(cupom.codigo ?? '')),
+                          { nome: cupom.negocio ?? '', beneficio: cupom.beneficio ?? '' },
+                        )
+                      : null
+                  }
+                  textos={{ titulo: t.agendar_titulo, texto: t.agendar_texto, botao: t.agendar_botao }}
+                />
+              ) : null}
               {banner ? (
                 <p className="clube-erro" role="status" style={{ marginTop: '0.75rem' }}>
                   {banner}
