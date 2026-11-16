@@ -4,6 +4,7 @@ import { useRef, useState, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { armazemDoNavegador, guardarCupom } from '@/lib/clube/cupons-locais'
+import { PERGUNTA_VERSAO, idiomaDaPergunta } from '@/lib/clube/pergunta'
 import {
   POLITICA_VERSAO,
   interpretarResgate,
@@ -20,6 +21,8 @@ export interface TextosForm {
   campo_telefone: string
   nota_dados: string
   consentimento: string
+  /** Caixa opcional: o Vive Gostoso pergunta por e-mail, um dia depois, se a pessoa usou. */
+  consentimento_pergunta: string
   politica_link: string
   gerar_cupom: string
   gerando: string
@@ -70,6 +73,8 @@ export function FormResgate({ partnerId, negocio, textos, origem, prefixo, onCan
   const [email, setEmail] = useState('')
   const [telefone, setTelefone] = useState('')
   const [consentimento, setConsentimento] = useState(false)
+  // opcional e SEMPRE desmarcada: e um consentimento a parte, para um fim a parte
+  const [aceitaPergunta, setAceitaPergunta] = useState(false)
   const [isca, setIsca] = useState('')
   const [campoComErro, setCampoComErro] = useState<Campo | null>(null)
   const [erroGeral, setErroGeral] = useState<string | null>(null)
@@ -140,6 +145,19 @@ export function FormResgate({ partnerId, negocio, textos, origem, prefixo, onCan
       const r = interpretarResgate(data, error)
       if (r.tipo === 'ok') {
         guardarCupom(armazemDoNavegador(), partnerId, r.token)
+        if (aceitaPergunta) {
+          // melhor esforco: se falhar, o cupom ja saiu e a pergunta so nao sera enviada
+          try {
+            await supabase.rpc('gostoso_club_aceitar_pergunta', {
+              p_token: r.token,
+              p_versao: PERGUNTA_VERSAO,
+              p_texto: textos.consentimento_pergunta,
+              p_idioma: idiomaDaPergunta(prefixo.replace('/', '')),
+            })
+          } catch {
+            /* sem consentimento gravado, nada sera enviado */
+          }
+        }
         router.push(`${prefixo}/clube/cupom/${r.token}`)
         return
       }
@@ -238,6 +256,16 @@ export function FormResgate({ partnerId, negocio, textos, origem, prefixo, onCan
         </span>
       </label>
       {erro('consentimento')}
+
+      <label className="clube-check">
+        <input
+          type="checkbox"
+          name="consentimento_pergunta"
+          checked={aceitaPergunta}
+          onChange={(e) => setAceitaPergunta(e.target.checked)}
+        />
+        <span>{textos.consentimento_pergunta}</span>
+      </label>
 
       {/* campo isca: pessoa nao ve nem preenche; robo preenche e o servidor recusa */}
       <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }}>

@@ -235,6 +235,7 @@ export default async function PlaquinhaPage({ params }: Props) {
     campo_telefone: tc.campo_telefone,
     nota_dados: tc.nota_dados,
     consentimento: tc.consentimento,
+    consentimento_pergunta: tc.consentimento_pergunta,
     politica_link: tc.politica_link,
     gerar_cupom: tc.gerar_cupom,
     gerando: tc.gerando,

@@ -5,6 +5,11 @@
 
 ---
 
+## 2026-11-16: teste de regra de tempo que passa sem provar a regra
+**O que aconteceu:** na fila da pergunta (KAN-896) a regra "pelo menos 12 horas" estava coberta por um teste verde, mas ao quebrar a regra de proposito o teste continuava verde: com o relogio real, a regra do dia civil anterior barrava o mesmo caso. Duas regras de tempo que se sobrepoem escondem uma a outra.
+**Regra:** regra que depende do relogio tem o relogio como parametro (`p_agora`) e o teste fixa horas em que so uma das regras decide (23h de um dia, 09h do outro). Todo teste de regra e quebrado de proposito antes de ser aceito.
+**Tambem:** nao ligar `node_modules` entre worktrees (ja estava registrado em 2026-09-24; foi desfeito antes de qualquer remocao). Cada worktree roda o proprio `npm ci`.
+
 ## 2026-11-15: upload com `upsert: true` volta 403 para o dono (conta nova nao envia foto)
 **O que aconteceu:** o painel do negocio (capa, galeria e fotos de servico) enviava ao bucket `business-photos` com `upsert: true`. No Storage, upsert exige INSERT, SELECT e UPDATE, e o dono so tem INSERT, UPDATE e DELETE nesse bucket (o SELECT de dono saiu de proposito, o bucket e publico). Resultado medido com conta de teste: o mesmo envio, na mesma pasta, deu 200 sem `x-upsert` e 403 "new row violates row-level security policy" com `x-upsert: true`; a tela mostrava "Voce nao tem permissao para editar este negocio". Antes de testar com a conta real, tres sessoes olharam so as politicas no banco, que estavam certas para o dono, e a simulacao em SQL passou, porque ela nao reproduz o caminho do upsert da API.
 **Regra:** envio ao Storage so com INSERT: sem `upsert`, caminho com carimbo de tempo e indice. Bug de upload se reproduz pela API do Storage com a sessao do usuario (cookie `sb-...-auth-token`), nao por SQL simulando o papel. `src/lib/envio-de-foto.test.ts` reprova `upsert: true` em `Perfil.tsx` e `photo-uploader.tsx`. Segundo defeito do mesmo caminho: a chave levava o nome original do arquivo, e acento, colchete ou emoji voltam 400 InvalidKey; o nome passa por `nomeSeguroDeFoto` (`src/lib/image-upload.ts`).

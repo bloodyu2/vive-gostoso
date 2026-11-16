@@ -118,6 +118,14 @@ export default async function CupomPage({ params }: Props) {
                 }}
               />
               <p className="clube-regra">{t.ajuda_salvar}</p>
+              {cupom.status === 'valido' ? (
+                <div style={{ marginTop: '1.25rem' }}>
+                  <p style={{ fontWeight: 600, marginBottom: '0.5rem' }}>{t.usou_titulo}</p>
+                  <a className="clube-btn clube-btn--contorno clube-btn--cheio" href={`${pre}/clube/usei/${token}`}>
+                    {t.usou_botao}
+                  </a>
+                </div>
+              ) : null}
             </>
           )}
         </div>

@@ -107,7 +107,7 @@ export default withPWA({
     runtimeCaching: [
       { urlPattern: /\/rest\/v1\/gostoso_club_vouchers/, handler: 'NetworkOnly' },
       { urlPattern: /\/rest\/v1\/rpc\/gostoso_club_(resgatar|cupom|verificar|marcar_usado)/, handler: 'NetworkOnly' },
-      { urlPattern: /\/clube\/(cupom|v)\//, handler: 'NetworkOnly' },
+      { urlPattern: /\/clube\/(cupom|v|usei)\//, handler: 'NetworkOnly' },
     ],
   },
 })(withNextIntl(config))
