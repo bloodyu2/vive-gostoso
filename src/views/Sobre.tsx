@@ -13,6 +13,7 @@ import { NumberTicker } from '@/components/magicui/number-ticker'
 import { ShimmerButton } from '@/components/magicui/shimmer-button'
 import { Citacao } from '@/components/institucional/citacao'
 import { SumarioPagina } from '@/components/institucional/sumario-pagina'
+import { CLUBE_PUBLICO } from '@/lib/clube/config'
 
 type SobreProps = { initialParametros?: Parametros }
 
@@ -75,6 +76,7 @@ export default function Sobre({ initialParametros }: SobreProps) {
     { v: t('nav.participe'), href: lp('/participe'), desc: t('sobre.verbos_participe_desc') },
     { v: t('nav.conheca'),   href: lp('/conheca'),   desc: t('sobre.verbos_conheca_desc') },
     { v: t('nav.contrate'),  href: lp('/contrate'),  desc: t('sobre.verbos_contrate_desc') },
+    ...(CLUBE_PUBLICO ? [{ v: t('nav.app_passaporte'), href: lp('/clube'), desc: t('sobre.verbos_clube_desc') }] : []),
   ]
 
   return (
@@ -265,7 +267,7 @@ export default function Sobre({ initialParametros }: SobreProps) {
                     </svg>
                   </div>
                   <div>
-                    <div className="font-semibold text-fg-1">Instituto Balaio</div>
+                    <div className="font-semibold text-fg-1">Balaio</div>
                     <div className="text-sm text-fg-3-texto">
                       {t('sobre.quem_balaio_sub')} · <a href="https://balaio.net" target="_blank" rel="noopener noreferrer" className="text-teal-dark dark:text-teal hover:underline inline-flex items-center gap-0.5">balaio.net <ExternalLink className="w-3 h-3" aria-hidden="true" /></a>
                     </div>

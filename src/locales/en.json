@@ -360,14 +360,15 @@
     "verbos_come_desc": "Restaurants, bars and local food",
     "verbos_fique_desc": "Guesthouses and all types of accommodation",
     "verbos_passeie_desc": "Kite, buggy, tours and sports",
-    "verbos_explore_desc": "Interactive city map",
+    "verbos_explore_desc": "Map, beaches and tide table",
+    "verbos_clube_desc": "Free perks at the city's partners",
     "verbos_participe_desc": "Festivals and calendar events",
     "verbos_conheca_desc": "History, beaches and how to get here",
     "verbos_apoie_desc": "Public fund and financial transparency",
     "verbos_contrate_desc": "Local services and job listings",
-    "planos_eyebrow": "Join",
-    "planos_h2": "Three ways to participate.",
-    "planos_desc": "Listing is free and already drives traffic. Paid plans are for those who want more visibility and to fund the city.",
+    "planos_eyebrow": "Listing",
+    "planos_h2": "Taking part is free.",
+    "planos_desc": "Listing is free and already drives traffic. Paid plans, with more visibility in the directory, are not available yet.",
     "planos_free_label": "Free, always",
     "planos_free_item_0": "Full profile on the platform",
     "planos_free_item_1": "Photos, hours, contact and map",
@@ -497,7 +498,7 @@
     ],
     "fotos_p3": "When a photo comes from the business itself, it is marked as such. The mark only appears after the owner uploads the image from the panel and agrees to the image rights terms, with the date and the user recorded. A photo that was already in the listing before that does not get the mark, even if it came from the owner: we would rather have few true marks than many doubtful ones.",
     "fotos_p4": "The terms say the image still belongs to whoever uploaded it, that permission to display it lasts while the listing is active, and that removal can be requested at any time, from the panel or at contato@vivegostoso.com.br.",
-    "conta_desc_sem_preco": "Anyone who wants to contribute beyond the free listing can subscribe to one of the support plans. The prices are on the signup page.",
+    "conta_desc_sem_preco": "Paid support plans are not available yet. When they open, businesses already listed will be told.",
     "toc_vendemos": "No commission"
   },
   "apoie": {
@@ -709,7 +710,8 @@
     "negocios": "Business",
     "modo_claro": "Light mode",
     "modo_escuro": "Dark mode",
-    "feito_por": "Made by Balaio"
+    "feito_por": "Made by Balaio",
+    "passaporte": "Gostoso Passport"
   },
   "common": {
     "ver_perfil": "View profile",
