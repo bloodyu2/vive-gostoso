@@ -12,8 +12,8 @@
 import { rotasMares } from './mares-slugs.mjs'
 
 export function paginasEstaticas(raiz) {
-  // /apoie fica fora do sitemap: não há forma de receber doação por enquanto.
-  const apoie = []
+  // /apoie volta ao sitemap em 16/11/2026: tem o link de pagamento do Asaas (src/lib/apoie.ts).
+  const apoie = [{ path: '/apoie', freq: 'monthly', priority: '0.6' }]
   return [
     { path: '/',          freq: 'daily',   priority: '1.0' },
     { path: '/come',      freq: 'weekly',  priority: '0.9' },

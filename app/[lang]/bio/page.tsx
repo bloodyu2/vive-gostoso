@@ -23,8 +23,7 @@ import { CLUBE_PUBLICO } from '@/lib/clube/config'
 import { dicionario, ehIdioma, prefixo } from '@/lib/bio/dicionario'
 import { comUtm, linksDaBio, linksDoRodape, type IdBloco } from '@/lib/bio/links-bio'
 import { proximasMares, type ProximaMare } from '@/lib/bio/proximas-mares'
-import { SLUG_GUIA_MARES, postPublicado } from '@/lib/blog/post-publicado'
-import { slugNoIdioma } from '@/lib/blog/traducoes'
+import { ultimoPost } from '@/lib/blog/post-publicado'
 import { carregarSemana } from '@/lib/mares/carregar'
 import { formatarAltura } from '@/lib/mares/formato'
 import { linkOfertas, linkOfertasWhatsapp, rotuloConhecerSite, textosOfertas } from '@/lib/ofertas'
@@ -138,10 +137,11 @@ export default async function BioPage({ params }: Props) {
   const dic = dicionario(idioma)
   const t = dic.bio
 
-  const slugDoPost = slugNoIdioma(SLUG_GUIA_MARES, idioma)
-  const [mare, temPost] = await Promise.all([lerMare(new Date()), postPublicado(slugDoPost)])
+  /* O cartao do blog mostra sempre o ultimo post publicado no idioma (antes era
+     o guia da tabua de mares, fixo, mesmo com posts mais novos). */
+  const [mare, postNovo] = await Promise.all([lerMare(new Date()), ultimoPost(idioma)])
 
-  const blocos = linksDaBio(idioma, { postSlug: temPost ? slugDoPost : null, clube: CLUBE_PUBLICO })
+  const blocos = linksDaBio(idioma, { postSlug: postNovo?.slug ?? null, clube: CLUBE_PUBLICO })
   const rodape = linksDoRodape(idioma)
   const hrefOfertas = linkOfertas('bio')
   const hrefOfertasWhatsapp = linkOfertasWhatsapp('bio')
@@ -218,7 +218,7 @@ export default async function BioPage({ params }: Props) {
 
               const Icone = ICONES[id]
               const c = t.cartoes[id]
-              const destaquePost = id === 'blog' && temPost
+              const destaquePost = id === 'blog' ? postNovo : null
               const quadrado = QUADRADO.has(id)
               const classe = id === 'cadastre' ? 'bio-btn--escuro' : quadrado ? 'bio-btn--tile' : ''
               return (
@@ -238,8 +238,8 @@ export default async function BioPage({ params }: Props) {
                     )}
                     <span className="bio-texto">
                       {destaquePost && <span className="bio-selo">{t.blog_novo}</span>}
-                      <span className="bio-titulo">{destaquePost ? dic.guia_mares.titulo : c.titulo}</span>
-                      <span className="bio-linha">{destaquePost ? dic.guia_mares.linha : c.linha}</span>
+                      <span className="bio-titulo">{destaquePost ? destaquePost.titulo : c.titulo}</span>
+                      <span className="bio-linha">{destaquePost ? destaquePost.linha || c.linha : c.linha}</span>
                     </span>
                     {!quadrado && <ArrowRight className="bio-seta" aria-hidden />}
                   </Link>

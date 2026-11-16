@@ -75,6 +75,7 @@ export default function Sobre({ initialParametros }: SobreProps) {
     { v: t('nav.explore'),   href: lp('/explore'),   desc: t('sobre.verbos_explore_desc') },
     { v: t('nav.participe'), href: lp('/participe'), desc: t('sobre.verbos_participe_desc') },
     { v: t('nav.conheca'),   href: lp('/conheca'),   desc: t('sobre.verbos_conheca_desc') },
+    { v: t('nav.apoie'),     href: lp('/apoie'),     desc: t('sobre.verbos_apoie_desc') },
     { v: t('nav.contrate'),  href: lp('/contrate'),  desc: t('sobre.verbos_contrate_desc') },
     ...(CLUBE_PUBLICO ? [{ v: t('nav.app_passaporte'), href: lp('/clube'), desc: t('sobre.verbos_clube_desc') }] : []),
   ]

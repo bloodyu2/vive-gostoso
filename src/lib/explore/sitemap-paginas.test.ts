@@ -28,9 +28,9 @@ describe('a /bio fica fora do sitemap', () => {
   })
 })
 
-describe('/apoie fica fora do sitemap', () => {
-  it('não há doação ativa, então a página não entra', () => {
+describe('/apoie no sitemap', () => {
+  it('tem o link de pagamento do Asaas desde 16/11/2026, então a página entra', () => {
     const caminhos = (paginasEstaticas(process.cwd()) as Array<{ path: string }>).map((p) => p.path)
-    expect(caminhos).not.toContain('/apoie')
+    expect(caminhos).toContain('/apoie')
   })
 })
