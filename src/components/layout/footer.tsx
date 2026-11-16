@@ -7,6 +7,7 @@ import { useLocalePath } from '@/hooks/useLocalePath'
 import { CookieBanner } from '@/components/cookie-banner'
 import { organizationSchema } from '@/lib/seo'
 import { safeJsonLd } from '@/lib/json-ld'
+import { CLUBE_PUBLICO } from '@/lib/clube/config'
 
 export function Footer() {
   const { t } = useTranslation()
@@ -19,6 +20,7 @@ export function Footer() {
     { to: lp('/passeie'),  label: t('nav.passeie') },
     { to: lp('/explore'),  label: t('nav.explore') },
     { to: lp('/explore/mares'), label: t('nav.mares_sub') },
+    ...(CLUBE_PUBLICO ? [{ to: lp('/clube'), label: t('footer.passaporte') }] : []),
   ]
   const CIDADE = [
     { to: lp('/sobre'),          label: t('footer.sobre_projeto') },
@@ -100,7 +102,7 @@ export function Footer() {
       {showCookieBanner && <CookieBanner forceOpen />}
       <div className="border-t border-[#3D3D3D] mt-10 pt-5 text-xs max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
         <span className="opacity-50 text-center sm:text-left">
-          vivegostoso.com.br · Sao Miguel do Gostoso, RN ·{' '}
+          vivegostoso.com.br · São Miguel do Gostoso, RN ·{' '}
           <a href="mailto:contato@vivegostoso.com.br" className="hover:opacity-100 transition-opacity">
             contato@vivegostoso.com.br
           </a>

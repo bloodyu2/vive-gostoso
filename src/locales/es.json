@@ -360,14 +360,15 @@
     "verbos_come_desc": "Restaurantes, bares y gastronomía local",
     "verbos_fique_desc": "Posadas y alojamiento de todos los estilos",
     "verbos_passeie_desc": "Kite, buggy, paseos y deportes",
-    "verbos_explore_desc": "Mapa interactivo de la ciudad",
+    "verbos_explore_desc": "Mapa, playas y tabla de mareas",
+    "verbos_clube_desc": "Ventajas gratis en los socios de la ciudad",
     "verbos_participe_desc": "Festivales y eventos del calendario",
     "verbos_conheca_desc": "Historia, playas y cómo llegar",
     "verbos_apoie_desc": "Fondo público y transparencia financiera",
     "verbos_contrate_desc": "Servicios de residentes y ofertas de empleo",
-    "planos_eyebrow": "Únete",
-    "planos_h2": "Tres formas de participar.",
-    "planos_desc": "El registro es gratuito y ya genera tráfico. Los planes de pago son para quienes quieren más visibilidad y para financiar la ciudad.",
+    "planos_eyebrow": "Registro",
+    "planos_h2": "Participar es gratis.",
+    "planos_desc": "El registro es gratuito y ya genera tráfico. Los planes de pago, con más visibilidad en el directorio, aún no están disponibles.",
     "planos_free_label": "Gratuito, siempre",
     "planos_free_item_0": "Perfil completo en la plataforma",
     "planos_free_item_1": "Fotos, horarios, contacto y mapa",
@@ -497,7 +498,7 @@
     ],
     "fotos_p3": "Cuando la foto es del propio negocio, aparece marcada como tal. La marca solo entra después de que el dueño envía la imagen por el panel y acepta la cláusula de derechos de imagen, con fecha y usuario registrados. Una foto que ya estaba en el registro antes de eso no recibe la marca, aunque haya venido del dueño: preferimos pocas marcas verdaderas a muchas dudosas.",
     "fotos_p4": "La cláusula dice que la imagen sigue siendo de quien la envió, que el permiso de exhibición vale mientras el registro esté activo, y que se puede pedir la retirada en cualquier momento, por el panel o por contato@vivegostoso.com.br.",
-    "conta_desc_sem_preco": "Quien quiera contribuir más allá del registro gratuito puede suscribir uno de los planes de apoyo. Los valores están en la página de registro.",
+    "conta_desc_sem_preco": "Los planes de apoyo de pago aún no están disponibles. Cuando abran, se avisará a los negocios ya registrados.",
     "toc_vendemos": "Sin comisión"
   },
   "apoie": {
@@ -709,7 +710,8 @@
     "negocios": "Negocios",
     "modo_claro": "Modo claro",
     "modo_escuro": "Modo oscuro",
-    "feito_por": "Hecho por Balaio"
+    "feito_por": "Hecho por Balaio",
+    "passaporte": "Pasaporte Gostoso"
   },
   "common": {
     "ver_perfil": "Ver perfil",
