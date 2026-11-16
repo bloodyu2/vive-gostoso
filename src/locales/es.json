@@ -33,8 +33,8 @@
       "description": "Profesionales y prestadores de servicios de la ciudad para contratar de forma directa, además de las vacantes de empleo abiertas en el comercio local."
     },
     "apoie": {
-      "title": "Fondo público de São Miguel do Gostoso",
-      "description": "Fondo público mantenido por la ciudad, con rendición de cuentas abierta sobre el dinero recaudado y el registro de lo que ya se pagó con él."
+      "title": "Apoya el Vive Gostoso, la guía de Gostoso",
+      "description": "Contribuye con lo que quieras para mantener Vive Gostoso, la guía gratuita de São Miguel do Gostoso, por Pix, boleto o tarjeta, en la página segura de Asaas."
     },
     "blog": {
       "title": "Blog: historias y consejos de São Miguel do Gostoso",
@@ -498,7 +498,7 @@
     ],
     "fotos_p3": "Cuando la foto es del propio negocio, aparece marcada como tal. La marca solo entra después de que el dueño envía la imagen por el panel y acepta la cláusula de derechos de imagen, con fecha y usuario registrados. Una foto que ya estaba en el registro antes de eso no recibe la marca, aunque haya venido del dueño: preferimos pocas marcas verdaderas a muchas dudosas.",
     "fotos_p4": "La cláusula dice que la imagen sigue siendo de quien la envió, que el permiso de exhibición vale mientras el registro esté activo, y que se puede pedir la retirada en cualquier momento, por el panel o por contato@vivegostoso.com.br.",
-    "conta_desc_sem_preco": "Los planes de apoyo de pago aún no están disponibles. Cuando abran, se avisará a los negocios ya registrados.",
+    "conta_desc_sem_preco": "Los planes de apoyo de pago aún no están disponibles, pero quien quiera contribuir puede apoyar con el valor que quiera en la página Apoya.",
     "toc_vendemos": "Sin comisión"
   },
   "apoie": {
@@ -522,6 +522,13 @@
     "pagamentos_pausados_titulo": "Contribuciones temporalmente no disponibles",
     "pagamentos_pausados_desc": "Por ahora no es posible donar ni contratar planes de pago en este sitio. Pronto habrá nuevas formas de contribuir.",
     "pagamentos_pausados_voltar": "Volver al inicio",
+    "contribua_titulo": "Apoya el Vive Gostoso",
+    "contribua_desc": "Vive Gostoso es gratuito para los negocios de São Miguel do Gostoso y lo mantiene Balaio. Quien quiera ayudar a mantener la guía en línea puede contribuir con el valor que quiera.",
+    "contribua_btn": "Contribuir por Asaas",
+    "contribua_nota": "El pago se hace en la página segura de Asaas, por Pix, boleto o tarjeta. El cobro sale a nombre de Balaio (CNPJ 57.463.091/0001-19), que desarrolla y mantiene Vive Gostoso.",
+    "extrato_titulo": "A dónde va el dinero",
+    "extrato_desc": "El extracto completo de las contribuciones aún no está en esta página y se publicará aquí. La regla de reparto está en la página Transparencia.",
+    "extrato_link": "Ver el reparto en Transparencia",
     "em_operacao": "En funcionamiento",
     "total_mes": "Costo directo del Vive Gostoso",
     "planejado_label": "Planificado para cuando la recaudación lo permita",

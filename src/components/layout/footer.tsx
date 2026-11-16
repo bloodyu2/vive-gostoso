@@ -28,6 +28,7 @@ export function Footer() {
     { to: lp('/blog'),           label: t('footer.blog') },
     { to: lp('/conheca'),        label: t('nav.conheca') },
     { to: lp('/participe'),      label: t('nav.participe') },
+    { to: lp('/apoie'),          label: t('nav.apoie') },
     { to: lp('/contrate'),       label: t('nav.contrate') },
   ]
   const NEGOCIOS = [

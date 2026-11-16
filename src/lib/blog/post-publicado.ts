@@ -1,6 +1,6 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import { fetchComCache } from '@/lib/mares/consulta'
-import { slugNoIdioma, urlDoPost, type IdiomaBlog } from './traducoes'
+import { slugNoIdioma, urlDoPost, visivelNoIdioma, type IdiomaBlog } from './traducoes'
 
 export type ClienteBlog = Pick<SupabaseClient, 'from'>
 
@@ -36,6 +36,35 @@ function clienteBlog(): ClienteBlog | null {
 
 export async function postPublicado(slug: string): Promise<boolean> {
   return consultarPublicado(clienteBlog(), slug)
+}
+
+export type UltimoPost = { slug: string; titulo: string; linha: string }
+
+type LinhaDePost = { slug: string; title: string; tags: string[] | null; published_at: string | null }
+
+/** O post publicado mais recente que aparece no idioma (post de grupo so no seu
+ *  idioma, post sem grupo em todos, mesma regra da lista do blog). Qualquer erro
+ *  vira null: a /bio mostra o cartao comum do blog em vez de um link quebrado. */
+export async function consultarUltimoPost(cliente: ClienteBlog | null, lang: IdiomaBlog): Promise<UltimoPost | null> {
+  if (!cliente) return null
+  try {
+    const { data, error } = await cliente
+      .from('gostoso_blog_posts')
+      .select('slug,title,tags,published_at')
+      .eq('is_published', true)
+      .order('published_at', { ascending: false, nullsFirst: false })
+      .limit(30)
+    if (error || !Array.isArray(data)) return null
+    const post = (data as LinhaDePost[]).find((p) => visivelNoIdioma(p.slug, lang))
+    if (!post) return null
+    return { slug: post.slug, titulo: post.title, linha: (post.tags ?? []).slice(0, 2).join(' · ') }
+  } catch {
+    return null
+  }
+}
+
+export async function ultimoPost(lang: IdiomaBlog): Promise<UltimoPost | null> {
+  return consultarUltimoPost(clienteBlog(), lang)
 }
 
 /** Caminho relativo do guia no idioma (o link fica no mesmo dominio). */

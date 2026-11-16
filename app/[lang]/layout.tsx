@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { routing } from '../../i18n/routing'
 import { ChromeDoSite } from '@/components/layout/chrome-do-site'
 import { LocaleSync } from '@/components/i18n/locale-sync'
+import { I18nPorIdioma } from '@/components/i18n/i18n-por-idioma'
 import { ClubeProvider } from '@/components/clube/contexto-clube'
 import { carregarIdsDoClube } from '@/lib/clube/parceiros-no-ar'
 
@@ -28,10 +29,12 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <ClubeProvider ids={idsDoClube}>
-      <LocaleSync lang={lang} />
-      {/* Cabeçalho, rodapé, flutuantes e banner de cookies, menos nas rotas onde
-          eles cobrem o conteúdo. Ver components/layout/chrome-do-site. */}
-      <ChromeDoSite>{children}</ChromeDoSite>
+      <I18nPorIdioma lang={lang}>
+        <LocaleSync lang={lang} />
+        {/* Cabeçalho, rodapé, flutuantes e banner de cookies, menos nas rotas onde
+            eles cobrem o conteúdo. Ver components/layout/chrome-do-site. */}
+        <ChromeDoSite>{children}</ChromeDoSite>
+      </I18nPorIdioma>
     </ClubeProvider>
   )
 }
