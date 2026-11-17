@@ -1109,7 +1109,7 @@
     "sec6_title": "6. Retención",
     "sec6_text": "Conservamos tus datos mientras tu cuenta o negocio esté activo en la plataforma. Tras la eliminación, los borramos en un plazo de 30 días, salvo obligaciones legales. Los datos de quienes canjean un cupón del Pasaporte siguen la regla de la sección 7.",
     "sec7_title": "7. Pasaporte Gostoso (cupones)",
-    "sec7_text": "Cuando canjeas un cupón del Pasaporte Gostoso, pedimos tu nombre, correo y teléfono. Los usamos para generar tu cupón y su imagen, para comprobar que el cupón vale una sola compra y para compartir tus datos con el negocio que elegiste, para que te hable de la ventaja. La base legal es tu consentimiento (LGPD, art. 7, inciso I): lo das marcando la casilla de autorización antes de canjear, y sin ella no se emite el cupón. Junto con el canje guardamos la fecha y la hora del consentimiento, la versión de esta política y el texto que leíste. Tus datos van solo al negocio de ese cupón. Después, el negocio es responsable del uso que les dé, y le pedimos que los use solo para hablar de la ventaja. No vendemos ni cedemos tus datos a nadie más. Los datos están en una base de datos en la nube, con acceso limitado al negocio del cupón y al equipo de Vive Gostoso. Guardamos los datos del canje hasta 12 meses y luego los borramos. Puedes retirar tu consentimiento y pedir la eliminación en cualquier momento, por correo, en privacidade@vivegostoso.com.br; también pediremos al negocio que borre su copia. Para limitar el abuso, guardamos una versión codificada (hash) de la dirección IP de cada canje. El negocio no la ve, y se borra junto con el canje. El nombre, el correo y el teléfono son los que escribiste, y no los verificamos.",
+    "sec7_text": "Cuando canjeas un cupón del Pasaporte Gostoso, pedimos tu nombre, correo y teléfono. Los usamos para generar tu cupón y su imagen, para comprobar que el cupón vale una sola compra y para compartir tus datos con el negocio que elegiste, para que te hable de la ventaja. La base legal es tu consentimiento (LGPD, art. 7, inciso I): lo das marcando la casilla de autorización antes de canjear, y sin ella no se emite el cupón. Junto con el canje guardamos la fecha y la hora del consentimiento, la versión de esta política y el texto que leíste. Tus datos van solo al negocio de ese cupón. Después, el negocio es responsable del uso que les dé, y le pedimos que los use solo para hablar de la ventaja. No vendemos ni cedemos tus datos a nadie más. Los datos están en una base de datos en la nube, con acceso limitado al negocio del cupón y al equipo de Vive Gostoso. Guardamos los datos del canje hasta 12 meses y luego los borramos. Puedes retirar tu consentimiento y pedir la eliminación en cualquier momento, por correo, en privacidade@vivegostoso.com.br; también pediremos al negocio que borre su copia. Si marcas la segunda casilla, que es opcional, Vive Gostoso también usa tu correo para enviar un único mensaje, un día después del canje, preguntando si usaste el cupón. La base legal de ese mensaje es tu consentimiento, guardado aparte con la fecha, la hora y el texto que leíste. Tu respuesta aparece para el negocio solo como cupón usado, y puedes retirar el consentimiento en el mismo correo. Para limitar el abuso, guardamos una versión codificada (hash) de la dirección IP de cada canje. El negocio no la ve, y se borra junto con el canje. El nombre, el correo y el teléfono son los que escribiste, y no los verificamos.",
     "atualizada": "Actualizada el 28 de octubre de 2026 (versión 2026-10-28)."
   },
   "professional_panel": {
@@ -2012,7 +2012,8 @@
     "fundo_texto": "Abierto a patrocinio. Las empresas de la región pueden patrocinar el Pasaporte, y todo el valor se convierte en anuncios pagos para la página del club, para llevar más visitantes a los socios. Los resultados se siguen con números.",
     "assinatura": "Pasaporte Gostoso es una iniciativa de Vive Gostoso, con Balaio.",
     "patrocinar": "Quiero patrocinar",
-    "patrocinar_msg": "¡Hola! Quiero saber cómo patrocinar el Pasaporte Gostoso con mi empresa."
+    "patrocinar_msg": "¡Hola! Quiero saber cómo patrocinar el Pasaporte Gostoso con mi empresa.",
+    "consentimento_pergunta": "Opcional. Quiero que Vive Gostoso me pregunte por correo, un día después, si usé este cupón. Es una sola pregunta."
   },
   "plaquinha": {
     "page_title": "Gracias por la visita",
@@ -2191,6 +2192,26 @@
     "agendar_msg": "¡Hola! Tengo un cupón del Pasaporte Gostoso ({beneficio}) y quiero reservar. Mi código es {codigo}.",
     "verificar_agendamento": "Esta ventaja exige reserva. Revisa que la persona haya reservado antes con {com}.",
     "arquivo": "pasaporte-gostoso",
-    "erro_carregar": "No se pudo cargar el cupón ahora. Inténtalo de nuevo en un momento."
+    "erro_carregar": "No se pudo cargar el cupón ahora. Inténtalo de nuevo en un momento.",
+    "usou_titulo": "¿Ya usaste este cupón?",
+    "usou_botao": "Contar que lo usé"
+  },
+  "usei": {
+    "page_title": "¿Usaste el cupón? | Pasaporte Gostoso",
+    "titulo": "¿Usaste el cupón?",
+    "sub": "{negocio}: {beneficio}",
+    "pergunta": "Cuéntanos. Es un solo toque.",
+    "btn_usei": "Lo usé",
+    "btn_nao": "Todavía no",
+    "enviando": "Guardando",
+    "obrigado_sim": "Gracias, {nome}. Anotamos que usaste el cupón.",
+    "obrigado_nao": "Está bien, {nome}. El cupón sigue valiendo hasta {data}. Si lo usas, vuelve a este enlace y toca Lo usé.",
+    "ja_usado": "Este cupón ya está marcado como usado.",
+    "cancelado": "Este cupón fue cancelado.",
+    "invalido_titulo": "Enlace no encontrado",
+    "invalido_texto": "La dirección puede estar incompleta. Abre de nuevo el enlace del correo.",
+    "erro": "No fue posible guardar ahora. Inténtalo de nuevo.",
+    "nota": "Tu respuesta aparece para el socio solo como cupón usado.",
+    "voltar": "Ver el Pasaporte"
   }
 }

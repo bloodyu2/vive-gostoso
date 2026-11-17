@@ -175,6 +175,7 @@ export default async function ClubePage({ params, searchParams }: Props) {
                 campo_telefone: t.campo_telefone,
                 nota_dados: t.nota_dados,
                 consentimento: t.consentimento,
+                consentimento_pergunta: t.consentimento_pergunta,
                 politica_link: t.politica_link,
                 gerar_cupom: t.gerar_cupom,
                 gerando: t.gerando,

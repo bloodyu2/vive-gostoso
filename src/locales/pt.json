@@ -1658,7 +1658,7 @@
     "sec6_title": "6. Retenção",
     "sec6_text": "Mantemos seus dados enquanto sua conta ou negócio estiver ativo na plataforma. Após exclusão, removemos em até 30 dias, salvo obrigações legais. Os dados de quem resgata um cupom do Passaporte seguem a regra da seção 7.",
     "sec7_title": "7. Passaporte Gostoso (cupons)",
-    "sec7_text": "Quando você resgata um cupom do Passaporte Gostoso, pedimos nome, e-mail e telefone. Usamos esses dados para gerar o seu cupom e a imagem dele, para conferir que o cupom vale uma compra só e para repassar os dados ao estabelecimento que você escolheu, para que ele fale com você sobre a vantagem. A base legal é o seu consentimento (LGPD, art. 7º, inciso I): você dá marcando a caixa de autorização antes de resgatar, e sem ela o cupom não é gerado. Guardamos junto com o resgate a data e a hora do consentimento, a versão desta política e o texto que você leu. Os dados vão só para o estabelecimento daquele cupom. Depois do repasse, ele passa a ser responsável pelo uso que faz dos dados, e pedimos que use só para falar sobre a vantagem. Não vendemos nem cedemos seus dados a mais ninguém. Os dados ficam em um banco de dados em nuvem, com acesso restrito ao estabelecimento do cupom e à equipe do Vive Gostoso. Guardamos os dados do resgate por até 12 meses e depois apagamos. Você pode revogar o consentimento e pedir a exclusão a qualquer momento, por e-mail, em privacidade@vivegostoso.com.br; também pediremos ao estabelecimento que apague os dados dele. Para limitar abuso, guardamos uma versão embaralhada (hash) do endereço IP de cada resgate. O estabelecimento não a vê, e ela é apagada junto com o resgate. Nome, e-mail e telefone são os que você digitou, e não os verificamos.",
+    "sec7_text": "Quando você resgata um cupom do Passaporte Gostoso, pedimos nome, e-mail e telefone. Usamos esses dados para gerar o seu cupom e a imagem dele, para conferir que o cupom vale uma compra só e para repassar os dados ao estabelecimento que você escolheu, para que ele fale com você sobre a vantagem. A base legal é o seu consentimento (LGPD, art. 7º, inciso I): você dá marcando a caixa de autorização antes de resgatar, e sem ela o cupom não é gerado. Guardamos junto com o resgate a data e a hora do consentimento, a versão desta política e o texto que você leu. Os dados vão só para o estabelecimento daquele cupom. Depois do repasse, ele passa a ser responsável pelo uso que faz dos dados, e pedimos que use só para falar sobre a vantagem. Não vendemos nem cedemos seus dados a mais ninguém. Os dados ficam em um banco de dados em nuvem, com acesso restrito ao estabelecimento do cupom e à equipe do Vive Gostoso. Guardamos os dados do resgate por até 12 meses e depois apagamos. Você pode revogar o consentimento e pedir a exclusão a qualquer momento, por e-mail, em privacidade@vivegostoso.com.br; também pediremos ao estabelecimento que apague os dados dele. Se você marcar a segunda caixa, que é opcional, o Vive Gostoso também usa o seu e-mail para enviar uma única mensagem, um dia depois do resgate, perguntando se você usou o cupom. A base legal dessa mensagem é o seu consentimento, gravado à parte com a data, a hora e o texto que você leu. A sua resposta aparece para o estabelecimento só como cupom usado, e você pode revogar o consentimento pelo mesmo e-mail. Para limitar abuso, guardamos uma versão embaralhada (hash) do endereço IP de cada resgate. O estabelecimento não a vê, e ela é apagada junto com o resgate. Nome, e-mail e telefone são os que você digitou, e não os verificamos.",
     "atualizada": "Atualizada em 28 de outubro de 2026 (versão 2026-10-28)."
   },
   "whatsapp": {
@@ -2012,7 +2012,8 @@
     "fundo_texto": "Aberto a patrocínio. Empresas da região podem patrocinar o Passaporte, e todo o valor vira anúncio pago para a página do clube, para levar mais visitantes aos parceiros. Os resultados são acompanhados com números.",
     "assinatura": "Passaporte Gostoso é uma iniciativa do Vive Gostoso, com a Balaio.",
     "patrocinar": "Quero patrocinar",
-    "patrocinar_msg": "Oi! Quero saber como patrocinar o Passaporte Gostoso com a minha empresa."
+    "patrocinar_msg": "Oi! Quero saber como patrocinar o Passaporte Gostoso com a minha empresa.",
+    "consentimento_pergunta": "Opcional. Quero que o Vive Gostoso me pergunte por e-mail, um dia depois, se usei este cupom. É uma pergunta só."
   },
   "plaquinha": {
     "page_title": "Obrigado pela visita",
@@ -2191,6 +2192,26 @@
     "agendar_msg": "Oi! Tenho um cupom do Passaporte Gostoso ({beneficio}) e quero agendar. Meu código é {codigo}.",
     "verificar_agendamento": "Este benefício exige agendamento. Confira se a pessoa agendou antes com {com}.",
     "arquivo": "passaporte-gostoso",
-    "erro_carregar": "Não deu para carregar o cupom agora. Tente de novo em instantes."
+    "erro_carregar": "Não deu para carregar o cupom agora. Tente de novo em instantes.",
+    "usou_titulo": "Já usou este cupom?",
+    "usou_botao": "Contar que usei"
+  },
+  "usei": {
+    "page_title": "Você usou o cupom? | Passaporte Gostoso",
+    "titulo": "Você usou o cupom?",
+    "sub": "{negocio}: {beneficio}",
+    "pergunta": "Conta para a gente. É um toque só.",
+    "btn_usei": "Usei",
+    "btn_nao": "Ainda não usei",
+    "enviando": "Registrando",
+    "obrigado_sim": "Obrigado, {nome}. Anotamos que você usou o cupom.",
+    "obrigado_nao": "Tudo bem, {nome}. O cupom continua valendo até {data}. Se você usar, volte a este link e toque em Usei.",
+    "ja_usado": "Este cupom já está marcado como usado.",
+    "cancelado": "Este cupom foi cancelado.",
+    "invalido_titulo": "Link não encontrado",
+    "invalido_texto": "O endereço pode estar incompleto. Abra o link do e-mail de novo.",
+    "erro": "Não deu para registrar agora. Tente de novo.",
+    "nota": "Sua resposta aparece para o parceiro só como cupom usado.",
+    "voltar": "Ver o Passaporte"
   }
 }

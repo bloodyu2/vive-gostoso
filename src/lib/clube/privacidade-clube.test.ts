@@ -28,6 +28,11 @@ describe('politica de privacidade e textos do Passaporte', () => {
       expect(d.passaporte.lead_contato_nao_verificado).toMatch(/verif/i)
     })
 
+    it(`${lang}: a politica cita a pergunta opcional de um dia depois, com consentimento proprio`, () => {
+      expect(d.privacidade.sec7_text).toMatch(/(segunda caixa|second box|segunda casilla)/i)
+      expect(d.privacidade.sec7_text).toMatch(/consent/i)
+    })
+
     it(`${lang}: nenhum texto do clube, da politica ou do painel promete criptografia`, () => {
       const texto = JSON.stringify([d.privacidade, d.clube, d.passaporte, d.cupom, d.plaquinha])
       expect(texto).not.toMatch(/criptograf|encrypt|cifrad|cifra[rd]|encript/i)
