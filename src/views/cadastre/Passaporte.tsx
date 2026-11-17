@@ -20,10 +20,12 @@ import {
 import { filtrarLeads, nomeDoArquivoCsv } from '@/lib/clube/painel-abas'
 import { limparContato } from '@/lib/clube/vantagens'
 
-/* Area do parceiro do Passaporte Gostoso. O dono muda a propria vantagem (texto,
-   regra, limite por mes, validade), liga e pausa, e acompanha usos. Tudo vale na
-   hora, sem aprovacao. A escrita passa pela RLS de gostoso_club_partners: o dono so
-   mexe no proprio negocio, e nunca coloca a vantagem em "em combinacao". */
+/* Area do parceiro do Passaporte Gostoso. O dono escreve a propria vantagem (texto,
+   regra, limite por mes, validade) e acompanha usos. Desde 17/11/2026 (KAN-917) a equipe
+   aprova o texto antes de a vantagem ir ao ar: o dono envia (em_analise), a equipe aprova
+   ou recusa com motivo. Limite e validade o dono muda sem esperar. Pausar e religar o texto
+   ja aprovado tambem. A regra esta no banco (trigger gostoso_club_partners_aprovacao): o
+   cliente pede, o banco decide, entao o status que volta de cada gravacao e o que vale. */
 
 /* Os textos antigos desta area usam {nome}, {n}, {data} com uma chave so; o i18next do site
    le {{nome}}. Sem esta opcao a tela mostrava as chaves cruas ("{n} resgates") e a mensagem
@@ -37,7 +39,9 @@ export interface Parceiro {
   regra: string | null
   limite_mensal: number | null
   valido_ate: string | null
-  status: 'em_combinacao' | 'no_ar' | 'pausado'
+  status: 'em_combinacao' | 'no_ar' | 'pausado' | 'em_analise' | 'rejeitado'
+  /** motivo da recusa da equipe; ausente enquanto a migration de aprovacao nao rodou */
+  motivo_recusa?: string | null
   /** ausentes enquanto a migration de agendamento nao rodou */
   requer_agendamento?: boolean
   agendamento_contato?: string | null
@@ -199,14 +203,16 @@ export function FormVantagem({ negocioId, parceiro }: { negocioId: string; parce
   const [agendar, setAgendar] = useState(parceiro?.requer_agendamento === true)
   const [agendarCom, setAgendarCom] = useState(parceiro?.agendamento_com ?? '')
   const [agendarContato, setAgendarContato] = useState(parceiro?.agendamento_contato ? mascararTelefone(parceiro.agendamento_contato) : '')
-  const [estado, setEstado] = useState<'ocioso' | 'salvando' | 'salvo' | 'erro' | 'erro_limite' | 'erro_data' | 'erro_contato'>('ocioso')
+  const [estado, setEstado] = useState<'ocioso' | 'salvando' | 'salvo' | 'enviado' | 'erro' | 'erro_limite' | 'erro_data' | 'erro_contato'>('ocioso')
 
   const status = parceiro?.status ?? null
   const ligada = status === 'no_ar'
   const emCombinacao = status === 'em_combinacao'
+  const emAnalise = status === 'em_analise'
+  const rejeitada = status === 'rejeitado'
   const valido = beneficio.trim().length >= 3 && beneficio.trim().length <= 140
 
-  async function gravar(novoStatus: 'no_ar' | 'pausado') {
+  async function gravar(novoStatus: 'no_ar' | 'pausado' | 'em_analise') {
     if (!valido) return
     const limiteNumero = Number(limite)
     if (!semLimite && (!Number.isInteger(limiteNumero) || limiteNumero < 1 || limiteNumero > 100000)) {
@@ -241,14 +247,15 @@ export function FormVantagem({ negocioId, parceiro }: { negocioId: string; parce
           }
         : {}),
     }
-    const { error } = parceiro
-      ? await supabase.from('gostoso_club_partners').update(campos).eq('id', parceiro.id)
-      : await supabase.from('gostoso_club_partners').insert({ ...campos, business_id: negocioId })
+    /* O banco decide o status: ligar com texto novo volta como em_analise. Lemos o que ele devolveu. */
+    const { data, error } = parceiro
+      ? await supabase.from('gostoso_club_partners').update(campos).eq('id', parceiro.id).select('status').maybeSingle()
+      : await supabase.from('gostoso_club_partners').insert({ ...campos, business_id: negocioId }).select('status').maybeSingle()
     if (error) {
       setEstado('erro')
       return
     }
-    setEstado('salvo')
+    setEstado((data as { status?: string } | null)?.status === 'em_analise' ? 'enviado' : 'salvo')
     await qc.invalidateQueries({ queryKey: ['clube-parceiro', negocioId] })
     await qc.invalidateQueries({ queryKey: ['clube-painel'] })
   }
@@ -268,11 +275,23 @@ export function FormVantagem({ negocioId, parceiro }: { negocioId: string; parce
             {t('titulo')}
           </h2>
           <span className={`clube-tag ${ligada ? 'clube-tag--no-ar' : 'clube-tag--combinacao'}`}>
-            {ligada ? t('ligada') : emCombinacao ? t('em_combinacao') : t('pausada')}
+            {ligada
+              ? t('ligada')
+              : emAnalise
+                ? t('em_analise')
+                : rejeitada
+                  ? t('rejeitada')
+                  : emCombinacao
+                    ? t('em_combinacao')
+                    : t('pausada')}
           </span>
         </div>
       )}
       {emCombinacao ? <p className="clube-aviso">{t('aviso_combinacao')}</p> : null}
+      {emAnalise ? <p className="clube-aviso">{t('aviso_em_analise')}</p> : null}
+      {rejeitada ? (
+        <p className="clube-aviso">{t('aviso_rejeitada', { motivo: parceiro?.motivo_recusa ?? '—' })}</p>
+      ) : null}
 
       <div style={{ display: 'grid', gap: '1rem', marginTop: '1.25rem' }}>
         <label>
@@ -388,7 +407,16 @@ export function FormVantagem({ negocioId, parceiro }: { negocioId: string; parce
       </div>
 
       <div className="clube-acoes">
-        {emCombinacao || !parceiro ? (
+        {emAnalise || rejeitada ? (
+          <button
+            type="button"
+            className="clube-btn clube-btn--verde"
+            disabled={!valido || estado === 'salvando'}
+            onClick={() => gravar('em_analise')}
+          >
+            {estado === 'salvando' ? t('salvando') : t('reenviar')}
+          </button>
+        ) : emCombinacao || !parceiro ? (
           <>
             <button
               type="button"
@@ -396,7 +424,7 @@ export function FormVantagem({ negocioId, parceiro }: { negocioId: string; parce
               disabled={!valido || estado === 'salvando'}
               onClick={() => gravar('no_ar')}
             >
-              {estado === 'salvando' ? t('salvando') : parceiro ? t('salvar_ligar') : t('entrar_botao')}
+              {estado === 'salvando' ? t('salvando') : parceiro ? t('salvar_ligar') : t('enviar_analise')}
             </button>
             <button
               type="button"
@@ -432,7 +460,9 @@ export function FormVantagem({ negocioId, parceiro }: { negocioId: string; parce
       <p role="status" className={estado.startsWith('erro') ? 'clube-erro' : 'clube-regra'}>
         {estado === 'salvo'
           ? t('salvo')
-          : estado === 'erro'
+          : estado === 'enviado'
+            ? t('enviado')
+            : estado === 'erro'
             ? t('erro')
             : estado === 'erro_limite'
               ? t('erro_limite')

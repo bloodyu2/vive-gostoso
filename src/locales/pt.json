@@ -954,7 +954,9 @@
     "stat_jobs": "Vagas",
     "stat_transfers": "Transfers",
     "stat_businesses": "Negócios",
-    "stat_drafts": "Rascunhos"
+    "stat_drafts": "Rascunhos",
+    "module_clube": "Vantagens do Passaporte",
+    "module_clube_desc": "Aprovar ou recusar o texto das vantagens dos parceiros antes de irem ao ar."
   },
   "admin_businesses": {
     "back": "Admin",
@@ -2148,7 +2150,7 @@
     "header": "Passaporte Gostoso",
     "voltar": "Voltar ao painel",
     "titulo": "Minha vantagem",
-    "sub": "Você muda quando quiser. Vale na hora.",
+    "sub": "A equipe confere o texto antes de a vantagem ir ao ar. Limite e validade você muda quando quiser.",
     "campo_negocio": "Negócio",
     "entrar_titulo": "Entre no Passaporte Gostoso",
     "entrar_texto": "É de graça. Você escolhe uma vantagem simples para quem chegar pelo Vive Gostoso e acompanha aqui quantas vezes foi usada.",
@@ -2172,10 +2174,10 @@
     "ajuda_agendamento_contato": "Com DDD. Sem número, vale o WhatsApp do negócio.",
     "erro_contato": "Confira o WhatsApp para agendar: DDD mais número.",
     "salvar": "Salvar mudança",
-    "salvar_ligar": "Salvar e ligar",
+    "salvar_ligar": "Salvar e enviar para análise",
     "salvar_pausada": "Salvar sem ligar",
     "salvando": "Salvando",
-    "salvo": "Salvo. Já vale no Passaporte.",
+    "salvo": "Salvo.",
     "erro": "Não deu para salvar. Tente de novo.",
     "erro_limite": "Informe um limite de 1 a 100000, ou marque Sem limite.",
     "erro_data": "Escolha uma data de hoje em diante, ou marque Sem data.",
@@ -2240,7 +2242,14 @@
     "leads_csv_botao": "Baixar CSV",
     "leads_csv_baixando": "Gerando arquivo",
     "leads_encontrados": "{{n}} de {{total}} resgates",
-    "leads_sem_resultado": "Nenhum contato com essa busca."
+    "leads_sem_resultado": "Nenhum contato com essa busca.",
+    "enviar_analise": "Enviar para análise",
+    "reenviar": "Salvar e reenviar para análise",
+    "enviado": "Enviada para a equipe. Ela confere e você vê o resultado aqui.",
+    "em_analise": "Em análise",
+    "rejeitada": "Recusada",
+    "aviso_em_analise": "A equipe está conferindo sua vantagem. Enquanto isso ela não aparece no Passaporte.",
+    "aviso_rejeitada": "A equipe não aprovou esta vantagem. Motivo: {{motivo}}. Ajuste o texto e reenvie."
   },
   "cupom": {
     "page_title": "Seu cupom do Passaporte Gostoso",
@@ -2310,5 +2319,27 @@
     "erro": "Não deu para registrar agora. Tente de novo.",
     "nota": "Sua resposta aparece para o parceiro só como cupom usado.",
     "voltar": "Ver o Passaporte"
+  },
+  "admin_clube": {
+    "back": "Admin",
+    "title": "Vantagens para aprovar",
+    "count": "{{count}} em análise",
+    "empty": "Nenhuma vantagem esperando a equipe.",
+    "view_business": "Ver negócio ↗",
+    "benefit": "O que oferece",
+    "rule": "Regra",
+    "limit": "Limite por mês: {{n}}",
+    "no_limit": "Sem limite",
+    "valid_until": "Válida até {{date}}",
+    "no_date": "Sem data",
+    "sent_at": "Enviada em {{date}}",
+    "was_approved_before": "Já esteve no ar: o texto mudou depois da última aprovação.",
+    "last_reason": "Última recusa: {{motivo}}",
+    "approve": "Aprovar",
+    "reject": "Recusar",
+    "reason_placeholder": "Motivo da recusa (obrigatório, 5 a 300 letras)",
+    "reason_required": "Escreva o motivo da recusa.",
+    "error": "Não deu para concluir. Tente de novo.",
+    "not_in_review": "Esta vantagem já foi decidida por outra pessoa."
   }
 }

@@ -1765,7 +1765,9 @@
     "stat_jobs": "Jobs",
     "stat_transfers": "Transfers",
     "stat_businesses": "Businesses",
-    "stat_drafts": "Drafts"
+    "stat_drafts": "Drafts",
+    "module_clube": "Passport perks",
+    "module_clube_desc": "Approve or decline partners perk text before it goes live."
   },
   "links_modulos": {
     "titulo": "Keep exploring the town",
@@ -2148,7 +2150,7 @@
     "header": "Gostoso Passport",
     "voltar": "Back to dashboard",
     "titulo": "My perk",
-    "sub": "Change it whenever you want. It applies right away.",
+    "sub": "The team checks the text before the perk goes live. You can change the limit and the expiry date any time.",
     "campo_negocio": "Business",
     "entrar_titulo": "Join the Gostoso Passport",
     "entrar_texto": "It is free. You choose one simple perk for people who arrive through Vive Gostoso and see here how many times it was used.",
@@ -2172,10 +2174,10 @@
     "ajuda_agendamento_contato": "With area code. Without a number, the business WhatsApp is used.",
     "erro_contato": "Check the booking WhatsApp: area code plus number.",
     "salvar": "Save change",
-    "salvar_ligar": "Save and turn on",
+    "salvar_ligar": "Save and send for review",
     "salvar_pausada": "Save without turning on",
     "salvando": "Saving",
-    "salvo": "Saved. It already applies in the Passport.",
+    "salvo": "Saved.",
     "erro": "Could not save. Try again.",
     "erro_limite": "Enter a limit from 1 to 100000, or check No limit.",
     "erro_data": "Pick a date from today on, or check No end date.",
@@ -2240,7 +2242,14 @@
     "leads_csv_botao": "Download CSV",
     "leads_csv_baixando": "Generating file",
     "leads_encontrados": "{{n}} of {{total}} claims",
-    "leads_sem_resultado": "No contacts match this search."
+    "leads_sem_resultado": "No contacts match this search.",
+    "enviar_analise": "Send for review",
+    "reenviar": "Save and resend for review",
+    "enviado": "Sent to the team. They will check it and you will see the result here.",
+    "em_analise": "In review",
+    "rejeitada": "Declined",
+    "aviso_em_analise": "The team is checking your perk. Until then it does not show in the Passport.",
+    "aviso_rejeitada": "The team did not approve this perk. Reason: {{motivo}}. Adjust the text and send it again."
   },
   "cupom": {
     "page_title": "Your Gostoso Passport coupon",
@@ -2310,5 +2319,27 @@
     "erro": "We could not save this now. Please try again.",
     "nota": "Your answer shows to the partner only as a used coupon.",
     "voltar": "See the Passport"
+  },
+  "admin_clube": {
+    "back": "Admin",
+    "title": "Perks to approve",
+    "count": "{{count}} in review",
+    "empty": "No perk waiting for the team.",
+    "view_business": "View business ↗",
+    "benefit": "What is offered",
+    "rule": "Rule",
+    "limit": "Monthly limit: {{n}}",
+    "no_limit": "No limit",
+    "valid_until": "Valid until {{date}}",
+    "no_date": "No date",
+    "sent_at": "Sent on {{date}}",
+    "was_approved_before": "It was live before: the text changed after the last approval.",
+    "last_reason": "Last decline: {{motivo}}",
+    "approve": "Approve",
+    "reject": "Decline",
+    "reason_placeholder": "Reason for declining (required, 5 to 300 characters)",
+    "reason_required": "Write the reason for declining.",
+    "error": "Could not finish. Try again.",
+    "not_in_review": "Someone else already decided this perk."
   }
 }
