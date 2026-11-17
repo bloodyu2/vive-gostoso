@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { requireAdmin } from '@/lib/supabase/queries'
+import { requireAprovador } from '@/lib/supabase/queries'
 import AdminClube from '@/views/cadastre/AdminClube'
 
 export default async function AdminClubePage() {
@@ -9,7 +9,7 @@ export default async function AdminClubePage() {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) redirect('/cadastre')
-  await requireAdmin(supabase, user.id)
+  await requireAprovador(supabase)
 
   return <AdminClube />
 }

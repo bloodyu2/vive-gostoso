@@ -183,6 +183,15 @@ export async function requireAdmin(supabase: SupabaseClient, userId: string): Pr
   }
 }
 
+/** Pagina da equipe que aprova vantagens: admin ou aprovador (gostoso_pode_aprovar, KAN-917). */
+export async function requireAprovador(supabase: SupabaseClient): Promise<void> {
+  const { data, error } = await supabase.rpc('gostoso_pode_aprovar')
+  if (error) throw error
+  if (data !== true) {
+    redirect('/cadastre/painel')
+  }
+}
+
 // ─── Parametros do produto ───────────────────────────────────────────────────
 
 /** Preco e percentual, para o servidor entregar ja no HTML. Sem isto a pagina

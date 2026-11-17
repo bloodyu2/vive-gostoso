@@ -1,21 +1,36 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
-import { AdminGuard } from '@/components/auth/admin-guard'
-import { useClubeAnaliseFila, useClubeDecidir } from '@/hooks/useClubeAnalise'
+import { useAuth } from '@/hooks/useAuth'
+import { useClubeAnaliseFila, useClubeDecidir, usePodeAprovar } from '@/hooks/useClubeAnalise'
 import { motivoValido, MOTIVO_MAX } from '@/lib/clube/analise'
 import { Button } from '@/components/ui/button'
 import { ErrorState } from '@/components/ui/error-state'
 
+/* Admin ou aprovador (Item 305: a Iza aprova vantagens sem ser admin). O banco confere de novo em cada chamada. */
 export default function AdminClube() {
-  return (
-    <AdminGuard>
-      <AdminClubeInner />
-    </AdminGuard>
-  )
+  const { user, loading } = useAuth()
+  const router = useRouter()
+  const { data: pode, isPending } = usePodeAprovar(!!user)
+
+  useEffect(() => {
+    if (loading) return
+    if (!user) router.replace('/cadastre')
+    else if (!isPending && pode === false) router.replace('/cadastre/painel')
+  }, [loading, user, isPending, pode, router])
+
+  if (loading || !user || isPending || pode !== true) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="w-8 h-8 border-4 border-teal border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
+  }
+  return <AdminClubeInner />
 }
 
 function AdminClubeInner() {

@@ -1,8 +1,9 @@
 -- Passaporte Gostoso: a equipe aprova a vantagem do negocio antes de ir ao ar (KAN-917, Item 294, 17/11/2026).
 --
 -- Antes (26/10): o dono ligava a propria vantagem e ela valia na hora, sem aprovacao.
--- Agora: o dono ENVIA a vantagem (status em_analise); Iza e Victor (perfil admin) aprovam ou recusam
--- com motivo. Aprovada vira no_ar. O dono continua pausando e religando sozinho enquanto o texto
+-- Agora: o dono ENVIA a vantagem (status em_analise); Iza e Victor aprovam ou recusam com motivo.
+-- Victor e admin; a Iza NAO vira admin (Item 305): ela entra na tabela gostoso_aprovadores, um papel
+-- menor que so decide vantagens (nao modera avaliacoes, eventos, negocios etc.). Aprovada vira no_ar. O dono continua pausando e religando sozinho enquanto o texto
 -- for o que foi aprovado. O lojista confirmar o uso do voucher ja existe (gostoso_club_marcar_usado,
 -- 28/10) e nao muda aqui.
 --
@@ -11,6 +12,7 @@
 --   colunas novas (so a equipe escreve): motivo_recusa, analisado_em, analisado_por, aprovado_hash
 --   trigger gostoso_club_partners_aprovacao: para o dono (authenticated/anon), insert nasce em_analise;
 --       ligar (no_ar) so vale se o texto for igual ao aprovado; mudou o texto, volta a em_analise e sai do ar
+--   gostoso_aprovadores (tabela sem grant) e gostoso_pode_aprovar(): admin OU quem esta na tabela
 --   funcoes da equipe: gostoso_club_analise_fila(), gostoso_club_analise_decidir(uuid, boolean, text)
 --   politicas de insert e update do dono passam a aceitar em_analise
 --
@@ -24,6 +26,8 @@
 --
 -- REVERSAO (rodar para desfazer):
 --   drop function if exists public.gostoso_club_analise_decidir(uuid, boolean, text);
+--   drop function if exists public.gostoso_pode_aprovar();
+--   drop table if exists public.gostoso_aprovadores;
 --   drop function if exists public.gostoso_club_analise_fila();
 --   drop trigger if exists gostoso_club_partners_aprovacao on public.gostoso_club_partners;
 --   drop function if exists public.gostoso_club_partners_aprovacao();
@@ -148,13 +152,35 @@ update public.gostoso_club_partners cp
        analisado_em = now()
  where cp.status in ('no_ar', 'pausado') and cp.aprovado_hash is null;
 
+-- ── quem pode aprovar ───────────────────────────────────────────────────────
+-- Admin completo ou aprovador. Para pôr alguem (service_role, no SQL do painel, depois da frase do Victor):
+--   insert into public.gostoso_aprovadores (auth_user_id) select id from auth.users where email = '<email da pessoa>';
+-- Para tirar: delete from public.gostoso_aprovadores where auth_user_id = '<id>';
+
+create table if not exists public.gostoso_aprovadores (
+  auth_user_id uuid primary key references auth.users (id) on delete cascade,
+  criado_em    timestamptz not null default now()
+);
+alter table public.gostoso_aprovadores enable row level security;
+revoke all on public.gostoso_aprovadores from anon, authenticated;
+grant all on public.gostoso_aprovadores to service_role;
+
+create or replace function public.gostoso_pode_aprovar() returns boolean
+  language sql stable security definer set search_path = public as
+$$
+  select public.gostoso_is_admin()
+      or exists (select 1 from public.gostoso_aprovadores a where a.auth_user_id = auth.uid())
+$$;
+revoke all on function public.gostoso_pode_aprovar() from public, anon;
+grant execute on function public.gostoso_pode_aprovar() to authenticated, service_role;
+
 -- ── funcoes da equipe ───────────────────────────────────────────────────────
 
 create or replace function public.gostoso_club_analise_fila() returns jsonb
   language plpgsql stable security definer set search_path = public as
 $$
 begin
-  if not public.gostoso_is_admin() then
+  if not public.gostoso_pode_aprovar() then
     raise exception 'sem acesso' using errcode = '42501';
   end if;
   return coalesce((
@@ -180,7 +206,7 @@ declare
   v public.gostoso_club_partners%rowtype;
   v_motivo text := nullif(btrim(coalesce(p_motivo, '')), '');
 begin
-  if not public.gostoso_is_admin() then
+  if not public.gostoso_pode_aprovar() then
     raise exception 'sem acesso' using errcode = '42501';
   end if;
   if not coalesce(p_aprovar, false) and (v_motivo is null or char_length(v_motivo) < 5 or char_length(v_motivo) > 300) then

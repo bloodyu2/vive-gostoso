@@ -18,6 +18,7 @@ const APROVACAO = '20261117210000_vg_clube_aprovacao_da_oferta.sql'
 const CAT = '30000000-0000-4000-8000-000000000001'
 const NEGOCIO_NO_AR = IDS.negocioPublicado // dono: usuarioDono, ja tinha vantagem no ar antes da migracao
 const NEGOCIO_NOVO = IDS.negocioRascunho // dono: usuarioDono, sem vantagem
+const USUARIO_APROVADOR = '00000000-0000-4000-8000-0000000000d1' // nao e admin; esta em gostoso_aprovadores
 
 let db: PGlite
 const sql = (arquivo: string) => readFileSync(resolve(process.cwd(), 'supabase/migrations', arquivo), 'utf8')
@@ -25,6 +26,7 @@ const sql = (arquivo: string) => readFileSync(resolve(process.cwd(), 'supabase/m
 const dono = (consulta: string) => como(db, 'authenticated', IDS.usuarioDono, consulta)
 const outro = (consulta: string) => como(db, 'authenticated', IDS.usuarioOutro, consulta)
 const admin = (consulta: string) => como(db, 'authenticated', IDS.usuarioAdmin, consulta)
+const aprovador = (consulta: string) => como(db, 'authenticated', USUARIO_APROVADOR, consulta)
 const publico = (consulta: string) => como(db, 'anon', null, consulta)
 
 async function status(negocio: string) {
@@ -42,7 +44,7 @@ beforeAll(async () => {
     insert into public.gostoso_categories values ('${CAT}', 'Cafe');
     create schema if not exists auth;
     create table if not exists auth.users (id uuid primary key);
-    insert into auth.users (id) values ('${IDS.usuarioAdmin}'), ('${IDS.usuarioDono}'), ('${IDS.usuarioOutro}');
+    insert into auth.users (id) values ('${IDS.usuarioAdmin}'), ('${IDS.usuarioDono}'), ('${IDS.usuarioOutro}'), ('${USUARIO_APROVADOR}');
   `)
   for (const m of MIGRACOES) await db.exec(sql(m))
   // a migracao do clube semeia os fundadores; o teste controla as linhas
@@ -52,6 +54,7 @@ beforeAll(async () => {
       ('${NEGOCIO_NO_AR}', 'Cafe', 'Um cafezinho de cortesia.', 'Vale na compra de qualquer prato.', 10, 'no_ar');
   `)
   await db.exec(sql(APROVACAO))
+  await db.exec(`insert into public.gostoso_aprovadores (auth_user_id) values ('${USUARIO_APROVADOR}')`)
 }, 60_000)
 
 describe('o que ja estava no ar antes da aprovacao', () => {
@@ -194,5 +197,39 @@ describe('so o admin decide', () => {
     const r = await admin(`select public.gostoso_club_analise_decidir(${idDe(NEGOCIO_NOVO)}, false, 'Motivo qualquer aqui.') as r`)
     expect((r.rows[0] as { r: { ok: boolean; motivo: string } }).r).toMatchObject({ ok: false, motivo: 'nao_esta_em_analise' })
     expect((await status(NEGOCIO_NOVO)).status).toBe('no_ar')
+  })
+})
+
+describe('o aprovador (Iza) decide vantagens sem ser admin', () => {
+  /* O id vem da fila (a tela da equipe o recebe dela); o aprovador nao le a tabela direto, entao o teste o busca como dono do banco. */
+  const idDe = async (negocio: string) => (await db.query<{ id: string }>(`select id from public.gostoso_club_partners where business_id = '${negocio}'`)).rows[0].id
+
+  it('nao e admin, mas pode aprovar', async () => {
+    const r = await aprovador('select public.gostoso_is_admin() as admin, public.gostoso_pode_aprovar() as pode')
+    expect(r.rows[0]).toEqual({ admin: false, pode: true })
+  })
+
+  it('ve a fila e aprova e recusa', async () => {
+    await dono(`update public.gostoso_club_partners set beneficio = 'Cafe e bolo de cortesia.', status = 'no_ar' where business_id = '${NEGOCIO_NOVO}'`)
+    const fila = await aprovador('select public.gostoso_club_analise_fila() as fila')
+    expect((fila.rows[0] as { fila: unknown[] }).fila.length).toBeGreaterThanOrEqual(1)
+    const r = await aprovador(`select public.gostoso_club_analise_decidir('${await idDe(NEGOCIO_NOVO)}', false, 'Diga o horario em que vale.') as r`)
+    expect((r.rows[0] as { r: { ok: boolean; status: string } }).r).toMatchObject({ ok: true, status: 'rejeitado' })
+    await dono(`update public.gostoso_club_partners set status = 'em_analise' where business_id = '${NEGOCIO_NOVO}'`)
+    const a = await aprovador(`select public.gostoso_club_analise_decidir('${await idDe(NEGOCIO_NOVO)}', true) as r`)
+    expect((a.rows[0] as { r: { ok: boolean; status: string } }).r).toMatchObject({ ok: true, status: 'no_ar' })
+    expect((await db.query<{ analisado_por: string }>(`select analisado_por from public.gostoso_club_partners where business_id = '${NEGOCIO_NOVO}'`)).rows[0].analisado_por).toBe(USUARIO_APROVADOR)
+  })
+
+  it('a tabela de aprovadores nao e lida nem escrita por ninguem de fora', async () => {
+    for (const quem of [dono, aprovador, outro]) {
+      await expect(quem('select * from public.gostoso_aprovadores')).rejects.toThrow()
+      await expect(quem(`insert into public.gostoso_aprovadores (auth_user_id) values ('${IDS.usuarioOutro}')`)).rejects.toThrow()
+    }
+    await expect(publico('select * from public.gostoso_aprovadores')).rejects.toThrow()
+  })
+
+  it('quem nao e admin nem aprovador continua barrado', async () => {
+    await expect(outro('select public.gostoso_club_analise_fila()')).rejects.toThrow(/sem acesso/)
   })
 })

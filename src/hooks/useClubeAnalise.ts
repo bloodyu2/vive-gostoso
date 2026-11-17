@@ -16,6 +16,20 @@ export function useClubeAnaliseFila() {
   })
 }
 
+/** Admin ou aprovador. O banco e quem decide; isto so escolhe entre mostrar a tela ou mandar de volta ao painel. */
+export function usePodeAprovar(enabled: boolean) {
+  return useQuery<boolean>({
+    queryKey: ['clube-pode-aprovar'],
+    enabled,
+    staleTime: 60 * 1000,
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc('gostoso_pode_aprovar')
+      if (error) throw error
+      return data === true
+    },
+  })
+}
+
 export function useClubeDecidir() {
   const qc = useQueryClient()
   return useMutation<ResultadoDecisao, Error, { partnerId: string; aprovar: boolean; motivo?: string }>({
