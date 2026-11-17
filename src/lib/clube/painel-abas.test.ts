@@ -29,8 +29,8 @@ const lead = (o: Partial<LinhaLead>): LinhaLead => ({
 })
 
 describe('abas na URL', () => {
-  it('so aceita as cinco abas, com ou sem #, em qualquer caixa', () => {
-    expect(ABAS).toEqual(['resumo', 'perfil', 'passaporte', 'contatos', 'plaquinha'])
+  it('so aceita as seis abas, com ou sem #, em qualquer caixa', () => {
+    expect(ABAS).toEqual(['resumo', 'pedidos', 'perfil', 'passaporte', 'contatos', 'plaquinha'])
     expect(abaValida('contatos')).toBe('contatos')
     expect(abaValida('#Passaporte')).toBe('passaporte')
     expect(abaValida('qualquer')).toBeNull()
@@ -59,7 +59,8 @@ describe('abas na URL', () => {
 
 describe('teclado das abas', () => {
   it('setas andam e dao a volta', () => {
-    expect(abaPorTecla('resumo', 'ArrowRight')).toBe('perfil')
+    expect(abaPorTecla('resumo', 'ArrowRight')).toBe('pedidos')
+    expect(abaPorTecla('pedidos', 'ArrowRight')).toBe('perfil')
     expect(abaPorTecla('plaquinha', 'ArrowRight')).toBe('resumo')
     expect(abaPorTecla('resumo', 'ArrowLeft')).toBe('plaquinha')
     expect(abaPorTecla('contatos', 'ArrowLeft')).toBe('passaporte')

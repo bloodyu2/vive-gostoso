@@ -6,7 +6,7 @@
 import { PLAQUINHAS } from '@/lib/plaquinhas'
 import type { LinhaLead } from '@/lib/clube/resgate'
 
-export const ABAS = ['resumo', 'perfil', 'passaporte', 'contatos', 'plaquinha'] as const
+export const ABAS = ['resumo', 'pedidos', 'perfil', 'passaporte', 'contatos', 'plaquinha'] as const
 export type AbaId = (typeof ABAS)[number]
 export const ABA_PADRAO: AbaId = 'resumo'
 

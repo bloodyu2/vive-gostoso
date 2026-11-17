@@ -5,6 +5,14 @@
 
 ---
 
+## 2026-11-17: conferir tela no navegador com Supabase falso: CSP, porta e service worker
+**O que aconteceu:** ao testar a aba Pedidos (KAN-907) sem tocar no banco de producao, o login do navegador nao saia. Tres causas seguidas: (1) a CSP (`connect-src`) so aceita `self` e o Supabase de producao, entao um Supabase falso em `127.0.0.1:54399` foi bloqueado; (2) um `next start` antigo ficou escutando em `[::]:3100` depois de o processo ser parado, e `localhost` abria ele (IPv6 primeiro) no lugar do servidor novo; (3) o `NEXT_PUBLIC_SUPABASE_URL` e gravado no bundle na hora do build, entao trocar a variavel exige `next build` de novo.
+**Regra:** para conferir tela contra um servico falso, subir o falso na MESMA origem do site (proxy na frente do Next, `NEXT_PUBLIC_SUPABASE_URL` igual a origem do site e rebuild), olhar `netstat -ano` antes de culpar o codigo e desregistrar o service worker (PWA) do navegador de teste. `npm run build` chama `scripts/generate-sitemap.mjs` (precisa do Supabase real): para conferir so a compilacao, `npx next build`. O `next build` local parou duas vezes com um aviso de seguranca do Next (SecurityFatalError, exit 1) e passou na repeticao; `npm audit` confirma advisory moderado em 16.3.0 a 16.4.4 (GHSA-mfr8-8qww-v76h).
+
+## 2026-11-17: UPDATE e DELETE negados pela RLS devolvem zero linhas, nao erro
+**O que aconteceu:** o PostgREST responde 200 com lista vazia quando a RLS nega um UPDATE ou DELETE. Uma tela que so olha `error` mostra "Salvo" para uma gravacao que nao aconteceu.
+**Regra:** escrita direta em tabela pede `select(...)` de volta e trata lista vazia como negado (`conferirLinhas` em `src/lib/pedidos/api.ts`, com teste que derruba o mutante). Para escrita sensivel preferir funcao RPC, que levanta `42501` de verdade.
+
 ## 2026-11-16: teste de regra de tempo que passa sem provar a regra
 **O que aconteceu:** na fila da pergunta (KAN-896) a regra "pelo menos 12 horas" estava coberta por um teste verde, mas ao quebrar a regra de proposito o teste continuava verde: com o relogio real, a regra do dia civil anterior barrava o mesmo caso. Duas regras de tempo que se sobrepoem escondem uma a outra.
 **Regra:** regra que depende do relogio tem o relogio como parametro (`p_agora`) e o teste fixa horas em que so uma das regras decide (23h de um dia, 09h do outro). Todo teste de regra e quebrado de proposito antes de ser aceito.

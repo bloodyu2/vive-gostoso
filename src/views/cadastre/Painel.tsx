@@ -20,6 +20,7 @@ import { PerfilAba } from './painel-abas/PerfilAba'
 import { PassaporteAba } from './painel-abas/PassaporteAba'
 import { ContatosAba } from './painel-abas/ContatosAba'
 import { PlaquinhaAba } from './painel-abas/PlaquinhaAba'
+import { PedidosAba } from './painel-abas/PedidosAba'
 
 export default function Painel() {
   return <AuthGuard><PainelInner /></AuthGuard>
@@ -250,6 +251,11 @@ function PainelInner() {
 
         {temNegocio && negocio && (
           <>
+            {/* Pedidos fica montado desde o inicio (visitada sempre true): a leitura e o alarme de pedido
+                novo precisam seguir rodando enquanto o dono olha outra aba. */}
+            <PainelDaAba id="pedidos" ativa={aba} visitada>
+              <PedidosAba key={negocio.id} negocio={negocio} />
+            </PainelDaAba>
             <PainelDaAba id="perfil" ativa={aba} visitada={visitadas.has('perfil')}>
               <PerfilAba key={negocio.id} negocio={negocio} />
             </PainelDaAba>
