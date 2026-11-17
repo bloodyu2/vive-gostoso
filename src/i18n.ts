@@ -9,7 +9,7 @@ const ns = [
   'cadastro', 'auth', 'painel', 'meus_negocios', 'perfil', 'preview',
   'claim', 'professional_panel', 'admin',
   'admin_businesses', 'admin_professionals', 'admin_services', 'admin_jobs',
-  'admin_events', 'admin_claims', 'admin_transfers', 'admin_reviews',
+  'admin_events', 'admin_claims', 'admin_clube', 'admin_transfers', 'admin_reviews',
   'cookie', 'whatsapp',
   'parceiros', 'reivindicar', 'bio', 'passaporte',
   'service_form', 'job_form', 'review_form', 'review_list', 'share', 'lightbox',

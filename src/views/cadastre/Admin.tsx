@@ -4,12 +4,13 @@ import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import {
-  Star, Tag, Calendar, Briefcase, ClipboardList, Car, Store,
+  Star, Tag, Calendar, Briefcase, ClipboardList, Car, Store, Ticket,
   LogOut, LayoutDashboard, User,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { AdminGuard } from '@/components/auth/admin-guard'
 import { useAdminStats } from '@/hooks/useAdminStats'
+import { useClubeAnaliseFila } from '@/hooks/useClubeAnalise'
 import { useAuth } from '@/hooks/useAuth'
 
 export default function Admin() {
@@ -28,6 +29,7 @@ function PendingBadge({ count }: { count: number }) {
 function AdminInner() {
   const statsQuery = useAdminStats()
   const stats = statsQuery.data
+  const clubeFila = useClubeAnaliseFila().data
   const { user, supabase } = useAuth()
   const { t } = useTranslation()
   const lp = useLocalePath()
@@ -46,6 +48,13 @@ function AdminInner() {
       title: t('admin.module_claims'),
       desc: t('admin.module_claims_desc'),
       badge: stats?.pendingClaims ?? 0,
+    },
+    {
+      href: lp('/cadastre/admin/clube'),
+      icon: Ticket,
+      title: t('admin.module_clube'),
+      desc: t('admin.module_clube_desc'),
+      badge: clubeFila?.length ?? 0,
     },
     {
       href: lp('/cadastre/admin/events'),
