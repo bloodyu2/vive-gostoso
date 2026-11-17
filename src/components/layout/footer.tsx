@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Logo } from '@/components/brand/logo'
+import { LogoBalaio } from '@/components/brand/logo-balaio'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 import { CookieBanner } from '@/components/cookie-banner'
@@ -134,16 +135,14 @@ export function Footer() {
             {t('footer.excluir_conta') ?? 'Excluir conta'}
           </Link>
           <a
-            href="https://balaio.net"
+            href="https://balaio.net/?utm_source=vivegostoso&utm_medium=rodape&utm_campaign=credito-site"
             target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity"
+            rel="noopener"
+            aria-label={`${t('footer.feito_por')} Balaio Digital`}
+            className="flex min-h-[44px] items-center gap-2 opacity-80 hover:opacity-100 transition-opacity"
           >
-            <svg width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M6 26 C6 26 4 16 16 10 C28 4 28 14 22 18 C16 22 14 18 16 14 C18 10 22 12 20 16" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-              <circle cx="20" cy="16" r="2" fill="currentColor"/>
-            </svg>
             <span className="font-medium">{t('footer.feito_por')}</span>
+            <LogoBalaio className="h-[22px] w-auto" />
           </a>
         </div>
       </div>
