@@ -66,8 +66,17 @@ describe('autorização', () => {
   it('sem cabeçalho, com segredo errado ou sem CRON_SECRET no ambiente: 401 e nada é tocado', async () => {
     expect((await chamar(pedido(undefined, null))).status).toBe(401)
     expect((await chamar(pedido(undefined, 'errado'))).status).toBe(401)
+    expect(rpc).not.toHaveBeenCalled()
+    expect(enviar).not.toHaveBeenCalled()
+  })
+
+  it('sem CRON_SECRET no ambiente a rota está desligada: 200, mesmo com a chave de envio ligada, e nada é tocado', async () => {
     vi.stubEnv('CRON_SECRET', '')
-    expect((await chamar(pedido(undefined, ''))).status).toBe(401)
+    for (const segredo of [null, '', 'qualquer']) {
+      const r = await chamar(pedido(undefined, segredo))
+      expect(r.status).toBe(200)
+      expect(r.corpo).toEqual({ estado: 'desligado' })
+    }
     expect(rpc).not.toHaveBeenCalled()
     expect(enviar).not.toHaveBeenCalled()
   })

@@ -34,7 +34,10 @@ function segredoConfere(recebido: string | null, esperado: string): boolean {
 
 export async function GET(req: Request) {
   const segredo = process.env.CRON_SECRET
-  if (!segredo || !segredoConfere(req.headers.get('authorization'), segredo)) {
+  // Sem CRON_SECRET a rota esta desligada: responde 200 sem tocar em nada, para o cron diario
+  // nao falhar enquanto as variaveis nao foram postas. Com ele, so quem manda o segredo passa.
+  if (!segredo) return resposta({ estado: 'desligado' })
+  if (!segredoConfere(req.headers.get('authorization'), segredo)) {
     return resposta({ erro: 'nao_autorizado' }, 401)
   }
 
