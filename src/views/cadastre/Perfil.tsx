@@ -990,6 +990,13 @@ function PerfilInner({ embedded, bizIdProp }: { embedded: boolean; bizIdProp?: s
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
 
+    // Nome vazio: erro no proprio campo, com foco e leitura por leitor de tela (QA 18/11/2026, S3)
+    if (!(biz.name ?? '').trim()) {
+      setNomeErro(true)
+      document.getElementById('campo-nome')?.focus()
+      return
+    }
+
     if (!profileId) {
       setSaveModal({ type: 'error', message: t('perfil:error_profile') })
       return
@@ -1089,6 +1096,7 @@ function PerfilInner({ embedded, bizIdProp }: { embedded: boolean; bizIdProp?: s
     }
   }
 
+  const [nomeErro, setNomeErro] = useState(false)
   const textFields = [
     { key: 'name' as const, required: true },
     { key: 'address' as const },
@@ -1222,11 +1230,12 @@ function PerfilInner({ embedded, bizIdProp }: { embedded: boolean; bizIdProp?: s
         />
       )}
 
-      <form ref={formRef} onSubmit={handleSave}>
+      <form ref={formRef} onSubmit={handleSave} noValidate>
         {/* Basic info */}
         <section className={SECTION_CLS}>
           <h2 className="font-display text-lg font-semibold mb-1">{t('perfil:basic_title')}</h2>
-          <p className="text-sm text-fg-3-texto mb-4">{t('perfil:basic_desc')}</p>
+          <p className="text-sm text-fg-3-texto mb-2">{t('perfil:basic_desc')}</p>
+          <p className="text-xs text-fg-3-texto mb-4"><span className="text-coral" aria-hidden="true">*</span> {t('perfil:required_legend')}</p>
           <div className="space-y-4">
             {textFields.map(({ key, required }) => {
               const helpers: Record<string, string> = {
@@ -1239,15 +1248,23 @@ function PerfilInner({ embedded, bizIdProp }: { embedded: boolean; bizIdProp?: s
                 <div key={key}>
                   <label className="block text-sm font-medium mb-1.5">
                     {t('perfil:field_' + key)}
-                    {required && <span className="text-coral ml-0.5">*</span>}
+                    {required && <span className="text-coral ml-0.5" aria-hidden="true">*</span>}
+                    {required && <span className="sr-only"> ({t('perfil:required_sr')})</span>}
                   </label>
                   <input
                     type="text"
+                    id={key === 'name' ? 'campo-nome' : undefined}
                     required={required}
+                    aria-required={required ? true : undefined}
+                    aria-invalid={key === 'name' && nomeErro ? true : undefined}
+                    aria-describedby={key === 'name' && nomeErro ? 'campo-nome-erro' : undefined}
                     value={(biz[key] as string | null | undefined) ?? ''}
-                    onChange={e => setBiz(b => ({ ...b, [key]: e.target.value }))}
+                    onChange={e => { if (key === 'name') setNomeErro(false); setBiz(b => ({ ...b, [key]: e.target.value })) }}
                     className={INPUT_CLS}
                   />
+                  {key === 'name' && nomeErro && (
+                    <p id="campo-nome-erro" role="alert" className="text-xs text-coral-texto mt-1">{t('perfil:error_name_required')}</p>
+                  )}
                   {helpers[key] && (
                     <p className="text-xs text-fg-3-texto mt-1">{helpers[key]}</p>
                   )}
@@ -1292,12 +1309,15 @@ function PerfilInner({ embedded, bizIdProp }: { embedded: boolean; bizIdProp?: s
           <div className="space-y-4">
             {/* Faixa de preco */}
             <div>
-              <label className="block text-sm font-medium mb-1.5">{t('perfil:price_label')}</label>
-              <div className="flex gap-2 flex-wrap">
+              <p id="faixa-preco-rotulo" className="block text-sm font-medium mb-1">{t('perfil:price_label')}</p>
+              <p className="text-xs text-fg-3-texto mb-2">{t('perfil:price_help')}</p>
+              <div className="flex gap-2 flex-wrap" role="radiogroup" aria-labelledby="faixa-preco-rotulo">
                 {(['', '$', '$$', '$$$'] as const).map(v => (
                   <button
                     key={v}
                     type="button"
+                    role="radio"
+                    aria-checked={(biz.price_range ?? '') === v}
                     onClick={() =>
                       setBiz(b => ({ ...b, price_range: (v === '' ? null : v) as '$' | '$$' | '$$$' | null }))
                     }
@@ -1391,6 +1411,9 @@ function PerfilInner({ embedded, bizIdProp }: { embedded: boolean; bizIdProp?: s
             {t('perfil:cancel')}
           </Link>
           )}
+          {profileLoading && (
+            <p role="status" aria-live="polite" className="flex items-center gap-2 text-xs text-fg-3-texto mb-2"><Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden="true" />{t('perfil:profile_loading')}</p>
+          )}
           <Button
             type="button"
             variant="primary"
@@ -1400,8 +1423,6 @@ function PerfilInner({ embedded, bizIdProp }: { embedded: boolean; bizIdProp?: s
           >
             {saving
               ? <><Loader2 className="w-4 h-4 animate-spin" />{t('perfil:saving')}</>
-              : profileLoading
-              ? <><Loader2 className="w-4 h-4 animate-spin" />{t('perfil:profile_loading')}</>
               : t('perfil:save_business')}
           </Button>
         </div>

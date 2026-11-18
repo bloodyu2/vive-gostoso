@@ -1,0 +1,9 @@
+Confirme seu cadastro no Vive Gostoso
+
+Falta um passo para usar a sua conta. Abra o endereço abaixo no navegador para confirmar este e-mail:
+
+{{ .ConfirmationURL }}
+
+Se você não criou uma conta, pode ignorar esta mensagem. Nada acontece sem a confirmação.
+
+Vive Gostoso, São Miguel do Gostoso, RN

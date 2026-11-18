@@ -191,6 +191,8 @@ export function FormResgate({ partnerId, negocio, textos, origem, prefixo, onCan
           className="clube-campo"
           type="text"
           name="nome"
+          required
+          aria-required="true"
           autoComplete="name"
           maxLength={80}
           value={nome}
@@ -208,6 +210,8 @@ export function FormResgate({ partnerId, negocio, textos, origem, prefixo, onCan
           className="clube-campo"
           type="email"
           name="email"
+          required
+          aria-required="true"
           autoComplete="email"
           inputMode="email"
           maxLength={254}
@@ -226,6 +230,8 @@ export function FormResgate({ partnerId, negocio, textos, origem, prefixo, onCan
           className="clube-campo"
           type="tel"
           name="telefone"
+          required
+          aria-required="true"
           autoComplete="tel-national"
           inputMode="tel"
           placeholder="(84) 99999-9999"
@@ -242,6 +248,8 @@ export function FormResgate({ partnerId, negocio, textos, origem, prefixo, onCan
           ref={refConsentimento}
           type="checkbox"
           name="consentimento"
+          required
+          aria-required="true"
           checked={consentimento}
           onChange={(e) => setConsentimento(e.target.checked)}
           aria-invalid={campoComErro === 'consentimento'}

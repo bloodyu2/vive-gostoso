@@ -1444,7 +1444,11 @@
     "licenca_checkbox": "I have read and agree to the photo rights terms.",
     "licenca_aceito_em": "Agreed on {{data}}.",
     "licenca_pendente": "Tick the box above to upload photos.",
-    "licenca_erro": "We could not record your agreement. Please try again."
+    "licenca_erro": "We could not record your agreement. Please try again.",
+    "required_legend": "required field",
+    "required_sr": "required",
+    "error_name_required": "Enter the business name.",
+    "price_help": "Optional. $ is cheap, $$ is medium, $$$ is expensive."
   },
   "preview": {
     "back": "← Back",
@@ -2019,7 +2023,7 @@
     "page_description": "Claim a coupon at every partner in Gostoso. Free for visitors and for businesses.",
     "marca": "Vive Gostoso",
     "selo": "100% free",
-    "selo_anel": "No app · Nothing to pay · One coupon, one purchase · ",
+    "selo_anel": "Nothing to install · Nothing to pay · One coupon, one purchase · ",
     "lancamento": "The Passport is live. Coupons work at the partners listed below.",
     "valido_hoje": "Valid today only, {data}",
     "foto_alt": "Sunset on the beach at São Miguel do Gostoso, with wind turbines in the distance",
