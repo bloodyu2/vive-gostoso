@@ -1654,7 +1654,11 @@
     "licenca_checkbox": "Leí y acepto los derechos sobre las fotos.",
     "licenca_aceito_em": "Aceptado el {{data}}.",
     "licenca_pendente": "Marque la casilla de arriba para poder enviar fotos.",
-    "licenca_erro": "No fue posible registrar su aceptación. Intente de nuevo."
+    "licenca_erro": "No fue posible registrar su aceptación. Intente de nuevo.",
+    "required_legend": "campo obligatorio",
+    "required_sr": "obligatorio",
+    "error_name_required": "Escribe el nombre del negocio.",
+    "price_help": "Opcional. $ es barato, $$ es medio, $$$ es caro."
   },
   "preview": {
     "back": "← Volver",
@@ -2019,7 +2023,7 @@
     "page_description": "Canjea un cupón en cada socio de Gostoso. Gratis para quien visita y para los negocios.",
     "marca": "Vive Gostoso",
     "selo": "100% gratis",
-    "selo_anel": "Sin app · Sin pagar nada · Un cupón, una compra · ",
+    "selo_anel": "Sin instalar nada · Sin pagar nada · Un cupón, una compra · ",
     "lancamento": "El Pasaporte ya está activo. Los cupones valen en los socios de la lista de abajo.",
     "valido_hoje": "Vale solo hoy, {data}",
     "foto_alt": "Atardecer en la playa de São Miguel do Gostoso, con los aerogeneradores al fondo",

@@ -1528,7 +1528,11 @@
     "licenca_checkbox": "Li e concordo com os direitos sobre as fotos.",
     "licenca_aceito_em": "Aceito em {{data}}.",
     "licenca_pendente": "Marque a caixa acima para poder enviar fotos.",
-    "licenca_erro": "Não foi possível registrar o aceite. Tente de novo."
+    "licenca_erro": "Não foi possível registrar o aceite. Tente de novo.",
+    "required_legend": "campo obrigatório",
+    "required_sr": "obrigatório",
+    "error_name_required": "Escreva o nome do negócio.",
+    "price_help": "Opcional. $ é barato, $$ é médio, $$$ é caro."
   },
   "preview": {
     "back": "← Voltar",
@@ -2019,7 +2023,7 @@
     "page_description": "Resgate um cupom em cada parceiro de Gostoso. De graça, para quem visita e para os negócios.",
     "marca": "Vive Gostoso",
     "selo": "100% grátis",
-    "selo_anel": "Sem app · Sem pagar nada · Um cupom, uma compra · ",
+    "selo_anel": "Sem instalar nada · Sem pagar nada · Um cupom, uma compra · ",
     "lancamento": "O Passaporte já está no ar. Os cupons valem nos parceiros da lista abaixo.",
     "valido_hoje": "Vale só hoje, {data}",
     "foto_alt": "Pôr do sol na praia de São Miguel do Gostoso, com os cataventos ao fundo",
