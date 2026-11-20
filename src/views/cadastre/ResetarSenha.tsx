@@ -8,7 +8,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useTranslation } from 'react-i18next'
 import { useLocalePath } from '@/hooks/useLocalePath'
 
-type Stage = 'waiting' | 'form' | 'success' | 'invalid'
+type Stage = 'waiting' | 'confirm' | 'form' | 'success' | 'invalid'
 
 export default function ResetarSenha() {
   const [stage, setStage] = useState<Stage>('waiting')
@@ -16,12 +16,21 @@ export default function ResetarSenha() {
   const [confirm, setConfirm] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  // Link novo: o e-mail leva ?token_hash=...&type=recovery e o token só é gasto quando a pessoa toca em Continuar.
+  const [tokenHash, setTokenHash] = useState<string | null>(null)
   const router = useRouter()
   const { t } = useTranslation()
   const lp = useLocalePath()
   const supabase = createClient()
 
   useEffect(() => {
+    const q = new URLSearchParams(window.location.search)
+    const th = q.get('token_hash')
+    if (th && q.get('type') === 'recovery') {
+      setTokenHash(th)
+      setStage('confirm')
+      return
+    }
     // Supabase fires PASSWORD_RECOVERY when the user arrives via the reset link.
     // The token in the URL hash is exchanged automatically — we just listen for it.
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
@@ -35,10 +44,10 @@ export default function ResetarSenha() {
       if (data.session) {
         setStage('form')
       } else {
-        // Give it 3s for the hash exchange, then mark as invalid
+        // Give it 8s for the hash exchange (rede lenta), then mark as invalid
         setTimeout(() => {
           setStage(s => s === 'waiting' ? 'invalid' : s)
-        }, 3000)
+        }, 8000)
       }
     })
 
@@ -47,6 +56,15 @@ export default function ResetarSenha() {
     // in the browser (@supabase/ssr caches `cachedBrowserClient`), so
     // `supabase.auth` is referentially stable across renders here.
   }, [supabase.auth])
+
+  async function handleConfirm() {
+    if (!tokenHash) return
+    setLoading(true)
+    const { error: otpError } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type: 'recovery' })
+    setLoading(false)
+    if (otpError) setStage('invalid')
+    else setStage('form')
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -87,6 +105,18 @@ export default function ResetarSenha() {
             <div className="text-center py-4">
               <div className="text-4xl mb-4 animate-pulse">🔑</div>
               <p className="text-fg-3-texto text-sm">{t('auth.waiting')}</p>
+            </div>
+          )}
+
+          {/* Link novo: confirmar antes de gastar o token */}
+          {stage === 'confirm' && (
+            <div className="text-center">
+              <div className="text-5xl mb-4">🔑</div>
+              <h2 className="font-display text-xl font-semibold mb-2 text-[#1A1A1A]">{t('auth.confirm_title')}</h2>
+              <p className="text-fg-3-texto text-sm mb-6">{t('auth.confirm_desc')}</p>
+              <Button variant="primary" className="w-full" disabled={loading} onClick={() => void handleConfirm()}>
+                {loading ? t('auth.confirm_btn_loading') : t('auth.confirm_btn')}
+              </Button>
             </div>
           )}
 

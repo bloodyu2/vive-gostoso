@@ -872,7 +872,11 @@
     "success_btn": "Ir al panel",
     "error_password_length": "La contrasena debe tener al menos 8 caracteres.",
     "error_password_mismatch": "Las contrasenas no coinciden.",
-    "error_update": "No se pudo actualizar la contrasena. El enlace puede haber expirado."
+    "error_update": "No se pudo actualizar la contrasena. El enlace puede haber expirado.",
+    "confirm_title": "Crear una contraseña nueva",
+    "confirm_desc": "Toca Continuar para abrir la pantalla de la contraseña nueva. El enlace vale una sola vez.",
+    "confirm_btn": "Continuar",
+    "confirm_btn_loading": "Verificando..."
   },
   "admin_businesses": {
     "back": "Admin",

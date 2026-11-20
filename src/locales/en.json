@@ -872,7 +872,11 @@
     "success_btn": "Go to dashboard",
     "error_password_length": "Password must be at least 8 characters.",
     "error_password_mismatch": "Passwords do not match.",
-    "error_update": "Could not update password. The link may have expired."
+    "error_update": "Could not update password. The link may have expired.",
+    "confirm_title": "Create a new password",
+    "confirm_desc": "Tap Continue to open the new password screen. The link works only once.",
+    "confirm_btn": "Continue",
+    "confirm_btn_loading": "Checking..."
   },
   "admin_businesses": {
     "back": "Admin",
