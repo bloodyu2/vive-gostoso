@@ -872,7 +872,11 @@
     "success_btn": "Ir para o painel",
     "error_password_length": "A senha deve ter pelo menos 8 caracteres.",
     "error_password_mismatch": "As senhas não coincidem.",
-    "error_update": "Não foi possível atualizar a senha. O link pode ter expirado."
+    "error_update": "Não foi possível atualizar a senha. O link pode ter expirado.",
+    "confirm_title": "Criar uma senha nova",
+    "confirm_desc": "Toque em Continuar para abrir a tela da senha nova. O link só vale uma vez.",
+    "confirm_btn": "Continuar",
+    "confirm_btn_loading": "Verificando..."
   },
   "professional_panel": {
     "back_to_painel": "← Painel",

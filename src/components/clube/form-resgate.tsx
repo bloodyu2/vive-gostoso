@@ -276,7 +276,7 @@ export function FormResgate({ partnerId, negocio, textos, origem, prefixo, onCan
       </label>
 
       {/* campo isca: pessoa nao ve nem preenche; robo preenche e o servidor recusa */}
-      <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }}>
+      <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', top: 'auto', width: 1, height: 1, overflow: 'hidden', opacity: 0, pointerEvents: 'none', clipPath: 'inset(50%)', whiteSpace: 'nowrap' }}>
         <label>
           Contato extra
           <input type="text" name="contato_extra" tabIndex={-1} autoComplete="off" data-lpignore="true" data-1p-ignore value={isca} onChange={(e) => setIsca(e.target.value)} />
