@@ -45,18 +45,47 @@ a:focus-visible{outline:3px solid #C97D2A;outline-offset:2px}
     $('t').textContent = 'Pronto'; $('msg').textContent = 'Voltando para o app...';
     location.href = destino;
   }
+  // Beta (25/11/2026): o desafio nunca trava o cadastro. O widget erra na primeira tentativa em aparelho de pouca confianca (emulador, celular com VPN ou
+  // navegador desatualizado) e depois se recupera sozinho ou pede uma caixa para tocar. Por isso o erro NAO encerra a pagina na hora:
+  // o widget repete, a pessoa ve o aviso para tocar na caixa, e so depois do prazo a pagina devolve ao app o marcador "sem-verificacao:<codigo>".
+  // O servidor (verificar-turnstile) em modo observa deixa passar e registra; com TURNSTILE_EXIGIR=1 esse marcador e recusado (token invalido).
+  // Para endurecer de vez: ligar TURNSTILE_EXIGIR e tirar o PRAZO_MS abaixo (docs/auth/turnstile.md).
+  var PRAZO_MS = 20000;      // erro persistente: depois disso devolve o marcador
+  var PRAZO_FATAL_MS = 2500; // erro de configuracao (110xxx, 400xxx): nao se recupera, nao adianta esperar
+  var ultimoCodigo = '';
+  var terminou = false;
+  var timer = null;
+  function fim(token) { if (terminou) return; terminou = true; if (timer) clearTimeout(timer); devolver(token); }
+  function marcador() { return 'sem-verificacao:' + (ultimoCodigo || 'prazo'); }
+  var limite = Infinity; // instante (ms) em que a pagina desiste; so pode diminuir, para a repeticao do widget nao empurrar o prazo para sempre
+  function armar(ms) {
+    var quando = Date.now() + ms;
+    if (quando >= limite) return;
+    limite = quando;
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(function () { fim(marcador()); }, ms);
+  }
   window.onTurnstileLoad = function () {
     window.turnstile.render('#widget', {
       sitekey: chave, action: 'cadastro', language: 'pt-br',
-      callback: devolver,
-      'error-callback': function () { parar('A verificação falhou. Volte ao app e tente de novo.'); },
-      'expired-callback': function () { parar('A verificação expirou. Volte ao app e tente de novo.'); }
+      retry: 'auto', 'retry-interval': 3000, 'refresh-expired': 'auto',
+      callback: function (token) { fim(token); },
+      'error-callback': function (codigo) {
+        if (terminou) return true;
+        ultimoCodigo = String(codigo || 'erro').slice(0, 12);
+        $('t').textContent = 'Só um instante';
+        $('msg').textContent = 'Tentando de novo. Se aparecer a caixa "Confirme que é humano", toque nela.';
+        armar(/^(110|400)/.test(ultimoCodigo) ? PRAZO_FATAL_MS : PRAZO_MS);
+        return true;
+      },
+      'expired-callback': function () { $('msg').textContent = 'Atualizando a verificação...'; }
     });
+    armar(PRAZO_MS + 15000); // nem o widget respondeu (rede lenta): mesmo prazo, com folga
   };
   var s = document.createElement('script');
   s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad&render=explicit';
   s.async = true; s.defer = true;
-  s.onerror = function () { parar('Sem conexão com o serviço de verificação. Tente de novo.'); };
+  s.onerror = function () { ultimoCodigo = 'sem-rede'; armar(PRAZO_FATAL_MS); $('msg').textContent = 'Sem conexão com o serviço de verificação. Seguindo sem ela.'; };
   document.head.appendChild(s);
 })();
 </script>
