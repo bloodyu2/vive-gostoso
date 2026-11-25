@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baixar o Vive Gostoso</title>
+<meta name="description" content="Instale o app Vive Gostoso no seu Android: guia, marés, Passaporte e mais de São Miguel do Gostoso.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src https://api.github.com ; base-uri 'none'; form-action 'none'">
+<meta name="theme-color" content="#0D7C7C">
+<link rel="icon" href="icon.png">
+<style>
+:root{--teal:#0D7C7C;--teal-dark:#085E5E;--ocre:#C97D2A;--ink:#1A1A1A;--ink2:#4A4A4A;--page:#F5F2EE;--card:#fff;--line:#E4DED6;--soft:#E3F2F2}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--page);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:linear-gradient(160deg,var(--teal-dark),var(--teal));color:#fff;padding:32px 20px 56px}
+.wrap{max-width:720px;margin:0 auto}
+header .marca{display:flex;align-items:center;gap:14px}
+header img{width:56px;height:56px;border-radius:16px;border:2px solid rgba(255,255,255,.85)}
+h1{margin:0;font-size:1.75rem;line-height:1.15}
+header p{margin:6px 0 0;color:rgba(255,255,255,.9)}
+main{max-width:720px;margin:-36px auto 40px;padding:0 16px;display:grid;gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+h2{margin:0 0 10px;font-size:1.15rem}
+.versao{display:flex;flex-wrap:wrap;gap:6px 14px;color:var(--ink2);font-size:.95rem;margin:0 0 14px}
+.botao{display:flex;align-items:center;justify-content:center;text-align:center;gap:10px;min-height:56px;padding:0 20px;border-radius:16px;background:var(--teal);color:#fff;font-weight:700;font-size:1.05rem;text-decoration:none;border:0;width:100%}
+.botao:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--ocre);outline-offset:2px}
+.botao[aria-disabled=true]{background:#9DB9B9;pointer-events:none}
+.aviso{background:#FBF0E3;border:1px solid #F0D9BC;border-radius:14px;padding:12px 14px;margin:12px 0 0;font-size:.95rem}
+.erro{background:#FCEAE5;border-color:#F3C8BC}
+.qr{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.qr img{width:160px;height:160px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:8px}
+ol{margin:0;padding-left:1.25rem;display:grid;gap:10px}
+li::marker{font-weight:700;color:var(--teal)}
+details{border-top:1px solid var(--line);padding-top:10px;margin-top:12px}
+summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center}
+.mono{font:.8rem/1.4 ui-monospace,Menlo,Consolas,monospace;word-break:break-all;color:var(--ink2)}
+.notas{white-space:pre-wrap;color:var(--ink2);font-size:.92rem;margin:8px 0 0}
+footer{max-width:720px;margin:0 auto;padding:0 16px 40px;color:var(--ink2);font-size:.9rem}
+footer a{color:var(--teal-dark)}
+@media (max-width:520px){.qr{grid-template-columns:1fr;justify-items:center;text-align:center}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="marca"><img src="icon.png" alt="" width="56" height="56"><div><h1>Vive Gostoso</h1><p>O app de São Miguel do Gostoso, para Android.</p></div></div></div></header>
+<main>
+  <section class="card" aria-labelledby="t-baixar">
+    <h2 id="t-baixar">Baixar a versão mais nova</h2>
+    <p class="versao" id="info" aria-live="polite">Procurando a versão mais nova...</p>
+    <a class="botao" id="baixar" href="#" aria-disabled="true" rel="noopener">Baixar o app (Android)</a>
+    <div class="aviso erro" id="erro" hidden></div>
+    <details id="det" hidden><summary>O que mudou nesta versão</summary><p class="notas" id="notas"></p></details>
+    <details id="detsha" hidden><summary>Conferir o arquivo (avançado)</summary><p class="mono" id="sha"></p></details>
+  </section>
+
+  <section class="card" aria-labelledby="t-qr">
+    <h2 id="t-qr">Passe para outro celular</h2>
+    <div class="qr"><img src="qr.svg" alt="QR code que abre esta página" width="160" height="160"><p style="margin:0">Aponte a câmera do outro celular para o QR code. Ele abre esta página, e de lá é só baixar. Dá para imprimir e deixar na pousada ou no restaurante.</p></div>
+  </section>
+
+  <section class="card" aria-labelledby="t-inst">
+    <h2 id="t-inst">Como instalar</h2>
+    <ol>
+      <li><strong>Baixe o arquivo</strong> com o botão acima. Ele é grande (mais de 100 MB): use o Wi-Fi.</li>
+      <li><strong>Abra o arquivo baixado</strong> (na barra de avisos ou no app Arquivos, pasta Downloads).</li>
+      <li>Se o Android disser que a instalação está <strong>bloqueada</strong> ou pedir para permitir apps desta fonte, toque em <strong>Configurações</strong>, ligue <strong>Permitir desta fonte</strong> e volte. O texto muda de marca para marca.</li>
+      <li>Se o Google Play Protect avisar que o app não é conhecido, toque em <strong>Mais detalhes</strong> e depois em <strong>Instalar mesmo assim</strong>. O Vive Gostoso ainda não está na Play Store.</li>
+      <li>Toque em <strong>Instalar</strong> e depois em <strong>Abrir</strong>.</li>
+    </ol>
+    <details><summary>Já tenho o app e quero atualizar</summary><p>Baixe e instale do mesmo jeito, por cima. Sua conta, seus carimbos e seus cupons ficam como estão.</p></details>
+    <details><summary>Instalou e não abriu?</summary><p>Confira se o celular tem espaço livre e baixe de novo, com Wi-Fi. Se continuar, fale com a gente pelo WhatsApp abaixo e conte o modelo do celular.</p></details>
+  </section>
+</main>
+<footer>
+  <p>Precisa de ajuda? <a id="zap" href="https://wa.me/558488182779" rel="noopener">Fale com o Vive pelo WhatsApp</a>. Só para Android por enquanto.</p>
+</footer>
+<script>
+(function () {
+  'use strict';
+  var REPO = 'bloodyu2/vive-gostoso-app';
+  var API = 'https://api.github.com/repos/' + REPO + '/releases/latest';
+  // Só no computador de desenvolvimento: ?api=http://localhost:4173/mock-release.json troca a fonte para testar sem rede.
+  var local = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+  var q = new URLSearchParams(location.search);
+  if (local && q.get('api')) API = q.get('api');
+  var $ = function (id) { return document.getElementById(id); };
+  var botao = $('baixar'), info = $('info'), erro = $('erro');
+
+  function falha(msg) {
+    info.textContent = '';
+    erro.hidden = false;
+    erro.textContent = msg;
+  }
+  function dataBR(iso) { try { return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }); } catch (e) { return ''; } }
+  function mb(n) { return n ? (n / 1048576).toFixed(0) + ' MB' : ''; }
+  function mostrar(rel) {
+    var apk = (rel.assets || []).filter(function (a) { return /\.apk$/i.test(a.name || ''); })[0];
+    var url = apk && apk.browser_download_url;
+    var okUrl = typeof url === 'string' && (url.indexOf('https://github.com/' + REPO + '/releases/download/') === 0 || (local && q.get('api')));
+    if (!apk || !okUrl) { falha('A versão mais nova ainda não tem o arquivo do app. Tente de novo mais tarde ou fale com a gente pelo WhatsApp.'); return; }
+    var versao = String(rel.tag_name || rel.name || '').replace(/^v/, '');
+    var partes = ['Versão ' + versao];
+    if (rel.published_at) partes.push(dataBR(rel.published_at));
+    if (apk.size) partes.push(mb(apk.size));
+    info.textContent = partes.join(' · ');
+    botao.href = url;
+    botao.removeAttribute('aria-disabled');
+    botao.textContent = 'Baixar o Vive Gostoso ' + versao;
+    if (rel.body && String(rel.body).trim()) { $('notas').textContent = String(rel.body).trim().slice(0, 1500); $('det').hidden = false; }
+    var d = String(apk.digest || '');
+    if (/^sha256:[0-9a-f]{64}$/i.test(d)) { $('sha').textContent = 'SHA-256: ' + d.slice(7); $('detsha').hidden = false; }
+  }
+  function usar(json) { try { mostrar(json); } catch (e) { falha('Não deu para ler a versão mais nova. Tente de novo.'); } }
+
+  var CHAVE = 'vg_download_release:' + API, agora = Date.now();
+  try {
+    var c = JSON.parse(sessionStorage.getItem(CHAVE) || 'null');
+    if (c && agora - c.t < 600000) { usar(c.j); return; }
+  } catch (e) { /* sem cache */ }
+  fetch(API, { headers: { Accept: 'application/vnd.github+json' } })
+    .then(function (r) {
+      if (r.status === 404) throw new Error('nao-achou');
+      if (r.status === 403 || r.status === 429) throw new Error('limite');
+      if (!r.ok) throw new Error('http');
+      return r.json();
+    })
+    .then(function (j) { try { sessionStorage.setItem(CHAVE, JSON.stringify({ t: agora, j: j })); } catch (e) { /* ok */ } usar(j); })
+    .catch(function (e) {
+      falha(e.message === 'limite' ? 'Muita gente procurando agora. Espere um minuto e atualize a página.' : 'Não achamos a versão mais nova agora. Atualize a página ou fale com a gente pelo WhatsApp.');
+    });
+})();
+</script>
+</body>
+</html>

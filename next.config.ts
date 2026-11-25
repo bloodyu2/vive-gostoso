@@ -47,6 +47,19 @@ const config: NextConfig = {
      Vitor B ficou de fora de proposito: os dois registros dividem telefone mas
      tem nome e endereco diferentes, e a decisao de qual manter depende de
      confirmacao do dono do projeto. */
+  /* /baixar: pagina de download do app Vive Gostoso (QR code e botao) e a pagina do desafio Turnstile do
+     cadastro do app. Sao arquivos estaticos em public/baixar (gerados por download/build.mjs do repositorio do
+     app). O proxy.ts nao passa por elas (matcher), entao aqui o endereco sem barra aponta para o index.html. */
+  async rewrites() {
+    return {
+      beforeFiles: [
+        { source: '/baixar', destination: '/baixar/index.html' },
+        { source: '/baixar/verificar', destination: '/baixar/verificar/index.html' },
+      ],
+      afterFiles: [],
+      fallback: [],
+    }
+  },
   async redirects() {
     const duplicatas: Array<[string, string]> = [
       ['flor-de-caju-cafe-livros', 'flor-de-caju'],
