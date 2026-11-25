@@ -63,8 +63,9 @@ export const config = {
   /* Arquivos estaticos de public/ que NAO podem passar pelo i18n: o proxy os reescrevia para
      /pt/<arquivo> e davam 404 (visto no QA de 08/11/2026): o swe-worker-*.js e o workbox-*.js do
      service worker (o sw.js lista o swe-worker no precache) e o arquivo de verificacao do Google
-     Search Console (googleXXXX.html). */
+     Search Console (googleXXXX.html). /baixar (pagina de download do app e pagina do desafio Turnstile, em
+     public/baixar) tambem fica de fora: sao paginas estaticas com a propria CSP, sem prefixo de idioma. */
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|icons|manifest.json|sw.js|swe-worker-[^/]+\\.js|workbox-[^/]+\\.js|google[a-z0-9]+\\.html|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|icons|manifest.json|sw.js|swe-worker-[^/]+\\.js|workbox-[^/]+\\.js|baixar(?:/|$)|google[a-z0-9]+\\.html|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
