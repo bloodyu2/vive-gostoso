@@ -10,7 +10,7 @@ import { useInvalidateMyBusinesses, type BusinessSummary } from '@/hooks/useMyBu
 import type { Professional } from '@/types/database'
 import { supabase } from '@/lib/supabase'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
-import { corteDaJanela, diaMenos, hojeNoFuso, somarVistas, type AbaId } from '@/lib/clube/painel-abas'
+import { corteDaJanela, diaMenos, hojeNoFuso, vistasDaJanela, type AbaId } from '@/lib/clube/painel-abas'
 import { useParceiro, type Parceiro } from '../Passaporte'
 import { CompletionBar, CopyLinkButton, PublishToggle, completionScore } from '../MeusNegocios'
 
@@ -29,8 +29,11 @@ interface NumerosDosCupons {
   pegos30: number
   usados7: number
   usados30: number
-  vistas7: number
-  vistas30: number
+  /** null = a janela ainda tem dia sem contagem valida por parceiro (KAN-998) */
+  vistas7: number | null
+  vistas30: number | null
+  /** primeiro dia com contagem valida por parceiro; null quando nao se sabe */
+  validasDesde: string | null
 }
 
 /** Cupons pegos e usados e vezes que a vantagem foi vista, em 7 e 30 dias. Os cupons vem de
@@ -56,29 +59,40 @@ function useNumerosDosCupons(parceiro: Parceiro | null) {
         return count ?? 0
       }
       const hoje = hojeNoFuso(agora)
-      const [pegos7, pegos30, usados7, usados30, vistas] = await Promise.all([
+      const [pegos7, pegos30, usados7, usados30, vistas, validas] = await Promise.all([
         contar('created_at', 7, false),
         contar('created_at', 30, false),
         contar('usado_em', 7, true),
         contar('usado_em', 30, true),
         supabase.from('gostoso_club_views').select('dia, n').eq('partner_id', id!).gte('dia', diaMenos(hoje, 29)),
+        supabase.rpc('gostoso_club_vistas_validas_desde'),
       ])
       if (vistas.error) throw vistas.error
+      // Falha ou funcao ainda nao criada: sem a data nao se mostra vista (melhor "–" que numero errado).
+      const validasDesde = validas.error ? null : ((validas.data as string | null) ?? null)
       const linhas = (vistas.data ?? []) as { dia: string; n: number }[]
       return {
         pegos7,
         pegos30,
         usados7,
         usados30,
-        vistas7: somarVistas(linhas, hoje, 7),
-        vistas30: somarVistas(linhas, hoje, 30),
+        vistas7: vistasDaJanela(linhas, hoje, 7, validasDesde),
+        vistas30: vistasDaJanela(linhas, hoje, 30, validasDesde),
+        validasDesde,
       }
     },
   })
 }
 
+/** AAAA-MM-DD como dia e mes no idioma da tela (sem fuso: e so calendario). */
+function dataCurtaDoDia(dia: string, idioma: string): string {
+  return new Intl.DateTimeFormat(idioma, { day: '2-digit', month: '2-digit', timeZone: 'UTC' }).format(
+    new Date(`${dia}T12:00:00Z`),
+  )
+}
+
 function BlocoDeCupons({ negocio, onAba }: { negocio: BusinessSummary; onAba: (aba: AbaId) => void }) {
-  const { t } = useTranslation('painel')
+  const { t, i18n } = useTranslation('painel')
   const parceiro = useParceiro(negocio.id)
   const numeros = useNumerosDosCupons(parceiro.data ?? null)
 
@@ -141,6 +155,11 @@ function BlocoDeCupons({ negocio, onAba }: { negocio: BusinessSummary; onAba: (a
             </table>
           </div>
           <p className="text-xs text-fg-3-texto mt-3">{t('abas.cupons_nota')}</p>
+          {numeros.data?.vistas30 === null && numeros.data.validasDesde ? (
+            <p className="text-xs text-fg-3-texto mt-2">
+              {t('abas.cupons_vistas_refeita', { data: dataCurtaDoDia(numeros.data.validasDesde, i18n.language) })}
+            </p>
+          ) : null}
         </>
       )}
     </section>

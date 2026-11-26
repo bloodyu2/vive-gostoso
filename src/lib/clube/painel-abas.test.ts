@@ -13,6 +13,7 @@ import {
   nomeDoArquivoCsv,
   queryDaAba,
   somarVistas,
+  vistasDaJanela,
   urlDaPlaquinha,
 } from './painel-abas'
 import { BOM, csvDeLeads, type LinhaLead } from './resgate'
@@ -128,6 +129,38 @@ describe('janelas de 7 e 30 dias', () => {
     ]
     expect(somarVistas(linhas, '2026-11-08', 7)).toBe(2)
     expect(somarVistas([], '2026-11-08', 7)).toBe(0)
+  })
+})
+
+describe('vistas da janela (KAN-998)', () => {
+  const linhas = [
+    { dia: '2026-11-27', n: 58 },
+    { dia: '2026-11-28', n: 2 },
+    { dia: '2026-11-30', n: 3 },
+    { dia: '2026-12-05', n: 4 },
+  ]
+
+  it('janela que ainda tem dia do periodo invalido nao mostra numero', () => {
+    expect(vistasDaJanela(linhas, '2026-11-30', 7, '2026-11-28')).toBeNull()
+  })
+
+  it('janela inteira de dias validos soma normalmente', () => {
+    // 7 dias terminando em 05/12 comecam em 29/11, depois de 28/11
+    expect(vistasDaJanela(linhas, '2026-12-05', 7, '2026-11-28')).toBe(7)
+  })
+
+  it('o primeiro dia valido ja entra na janela', () => {
+    expect(vistasDaJanela(linhas, '2026-12-04', 7, '2026-11-28')).toBe(5)
+  })
+
+  it('sem a data de validade (migration nao aplicada ou consulta falhou) nao mostra numero', () => {
+    expect(vistasDaJanela(linhas, '2026-12-05', 7, null)).toBeNull()
+    expect(vistasDaJanela(linhas, '2026-12-05', 7, undefined)).toBeNull()
+  })
+
+  it('o numero repetido de 58 do periodo invalido nunca aparece', () => {
+    expect(vistasDaJanela(linhas, '2026-11-28', 7, '2026-11-28')).toBeNull()
+    expect(vistasDaJanela(linhas, '2026-11-28', 30, '2026-11-28')).toBeNull()
   })
 })
 
