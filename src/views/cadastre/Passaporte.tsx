@@ -52,7 +52,10 @@ interface PainelDados {
   resgates_mes: number
   usados_mes: number
   ativos: number
-  vistas_mes: number
+  /** null enquanto o mes tem dia sem contagem valida por parceiro (KAN-998) */
+  vistas_mes: number | null
+  /** ausente enquanto a migration das vistas validas nao rodou */
+  vistas_validas_desde?: string
   dias_de_pico: number[]
 }
 
@@ -493,6 +496,9 @@ export function Numeros({ parceiro }: { parceiro: Parceiro }) {
 
   if (painel.isLoading || !dados) return null
 
+  // Sem vistas_validas_desde o banco ainda e o antigo; com vistas_mes null o mes tem dia invalido.
+  const vistasValem = dados.vistas_validas_desde !== undefined && dados.vistas_mes !== null
+
   return (
     <section aria-labelledby="neste-mes">
       <h2 id="neste-mes" className="clube-h2" style={{ fontSize: '1.25rem' }}>
@@ -502,7 +508,11 @@ export function Numeros({ parceiro }: { parceiro: Parceiro }) {
         <Numero rotulo={t('numero_resgates')} valor={String(dados.resgates_mes)} />
         <Numero rotulo={t('numero_usados')} valor={String(dados.usados_mes)} />
         <Numero rotulo={t('numero_ativos')} valor={String(dados.ativos)} />
-        <Numero rotulo={t('numero_vistas')} valor={String(dados.vistas_mes)} />
+        {vistasValem ? (
+          <Numero rotulo={t('numero_vistas')} valor={String(dados.vistas_mes)} />
+        ) : (
+          <Numero rotulo={t('numero_vistas_refeita')} valor="–" />
+        )}
         <div style={{ gridColumn: '1 / -1' }}>
           <Numero rotulo={t('numero_pico')} valor={pico} pequeno />
         </div>

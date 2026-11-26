@@ -2,14 +2,13 @@
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { BedDouble, Check, Compass, Palette, Share2, Ticket, UtensilsCrossed, Waves } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
 import { SafeCoverImage } from '@/components/ui/safe-cover-image'
 import { armazemDoNavegador, lerCupons } from '@/lib/clube/cupons-locais'
-import { disparar } from '@/lib/clube/disparar'
 import { chipsDeCategorias, filtrarPorCategoria } from '@/lib/clube/filtro'
 import { juntarRegra, linkAgendamento, linkParaAmigo, textoParaAmigo, type Vantagem } from '@/lib/clube/vantagens'
 import { AvisoAgendamento } from './aviso-agendamento'
 import { FormResgate, type TextosForm } from './form-resgate'
+import { useVistasPorCartao } from './usar-vistas-por-cartao'
 
 /** Textos já no idioma da página (o servidor resolve; este componente não carrega
  *  o i18n do cliente, que só sincroniza o idioma depois da hidratação). */
@@ -55,11 +54,6 @@ interface Props {
   doBanco: boolean
 }
 
-/** Dia no fuso de Gostoso (o mesmo que o banco usa). */
-function diaDeGostoso(): string {
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Fortaleza' }).format(new Date())
-}
-
 function dataCurta(iso: string, lang: string): string {
   const d = new Date(`${iso}T12:00:00Z`)
   return new Intl.DateTimeFormat(lang === 'pt' ? 'pt-BR' : lang, { timeZone: 'UTC' }).format(d)
@@ -81,7 +75,7 @@ export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, 
   const [formAberto, setFormAberto] = useState<string | null>(null)
   const [cupons, setCupons] = useState<Record<string, string>>({})
   const [categoria, setCategoria] = useState<string | null>(null)
-  const contou = useRef(false)
+  const listaRef = useRef<HTMLUListElement>(null)
 
   /* Filtro de categoria: so no cliente, sem recarregar. Os chips vem das categorias dos
      parceiros no ar; com menos de duas categorias o filtro nao serve e nem aparece. */
@@ -101,22 +95,11 @@ export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, 
     setCupons(lerCupons(armazemDoNavegador()))
   }, [])
 
-  /* Vezes que a vantagem foi vista: uma chamada por visita, uma vez por dia por
-     aba (sessionStorage). Sem dado pessoal, falha em silêncio. */
-  useEffect(() => {
-    if (!doBanco || contou.current) return
-    contou.current = true
-    const ids = vantagens.map((v) => v.partnerId)
-    if (ids.length === 0) return
-    try {
-      const chave = `vg-clube-vistas-${diaDeGostoso()}`
-      if (sessionStorage.getItem(chave)) return
-      sessionStorage.setItem(chave, '1')
-    } catch {
-      /* sem sessionStorage: conta mesmo assim */
-    }
-    disparar(supabase.rpc('gostoso_club_registrar_vistas', { p_partner_ids: ids }))
-  }, [doBanco, vantagens])
+  /* Vezes que a vantagem foi vista (KAN-998): cada parceiro conta quando o cartao dele fica
+     na tela, uma vez por dia por aba. Antes a pagina mandava todos os ids a cada visita e todo
+     parceiro ficava com o mesmo numero. A regra mora em usar-vistas-por-cartao.ts e em
+     src/lib/clube/vistas.ts. Sem dado pessoal, falha em silencio. */
+  useVistasPorCartao(listaRef, doBanco, visiveis.map((v) => v.partnerId).join(','))
 
   if (vantagens.length === 0) {
     return <p className="clube-aviso">{textos.vazio}</p>
@@ -166,7 +149,7 @@ export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, 
         </div>
       ) : null}
 
-      <ul className="clube-lista">
+      <ul ref={listaRef} className="clube-lista">
         {visiveis.map((v, i) => {
           const noAr = v.status === 'no_ar'
           const regra = juntarRegra([
@@ -179,7 +162,12 @@ export function ListaVantagens({ vantagens, textos, origem, prefixo, linkClube, 
           const formularioAberto = formAberto === v.partnerId
 
           return (
-            <li key={v.partnerId} className="clube-card clube-entra" style={{ '--i': i } as CSSProperties}>
+            <li
+              key={v.partnerId}
+              data-parceiro={v.partnerId}
+              className="clube-card clube-entra"
+              style={{ '--i': i } as CSSProperties}
+            >
               <div className={`clube-foto ${v.capaUrl ? 'clube-foto--com' : 'clube-foto--vazia'}`}>
                 {v.capaUrl ? (
                   <SafeCoverImage

@@ -76,3 +76,7 @@
 ## 2026-10-30: teste de varredura estourava 5 s com os testes de PGlite juntos
 **O que aconteceu:** `numeros-de-produto.test.ts` le todos os arquivos de `src` e passou do prazo padrao do vitest quando rodou junto dos testes de PGlite (passava sozinho).
 **Regra:** teste que varre o repositorio ou sobe PGlite declara o proprio prazo (`60_000` no `beforeAll`, `30_000` na varredura). Falha so no conjunto completo e sinal de prazo, nao de regra.
+
+## 2026-11-26: contador por parceiro alimentado com a lista inteira da pagina (KAN-998)
+**O que aconteceu:** a /clube chamava `gostoso_club_registrar_vistas` uma vez por visita com os ids de todos os parceiros. A funcao do banco estava certa (soma 1 por id), o chamador e que mandava a lista toda. De 26/10 a 26/11 todo parceiro ficou com o mesmo n por dia, e o painel do dono mostrava esse numero como "vezes que viram a vantagem". Os testes do banco passavam porque so testavam a funcao, nunca o chamador.
+**Regra:** contador por entidade so e alimentado com a entidade que o usuario de fato viu ou tocou. Todo contador novo leva um teste do chamador com tres entidades e uma so vista, e um conferidor no banco que compara o n entre entidades (todas iguais no mesmo dia e sinal de defeito).

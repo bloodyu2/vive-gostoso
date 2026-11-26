@@ -94,6 +94,21 @@ export function somarVistas(linhas: readonly VistaDia[], hoje: string, dias: num
   return total
 }
 
+/** Vistas da janela de `dias` dias, ou null quando a janela ainda tem dia sem contagem valida
+ *  por parceiro (KAN-998: ate a data de `validasDesde` o n era igual para todos os parceiros).
+ *  `validasDesde` ausente (migration ainda nao aplicada ou consulta falhou) tambem da null:
+ *  melhor mostrar "–" do que um numero que nao vale. */
+export function vistasDaJanela(
+  linhas: readonly VistaDia[],
+  hoje: string,
+  dias: number,
+  validasDesde: string | null | undefined,
+): number | null {
+  if (!validasDesde) return null
+  if (diaMenos(hoje, dias - 1) < validasDesde) return null
+  return somarVistas(linhas, hoje, dias)
+}
+
 /* ---------- contatos: busca e CSV ---------- */
 
 function semAcento(s: string): string {
